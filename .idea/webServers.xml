@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="7b6b8fe6-96e1-47f8-9600-2d4326d7925e" name="StatsCoach" url="http://Stats.Coach">
+        <fileTransfer host="ftp.lilrichard.com" port="21" rootFolder="/Stats.Coach" password="df9ddf99df9bdf9bdf92df9adf99df9adf98" username="admin@lilrichard.com">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

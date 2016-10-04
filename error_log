@@ -1,0 +1,984 @@
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 48
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[25-May-2016 11:30:13 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 48
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): iCheck_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 24 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): Morris_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 27 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): jvectormap_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 30 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): Date_Picker_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 33 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): Daterange_picker_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 36 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Notice:  Undefined property via __get(): wysihtml5_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 39 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:37 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 18 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:37 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 20 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:37 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 22 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:37 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 24 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): iCheck_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 24 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): Morris_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 27 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): jvectormap_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 30 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): Date_Picker_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 33 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): Daterange_picker_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 36 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Notice:  Undefined property via __get(): wysihtml5_css in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 39 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:39:41 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 18 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:41 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 20 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:41 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 22 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:39:41 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 24 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:53:22 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 19:53:22 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 18 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:53:22 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 20 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:53:22 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 22 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 19:53:22 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 24 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 35
+[25-May-2016 20:15:09 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 20:15:09 UTC] PHP Notice:  Undefined property via __get(): username in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 20:15:09 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 23 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 34
+[25-May-2016 20:15:09 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 25 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 34
+[25-May-2016 20:15:09 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 27 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 34
+[25-May-2016 20:15:09 UTC] PHP Warning:  Missing argument 5 for ALITE\widgets\WidgetsView::leftColor_info_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 29 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 34
+[25-May-2016 20:18:01 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 20:18:01 UTC] PHP Notice:  Undefined property via __get(): username in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 57
+[25-May-2016 20:23:39 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 20:23:48 UTC] PHP Notice:  Undefined property via __get(): title in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/head.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 21:10:23 UTC] PHP Fatal error:  Class 'App\Helpers\Data\Userdata' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[25-May-2016 21:10:24 UTC] PHP Fatal error:  Class 'App\Helpers\Data\Userdata' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[25-May-2016 21:11:24 UTC] PHP Fatal error:  Class 'App\Helpers\Data\Userdata' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[25-May-2016 21:11:24 UTC] PHP Fatal error:  Class 'App\Helpers\Data\Userdata' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[25-May-2016 21:11:25 UTC] PHP Fatal error:  Class 'App\Helpers\Data\Userdata' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[25-May-2016 21:20:46 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 21:20:46 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 21:22:20 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5
+[25-May-2016 21:22:20 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5
+[25-May-2016 21:22:39 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 21:22:39 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 5 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 56
+[25-May-2016 21:26:50 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[25-May-2016 21:26:50 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[25-May-2016 21:29:08 UTC] PHP Notice:  Array to string conversion in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 36
+[25-May-2016 21:34:31 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[25-May-2016 21:34:31 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[26-May-2016 04:19:25 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:19:25 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:19:25 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:19:25 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:19:25 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/login.view.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 34
+[26-May-2016 04:19:25 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/login.view.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 34
+[26-May-2016 04:19:31 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[26-May-2016 04:19:31 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[26-May-2016 04:23:21 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[26-May-2016 04:23:21 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[26-May-2016 04:26:49 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[26-May-2016 04:26:49 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[26-May-2016 04:28:11 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[26-May-2016 04:28:11 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[26-May-2016 04:36:51 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 62
+[27-May-2016 23:56:52 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[27-May-2016 23:56:52 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[27-May-2016 23:57:18 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[27-May-2016 23:57:18 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[27-May-2016 23:57:24 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[27-May-2016 23:57:24 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[28-May-2016 04:02:09 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[28-May-2016 04:02:09 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[28-May-2016 04:02:23 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[28-May-2016 04:02:23 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[28-May-2016 04:02:29 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[28-May-2016 04:02:29 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[28-May-2016 04:02:35 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 26
+[28-May-2016 04:02:35 UTC] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php:26) in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 28
+[28-May-2016 04:05:33 UTC] PHP Notice:  Array to string conversion in /home/tmiles199/public_html/Stats.Coach/Application/Services/Router.php on line 31
+[28-May-2016 04:05:48 UTC] PHP Fatal error:  Class 'App\Services\Router' not found in /home/tmiles199/public_html/Stats.Coach/index.php on line 36
+[28-May-2016 04:06:19 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[28-May-2016 04:06:19 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[28-May-2016 05:52:59 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:53:12 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:53:36 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Services/Router.php on line 36
+[28-May-2016 05:53:36 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Services/Router.php on line 36
+[28-May-2016 05:54:05 UTC] PHP Fatal error:  Class 'App\Services\Router' not found in /home/tmiles199/public_html/Stats.Coach/index.php on line 36
+[28-May-2016 05:54:08 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Services/Router.php on line 36
+[28-May-2016 05:55:32 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:56:31 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:56:54 UTC] PHP Fatal error:  Class 'App\Services\Router' not found in /home/tmiles199/public_html/Stats.Coach/index.php on line 36
+[28-May-2016 05:56:55 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:59:01 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 05:59:03 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:03:11 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:03:59 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:04:10 UTC] PHP Fatal error:  Class 'App\Services\Router' not found in /home/tmiles199/public_html/Stats.Coach/index.php on line 42
+[28-May-2016 06:04:11 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:05:01 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:05:45 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:05:46 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:05:47 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:06:00 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:07:38 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[28-May-2016 06:07:38 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[28-May-2016 06:08:34 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting ']' in /home/tmiles199/public_html/Stats.Coach/Application/Services/Router.php on line 47
+[28-May-2016 06:08:56 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::signIn() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:09:49 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:11:01 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:11:09 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:11:42 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[28-May-2016 06:11:42 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[28-May-2016 06:12:17 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 85
+[28-May-2016 06:12:17 UTC] PHP Notice:  Undefined index: email in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 88
+[28-May-2016 06:15:22 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Users::signin() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:16:13 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Users::signin() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:16:56 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Users::signin() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:17:02 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Users::signin() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 06:33:24 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[28-May-2016 07:01:06 UTC] PHP Fatal error:  Call to undefined method View\AdminLTE::fullView() in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 76
+[28-May-2016 07:05:47 UTC] PHP Fatal error:  Call to undefined method View\AdminLTE::fullView() in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 76
+[28-May-2016 07:06:45 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:45 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:45 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:45 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:45 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:45 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:47 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:47 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:47 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:47 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:47 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:47 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:48 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:48 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:48 UTC] PHP Notice:  Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:48 UTC] PHP Notice:  Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/topmenu.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 59
+[28-May-2016 07:06:48 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:48 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/recover.view.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 32
+[28-May-2016 07:06:50 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 37
+[28-May-2016 09:01:02 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 3
+[28-May-2016 09:01:02 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 3
+[28-May-2016 09:01:02 UTC] PHP Notice:  Undefined property: View\AdminLTE::$widgets in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[28-May-2016 09:01:02 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[28-May-2016 09:01:03 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 3
+[28-May-2016 09:01:03 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 3
+[28-May-2016 09:01:03 UTC] PHP Notice:  Undefined property: View\AdminLTE::$widgets in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[28-May-2016 09:01:03 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php on line 4
+[28-May-2016 09:06:24 UTC] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT), expecting ',' or ';' in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 16
+[28-May-2016 09:07:17 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:07:17 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:07:17 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:07:17 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:19:21 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:19:21 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:19:21 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:19:21 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:20:30 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:20:30 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:20:30 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:20:30 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:21:16 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:21:16 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:21:16 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:21:16 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:22:45 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:22:45 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:22:45 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:22:45 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:04 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:04 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:04 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:04 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:08 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:08 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:08 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:08 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:44 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:44 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:23:44 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:23:44 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:35 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:35 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:35 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:35 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:36 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:36 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:36 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:36 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:37 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:37 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:37 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:37 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:38 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:38 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:38 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:38 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:39 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:39 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:39 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:39 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:40 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:40 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:40 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:40 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:41 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:41 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:41 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:41 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:42 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:42 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:42 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:42 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:43 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:44 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:44 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:24:44 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:24:44 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:25:06 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:25:06 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:25:06 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:25:06 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:26:26 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:26 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:26 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:26:26 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:26:27 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:27 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:27 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:26:27 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:26:50 UTC] PHP Notice:  Undefined property: View\AdminLTE::$go in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 1
+[28-May-2016 09:26:50 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:50 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:26:50 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:26:50 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:27:05 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 1
+[28-May-2016 09:27:05 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:27:05 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:27:05 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:27:05 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:27:06 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 1
+[28-May-2016 09:27:06 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:27:06 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:27:06 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:27:06 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:29:50 UTC] PHP Catchable fatal error:  Object of class View\AdminLTE could not be converted to string in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 24
+[28-May-2016 09:30:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 42
+[28-May-2016 09:30:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 43
+[28-May-2016 09:30:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 09:30:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 45
+[28-May-2016 09:30:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 48
+[28-May-2016 09:30:07 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 1
+[28-May-2016 09:30:07 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:30:07 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:30:07 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:30:07 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:30:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 42
+[28-May-2016 09:30:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 43
+[28-May-2016 09:30:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 09:30:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 45
+[28-May-2016 09:30:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 48
+[28-May-2016 09:30:26 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 1
+[28-May-2016 09:30:26 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:30:26 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 48
+[28-May-2016 09:30:26 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:30:26 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 55
+[28-May-2016 09:31:03 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:31:03 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:31:03 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:31:03 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:35:47 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:35:47 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:35:47 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:37:28 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:37:28 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 09:37:28 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:37:28 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:37:38 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:37:38 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 09:44:24 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 63
+[28-May-2016 09:44:24 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/dynamic/home.view.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 63
+[28-May-2016 09:47:33 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/home.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 63
+[28-May-2016 09:47:33 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/home.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 63
+[28-May-2016 10:05:21 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:21 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:22 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:22 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:49 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:05:49 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:05:49 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:49 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:50 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:05:50 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:05:50 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:05:50 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:06:48 UTC] PHP Notice:  Undefined property: View\AdminLTE::$first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:06:48 UTC] PHP Notice:  Undefined property: View\AdminLTE::$last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 10:06:48 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:06:48 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:07:07 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:07:07 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:08:06 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:08:06 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:10:35 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:10:35 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:20:00 UTC] PHP Fatal error:  Call to undefined method ALITE\widgets\WidgetsView::leftColor_info_box() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 28
+[28-May-2016 10:20:03 UTC] PHP Fatal error:  Call to undefined method ALITE\widgets\WidgetsView::leftColor_info_box() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 28
+[28-May-2016 10:20:04 UTC] PHP Fatal error:  Call to undefined method ALITE\widgets\WidgetsView::leftColor_info_box() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 28
+[28-May-2016 10:20:15 UTC] PHP Fatal error:  Call to undefined method ALITE\widgets\WidgetsView::leftColor_info_box() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 28
+[28-May-2016 10:20:46 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:20:46 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:23:59 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:24:00 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:24:07 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:24:07 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:39:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 72
+[28-May-2016 10:39:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 73
+[28-May-2016 10:39:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 74
+[28-May-2016 10:39:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 75
+[28-May-2016 10:39:58 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 78
+[28-May-2016 10:39:58 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:39:58 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Notice:  Trying to get property of non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 25
+[28-May-2016 10:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 72
+[28-May-2016 10:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 73
+[28-May-2016 10:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 74
+[28-May-2016 10:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 75
+[28-May-2016 10:40:23 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:25) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 78
+[28-May-2016 10:40:23 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:40:23 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:40:33 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:40:33 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:24 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:24 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:46 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:46 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:48 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:42:48 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:43:12 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[28-May-2016 10:43:12 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[28-May-2016 10:43:12 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 10:43:12 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 10:43:12 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:43:12 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:43:13 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[28-May-2016 10:43:13 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[28-May-2016 10:43:13 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 10:43:13 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 44
+[28-May-2016 10:43:13 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:43:13 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:44:25 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:44:25 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:44:37 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:44:37 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:46:18 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:46:18 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:47:43 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:47:43 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52
+[28-May-2016 10:55:07 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 16:17:25 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45
+[28-May-2016 17:25:28 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 17:25:45 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[28-May-2016 17:27:36 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[28-May-2016 17:27:36 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[29-May-2016 07:42:38 UTC] PHP Fatal error:  Class 'App\Bootstrap' not found in /home/tmiles199/public_html/Stats.Coach/index.php on line 35
+[30-May-2016 03:36:20 UTC] PHP Fatal error:  Class 'View\VIEW_CLASS' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[30-May-2016 03:36:37 UTC] PHP Fatal error:  Class 'View\VIEW_CLASS' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[30-May-2016 03:36:38 UTC] PHP Fatal error:  Class 'View\VIEW_CLASS' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[30-May-2016 03:36:39 UTC] PHP Fatal error:  Class 'View\VIEW_CLASS' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[30-May-2016 03:38:10 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[30-May-2016 04:00:24 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 04:00:34 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 04:05:17 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:05:17 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:07:25 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:07:25 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:07:26 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:07:26 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:07:32 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:07:32 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:07:44 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:07:44 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:07:47 UTC] PHP Notice:  Undefined property: App\Bootstrap::$action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 95
+[30-May-2016 04:07:47 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[30-May-2016 04:08:50 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 04:52:07 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 101
+[30-May-2016 04:52:39 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 100
+[30-May-2016 04:52:42 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 100
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:54:08 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 154
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:23 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:55:37 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 152
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:56:04 UTC] PHP Warning:  Unexpected character in input:  ' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 151
+[30-May-2016 04:57:25 UTC] PHP Fatal error:  Class '\App\Models\Users' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 24
+[30-May-2016 05:00:24 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:00:45 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:04:40 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 53 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:14:05 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:14:19 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:14:53 UTC] PHP Notice:  Undefined property via __get(): parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:35:37 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 149
+[30-May-2016 05:35:42 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 149
+[30-May-2016 05:35:44 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 149
+[30-May-2016 05:43:17 UTC] PHP Notice:  Undefined property via __get(): id in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 84 in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 54
+[30-May-2016 05:43:17 UTC] PHP Warning:  session_regenerate_id(): Cannot regenerate session id - headers already sent in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 86
+[30-May-2016 05:43:17 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php:54) in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 88
+[30-May-2016 06:08:11 UTC] PHP Warning:  Missing argument 1 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 168
+[30-May-2016 06:09:17 UTC] PHP Warning:  Missing argument 1 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 168
+[30-May-2016 06:09:17 UTC] PHP Notice:  Undefined variable: name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 173
+[30-May-2016 06:10:07 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 23
+[30-May-2016 06:10:10 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 23
+[30-May-2016 06:10:11 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 23
+[30-May-2016 06:10:22 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 23
+[30-May-2016 06:10:28 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 23
+[30-May-2016 06:11:12 UTC] PHP Notice:  Undefined property: ALITE\widgets\WidgetsView::$name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 173
+[30-May-2016 06:11:15 UTC] PHP Notice:  Undefined property: ALITE\widgets\WidgetsView::$name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 173
+[30-May-2016 06:15:47 UTC] PHP Warning:  Missing argument 1 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 168
+[30-May-2016 06:15:47 UTC] PHP Warning:  Missing argument 2 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 168
+[30-May-2016 06:15:47 UTC] PHP Notice:  Undefined variable: first in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 173
+[30-May-2016 06:15:47 UTC] PHP Notice:  Undefined variable: last in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/widgets/WidgetsView.php on line 173
+[30-May-2016 07:21:17 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 148
+[30-May-2016 07:21:19 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 148
+[30-May-2016 18:32:28 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 116
+[30-May-2016 18:59:31 UTC] PHP Warning:  Missing argument 1 for App\Models\Users::activate(), called in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 31 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 81
+[30-May-2016 18:59:31 UTC] PHP Notice:  Undefined variable: data in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 83
+[30-May-2016 19:00:48 UTC] PHP Warning:  Missing argument 1 for App\Models\Users::activate(), called in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 31 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 81
+[30-May-2016 19:00:48 UTC] PHP Notice:  Undefined variable: data in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 83
+[30-May-2016 19:02:51 UTC] PHP Warning:  Missing argument 1 for App\Models\Users::activate(), called in /home/tmiles199/public_html/Stats.Coach/Application/Models/AppModel.php on line 31 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 81
+[30-May-2016 19:02:51 UTC] PHP Notice:  Undefined variable: data in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 83
+[01-Jun-2016 21:21:18 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 117
+[01-Jun-2016 21:22:03 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:22:04 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:22:28 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:22:29 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:22:43 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 112
+[01-Jun-2016 21:22:56 UTC] PHP Notice:  Undefined variable: Push in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 112
+[01-Jun-2016 21:27:08 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 21:40:16 UTC] PHP Fatal error:  Access level to App\Models\Users::$userRelay must be protected (as in class App\Models\AppModel) or weaker in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 10
+[01-Jun-2016 21:47:01 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 132
+[01-Jun-2016 21:48:47 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 131
+[01-Jun-2016 21:50:02 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 131
+[01-Jun-2016 21:53:52 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 134
+[01-Jun-2016 21:57:17 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:57:18 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 119
+[01-Jun-2016 21:58:46 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 130
+[01-Jun-2016 21:58:46 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 21:59:12 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 21:59:26 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 22:00:40 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 22:04:33 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[01-Jun-2016 22:08:33 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 86
+[01-Jun-2016 22:08:53 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 86
+[01-Jun-2016 22:09:03 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 86
+[01-Jun-2016 22:12:15 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 89
+[01-Jun-2016 22:13:07 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 89
+[01-Jun-2016 22:26:18 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 91
+[01-Jun-2016 22:42:08 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 91
+[01-Jun-2016 22:42:31 UTC] PHP Notice:  Undefined variable: errors in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 91
+[01-Jun-2016 23:29:59 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 165
+[06-Jun-2016 17:40:22 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[06-Jun-2016 17:42:00 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[06-Jun-2016 17:42:01 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[06-Jun-2016 17:42:16 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[06-Jun-2016 17:43:54 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 52
+[06-Jun-2016 18:03:08 UTC] PHP Notice:  Undefined variable: sortedData in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 117
+[06-Jun-2016 18:03:08 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 89
+[06-Jun-2016 18:10:32 UTC] PHP Notice:  Undefined property: App\Models\Users::$id in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 94
+[06-Jun-2016 18:10:32 UTC] PHP Warning:  session_regenerate_id(): Cannot regenerate session id - headers already sent in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 95
+[06-Jun-2016 18:10:32 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php:94) in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 97
+[16-Jun-2016 15:38:28 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 161
+[19-Jun-2016 05:35:52 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 161
+[19-Jun-2016 18:01:03 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 161
+[19-Jun-2016 18:01:03 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 161
+[19-Jun-2016 20:23:43 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 161
+[19-Jun-2016 20:28:49 UTC] PHP Notice:  Undefined index: username in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 11
+[19-Jun-2016 20:28:49 UTC] PHP Notice:  Undefined index: password in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 12
+[19-Jun-2016 20:30:47 UTC] PHP Notice:  Undefined index: username in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 11
+[19-Jun-2016 20:30:47 UTC] PHP Notice:  Undefined index: password in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 12
+[19-Jun-2016 20:38:58 UTC] PHP Notice:  Undefined property: App\Models\Users::$parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 139
+[19-Jun-2016 20:38:58 UTC] PHP Notice:  Array to string conversion in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 60
+[20-Jun-2016 03:29:42 UTC] PHP Notice:  Undefined property: App\Models\Users::$parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 139
+[20-Jun-2016 03:29:42 UTC] PHP Notice:  Array to string conversion in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 60
+[20-Jun-2016 18:19:34 UTC] PHP Notice:  Undefined property: App\Models\Users::$parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 139
+[20-Jun-2016 18:19:34 UTC] PHP Notice:  Array to string conversion in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/static/recover.php on line 60
+[20-Jun-2016 18:21:06 UTC] PHP Notice:  Undefined property: App\Models\Users::$parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 139
+[20-Jun-2016 18:21:11 UTC] PHP Notice:  Undefined property: App\Models\Users::$parameter in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 139
+[20-Jun-2016 18:37:19 UTC] PHP Fatal error:  Cannot use [] for reading in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 79
+[25-Jun-2016 21:19:20 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 39
+[25-Jun-2016 21:19:20 UTC] PHP Warning:  session_regenerate_id(): Cannot regenerate session id - headers already sent in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 46
+[25-Jun-2016 21:19:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php:39) in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 48
+[25-Jun-2016 21:38:20 UTC] PHP Notice:  Undefined variable: url_values in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 20
+[25-Jun-2016 21:38:20 UTC] PHP Notice:  Undefined variable: url_values in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[25-Jun-2016 21:38:20 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 24
+[25-Jun-2016 21:41:44 UTC] PHP Warning:  Missing argument 1 for App\Controllers\Users::login(), called in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 28 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 7
+[25-Jun-2016 21:41:44 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 8
+[25-Jun-2016 21:41:44 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:41:44 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:42:40 UTC] PHP Warning:  Missing argument 1 for App\Controllers\Users::login(), called in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 28 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 7
+[25-Jun-2016 21:42:40 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 8
+[25-Jun-2016 21:42:40 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:42:40 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:57:10 UTC] PHP Warning:  Missing argument 1 for App\Controllers\Users::login(), called in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 28 and defined in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 7
+[25-Jun-2016 21:57:10 UTC] PHP Warning:  extract() expects parameter 1 to be array, null given in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php on line 8
+[25-Jun-2016 21:57:10 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:57:10 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 20
+[25-Jun-2016 21:58:40 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 21:58:40 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 21:58:50 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 21:58:50 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 22:01:05 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 22:01:05 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 67
+[25-Jun-2016 22:08:31 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:08:31 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:13:21 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:13:21 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:13:23 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:13:23 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:23:55 UTC] PHP Fatal error:  Class 'View\UserProtect' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 21
+[25-Jun-2016 22:25:20 UTC] PHP Notice:  Undefined variable: view in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 25
+[25-Jun-2016 22:25:20 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:25:20 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:31:21 UTC] PHP Fatal error:  Class 'App\Helpers\UserProtect' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 18
+[25-Jun-2016 22:31:31 UTC] PHP Notice:  Undefined variable: view in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 22
+[25-Jun-2016 22:31:31 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:31:31 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:34:01 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:34:01 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:34:48 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:34:48 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:37:41 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:37:41 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:37:46 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:37:46 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:09 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:09 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:32 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:32 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:51 UTC] PHP Notice:  A session had already been started - ignoring session_start() in /home/tmiles199/public_html/Stats.Coach/Application/Modules/UserProtect.php on line 30
+[25-Jun-2016 22:38:51 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Modules/UserProtect.php:30) in /home/tmiles199/public_html/Stats.Coach/Application/Modules/UserProtect.php on line 32
+[25-Jun-2016 22:38:51 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:38:51 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:41:41 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[25-Jun-2016 22:41:41 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Users/login.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 00:15:27 UTC] PHP Fatal error:  Cannot redeclare App\Bootstrap::cleanUrl() in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 115
+[26-Jun-2016 00:19:30 UTC] PHP Notice:  Undefined index: $action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 54
+[26-Jun-2016 00:19:31 UTC] PHP Notice:  Undefined index: $action in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 54
+[26-Jun-2016 00:19:49 UTC] PHP Notice:  Undefined index: $parameter in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 55
+[26-Jun-2016 00:19:55 UTC] PHP Notice:  Undefined index: $parameter in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 55
+[26-Jun-2016 00:20:54 UTC] PHP Notice:  Undefined index: $parameter in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 56
+[26-Jun-2016 00:20:54 UTC] PHP Notice:  Undefined index: $parameter in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 56
+[26-Jun-2016 00:20:58 UTC] PHP Notice:  Undefined index: $parameter in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 56
+[26-Jun-2016 01:29:05 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::Error() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:16 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:31 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:32 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:33 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:33 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:34 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::h() in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 22
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:44 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 22
+[26-Jun-2016 01:31:44 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:44 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:49 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 21
+[26-Jun-2016 01:31:49 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 22
+[26-Jun-2016 01:31:49 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:31:49 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 27
+[26-Jun-2016 01:33:22 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 14
+[26-Jun-2016 01:33:22 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 14
+[26-Jun-2016 01:34:33 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:34:33 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:34:35 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:34:35 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:35:06 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:35:06 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:35:06 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:41 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:36:41 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:41 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:52 UTC] PHP Warning:  in_array() expects parameter 2 to be array, string given in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 111
+[26-Jun-2016 01:36:52 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:36:52 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:52 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:55 UTC] PHP Warning:  in_array() expects parameter 2 to be array, string given in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 111
+[26-Jun-2016 01:36:55 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:36:55 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:36:55 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:38:03 UTC] PHP Warning:  in_array() expects parameter 2 to be array, string given in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 111
+[26-Jun-2016 01:38:03 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:38:03 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:38:03 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:38:56 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 9
+[26-Jun-2016 01:38:56 UTC] PHP Notice:  Undefined index: function in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:38:56 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/AppController.php on line 10
+[26-Jun-2016 01:46:43 UTC] PHP Fatal error:  Class 'App\Controllers\AppController' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Error.php on line 6
+[26-Jun-2016 02:01:45 UTC] PHP Notice:  Undefined variable: controller in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:01:45 UTC] PHP Notice:  Undefined variable: action in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:01:45 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:01:45 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:08:14 UTC] PHP Notice:  Undefined variable: controller in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:08:14 UTC] PHP Notice:  Undefined variable: action in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:08:14 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:08:14 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 68
+[26-Jun-2016 02:11:33 UTC] PHP Notice:  Undefined variable: controller in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:33 UTC] PHP Notice:  Undefined variable: action in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:33 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:33 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:34 UTC] PHP Notice:  Undefined variable: controller in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:34 UTC] PHP Notice:  Undefined variable: action in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:34 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:11:34 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages//.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:12:15 UTC] PHP Notice:   Undefined property via __get(): action in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:12:15 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:12:15 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:12:25 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:12:25 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:37 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:37 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:38 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:38 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:39 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:39 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:47 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:47 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:47 UTC] PHP Warning:  require(/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:47 UTC] PHP Fatal error:  require(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/Golf/index.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 71
+[26-Jun-2016 02:13:58 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:13:58 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:13:58 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 4
+[26-Jun-2016 02:13:58 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 4
+[26-Jun-2016 02:14:16 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:14:16 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:14:16 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:14:16 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:14:16 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:16 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:16 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:16 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php:17) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 88
+[26-Jun-2016 02:14:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php:17) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 89
+[26-Jun-2016 02:14:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php:17) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 90
+[26-Jun-2016 02:14:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php:17) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 91
+[26-Jun-2016 02:14:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php:17) in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 94
+[26-Jun-2016 02:14:41 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:14:41 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:14:41 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:14:41 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:14:41 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:41 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:41 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:41 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:14:54 UTC] PHP Fatal error:  Class 'App\Controllers\AppController' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Error.php on line 6
+[26-Jun-2016 02:15:55 UTC] PHP Fatal error:  Class 'App\Controllers\AppController' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Error.php on line 6
+[26-Jun-2016 02:16:34 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 30
+[26-Jun-2016 02:16:34 UTC] PHP Fatal error:  Class '\App\Models\' not found in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 31
+[26-Jun-2016 02:16:35 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 30
+[26-Jun-2016 02:16:35 UTC] PHP Fatal error:  Class '\App\Models\' not found in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 31
+[26-Jun-2016 02:16:43 UTC] PHP Notice:  Undefined index: controller in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 30
+[26-Jun-2016 02:16:43 UTC] PHP Fatal error:  Class '\App\Models\' not found in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 31
+[26-Jun-2016 02:17:09 UTC] PHP Notice:  Undefined index: action in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 16
+[26-Jun-2016 02:17:09 UTC] PHP Fatal error:  Method name must be a string in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 16
+[26-Jun-2016 02:32:09 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:32:09 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:32:09 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:32:09 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:32:09 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:32:09 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:32:09 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:32:09 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:38:10 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:38:10 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 02:38:10 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:38:10 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 02:38:10 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:38:10 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:38:10 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:38:10 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 02:49:23 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:50:02 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:50:50 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:52:16 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:52:20 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 15
+[26-Jun-2016 02:52:23 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 15
+[26-Jun-2016 02:52:24 UTC] PHP Fatal error:  Class 'App\Helpers\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 15
+[26-Jun-2016 02:52:55 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:54:19 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:54:56 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:55:06 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:55:29 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:55:41 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:55:42 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:06 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:33 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:43 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:43 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:44 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:56:56 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:57:06 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:57:07 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:57:11 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:58:35 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 02:59:00 UTC] PHP Fatal error:  Class 'App\Models\UserRelay' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 16
+[26-Jun-2016 02:59:41 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 03:00:06 UTC] PHP Fatal error:  require(): Cannot redeclare class app\modules\application\userprotect in /home/tmiles199/public_html/Stats.Coach/Application/Services/Psr4AutoloaderClass.php on line 188
+[26-Jun-2016 03:00:23 UTC] PHP Fatal error:  Class 'View\UserProtect' not found in /home/tmiles199/public_html/Stats.Coach/Public/View.php on line 18
+[26-Jun-2016 03:00:49 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 03:00:49 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 3
+[26-Jun-2016 03:00:49 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 03:00:49 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/pages/golf/index.php on line 14
+[26-Jun-2016 03:00:49 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 03:00:49 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 03:00:49 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 03:00:49 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/LTEStripped/layout/athlete/main-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE.php on line 54
+[26-Jun-2016 03:17:54 UTC] PHP Fatal error:  Call to a member function profileData() on a non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[26-Jun-2016 03:17:56 UTC] PHP Fatal error:  Call to a member function profileData() on a non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[26-Jun-2016 03:18:33 UTC] PHP Fatal error:  Call to a member function profileData() on a non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[26-Jun-2016 03:18:34 UTC] PHP Fatal error:  Call to a member function profileData() on a non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[26-Jun-2016 03:18:35 UTC] PHP Fatal error:  Call to a member function profileData() on a non-object in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 19
+[26-Jun-2016 03:44:56 UTC] PHP Fatal error:  Class 'App\Application' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Golf.php on line 5
+[26-Jun-2016 03:44:57 UTC] PHP Fatal error:  Class 'App\Application' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Golf.php on line 5
+[26-Jun-2016 03:48:02 UTC] PHP Fatal error:  Class 'App\Application' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Golf.php on line 5
+[26-Jun-2016 03:52:18 UTC] PHP Fatal error:  Class 'App\Controllers\AppController' not found in /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Error.php on line 6
+[26-Jun-2016 03:53:26 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::index() in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 28
+[26-Jun-2016 03:53:27 UTC] PHP Fatal error:  Call to undefined method App\Controllers\Error::index() in /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php on line 28
+[26-Jun-2016 20:19:20 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Golf.php on line 21
+[27-Jun-2016 06:33:21 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[27-Jun-2016 07:14:11 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[27-Jun-2016 17:18:07 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[27-Jun-2016 17:30:25 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[27-Jun-2016 17:30:50 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[28-Jun-2016 01:54:06 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[28-Jun-2016 23:24:31 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[29-Jun-2016 01:19:33 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[29-Jun-2016 09:47:39 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[29-Jun-2016 19:57:29 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 19:57:29 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 19:57:29 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 19:57:29 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 19:57:57 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 19:57:57 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 19:57:57 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 19:57:57 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:04:47 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:04:47 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:04:47 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:04:47 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:27 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:27 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:27 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:27 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:28 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:28 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:28 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:28 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:29 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:29 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:05:29 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:05:29 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:07:05 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:07:05 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:07:05 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:07:05 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:07:29 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:07:29 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:07:29 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:07:29 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[29-Jun-2016 20:08:31 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:08:31 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:08:31 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14
+[29-Jun-2016 20:08:31 UTC] PHP Fatal error:  Call to a member function userProfile_box() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14
+[29-Jun-2016 20:08:32 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:08:32 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:08:32 UTC] PHP Notice:  Undefined variable: widgets in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14
+[29-Jun-2016 20:08:32 UTC] PHP Fatal error:  Call to a member function userProfile_box() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14
+[29-Jun-2016 20:09:00 UTC] PHP Notice:  Undefined variable: first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:09:00 UTC] PHP Notice:  Undefined variable: last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 3
+[29-Jun-2016 20:09:00 UTC] PHP Warning:  Missing argument 1 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 168
+[29-Jun-2016 20:09:00 UTC] PHP Warning:  Missing argument 2 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 168
+[29-Jun-2016 20:09:00 UTC] PHP Notice:  Undefined variable: first in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 173
+[29-Jun-2016 20:09:00 UTC] PHP Notice:  Undefined variable: last in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 173
+[29-Jun-2016 20:09:53 UTC] PHP Warning:  Missing argument 1 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 168
+[29-Jun-2016 20:09:53 UTC] PHP Warning:  Missing argument 2 for ALITE\widgets\WidgetsView::userProfile_box(), called in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 14 and defined in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 168
+[29-Jun-2016 20:09:53 UTC] PHP Notice:  Undefined variable: first in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 173
+[29-Jun-2016 20:09:53 UTC] PHP Notice:  Undefined variable: last in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/widgets/WidgetsView.php on line 173
+[30-Jun-2016 13:56:54 UTC] PHP Fatal error:  Class 'ALITE\widgets\WidgetsView' not found in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67
+[30-Jun-2016 13:57:47 UTC] PHP Fatal error:  Call to a member function Content_Header() on a non-object in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/pages/golf/index.php on line 4
+[30-Jun-2016 18:13:38 UTC] PHP Notice:  Undefined index: signedIn in /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php on line 15
+[30-Jun-2016 18:13:38 UTC] PHP Notice:  Undefined index: view in /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php on line 16
+[30-Jun-2016 18:17:08 UTC] PHP Notice:  Undefined index: view in /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php on line 15
+[30-Jun-2016 18:17:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php:15) in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 85
+[30-Jun-2016 18:17:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php:15) in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 86
+[30-Jun-2016 18:17:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php:15) in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 87
+[30-Jun-2016 18:17:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php:15) in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 88
+[30-Jun-2016 18:17:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/tmiles199/public_html/Stats.Coach/Application/Views/View.php:15) in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 91
+[30-Jun-2016 20:02:21 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[30-Jun-2016 20:02:21 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/menu/athlete-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 49
+[30-Jun-2016 20:02:21 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/menu/athlete-header.php on line 45 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 49
+[30-Jun-2016 20:02:21 UTC] PHP Notice:   Undefined property via __get(): first_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/menu/athlete-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 49
+[30-Jun-2016 20:02:21 UTC] PHP Notice:   Undefined property via __get(): last_name in /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/menu/athlete-header.php on line 52 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 49
+[30-Jun-2016 20:07:16 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[30-Jun-2016 20:07:59 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[30-Jun-2016 20:08:22 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[30-Jun-2016 20:08:22 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[30-Jun-2016 20:11:02 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/profile.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[07-Jul-2016 17:29:20 UTC] PHP Warning:  require_once(/home/tmiles199/public_html/Stats.Coach/Application/Configs/config.php): failed to open stream: No such file or directory in /home/tmiles199/public_html/Stats.Coach/index.php on line 40
+[07-Jul-2016 17:29:20 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/tmiles199/public_html/Stats.Coach/Application/Configs/config.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/tmiles199/public_html/Stats.Coach/index.php on line 40
+[07-Jul-2016 17:35:39 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/users/login.tpl.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 67 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[07-Jul-2016 17:35:39 UTC] PHP Notice:  Include Error:: /home/tmiles199/public_html/Stats.Coach/Public/AdminLTE2/StatsCoach/menu/athlete-header.php<br /> requested from /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 75 in /home/tmiles199/public_html/Stats.Coach/Application/Views/AdminLTE.php on line 22
+[07-Jul-2016 18:30:23 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:31:51 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:31:52 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:32:01 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:32:59 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:33:16 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:34:56 UTC] PHP Fatal error:  Class 'View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:35:18 UTC] PHP Fatal error:  Class 'App\View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:35:19 UTC] PHP Fatal error:  Class 'App\View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:35:36 UTC] PHP Fatal error:  Class 'App\View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[07-Jul-2016 18:35:38 UTC] PHP Fatal error:  Class 'App\View\View' not found in /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php on line 59
+[10-Jul-2016 03:51:05 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 07:22:46 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 07:29:28 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 10:20:29 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 10:54:57 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 17:18:24 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 17:30:10 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(163): App\Models\Database\db->checkExist('SELECT COUNT(`i...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(31): App\Modules\Models\UserRelay->user_exists('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.p in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69
+[10-Jul-2016 17:46:42 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'confirmed' in 'where clause'' in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php:69
+Stack trace:
+#0 /home/tmiles199/public_html/Stats.Coach/Application/Modules/Models/UserRelay.php(175): App\Models\Database\db->checkExist('SELECT COUNT(`u...', Array)
+#1 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(34): App\Modules\Models\UserRelay->email_confirmed('Admin')
+#2 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(41): App\Models\Users->login(Array)
+#3 /home/tmiles199/public_html/Stats.Coach/Application/Models/Users.php(20): App\ApplicationModel->__construct(Array)
+#4 /home/tmiles199/public_html/Stats.Coach/Application/Bootstrap.php(33): App\Models\Users->__construct(Array)
+#5 /home/tmiles199/public_html/Stats.Coach/Application/Controllers/Users.php(23): App\ApplicationController->pushModel(Array)
+#6 /home/tmiles199/public_html/Stats.Coach/Applicatio in /home/tmiles199/public_html/Stats.Coach/Application/Models/Database/db.php on line 69

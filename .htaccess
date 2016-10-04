@@ -1,0 +1,17 @@
+Options +FollowSymLinks
+# Provide Specific Index Page (Set the default handler)
+
+DirectoryIndex index.php
+#RewriteRule ^$ /index.php
+
+RewriteRule ^([^/]+)/$                                  /?controller=$1
+RewriteRule ^([^/]+)/([^/]+)/$                          /?controller=$1&action=$2
+RewriteRule ^([^/]+)/([^/]+)/([^/]+)/$                  /?controller=$1&action=$2&parameter=$3
+RewriteRule ^([^/]+)/([^/]+)/([^/]+)/([^/]+)/$          /?controller=$1&action=$2&parameter=$3&unique=$4
+RewriteRule ^([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)/$  /?controller=$1&action=$2&parameter=$3&unique=$4&id=$5
+
+RewriteCond %{HTTP_HOST} ^www\.Stats\.Coach$
+#RewriteRule ^/?$ "http\:\/\/lilrichard\.com\/index\.php" [R=301,L]
+
+
+
