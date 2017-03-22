@@ -1,6 +1,822 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="StatsCoach - @lilrichard.com" uuid="f29dcd24-9ec9-4af2-8e14-53c3f1212b94">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+    <database-info product="MySQL" version="5.6.33-cll-lve" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
+      <schema id="1" name="StatsCoach"/>
+      <schema id="2" name="HomingDevice"/>
+      <table id="3" parent="1" name="golf_courses"/>
+      <table id="4" parent="1" name="golf_distances"/>
+      <table id="5" parent="1" name="golf_handicap"/>
+      <table id="6" parent="1" name="golf_rounds"/>
+      <table id="7" parent="1" name="golf_tournament_teams"/>
+      <table id="8" parent="1" name="golf_tournaments"/>
+      <table id="9" parent="1" name="team_members"/>
+      <table id="10" parent="1" name="teams"/>
+      <table id="11" parent="1" name="users"/>
+      <table id="12" parent="2" name="users"/>
+      <column id="13" parent="3" name="course_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="14" parent="3" name="course_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="15" parent="3" name="course_holes">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+        <default-expression>&apos;18&apos;</default-expression>
+      </column>
+      <column id="16" parent="3" name="course_street">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="17" parent="3" name="course_city">
+        <data-type>varchar(40)</data-type>
+      </column>
+      <column id="18" parent="3" name="course_state">
+        <mandatory>1</mandatory>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="19" parent="3" name="course_phone">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="20" parent="3" name="course_elevation">
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="21" parent="3" name="course_difficulty">
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="22" parent="3" name="course_rank">
+        <mandatory>1</mandatory>
+        <data-type>int(5)</data-type>
+      </column>
+      <column id="23" parent="3" name="box_color_1">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="24" parent="3" name="box_color_2">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="25" parent="3" name="box_color_3">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="26" parent="3" name="box_color_4">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="27" parent="3" name="box_color_5">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="28" parent="3" name="par_1">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="29" parent="3" name="par_2">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="30" parent="3" name="par_3">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="31" parent="3" name="par_4">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="32" parent="3" name="par_5">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="33" parent="3" name="par_6">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="34" parent="3" name="par_7">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="35" parent="3" name="par_8">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="36" parent="3" name="par_9">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="37" parent="3" name="par_out">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="38" parent="3" name="par_10">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="39" parent="3" name="par_11">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="40" parent="3" name="par_12">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="41" parent="3" name="par_13">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="42" parent="3" name="par_14">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="43" parent="3" name="par_15">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="44" parent="3" name="par_16">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="45" parent="3" name="par_17">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="46" parent="3" name="par_18">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="47" parent="3" name="par_in">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="48" parent="3" name="par_tot">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="49" parent="3" name="par_hcp">
+        <mandatory>1</mandatory>
+        <data-type>int(4)</data-type>
+      </column>
+      <column id="50" parent="3" name="course_type">
+        <data-type>char(30)</data-type>
+      </column>
+      <column id="51" parent="4" name="course_id">
+        <comment>Reference from golf_courses</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="52" parent="4" name="tee_box">
+        <comment>options ( 1 - 5 )</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="53" parent="4" name="distance_1">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="54" parent="4" name="distance_2">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="55" parent="4" name="distance_3">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="56" parent="4" name="distance_4">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="57" parent="4" name="distance_5">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="58" parent="4" name="distance_6">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="59" parent="4" name="distance_7">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="60" parent="4" name="distance_8">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="61" parent="4" name="distance_9">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="62" parent="4" name="distance_out">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="63" parent="4" name="distance_10">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="64" parent="4" name="distance_11">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="65" parent="4" name="distance_12">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="66" parent="4" name="distance_13">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="67" parent="4" name="distance_14">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="68" parent="4" name="distance_15">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="69" parent="4" name="distance_16">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="70" parent="4" name="distance_17">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="71" parent="4" name="distance_18">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="72" parent="4" name="distance_in">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="73" parent="4" name="distance_tot">
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="74" parent="5" name="course_id">
+        <comment>References golf_courses(course_id)</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="75" parent="5" name="handicap_gender">
+        <data-type>varchar(5)</data-type>
+      </column>
+      <column id="76" parent="5" name="handicap_1">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="77" parent="5" name="handicap_2">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="78" parent="5" name="handicap_3">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="79" parent="5" name="handicap_4">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="80" parent="5" name="handicap_5">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="81" parent="5" name="handicap_6">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="82" parent="5" name="handicap_7">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="83" parent="5" name="handicap_8">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="84" parent="5" name="handicap_9">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="85" parent="5" name="handicap_10">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="86" parent="5" name="handicap_11">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="87" parent="5" name="handicap_12">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="88" parent="5" name="handicap_13">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="89" parent="5" name="handicap_14">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="90" parent="5" name="handicap_15">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="91" parent="5" name="handicap_16">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="92" parent="5" name="handicap_17">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="93" parent="5" name="handicap_18">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="94" parent="6" name="round_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="95" parent="6" name="round_public">
+        <comment>true &quot;1&quot; or false &quot;2&quot;</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="96" parent="6" name="user_id">
+        <comment>reference from users</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="97" parent="6" name="course_id">
+        <comment>golf_courses(course_id)</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="98" parent="6" name="score_1">
+        <comment>strokes / score</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="99" parent="6" name="score_2">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="100" parent="6" name="score_3">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="101" parent="6" name="score_4">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="102" parent="6" name="score_5">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="103" parent="6" name="score_6">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="104" parent="6" name="score_7">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="105" parent="6" name="score_8">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="106" parent="6" name="score_9">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="107" parent="6" name="score_out">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="108" parent="6" name="score_10">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="109" parent="6" name="score_11">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="110" parent="6" name="score_12">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="111" parent="6" name="score_13">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="112" parent="6" name="score_14">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="113" parent="6" name="score_15">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="114" parent="6" name="score_16">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="115" parent="6" name="score_17">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="116" parent="6" name="score_18">
+        <mandatory>1</mandatory>
+        <data-type>int(2)</data-type>
+      </column>
+      <column id="117" parent="6" name="score_in">
+        <mandatory>1</mandatory>
+        <data-type>int(3)</data-type>
+      </column>
+      <column id="118" parent="6" name="score_tot">
+        <mandatory>1</mandatory>
+        <data-type>int(3)</data-type>
+      </column>
+      <index id="119" parent="6" name="round_id">
+        <columns>round_id</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="120" parent="6" name="round_id">
+        <columns>round_id</columns>
+        <underlying-index>round_id</underlying-index>
+      </key>
+      <column id="121" parent="7" name="tournament_id">
+        <comment>tournaments(tournament_id)</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="122" parent="7" name="tournament_team_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="123" parent="7" name="tournament_team_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="124" parent="7" name="tournament_accepted">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="125" parent="7" name="tournament_paid">
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="126" parent="7" name="coach_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="127" parent="7" name="team_id">
+        <comment>teams(team_id)</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="128" parent="7" name="athlete_id_1">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="129" parent="7" name="athlete_id_2">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="130" parent="7" name="athlete_id_3">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="131" parent="7" name="athlete_id_4">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="132" parent="7" name="athlete_id_5">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="133" parent="8" name="tournament_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="134" parent="8" name="tournament_name">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="135" parent="8" name="host_name">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="136" parent="8" name="tournament_style">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="137" parent="8" name="tournament_team_price">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="138" parent="8" name="tournament_paid">
+        <comment>True False</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="139" parent="8" name="host_id">
+        <comment>users(user_id)</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="140" parent="8" name="course_id_day_1">
+        <comment>course_id, incase double</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="141" parent="8" name="course_id_day_2">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="142" parent="8" name="tournament_date">
+        <mandatory>1</mandatory>
+        <data-type>date</data-type>
+      </column>
+      <index id="143" parent="8" name="tournament_id">
+        <columns>tournament_id</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="144" parent="8" name="PRIMARY">
+        <columns>tournament_id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="145" parent="8" name="tournament_id">
+        <columns>tournament_id</columns>
+        <underlying-index>tournament_id</underlying-index>
+      </key>
+      <column id="146" parent="9" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="147" parent="9" name="team_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <key id="148" parent="9" name="PRIMARY">
+        <columns>user_id
+team_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="149" parent="10" name="team_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="150" parent="10" name="team_code">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="151" parent="10" name="team_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="152" parent="10" name="team_rank">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="153" parent="10" name="team_coach">
+        <comment>user_id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="154" parent="10" name="team_sport">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="155" parent="10" name="team_division">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="156" parent="10" name="team_school">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="157" parent="10" name="team_district">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="158" parent="10" name="team_membership">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <index id="159" parent="10" name="team_id">
+        <columns>team_id
+team_code</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="160" parent="10" name="PRIMARY">
+        <columns>team_id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="161" parent="10" name="team_id">
+        <columns>team_id
+team_code</columns>
+        <underlying-index>team_id</underlying-index>
+      </key>
+      <column id="162" parent="11" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(25)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="163" parent="11" name="user_username">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="164" parent="11" name="user_first_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="165" parent="11" name="user_last_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="166" parent="11" name="user_profile_pic">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+        <default-expression>&apos;Data/Uploads/Pictures/default_avatar.png&apos;</default-expression>
+      </column>
+      <column id="167" parent="11" name="user_cover_photo">
+        <data-type>text</data-type>
+      </column>
+      <column id="168" parent="11" name="user_birth_date">
+        <data-type>date</data-type>
+      </column>
+      <column id="169" parent="11" name="user_gender">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="170" parent="11" name="user_bio">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="171" parent="11" name="user_rank">
+        <mandatory>1</mandatory>
+        <data-type>int(8)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="172" parent="11" name="user_password">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="173" parent="11" name="user_email">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="174" parent="11" name="user_email_code">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="175" parent="11" name="user_email_confirmed">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="176" parent="11" name="user_generated_string">
+        <mandatory>1</mandatory>
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="177" parent="11" name="user_membership">
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="178" parent="11" name="user_deactivated">
+        <mandatory>1</mandatory>
+        <data-type>int(4)</data-type>
+      </column>
+      <column id="179" parent="11" name="user_creation_date">
+        <mandatory>1</mandatory>
+        <data-type>varchar(14)</data-type>
+      </column>
+      <column id="180" parent="11" name="user_ip">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+      </column>
+      <index id="181" parent="11" name="first_name">
+        <columns>user_first_name
+user_last_name
+user_email</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="182" parent="11" name="username">
+        <columns>user_username</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <index id="183" parent="11" name="username_2">
+        <columns>user_username</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="184" parent="11" name="PRIMARY">
+        <columns>user_id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="185" parent="11" name="username">
+        <columns>user_username</columns>
+        <underlying-index>username</underlying-index>
+      </key>
+      <column id="186" parent="12" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(25)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="187" parent="12" name="user_username">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="188" parent="12" name="user_first_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="189" parent="12" name="user_last_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="190" parent="12" name="user_profile_pic">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+        <default-expression>&apos;Data/Uploads/Pictures/default_avatar.png&apos;</default-expression>
+      </column>
+      <column id="191" parent="12" name="user_cover_photo">
+        <data-type>text</data-type>
+      </column>
+      <column id="192" parent="12" name="user_birth_date">
+        <data-type>date</data-type>
+      </column>
+      <column id="193" parent="12" name="user_gender">
+        <mandatory>1</mandatory>
+        <data-type>varchar(25)</data-type>
+      </column>
+      <column id="194" parent="12" name="user_bio">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="195" parent="12" name="user_rank">
+        <mandatory>1</mandatory>
+        <data-type>int(8)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="196" parent="12" name="user_password">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="197" parent="12" name="user_email">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="198" parent="12" name="user_email_code">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="199" parent="12" name="user_email_confirmed">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="200" parent="12" name="user_generated_string">
+        <mandatory>1</mandatory>
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="201" parent="12" name="user_membership">
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="202" parent="12" name="user_deactivated">
+        <mandatory>1</mandatory>
+        <data-type>int(4)</data-type>
+      </column>
+      <column id="203" parent="12" name="user_creation_date">
+        <mandatory>1</mandatory>
+        <data-type>varchar(14)</data-type>
+      </column>
+      <column id="204" parent="12" name="user_ip">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+      </column>
+      <index id="205" parent="12" name="first_name">
+        <columns>user_first_name
+user_last_name
+user_email</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="206" parent="12" name="username">
+        <columns>user_username</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <index id="207" parent="12" name="username_2">
+        <columns>user_username</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="208" parent="12" name="PRIMARY">
+        <columns>user_id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="209" parent="12" name="username">
+        <columns>user_username</columns>
+        <underlying-index>username</underlying-index>
+      </key>
+    </database-model>
   </data-source>
 </component>
