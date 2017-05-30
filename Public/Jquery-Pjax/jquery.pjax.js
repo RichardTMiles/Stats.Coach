@@ -173,6 +173,7 @@
 //
 // Returns whatever $.ajax returns.
     function pjax(options) {
+
         options = $.extend(true, {}, $.ajaxSettings, pjax.defaults, options)
         
         if ($.isFunction(options.url)) {

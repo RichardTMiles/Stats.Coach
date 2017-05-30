@@ -95,7 +95,7 @@ if ($this->ajax) {
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>State</label>
-                        <select class="form-control select2" style="width: 100%;" onchange="states(this)">
+                        <select class="form-control select2" style="width: 100%;" onchange="states(this)" required>
                             <option selected="selected" disabled value="">State</option>
                             <option value="Alabama">Alabama</option>
                             <option value="Alaska">Alaska</option>

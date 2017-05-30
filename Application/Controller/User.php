@@ -2,8 +2,10 @@
 
 namespace Controller;
 
+use Model\Helpers\UserRelay;
 use Modules\Request;
 use Psr\Singleton;
+use View\View;
 
 class User
 {
@@ -11,12 +13,12 @@ class User
 
     private $request;
 
-
     public function __construct()
     {
         $this->request = Request::getInstance();
     }
 
+    ############################## These function depend on each other
     public static function loggedIn()
     {
         return (isset($_SESSION['id']) ? $_SESSION['id'] : false);
@@ -24,9 +26,10 @@ class User
 
     public static function loggedOut()
     {
-        if (self::loggedIn()) {
-            echo '<script type="text/javascript"> window.location ='. SITE_ROOT .'</script>';
-            exit();
+        if (isset($_SESSION['id'])) {   // otherwise send them to the home page
+            View::newInstance();
+            mvc( 'Golf', 'golf');      // TODO - portability
+            die();
         }
     }
 
@@ -34,23 +37,6 @@ class User
     {
         if (!self::loggedIn()) self::logout();
     }
-
-
-    public function login()
-    {
-        if (!empty($_POST)) {   // If forum already submitted
-
-            $this->username = $this->request->post( 'username' )->alnum();
-            $this->password = $this->request->post( 'password' )->alnum();
-
-            if (!isset($this->username) || !isset($this->password)) {
-                $this->alert = 'Sorry, but we need your username and password.';
-            } else {
-                $this->state = 'verify';      // We can now check server side
-            }
-        }
-    }
-
     // If one of these doesn't work... You're doing something wrong
     // header( "LOCATION: http://example.com/" );  // Note that this will not change url / state
     // <head><meta http-equiv="refresh" content="2;url=http://example.com" /></head>
@@ -61,39 +47,62 @@ class User
         session_unset();
         session_destroy();
         session_start();
-        echo '<head><meta http-equiv="refresh" content="2;url='. SITE_ROOT .'Login/" />
-        <script type="text/javascript"> window.location = "'. SITE_ROOT .'Login/" </script></head>';
-        die();
+        View::newInstance();                    // I think this only works b/c Pjax is the shit
+        UserRelay::newInstance();               // We want to reset the users class
+        mvc('User', 'login', 'loggedOut');
+        die(); 
+    }
+    ############################## / end dependency
+
+
+    public function login()
+    {
+        if (empty($_POST)) return false;  // If forum already submitted
+
+        $this->username = $this->request->post( 'username' )->alnum();
+        $this->password = $this->request->post( 'password' )->value();
+
+        if (!$this->username || !$this->password) {
+            $this->alert = 'Sorry, but we need your username and password.';
+            return false;
+        } return true;
     }
 
-    private function register()
+
+    public function register()
     {
-        $this->register = false;
-        if (!empty($_POST)) {
-            $this->username = $this->request->post( 'username' )->alnum();
-            $this->password = $this->request->post( 'password' )->value();  // unsanitized
-            $this->email    = $this->request->post( 'email'    )->email();
-            $this->firstName= $this->request->post( 'firstname')->alnum();
-            $this->lastName = $this->request->post( 'lastname' )->alnum();
+        if (empty($_POST))
+            return false;
 
+        list($this->username, $this->firstName, $this->lastName) = $this->request->post( 'username', 'firstname', 'lastname' )->alnum();
+        list($this->password, $verifyPass )= $this->request->post( 'password', 'password2' )->value();  // unsanitized
+        $this->email = $this->request->post( 'email' )->email();
+        $terms = $this->request->post('Terms')->int();
 
-            if (!isset($this->username)) {
-                $this->alert = 'Please enter a Username with only numbers & letters!';
+        //sortDump($terms);
 
-            } elseif (!isset($this->password) && $len = strlen($this->password) < 6 && $len > 16) {
-                $this->alert = 'Your password must be between 6 and 16 characters!';
+        if (!$this->username)
+            $this->alert = 'Please enter a username with only numbers & letters!';
 
-            } elseif (!isset($this->email)) {
-                $this->alert = 'Please enter a valid email address!';
+        elseif (!$this->password && $len = strlen( $this->password ) < 6 && $len > 16)
+            $this->alert = 'Your password must be between 6 and 16 characters!';
 
-            } elseif (!isset($this->firstName)) {
-                $this->alert = 'Please enter your first name!';
+        elseif ($this->password != $verifyPass)
+            $this->alert = 'The passwords entered must match!';
 
-            } elseif (!isset($this->lastName)) {
-                $this->alert = 'Please enter your last name!';
-            } else { $this->register = true; }
+        elseif (!$this->email)
+            $this->alert = 'Please enter a valid email address!';
 
-        }
+        elseif (!$this->firstName)
+            $this->alert = 'Please enter your first name!';
+
+        elseif (!$this->lastName)
+            $this->alert = 'Please enter your last name!';
+
+        elseif (!$terms)
+            $this->alert = 'You must agree to the terms and conditions.';
+        else return true;
+        return false;
     }
 
     public function recover($id = null)
@@ -107,7 +116,7 @@ class User
 
     public function profile($user = null)
     {
-        // validate something
+        return true;
     }
 
 }

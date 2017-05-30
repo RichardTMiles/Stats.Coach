@@ -15,25 +15,29 @@ trait Singleton
         return self::getInstance()->Skeleton( $methodName, $arguments );
     }
 
-    public static function getInstance()
+    public static function newInstance()
     {
-        // see if the class has already been called this run
-        if (!empty(self::$getInstance)) return self::$getInstance;
+        // Start a new instance of the class and pass any arguments
+        $class = new \ReflectionClass( get_called_class() );
+        self::$getInstance = $class->newInstanceArgs( func_get_args() );
+        return self::$getInstance;
+    }
+
+    public static function getInstance()
+    {   // see if the class has already been called this run
+        if (!empty(self::$getInstance))
+            return self::$getInstance;
 
         $calledClass = get_called_class();
-
         // check if the object has been sterilized in the session
         if (array_key_exists( $calledClass, $_SESSION )) {
-            if (is_object( self::$getInstance = unserialize( $_SESSION[$calledClass])))     // This will invoke the __wake up operator
+            // This will invoke the __wake up operator
+            if (is_object( self::$getInstance = unserialize( $_SESSION[$calledClass] ) ))
                 return self::$getInstance;
-            throw new \Exception('bad unserialize');
+            throw new \Exception( 'Bad Unserialize in Singleton' );
         }
-
-        $class = new \ReflectionClass( $calledClass );
-
-        self::$getInstance = $class->newInstanceArgs( func_get_args() );
-
-        return self::$getInstance;
+        // Start a new instance
+        return self::newInstance();
     }
 
     public function __call($methodName, $arguments = array())
@@ -43,44 +47,46 @@ trait Singleton
 
     private function Skeleton($methodName, $arguments = array())
     {
+        // Have we used addMethod() to override an existing method
         if (key_exists( $methodName, $this->methods ))
             return (empty($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
                 $this :
                 $result);
 
+        // Is the method in the current scope ( public, protected, private ).
+        // Note declaiming the method as private is the only way to ensure single instancing
         if (method_exists($this , $methodName))
-            return (null == ($result = call_user_func_array(array($this, $methodName), $arguments)) ?
-                $this :
-                $result);
+            return (null == ($result = call_user_func_array( array($this, $methodName), $arguments )) ?
+                $this : $result);
+        
 
-        if (key_exists( $methodName, $GLOBALS['closures'] )) {
+        if (key_exists( 'closures', $GLOBALS ) && key_exists( $methodName, $GLOBALS['closures'] )) {
             $function = $GLOBALS['closures'][$methodName];
             $this->addMethod( $methodName, $function );
             return (empty($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
-                $this :
-                $result);
+                $this : $result);
         }
         throw new \Exception( "There is valid method or closure with the given name '$methodName' to call" );
     }
 
     private function addMethod($name, $closure)
     {
-        if (is_callable( $closure )) {
+        if (is_callable( $closure )):
             $this->methods[$name] = \Closure::bind( $closure, $this, get_called_class() );
-        } else {
-            // Nested to ensure carbon returns the correct value of self
+        else: // Nested to ensure Singleton returns the correct value of self
             throw new \Exception( "New Method Must Be A Valid Closure" );
-        }
+        endif;
     }
 
     public function __sleep()
     {
-        return 0;
+        return 0;   // This will stop serialization automatically
     }
 
 
     public function __destruct()
     {
+        // We require a sleep function to be set manually for singleton to manage utilization
         if ($this->__sleep() !== 0) $_SESSION[__CLASS__] = serialize( $this );
         else if(array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
     }
@@ -90,7 +96,7 @@ trait Singleton
         if (array_key_exists( $variable, $GLOBALS ))
             return $GLOBALS[$variable];
 
-        throw new \Exception( $variable );
+        throw new \Exception( "The variable `$variable` was not defined in the global scope");
     }
 
     public function __set($variable, $value)
@@ -115,7 +121,7 @@ trait Singleton
 
     private function set($name, $value = null)
     {
-        if (empty($value))
+        if (empty($value)) 
             $value = $this->storage;
         $this->$name = $value;
     }

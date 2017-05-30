@@ -9,6 +9,7 @@
 namespace Modules;
 
 use Psr\Singleton;
+use View\View;
 
 class Route
 {
@@ -18,16 +19,16 @@ class Route
     private $matched;
     private $default;
 
-    public function __construct($default)
+    public function __construct($default = "Home/")
     {
         $this->matched = false;
         if (key_exists( 'REQUEST_URI', $_SERVER )) {
             $uri = urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
             $uri = ltrim( $uri, '/' );
-        } else {
-            if (empty($uri)) $uri = $default;
-        }
         
+        } else if (empty($uri)) $uri = $default;
+        
+        // TODO - rethink the url and public opt
         if ($uri !== '/' && file_exists( SERVER_ROOT . '/public' . $uri )) {
             include(SERVER_ROOT . 'public/' . $uri);
             die();
@@ -43,31 +44,26 @@ class Route
             $this->default = $this->storage;
         }
     }
-
-    private function restart()
-    {
-        $this->addMethod( 'default', $this->default );
-        $restart = $this->methods['default'];
-        $this->default = true;
-        $restart();
-    }
-
+    
     public function __destruct()
     {
         if (!$this->matched && is_callable( $this->default )) {
-            $this->restart();
+            $this->addMethod( 'default', $this->default );
+            $restart = $this->methods['default'];
+            $this->default = true;
+            $restart();
         }
     }
 
-    public function match($toMatch, $closure)
+    public function match($toMatch, $closure)       // TODO - make someone rewrite this in REGX
     {
         if ($this->matched == true)
-            return false;               // note that home must be the first case
+            return $this;
 
         if (!is_callable( $closure ))
             throw new \Exception;
 
-        $this->storage = $closure;
+        $this->storage = $closure;  // This is for home route function
 
         $uri = $this->uri;
 
@@ -77,13 +73,14 @@ class Route
         $uriLength = sizeof( $uri );
 
         if ($pathLength < $uriLength && substr( $toMatch, -1 ) != '*')
-                return $this;
+            return $this;
 
         $required = true;
         $variables = null;
 
         for ($i = 0; $i <= $pathLength; $i++) {
 
+            // set up our ending condition
             if ($pathLength == $i || $arrayToMatch[$i] == null)
                 $arrayToMatch[$i] = '*';
 
@@ -102,12 +99,10 @@ class Route
 
                     $this->addMethod( 'routeMatched', $closure );
 
-                    if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false) throw new \Error( 'Bad Closure Passed to Route::match()' );
+                    if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
+                        throw new \Error( 'Bad Closure Passed to Route::match()' );
 
-                    // I think this makes the most sense
-                    exit(1);  // we can debate on killing the application here or not.
-
-                    return $this;   // is the current "run" route uses the ->home member function
+                    return $this; // Note that the application will break in the View::contents
 
                 case '{': // this is going to indicate the start of a variable name
 
@@ -121,10 +116,9 @@ class Route
                     if (substr( $variable, -1 ) == '?') {
                         $variable = rtrim( $variable, '?' );
                         $required = false;
-                    } else {
-                        if ($required == false)
-                            return $this;
-                    }
+                    } elseif ($required == false)
+                        return $this;
+
 
                     if ($variable == null)
                         throw new \Exception;

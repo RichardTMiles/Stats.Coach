@@ -43,8 +43,8 @@ class Database
 
     protected function setUp()
     {
-        if (file_exists( SERVER_ROOT . "Application/Configs/DBSetup.php" )) {
-            require_once SERVER_ROOT . "Application/Configs/DBSetup.php";
+        if (file_exists( SERVER_ROOT . "Scripts/Build/DBSetup.php" )) {
+            require_once SERVER_ROOT . "Scripts/Build/DBSetup.php";
         }
     }
 

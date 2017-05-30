@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Helpers\UserRelay;
+use Modules\Route;
 use Modules\StoreFiles;
 use Psr\Singleton;
 
@@ -10,68 +11,54 @@ use Psr\Singleton;
 class User
 {
     use Singleton;
-    
+
     private $relay;
-    
+
     public function __construct()
-    {// TODO - test runtime complexity of sterilizing
+    {
         $this->relay = UserRelay::getInstance();
     }
-
+ 
     public function login()
     {
-        if (isset($this->state)) {
-            switch ($this->state) {
-                case 'sent':
-                    $this->alert = 'We have sent you a email containing steps to reset your password.';
-                    break;
-                case 'recover':
-                    $this->alert = "Success, a new password has been sent to your email.";
-                    break;
-                case 'verify':
-                    try {
-                        if (!$this->relay->user_exists( $this->username ))
-                            throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
+        try {
+            if (!$this->relay->user_exists( $this->username ))
+                throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
 
-                        if (!$this->relay->email_confirmed( $this->username ))
-                            throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
+            if (!$this->relay->email_confirmed( $this->username ))
+                throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
-                        // If ->login() fails exception is thrown
-                        $_SESSION['id'] = $this->relay->login( $this->username, $this->password );
+            // If ->login() fails exception is thrown
+            $this->relay->login( $this->username, $this->password );
 
-                        print '<meta http-equiv="refresh" content="0; url='. SITE_ROOT .'">';
-
-                        die();
-
-                    } catch (\Exception $e) {
-                        $this->alert = $e->getMessage();
-                    }
-
-                    break;
-            }
+            $this->relay->userProfile($_SESSION['id']);
+            
+            restart();
+            
+        } catch (\Exception $e) {
+            $this->alert = $e->getMessage();
         }
     }
 
     public function register()
     {
-        if ($this->register)
-            try {
-                if ($this->relay->user_exists( $this->username ))
-                    throw new \Exception ( 'That username already exists' );
+        try {
+            if ($this->relay->user_exists( $this->username ))
+                throw new \Exception ( 'That username already exists' );
 
-                if ($this->relay->email_exists( $this->email ))
-                    throw new \Exception ( 'That email already exists.' );
+            if ($this->relay->email_exists( $this->email ))
+                throw new \Exception ( 'That email already exists.' );
 
-                $this->relay->register( $this->username, $this->password, $this->email, $this->firstName, $this->lastName );
 
-                $_SESSION['id'] = $this->relay->login( $this->username, $this->password );
+            $this->relay->register( $this->username, $this->password, $this->email, $this->firstName, $this->lastName );
 
-                die();
+            $this->relay->login( $this->username, $this->password );
+            
+            restart();
 
-            } catch (\Exception $e) {
-                $this->alert = $e->getMessage();
-
-            }
+        } catch (\Exception $e) {
+            $this->alert = $e->getMessage();
+        }
     }
 
     public function activate()
@@ -83,7 +70,7 @@ class User
 
             if (!$this->relay->activate( $this->email, $this->email_code ))      //Push to server - run activate
                 throw new \Exception( 'Sorry, we have failed to activate your account' );
-            
+
 
             $login = $this->relay->fetch_info( 'id', 'email', $this->email );
 
@@ -91,7 +78,7 @@ class User
             session_regenerate_id( true );
 
             $_SESSION['id'] = $login;
-            
+
             header( 'Location:' . SITE_ROOT );
 
         } catch (\Exception $e) {

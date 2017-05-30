@@ -15,6 +15,7 @@ use Controller\User as Users;
 use Modules\Helpers\Skeleton;
 use Modules\Helpers\Bcrypt;
 use Modules\Database;
+use Psr\Log\InvalidArgumentException;
 use Psr\Singleton;
 
 class UserRelay
@@ -48,6 +49,7 @@ class UserRelay
 
     public function __construct()
     {
+
         $this->db = Database::getConnection();  // establish a connection
 
         //This would be run on first request after logging in. Class will be sterilised
@@ -66,42 +68,34 @@ class UserRelay
                 $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
             }
 
-            if (isset($this->username) && !array_key_exists( 'username', $GLOBALS )) {
-                foreach (get_class_vars( $this ) as $key => $var)
+            if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
+                foreach (get_object_vars( $this ) as $key => $var)
                     $GLOBALS[$key] = $this->$key = $var;
+            } else {
+                // throw new InvalidArgumentException( "Bad User Wake Up" );
             }
         }
     }
 
     public function __sleep()
     {
-        return array('user_username', 'user_first_name', 'user_last_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip');
-    }
-
-    public function profileData($id)
-    {
-        // TODO - I dont think I need this anymore.. but idk
-        $sql = "SELECT user_username, user_first_name, user_last_name, user_gender, user_bio, user_profile_pic, user_cover_photo, user_email, user_creation_date
-                      FROM `users` WHERE `user_id`= ?";
-
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($id) );
-        return $stmt->fetch();
+        return (!empty($this->user_username) ? array('user_username', 'user_first_name', 'user_last_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
     }
 
 
-    private function userProfile($id = null)
-    {
+    private function userProfile($id = false)
+    {   // Private bc its commonly called singly, but still required the constructor
 
+        if (!!$id) $id = User::loggedIn(); // throw new \Exception("Attempted load of profile while logged out.");
 
-        $this->user_id = ($id == null ? $id = User::loggedIn() : $id);
+        $this->user_id = $id;
 
-        
-        if (isset($this->username)) {
+        if (isset($this->user_username)) {
             // this should have been done in the wake up routine
             // TODO - check if this actually matters
-            if (!array_key_exists( 'username', $GLOBALS )) {
-                foreach (get_class_vars( $this ) as $key => $var)
+
+            if (!array_key_exists( 'user_username', $GLOBALS )) {
+                foreach (get_object_vars( $this ) as $key => $var)
                     $GLOBALS[$key] = $var;
             }
             return true;
@@ -110,9 +104,8 @@ class UserRelay
         // In theory this request is only called once per session.
         $sql = 'SELECT * FROM users WHERE `user_id` = ?';
         $stmt = $this->db->prepare( $sql );
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-        $stmt->execute( array($id) );
-        $data = $stmt->fetch();
+        $stmt->execute( [$id] );
+        $data = $stmt->fetch( PDO::FETCH_ASSOC );
 
         foreach ($data as $key => $val)
             $GLOBALS[$key] = $this->{$key} = $val;
@@ -121,9 +114,9 @@ class UserRelay
         $GLOBALS['user_profile_pic'] = $this->user_profile_pic = SITE_ROOT . $this->user_profile_pic;
         $GLOBALS['user_cover_photo'] = $this->user_cover_photo = SITE_ROOT . $this->user_cover_photo;
         $GLOBALS['user_full_name'] = $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
-        
+
     }
- 
+
     public function fetch_info($what, $field, $value)
     {
         $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
@@ -146,7 +139,8 @@ class UserRelay
         $crypt = Bcrypt::genHash( $password );
 
         try {
-            $sql = "INSERT INTO users (`user_username`, `user_password`, `user_email`, `user_ip`, `user_creation_date`, `user_email_code`, `user_first_name`, `user_last_name`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO users (`user_username`, `user_password`, `user_email`, `user_ip`, `user_creation_date`, `user_email_code`, `user_first_name`, `user_last_name`) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $this->db->prepare( $sql )->execute( array($username, $crypt, $email, $ip, $time, $email_code, $firstName, $lastName) );
 
             mail( $email, 'Please activate your account', "Hello $firstName ,
@@ -158,10 +152,9 @@ class UserRelay
              \r\n\r\n--" . SITE_ROOT );
 
         } catch (\Exception $e) {
-            echo $e->getMessage();
-
             throw new \Exception( "Sorry, we were unable to create this account. Please try again." );
         }
+
         return true;
     }
 
@@ -187,10 +180,11 @@ class UserRelay
         $data = $stmt->fetch();
 
         // using the verify method to compare the password with the stored hashed password.
-        if (Bcrypt::verify( $password, $data['user_password'] ) === true) {
-            return $data['user_id'];    // returning the user's id.
-        }
-        throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
+        if (Bcrypt::verify( $password, $data['user_password'] ) === true)
+            $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+        else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
+
+        $this->userProfile( $_SESSION['id'] );
     }
 
     public function update_user($first_name, $last_name, $gender, $bio, $image_location, $id)
@@ -263,13 +257,14 @@ class UserRelay
     {
         $sql = 'SELECT COUNT(user_id) FROM users WHERE user_username = ?';
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($username) );
+        $stmt->execute( [$username] );
         $sql = $stmt->fetchColumn();
         return $sql;
     }
 
     public function email_exists($email)
     {
+
         $sql = "SELECT COUNT(user_id) FROM `users` WHERE `user_email`= ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($email) );

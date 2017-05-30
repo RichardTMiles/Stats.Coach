@@ -40,6 +40,7 @@ class Bcrypt
     public static function verify($password, $existingHash)
     {
         /* Hash new password with old hash */
+
         $hash = crypt( $password, $existingHash );
 
         /* Do Hashs match? */

@@ -2,17 +2,21 @@
 
 namespace Modules;
 
-use Psr\Singleton;
+// http://php.net/manual/en/function.debug-backtrace.php
 
 class ErrorCatcher
 {
-    use Singleton;
-
     private $report;
 
     public function __construct( )
     {
+        $closure = function () { $this->generateErrorLog(); };
+        set_error_handler($closure);
+        set_exception_handler($closure);
+    }
 
+    private function generateErrorLog()
+    {
         if ( 0 == error_reporting () ) return null;
 
         // Open the file to get existing content
@@ -22,12 +26,9 @@ class ErrorCatcher
         $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
-        // file_put_contents( ERROR_LOG, $output );
-
-        echo $output;
-
-        // $this->redirect();
-        die();
+        file_put_contents( ERROR_LOG, $output );
+        restart();
+        exit(1);
     }
 
     private function generateCallTrace()
@@ -68,17 +69,11 @@ class ErrorCatcher
         set_exception_handler( $error );
     }
 
-    // http://php.net/manual/en/function.debug-backtrace.php
-
+    // TODO - add java tags/ make redirect work
     private function redirect()
     {
-        $errorPage = function () {
-            // A call to you're home page should work here, but custom reporting would be better
-            print '<meta http-equiv="refresh" content="0;url= ' . SITE_ROOT . '"/>';
-            die();
-        };
-
-        $errorPage();
+        print '<meta http-equiv="refresh" content="0;url= ' . SITE_ROOT . '"/>';
+        die(0);
     }
 
 }

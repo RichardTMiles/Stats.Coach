@@ -10,37 +10,47 @@
 
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="<?=$this->versionControl("bootstrap/css/bootstrap.css")?>">
     <!-- Theme style -->
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>dist/css/AdminLTE.css">
+    <link rel="stylesheet" href="<?=$this->versionControl("dist/css/AdminLTE.min.css")?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>dist/css/skins/_all-skins.css">
+    <link rel="preload" href="<?=$this->versionControl("dist/css/skins/_all-skins.css")?>" as="style" onload="this.rel='stylesheet'">
     <!-- DataTables.Bootstrap -->
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/datatables/dataTables.bootstrap.css">
+    <link rel="preload" href="<?=$this->versionControl("plugins/datatables/dataTables.bootstrap.css")?>" as="style" onload="this.rel='stylesheet'">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" as="style" onload="this.rel='stylesheet'">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>dist/css/skins/skin-green.css">
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/select2/select2.min.css">
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/iCheck/flat/blue.css">
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/morris/morris.css">
-
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="preload" href="<?=$this->versionControl("plugins/ionicons/ionicons.min.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- Back color -->
+    <link rel="preload" href="<?=$this->versionControl("dist/css/skins/skin-green.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- Multiple input dynamic form -->
+    <link rel="preload" href="<?=$this->versionControl("plugins/select2/select2.min.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- Check Ratio Box -->
+    <link rel="preload" href="<?=$this->versionControl("plugins/iCheck/flat/blue.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- I dont know but keep it -->
+    <link rel="preload" href="<?=$this->versionControl("plugins/morris/morris.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- fun ajax refresh -->
+    <link rel="preload" href="<?=$this->versionControl("plugins/pace/pace.css")?>" as="style" onload="this.rel='stylesheet'">
+    <!-- Jquery -->
+    <link rel="preload" href="<?=$this->versionControl("plugins/jvectormap/jquery-jvectormap-1.2.2.css")?>" as="style" onload="this.rel='stylesheet'">
     <!--
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/datepicker/datepicker3.css">
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/daterangepicker/daterangepicker-bs3.css">
+    <link rel="preload" href="<?=$this->versionControl("plugins/datepicker/datepicker3.css")?>" as="style" onload="this.rel='stylesheet'">>
+    <link rel="preload" href="<?=$this->versionControl("plugins/daterangepicker/daterangepicker-bs3.css")?>" as="style" onload="this.rel='stylesheet'">
     -->
-    <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-
+    <link rel="preload" href="<?=$this->versionControl("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")?>" as="style" onload="this.rel='stylesheet'">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" as="style" onload="this.rel='stylesheet'">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" as="style" onload="this.rel='stylesheet'">
 
+    <script>
+        /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+        !function(a){"use strict";var b=function(b,c,d){function e(a){return h.body?a():void setTimeout(function(){e(a)})}function f(){i.addEventListener&&i.removeEventListener("load",f),i.media=d||"all"}var g,h=a.document,i=h.createElement("link");if(c)g=c;else{var j=(h.body||h.getElementsByTagName("head")[0]).childNodes;g=j[j.length-1]}var k=h.styleSheets;i.rel="stylesheet",i.href=b,i.media="only x",e(function(){g.parentNode.insertBefore(i,c?g:g.nextSibling)});var l=function(a){for(var b=i.href,c=k.length;c--;)if(k[c].href===b)return a();setTimeout(function(){l(a)})};return i.addEventListener&&i.addEventListener("load",f),i.onloadcssdefined=l,l(f),i};"undefined"!=typeof exports?exports.loadCSS=b:a.loadCSS=b}("undefined"!=typeof global?global:this);
+        /*! loadCSS rel=preload polyfill. [c]2017 Filament Group, Inc. MIT License */
+        !function(a){if(a.loadCSS){var b=loadCSS.relpreload={};if(b.support=function(){try{return a.document.createElement("link").relList.supports("preload")}catch(b){return!1}},b.poly=function(){for(var b=a.document.getElementsByTagName("link"),c=0;c<b.length;c++){var d=b[c];"preload"===d.rel&&"style"===d.getAttribute("as")&&(a.loadCSS(d.href,d,d.getAttribute("media")),d.rel=null)}},!b.support()){b.poly();var c=a.setInterval(b.poly,300);a.addEventListener&&a.addEventListener("load",function(){b.poly(),a.clearInterval(c)}),a.attachEvent&&a.attachEvent("onload",function(){a.clearInterval(c)})}}}(this);
+    </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,10 +78,14 @@
         background-color: transparent;
     }
 
+    .menu {
+        height: 100px;
+    }
+
 </style>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-red layout-top-nav">
+<body class="hold-transition skin-green layout-top-nav">
 <div class="wrapper">
 
     <header class="main-header">
@@ -287,38 +301,35 @@
         <!-- /.container -->
     </footer>
 </div>
+
 <!-- ./wrapper -->
-
-
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
 <!-- Background -->
 <script src="<?= SITE_ROOT ?>Public/JavaScript/jquery.backstretch.min.js"></script>
 
 <!-- Menu Options -->
-<script src="<?= TEMPLATE_PATH ?>plugins/select2/select2.full.min.js"></script>
-
-
-<script src="<?= TEMPLATE_PATH ?>bootstrap/js/bootstrap.min.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/datatables/dataTables.bootstrap.min.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/input-mask/jquery.inputmask.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<script src="<?= TEMPLATE_PATH ?>plugins/fastclick/fastclick.min.js"></script>
-<script src="<?= TEMPLATE_PATH ?>dist/js/app.min.js"></script>
+<script src="<?=$this->versionControl('plugins/select2/select2.full.min.js');?>"></script>
+<script src="<?=$this->versionControl('bootstrap/js/bootstrap.min.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/datatables/jquery.dataTables.min.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/datatables/dataTables.bootstrap.min.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/input-mask/jquery.inputmask.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/input-mask/jquery.inputmask.date.extensions.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/input-mask/jquery.inputmask.extensions.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/slimScroll/jquery.slimscroll.min.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/fastclick/fastclick.min.js');?>"></script>
+<script src="<?=$this->versionControl('plugins/pace/pace.js');?>"></script>
+<script src="<?=$this->versionControl('dist/js/app.min.js');?>"></script>
 <script src="<?=SITE_ROOT?>Public/Jquery-Pjax/jquery.pjax.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script>
-    $(function () {     // on Document Load
+    $(function () {
         // initial content
-
         $.pjax.reload('#ajax-content');
 
-        // every href on 'a' element
-        $(document).pjax('a', '#ajax-content');
-
+        // Every href on 'a' element
+        // when on document load add event to every a tag, when event fired trigger smart refresh
+        $.when($(document).pjax('a', '#ajax-content')).then(function() { Pace.restart(); });
     });
 </script>
 

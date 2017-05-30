@@ -58,9 +58,17 @@ class Autoload
     protected $prefixes = array();
 
 
+    // This should be set to the applications file structure
     public function __construct()
     {
         spl_autoload_register( array($this, 'loadClass') );
+        $this->addNamespace( 'View',        '/Application/View' );
+        $this->addNamespace( 'Psr',         '/Application/Standards' );
+        $this->addNamespace( 'Modules',     '/Application/Modules' );
+        $this->addNamespace( 'Controller',  '/Application/Controller' );
+        $this->addNamespace( 'Model',       '/Application/Model' );
+        $this->addNamespace( 'Facebook',    '/Application/Services/Facebook');
+        $this->addNamespace( 'App',         '/Application' );
     }
 
     /**
@@ -106,7 +114,7 @@ class Autoload
 
     private function loadClass($class)
     {
-        // I Like The Common Case First Rule -- Richard Miles
+        // I Like The Common Case First Rule -- added by Richard Miles
         if ($this->requireFile( SERVER_ROOT . str_replace( '\\', '/', $class ) . '.php' )) return true;
 
         // the current namespace prefix
