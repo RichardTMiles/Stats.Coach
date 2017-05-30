@@ -106,7 +106,7 @@ class View
 
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email'];
-        return $helper->getLoginUrl('http://stats.coach/login/facebook/', $permissions);
+        return $helper->getLoginUrl('http://stats.coach/Facebook/', $permissions);
     }
 
 

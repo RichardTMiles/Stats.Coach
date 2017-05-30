@@ -1,0 +1,6 @@
+
+$time_pre = microtime( true );
+
+            printf( "<div> %s seconds to produce %sb (%sb/sec)</div>",
+                round( $loadtime = (microtime( true ) - $GLOBALS['time_pre']), 6 ), $size,
+                round( ($size / ($loadtime)) / 1024 ) );
