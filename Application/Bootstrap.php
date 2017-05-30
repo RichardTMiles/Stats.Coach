@@ -2,6 +2,11 @@
 // TODO - find how to make the godaddy stats.coach subdomain url works
 
 
+$route->match( 'Facebook/*', function () {
+    include SERVER_ROOT . 'Tests/fb-callback.php';
+} );
+
+
 $route->match( 'Tests/*', function ( ) {
     //Controller\User::protectPage(); ( new \Tests\Tests() );
     // include SERVER_ROOT . 'Tests/login.php';
@@ -10,12 +15,8 @@ $route->match( 'Tests/*', function ( ) {
 } );
 
 $route->match( 'Login/{client?}/*', function ($client) {
-    if ($client == "faceboook");
 
-    echo $client . PHP_EOL;
-        include SERVER_ROOT . "tests/fb-callback.php";
-
-
+    alert($client);
     // mvc( 'User', 'login', 'loggedOut' );
     exit(1); 
 } );    // Login
@@ -45,12 +46,4 @@ $route->match( 'Recover/{userId?}/', function ($userId) { mvc( 'User', 'Recover'
 
 
 $route->match( 'Profile/{user?}/', function ($user) { mvc( 'User', 'profile', 'protectPage' ); } );    // Profile $user
-
-
-$route->match( 'Facebook/*', function () {
-    include SERVER_ROOT . 'Tests/fb-callback.php';
-} );
-
-
-
 
