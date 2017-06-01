@@ -69,7 +69,7 @@
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Username" name="username" value="<?=$this->username?>">
+                <input type="text" class="form-control" placeholder="Username" name="username" value="<?=$this->username?>" >
                 <span class="glyphicon glyphicon-knight form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">

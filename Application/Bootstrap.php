@@ -5,6 +5,18 @@
  * as expected.
  */
 
+
+
+$route->signedIn()->match( 'Home/*', function () {
+    mvc( 'Golf', 'golf' ); } )->home( );                    // Home = golf -> golf
+
+
+$route->match( 'adminLTE/*', function () {
+    include SERVER_ROOT . "Library/operators#2.php";
+    exit(1);
+} );
+
+
 $route->match( 'Facebook/*', function () {
     alert("FACEBOOK");
     include SERVER_ROOT . 'Tests/fb-callback.php';
@@ -14,46 +26,31 @@ $route->match( 'Facebook/*', function () {
 
 
 $route->match( 'Tests/*', function ( ) {
-    //Controller\User::protectPage(); ( new \Tests\Tests() );
-    // include SERVER_ROOT . 'Tests/login.php';
-    // Scripts\OpenSSL\NewKeys::generate();
     include SERVER_ROOT . 'Tests/login.php';
 } );
 
 
-$route->match( 'Login/{client?}/*', function ($client = null) {
-    alert("Login PAGE!!");
-    mvc( 'User', 'login', 'loggedOut' );
-    exit(1); 
+$route->signedOut()->match( 'Login/{client?}/*', function ($client = null) {
+    mvc( 'User', 'login' );
 } );    // Login
 
 
-$route->match( 'Home/*', function () {
-    alert("running home");
-    mvc( 'Golf', 'golf', 'protectPage' ); } )->home( ); // Home = golf -> golf
-
-
-$route->match( 'PostScore/{state?}/*', 
-    function ($state) {
-        alert("POSTSCORE");
-
-        mvc('Golf', 'postScore', 'protectPage'); } );    // PostScore $state
+$route->signedIn()->match( 'PostScore/{state?}/*', 
+    function ($state) { mvc('Golf', 'postScore'); } );    // PostScore $state
 
 
 $route->match( 'AddCourse/{state?}/*', 
-    function ($state) { mvc( 'Golf', 'AddCourse', 'protectPage' ); } );    // AddCourse TODO - Make $state work
+    function ($state) { mvc( 'Golf', 'AddCourse'); } );    // AddCourse TODO - Make $state work
 
 
 $route->match( 'Logout/*', 
     function () {
-
         alert("matched logout request");
-
-        Controller\User::logout();} );    // Logout
+        Controller\User::logout(); } );    // Logout
 
 
 $route->match( 'Register/*', function () { 
-    mvc( 'User', 'Register', 'loggedOut' ); } );    // Register
+    mvc( 'User', 'Register'); } );    // Register
 
 
 $route->match( 'Activate/{email?}/{email_code?}/', 
@@ -63,11 +60,11 @@ $route->match( 'Activate/{email?}/{email_code?}/',
 
 
 $route->match( 'Recover/{userId?}/', 
-    function ($userId) { mvc( 'User', 'Recover', 'protectPage' ); } );    // Recover $userId
+    function ($userId) { mvc( 'User', 'Recover' ); } );    // Recover $userId
 
 
 $route->match( 'Profile/{user?}/', 
-    function ($user) { mvc( 'User', 'profile', 'protectPage' ); } );    // Profile $user
+    function ($user) { mvc( 'User', 'profile' ); } );    // Profile $user
 
 
 

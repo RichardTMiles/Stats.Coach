@@ -23,11 +23,11 @@ class ErrorCatcher
         ob_start( );
         print file_get_contents( ERROR_LOG ) . PHP_EOL;
         print $this->generateCallTrace( ) . PHP_EOL;
-        $output = ob_get_contents( );
+        echo $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
         file_put_contents( ERROR_LOG, $output );
-        restart();
+        // startApplication();
         exit(1);
     }
 

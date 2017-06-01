@@ -42,6 +42,11 @@ trait Singleton
         self::$getInstance = $class->newInstanceArgs( func_get_args() );
         return self::$getInstance;
     }
+    public static function clearInstance()
+    {
+        if (!empty(self::$getInstance))
+            return self::$getInstance = null;
+    }
 
     public function __call($methodName, $arguments = array())
     {

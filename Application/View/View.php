@@ -7,7 +7,6 @@ namespace View;
             Which in this case is the class AdminLTE
 */
 
-use Model\Helpers\UserRelay;
 use Facebook\Facebook;
 use Controller\User;
 use Psr\Singleton;
@@ -16,12 +15,12 @@ class View
 {
     use Singleton;
 
-    public $pageTitle;
     public $currentPage;
 
-    public function __wakeup($container = false)
+    public function __wakeup()
     {
-        alert("View->Wakeup");
+        alert("View->Wakeup(". ($container = User::getApp_id() ?: "false") . ")");
+        
         if (!$this->ajaxSupport()):     // an HTTP request
             $this->__construct($container);       // and reprocess the dependencies
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
@@ -41,7 +40,9 @@ class View
 
         if ($container) {
             if ($ajax) return null;
-            
+
+            alert("Push Content Wrappwer");
+
             ob_start();
             require_once(CONTENT_WRAPPER);
             $size = ob_get_length();
@@ -63,9 +64,8 @@ class View
         if (file_exists( $file )) {
             ob_start();
             require_once $file;
-            $size = ob_get_length();    // Speed testing
             $file = ob_get_clean();
-            
+
             if (!$this->ajax && $loggedIn)          // TODO - think
                 $this->currentPage = base64_encode( $file );
             else echo $file;
@@ -126,6 +126,7 @@ class View
             unset($_SESSION[__CLASS__]);
             return 0;
         }
+        alert("View->sleep true");
         return array('currentPage');
 
     }

@@ -9,17 +9,15 @@ Email needs to be edited in function "register"
 
 namespace Model\Helpers;
 
-use Controller\User;
 use PDO;
-use Controller\User as Users;
+
+use Controller\User;
 use Modules\Helpers\Skeleton;
 use Modules\Helpers\Bcrypt;
 use Modules\Database;
-use Psr\Log\InvalidArgumentException;
 use Psr\Singleton;
-use View\View;
 
-class UserRelay
+abstract class UserRelay
 {
     use Singleton;
 
@@ -50,45 +48,48 @@ class UserRelay
 
     public function __construct($id = false)
     {
-        alert('UserRelay->__Construct');
-        if ($this->user_id = $id) $this->db = Database::getConnection();  // establish a connection
-    }
+        if ($this->user_id = ($id ?: User::getApp_id()))
+            $this->db = Database::getConnection();  // establish a connection
 
+    }
 
     public function __wakeup($id = false)
     {
-        alert('UserRelay->__Wakeup');
     }
 
-    
-    private function ajaxLogin_Support($id = false) {
-        alert('ajaxLogin_Support( id = ' . ($id ?: 'flase' ) . ")" );
+
+    private function ajaxLogin_Support($id = false)
+    {
         //This would be run on first request after logging in. Class will be sterilised
-        if ($this->user_id = $id) {
-            if (!isset($this->user_username))
-                $this->userProfile( $this->user_id );   // populates the global and
+        if (!$this->user_id = ($id ?: User::getApp_id()))
+            return false;
+        
+        if (!isset($this->user_username))
+            $this->userProfile( $this->user_id );   // populates the global and
 
-            if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
-                if (empty($this->user_full_name))
-                    $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
+        if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
+            if (empty($this->user_full_name))
+                $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
 
-                foreach (get_object_vars( $this ) as $key => $var)
-                    $GLOBALS[$key] = $this->$key = $var;
+            foreach (get_object_vars( $this ) as $key => $var)
+                $GLOBALS[$key] = $this->$key = $var;
 
-                // Ajax makes life a little hard when pressing the back button
-                // Backing into a previous post state is a thing is a problem..
-                if (!array_key_exists( "username", $_POST )) return true;
-                // We came from the login page?
-                $_POST["username"] = null;
-                $_POST["password"] = null;
-                unset($_POST);
-            }
-            return true;
-        } return false;
+            // Ajax makes life a little hard when pressing the back button
+            // Backing into a previous post state is a thing is a problem..
+            if (!array_key_exists( "username", $_POST )) return true;
+            // We came from the login page?
+            $_POST["username"] = null;
+            $_POST["password"] = null;
+            unset($_POST);
+        }
+        return true;
 
     }
-    
-    
+
+    public function __toString()
+    {
+        return (string)$this->user_id;
+    }
 
     public function __sleep()
     {
@@ -96,12 +97,12 @@ class UserRelay
     }
 
 
-    private function userProfile($id = false)
+    protected function userProfile($id = false)
     {   // Private bc its commonly called singly, but still required the constructor
         $this->db = Database::getConnection();
 
-        alert("userProfile($id)");
-        
+        alert( "userProfile($id)" );
+
         $id = $id ?: User::getApp_id(); // throw new \Exception("Attempted load of profile while logged out.");
         $this->user_id = $id;
 
@@ -132,7 +133,7 @@ class UserRelay
 
     }
 
-    public function fetch_info($what, $field, $value)
+    protected function fetch_info($what, $field, $value)
     {
         $this->db = Database::getConnection();
 
@@ -148,7 +149,7 @@ class UserRelay
 
     } // Returns only one value from the db
 
-    public function register($username, $password, $email, $firstName, $lastName)
+    protected function registerSQL($username, $password, $email, $firstName, $lastName)
     {
         $this->db = Database::getConnection();
 
@@ -177,7 +178,7 @@ class UserRelay
         return true;
     }
 
-    public function activate($email, $email_code)
+    public function activateSQL($email, $email_code)
     {
         $this->db = Database::getConnection();
 
@@ -193,7 +194,7 @@ class UserRelay
 
     }
 
-    public function login($username, $password)
+    protected function loginSQL($username, $password)
     {
         $this->db = Database::getConnection();
 
@@ -210,7 +211,7 @@ class UserRelay
         $this->userProfile( $_SESSION['id'] );
     }
 
-    public function update_user($first_name, $last_name, $gender, $bio, $image_location, $id)
+    protected function update_user($first_name, $last_name, $gender, $bio, $image_location, $id)
     {
         $this->db = Database::getConnection();
 
@@ -218,7 +219,7 @@ class UserRelay
             ->execute( array($first_name, $last_name, $gender, $bio, $image_location, $id) );
     }
 
-    public function change_password($user_id, $password)
+    protected function change_password($user_id, $password)
     {   /* Two create a Hash you do */
         $this->db = Database::getConnection();
 
@@ -229,7 +230,7 @@ class UserRelay
 
     }
 
-    public function recover($email, $generated_string)
+    public function recoverSQL($email, $generated_string)
     {
         $this->db = Database::getConnection();
 
@@ -263,7 +264,7 @@ class UserRelay
         }
     }
 
-    public function confirm_recover($email)
+    protected function confirm_recover($email)
     {
         $this->db = Database::getConnection();
 
@@ -284,7 +285,7 @@ class UserRelay
         return true;
     }
 
-    public function user_exists($username)
+    protected function user_exists($username)
     {
         $this->db = Database::getConnection();
 
@@ -295,7 +296,7 @@ class UserRelay
         return $sql;
     }
 
-    public function email_exists($email)
+    protected function email_exists($email)
     {
         $this->db = Database::getConnection();
 
@@ -306,7 +307,7 @@ class UserRelay
         return $sql;
     }
 
-    public function email_confirmed($username)
+    protected function email_confirmed($username)
     {
         $this->db = Database::getConnection();
 
@@ -318,7 +319,7 @@ class UserRelay
         throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
     }
 
-    public function get_users()
+    private function get_users()
     {
         $this->db = Database::getConnection();
 

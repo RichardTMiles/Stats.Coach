@@ -6,39 +6,24 @@ use Model\Helpers\UserRelay;
 use Modules\Route;
 use Modules\StoreFiles;
 use Psr\Singleton;
+use View\View;
 
 
-class User
+class User extends UserRelay
 {
-    use Singleton;
-
-    private $relay;
-
-    public function __construct()
-    {
-        $this->relay = UserRelay::getInstance();
-    }
- 
+    
     public function login()
     {
-
-       
         try {
-            if (!$this->relay->user_exists( $this->username ))
+            if (!parent::user_exists( $this->username ))
                 throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
 
-            if (!$this->relay->email_confirmed( $this->username ))
+            if (!parent::email_confirmed( $this->username ))
                 throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
             // If ->login() fails exception is thrown
-            $this->relay->login( $this->username, $this->password );
-
-            $this->relay->userProfile($_SESSION['id']);
-
-            // restart();
-
-            alert("LOGGED IN YO");
-
+            parent::loginSQL( $this->username, $this->password );
+            
             startApplication();     // restart
             
         } catch (\Exception $e) {
@@ -49,16 +34,16 @@ class User
     public function register()
     {
         try {
-            if ($this->relay->user_exists( $this->username ))
+            if (!parent::user_exists( $this->username ))
                 throw new \Exception ( 'That username already exists' );
 
-            if ($this->relay->email_exists( $this->email ))
+            if (!parent::email_exists( $this->email ))
                 throw new \Exception ( 'That email already exists.' );
 
 
-            $this->relay->register( $this->username, $this->password, $this->email, $this->firstName, $this->lastName );
+            parent::registerSQL( $this->username, $this->password, $this->email, $this->firstName, $this->lastName );
 
-            $this->relay->login( $this->username, $this->password );
+            parent::loginSQL( $this->username, $this->password );
             
             startApplication();
 
@@ -71,14 +56,14 @@ class User
     {
         // Need to validate the success with database
         try {
-            if (!$this->relay->email_exists( $this->email ))
+            if (!parent::email_exists( $this->email ))
                 throw new \Exception( 'Please make sure the Url you have entered is correct.' );
 
             if (!$this->relay->activate( $this->email, $this->email_code ))      //Push to server - run activate
                 throw new \Exception( 'Sorry, we have failed to activate your account' );
 
 
-            $login = $this->relay->fetch_info( 'id', 'email', $this->email );
+            $login = parent::fetch_info( 'id', 'email', $this->email );
 
             session_destroy();
             session_regenerate_id( true );
@@ -96,10 +81,10 @@ class User
     {
         try {
             if (isset($parameter) & isset($unique)) {
-                if (!$this->relay->email_exists( $email ))
+                if (!parent::email_exists( $email ))
                     throw new \Exception ( "Sorry, we have detected an invalid url. Please contact us for further support." );
 
-                if (!$this->relay->recover( $email, $unique ))
+                if (!parent::recoverSQL( $email, $unique ))
                     throw new \Exception ( "Sorry, something went wrong and we could not recover your password." );
 
                 return header( "LOCATION: http://Stats.Coach/login/recover/" );
@@ -108,10 +93,10 @@ class User
             }
             if (isset($email) === true) {   // and only email
 
-                if (!$this->relay->email_exists( $email ))
+                if (!parent::email_exists( $email ))
                     throw new \Exception ( 'Sorry, that email doesn\'t exist.' );
 
-                if (!$this->relay->confirm_recover( $email ))     // Sends Email  // if didn't work
+                if (!parent::confirm_recover( $email ))     // Sends Email  // if didn't work
                     throw new \Exception ( 'Sorry, we are having an internal error. Please contact us for more support.' );
 
                 return header( "LOCATION: http://Stats.Coach/login/sent/" ); // This Re-directs to new url/ No $_Post

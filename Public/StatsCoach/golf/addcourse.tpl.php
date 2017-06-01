@@ -99,7 +99,6 @@ if ($this->ajax) {
 
     /* validate course data <int> */
     function validateP1() {
-
         var Form = document.forms["addCourse"];
         var fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state"],
             lengthF = fields.length, e = false;
@@ -136,7 +135,7 @@ if ($this->ajax) {
     <h1>Add Course
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i>Home</a></li>
         <li><a href="#" style="color: ghostwhite;">Forms</a></li>
         <li class="active" style="color: ghostwhite;">Advanced Elements</li>
     </ol>

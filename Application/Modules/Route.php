@@ -8,6 +8,7 @@
 
 namespace Modules;
 
+use Model\User;
 use Psr\Singleton;
 use View\View;
 
@@ -17,52 +18,79 @@ class Route
 
     public $uri;
     private $matched;
-    private $default;
+    private $homeMethod;
+    private $signedStatus;
+    private $default_Signed_Out;
+    private $default_Signed_In;
 
-    public function __construct($default = "Home/")
+    public function __construct(callable $default_Signed_Out, callable $default_Signed_In = null, $signedStatus = false)
     {
-        $this->matched = false;
         if (key_exists( 'REQUEST_URI', $_SERVER )) {
             $uri = urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
             $_SERVER['REQUEST_URI'] = null;   // so I can restart the class to the default path TODO - this may b the pr
             $uri = ltrim( $uri, '/' );
-        } else $uri = $default;
-        
-        // TODO - rethink the url and public opt
-        if ($uri !== '/' && file_exists( SERVER_ROOT . '/public' . $uri )) {
-            include(SERVER_ROOT . 'public/' . $uri);
-            die();
         }
+
+        if (empty($uri)) {
+            alert('route-defaults');
+            $this->matched = true;  // I dont think this is needed how im using it, but my be required for fututre builds
+            return ($signedStatus ? $default_Signed_In() : $default_Signed_Out());
+        }
+        $this->matched = false;
+        $this->default_Signed_Out = $default_Signed_Out;
+        $this->default_Signed_In = $default_Signed_In;
+        $this->signedStatus = $signedStatus;
+
         $this->uri = explode( '/', strtolower( $uri ) );
+    }
+    
+    public function signedIn() {
+        if ($this->signedStatus != true && $this->matched != true)
+            $this->matched = "PUSH";
+        return $this;
+    }
+    
+    public function signedOut() {
+        if ($this->signedStatus != false && $this->matched != true)
+            $this->matched = "PUSH";
+        return $this;
     }
 
     public function home($function = null)
     {
         if ($this->matched == false) {
             if (is_callable( $function ))
-                $this->default = $function;
-            $this->default = $this->storage;
+                $this->homeMethod = $function;
+            $this->homeMethod = $this->storage;
         }
     }
     
     public function __destruct()
     {
-        if (!$this->matched && is_callable( $this->default )) {
-            $this->addMethod( 'default', $this->default );
-            $restart = $this->methods['default'];
-            $this->default = true;
-            $restart();
-        }
+        if ($this->matched) return;
+
+        if (!is_callable( $this->homeMethod ))
+            $this->homeMethod = ($this->signedStatus ? $this->default_Signed_In : $this->default_Signed_Out);
+
+        $this->addMethod( 'default', $this->homeMethod );
+        $restart = $this->methods['default'];
+        $restart();
+
     }
 
-    public function match($toMatch, $closure)       // TODO - make someone rewrite this in REGX
+    public function match($toMatch, callable $closure)       // TODO - make someone rewrite this in REGX
     {
-        if ($this->matched == true)
+        if ($this->matched === true)
             return $this;
 
         if (!is_callable( $closure ))
-            throw new \Exception;
+            throw new \Exception();
 
+        if ($this->matched === "PUSH") {
+            $this->matched = false;
+            return $this;
+        }
+         
         $this->storage = $closure;  // This is for home route function
 
         $uri = $this->uri;
@@ -95,7 +123,7 @@ class Route
                     }
 
                     $this->matched = true;
-                    $this->default = null;
+                    $this->homeMethod = null;
 
                     $this->addMethod( 'routeMatched', $closure );
 

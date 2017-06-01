@@ -43,7 +43,7 @@ header( 'Content-type: text/html; charset=utf-8' );
 // First step in debugging
 function sortDump($mixed = null)
 {
-    unset($_SERVER);
+    // unset($_SERVER);
     echo '<pre>';
     var_dump( ($mixed === null ? $GLOBALS : $mixed) );
     echo '</pre>';
@@ -55,22 +55,19 @@ function alert($string = "Made it!")
     print "<script>alert('$string')</script>";
 }
 
-function mvc($class, $method, $access = false)
+function mvc($class, $method)
 {
-
-    if ($access != false) Controller\User::$access();
-
+    alert("MVC ( $class, $method )");
     $controller = "Controller\\$class";
     $model = "Model\\$class";
 
     if (( new $controller )->$method())
         ( new $model )->$method();
-
-
-    alert("MVC");
-
-    \View\View::contents( $class, $method );
+    
+    \View\View::contents( $class, $method );    // this will exit(1);
 
 }
+
+
 
 

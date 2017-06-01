@@ -19,21 +19,9 @@ class User
     }
 
     ############################## These function depend on each other
-    public static function getApp_id()
+    public static function getApp_id(callable $callable = null)
     {
-        return (array_key_exists('id', $_SESSION) ? $_SESSION['id'] : false);
-    }
-
-    public static function loggedOut()
-    {
-        // the user is requesting a page for
-        if (array_key_exists( 'id' , $_SESSION ) && $_SESSION['id'])   // otherwise send them to the home page
-            startApplication();
-    }
-
-    public static function protectPage()
-    {
-        if (!self::getApp_id()) self::logout();
+        return (array_key_exists('id', $_SESSION) ? (is_callable( $callable ) ? $callable() : $_SESSION['id']): false);
     }
 
     public static function logout()
@@ -41,11 +29,10 @@ class User
         session_unset();
         session_destroy();
         session_start();
+        session_regenerate_id(true);
         $_SESSION['id'] = false;
-        View::newInstance();                    // I think this only works b/c Pjax is the shit
-        UserRelay::newInstance();               // We want to reset the users class
-        mvc('User', 'login');
-        die(); 
+        if (WRAPPING_REQUIRES_LOGIN) View::newInstance();
+        startApplication();
     }
     ############################## / end dependency
 
