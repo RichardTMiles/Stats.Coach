@@ -24,9 +24,9 @@ class Route
         $this->matched = false;
         if (key_exists( 'REQUEST_URI', $_SERVER )) {
             $uri = urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
+            $_SERVER['REQUEST_URI'] = null;   // so I can restart the class to the default path TODO - this may b the pr
             $uri = ltrim( $uri, '/' );
-        
-        } else if (empty($uri)) $uri = $default;
+        } else $uri = $default;
         
         // TODO - rethink the url and public opt
         if ($uri !== '/' && file_exists( SERVER_ROOT . '/public' . $uri )) {

@@ -21,6 +21,8 @@ class User
  
     public function login()
     {
+
+       
         try {
             if (!$this->relay->user_exists( $this->username ))
                 throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
@@ -32,8 +34,12 @@ class User
             $this->relay->login( $this->username, $this->password );
 
             $this->relay->userProfile($_SESSION['id']);
-            
-            restart();
+
+            // restart();
+
+            alert("LOGGED IN YO");
+
+            startApplication();     // restart
             
         } catch (\Exception $e) {
             $this->alert = $e->getMessage();
@@ -54,7 +60,7 @@ class User
 
             $this->relay->login( $this->username, $this->password );
             
-            restart();
+            startApplication();
 
         } catch (\Exception $e) {
             $this->alert = $e->getMessage();

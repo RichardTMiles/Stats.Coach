@@ -11,14 +11,31 @@ if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
     echo "Internal Server Error"; exit(1); }
 
 
+new Psr\Autoload;                  //Controller\User::logout(); exit(1);
+// new Modules\ErrorCatcher;
 
-new Psr\Autoload;                   //Controller\User::logout();
-new Modules\ErrorCatcher;
-View\View::newInstance();           // This will fire the users object
-// TODO - I think there needs to be further seperation between the users class and view
 
-$route = new Modules\Route( DEFAULT_LANDING_URI );
+function startApplication()
+{
+    alert("startApplication");
 
-require SERVER_ROOT . 'Application/Bootstrap.php';
+    View\View::newInstance(
+        (!WRAPPING_REQUIRES_LOGIN ?: \Model\Helpers\UserRelay::ajaxLogin_Support( \Controller\User::getApp_id() ) ));  // This will fire the users object if logged in
 
+    $route = new Modules\Route( DEFAULT_LANDING_URI );
+    
+    alert("Bootstap");
+    
+    require SERVER_ROOT . 'Application/Bootstrap.php';
+
+    exit(1);
+}
+
+
+
+
+
+
+
+startApplication();
 

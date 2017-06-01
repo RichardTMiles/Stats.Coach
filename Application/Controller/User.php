@@ -15,41 +15,36 @@ class User
 
     public function __construct()
     {
-        $this->request = Request::getInstance();
+        $this->request = new Request;
     }
 
     ############################## These function depend on each other
-    public static function loggedIn()
+    public static function getApp_id()
     {
-        return (isset($_SESSION['id']) ? $_SESSION['id'] : false);
+        return (array_key_exists('id', $_SESSION) ? $_SESSION['id'] : false);
     }
 
     public static function loggedOut()
     {
-        if (isset($_SESSION['id'])) {   // otherwise send them to the home page
-            View::newInstance();
-            mvc( 'Golf', 'golf');      // TODO - portability
-            die();
-        }
+        // the user is requesting a page for
+        if (array_key_exists( 'id' , $_SESSION ) && $_SESSION['id'])   // otherwise send them to the home page
+            startApplication();
     }
 
     public static function protectPage()
     {
-        if (!self::loggedIn()) self::logout();
+        if (!self::getApp_id()) self::logout();
     }
-    // If one of these doesn't work... You're doing something wrong
-    // header( "LOCATION: http://example.com/" );  // Note that this will not change url / state
-    // <head><meta http-equiv="refresh" content="2;url=http://example.com" /></head>
-    // <script type="text/javascript"> window.location = "http://www.example.com/" </script>
 
     public static function logout()
     {
         session_unset();
         session_destroy();
         session_start();
+        $_SESSION['id'] = false;
         View::newInstance();                    // I think this only works b/c Pjax is the shit
         UserRelay::newInstance();               // We want to reset the users class
-        mvc('User', 'login', 'loggedOut');
+        mvc('User', 'login');
         die(); 
     }
     ############################## / end dependency

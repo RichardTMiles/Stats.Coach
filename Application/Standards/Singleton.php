@@ -36,8 +36,11 @@ trait Singleton
                 return self::$getInstance;
             throw new \Exception( 'Bad Unserialize in Singleton' );
         }
-        // Start a new instance
-        return self::newInstance();
+
+        // Start a new instance of the class and pass any arguments
+        $class = new \ReflectionClass( get_called_class() );
+        self::$getInstance = $class->newInstanceArgs( func_get_args() );
+        return self::$getInstance;
     }
 
     public function __call($methodName, $arguments = array())
@@ -49,21 +52,22 @@ trait Singleton
     {
         // Have we used addMethod() to override an existing method
         if (key_exists( $methodName, $this->methods ))
-            return (empty($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
+            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
                 $this :
                 $result);
 
         // Is the method in the current scope ( public, protected, private ).
         // Note declaiming the method as private is the only way to ensure single instancing
-        if (method_exists($this , $methodName))
-            return (null == ($result = call_user_func_array( array($this, $methodName), $arguments )) ?
+        if (method_exists($this , $methodName)) {
+            return (null === ($result = call_user_func_array( array($this, $methodName), $arguments )) ?
                 $this : $result);
+        }
         
 
         if (key_exists( 'closures', $GLOBALS ) && key_exists( $methodName, $GLOBALS['closures'] )) {
             $function = $GLOBALS['closures'][$methodName];
             $this->addMethod( $methodName, $function );
-            return (empty($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
+            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
                 $this : $result);
         }
         throw new \Exception( "There is valid method or closure with the given name '$methodName' to call" );

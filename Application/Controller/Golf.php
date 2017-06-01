@@ -17,7 +17,7 @@ class Golf
 
     public function Golf()
     {
-
+        return false;   
     }
 
     public function PostScore()

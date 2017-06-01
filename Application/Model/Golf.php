@@ -2,11 +2,8 @@
 
 namespace Model;
 
-
-use Model\Helpers\GolfRelay;
 use Psr\Singleton;
 use Modules\Database;
-
 
 class Golf
 {
@@ -29,7 +26,7 @@ class Golf
 
     public function Golf()
     {
-
+        return true;
     }
 
     public function PostScore($state = false)

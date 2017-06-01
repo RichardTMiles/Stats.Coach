@@ -8,25 +8,22 @@ namespace View;
 */
 
 use Model\Helpers\UserRelay;
+use Facebook\Facebook;
 use Controller\User;
 use Psr\Singleton;
-
-use Facebook\Facebook;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
-
 
 class View
 {
     use Singleton;
 
+    public $pageTitle;
     public $currentPage;
 
-    public function __wakeup()
+    public function __wakeup($container = false)
     {
-        // HTTP or AJAX?
+        alert("View->Wakeup");
         if (!$this->ajaxSupport()):     // an HTTP request
-            $this->__construct();       // and reprocess the dependencies
+            $this->__construct($container);       // and reprocess the dependencies
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
             unset( $this->currentPage );
@@ -35,35 +32,41 @@ class View
         // this would mean we're requesting our second page through ajax
     }
 
-    public function __construct($file = null)
+    public function __construct($container = false)
     {
         $ajax = $this->ajaxSupport();
 
-        if ($id = User::loggedIn()) {
-            // If were logged in (ajax or not) we need to get the user data, which will be SESSION stored
-            UserRelay::getInstance();
+        alert("View::__construct( Container = " . ($container ?: 'false') . " ) ajax = " . ($ajax ?: 'false'));
 
+
+        if ($container) {
             if ($ajax) return null;
             
             ob_start();
-            require_once(SERVER_ROOT . 'Public' . DS . 'StatsCoach' . DS . 'TopNav.php');
+            require_once(CONTENT_WRAPPER);
             $size = ob_get_length();
             echo $template = ob_get_clean(); // Return the Template
-           
-        }  elseif ($ajax) User::logout(); // if there it is an ajax request, the user must be logged in
+        }  elseif ($ajax) User::logout();
+        // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
     private function contents($class, $fileName) // Must be called through Singleton, must be private
     {
+        alert("view->contents( $class, $fileName )");
+
+        $this->fileName = $fileName;    // So this will be stored for error catching
+
         $file = SERVER_ROOT . 'Public/StatsCoach/' . strtolower( $class ) . DS .
-            strtolower( $fileName ) . (($loggedIn = User::loggedIn()) ? '.tpl.php' : '.php');
+            strtolower( $fileName ) . ( ($loggedIn = User::getApp_id()) ? '.tpl.php' : '.php');
+
 
         if (file_exists( $file )) {
             ob_start();
             require_once $file;
             $size = ob_get_length();    // Speed testing
             $file = ob_get_clean();
-            if (!$this->ajax && $loggedIn)
+            
+            if (!$this->ajax && $loggedIn)          // TODO - think
                 $this->currentPage = base64_encode( $file );
             else echo $file;
         } else echo('Template Files not found.');   // TODO - Throw exception
@@ -87,26 +90,18 @@ class View
 
     public function faceBookLoginUrl() {
         $fb = new Facebook([
-            'app_id' => '1456106104433760',
+            'app_id' => '1456106104433760', // Replace {app-id} with your app id
             'app_secret' => 'c35d6779a1e5eebf7a4a3bd8f1e16026',
-            'default_graph_version' => 'v2.4',
-            'default_access_token' => isset($_SESSION['facebook_access_token']) ? $_SESSION['facebook_access_token'] : '1456106104433760|c35d6779a1e5eebf7a4a3bd8f1e16026'
+            'default_graph_version' => 'v2.2',
         ]);
 
-        try {
-            $response = $fb->get('/me?fields=id,name');
-            $user = $response->getGraphUser();
-            echo 'Name: ' . $user['name'];
-            exit; //redirect, or do whatever you want
-        } catch(FacebookResponseException $e) {
-            //echo 'Graph returned an error: ' . $e->getMessage();
-        } catch(FacebookSDKException $e) {
-            //echo 'Facebook SDK returned an error: ' . $e->getMessage();
-        }
-
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email'];
-        return $helper->getLoginUrl('http://stats.coach/Facebook/', $permissions);
+
+        $permissions = ['email', 'user_friends', 'public_profile'];           // Optional permissions
+
+        $loginUrl = $helper->getLoginUrl('https://stats.coach/FaceBook/', $permissions);
+
+        return htmlspecialchars( $loginUrl );
     }
 
 

@@ -17,6 +17,7 @@ use Modules\Helpers\Bcrypt;
 use Modules\Database;
 use Psr\Log\InvalidArgumentException;
 use Psr\Singleton;
+use View\View;
 
 class UserRelay
 {
@@ -47,35 +48,47 @@ class UserRelay
     public $user_ip;
 
 
-    public function __construct()
+    public function __construct($id = false)
     {
-
-        $this->db = Database::getConnection();  // establish a connection
-
-        //This would be run on first request after logging in. Class will be sterilised
-        if ($this->user_id = Users::loggedIn() && !isset($this->user_username))
-            $this->userProfile( $this->user_id );   // populates the global and
+        alert('UserRelay->__Construct');
+        if ($this->user_id = $id) $this->db = Database::getConnection();  // establish a connection
     }
 
-    public function __wakeup()
+
+    public function __wakeup($id = false)
     {
-        $this->db = Database::getConnection();
+        alert('UserRelay->__Wakeup');
+    }
 
-        if (Users::loggedIn()) {
-            // every server request after login
-
-            if (empty($this->user_full_name)) {
-                $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
-            }
+    
+    private function ajaxLogin_Support($id = false) {
+        alert('ajaxLogin_Support( id = ' . ($id ?: 'flase' ) . ")" );
+        //This would be run on first request after logging in. Class will be sterilised
+        if ($this->user_id = $id) {
+            if (!isset($this->user_username))
+                $this->userProfile( $this->user_id );   // populates the global and
 
             if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
+                if (empty($this->user_full_name))
+                    $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
+
                 foreach (get_object_vars( $this ) as $key => $var)
                     $GLOBALS[$key] = $this->$key = $var;
-            } else {
-                // throw new InvalidArgumentException( "Bad User Wake Up" );
+
+                // Ajax makes life a little hard when pressing the back button
+                // Backing into a previous post state is a thing is a problem..
+                if (!array_key_exists( "username", $_POST )) return true;
+                // We came from the login page?
+                $_POST["username"] = null;
+                $_POST["password"] = null;
+                unset($_POST);
             }
-        }
+            return true;
+        } return false;
+
     }
+    
+    
 
     public function __sleep()
     {
@@ -85,9 +98,11 @@ class UserRelay
 
     private function userProfile($id = false)
     {   // Private bc its commonly called singly, but still required the constructor
+        $this->db = Database::getConnection();
 
-        if (!!$id) $id = User::loggedIn(); // throw new \Exception("Attempted load of profile while logged out.");
-
+        alert("userProfile($id)");
+        
+        $id = $id ?: User::getApp_id(); // throw new \Exception("Attempted load of profile while logged out.");
         $this->user_id = $id;
 
         if (isset($this->user_username)) {
@@ -119,6 +134,8 @@ class UserRelay
 
     public function fetch_info($what, $field, $value)
     {
+        $this->db = Database::getConnection();
+
         $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
 
         if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
@@ -133,6 +150,8 @@ class UserRelay
 
     public function register($username, $password, $email, $firstName, $lastName)
     {
+        $this->db = Database::getConnection();
+
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR']; // getting the users IP address
         $email_code = $email_code = uniqid( 'code_', true ); // Creating a unique string.
@@ -160,6 +179,8 @@ class UserRelay
 
     public function activate($email, $email_code)
     {
+        $this->db = Database::getConnection();
+
         $sql = "SELECT COUNT(user_id) FROM users WHERE user_email = ? AND user_email_code = ? AND user_email_confirmed = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($email, $email_code, '0') );
@@ -174,6 +195,8 @@ class UserRelay
 
     public function login($username, $password)
     {
+        $this->db = Database::getConnection();
+
         $sql = "SELECT `user_password`, `user_id` FROM `users` WHERE `user_username` = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($username) );
@@ -189,12 +212,16 @@ class UserRelay
 
     public function update_user($first_name, $last_name, $gender, $bio, $image_location, $id)
     {
+        $this->db = Database::getConnection();
+
         return $this->db->prepare( "UPDATE users SET user_first_name = ?, user_last_name = ?, user_gender = ?, user_bio = ?, user_profile_pic = ? WHERE user_id = ?" )
             ->execute( array($first_name, $last_name, $gender, $bio, $image_location, $id) );
     }
 
     public function change_password($user_id, $password)
     {   /* Two create a Hash you do */
+        $this->db = Database::getConnection();
+
         $password_hash = Bcrypt::genHash( $password );
 
         $stmt = $this->db->prepare( "UPDATE users SET user_password = ? WHERE user_id = ?" );
@@ -204,6 +231,8 @@ class UserRelay
 
     public function recover($email, $generated_string)
     {
+        $this->db = Database::getConnection();
+
         if ($generated_string == 0) {
             return false;
         } else {
@@ -236,6 +265,8 @@ class UserRelay
 
     public function confirm_recover($email)
     {
+        $this->db = Database::getConnection();
+
         $first_name = $this->fetch_info( 'first_name', 'email', $email );   // returns 1 value
 
         $unique = uniqid( '', true );
@@ -255,6 +286,8 @@ class UserRelay
 
     public function user_exists($username)
     {
+        $this->db = Database::getConnection();
+
         $sql = 'SELECT COUNT(user_id) FROM users WHERE user_username = ?';
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$username] );
@@ -264,6 +297,7 @@ class UserRelay
 
     public function email_exists($email)
     {
+        $this->db = Database::getConnection();
 
         $sql = "SELECT COUNT(user_id) FROM `users` WHERE `user_email`= ?";
         $stmt = $this->db->prepare( $sql );
@@ -274,6 +308,8 @@ class UserRelay
 
     public function email_confirmed($username)
     {
+        $this->db = Database::getConnection();
+
         $sql = "SELECT COUNT(user_id) FROM users WHERE user_username= ? AND user_email_confirmed = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($username, 1) );
@@ -284,6 +320,8 @@ class UserRelay
 
     public function get_users()
     {
+        $this->db = Database::getConnection();
+
         $sql = "SELECT * FROM users ORDER BY user_creation_date DESC";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute();

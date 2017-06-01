@@ -16,16 +16,6 @@ class Request
 {
     use Singleton;
 
-    public function __construct()
-    {
-        // Ajax makes life a little hard when pressing the back button
-        // Backing into a previous post state is a thing is a problem..
-        if (!array_key_exists("username", $_POST) || !User::loggedIn()) return;
-        $_POST["username"] = null;
-        $_POST["password"] = null;
-        unset($_POST);
-    }
-
     public function is($type)
     {
         $type = 'is_' . strtolower( $type );
@@ -43,11 +33,13 @@ class Request
         array_walk( func_get_args(), function ($key) {
             if (array_key_exists( $key, $this->storage )) unset($this->storage[$key]);
         } );
+        return $this;
     }
 
     private function flash()
     {
         $_SESSION['OLDRequest'][] = $this->storage;
+        return $this;
     }
 
     private function old($key = null)
@@ -67,6 +59,7 @@ class Request
             } else $this->storage[] = false;
         }; // the unset function isn't behaving nicely w/ Ajax :: so = null
         if (count( $only ) == 0 || !array_walk( $only, $post )) $this->storage = $_POST;
+        return $this;
     }
 
     private function cookie($key = null)
@@ -80,6 +73,7 @@ class Request
             } else $this->storage[] = false;
         }; // the unset function isn't behaving nicely w/ Ajax :: so = null
         if (count( $only ) == 0 || !array_walk( $only, $cookie )) $this->storage = $_COOKIE;
+        return $this;
     }
 
     private function files($key = null)
@@ -93,15 +87,24 @@ class Request
             } else $this->storage[] = false;
         }; // the unset function isn't behaving nicely w/ Ajax :: so = null
         if (count( $only ) == 0 || !array_walk( $only, $file )) $this->storage = $_FILES;
+        return $this;
     }
 
     ########################## Validating ##############################
+
+    private function validating($callable)
+    {
+        return (is_array( $callable ) && array_walk( $callable, $regex ) ?
+            count($this->storage) > 1 ? $this->storage : array_shift( $this->storage ) :
+            array_shift($regex( $callable )));
+    }
+
     public function phone()
     {
         return (preg_match( '#((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}#', $this->storage[0] ) ? $this->storage[0] : false);
     }
 
-    private function email()
+    public function email()
     {
         return filter_var( array_shift($this->storage), FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE );
     }
@@ -117,7 +120,7 @@ class Request
             array_shift($regex( $only )));
     }
 
-    private function value()
+    public function value()
     {
         $only = $this->storage;
         $this->storage = null;
@@ -134,7 +137,7 @@ class Request
         $this->storage = null;
         $alphaNumeric = function ($key) use ($only) {
             return $this->storage[] = (ctype_alnum( $key ) ? $key : false); };
-        return (is_array( $only ) && array_walk( $only, $alphaNumeric ) ? 
+        return (is_array( $only ) && array_walk( $only, $alphaNumeric ) ?
             count($this->storage) > 1 ? $this->storage : array_shift( $this->storage ) :
             array_shift($alphaNumeric( $only )));
     }
