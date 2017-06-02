@@ -14,6 +14,6 @@ if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
 
 
 new Psr\Autoload;                  //Controller\User::logout(); exit(1);
-// new Modules\ErrorCatcher;
+new Modules\ErrorCatcher;
 
 startApplication();

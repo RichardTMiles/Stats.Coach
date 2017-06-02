@@ -27,7 +27,7 @@ class ErrorCatcher
         ob_end_clean( );
         // Write the contents back to the file
         file_put_contents( ERROR_LOG, $output );
-        // startApplication();
+        startApplication();
         exit(1);
     }
 
