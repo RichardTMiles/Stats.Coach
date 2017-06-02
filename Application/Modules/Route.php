@@ -61,7 +61,8 @@ class Route
         if ($this->matched == false) {
             if (is_callable( $function ))
                 $this->homeMethod = $function;
-            $this->homeMethod = $this->storage;
+            elseif (is_callable( $this->storage ))
+                $this->homeMethod = $this->storage;
         }
     }
     
@@ -83,8 +84,7 @@ class Route
         if ($this->matched === true)
             return $this;
 
-        if (!is_callable( $closure ))
-            throw new \Exception();
+        $this->storage = null;
 
         if ($this->matched === "PUSH") {
             $this->matched = false;

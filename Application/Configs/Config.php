@@ -52,7 +52,7 @@ function sortDump($mixed = null)
 
 function alert($string = "Made it!")
 {
-    print "<script>alert('$string')</script>";
+    //print "<script>alert('$string')</script>";
 }
 
 function mvc($class, $method)
@@ -63,9 +63,31 @@ function mvc($class, $method)
 
     if (( new $controller )->$method())
         ( new $model )->$method();
-    
+
     \View\View::contents( $class, $method );    // this will exit(1);
 
+}
+
+function startApplication()
+{
+    $userStatus = \Controller\User::getApp_id();
+
+    $wrapper = function () use ($userStatus) {
+        return (!WRAPPING_REQUIRES_LOGIN ?: \Model\User::ajaxLogin_Support( $userStatus ));
+    };
+
+    View\View::clearInstance();
+    View\View::getInstance( $wrapper() );
+
+    $route = new Modules\Route(
+        function () { mvc( 'User', 'login' ); } ,         // default logged out
+        function () { mvc( 'Golf', 'golf' ); } ,         // default logged in
+        $userStatus );
+
+
+    require SERVER_ROOT . 'Application/Bootstrap.php';
+
+    exit(1);
 }
 
 

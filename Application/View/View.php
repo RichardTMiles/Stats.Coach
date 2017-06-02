@@ -60,7 +60,6 @@ class View
         $file = SERVER_ROOT . 'Public/StatsCoach/' . strtolower( $class ) . DS .
             strtolower( $fileName ) . ( ($loggedIn = User::getApp_id()) ? '.tpl.php' : '.php');
 
-
         if (file_exists( $file )) {
             ob_start();
             require_once $file;
@@ -69,7 +68,7 @@ class View
             if (!$this->ajax && $loggedIn)          // TODO - think
                 $this->currentPage = base64_encode( $file );
             else echo $file;
-        } else echo('Template Files not found.');   // TODO - Throw exception
+        } else echo('Template Files not found.');   // TODO - Throw exception , restart?
         exit(1);
     }
 
