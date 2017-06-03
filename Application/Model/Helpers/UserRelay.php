@@ -63,7 +63,7 @@ abstract class UserRelay
         //This would be run on first request after logging in. Class will be sterilised
         if (!$this->user_id = ($id ?: User::getApp_id()))
             return false;
-        
+
         if (!isset($this->user_username))
             $this->userProfile( $this->user_id );   // populates the global and
 
@@ -83,7 +83,6 @@ abstract class UserRelay
             unset($_POST);
         }
         return true;
-
     }
 
     public function __toString()
@@ -100,8 +99,6 @@ abstract class UserRelay
     protected function userProfile($id = false)
     {   // Private bc its commonly called singly, but still required the constructor
         $this->db = Database::getConnection();
-
-        alert( "userProfile($id)" );
 
         $id = $id ?: User::getApp_id(); // throw new \Exception("Attempted load of profile while logged out.");
         $this->user_id = $id;

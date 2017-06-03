@@ -58,16 +58,7 @@ class ErrorCatcher
         ob_end_clean( );
         return $this->report = $output;
     }
-
-    public static function reporting($level = 0)
-    {
-        $error = function () { new ErrorCatcher(); };
-
-        error_reporting( $level );
-        ini_set( 'display_errors', ($level == 0 ? 0 : 1) );
-        set_error_handler( $error );
-        set_exception_handler( $error );
-    }
+    
 
     // TODO - add java tags/ make redirect work
     private function redirect()

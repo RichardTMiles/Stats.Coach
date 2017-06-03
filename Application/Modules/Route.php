@@ -32,7 +32,6 @@ class Route
         }
 
         if (empty($uri)) {
-            alert('route-defaults');
             $this->matched = true;  // I dont think this is needed how im using it, but my be required for fututre builds
             return ($signedStatus ? $default_Signed_In() : $default_Signed_Out());
         }

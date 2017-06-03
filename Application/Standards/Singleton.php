@@ -44,8 +44,7 @@ trait Singleton
     }
     public static function clearInstance()
     {
-        if (!empty(self::$getInstance))
-            return self::$getInstance = null;
+        return self::$getInstance = null;
     }
 
     public function __call($methodName, $arguments = array())
