@@ -18,7 +18,7 @@ $url = (isset($_SERVER['SERVER_NAME']) ?
 
 
 #################   Template ########################
-define( 'SITE_ROOT',       $url . DS );          // The base URL
+define( 'SITE_ROOT',       $url .   DS );          // The base URL
 define( 'ERROR_LOG',       SERVER_ROOT . 'Data'   . DS . 'Logs'       . DS . 'Logs.php'  );
 define( 'CONTENT_ROOT',    SERVER_ROOT . 'Public' . DS . 'StatsCoach' . DS );
 define( 'CONTENT_WRAPPER', CONTENT_ROOT. 'TopNav.php');
@@ -50,9 +50,8 @@ function startApplication()
 {
     $userStatus = Controller\User::getApp_id();
 
-    $wrapper = $GLOBALS['wrapper'] = function () use ($userStatus) {
-        return (!WRAPPING_REQUIRES_LOGIN ?: Model\User::ajaxLogin_Support( $userStatus ));
-    };
+    $wrapper = $GLOBALS['closures']['wrapper'] = function () use ($userStatus) {
+        return (!WRAPPING_REQUIRES_LOGIN ?: Model\User::ajaxLogin_Support( $userStatus )); };
 
     View\View::clearInstance();
     View\View::getInstance( $wrapper() );
