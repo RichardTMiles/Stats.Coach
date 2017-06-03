@@ -11,7 +11,7 @@ $route->signedIn()->match( 'Home/*', function () { mvc( 'Golf', 'golf' ); } )->h
 
 
 $route->match( 'AdminLTE/*', function () {
-    include TEMPLATE_ROOT . 'pages/layout/boxed.html';
+    // include TEMPLATE_ROOT . 'pages/layout/boxed.html';
     exit(1);
 } );
 
@@ -26,7 +26,7 @@ $route->match( 'Facebook/*', function () {
 $route->match( 'Tests/*',    function () { include SERVER_ROOT . 'Tests/login.php'; } );
 
 
-$route->signedOut()->match( 'Login/{client?}/*', function ($client = null) { mvc( 'User', 'login' ); } );    // Login
+$route->signedOut()->match( 'Login/{client?}/*', function ($client) { mvc( 'User', 'login' ); } );    // Login
 
 
 $route->signedIn()->match( 'PostScore/{state?}/*', function ($state) { mvc('Golf', 'postScore'); } );    // PostScore $state
@@ -35,10 +35,10 @@ $route->signedIn()->match( 'PostScore/{state?}/*', function ($state) { mvc('Golf
 $route->signedIn()->match( 'AddCourse/{state?}/*', function ($state) { mvc( 'Golf', 'AddCourse'); } );    // AddCourse TODO - Make $state work
 
 
-$route->match( 'Logout/*',  function () { Controller\User::logout(); } );    // Logout
+$route->signedIn()->match( 'Logout/*',  function () { Controller\User::logout(); } );    // Logout
 
 
-$route->match( 'Register/*', function () { mvc( 'User', 'Register'); } );    // Register
+$route->signedOut()->match( 'Register/*', function () { mvc( 'User', 'Register'); } );    // Register
 
 
 $route->match( 'Activate/{email?}/{email_code?}/', 

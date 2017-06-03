@@ -19,6 +19,7 @@ class View
 
     public function __wakeup()
     {
+        alert("Wakeup");
         if (!$this->ajaxActive()):     // an HTTP request
             $this->__construct($this->wrapper());      // and reprocess the dependencies
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
@@ -52,8 +53,10 @@ class View
             ob_start();
             require_once $file;
             $file = ob_get_clean();
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn))          // TODO - Logged in should be rethought
+            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {         // TODO - Logged in should be rethought
+                alert("View:Store_Page");
                 $this->currentPage = base64_encode( $file );
+            }
             else echo $file;
         } else startApplication();          // restart, this usually means the user is trying to access a protected page when logged out
         exit(1);

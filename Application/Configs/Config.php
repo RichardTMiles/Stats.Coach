@@ -14,7 +14,7 @@ define ('DB_PASS', 'Huskies!99'   );
 $url = (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
         'https://' :
-        'http://') . $_SERVER['SERVER_NAME'] : null);
+        'http://' ) . $_SERVER['SERVER_NAME'] : null);
 
 
 #################   Template ########################
@@ -36,19 +36,23 @@ header( 'Content-type: text/html; charset=utf-8' );
 #################   Functions  ######################
 function mvc($class, $method)
 {
+    alert("mvc($class, $method)");
     $controller = "Controller\\$class";
     $model = "Model\\$class";
 
     if (( new $controller )->$method())
         ( new $model )->$method();
 
-    View\View::contents( $class, $method );    // this will exit(1);
+    View\View::contents( $class, $method );    // this will
 
+    exit(1);
 }
 
 function startApplication()
 {
     $userStatus = Controller\User::getApp_id();
+
+    alert("startApplication ( " . ($userStatus ? 'logged in' : 'Logged out' ) . ' )');
 
     $wrapper = $GLOBALS['closures']['wrapper'] = function () use ($userStatus) {
         return (!WRAPPING_REQUIRES_LOGIN ?: Model\User::ajaxLogin_Support( $userStatus )); };

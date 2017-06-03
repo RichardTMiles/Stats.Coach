@@ -10,8 +10,6 @@
 try {
     $db = \Modules\Database::getConnection();
 
-    $drop = 'DROP TABLE users';
-
     $sql = "CREATE TABLE IF NOT EXISTS `users` (
       `user_id` INT(25) NOT NULL AUTO_INCREMENT,
       `user_username` VARCHAR(25) NOT NULL,
@@ -60,7 +58,7 @@ CREATE UNIQUE INDEX team_id ON teams (team_id, team_code)";
 
 
 
-    $sql = "CREATE TABLE team_members (
+    $sql = "CREATE TABLE IF NOT EXISTS team_members (
     user_id INT(11) NOT NULL,
     team_id INT(11) NOT NULL,
     CONSTRAINT `PRIMARY` PRIMARY KEY (user_id, team_id))";
@@ -69,7 +67,7 @@ CREATE UNIQUE INDEX team_id ON teams (team_id, team_code)";
     $db->exec( $sql );
     echo "Created `Team_members` Table \n";
 
-    $sql ="CREATE TABLE golf_tournaments
+    $sql ="CREATE TABLE IF NOT EXISTS golf_tournaments
 (
   tournament_id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   tournament_name INT(11) NOT NULL,
@@ -89,7 +87,7 @@ CREATE UNIQUE INDEX tournament_id ON golf_tournaments (tournament_id)";
     echo "Created `Golf_tournaments` Table \n";
 
 
-    $sql = "CREATE TABLE golf_tournament_teams
+    $sql = "CREATE TABLE IF NOT EXISTS golf_tournament_teams
 (
   tournament_id INT(11) NOT NULL COMMENT 'tournaments(tournament_id)',
   tournament_team_id INT(11) NOT NULL,
@@ -108,7 +106,7 @@ CREATE UNIQUE INDEX tournament_id ON golf_tournaments (tournament_id)";
     $db->exec( $sql );
     echo "Created `golf_tournament_teams` Table \n";
 
-    $sql = "CREATE TABLE golf_rounds
+    $sql = "CREATE TABLE IF NOT EXISTS golf_rounds
 (
   round_id INT(11) NOT NULL,
   round_public INT(1) DEFAULT '1' NOT NULL COMMENT 'true \"1\" or false \"2\"',
@@ -141,7 +139,7 @@ CREATE UNIQUE INDEX round_id ON golf_rounds (round_id)";
     $db->exec( $sql );
     echo "Created `golf_rounds` Table \n";
 
-    $sql = "CREATE TABLE golf_handicap
+    $sql = "CREATE TABLE IF NOT EXISTS golf_handicap
 (
   course_id INT(11) NOT NULL COMMENT 'References golf_courses(course_id)',
   handicap_gender VARCHAR(5),
@@ -171,7 +169,7 @@ CREATE UNIQUE INDEX round_id ON golf_rounds (round_id)";
 
 
 
-    $sql = "CREATE TABLE golf_distances
+    $sql = "CREATE TABLE IF NOT EXISTS golf_distances
 (
   course_id INT(11) NOT NULL COMMENT 'Reference from golf_courses',
   tee_box INT(1) NOT NULL COMMENT 'options ( 1 - 5 )',
@@ -204,7 +202,7 @@ CREATE UNIQUE INDEX round_id ON golf_rounds (round_id)";
     echo "Created `golf_distances` Table \n";
 
 
-    $sql = "CREATE TABLE golf_courses
+    $sql = "CREATE TABLE IF NOT EXISTS golf_courses
 (
   course_id INT(11) NOT NULL,
   course_name VARCHAR(225) NOT NULL,
@@ -253,12 +251,12 @@ CREATE UNIQUE INDEX round_id ON golf_rounds (round_id)";
 
     echo '<meta http-equiv="refresh" content="5">';
 
-    unlink( SERVER_ROOT . "Scripts/Build/DBSetup.php" );
-
-    die();
 } catch (PDOException $e) {
     // Delete this file
     echo "Build Failed";
 }
 
+unlink( SERVER_ROOT . "Scripts/Build/DBSetup.php" );
 
+
+exit(1);
