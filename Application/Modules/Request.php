@@ -50,7 +50,7 @@ class Request
 
 
     ########################## Browser Storage #############################
-    public static function setCookie($key, $value = null, $time = 3600)
+    public static function setCookie($key, $value = null, $time = 604800)
     {
         $boolSecure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
         return setcookie( $key, $value, time() + $time, '/', $_SERVER['SERVER_NAME'], $boolSecure, true );

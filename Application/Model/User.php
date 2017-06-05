@@ -15,7 +15,7 @@ class User extends UserRelay
     private function ajaxLogin_Support($id = false)
     {
         if (!$id) return false;
-        
+
         if (!isset($this->user_username))
             $this->userSQL( $this->user_id );   // populates the global and
 
@@ -29,7 +29,8 @@ class User extends UserRelay
 
             // Ajax makes life a little hard when pressing the back button
             // Backing into a previous post state is a thing is a problem..
-            if (!array_key_exists( "username", $_POST )) return true;
+            if (!array_key_exists( "username", $_POST ))
+                return true;
             // We came from the login page?
             $_POST["username"] = null;
             $_POST["password"] = null;

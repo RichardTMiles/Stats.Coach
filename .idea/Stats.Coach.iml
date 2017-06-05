@@ -8,8 +8,10 @@
       <sourceFolder url="file://$MODULE_DIR$/Application/Modules" isTestSource="false" packagePrefix="Modules" />
       <sourceFolder url="file://$MODULE_DIR$/Application/Standards" isTestSource="false" packagePrefix="Standards" />
       <sourceFolder url="file://$MODULE_DIR$/Application/View" isTestSource="false" packagePrefix="View" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests" isTestSource="false" packagePrefix="Tests" />
       <sourceFolder url="file://$MODULE_DIR$/Application/Services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests" isTestSource="true" packagePrefix="Tests" />
+      <sourceFolder url="file://$MODULE_DIR$/Application/Services/vendor" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/Application/Services/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

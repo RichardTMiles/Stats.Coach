@@ -54,6 +54,8 @@ class Golf
 
         if (empty($_POST)) return false;
 
+        sortDump($_POST);
+
         try {
             $this->par = array();
 
@@ -84,14 +86,13 @@ class Golf
 
             $this->handicap[1] = $this->request->post("hc_1_1", "hc_1_2","hc_1_3","hc_1_4","hc_1_5","hc_1_6","hc_1_7","hc_1_8","hc_1_9","hc_1_10","hc_1_11","hc_1_12","hc_1_13","hc_1_14","hc_1_15","hc_1_16","hc_1_17","hc_1_18")->int();
             // hc2 may not need to be validated?
-            if ($this->request->post("hc2")->alnum() != "none" || $this->handicapTwo != null)
+            if ($this->request->post("hc2")->alnum() != "none" || $this->handicap[2] != null)
                 $this->handicap[2] = $this->request->post("hc_2_1", "hc_2_2","hc_2_3","hc_2_4","hc_2_5","hc_2_6","hc_2_7","hc_2_8","hc_2_9","hc_2_10","hc_2_11","hc_2_12","hc_2_13","hc_2_14","hc_2_15","hc_2_16","hc_2_17","hc_2_18")->int();
             else $this->handicap[2] = null;
 
             return true;
         } catch (\Exception $e) {
             alert( $e->getMessage() );
-            sortDump();
         } return false;
     }
 

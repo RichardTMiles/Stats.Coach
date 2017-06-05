@@ -23,7 +23,7 @@ $route->match( 'Tests/*',    function () { include SERVER_ROOT . 'Tests/login.ph
 
 
 $route->signedOut()->match( 'Login/{client?}/*', function ($client) {
-    if ($client == "facebook") include SERVER_ROOT . 'Application/Services/Facebook/callback.php';
+    if ($client == "facebook") include SERVER_ROOT . 'Application/Services/fb-callback.php';
     mvc( 'User', 'login' ); } );    // Login
 
 

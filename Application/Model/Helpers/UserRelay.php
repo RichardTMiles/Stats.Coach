@@ -49,11 +49,11 @@ abstract class UserRelay
     public function __construct($id = false)
     {
         $this->db = Database::getConnection();  // establish a connection
-
     }
 
     public function __wakeup($id = false)
     {
+        $this->db = Database::getConnection();  // establish a connection
     }
     
 
@@ -65,8 +65,7 @@ abstract class UserRelay
 
     protected function userSQL($id = false)
     {   // Private bc its commonly called singly, but still required the constructor
-        $this->db = Database::getConnection();
-        
+
         $id = $id ?: User::getApp_id(); // throw new \Exception("Attempted load of profile while logged out.");
         $this->user_id = $id;
 
@@ -100,8 +99,6 @@ abstract class UserRelay
 
     protected function fetchSQL($what, $field, $value)
     {
-        $this->db = Database::getConnection();
-
         $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
 
         if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
@@ -116,7 +113,6 @@ abstract class UserRelay
 
     protected function registerSQL($username, $password, $email, $firstName, $lastName)
     {
-        $this->db = Database::getConnection();
 
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR']; // getting the users IP address
@@ -145,7 +141,6 @@ abstract class UserRelay
 
     public function activateSQL($email, $email_code)
     {
-        $this->db = Database::getConnection();
 
         $sql = "SELECT COUNT(user_id) FROM users WHERE user_email = ? AND user_email_code = ? AND user_email_confirmed = ?";
         $stmt = $this->db->prepare( $sql );
@@ -161,7 +156,6 @@ abstract class UserRelay
 
     protected function loginSQL($username, $password)
     {
-        $this->db = Database::getConnection();
 
         $sql = "SELECT `user_password`, `user_id` FROM `users` WHERE `user_username` = ?";
         $stmt = $this->db->prepare( $sql );
@@ -178,8 +172,6 @@ abstract class UserRelay
 
     protected function updateSQL()
     {
-        $this->db = Database::getConnection();
-
         return $this->db->prepare(  "UPDATE users SET 
                                     user_facebook_id = ?, 
                                     user_username = ?, 

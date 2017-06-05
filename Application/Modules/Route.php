@@ -25,11 +25,8 @@ class Route
 
     public function __construct($default_Signed_Out = "Login/", $default_Signed_In = "Home/", $signedStatus = false)
     {
-        if (key_exists( 'REQUEST_URI', $_SERVER )) {
-            $uri = urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
-            $uri = ltrim( $uri, '/' );
-        }
-
+        if (key_exists( 'REQUEST_URI', $_SERVER ))
+            $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ) , '/' );
 
         if (empty($uri)) {
             $this->matched = true;
