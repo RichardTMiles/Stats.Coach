@@ -6,6 +6,7 @@
  * Time: 10:20 PM
  */
 
+/*
 
 try {
     $db = \Modules\Database::getConnection();
@@ -260,3 +261,5 @@ unlink( SERVER_ROOT . "Scripts/Build/DBSetup.php" );
 
 
 exit(1);
+
+*/

@@ -19,12 +19,12 @@ use Psr\Singleton;
 
 abstract class UserRelay
 {
-    use Singleton;
 
     private $db;
 
 
     public $user_id;
+    public $user_facebook_id;
     public $user_username;
     public $user_full_name;
     public $user_first_name;
@@ -48,47 +48,14 @@ abstract class UserRelay
 
     public function __construct($id = false)
     {
-        if ($this->user_id = ($id ?: User::getApp_id()))
-            $this->db = Database::getConnection();  // establish a connection
+        $this->db = Database::getConnection();  // establish a connection
 
     }
 
     public function __wakeup($id = false)
     {
     }
-
-
-    private function ajaxLogin_Support($id = false)
-    {
-        //This would be run on first request after logging in. Class will be sterilised
-        if (!$this->user_id = ($id ?: User::getApp_id()))
-            return false;
-
-        if (!isset($this->user_username))
-            $this->userProfile( $this->user_id );   // populates the global and
-
-        if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
-            if (empty($this->user_full_name))
-                $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
-
-            foreach (get_object_vars( $this ) as $key => $var)
-                $GLOBALS[$key] = $this->$key = $var;
-
-            // Ajax makes life a little hard when pressing the back button
-            // Backing into a previous post state is a thing is a problem..
-            if (!array_key_exists( "username", $_POST )) return true;
-            // We came from the login page?
-            $_POST["username"] = null;
-            $_POST["password"] = null;
-            unset($_POST);
-        }
-        return true;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->user_id;
-    }
+    
 
     public function __sleep()
     {
@@ -96,10 +63,10 @@ abstract class UserRelay
     }
 
 
-    protected function userProfile($id = false)
+    protected function userSQL($id = false)
     {   // Private bc its commonly called singly, but still required the constructor
         $this->db = Database::getConnection();
-
+        
         $id = $id ?: User::getApp_id(); // throw new \Exception("Attempted load of profile while logged out.");
         $this->user_id = $id;
 
@@ -120,6 +87,7 @@ abstract class UserRelay
         $stmt->execute( [$id] );
         $data = $stmt->fetch( PDO::FETCH_ASSOC );
 
+
         foreach ($data as $key => $val)
             $GLOBALS[$key] = $this->{$key} = $val;
 
@@ -130,7 +98,7 @@ abstract class UserRelay
 
     }
 
-    protected function fetch_info($what, $field, $value)
+    protected function fetchSQL($what, $field, $value)
     {
         $this->db = Database::getConnection();
 
@@ -205,15 +173,38 @@ abstract class UserRelay
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
         else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
 
-        $this->userProfile( $_SESSION['id'] );
+        $this->userSQL( $_SESSION['id'] );
     }
 
-    protected function update_user($first_name, $last_name, $gender, $bio, $image_location, $id)
+    protected function updateSQL()
     {
         $this->db = Database::getConnection();
 
-        return $this->db->prepare( "UPDATE users SET user_first_name = ?, user_last_name = ?, user_gender = ?, user_bio = ?, user_profile_pic = ? WHERE user_id = ?" )
-            ->execute( array($first_name, $last_name, $gender, $bio, $image_location, $id) );
+        return $this->db->prepare(  "UPDATE users SET 
+                                    user_facebook_id = ?, 
+                                    user_username = ?, 
+                                    user_first_name = ?, 
+                                    user_last_name = ?, 
+                                    user_profile_pic = ?,
+                                    user_cover_photo = ?,
+                                    user_birth_date = ?,
+                                    user_gender = ?, 
+                                    user_bio = ?,
+                                    user_rank = ?,
+                                    user_email = ?
+                                    WHERE user_id = ?" )
+            ->execute( [$this->user_facebook_id,
+                $this->user_username,
+                $this->user_first_name,
+                $this->user_last_name,
+                $this->user_profile_pic,
+                $this->user_cover_photo,
+                $this->user_birth_date,
+                $this->user_gender,
+                $this->user_bio,
+                $this->user_rank,
+                $this->user_email,
+                $this->user_id] );
     }
 
     protected function change_password($user_id, $password)
@@ -239,8 +230,8 @@ abstract class UserRelay
 
             if ($stmt->fetch()) {   // a row exists
 
-                $username = self::fetch_info( 'user_username', 'user_email', $email ); // getting username for the use in the email.
-                $user_id = self::fetch_info( 'user_id', 'user_email', $email ); // getting username for the use in the email.
+                $username = self::fetchSQL( 'user_username', 'user_email', $email ); // getting username for the use in the email.
+                $user_id = self::fetchSQL( 'user_id', 'user_email', $email ); // getting username for the use in the email.
 
                 // We want to keep things standard and use the user's id for most of the operations. Therefore, we use id instead of email.
 
@@ -265,7 +256,7 @@ abstract class UserRelay
     {
         $this->db = Database::getConnection();
 
-        $first_name = $this->fetch_info( 'first_name', 'email', $email );   // returns 1 value
+        $first_name = $this->fetchSQL( 'first_name', 'email', $email );   // returns 1 value
 
         $unique = uniqid( '', true );
         $random = substr( str_shuffle( 'AdfsBCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, 10 );
@@ -311,8 +302,7 @@ abstract class UserRelay
         $sql = "SELECT COUNT(user_id) FROM users WHERE user_username= ? AND user_email_confirmed = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($username, 1) );
-        if ($stmt->fetch())
-            return true;
+        if ($stmt->fetch()) return true;
         throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
     }
 

@@ -3,17 +3,45 @@
 namespace Model;
 
 use Model\Helpers\UserRelay;
-use Modules\Route;
 use Modules\StoreFiles;
+use Modules\Request;
 use Psr\Singleton;
-use View\View;
 
 
 class User extends UserRelay
 {
+    use Singleton;
+
+    private function ajaxLogin_Support($id = false)
+    {
+        if (!$id) return false;
+        
+        if (!isset($this->user_username))
+            $this->userSQL( $this->user_id );   // populates the global and
+
+
+        if (isset($this->user_username) && !array_key_exists( 'user_username', $GLOBALS )) {
+            if (empty($this->user_full_name))
+                $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
+
+            foreach (get_object_vars( $this ) as $key => $var)
+                $GLOBALS[$key] = $this->$key = $var;
+
+            // Ajax makes life a little hard when pressing the back button
+            // Backing into a previous post state is a thing is a problem..
+            if (!array_key_exists( "username", $_POST )) return true;
+            // We came from the login page?
+            $_POST["username"] = null;
+            $_POST["password"] = null;
+            unset($_POST);
+        }
+        return true;
+    }
     
     public function login()
     {
+        if (isset($this->facebook)) return $this->facebook();
+
         try {
             if (!parent::user_exists( $this->username ))
                 throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
@@ -22,17 +50,47 @@ class User extends UserRelay
                 throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
             // If ->login() fails exception is thrown
-            parent::loginSQL( $this->username, $this->password );
-            
-            startApplication();     // restart
+            parent::loginSQL( $this->username, $this->password );   // This will call userProfile()
+
+            session_regenerate_id(true);
+
+            if ($this->rememberMe) {
+                Request::setCookie( "UserName",  $this->user_username);
+                Request::setCookie( "FullName",  $this->user_full_name);
+                Request::setCookie( "UserImage",  $this->user_profile_pic);
+            } else {
+                Request::setCookie( "UserName",  "", -1);
+                Request::setCookie( "FullName",  "", -1);
+                Request::setCookie( "UserImage",  "", -1);
+            }
+            startApplication(true);     // restart
             
         } catch (\Exception $e) {
             $this->alert = $e->getMessage();
+        }
+
+    }
+
+    public function facebook()
+    {
+        try {
+            if ($this->email_exists( $this->facebook['email'] )) {
+                $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
+                    $this->userSQL($_SESSION['id']);
+                if ($this->user_facebook_id == null)
+                    //$this->update_user();
+                sortDump($this->facebook);
+            } else {
+                
+            }
+        } catch (\Exception $e) {
+            throw new \Exception( 'Sorry, there appears to be an error in Facebook SDK.' );
         }
     }
 
     public function register()
     {
+
         try {
             if (!parent::user_exists( $this->username ))
                 throw new \Exception ( 'That username already exists' );
@@ -45,7 +103,7 @@ class User extends UserRelay
 
             parent::loginSQL( $this->username, $this->password );
             
-            startApplication();
+            startApplication(true);
 
         } catch (\Exception $e) {
             $this->alert = $e->getMessage();
@@ -63,7 +121,7 @@ class User extends UserRelay
                 throw new \Exception( 'Sorry, we have failed to activate your account' );
 
 
-            $login = parent::fetch_info( 'id', 'email', $this->email );
+            $login = parent::fetchSQL( 'id', 'email', $this->email );
 
             session_destroy();
             session_regenerate_id( true );
@@ -87,7 +145,7 @@ class User extends UserRelay
                 if (!parent::recoverSQL( $email, $unique ))
                     throw new \Exception ( "Sorry, something went wrong and we could not recover your password." );
 
-                return header( "LOCATION: http://Stats.Coach/login/recover/" );
+                return header( "LOCATION: http://Stats.Coach/login/recover/" ); // TODO - start app compat.
                 // throw new /Exception ('');
 
             }

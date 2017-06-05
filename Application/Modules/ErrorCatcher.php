@@ -22,13 +22,13 @@ class ErrorCatcher
         // Open the file to get existing content
         ob_start( );
         print file_get_contents( ERROR_LOG ) . PHP_EOL;
+        echo date( 'D, d M Y H:i:s' , time());
         print $this->generateCallTrace( ) . PHP_EOL;
         echo $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
         file_put_contents( ERROR_LOG, $output );
-        startApplication();
-        exit(1);
+        startApplication(true);
     }
 
     private function generateCallTrace()

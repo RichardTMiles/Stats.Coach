@@ -14,6 +14,23 @@ if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
 
 
 new Psr\Autoload;
-new Modules\ErrorCatcher;
+# new Modules\ErrorCatcher;
 
+
+##################   DEV Tools   #################
+function sortDump($mixed = null)
+{
+    unset($_SERVER);
+    echo '<pre>';
+    var_dump( ($mixed === null ? $GLOBALS : $mixed) );
+    echo '</pre>';
+    die(1);
+}
+
+function alert($string = "Made it!")
+{
+    print "<script>alert('$string')</script>";
+}
+
+#################### Run Stats Coach ###############
 startApplication();

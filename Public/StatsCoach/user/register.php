@@ -28,7 +28,7 @@
     html {
         /* This image will be displayed fullscreen */
 
-        background: url('http://www.sbs.com.au/cyclingcentral/sites/sbs.com.au.cyclingcentral/files/velodrome_4000_getty.jpg') no-repeat center fixed;
+        background: url('/Public/StatsCoach/img/velodrome.jpg') no-repeat center fixed;
 
         scroll-x: none;/* Ensure the html element always takes up the full height of the browser window */
 
@@ -89,7 +89,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-xs-8"> 
                     <div class="checkbox icheck">
                         <label>
                             <input type="checkbox" name="Terms" value="1"> I agree to the <a href="#">terms</a>

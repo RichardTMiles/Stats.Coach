@@ -240,7 +240,7 @@
 
                                     <p>
                                         <?=$this->user_full_name?>
-                                        <small>Member since Nov. 2012</small>
+                                        <small>Member since <?= date( 'm/d/Y', $this->user_creation_date ) ?></small>
                                     </p>
                                 </li>
                                 <!-- Menu Body -->
@@ -293,9 +293,9 @@
     <footer class="main-footer" style="">
         <div class="container">
             <div class="pull-right hidden-xs">
-                <b>Version</b> 1.0.0
+                <a href="<?=SITE_ROOT?>Privacy/">Privacy Policy</a> <b>Version</b> 0.4.0
             </div>
-            <strong>Copyright &copy; 2014-2016 <a href="http://lilRichard.com">Richard Miles</a>.</strong> All rights
+            <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Richard Miles</a>.</strong> All rights
             reserved.
         </div>
         <!-- /.container -->

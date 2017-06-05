@@ -30,7 +30,8 @@ class Request
 
     public function except()
     {
-        array_walk( func_get_args(), function ($key) {
+        $arg = func_get_args();
+        array_walk( $arg, function ($key) {
             if (array_key_exists( $key, $this->storage )) unset($this->storage[$key]);
         } );
         return $this;
@@ -47,8 +48,16 @@ class Request
         return (!empty($key) ? $_SESSION['OLDRequest'][$key] : $_SESSION['OLDRequest']);
     }
 
+
+    ########################## Browser Storage #############################
+    public static function setCookie($key, $value = null, $time = 3600)
+    {
+        $boolSecure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
+        return setcookie( $key, $value, time() + $time, '/', $_SERVER['SERVER_NAME'], $boolSecure, true );
+    }
+
     ########################## Building the storage ########################
-    private function post()
+    public function post()
     {
         $only = func_get_args();
         $this->storage = null;
@@ -62,13 +71,14 @@ class Request
         return $this;
     }
 
-    private function cookie($key = null)
+
+    public function cookie($key = null)
     {
         $only = func_get_args();
         $this->storage = null;
         $cookie = function ($key) {
             if (array_key_exists( $key, $_COOKIE )) {
-                $this->storage[] = $_COOKIE[$key];
+                $this->storage[] = htmlspecialchars( $_COOKIE[$key] );
                 $_COOKIE[$key] = null;
             } else $this->storage[] = false;
         }; // the unset function isn't behaving nicely w/ Ajax :: so = null
@@ -76,7 +86,7 @@ class Request
         return $this;
     }
 
-    private function files($key = null)
+    public function files($key = null)
     {
         $only = func_get_args();
         $this->storage = null;
@@ -92,12 +102,17 @@ class Request
 
     ########################## Validating ##############################
 
-    private function validating($callable)
+    public function clearCookies()
     {
-        return (is_array( $callable ) && array_walk( $callable, $regex ) ?
-            count($this->storage) > 1 ? $this->storage : array_shift( $this->storage ) :
-            array_shift($regex( $callable )));
+        $only = array_keys( $this->storage );
+        $this->storage = null; $i = 0;
+        $clear = function ($key = SITE_ROOT) {
+            setcookie( $key, "",time()-1, '/', $_SERVER['SERVER_NAME'], true, true);
+        };
+        if (is_array( $only )) foreach ($only as $key => $value) $clear( $value );
+        else $clear( $only );
     }
+
 
     public function phone()
     {

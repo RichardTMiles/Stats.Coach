@@ -622,102 +622,114 @@ team_code</columns>
         <data-type>int(25)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="163" parent="10" name="user_username">
+      <column id="163" parent="10" name="user_facebook_id">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="164" parent="10" name="user_username">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="164" parent="10" name="user_first_name">
+      <column id="165" parent="10" name="user_first_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="165" parent="10" name="user_last_name">
+      <column id="166" parent="10" name="user_last_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="166" parent="10" name="user_profile_pic">
+      <column id="167" parent="10" name="user_profile_pic">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;Data/Uploads/Pictures/default_avatar.png&apos;</default-expression>
       </column>
-      <column id="167" parent="10" name="user_cover_photo">
+      <column id="168" parent="10" name="user_cover_photo">
         <data-type>text</data-type>
       </column>
-      <column id="168" parent="10" name="user_birth_date">
+      <column id="169" parent="10" name="user_birth_date">
         <data-type>date</data-type>
       </column>
-      <column id="169" parent="10" name="user_gender">
+      <column id="170" parent="10" name="user_gender">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="170" parent="10" name="user_bio">
+      <column id="171" parent="10" name="user_bio">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="171" parent="10" name="user_rank">
+      <column id="172" parent="10" name="user_rank">
         <mandatory>1</mandatory>
         <data-type>int(8)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="172" parent="10" name="user_password">
+      <column id="173" parent="10" name="user_password">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="173" parent="10" name="user_email">
+      <column id="174" parent="10" name="user_email">
         <mandatory>1</mandatory>
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="174" parent="10" name="user_email_code">
+      <column id="175" parent="10" name="user_email_code">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="175" parent="10" name="user_email_confirmed">
+      <column id="176" parent="10" name="user_email_confirmed">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="176" parent="10" name="user_generated_string">
+      <column id="177" parent="10" name="user_generated_string">
         <mandatory>1</mandatory>
         <data-type>varchar(200)</data-type>
       </column>
-      <column id="177" parent="10" name="user_membership">
+      <column id="178" parent="10" name="user_membership">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="178" parent="10" name="user_deactivated">
+      <column id="179" parent="10" name="user_deactivated">
         <mandatory>1</mandatory>
         <data-type>int(4)</data-type>
       </column>
-      <column id="179" parent="10" name="user_creation_date">
+      <column id="180" parent="10" name="user_creation_date">
         <mandatory>1</mandatory>
         <data-type>varchar(14)</data-type>
       </column>
-      <column id="180" parent="10" name="user_ip">
+      <column id="181" parent="10" name="user_ip">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <index id="181" parent="10" name="first_name">
+      <index id="182" parent="10" name="first_name">
         <columns>user_first_name
 user_last_name
 user_email</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="182" parent="10" name="username">
+      <index id="183" parent="10" name="username">
         <columns>user_username</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="183" parent="10" name="username_2">
+      <index id="184" parent="10" name="username_2">
         <columns>user_username</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="184" parent="10" name="PRIMARY">
+      <index id="185" parent="10" name="users_user_facebook_id_uindex">
+        <columns>user_facebook_id</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="186" parent="10" name="PRIMARY">
         <columns>user_id</columns>
         <primary>1</primary>
       </key>
-      <key id="185" parent="10" name="username">
+      <key id="187" parent="10" name="username">
         <columns>user_username</columns>
         <underlying-index>username</underlying-index>
+      </key>
+      <key id="188" parent="10" name="users_user_facebook_id_uindex">
+        <columns>user_facebook_id</columns>
+        <underlying-index>users_user_facebook_id_uindex</underlying-index>
       </key>
     </database-model>
   </data-source>

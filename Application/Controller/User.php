@@ -31,18 +31,29 @@ class User
         session_start();
         session_regenerate_id(true);
         $_SESSION['id'] = false;
-        if (WRAPPING_REQUIRES_LOGIN) View::newInstance();
-        startApplication();
+        if (WRAPPING_REQUIRES_LOGIN)
+            View::newInstance();
+        startApplication(true);
     }
     ############################## / end dependency
 
 
     public function login()
     {
+        if (isset($this->facebook)) return true;
+
+        if (isset($this->client) && $this->client == "clear")
+             return $this->request->cookie()->except('PHPSESSID')->clearCookies();
+
+        list($this->UserName, $this->FullName, $this->UserImage) = $this->request->cookie('UserName', 'FullName', 'UserImage')->value();
+
         if (empty($_POST)) return false;  // If forum already submitted
 
         $this->username = $this->request->post( 'username' )->alnum();
         $this->password = $this->request->post( 'password' )->value();
+        $this->rememberMe = $this->request->post('RememberMe')->int();
+
+        if (!$this->rememberMe) $this->request->cookie()->except('PHPSESSID')->clearCookies();
 
         if (!$this->username || !$this->password) {
             $this->alert = 'Sorry, but we need your username and password.';

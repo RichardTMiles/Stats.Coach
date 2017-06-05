@@ -11,22 +11,20 @@ $route->signedIn()->match( 'Home/*', function () { mvc( 'Golf', 'golf' ); } )->h
 
 
 $route->match( 'AdminLTE/*', function () {
-    // include TEMPLATE_ROOT . 'pages/layout/boxed.html';
+    include TEMPLATE_ROOT . 'pages/layout/boxed.html';
     exit(1);
 } );
 
 
-$route->match( 'Facebook/*', function () {
-    alert("FACEBOOK");
-    include SERVER_ROOT . 'Tests/fb-callback.php';
-    exit(1);
-} );
+$route->match( 'Privacy/*', function () { \View\View::contents('policy','privacypolicy'); } );
 
 
 $route->match( 'Tests/*',    function () { include SERVER_ROOT . 'Tests/login.php'; } );
 
 
-$route->signedOut()->match( 'Login/{client?}/*', function ($client) { mvc( 'User', 'login' ); } );    // Login
+$route->signedOut()->match( 'Login/{client?}/*', function ($client) {
+    if ($client == "facebook") include SERVER_ROOT . 'Application/Services/Facebook/callback.php';
+    mvc( 'User', 'login' ); } );    // Login
 
 
 $route->signedIn()->match( 'PostScore/{state?}/*', function ($state) { mvc('Golf', 'postScore'); } );    // PostScore $state
@@ -35,24 +33,22 @@ $route->signedIn()->match( 'PostScore/{state?}/*', function ($state) { mvc('Golf
 $route->signedIn()->match( 'AddCourse/{state?}/*', function ($state) { mvc( 'Golf', 'AddCourse'); } );    // AddCourse TODO - Make $state work
 
 
-$route->signedIn()->match( 'Logout/*',  function () { Controller\User::logout(); } );    // Logout
+$route->match( 'Logout/*',  function () {
+    Controller\User::logout(); } );    // Logout
 
 
 $route->signedOut()->match( 'Register/*', function () { mvc( 'User', 'Register'); } );    // Register
 
 
-$route->match( 'Activate/{email?}/{email_code?}/', 
-    function ($email, $email_code) { 
-        ( new Model\User )->activate(); 
+$route->match( 'Activate/{email?}/{email_code?}/', function ($email, $email_code) {
+        ( new Model\User )->activate();
         \View\View::contents( 'user', 'profile' ); } );    // Activate $email $email_code
 
 
-$route->match( 'Recover/{userId?}/', 
-    function ($userId) { mvc( 'User', 'Recover' ); } );    // Recover $userId
+$route->signedOut()->match( 'Recover/{userId?}/', function ($userId) { mvc( 'User', 'Recover' ); } );    // Recover $userId
 
 
-$route->match( 'Profile/{user?}/', 
-    function ($user) { mvc( 'User', 'profile' ); } );    // Profile $user
+$route->signedIn()->match( 'Profile/{user?}/', function ($user) { mvc( 'User', 'profile' ); } );    // Profile $user
 
 
 
