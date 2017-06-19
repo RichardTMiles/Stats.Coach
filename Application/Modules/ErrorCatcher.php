@@ -8,8 +8,9 @@ class ErrorCatcher
 {
     private $report;
 
-    public function __construct( )
+    public function __construct( $active = true )
     {
+        if (!$active) return;
         $closure = function () { $this->generateErrorLog(); };
         set_error_handler($closure);
         set_exception_handler($closure);
@@ -27,7 +28,8 @@ class ErrorCatcher
         echo $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
-        file_put_contents( ERROR_LOG, $output );
+        print $output;
+        // file_put_contents( ERROR_LOG, $output );
         startApplication(true);
     }
 
@@ -63,7 +65,7 @@ class ErrorCatcher
     // TODO - add java tags/ make redirect work
     private function redirect()
     {
-        print '<meta http-equiv="refresh" content="0;url= ' . SITE_ROOT . '"/>';
+        print '<meta http-equiv="refresh" content="0;url= ' . SITE_PATH . '"/>';
         die(0);
     }
 

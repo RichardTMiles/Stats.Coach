@@ -8,9 +8,7 @@
 
 namespace Modules;
 
-use Model\User;
 use Psr\Singleton;
-use View\View;
 
 class Route
 {
@@ -23,7 +21,7 @@ class Route
     private $default_Signed_Out;
     private $default_Signed_In;
 
-    public function __construct($default_Signed_Out = "Login/", $default_Signed_In = "Home/", $signedStatus = false)
+    public function __construct(callable $default_Signed_Out = null, callable $default_Signed_In = null, $signedStatus = false)
     {
         if (key_exists( 'REQUEST_URI', $_SERVER ))
             $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ) , '/' );
@@ -34,6 +32,7 @@ class Route
             $uri = ($signedStatus ? (is_callable( $default_Signed_In ) ? $default_Signed_In() : $default_Signed_In) :
                 (is_callable( $default_Signed_Out ) ? $default_Signed_Out() : $default_Signed_Out));
         }
+
         $this->matched = false;
         $this->default_Signed_Out = $default_Signed_Out;
         $this->default_Signed_In = $default_Signed_In;
@@ -41,7 +40,6 @@ class Route
 
         $this->uri = explode( '/', strtolower( $uri ) );
     }
-
 
     public function signedIn()
     {
@@ -69,6 +67,7 @@ class Route
 
     public function __destruct()
     {
+
         if ($this->matched) return;
 
         if (!is_callable( $this->homeMethod ))
@@ -79,7 +78,6 @@ class Route
             $restart = $this->methods['default'];
             $restart();
         } else startApplication(true);
-
     }
 
     public function match($toMatch, callable $closure)       // TODO - make someone rewrite this in REGX
@@ -98,7 +96,7 @@ class Route
 
         $uri = $this->uri;
 
-        $arrayToMatch = explode( '/', strtolower( $toMatch ) );
+        $arrayToMatch = explode( '/', $toMatch );
 
         $pathLength = sizeof( $arrayToMatch );
         $uriLength = sizeof( $uri );
@@ -121,6 +119,7 @@ class Route
                         $this->{$key} = $value;
 
                     $this->matched = true;
+
                     $this->homeMethod = null;
 
                     $this->addMethod( 'routeMatched', $closure );
@@ -163,7 +162,7 @@ class Route
                     if (!array_key_exists( $i, $uri ))
                         return $this;
 
-                    if ($arrayToMatch[$i] != $uri[$i])
+                    if (strtolower($arrayToMatch[$i]) != $uri[$i])
                         return $this;
             }
         }

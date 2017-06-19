@@ -13,11 +13,13 @@ class Database
     private $password = DB_PASS;
     private $dbName = DB_NAME;
     private $host = DB_HOST;
+    private $attempts;
 
     # Build the connection
 
     public function __construct($dbName = null)
     {
+        $this->attempts = 0;
         $this->getConnection( $dbName );
         $this->setUp();             // This can be deleted after the initial run
         return $this->database;
@@ -37,7 +39,13 @@ class Database
             $this->database->setAttribute( \PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC );
             return $this->database;
         } catch (\PDOException $e) {
-            throw new \Exception( "Could not establish database connection. \n" );    #Push error message
+            $this->attempts++;
+            if ($this->attempts < 3) {
+                sleep( 1 );                                     // adding one second of runtime??? should I do this
+                                                                // may help clogging the connection for everyone.. do test 
+                return $this->getConnection();                 // Make sure this will work.
+            }
+            throw new \Exception( "Could not establish database connection. \n" );  // TODO - catch this error with the class error
         }
     }
 
