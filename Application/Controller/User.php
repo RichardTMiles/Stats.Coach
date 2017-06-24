@@ -18,7 +18,6 @@ class User
         $this->request = new Request;
     }
 
-    ############################## These function depend on each other
     public static function getApp_id(callable $callable = null)
     {
         return (array_key_exists('id', $_SESSION) ? (is_callable( $callable ) ? $callable() : $_SESSION['id']): false);
@@ -31,13 +30,9 @@ class User
         session_start();
         session_regenerate_id(true);
         $_SESSION['id'] = false;
-        if (WRAPPING_REQUIRES_LOGIN)
-            View::newInstance();
         startApplication(true);
     }
-    ############################## / end dependency
-
-
+    
     public function login()
     {
         if (isset($this->facebook)) return true;
@@ -56,60 +51,95 @@ class User
         if (!$this->rememberMe) $this->request->cookie()->except('PHPSESSID')->clearCookies();
 
         if (!$this->username || !$this->password) {
-            $this->alert = 'Sorry, but we need your username and password.';
+            $this->alert['warning'] = 'Sorry, but we need your username and password.';
             return false;
         } return true;
     }
 
+    public function facebook()
+    {
+        if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
+            $this->alert = 'Sorry, we could not connect to Facebook. Please try again later.';
+        else return true;
+        startApplication(true);     // This will load the login page
+    }
 
     public function register()
     {
         if (empty($_POST))
             return false;
 
-        list($this->username, $this->firstName, $this->lastName) = $this->request->post( 'username', 'firstname', 'lastname' )->alnum();
-        list($this->password, $verifyPass )= $this->request->post( 'password', 'password2' )->value();  // unsanitized
+        list($this->username, $this->firstName, $this->lastName, $this->gender, $this->userType, $this->teamCode)
+            = $this->request->post( 'username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode')->alnum();
+
+        list($this->teamName, $this->schoolName)
+            = $this->request->post( 'teamName', 'schoolName' )->text();
+        
+        list($this->password, $verifyPass )
+            = $this->request->post( 'password', 'password2' )->value();  // unsanitized
+
         $this->email = $this->request->post( 'email' )->email();
+
         $terms = $this->request->post('Terms')->int();
 
-        //sortDump($terms);
 
         if (!$this->username)
-            $this->alert = 'Please enter a username with only numbers & letters!';
+            $this->alert['warning'] = 'Please enter a username with only numbers & letters!';
 
-        elseif (!$this->password && $len = strlen( $this->password ) < 6 && $len > 16)
-            $this->alert = 'Your password must be between 6 and 16 characters!';
+        elseif (!$this->gender)
+            $this->alert['warning'] = 'Sorry, please enter your gender.';
+
+        elseif (!$this->userType)
+            $this->alert['warning'] = 'Sorry, please choose an account type. This can be changed later in the web application.';
+
+        elseif ($this->userType && !$this->teamName)
+            $this->alert['warning'] = "Sorry, the team name you have entered appears invalid.";
+
+        elseif (!$this->password || ($len = strlen( $this->password )) < 6 || $len > 16)
+            $this->alert['warning'] = 'Sorry, your password must be between 6 and 16 characters!';
 
         elseif ($this->password != $verifyPass)
-            $this->alert = 'The passwords entered must match!';
+            $this->alert['warning'] = 'The passwords entered must match!';
 
         elseif (!$this->email)
-            $this->alert = 'Please enter a valid email address!';
+            $this->alert['warning'] = 'Please enter a valid email address!';
 
         elseif (!$this->firstName)
-            $this->alert = 'Please enter your first name!';
+            $this->alert['warning'] = 'Please enter your first name!';
 
         elseif (!$this->lastName)
-            $this->alert = 'Please enter your last name!';
+            $this->alert['warning'] = 'Please enter your last name!';
 
         elseif (!$terms)
-            $this->alert = 'You must agree to the terms and conditions.';
+            $this->alert['warning'] = 'You must agree to the terms and conditions.';
         else return true;
         return false;
+    }
+    
+    public function activate() 
+    {
+        $this->email = $this->request->set( $this->email )->email();
+        $this->email_code = $this->request->set( $this->email_code )->value();
+
+        if (!$this->email || !$this->email_code)
+            $this->alert['warning'] = 'Sorry the url submitted is invalid.';
+        else return true;
     }
 
     public function recover($id = null)
     {
         $this->email = $this->request->post( 'email' )->email();
 
-        if (empty($this->email)) $this->alert = 'You have entered an invalid email address.';
+        if ($this->email) $this->alert['warning'] = 'You have entered an invalid email address.';
 
         if (isset($this->alert) === true) $this->parameter = 'verify';
     }
 
     public function profile($user = null)
     {
-        return true;
+
+        $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
+        return false;
     }
 
 }

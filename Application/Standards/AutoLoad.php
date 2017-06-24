@@ -1,5 +1,8 @@
 <?php
 
+// Including this file will automatically initiate this class
+
+
 namespace Psr;
 
 /**         Psr4AutoloaderClass
@@ -197,3 +200,7 @@ class Autoload
         return false;
     }
 }
+
+
+new Autoload;   // start the class!
+

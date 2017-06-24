@@ -7,7 +7,6 @@ namespace View;
             Which in this case is the class AdminLTE
 */
 
-use \Facebook\Facebook;
 use Controller\User;
 use Psr\Singleton;
 
@@ -19,9 +18,8 @@ class View
 
     public function __wakeup()
     {
-        if (!$this->ajaxActive()):     // an HTTP request
-            $this->__construct( $this->wrapper() );      // and reprocess the dependencies
-        // TODO - see if this is ever acutally reached, and if global closure (lambda) skingleton is working as desired
+        if (!($this->ajax = $this->ajaxActive())):     // an HTTP request
+            $this->__construct( $this->wrapper() );      // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
             unset($this->currentPage);
@@ -33,62 +31,62 @@ class View
     public function __construct($container = false)
     {
         if ($container) {
-            if ($this->ajaxActive()) return null;
+            if (($this->ajax = $this->ajaxActive())) return null;
+            require_once "minify.php";
             ob_start();
             require_once(CONTENT_WRAPPER);
-            $size = ob_get_length();
-            echo $template = ob_get_clean(); // Return the Template
+            $template = ob_get_clean(); // Return the Template    minify_html()
+            echo (MINIFY_CONTENTS && (@include_once "minify.php") ?
+                    minify_html( $template ) :
+                    $template);
         } elseif ($this->ajaxActive()) User::logout();
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
     private function contents($class, $fileName) // Must be called through Singleton, must be private
     {
-        $file = CONTENT_ROOT . strtolower( $class ) . DS .
-            strtolower( $fileName ) . (($loggedIn = User::getApp_id()) ? '.tpl.php' : '.php');
+        $loggedIn = User::getApp_id();
+        $file = ($class != 'Tests' ?
+            (CONTENT_ROOT . strtolower( $class ) . DS .
+            strtolower( $fileName ) . ($loggedIn ? '.tpl.php' : '.php')) :
+            SERVER_ROOT . $class . DS . $fileName . '.php');
 
         if (file_exists( $file )) {
             ob_start();
-            require_once $file;
-            $file = ob_get_clean();
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn))         // TODO - Logged in should be rethought
+
+            include $file;
+            include CONTENT_ROOT . 'alert' . DS . 'alerts.tpl.php'; // a little hackish when not using template file
+            
+            $file = ob_get_clean();         // minify_html()
+
+            if (MINIFY_CONTENTS && (@include_once "minify.php"))
+                 $file = minify_html( $file );
+
+            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {        // TODO - Logged in should be rethought
                 $this->currentPage = base64_encode( $file );
-            else echo $file;
-        } else startApplication( true );
+            } else echo $file;
+
+        } else throw new \Error;
+            // startApplication( true );
         // restart, this usually means the user is trying to access a protected page when logged out
         exit(1);
     }
 
-    public function ajaxActive()
+    private function ajaxActive()
     {
-        return ((isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
+        return (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
     }
 
     public function faceBookLoginUrl()
     {
-        $fb = new Facebook( [
-            'app_id' => '1456106104433760', // Replace {app-id} with your app id
-            'app_secret' => 'c35d6779a1e5eebf7a4a3bd8f1e16026',
-            'default_graph_version' => 'v2.2',
-        ] );
-
-        $helper = $fb->getRedirectLoginHelper();
-
-        $permissions = [
-            'public_profile', 'user_friends', 'email',
-            'user_about_me', 'user_birthday',
-            'user_education_history', 'user_hometown',
-            'user_location', 'user_photos', 'user_friends'];           // Optional permissions
-
-        $loginUrl = $helper->getLoginUrl( 'https://stats.coach/Login/Facebook/', $permissions );    // TODO - make work
-
-        return $loginUrl;
+       return (include SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'Social' . DS . 'fb-login-url.php');
     }
 
     public function googleLoginUrl()
     {
 
     }
+
 
     /**
      *  Given a file, i.e. /css/base.css, replaces it with a string containing the
@@ -102,11 +100,10 @@ class View
 
     public function versionControl($file)
     {
-        if (!file_exists( SERVER_ROOT . TEMPLATE_PATH . $file ))
-            return TEMPLATE_PATH . $file;
+        if (file_exists( $file ))
+            return preg_replace( '{\\.([^./]+)$}', ".".filemtime( $file ).".\$1", $file );
 
-        $mtime = filemtime( SERVER_ROOT . TEMPLATE_PATH . $file );
-        return TEMPLATE_PATH . preg_replace( '{\\.([^./]+)$}', ".$mtime.\$1", $file );
+        return TEMPLATE_PATH . preg_replace( '{\\.([^./]+)$}', ".".filemtime( SERVER_ROOT . TEMPLATE_PATH . $file ).".\$1", $file );
     }
 
     public function __get($variable)

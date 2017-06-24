@@ -10,12 +10,13 @@ trait Singleton
     protected $methods = array();   // Anonymous Function Declaration
     private $storage;               // Instance of the Container
 
-    public static function __callStatic($methodName, $arguments = array())
+    
+    public static final function __callStatic($methodName, $arguments = array())
     {
         return self::getInstance()->Skeleton( $methodName, $arguments );
     }
 
-    public static function newInstance()
+    public static final function newInstance()
     {
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
@@ -23,7 +24,7 @@ trait Singleton
         return self::$getInstance;
     }
 
-    public static function getInstance()
+    public static final function getInstance()
     {   // see if the class has already been called this run
         if (!empty(self::$getInstance))
             return self::$getInstance;
@@ -34,7 +35,7 @@ trait Singleton
             // This will invoke the __wake up operator
             if (is_object( self::$getInstance = unserialize( $_SESSION[$calledClass] ) ))
                 return self::$getInstance;
-            throw new \Exception( 'Bad Unserialize in Singleton' );
+            throw new \Exception( 'Unserialize failed on '.$calledClass.' using Singleton' );
         }
 
         // Start a new instance of the class and pass any arguments
@@ -42,17 +43,17 @@ trait Singleton
         self::$getInstance = $class->newInstanceArgs( func_get_args() );
         return self::$getInstance;
     }
-    public static function clearInstance()
+    public static final function clearInstance()
     {
         return self::$getInstance = null;
     }
 
-    public function __call($methodName, $arguments = array())
+    public final function __call($methodName, $arguments = array())
     {
         return $this->Skeleton( $methodName, $arguments );
     }
 
-    private function Skeleton($methodName, $arguments = array())
+    private final function Skeleton($methodName, $arguments = array())
     {
         // Have we used addMethod() to override an existing method
         if (key_exists( $methodName, $this->methods ))
@@ -86,6 +87,9 @@ trait Singleton
         endif;
     }
 
+    // you must create a replacement sleep function in the class calling Singleton
+    // for the session class serializing to work
+
     public function __sleep()
     {
         return 0;   // This will stop serialization automatically
@@ -96,15 +100,14 @@ trait Singleton
     {
         // We require a sleep function to be set manually for singleton to manage utilization
         if ($this->__sleep() !== 0) $_SESSION[__CLASS__] = serialize( $this );
-        else if(array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
+        elseif(array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
     }
+
+    // The rest of the functions are for the sake of functions
 
     public function &__get($variable)
     {
-        if (array_key_exists( $variable, $GLOBALS ))
-            return $GLOBALS[$variable];
-
-        throw new \Exception( "The variable `$variable` was not defined in the global scope");
+        return $GLOBALS[$variable];
     }
 
     public function __set($variable, $value)
@@ -129,9 +132,15 @@ trait Singleton
 
     private function set($name, $value = null)
     {
-        if (empty($value)) 
-            $value = $this->storage;
-        $this->$name = $value;
+        $this->storage = null;
+        if ($value == null) {
+            if (is_array( $name ))
+                $this->storage = $name;
+            else
+                $this->storage[] = $name;
+        }
+        else $this->storage[$name] = $value;
+        return $this;
     }
 
     private function get($variable = null)

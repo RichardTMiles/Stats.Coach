@@ -22,7 +22,7 @@ class Request
 
     ########################### Request data ###############################
 
-    private function post(...$argv)
+    public function post(...$argv)
     {
         $this->storage = null;
         $closure = function ($key) {
@@ -35,7 +35,7 @@ class Request
         return $this;
     }
 
-    private function cookie(...$argv)
+    public function cookie(...$argv)
     {
         $this->storage = null;
         $closure = function ($key) {
@@ -48,7 +48,7 @@ class Request
         return $this;
     }
 
-    private function files(...$argv)
+    public function files(...$argv)
     {
         $this->storage = null;
         $closure = function ($key) {
@@ -135,6 +135,12 @@ class Request
     public function value()
     {
         return count( $this->storage ) > 1 ? $this->storage : array_shift( $this->storage );
+    }
+
+
+    public function text()
+    {
+        return $this->regex('/([^\w])+/');
     }
 
     public function alnum()

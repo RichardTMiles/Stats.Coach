@@ -1,57 +1,62 @@
 <?php
-// TODO - find how to make the godaddy stats.coach subdomain url works
-/*
- * Routing a home function required default arguments be set to fuction
- * as expected.
- */
 
 
+$route->match( 'Tests/*',   // This 
+    function () {
+        $view = \View\View::getInstance();
+        if ($view->ajaxActive()) {
+            include SERVER_ROOT . 'Tests' . DS . 'sorecard.php';
+            exit(1);
+        }
+        require_once SERVER_ROOT . 'Application' . DS . 'View' . DS . "minify.php";
+        ob_start();
+        require_once SERVER_ROOT . 'Tests' . DS . 'sorecard.php';
+        $file = minify_html( ob_get_clean() );
+        $view->currentPage = base64_encode( $file );
+        exit(1);
+    }
+);
 
-$route->signedIn()->match( 'Home/*', function () { mvc( 'Golf', 'golf' ); } )->home();                    // Home = golf -> golf
-
-
-$route->match( 'AdminLTE/*', function () {
-    include TEMPLATE_ROOT . 'pages/layout/boxed.html';
-    exit(1);
-} );
-
-
-$route->match( 'Privacy/*', function () { \View\View::contents('policy','privacypolicy'); } );
-
-
-$route->match( 'Tests/*',    function () { include SERVER_ROOT . 'Tests/login.php'; } );
-
+$route->signedIn()->match( 'Home/*', function () {
+    mvc( 'Golf', 'golf' );
+} )->home();          // Home = golf -> golf
 
 $route->signedOut()->match( 'Login/{client?}/*', function ($client) {
-    if ($client == "facebook") include SERVER_ROOT . 'Application/Services/fb-callback.php';
-    mvc( 'User', 'login' ); } );    // Login
+    if ($client == "facebook") mvc( 'User', 'facebook' );
+    else mvc( 'User', 'login' );
+} );                    // Login
+
+$route->signedIn()->match( 'Logout/*', function () {
+    Controller\User::logout();
+} );                       // Logout
+
+$route->match( 'Privacy/*', function () {
+    \View\View::contents( 'policy', 'privacypolicy' );
+} );    // There is both a .php and .tpl.php
 
 
-$route->signedIn()->match( 'PostScore/{state?}/*', function ($state) { mvc('Golf', 'postScore'); } );    // PostScore $state
+$route->signedIn()->match( 'PostScore/{state?}/{courseId?}/{boxColor?}/*',
+    function ($state, $courseId, $boxColor) {
+        mvc( 'Golf', 'postScore' );
+    } );       // PostScore $state
 
+$route->signedIn()->match( 'AddCourse/{state?}/*', function ($state) {
+    mvc( 'Golf', 'AddCourse' );
+} );      // AddCourse TODO - Make $state work
 
-$route->signedIn()->match( 'AddCourse/{state?}/*', function ($state) { mvc( 'Golf', 'AddCourse'); } );    // AddCourse TODO - Make $state work
-
-
-$route->match( 'Logout/*',  function () {
-    Controller\User::logout(); } );    // Logout
-
-
-$route->signedOut()->match( 'Register/*', function () { mvc( 'User', 'Register'); } );    // Register
-
+$route->signedOut()->match( 'Register/*', function () {
+    mvc( 'User', 'Register' );
+} );          // Register
 
 $route->match( 'Activate/{email?}/{email_code?}/', function ($email, $email_code) {
-        ( new Model\User )->activate();
-        \View\View::contents( 'user', 'profile' ); } );    // Activate $email $email_code
+    mvc( 'User', 'activate' );
+} );    // Activate $email $email_code
 
+$route->signedOut()->match( 'Recover/{userId?}/', function ($userId) {
+    mvc( 'User', 'Recover' );
+} );   // Recover $userId
 
-$route->signedOut()->match( 'Recover/{userId?}/', function ($userId) { mvc( 'User', 'Recover' ); } );    // Recover $userId
-
-
-$route->signedIn()->match( 'Profile/{user?}/', function ($user) { mvc( 'User', 'profile' ); } );    // Profile $user
-
-
-
-
-
+$route->signedIn()->match( 'Profile/{userID?}/', function ($userID) {
+    mvc( 'User', 'profile' );
+} );    // Profile $user
 
