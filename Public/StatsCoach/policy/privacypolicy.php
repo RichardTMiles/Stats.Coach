@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2 class="page-header">
-                    <i class="fa fa-globe"></i> <a href="<?=SITE_ROOT?>">Stats Coach</a>
+                    <i class="fa fa-globe"></i> <a href="<?=SITE_PATH?>">Stats Coach</a>
                     <small class="pull-right"><?=date( 'm/d/Y', filemtime(__FILE__))?></small>
                 </h2>
             </div>

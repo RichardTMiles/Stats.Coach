@@ -111,6 +111,9 @@ function mvc($class, $method)
     $controller = $controller::getInstance();   // debating to clear the instance
 
     if (($argv = $controller->$method()) !== false) {
+
+        sortDump($model);
+
         $model::clearInstance();
         $model = $model::getInstance( $argv );
         $model->$method( $argv );
@@ -140,17 +143,22 @@ function mvc($class, $method)
  */
 function startApplication($restart = false, callable $default_logged_out = null, callable $default_logged_in = null)
 {
-    $app_id = Controller\User::getApp_id();
+
+    // $_SESSION['id'] = null; exit(1);
+    // sortDump(Model\User::ajaxLogin_Support());
+    if ($restart) Model\User::clearInstance();
+    $GLOBALS['user'] = $user = Model\User::clearInstance(Model\User::ajaxLogin_Support());
+    $app_id = $user->user_id;
+
 
     $wrapper = $GLOBALS['closures']['wrapper'] = function () use ($app_id) {
-        return (!WRAPPING_REQUIRES_LOGIN ?: Model\User::ajaxLogin_Support( $app_id ));
-    };
+        return (!WRAPPING_REQUIRES_LOGIN ?: $app_id); };
 
     if ($restart || $_SERVER['REQUEST_URI'] == null) {
-        $_SERVER['REQUEST_URI'] = ($restart === true ?
-            ($app_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) :
-            ($restart ?: null));
         $_POST = null;
+        $_SERVER['REQUEST_URI'] = ($restart === true ?
+            ($user->user_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) :
+            ($restart ?: null));
     }
 
     View\View::clearInstance();             // This will help us remove any stored templates if restarted
@@ -161,7 +169,7 @@ function startApplication($restart = false, callable $default_logged_out = null,
     $route = new Modules\Route(
         $default_logged_out,                  // default logged out accepts Closure
         $default_logged_in,                   // default logged in  accepts Closure
-        $app_id );                            // User Id
+        $user->user_id);           // Signned in?
 
 
     require SERVER_ROOT . 'Application/Bootstrap.php';
@@ -183,12 +191,22 @@ function startApplication($restart = false, callable $default_logged_out = null,
  * @param mixed $mixed Will be run throught the var_dump function.
  *
  * @return die(1);
- */
-function sortDump($mixed = null)
+ */ 
+function sortDump(...$mixed)
 {
     unset($_SERVER);
     echo '<pre>';
-    var_dump( ($mixed === null ? $GLOBALS : $mixed) );
+    if (count($mixed) == 1) {
+        debug_zval_dump( $mixed[0] );
+        echo '</pre><br><br><pre>';
+
+    } else {
+        var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
+        echo '</pre><br><br><pre>';
+    }
+
+    var_dump(debug_backtrace());
+
     echo '</pre>';
     die(1);         // note minify.php is dependant of $_SERVER.. TODO - ?
 }

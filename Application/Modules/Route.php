@@ -80,7 +80,7 @@ class Route
         } else startApplication(true);
     }
 
-    public function match($toMatch, callable $closure)       // TODO - make someone rewrite this in REGX
+    public function match($toMatch, ...$argv)       // TODO - make someone rewrite this in REGX
     {
         if ($this->matched === true)
             return $this;
@@ -92,7 +92,7 @@ class Route
             return $this;
         }
 
-        $this->storage = $closure;  // This is for home route function
+        $this->storage = $argv;  // This is for home route function
 
         $uri = $this->uri;
 
@@ -122,10 +122,14 @@ class Route
 
                     $this->homeMethod = null;
 
-                    $this->addMethod( 'routeMatched', $closure );
-
-                    if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
-                        throw new \Error( 'Bad Closure Passed to Route::match()' );
+                    if(is_callable( $argv[0] )) {
+                        $this->addMethod( 'routeMatched', $argv[0] );
+                        if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
+                            throw new \Error( 'Bad Closure Passed to Route::match()' );
+                    } elseif (count( $argv ) == 2)
+                        mvc( $argv[0], $argv[1] );
+                    else
+                        throw new \InvalidArgumentException();
 
                     return $this; // Note that the application will break in the View::contents
 

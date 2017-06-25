@@ -29,20 +29,25 @@ class User
         session_destroy();
         session_start();
         session_regenerate_id(true);
+        \Model\User::clearInstance();
+        unset($GLOBALS['user']);
         $_SESSION['id'] = false;
         startApplication(true);
     }
     
     public function login()
     {
-        if (isset($this->facebook)) return true;
+        if (isset($this->facebook))
+            return true;
 
         if (isset($this->client) && $this->client == "clear")
              return $this->request->cookie()->except('PHPSESSID')->clearCookies();
 
-        list($this->UserName, $this->FullName, $this->UserImage) = $this->request->cookie('UserName', 'FullName', 'UserImage')->value();
+        list($this->UserName, $this->FullName, $this->UserImage)
+            = $this->request->cookie('UserName', 'FullName', 'UserImage')->value();
 
-        if (empty($_POST)) return false;  // If forum already submitted
+        if (empty($_POST))
+            return false;  // If forum already submitted
 
         $this->username = $this->request->post( 'username' )->alnum();
         $this->password = $this->request->post( 'password' )->value();
@@ -82,14 +87,13 @@ class User
 
         $terms = $this->request->post('Terms')->int();
 
-
         if (!$this->username)
             $this->alert['warning'] = 'Please enter a username with only numbers & letters!';
 
         elseif (!$this->gender)
             $this->alert['warning'] = 'Sorry, please enter your gender.';
 
-        elseif (!$this->userType)
+        elseif (!$this->userType || !($this->userType == 'Coach' || $this->userType == 'Athlete') )
             $this->alert['warning'] = 'Sorry, please choose an account type. This can be changed later in the web application.';
 
         elseif ($this->userType && !$this->teamName)

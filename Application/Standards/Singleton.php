@@ -11,12 +11,12 @@ trait Singleton
     private $storage;               // Instance of the Container
 
     
-    public static final function __callStatic($methodName, $arguments = array())
+    public static function __callStatic($methodName, $arguments = array())
     {
         return self::getInstance()->Skeleton( $methodName, $arguments );
     }
 
-    public static final function newInstance()
+    public static function newInstance()
     {
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
@@ -24,7 +24,7 @@ trait Singleton
         return self::$getInstance;
     }
 
-    public static final function getInstance()
+    public static function getInstance()
     {   // see if the class has already been called this run
         if (!empty(self::$getInstance))
             return self::$getInstance;
@@ -43,17 +43,23 @@ trait Singleton
         self::$getInstance = $class->newInstanceArgs( func_get_args() );
         return self::$getInstance;
     }
-    public static final function clearInstance()
+
+    /**
+     * @param null $object
+     * @return object|null
+     */
+    public static function clearInstance($object = null)
     {
-        return self::$getInstance = null;
+        return self::$getInstance = $object;
     }
 
-    public final function __call($methodName, $arguments = array())
+
+    public function __call($methodName, $arguments = array())
     {
         return $this->Skeleton( $methodName, $arguments );
     }
 
-    private final function Skeleton($methodName, $arguments = array())
+    private function Skeleton($methodName, $arguments = array())
     {
         // Have we used addMethod() to override an existing method
         if (key_exists( $methodName, $this->methods ))
@@ -99,6 +105,7 @@ trait Singleton
     public function __destruct()
     {
         // We require a sleep function to be set manually for singleton to manage utilization
+        $this->db = null;
         if ($this->__sleep() !== 0) $_SESSION[__CLASS__] = serialize( $this );
         elseif(array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
     }

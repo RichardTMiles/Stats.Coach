@@ -1,37 +1,26 @@
 <?php
-session_start();
-
 define( 'DS', DIRECTORY_SEPARATOR );
-define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );
 
-// These are required for  the app to run. PHP-Standards
+define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
+
+session_save_path(SERVER_ROOT . 'Data' . DS . 'Sessions');    // Manually Set where the Users Session Data is stored
+
+ini_set('session.gc_probability', 1);               // Clear any lingering session data in default locations
+
+session_start();                // Receive the session id from the users Cookies (browser) and load variables stored on the server
+
+// These are required for  the app to run. You must edit the Config file for your Servers
 if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
-    (include SERVER_ROOT . 'Application/Standards/Singleton.php') == false ||
-    (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') == false ||
-    (include SERVER_ROOT . 'Application/Services/vendor/autoload.php') == false){
-    echo "Internal Server Error";
+    (include SERVER_ROOT . 'Application/Standards/Singleton.php') == false ||           // Trait that defines magic methods for session and application portability
+    (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') == false ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
+    (include SERVER_ROOT . 'Application/Services/vendor/autoload.php') == false){       // Load the autoload() for composer dependencies located in the Services folder
+    echo "Internal Server Error";                                                       // These file locations will not change.
     exit(1);
 }
 
+// Setting the following parameter to one or zero will turn on the Log file and attempt to catch all errors that slip through
+// new Modules\ErrorCatcher(0); // This Error Catching system will store any errors on the servers log file defined in the config file
+// The current catching system actually blows.. need to remake
 
-new Psr\Autoload;
-# new Modules\ErrorCatcher;
 
-
-##################   DEV Tools   #################
-function sortDump($mixed = null)
-{
-    unset($_SERVER);
-    echo '<pre>';
-    var_dump( ($mixed === null ? $GLOBALS : $mixed) );
-    echo '</pre>';
-    die(1);
-}
-
-function alert($string = "Made it!")
-{
-    print "<script>alert('$string')</script>";
-}
-
-#################### Run Stats Coach ###############
 startApplication();

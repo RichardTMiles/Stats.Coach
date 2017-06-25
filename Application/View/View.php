@@ -10,7 +10,7 @@ namespace View;
 use Controller\User;
 use Psr\Singleton;
 
-class View
+class    View
 {
     use Singleton;
 
@@ -18,12 +18,12 @@ class View
 
     public function __wakeup()
     {
-        if (!($this->ajax = $this->ajaxActive())):     // an HTTP request
-            $this->__construct( $this->wrapper() );      // and reprocess the dependencies, wrapper is a global closure
+        if (!($this->ajax = $this->ajaxActive())):      // an HTTP request
+            $this->__construct( $this->wrapper() );     // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
             unset($this->currentPage);
-            exit(1);                      // This is for the second inner AJAX request on first page load
+            exit(1);                                    // This is for the second inner AJAX request on first page load
         endif;
         // this would mean we're requesting our second page through ajax
     }
@@ -39,13 +39,15 @@ class View
             echo (MINIFY_CONTENTS && (@include_once "minify.php") ?
                     minify_html( $template ) :
                     $template);
-        } elseif ($this->ajaxActive()) User::logout();
+        } elseif ($this->ajaxActive())
+            User::logout();
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
     private function contents($class, $fileName) // Must be called through Singleton, must be private
     {
-        $loggedIn = User::getApp_id();
+        $loggedIn = $this->user->user_id;
+
         $file = ($class != 'Tests' ?
             (CONTENT_ROOT . strtolower( $class ) . DS .
             strtolower( $fileName ) . ($loggedIn ? '.tpl.php' : '.php')) :
@@ -62,11 +64,11 @@ class View
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                  $file = minify_html( $file );
 
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {        // TODO - Logged in should be rethought
+            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {  // TODO - Logged in should be rethought
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
 
-        } else throw new \Error;
+        } else throw new \Exception("$file does not exist");
             // startApplication( true );
         // restart, this usually means the user is trying to access a protected page when logged out
         exit(1);

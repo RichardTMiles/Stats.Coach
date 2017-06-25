@@ -16,8 +16,9 @@ use Modules\Helpers\Bcrypt;
 use Modules\Database;
 use Psr\Singleton;
 
-abstract class UserRelay
+abstract class UserRelay 
 {
+    
     public $user_id;
     public $user_facebook_id;
     public $user_username;
@@ -39,7 +40,8 @@ abstract class UserRelay
     public $user_deactivated;
     public $user_creation_date;
     public $user_ip;
-    
+
+
 }
 
 

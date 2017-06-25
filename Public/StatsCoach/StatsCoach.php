@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- Ajax (Asynchronous JavaScript and XML) -->
-    <script src="<?=SITE_ROOT?>Public/Jquery-Pjax/jquery.pjax.js"></script>
+    <script src="<?=SITE_PATH?>Public/Jquery-Pjax/jquery.pjax.js"></script>
     <script>
         $.pjax.reload('#pjax-container');
 
@@ -387,7 +387,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
-<script src="<?= SITE_ROOT ?>Public/JavaScript/jquery.backstretch.min.js"></script>
+<script src="<?= SITE_PATH ?>Public/JavaScript/jquery.backstretch.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="<?= TEMPLATE_PATH ?>bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->

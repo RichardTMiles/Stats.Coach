@@ -16,5 +16,16 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jquery-2.2.0" level="application" />
+    <orderEntry type="module-library">
+      <library name="PHARS">
+        <CLASSES>
+          <root url="phar://$MODULE_DIR$/Application/Services/composer_osx.phar/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="phar://$MODULE_DIR$/Application/Services/composer_osx.phar/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

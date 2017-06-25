@@ -1,12 +1,12 @@
 
 <section class="content-header" style="color: #d9edf7">
     <h1>
-        <?=$this->user_first_name ?>
+        <?=$this->user->user_first_name ?>
         <small style="color: #d9edf7">Profile</small>
     </h1>
     <ol class="breadcrumb">
         <li ><a href="#"style="color: #d9edf7"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li><?= $this->user_full_name ?></li>
+        <li><?= $this->user->user_full_name ?></li>
         <li class="active" style="color: #d9edf7">Profile</li>
     </ol>
 </section>
@@ -14,7 +14,7 @@
 <!-- Main content -->
 
 <section class="content">
-
+    <div id="alert"></div>
 
     <div class="box box-widget widget-user">
         <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -24,7 +24,7 @@
             <h5 class="widget-user-desc"></h5>
         </div>
         <div class="widget-user-image">
-            <img class="img-circle" src="<?= $this->user_profile_pic ?>" alt="User Avatar">
+            <img class="img-circle" src="<?= $this->user->user_profile_pic ?>" alt="User Avatar">
         </div>
 
         <div class="box-footer">
@@ -115,8 +115,8 @@
                 </div><!-- /.table-responsive -->
             </div><!-- /.box-body -->
             <div class="box-footer clearfix">
-                <a href="<?=SITE_ROOT?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
-                <a href="<?=SITE_ROOT?>" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
+                <a href="<?=SITE_PATH?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                <a href="<?=SITE_PATH?>" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
             </div><!-- /.box-footer -->
         </div>
     </div>

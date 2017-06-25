@@ -24,7 +24,7 @@ mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 # Version Control for Dependancies
 RewriteRule ^(.*)\.[\d]{10}\.(css|js|html)$ $1.$2 [L]
 
-# Still Not sure
+# Still Not sure?
 Options +FollowSymLinks
 
 # Everything to the index

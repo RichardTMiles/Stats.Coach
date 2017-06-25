@@ -14,79 +14,63 @@ class User extends UserRelay
 {
     use Singleton;
 
+
     protected $db;
 
-    private function ajaxLogin_Support($id = false)
-    {
-        // TODO - Im too high, see why im not storing the id in the session.. moving on 
-        if (!($this->user_id = $id)) return false;
-
-        if (!isset($this->user_username))
-            $this->getUser( $this->user_id );   // populates the global and
-
-
-        if (empty($this->user_full_name))
-            $this->user['user_full_name'] = $this->user_first_name . ' ' . $this->user_last_name;
-
-        foreach (get_object_vars( $this ) as $key => $var)
-            $this->user[$key] = $var;
-        // TODO - is the above needed?
-
-
-        // Ajax makes life a little hard when pressing the back button
-        // Backing into a previous post state is a thing is a problem..
-        if (is_array( $_POST ) && !array_key_exists( "username", $_POST ))
-            return true;
-        // We came from the login page?
-        $_POST["username"] = null;
-        $_POST["password"] = null;
-        unset($_POST);
-
-        return true;
+    /**
+     * @return object|User
+     *
+     */
+    private function ajaxLogin_Support()
+    {   // the constructor or wake will be called first
+        if(empty($this->user_id)):
+            $this->user_id = false;
+        elseif (!isset($this->user_username)):
+            return $this->getUser();   // returns this object populated with data
+        endif; // $this will be returned through singleton
     }
 
     public function __construct()
     {
+        $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
         $this->db = Database::getConnection();  // establish a connection
+        // Reconfig variables for dynamic path
+        if (!$this->user_id) return;
+        $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
+        $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
+        $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
     }
 
     public function __wakeup()
     {
         $this->db = Database::getConnection();  // establish a connection
-        if (isset($this->user_username) && (!array_key_exists( 'user', $GLOBALS ) || !is_array( $GLOBALS['user'] ) || !array_key_exists( 'user_username', $GLOBALS['user']) ))
-            foreach (get_object_vars( $this ) as $key => $var)
-                $GLOBALS['user'][$key] = $var;
     }
 
-    public function __sleep()
+    public final function __sleep()
     {
-        return (!empty($this->user_username) ? array('user_username', 'user_first_name', 'user_last_name', 'user_full_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
+        return (!empty($this->user_username) ? array('user_id','user_username', 'user_first_name', 'user_last_name', 'user_full_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
     }
 
-    protected function getUser($id)
+    protected function getUser()
     {
-        $this->user_id = $id ?: \Controller\User::getApp_id();
-
+        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception('nope bad id');
         // In theory this request is only called once per session.
-        $sql = 'SELECT * FROM StatsCoach.users WHERE `user_id` = ?';
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$id] );
-        $data = $stmt->fetch( \PDO::FETCH_ASSOC );
-
-        foreach ($data as $key => $val)
-            $GLOBALS['user'][$key] = $this->{$key} = $val;
-
-        // Reconfig variables for dynamic path
-        $GLOBALS['user']['user_profile_pic'] = $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
-        $GLOBALS['user']['user_cover_photo'] = $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
-        $GLOBALS['user']['user_full_name'] = $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
+        try {
+            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.users WHERE user_id = ?' );
+            $stmt->setFetchMode( \PDO::FETCH_CLASS, User::class );
+            $stmt->execute( [$_SESSION['id']] );
+            $stmt = $stmt->fetch();                 // user obj
+            $stmt->user_id = $_SESSION['id'];
+            return $stmt;
+        } catch (\Exception $e) {
+            alert($e->getMessage());
+        }
 
     }
 
     protected function fetchSQL($what, $field, $value)
     {
         $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
-
         if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
             throw new \InvalidArgumentException;
 
@@ -193,6 +177,15 @@ class User extends UserRelay
         return $sql;
     }
 
+    protected function team_exists($teamCode)
+    {
+        $sql = 'SELECT COUNT(team_id) FROM StatsCoach.teams WHERE team_code = ?';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( [$teamCode] );
+        $sql = $stmt->fetchColumn();
+        return $sql;
+    }
+    
     protected function email_exists($email)
     {
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.users WHERE `user_email`= ?";
@@ -214,25 +207,25 @@ class User extends UserRelay
     public function login()
     {
         try {
+
             if (!$this->user_exists( $this->username ))
                 throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
 
-            if (!$this->email_confirmed( $this->username ))
-                throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
+
+            // if (!$this->email_confirmed( $this->username ))
+               // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
             $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.users WHERE `user_username` = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( array($this->username) );
             $data = $stmt->fetch();
 
+
             // using the verify method to compare the password with the stored hashed password.
             if (Bcrypt::verify( $this->password, $data['user_password'] ) === true)
                 $_SESSION['id'] = $data['user_id'];    // returning the user's id.
             else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
 
-            $this->getUser( $_SESSION['id'] );
-
-            session_regenerate_id( true );
 
             if ($this->rememberMe) {
                 Request::setCookie( "UserName", $this->user_username );
@@ -243,6 +236,9 @@ class User extends UserRelay
                 Request::setCookie( "FullName", "", -1 );
                 Request::setCookie( "UserImage", "", -1 );
             }
+
+            session_regenerate_id( true );
+            User::clearInstance();
             startApplication( true );     // restart
 
         } catch (\Exception $e) {
@@ -259,7 +255,7 @@ class User extends UserRelay
             } else {
                 $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
 
-                $this->getUser( $_SESSION['id'] );
+                $this->getUser();
 
                 if ($this->user_facebook_id == null) ;
                 #self::update_user();
@@ -298,21 +294,36 @@ class User extends UserRelay
                 $sql = "INSERT INTO StatsCoach.golf_stats (user_id) VALUES (?)";
                 $this->db->prepare( $sql )->execute([$_SESSION['id']]);
 
+                if ($this->userType == 'Coach') {
+                    $sql = "INSERT INTO StatsCoach.teams (team_name, team_school, team_coach) VALUES (?,?,?)";
+                    $this->db->prepare( $sql )->execute( [$this->teamName, $this->schoolName, $_SESSION['id']] );
+                } elseif ($this->teamCode) {
+                    if ($teamId = $this->team_exists($this->teamCode)) {
+                        $sql = "INSERT INTO StatsCoach.team_members (user_id, team_id) VALUES (?,?)";
+                        $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId] );
+                    } else {
+                        $this->alert['danger'] = "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.";
+                    }
+                }
+
                 mail( $this->email, 'Please activate your account', "Hello $this->firstName ,
             \r\nThank you for registering with us. 
             \r\n Username :  $this->username 
             \r\n Password :  $this->password 
             \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             http://www.Stats.Coach/Activate/$this->email/$email_code/
+             https://www.Stats.Coach/Activate/$this->email/$email_code/
              \r\n\r\n--" . SITE_PATH );
 
             } catch (\Exception $e) {
-                throw new \Exception( "Sorry, we were unable to create this account. Please try again." );
+
+                throw new \Exception( $e->getMessage() ); //"Sorry, we were unable to create this account. Please try again." );
             }
 
-            $this->getUser( $_SESSION['id'] );
 
-            $this->alert['success'] = "Welcome to Stats Coach";
+
+            $this->alert['success'] = "Welcome to Stats Coach. Please login and/or check your email to finish registration";
+
+            alert( $_SESSION['id'] );
 
             startApplication( true );
 

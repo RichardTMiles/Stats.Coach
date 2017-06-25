@@ -17,9 +17,7 @@ $route->match( 'Tests/*',   // This
     }
 );
 
-$route->signedIn()->match( 'Home/*', function () {
-    mvc( 'Golf', 'golf' );
-} )->home();          // Home = golf -> golf
+$route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();          // Home = golf -> golf
 
 $route->signedOut()->match( 'Login/{client?}/*', function ($client) {
     if ($client == "facebook") mvc( 'User', 'facebook' );

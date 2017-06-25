@@ -22,6 +22,8 @@
     <title>AdminLTE 2 | Recover Account</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="shortcut icon" href="<?=SITE_PATH?>/Public/favicon.png" type="image/x-icon" />
+
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="<?php echo TEMPLATE_PATH ?>bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -48,12 +50,12 @@
 <body class="hold-transition ">
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?= SITE_ROOT . 'index.php'; ?>"><b>Stats</b>.Coach</a>
+        <a href="<?= SITE_PATH . 'index.php'; ?>"><b>Stats</b>.Coach</a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Recover Username & Password</p>
 
-        <form action="<?= SITE_ROOT ?>users/recover/" method="post">
+        <form action="<?= SITE_PATH ?>users/recover/" method="post">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" name="email"
                        placeholder="Email" value="<?php if (isset($_POST['email'])) {
@@ -69,18 +71,11 @@
         </form>
         <br \>
 
-        <?php
-        if (empty($errors) === false) {
-            foreach ($errors as $key => $val) {
-                echo '<div class="categories-bottom"><p style="text-align:center;">';
-                echo $val;
-                echo '</p></div>';
-            }
-        }
-        ?>
+        <div id="alert"></div>
 
-        <a href="<?= SITE_ROOT ?>">Already Have an account? Login Here</a><br>
-        <a href="<?php echo SITE_ROOT . 'users/register/'; ?>" class="text-center">Register a new membership</a>
+
+        <a href="<?= SITE_PATH ?>">Already Have an account? Login Here</a><br>
+        <a href="<?php echo SITE_PATH . 'users/register/'; ?>" class="text-center">Register a new membership</a>
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->

@@ -170,7 +170,7 @@
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="<?= SITE_ROOT ?>" class="logo" onclick="return Ajax(this);">
+        <a href="<?= SITE_PATH ?>" class="logo" onclick="return Ajax(this);">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>S</b>.C</span>
             <!-- logo for regular state and mobile devices -->
@@ -284,7 +284,7 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="<?= SITE_ROOT . $this->user_profile_pic ?>" class="user-image" alt="User Image">
+                            <img src="<?= SITE_PATH . $this->user_profile_pic ?>" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                     <span class="hidden-xs">
                                         <?= $this->user_full_name ?>
@@ -293,7 +293,7 @@
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="<?= SITE_ROOT . $this->user_profile_pic ?>" class="img-circle"
+                                <img src="<?= SITE_PATH . $this->user_profile_pic ?>" class="img-circle"
                                      alt="User Image">
                                 <p>
                                     <?= $this->user_first_name ?> <?= $this->user_last_name ?> - Golf
@@ -315,11 +315,11 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="<?= SITE_ROOT ?>profile/"
+                                    <a href="<?= SITE_PATH ?>profile/"
                                        class="btn btn-default btn-flat" onclick="return Ajax(this);">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="<?= SITE_ROOT ?>logout/" class="btn btn-default btn-flat" onclick="return Ajax(this);">Logout</a>
+                                    <a href="<?= SITE_PATH ?>logout/" class="btn btn-default btn-flat" onclick="return Ajax(this);">Logout</a>
                                 </div>
                             </li>
                         </ul>
@@ -341,7 +341,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?= SITE_ROOT . $this->user_profile_pic ?>" class="img-circle" alt="User Image">
+                    <img src="<?= SITE_PATH . $this->user_profile_pic ?>" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p><?= $this->user_first_name ?> <?= $this->user_last_name ?></p>
@@ -371,7 +371,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="active">
-                            <a href="<?= SITE_ROOT ?>" onclick="return Ajax(this)">
+                            <a href="<?= SITE_PATH ?>" onclick="return Ajax(this)">
                                 <i class="fa fa-circle-o"></i><?= $this->user_first_name ?> <?= $this->user_last_name ?>
                             </a>
                         </li>
@@ -397,7 +397,7 @@
 
 
                 <li>
-                    <a href="<?= SITE_ROOT ?>PostScore/" onclick="return Ajax(this);">
+                    <a href="<?= SITE_PATH ?>PostScore/" onclick="return Ajax(this);">
                         <i class="fa fa-edit"></i> <span>Post Scores</span>
                     </a>
                 </li>
@@ -410,7 +410,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_ROOT . 'Profile/' ?>" onclick="Ajax(this)"><i
+                        <li><a href="<?= SITE_PATH . 'Profile/' ?>" onclick="Ajax(this)"><i
                                     class="fa fa-circle-o"></i> <?= $this->user_first_name ?> <?= $this->user_last_name ?>
                             </a></li>
                         <li>
@@ -477,7 +477,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_ROOT ?>Profile/" onclick="return Ajax(this);"><i class="fa fa-circle-o"></i> Profile
+                        <li><a href="<?= SITE_PATH ?>Profile/" onclick="return Ajax(this);"><i class="fa fa-circle-o"></i> Profile
                                 Settings</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Create Team</a></li>

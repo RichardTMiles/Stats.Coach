@@ -6,7 +6,6 @@
         <entryData>
           <resourceRoots>
             <path value="file://$PROJECT_DIR$" />
-            <path value="file://$PROJECT_DIR$/Public" />
             <path value="file://$PROJECT_DIR$/Application/Services/vendor" />
           </resourceRoots>
         </entryData>

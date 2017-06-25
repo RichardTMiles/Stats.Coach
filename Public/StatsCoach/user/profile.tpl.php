@@ -1,11 +1,9 @@
+
 <script>
     $(document).on('submit', 'form[data-pjax]', function(event) {
         $.pjax.submit(event, '#pjax-container')
     })
 </script>
-
-
-
 
 <!-- Content Header (Page header) -->
 
@@ -18,34 +16,23 @@
         <li><a href="#" style="color: ghostwhite">Examples</a></li>
         <li class="active" style="color: ghostwhite">User profile</li>
     </ol>
+    <p>
+    </p>
 </section>
 
 <!-- Main content -->
 
-<section class="content">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="callout callout-info">
-                <h4>Heads Up!</h4>
-                <p>There are over seven million high school student-athletes in the United States.
-                    Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your
-                    academia.
-                    The information you present here should be considered public, to be seen by peers and coaches alike;
-                    so please keep it classy. </p>
-            </div>
-        </div>
-    </div>
+<section class="content" >
+    <div id="alert"></div>
 
     <div class="row">
         <div class="col-md-3">
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle"
-                         src="<?=$this->user_profile_pic?>" alt="User profile picture">
-                    <h3 class="profile-username text-center"><?=$this->user_full_name?></h3>
+                    <img class="profile-user-img img-responsive img-circle" src="<?=$this->user->user_profile_pic?>" alt="User profile picture">
+                    <h3 class="profile-username text-center"><?=$this->user->user_full_name?></h3>
                     <p class="text-muted text-center">Software Engineer</p>
-
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Followers</b> <a class="pull-right">1,322</a>
@@ -142,7 +129,7 @@
                     </div><!-- /.table-responsive -->
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
-                    <a href="<?=SITE_ROOT. "PostScore/"?>" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                    <a href="<?=SITE_PATH. "PostScore/"?>" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
                     <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
                 </div><!-- /.box-footer -->
             </div>
@@ -198,14 +185,14 @@
                     <!-- SETTINGS TAB -->
                     <div class="tab-pane" id="settings">
                         <!-- Form Start -->
-                        <form class="form-horizontal" action="<?=SITE_ROOT?>Profile/" method="post" enctype="multipart/form-data">
+                        <form class="form-horizontal" action="<?=SITE_PATH?>Profile/" method="post" enctype="multipart/form-data">
 
 
                             <div class="form-group col-md-12">
 
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <img class="profile-user-img img-responsive img-circle" src="<?=$this->user_profile_pic ?>"
+                                        <img class="profile-user-img img-responsive img-circle" src="<?=$this->user->user_profile_pic ?>"
                                              alt="User profile picture">
                                     </div>
                                 </div>
@@ -221,28 +208,28 @@
                                     <label for="inputName" class="col-sm-3 control-label">First Name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="inputName"
-                                               placeholder="<?= $this->user_first_name ?>" name="first_name">
+                                               placeholder="<?= $this->user->user_first_name ?>" name="first_name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName" class="col-sm-3 control-label">Last Name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="inputName"
-                                               placeholder="<?=$this->user_last_name?>" name="first_name">
+                                               placeholder="<?=$this->user->user_last_name ?>" name="first_name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail" class="col-sm-3 control-label">Email</label>
                                     <div class="col-sm-8">
                                         <input type="email" class="form-control" id="inputEmail"
-                                               placeholder="<?= $this->user_email ?>" name="email">
+                                               placeholder="<?= $this->user->user_email ?>" name="email">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName" class="col-sm-3 control-label">Username</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="inputName" disabled="disabled"
-                                               placeholder="<?= $this->user_username ?>" name="username">
+                                               placeholder="<?= $this->user->user_username ?>" name="username">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -276,7 +263,7 @@
                                 <div class="col-sm-offset-3 col-sm-10">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox"> I agree to the <a href="#">terms and
+                                            <input type="checkbox" value="1"> I agree to the <a href="#">terms and
                                                 conditions</a>
                                         </label>
                                     </div>
