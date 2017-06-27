@@ -10,16 +10,23 @@ namespace View;
 use Controller\User;
 use Psr\Singleton;
 
-class    View
+class View
 {
     use Singleton;
 
+    public $ajax;
     public $currentPage;
+
+    public function wrapper()
+    {
+        return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
+    }
+
 
     public function __wakeup()
     {
         if (!($this->ajax = $this->ajaxActive())):      // an HTTP request
-            $this->__construct( $this->wrapper() );     // and reprocess the dependencies, wrapper is a global closure
+            $this->__construct();                       // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
             unset($this->currentPage);
@@ -28,17 +35,17 @@ class    View
         // this would mean we're requesting our second page through ajax
     }
 
-    public function __construct($container = false)
+    public function __construct()
     {
-        if ($container) {
-            if (($this->ajax = $this->ajaxActive())) return null;
+        if ($this->wrapper()) {
+            if ($this->ajaxActive()) return null;
             require_once "minify.php";
             ob_start();
             require_once(CONTENT_WRAPPER);
             $template = ob_get_clean(); // Return the Template    minify_html()
-            echo (MINIFY_CONTENTS && (@include_once "minify.php") ?
-                    minify_html( $template ) :
-                    $template);
+            echo(MINIFY_CONTENTS && (@include_once "minify.php") ?
+                minify_html( $template ) :
+                $template);
         } elseif ($this->ajaxActive())
             User::logout();
         // if there it is an ajax request, the user must be logged in, or container must be true
@@ -50,38 +57,56 @@ class    View
 
         $file = ($class != 'Tests' ?
             (CONTENT_ROOT . strtolower( $class ) . DS .
-            strtolower( $fileName ) . ($loggedIn ? '.tpl.php' : '.php')) :
+                strtolower( $fileName ) . ($loggedIn ? '.tpl.php' : '.php')) :
             SERVER_ROOT . $class . DS . $fileName . '.php');
 
         if (file_exists( $file )) {
             ob_start();
-
-            include $file;
             include CONTENT_ROOT . 'alert' . DS . 'alerts.tpl.php'; // a little hackish when not using template file
-            
+            include $file;
+            echo '<div class="clearfix"></div>';
             $file = ob_get_clean();         // minify_html()
 
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
-                 $file = minify_html( $file );
+                $file = minify_html( $file );
 
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {  // TODO - Logged in should be rethought
+            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) { 
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
 
-        } else throw new \Exception("$file does not exist");
-            // startApplication( true );
+        } else throw new \Exception( "$file does not exist" );
+        // startApplication( true );
         // restart, this usually means the user is trying to access a protected page when logged out
         exit(1);
     }
 
     private function ajaxActive()
     {
-        return (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
+        return $this->ajax = (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
+    }
+
+    public function activateAjax()
+    {?>
+        <script src="<?= $this->versionControl( 'plugins/pace/pace.js' ); ?>"></script>
+        <script src="<?= SITE_PATH ?>Public/Jquery-Pjax/jquery.pjax.js"></script>
+        <script>
+            $(function () {
+                // initial content
+                $.pjax.reload('#ajax-content');
+
+                // Every href on 'a' element
+                // when on document load add event to every a tag, when event fired trigger smart refresh
+                $.when($(document).pjax('a', '#ajax-content')).then(function () {
+                    Pace.restart();
+                });
+            });
+        </script>
+    <?php
     }
 
     public function faceBookLoginUrl()
     {
-       return (include SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'Social' . DS . 'fb-login-url.php');
+        return (include SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'Social' . DS . 'fb-login-url.php');
     }
 
     public function googleLoginUrl()
@@ -102,10 +127,9 @@ class    View
 
     public function versionControl($file)
     {
-        if (file_exists( $file ))
-            return preg_replace( '{\\.([^./]+)$}', ".".filemtime( $file ).".\$1", $file );
-
-        return TEMPLATE_PATH . preg_replace( '{\\.([^./]+)$}', ".".filemtime( SERVER_ROOT . TEMPLATE_PATH . $file ).".\$1", $file );
+        $file = TEMPLATE_PATH . $file;
+        return (file_exists( $file ) ?
+            preg_replace( '{\\.([^./]+)$}', "." . filemtime( $file ) . ".\$1", $file ) : $file);
     }
 
     public function __get($variable)

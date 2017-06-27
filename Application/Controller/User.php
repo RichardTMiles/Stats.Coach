@@ -2,10 +2,8 @@
 
 namespace Controller;
 
-use Model\Helpers\UserRelay;
 use Modules\Request;
 use Psr\Singleton;
-use View\View;
 
 class User
 {
@@ -29,19 +27,19 @@ class User
         session_destroy();
         session_start();
         session_regenerate_id(true);
-        \Model\User::clearInstance();
-        unset($GLOBALS['user']);
+        unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
+        \Model\User::clearInstance();   // remove sterilized data
         $_SESSION['id'] = false;
+        unset($_SESSION['id']);
         startApplication(true);
     }
     
     public function login()
     {
-        if (isset($this->facebook))
-            return true;
-
-        if (isset($this->client) && $this->client == "clear")
-             return $this->request->cookie()->except('PHPSESSID')->clearCookies();
+        if (isset($this->client) && $this->client == "clear") {
+            $this->request->cookie()->except( 'PHPSESSID' )->clearCookies();
+            return false;
+        }
 
         list($this->UserName, $this->FullName, $this->UserImage)
             = $this->request->cookie('UserName', 'FullName', 'UserImage')->value();
@@ -66,7 +64,7 @@ class User
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
             $this->alert = 'Sorry, we could not connect to Facebook. Please try again later.';
         else return true;
-        startApplication(true);     // This will load the login page
+        return startApplication(true);     // This will load the login page
     }
 
     public function register()
@@ -128,9 +126,10 @@ class User
         if (!$this->email || !$this->email_code)
             $this->alert['warning'] = 'Sorry the url submitted is invalid.';
         else return true;
+        return false;
     }
 
-    public function recover($id = null)
+    public function recover()
     {
         $this->email = $this->request->post( 'email' )->email();
 
@@ -139,9 +138,8 @@ class User
         if (isset($this->alert) === true) $this->parameter = 'verify';
     }
 
-    public function profile($user = null)
+    public function profile()
     {
-
         $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
         return false;
     }

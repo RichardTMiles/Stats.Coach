@@ -31,15 +31,15 @@
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header">2</h5>
-                        <span class="description-text">Tournaments</span>
+                        <h5 class="description-header"><?=$this->golf->stats_ffs?></h5>
+                        <span class="description-text">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
                 </div><!-- /.col -->
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header">56</h5>
+                        <h5 class="description-header"><?=$this->golf->stats_rounds?></h5>
                         <span class="description-text">Rounds</span>
                     </div><!-- /.description-block -->
 
@@ -47,8 +47,8 @@
 
                 <div class="col-sm-4">
                     <div class="description-block">
-                        <h5 class="description-header">6</h5>
-                        <span class="description-text">HANDICAP</span>
+                        <h5 class="description-header"><?=($this->golf->stats_gnr)?></h5>
+                        <span class="description-text">Greens in Regulation</span>
                     </div><!-- /.description-block -->
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -127,7 +127,7 @@
                 <span class="info-box-icon bg-aqua"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Shots</span>
-                    <span class="info-box-number">4,368</span>
+                    <span class="info-box-number"><?=$this->golf->stats_strokes?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -137,7 +137,7 @@
                 <span class="info-box-icon bg-green"><i class="fa fa-flag-checkered"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Rounds Played</span>
-                    <span class="info-box-number">56</span>
+                    <span class="info-box-number"><?=$this->golf->stats_rounds?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -147,7 +147,7 @@
                 <span class="info-box-icon bg-yellow"><i class="fa fa-tree"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Handicap</span>
-                    <span class="info-box-number">6</span>
+                    <span class="info-box-number"><?=($this->golf->stats_handicap < 6 ? "You must play at least 6 rounds": $this->golf->stats_handicap)?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

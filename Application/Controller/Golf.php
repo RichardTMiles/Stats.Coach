@@ -17,7 +17,7 @@ class Golf
 
     public function Golf()
     {
-        return false;
+        return true;
     }
 
     public function PostScore()
@@ -30,13 +30,12 @@ class Golf
             return true;
 
         if (!empty($_POST)) {
-            $this->fff = $this->request->post( 'ffs-1','ffs-2','ffs-3','ffs-4','ffs-5','ffs-6','ffs-7','ffs-8','ffs-9','ffs-10','ffs-11','ffs-12','ffs-13','ffs-14','ffs-15','ffs-16','ffs-17','ffs-18' )->int();
+            $this->ffs = $this->request->post( 'ffs-1','ffs-2','ffs-3','ffs-4','ffs-5','ffs-6','ffs-7','ffs-8','ffs-9','ffs-10','ffs-11','ffs-12','ffs-13','ffs-14','ffs-15','ffs-16','ffs-17','ffs-18' )->int();
             $this->gnr = $this->request->post( 'gnr-1','gnr-2','gnr-3','gnr-4','gnr-5','gnr-6','gnr-7','gnr-8','gnr-9','gnr-10','gnr-11','gnr-12','gnr-13','gnr-14','gnr-15','gnr-16','gnr-17','gnr-18' )->int();
             $this->newScore = $this->request->post( 'hole-1','hole-2','hole-3','hole-4','hole-5','hole-6','hole-7','hole-8','hole-9','hole-10','hole-11','hole-12','hole-13','hole-14','hole-15','hole-16','hole-17','hole-18' )->int();
         }
         return !(empty($this->newScore));
     }
-
 
     public function AddCourse()
     {
@@ -84,6 +83,8 @@ class Golf
             // TODO - validate number range
             for ($i = 1; $i <= $this->tee_boxes; $i++) {
                 if (array_key_exists( "tee_$i" . "_color", $_POST )) {
+                    $this->slope[$i] = $this->request->post( "general_slope_$i", "women_slope_$i" )->int();
+                    $this->difficulty[$i] = $this->request->post("general_difficulty_$i","women_difficulty_$i" )->int();
                     $this->teeBox[$i] = $this->request->post( "tee_$i" . "_1", "tee_$i" . "_2", "tee_$i" . "_3", "tee_$i" . "_4", "tee_$i" . "_5", "tee_$i" . "_6", "tee_$i" . "_7", "tee_$i" . "_8", "tee_$i" . "_9", "tee_$i" . "_10", "tee_$i" . "_11", "tee_$i" . "_12", "tee_$i" . "_13", "tee_$i" . "_14", "tee_$i" . "_15", "tee_$i" . "_16", "tee_$i" . "_17", "tee_$i" . "_18" )->int();
                     array_unshift( $this->teeBox[$i], $this->request->post( "tee_$i" . "_color" )->alnum() );
                 }
@@ -111,7 +112,6 @@ class Golf
         } catch (\Exception $e) {
             $this->alert['danger'] = $e->getMessage();
         }
-
         return false;
     }
 

@@ -48,7 +48,7 @@ class User extends UserRelay
 
     public final function __sleep()
     {
-        return (!empty($this->user_username) ? array('user_id','user_username', 'user_first_name', 'user_last_name', 'user_full_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
+        return (!empty($this->user_username) ? array_keys( get_object_vars( $this ) ) : 0 ); //? array('user_id','user_username', 'user_first_name', 'user_last_name', 'user_full_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
     }
 
     protected function getUser()
@@ -56,7 +56,7 @@ class User extends UserRelay
         if (!array_key_exists( 'id', $_SESSION )) throw new \Exception('nope bad id');
         // In theory this request is only called once per session.
         try {
-            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.users WHERE user_id = ?' );
+            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
             $stmt->setFetchMode( \PDO::FETCH_CLASS, User::class );
             $stmt->execute( [$_SESSION['id']] );
             $stmt = $stmt->fetch();                 // user obj
@@ -65,7 +65,6 @@ class User extends UserRelay
         } catch (\Exception $e) {
             alert($e->getMessage());
         }
-
     }
 
     protected function fetchSQL($what, $field, $value)
@@ -74,7 +73,7 @@ class User extends UserRelay
         if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
             throw new \InvalidArgumentException;
 
-        $sql = "SELECT $what FROM StatsCoach.users WHERE $field = ?";
+        $sql = "SELECT $what FROM StatsCoach.user WHERE $field = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($value) );
         return $stmt->fetch();
@@ -83,7 +82,7 @@ class User extends UserRelay
 
     protected function updateUser()
     {
-        return $this->db->prepare( "UPDATE StatsCoach.users SET 
+        return $this->db->prepare( "UPDATE StatsCoach.user SET 
                                     user_facebook_id = ?, 
                                     user_username = ?, 
                                     user_first_name = ?, 
@@ -113,7 +112,7 @@ class User extends UserRelay
     protected function change_password($user_id, $password)
     {   /* Two create a Hash you do */
         $password_hash = Bcrypt::genHash( $password );
-        $stmt = $this->db->prepare( "UPDATE StatsCoach.users SET user_password = ? WHERE user_id = ?" );
+        $stmt = $this->db->prepare( "UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?" );
         return $stmt->execute( array($password_hash, $user_id) );
     }
 
@@ -122,7 +121,7 @@ class User extends UserRelay
         if ($generated_string == 0) {
             return false;
         } else {
-            $stmt = $this->db->prepare( "SELECT COUNT(`user_id`) FROM StatsCoach.users WHERE `user_email` = ? AND `user_generated_string` = ?" );
+            $stmt = $this->db->prepare( "SELECT COUNT(`user_id`) FROM StatsCoach.user WHERE `user_email` = ? AND `user_generated_string` = ?" );
             $stmt->execute( array($email, $generated_string) );
 
             if ($stmt->fetch()) {   // a row exists
@@ -158,7 +157,7 @@ class User extends UserRelay
 
         $generated_string = $unique . $random;          // a random and unique string
 
-        $stmt = $this->db->prepare( "UPDATE StatsCoach.users SET `user_generated_string` = ? WHERE `user_email` = ?" );
+        $stmt = $this->db->prepare( "UPDATE StatsCoach.user SET `user_generated_string` = ? WHERE `user_email` = ?" );
         $stmt->execute( array($generated_string, $email) );
 
         mail( $email, 'Recover Password', "Hello " . $first_name . ",\r\nPlease click the link below:\r\n\r\n
@@ -170,7 +169,7 @@ class User extends UserRelay
 
     protected function user_exists($username)
     {
-        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.users WHERE user_username = ?';
+        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ?';
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$username] );
         $sql = $stmt->fetchColumn();
@@ -188,7 +187,7 @@ class User extends UserRelay
     
     protected function email_exists($email)
     {
-        $sql = "SELECT COUNT(user_id) FROM StatsCoach.users WHERE `user_email`= ?";
+        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($email) );
         $sql = $stmt->fetchColumn();
@@ -197,7 +196,7 @@ class User extends UserRelay
 
     protected function email_confirmed($username)
     {
-        $sql = "SELECT COUNT(user_id) FROM StatsCoach.users WHERE user_username= ? AND user_email_confirmed = ?";
+        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username= ? AND user_email_confirmed = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($username, 1) );
         if ($stmt->fetch()) return true;
@@ -215,7 +214,7 @@ class User extends UserRelay
             // if (!$this->email_confirmed( $this->username ))
                // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
-            $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.users WHERE `user_username` = ?";
+            $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.user WHERE `user_username` = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( array($this->username) );
             $data = $stmt->fetch();
@@ -231,11 +230,7 @@ class User extends UserRelay
                 Request::setCookie( "UserName", $this->user_username );
                 Request::setCookie( "FullName", $this->user_full_name );
                 Request::setCookie( "UserImage", $this->user_profile_pic );
-            } else {
-                Request::setCookie( "UserName", "", -1 );
-                Request::setCookie( "FullName", "", -1 );
-                Request::setCookie( "UserImage", "", -1 );
-            }
+            } // we clear the cookies in the controller
 
             session_regenerate_id( true );
             User::clearInstance();
@@ -281,12 +276,12 @@ class User extends UserRelay
             $this->password = Bcrypt::genHash( $this->password );
 
             try {
-                $sql = "INSERT INTO StatsCoach.users (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_gender) 
+                $sql = "INSERT INTO StatsCoach.user (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_gender) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $this->db->prepare( $sql )->execute(
                     array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->gender) );
 
-                $sql = "SELECT user_id FROM StatsCoach.users WHERE user_username = ?";
+                $sql = "SELECT user_id FROM StatsCoach.user WHERE user_username = ?";
                 $stmt = $this->db->prepare( $sql );
                 $stmt->execute([$this->username]);
                 $_SESSION['id'] = $stmt->fetchColumn();
@@ -295,8 +290,10 @@ class User extends UserRelay
                 $this->db->prepare( $sql )->execute([$_SESSION['id']]);
 
                 if ($this->userType == 'Coach') {
-                    $sql = "INSERT INTO StatsCoach.teams (team_name, team_school, team_coach) VALUES (?,?,?)";
-                    $this->db->prepare( $sql )->execute( [$this->teamName, $this->schoolName, $_SESSION['id']] );
+                    do $teamCode = \Modules\Helpers\Bcrypt::genRandomHex();
+                    while ($this->team_exists($teamCode));
+                    $sql = "INSERT INTO StatsCoach.teams (team_name, team_school, team_coach, team_code) VALUES (?,?,?,?)";
+                    $this->db->prepare( $sql )->execute( [$this->teamName, $this->schoolName, $_SESSION['id'], $teamCode] );
                 } elseif ($this->teamCode) {
                     if ($teamId = $this->team_exists($this->teamCode)) {
                         $sql = "INSERT INTO StatsCoach.team_members (user_id, team_id) VALUES (?,?)";
@@ -321,10 +318,8 @@ class User extends UserRelay
 
 
 
-            $this->alert['success'] = "Welcome to Stats Coach. Please login and/or check your email to finish registration";
-
-            alert( $_SESSION['id'] );
-
+            $this->alert['success'] = "Welcome to Stats Coach. Please check your email to finish your registration.";
+            
             startApplication( true );
 
         } catch (\Exception $e) {
@@ -339,14 +334,14 @@ class User extends UserRelay
             if (!$this->email_exists( $this->email ))
                 throw new \Exception( 'Please make sure the Url you have entered is correct.' );
 
-            $sql = "SELECT COUNT(user_id) FROM StatsCoach.users WHERE user_email = ? AND user_email_code = ? AND user_email_confirmed = ?";
+            $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ? AND user_email_confirmed = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( array($this->email, $this->email_code, '0') );
 
             if ($stmt->fetch() == 0)
                 startApplication( true );
 
-            $sql = "UPDATE StatsCoach.users SET `user_email_confirmed` = 1 WHERE `user_email` = ?";
+            $sql = "UPDATE StatsCoach.user SET `user_email_confirmed` = 1 WHERE `user_email` = ?";
             $this->db->prepare( $sql )->execute( array($this->email) );
             $login = $this->fetchSQL( 'id', 'email', $this->email );
             session_destroy();

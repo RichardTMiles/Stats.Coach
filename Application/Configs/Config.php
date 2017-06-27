@@ -50,7 +50,7 @@ define( 'VENDOR', SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'vendor' 
 define( 'ERROR_LOG', SERVER_ROOT . 'Data' . DS . 'Logs' . DS . 'Logs.php' );
 define( 'CONTENT_ROOT', SERVER_ROOT . 'Public' . DS . 'StatsCoach' . DS );
 define( 'CONTENT_PATH', SITE_PATH . 'Public' . DS . 'StatsCoach' . DS );
-define( 'CONTENT_WRAPPER', CONTENT_ROOT . 'AthleteLayout.php' );
+define( 'CONTENT_WRAPPER', CONTENT_ROOT . 'StatsCoach.php' );
 define( 'TEMPLATE_ROOT', VENDOR . 'almasaeed2010' . DS . 'adminlte' . DS );
 define( 'TEMPLATE_PATH', DS . 'Application/Services/vendor/almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
 define( 'WRAPPING_REQUIRES_LOGIN', true );
@@ -102,26 +102,7 @@ header( 'Content-type: text/html; charset=utf-8' );
  *
  * @return void The View->contents() procedure will exit(1)
  */
-function mvc($class, $method)
-{
-    $controller = "Controller\\$class";
-    $model = "Model\\$class";
 
-    $controller::clearInstance();
-    $controller = $controller::getInstance();   // debating to clear the instance
-
-    if (($argv = $controller->$method()) !== false) {
-
-        sortDump($model);
-
-        $model::clearInstance();
-        $model = $model::getInstance( $argv );
-        $model->$method( $argv );
-    }
-
-    // Relies on the Singleton Trait - content is private but uses attempts to use the current instance
-    View\View::contents( $class, $method );    // this will exit(1) on success
-}
 
 
 /**
@@ -143,16 +124,30 @@ function mvc($class, $method)
  */
 function startApplication($restart = false, callable $default_logged_out = null, callable $default_logged_in = null)
 {
+    $mvc = function ($class, $method) use ($restart) {
+        $controller = "Controller\\$class";
+        $model = "Model\\$class";
 
-    // $_SESSION['id'] = null; exit(1);
-    // sortDump(Model\User::ajaxLogin_Support());
+        if ($restart) {
+            View\View::clearInstance();             // This will help us remove any stored templates if restarted
+            $controller::clearInstance();
+            $model::clearInstance();
+        }
+
+        $controller = $controller::getInstance();   // debating to clear the instance
+        if (($argv = $controller->$method()) !== false) {
+            $GLOBALS[($class = strtolower($class))] = $model::getInstance( $argv );
+            $GLOBALS[$class]->$method( $argv );
+        }
+
+        // Relies on the Singleton Trait - content is private but uses attempts to use the current instance
+        View\View::contents( $class, $method );    // this will exit(1) on success
+    };
+
     if ($restart) Model\User::clearInstance();
     $GLOBALS['user'] = $user = Model\User::clearInstance(Model\User::ajaxLogin_Support());
     $app_id = $user->user_id;
-
-
-    $wrapper = $GLOBALS['closures']['wrapper'] = function () use ($app_id) {
-        return (!WRAPPING_REQUIRES_LOGIN ?: $app_id); };
+    
 
     if ($restart || $_SERVER['REQUEST_URI'] == null) {
         $_POST = null;
@@ -161,16 +156,15 @@ function startApplication($restart = false, callable $default_logged_out = null,
             ($restart ?: null));
     }
 
-    View\View::clearInstance();             // This will help us remove any stored templates if restarted
-    View\View::getInstance( $wrapper() );   // Un-sterilize and call the wake up fn if possible
+    View\View::getInstance( );   // Un-sterilize and call the wake up fn if possible
     // or construct and send the users content wrapper if not an ajax request
 
     // This will clear the uri, so if we must restart it will be with `default` options
     $route = new Modules\Route(
+        $user->user_id,                       // Signed in?
+        $mvc,                                 // Default Data Flo, post Route procedure
         $default_logged_out,                  // default logged out accepts Closure
-        $default_logged_in,                   // default logged in  accepts Closure
-        $user->user_id);           // Signned in?
-
+        $default_logged_in );                 // default logged in  accepts Closure
 
     require SERVER_ROOT . 'Application/Bootstrap.php';
 
@@ -191,12 +185,13 @@ function startApplication($restart = false, callable $default_logged_out = null,
  * @param mixed $mixed Will be run throught the var_dump function.
  *
  * @return die(1);
- */ 
+ */
 function sortDump(...$mixed)
 {
     unset($_SERVER);
     echo '<pre>';
     if (count($mixed) == 1) {
+        echo "##################### ZVAL ######################\n";
         debug_zval_dump( $mixed[0] );
         echo '</pre><br><br><pre>';
 
@@ -204,11 +199,10 @@ function sortDump(...$mixed)
         var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
         echo '</pre><br><br><pre>';
     }
-
+    echo "################## BACK TRACE ###################\n";
     var_dump(debug_backtrace());
-
     echo '</pre>';
-    die(1);         // note minify.php is dependant of $_SERVER.. TODO - ?
+    die(1);
 }
 
 /**

@@ -50,7 +50,9 @@ trait Singleton
      */
     public static function clearInstance($object = null)
     {
-        return self::$getInstance = $object;
+        if (array_key_exists( __CLASS__, $_SESSION ))
+            unset($_SESSION[__CLASS__]);                
+        return self::$getInstance = (is_object( $object ) ? $object : null );
     }
 
 

@@ -20,8 +20,9 @@ class Route
     private $signedStatus;
     private $default_Signed_Out;
     private $default_Signed_In;
+    private $postMethod;
 
-    public function __construct(callable $default_Signed_Out = null, callable $default_Signed_In = null, $signedStatus = false)
+    public function __construct($signedStatus = false, callable $structure, callable $default_Signed_Out = null, callable $default_Signed_In = null)
     {
         if (key_exists( 'REQUEST_URI', $_SERVER ))
             $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ) , '/' );
@@ -37,7 +38,7 @@ class Route
         $this->default_Signed_Out = $default_Signed_Out;
         $this->default_Signed_In = $default_Signed_In;
         $this->signedStatus = $signedStatus;
-
+        $this->postMethod = $structure;
         $this->uri = explode( '/', strtolower( $uri ) );
     }
 
@@ -119,17 +120,16 @@ class Route
                         $this->{$key} = $value;
 
                     $this->matched = true;
-
                     $this->homeMethod = null;
 
                     if(is_callable( $argv[0] )) {
                         $this->addMethod( 'routeMatched', $argv[0] );
                         if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
-                    } elseif (count( $argv ) == 2)
-                        mvc( $argv[0], $argv[1] );
-                    else
-                        throw new \InvalidArgumentException();
+                    } elseif (count( $argv ) == 2) {
+                        $structure = $this->postMethod;
+                        $structure( $argv[0], $argv[1] );
+                    } else throw new \InvalidArgumentException;
 
                     return $this; // Note that the application will break in the View::contents
 
@@ -139,7 +139,6 @@ class Route
                         throw new \InvalidArgumentException;
 
                     $variable = null;
-
                     $variable = rtrim( ltrim( $arrayToMatch[$i], '{' ), '}' );
 
                     if (substr( $variable, -1 ) == '?') {

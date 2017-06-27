@@ -20,6 +20,8 @@ abstract class UserRelay
 {
     
     public $user_id;
+    public $user_type;
+    public $user_sport;
     public $user_facebook_id;
     public $user_username;
     public $user_full_name;

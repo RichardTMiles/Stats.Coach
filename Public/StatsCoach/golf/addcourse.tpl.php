@@ -6,7 +6,7 @@
  * Time: 1:53 AM
  */ ?>
 
-<script src="<?=CONTENT_PATH?>golf/test.js"></script>
+<script src="<?=CONTENT_PATH?>golf/addcourse.js"></script>
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">

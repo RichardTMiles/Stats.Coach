@@ -8,9 +8,16 @@ namespace Modules\Helpers;
 
 class Bcrypt
 {
-    private static $rounds = 16;
+    private static $rounds = 10;
 
-    /* Gen Salt */
+
+    public static function genRandomHex($bitLength = 25)
+    {
+        $sudoRandom = 0;
+        for ($i=0;$i<$bitLength;$i++) $sudoRandom = $sudoRandom * 10 + rand(0,1) ;
+        return dechex(bindec($sudoRandom));
+    }
+    
     private static function genSalt()
     {
         /* GenSalt */
