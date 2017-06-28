@@ -1,0 +1,1 @@
+<?php namespace Modules\Helpers; use Psr\Singleton; class Carbon { use Singleton; }
