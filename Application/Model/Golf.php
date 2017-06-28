@@ -3,35 +3,30 @@
 namespace Model;
 
 use Model\Helpers\GolfRelay;
+use Modules\Helpers\Skeleton;
 use Psr\Singleton;
 use Modules\Database;
 
 class Golf extends GolfRelay
 {
     use Singleton;
+    const Singleton = true;
 
-    private $db;
-
-    public function __wakeup()
+    public function Golf()
     {
-        $this->db = Database::getConnection();  // establish a connection
-    }
-
-    public function __sleep()
-    {
-        return (!empty($this->course_id) ? [
-            'course_id', 'created_by', 'course_name', 'created_date', 'course_holes',
-            'course_street', 'course_city', 'course_state', 'course_phone', 'course_elevation',
-            'course_difficulty', 'course_rank', 'box_color_1', 'box_color_2', 'box_color_3',
-            'box_color_4', 'box_color_5', 'par_1', 'par_2', 'par_3', 'par_4', 'par_5',
-            'par_6', 'par_7', 'par_8', 'par_9', 'par_out', 'par_10', 'par_11', 'par_12', 'par_13',
-            'par_14', 'par_15', 'par_16', 'par_17', 'par_18', 'par_in', 'par_tot', 'par_hcp', 'course_type', 'course_access'] : 0);
-    }
-
-    public function __construct()
-    {
-        $this->db = Database::getConnection();
-    }
+        try {
+            $sql = "SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?";
+            $stmt = $this->db->prepare( $sql );
+            $stmt->execute([$this->user->user_id]);
+            $this->fetch_into_current_class( $stmt->fetch() );
+            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ?' );
+            $stmt->setFetchMode( \PDO::FETCH_CLASS, Skeleton::class );
+            $stmt->execute( [$_SESSION['id']] );
+            $this->golf_rounds = $stmt->fetchAll();  // user obj
+        } catch (\Exception $e) {
+            alert($e->getMessage());
+        }
+    }   // Home page 
 
     public function coursesByState($state)
     {
@@ -46,18 +41,20 @@ class Golf extends GolfRelay
         $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ?';
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$id] );
-        $data = $stmt->fetch( \PDO::FETCH_ASSOC );
-
-        foreach ($data as $key => $val)
-            $GLOBALS['golf'][$key] = $this->$key = $val;
+        $this->fetch_into_current_class( $stmt->fetch( \PDO::FETCH_ASSOC ) );
     }
 
-    public function Golf()
+    public function joinTeam($teamCode)
     {
-        $sql = "SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?";
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute([$this->user->user_id]);
-        $this->fetch_into_current_class( $stmt->fetch() );
+        try{
+            $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id) VALUES (?,?)";
+            $this->db->prepare( $sql )->execute([$this->user->user_id, $teamCode]);
+            
+            startApplication('Home/');
+        } catch (\Exception $e) {
+            $this->alert['danger'] = "Could Not Join Team, Please try again";
+        }
+
     }
 
     public function PostScore()

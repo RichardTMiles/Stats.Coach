@@ -31,7 +31,7 @@ class User
         \Model\User::clearInstance();   // remove sterilized data
         $_SESSION['id'] = false;
         unset($_SESSION['id']);
-        startApplication(true);
+        startApplication('login/');
     }
     
     public function login()

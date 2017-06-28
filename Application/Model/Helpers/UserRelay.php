@@ -9,16 +9,11 @@ Email needs to be edited in function "register"
 
 namespace Model\Helpers;
 
-use PDO;
 
-use Controller\User;
-use Modules\Helpers\Bcrypt;
-use Modules\Database;
-use Psr\Singleton;
+use Modules\Helpers\QuickFetch;
 
-abstract class UserRelay 
+abstract class UserRelay extends QuickFetch
 {
-    
     public $user_id;
     public $user_type;
     public $user_sport;
@@ -42,8 +37,6 @@ abstract class UserRelay
     public $user_deactivated;
     public $user_creation_date;
     public $user_ip;
-
-
 }
 
 

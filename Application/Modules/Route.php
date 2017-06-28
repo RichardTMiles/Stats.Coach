@@ -20,7 +20,7 @@ class Route
     private $signedStatus;
     private $default_Signed_Out;
     private $default_Signed_In;
-    private $postMethod;
+    private $structure;
 
     public function __construct($signedStatus = false, callable $structure, callable $default_Signed_Out = null, callable $default_Signed_In = null)
     {
@@ -29,16 +29,16 @@ class Route
 
         if (empty($uri)) {
             $this->matched = true;
-            // If the parameters set are callable then the return should be a valid url, or must exit ( which will happen in the mvc() function )
-            $uri = ($signedStatus ? (is_callable( $default_Signed_In ) ? $default_Signed_In() : $default_Signed_In) :
-                (is_callable( $default_Signed_Out ) ? $default_Signed_Out() : $default_Signed_Out));
+            if ($signedStatus) {
+                if (is_callable( $default_Signed_In )) $default_Signed_In();
+            } elseif (is_callable( $default_Signed_Out )) $default_Signed_Out();
         }
 
         $this->matched = false;
         $this->default_Signed_Out = $default_Signed_Out;
         $this->default_Signed_In = $default_Signed_In;
         $this->signedStatus = $signedStatus;
-        $this->postMethod = $structure;
+        $this->structure = $structure;
         $this->uri = explode( '/', strtolower( $uri ) );
     }
 
@@ -61,15 +61,17 @@ class Route
         if ($this->matched == false) {
             if (is_callable( $function ))
                 $this->homeMethod = $function;
-            elseif (is_callable( $this->storage ))
+            elseif (is_callable( $this->storage ) || (is_array( $this->storage ) && count( $this->storage ) == 2))
                 $this->homeMethod = $this->storage;
         }
     }
 
-    public function __destruct()
+    public function __destruct()        //TODO- make work with new structure
     {
-
         if ($this->matched) return;
+
+        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) == 2)
+            if (is_callable( $mvc = $this->structure)) $mvc( $this->storage[0], $this->storage[1] );
 
         if (!is_callable( $this->homeMethod ))
             $this->homeMethod = ($this->signedStatus ? $this->default_Signed_In : $this->default_Signed_Out);
@@ -127,7 +129,7 @@ class Route
                         if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
                     } elseif (count( $argv ) == 2) {
-                        $structure = $this->postMethod;
+                        $structure = $this->structure;
                         $structure( $argv[0], $argv[1] );
                     } else throw new \InvalidArgumentException;
 

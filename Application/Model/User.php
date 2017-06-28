@@ -13,72 +13,36 @@ use Psr\Singleton;
 class User extends UserRelay
 {
     use Singleton;
-
-
-    protected $db;
-
-    /**
-     * @return object|User
-     *
-     */
-    private function ajaxLogin_Support()
-    {   // the constructor or wake will be called first
-        if(empty($this->user_id)):
-            $this->user_id = false;
-        elseif (!isset($this->user_username)):
-            return $this->getUser();   // returns this object populated with data
-        endif; // $this will be returned through singleton
-    }
+    const Singleton = true;
 
     public function __construct()
     {
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
-        $this->db = Database::getConnection();  // establish a connection
+        parent::__construct();
+        if (empty($this->user_username) && $this->user_id) $this->getUser();
         // Reconfig variables for dynamic path
-        if (!$this->user_id) return;
-        $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
-        $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
-        $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
-    }
-
-    public function __wakeup()
-    {
-        $this->db = Database::getConnection();  // establish a connection
-    }
-
-    public final function __sleep()
-    {
-        return (!empty($this->user_username) ? array_keys( get_object_vars( $this ) ) : 0 ); //? array('user_id','user_username', 'user_first_name', 'user_last_name', 'user_full_name', 'user_profile_pic', 'user_cover_photo', 'user_birth_date', 'user_gender', 'user_bio', 'user_rank', 'user_email', 'user_email_code', 'user_email_confirmed', 'user_generated_string', 'user_membership', 'user_deactivated', 'user_creation_date', 'user_ip') : 0);
     }
 
     protected function getUser()
     {
-        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception('nope bad id');
+        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
         // In theory this request is only called once per session.
+        $this->user_id = $_SESSION['id'];
         try {
             $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
-            $stmt->setFetchMode( \PDO::FETCH_CLASS, User::class );
-            $stmt->execute( [$_SESSION['id']] );
-            $stmt = $stmt->fetch();                 // user obj
-            $stmt->user_id = $_SESSION['id'];
-            return $stmt;
+            $stmt->execute( [$this->user_id] );
+            $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
+
+
+            $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
+            $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
+            $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
+
+
         } catch (\Exception $e) {
-            alert($e->getMessage());
+            alert( $e->getMessage() );
         }
     }
-
-    protected function fetchSQL($what, $field, $value)
-    {
-        $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
-        if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
-            throw new \InvalidArgumentException;
-
-        $sql = "SELECT $what FROM StatsCoach.user WHERE $field = ?";
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($value) );
-        return $stmt->fetch();
-
-    } // Returns only one value from the db
 
     protected function updateUser()
     {
@@ -108,6 +72,19 @@ class User extends UserRelay
                 $this->user_email,
                 $this->user_id] );
     }
+
+    protected function fetchSQL($what, $field, $value)
+    {
+        $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
+        if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
+            throw new \InvalidArgumentException;
+
+        $sql = "SELECT $what FROM StatsCoach.user WHERE $field = ?";
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( array($value) );
+        return $stmt->fetch();
+
+    } // Returns only one value from the db
 
     protected function change_password($user_id, $password)
     {   /* Two create a Hash you do */
@@ -178,13 +155,13 @@ class User extends UserRelay
 
     protected function team_exists($teamCode)
     {
-        $sql = 'SELECT COUNT(team_id) FROM StatsCoach.teams WHERE team_code = ?';
+        $sql = 'SELECT COUNT(team_id) FROM StatsCoach.teams WHERE team_code = ? AND team_sport = ?';
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$teamCode] );
+        $stmt->execute( [$teamCode, $this->user_sport] );
         $sql = $stmt->fetchColumn();
         return $sql;
     }
-    
+
     protected function email_exists($email)
     {
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
@@ -212,7 +189,7 @@ class User extends UserRelay
 
 
             // if (!$this->email_confirmed( $this->username ))
-               // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
+            // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
             $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.user WHERE `user_username` = ?";
             $stmt = $this->db->prepare( $sql );
@@ -283,21 +260,21 @@ class User extends UserRelay
 
                 $sql = "SELECT user_id FROM StatsCoach.user WHERE user_username = ?";
                 $stmt = $this->db->prepare( $sql );
-                $stmt->execute([$this->username]);
+                $stmt->execute( [$this->username] );
                 $_SESSION['id'] = $stmt->fetchColumn();
 
                 $sql = "INSERT INTO StatsCoach.golf_stats (user_id) VALUES (?)";
-                $this->db->prepare( $sql )->execute([$_SESSION['id']]);
+                $this->db->prepare( $sql )->execute( [$_SESSION['id']] );
 
                 if ($this->userType == 'Coach') {
-                    do $teamCode = \Modules\Helpers\Bcrypt::genRandomHex();
-                    while ($this->team_exists($teamCode));
+                    do $teamCode = \Modules\Helpers\Bcrypt::genRandomHex( 25 );
+                    while ($this->team_exists( $teamCode ));
                     $sql = "INSERT INTO StatsCoach.teams (team_name, team_school, team_coach, team_code) VALUES (?,?,?,?)";
                     $this->db->prepare( $sql )->execute( [$this->teamName, $this->schoolName, $_SESSION['id'], $teamCode] );
                 } elseif ($this->teamCode) {
-                    if ($teamId = $this->team_exists($this->teamCode)) {
-                        $sql = "INSERT INTO StatsCoach.team_members (user_id, team_id) VALUES (?,?)";
-                        $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId] );
+                    if ($teamId = $this->team_exists( $this->teamCode )) {
+                        $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id, sport) VALUES (?,?,?)";
+                        $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId, 'Golf'] );
                     } else {
                         $this->alert['danger'] = "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.";
                     }
@@ -317,9 +294,8 @@ class User extends UserRelay
             }
 
 
-
             $this->alert['success'] = "Welcome to Stats Coach. Please check your email to finish your registration.";
-            
+
             startApplication( true );
 
         } catch (\Exception $e) {

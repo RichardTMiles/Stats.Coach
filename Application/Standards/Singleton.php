@@ -10,7 +10,6 @@ trait Singleton
     protected $methods = array();   // Anonymous Function Declaration
     private $storage;               // Instance of the Container
 
-    
     public static function __callStatic($methodName, $arguments = array())
     {
         return self::getInstance()->Skeleton( $methodName, $arguments );
@@ -28,16 +27,15 @@ trait Singleton
     {   // see if the class has already been called this run
         if (!empty(self::$getInstance))
             return self::$getInstance;
-
         $calledClass = get_called_class();
         // check if the object has been sterilized in the session
         if (array_key_exists( $calledClass, $_SESSION )) {
             // This will invoke the __wake up operator
-            if (is_object( self::$getInstance = unserialize( $_SESSION[$calledClass] ) ))
+            if (is_object( self::$getInstance
+                = unserialize( $_SESSION[$calledClass] ) ))
                 return self::$getInstance;
             throw new \Exception( 'Unserialize failed on '.$calledClass.' using Singleton' );
         }
-
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
         self::$getInstance = $class->newInstanceArgs( func_get_args() );
@@ -52,7 +50,8 @@ trait Singleton
     {
         if (array_key_exists( __CLASS__, $_SESSION ))
             unset($_SESSION[__CLASS__]);                
-        return self::$getInstance = (is_object( $object ) ? $object : null );
+        return self::$getInstance =
+            (is_object( $object ) ? $object : null );
     }
 
 
@@ -65,23 +64,15 @@ trait Singleton
     {
         // Have we used addMethod() to override an existing method
         if (key_exists( $methodName, $this->methods ))
-            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
-                $this :
-                $result);
-
+            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ? $this : $result);
         // Is the method in the current scope ( public, protected, private ).
         // Note declaiming the method as private is the only way to ensure single instancing
         if (method_exists($this , $methodName)) {
-            return (null === ($result = call_user_func_array( array($this, $methodName), $arguments )) ?
-                $this : $result);
-        }
-        
-
+            return (null === ($result = call_user_func_array( array($this, $methodName), $arguments )) ? $this : $result); }
         if (key_exists( 'closures', $GLOBALS ) && key_exists( $methodName, $GLOBALS['closures'] )) {
             $function = $GLOBALS['closures'][$methodName];
             $this->addMethod( $methodName, $function );
-            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ?
-                $this : $result);
+            return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ? $this : $result);
         }
         throw new \Exception( "There is valid method or closure with the given name '$methodName' to call" );
     }
@@ -100,14 +91,20 @@ trait Singleton
 
     public function __sleep()
     {
-        return 0;   // This will stop serialization automatically
+        if (!defined('self::Singleton') || !self::Singleton) return 0;
+        $object = get_object_vars( $this );
+        foreach ($object as $key => $value) {
+            if (is_object( $object[$key] ) ||
+                is_array( $object[$key] )  ||
+                empty($object[$key])) continue;
+            $onlyKeys[] = $key; }
+        return (isset($onlyKeys) ? $onlyKeys : 0);
     }
 
 
     public function __destruct()
     {
         // We require a sleep function to be set manually for singleton to manage utilization
-        $this->db = null;
         if ($this->__sleep() !== 0) $_SESSION[__CLASS__] = serialize( $this );
         elseif(array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
     }
@@ -143,11 +140,8 @@ trait Singleton
     {
         $this->storage = null;
         if ($value == null) {
-            if (is_array( $name ))
-                $this->storage = $name;
-            else
-                $this->storage[] = $name;
-        }
+            if (is_array( $name )) $this->storage = $name;
+            else $this->storage[] = $name; }
         else $this->storage[$name] = $value;
         return $this;
     }
@@ -163,5 +157,4 @@ trait Singleton
     {
         return isset($this->$variable);
     }
-
 }

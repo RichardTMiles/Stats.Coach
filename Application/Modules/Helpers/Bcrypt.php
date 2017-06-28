@@ -11,21 +11,25 @@ class Bcrypt
     private static $rounds = 10;
 
 
-    public static function genRandomHex($bitLength = 25)
+    // http://php.net/manual/en/language.operators.bitwise.php
+    // in actual system we will have to see what bit system we are using
+    // 32 bit = 28
+    // 64 biit = 60
+    // I assume this means php uses 4 bits to denote type (vzal) ?
+    // idk
+    // godaddy has me on a 64 bit computer
+    public static function genRandomHex($bitLength = 40)
     {
-        $sudoRandom = 0;
-        for ($i=0;$i<$bitLength;$i++) $sudoRandom = $sudoRandom * 10 + rand(0,1) ;
-        return dechex(bindec($sudoRandom));
+        $sudoRandom = 1;
+        for ($i=0;$i<=$bitLength;$i++) $sudoRandom = ($sudoRandom<<1)|rand(0,1);
+        return dechex($sudoRandom);
     }
     
     private static function genSalt()
     {
         /* GenSalt */
         $string = str_shuffle( mt_rand() );
-        $salt = uniqid( $string, true );
-
-        /* Return */
-        return $salt;
+        return uniqid( $string, true );
     }
 
     /* Gen Hash */

@@ -104,7 +104,6 @@ header( 'Content-type: text/html; charset=utf-8' );
  */
 
 
-
 /**
  * This will run the Application using the above configuration options.
  *
@@ -136,7 +135,7 @@ function startApplication($restart = false, callable $default_logged_out = null,
 
         $controller = $controller::getInstance();   // debating to clear the instance
         if (($argv = $controller->$method()) !== false) {
-            $GLOBALS[($class = strtolower($class))] = $model::getInstance( $argv );
+            $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
             $GLOBALS[$class]->$method( $argv );
         }
 
@@ -145,26 +144,18 @@ function startApplication($restart = false, callable $default_logged_out = null,
     };
 
     if ($restart) Model\User::clearInstance();
-    $GLOBALS['user'] = $user = Model\User::clearInstance(Model\User::ajaxLogin_Support());
-    $app_id = $user->user_id;
-    
+    $GLOBALS['user'] = Model\User::getInstance();
+    $app_id = $GLOBALS['user']->user_id;
 
     if ($restart || $_SERVER['REQUEST_URI'] == null) {
+        $_SERVER['REQUEST_URI'] = ($restart === true ? ($app_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) : ($restart ?: null));
         $_POST = null;
-        $_SERVER['REQUEST_URI'] = ($restart === true ?
-            ($user->user_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) :
-            ($restart ?: null));
     }
 
-    View\View::getInstance( );   // Un-sterilize and call the wake up fn if possible
-    // or construct and send the users content wrapper if not an ajax request
+    View\View::getInstance();   // Un-sterilize and call the wake up fn if possible
 
     // This will clear the uri, so if we must restart it will be with `default` options
-    $route = new Modules\Route(
-        $user->user_id,                       // Signed in?
-        $mvc,                                 // Default Data Flo, post Route procedure
-        $default_logged_out,                  // default logged out accepts Closure
-        $default_logged_in );                 // default logged in  accepts Closure
+    $route = new Modules\Route( $app_id, $mvc, $default_logged_out, $default_logged_in );
 
     require SERVER_ROOT . 'Application/Bootstrap.php';
 
@@ -190,17 +181,12 @@ function sortDump(...$mixed)
 {
     unset($_SERVER);
     echo '<pre>';
-    if (count($mixed) == 1) {
-        echo "##################### ZVAL ######################\n";
-        debug_zval_dump( $mixed[0] );
-        echo '</pre><br><br><pre>';
-
-    } else {
-        var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
-        echo '</pre><br><br><pre>';
-    }
+    debug_zval_dump( $mixed[0] );
+    echo '</pre><br><br><pre>';
+    var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
+    echo '</pre><br><br><pre>';
     echo "################## BACK TRACE ###################\n";
-    var_dump(debug_backtrace());
+    var_dump( $GLOBALS );
     echo '</pre>';
     die(1);
 }

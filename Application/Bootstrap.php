@@ -16,7 +16,7 @@ $route->match( 'Tests/*',                                               // This 
     }
 );
 
-$route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();          // Home = golf -> golf
+$route->signedIn()->match( 'Home/*', 'Golf', 'golf' );          // Home = golf -> golf ->home()
 
 $route->signedOut()->match( 'Login/facebook/*', 'User', 'facebook' );
 

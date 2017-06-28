@@ -13,4 +13,24 @@ use Psr\Singleton;
 class Skeleton
 {
     use Singleton;
+
+    public function &__get($variable)
+    {
+        return $this->storage[$variable];
+    }
+
+    public function __set($variable, $value)
+    {
+        $this->storage[$variable] = $value;
+    }
+
+    public function __isset($variable)
+    {
+        return array_key_exists( $variable, $this->storage );
+    }
+
+    public function __unset($variable)
+    {
+        unset($this->storage[$variable]);
+    }
 }

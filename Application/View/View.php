@@ -70,7 +70,7 @@ class View
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                 $file = minify_html( $file );
 
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) { 
+            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
 
@@ -85,9 +85,9 @@ class View
         return $this->ajax = (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
     }
 
+    // This is for carbon users
     public function activateAjax()
     {?>
-        <script src="<?= $this->versionControl( 'plugins/pace/pace.js' ); ?>"></script>
         <script src="<?= SITE_PATH ?>Public/Jquery-Pjax/jquery.pjax.js"></script>
         <script>
             $(function () {
