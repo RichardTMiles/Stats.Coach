@@ -13,6 +13,12 @@ use Psr\Singleton;
 class Skeleton
 {
     use Singleton;
+    const Singleton = true; // turns on auto caching
+
+    public function __sleep()
+    {
+        return ['storage'];
+    }
 
     public function &__get($variable)
     {
@@ -32,5 +38,9 @@ class Skeleton
     public function __unset($variable)
     {
         unset($this->storage[$variable]);
+    }
+    public function __destruct()
+    {
+        return null;
     }
 }

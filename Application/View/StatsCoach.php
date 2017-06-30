@@ -18,8 +18,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="<?= SITE_PATH ?>Public/favicon.png" type="image/x-icon"/>
-
-
+    
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?= $this->versionControl( "bootstrap/css/bootstrap.css" ) ?>">
@@ -135,8 +134,11 @@
         /* This image will be displayed fullscreen
         /Public/StatsCoach/img/augusta-master.jpg
         http://site.rockbottomgolf.com/blog_images/Hole%2012%20-%20Imgur.jpg
+
         */
-        background: url('/Public/StatsCoach/img/augusta-master.jpg') no-repeat center fixed;
+        opacity: .7;
+
+        background: url('https://c1.staticflickr.com/9/8394/8637537151_227a0b7baf_b.jpg') no-repeat center fixed;
 
         scroll-x /* Ensure the html element always takes up the full height of the browser window */ min-height: 100%;
         /* The Magic */
@@ -144,7 +146,7 @@
     }
 
     body {
-        background-color: transparent;
+        background-color: black;
     }
 
     .menu {
@@ -159,45 +161,36 @@
 
 if ($this->user->user_type == 'Coach') { ?>
     <body class="skin-green fixed sidebar-mini sidebar-collapse">
-    <?php require_once 'CoachLayout.php';
+    <?php require_once CONTENT_ROOT . 'CoachLayout.php';
 
 } elseif ($this->user->user_type == 'Athlete') { ?>
     <body class="hold-transition skin-green layout-top-nav">
-    <?php require_once 'AthleteLayout.php';
+    <?php require_once CONTENT_ROOT . 'AthleteLayout.php';
 
 } else sortDump();
 
 ?>
 
-
 <!-- Full Width Column -->
-<div class="content-wrapper" style="background-color: transparent;">
-    <div class="container" id="ajax-content" style="opacity:.95;">
-        <!-- Content Header (Page header) -->
-
-        <!-- /.content -->
-    </div>
+<div class="content-wrapper">
+    <div class="container" id="ajax-content" style=""></div>
     <!-- /.container -->
 </div>
-
 <!-- /.content-wrapper -->
 <footer class="main-footer" style="">
     <div class="container">
         <div class="pull-right hidden-xs">
             <a href="<?= SITE_PATH ?>Privacy/">Privacy Policy</a> <b>Version</b> 0.4.0
         </div>
-        <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Richard Miles</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
     </div>
     <!-- /.container -->
 </footer>
 </div>
-
 <!-- ./wrapper -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-
 <!-- Background -->
 <script src="<?= SITE_PATH ?>Public/Backstretch/jquery.backstretch.min.js"></script>
-
 <!-- Menu Options -->
 <script src="<?= $this->versionControl( 'plugins/select2/select2.full.min.js' ); ?>"></script>
 <script src="<?= $this->versionControl( 'bootstrap/js/bootstrap.min.js' ); ?>"></script>
@@ -219,7 +212,19 @@ if ($this->user->user_type == 'Coach') { ?>
 <!-- Sparkline -->
 <script src="<?= TEMPLATE_PATH ?>plugins/sparkline/jquery.sparkline.min.js"></script>
 
-<?= $this->activateAjax(); ?>
+<script src="<?= SITE_PATH ?>Public/Jquery-Pjax/jquery.pjax.js"></script>
+<script>
+    $(function () {
+        // initial content
+        $.pjax.reload('#ajax-content');
+        // Every href on 'a' element
+        // when on document load add event to every a tag, when event fired trigger smart refresh
+        $.when($(document).pjax('a', '#ajax-content')).then(function () {
+            $('#ajax-content').addClass("overlay").innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
+            Pace.restart();
+        }).done(function () { $('#ajax-content').removeClass('overlay');});
+    });
+</script>
 
 </body>
 </html>

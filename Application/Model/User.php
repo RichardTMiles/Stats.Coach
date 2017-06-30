@@ -3,7 +3,6 @@
 namespace Model;
 
 use Model\Helpers\UserRelay;
-use Modules\Database;
 use Modules\Helpers\Bcrypt;
 use Modules\StoreFiles;
 use Modules\Request;
@@ -17,32 +16,55 @@ class User extends UserRelay
 
     public function __construct()
     {
+        $this->user = $this;
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
-        parent::__construct();
+        parent::__construct();  // get database
         if (empty($this->user_username) && $this->user_id) $this->getUser();
         // Reconfig variables for dynamic path
     }
 
-    protected function getUser()
+    private function getUser()
     {
         if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
         // In theory this request is only called once per session.
         $this->user_id = $_SESSION['id'];
+
         try {
             $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
             $stmt->execute( [$this->user_id] );
             $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
-
-
             $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
             $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
-            $this->user_full_name = $this->user_first_name . ' ' . $this->user_last_name;
 
+            $work = $this->weCoach();
+            if (!is_array( $work )) $work = [$work];
+            $play = $this->weAthlete();
+            if (!is_array( $play )) $play = [$play];
+            $this->teams = (!empty($work) ? (!empty($play) ? array_merge((array) $work , (array) $play) : $work) :
+                (!empty($play) ? $play : null));
+
+            if (!empty($this->teams)) foreach ($this->teams as &$team)
+                $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
 
         } catch (\Exception $e) {
-            alert( $e->getMessage() );
+            echo $e->getMessage();
+            die();
         }
     }
+    // We coach
+    protected function weCoach()
+    {
+        $sql = 'SELECT * FROM StatsCoach.teams WHERE team_coach = ?';
+        return $this->fetch_as_object( $sql, $this->user_id );
+    }
+       // we athlete
+    protected function weAthlete()
+    {
+        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON teams.team_id = team_member.team_id WHERE user_id = ? AND sport = ?';
+        return $this->fetch_as_object( $sql, $this->user_id, $this->user_sport);
+
+    }
+    
 
     protected function updateUser()
     {
@@ -155,11 +177,10 @@ class User extends UserRelay
 
     protected function team_exists($teamCode)
     {
-        $sql = 'SELECT COUNT(team_id) FROM StatsCoach.teams WHERE team_code = ? AND team_sport = ?';
+        $sql = 'SELECT team_id FROM StatsCoach.teams WHERE team_code = ? AND team_sport = ?';
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$teamCode, $this->user_sport] );
-        $sql = $stmt->fetchColumn();
-        return $sql;
+        return $stmt->fetchColumn();
     }
 
     protected function email_exists($email)
@@ -210,13 +231,34 @@ class User extends UserRelay
             } // we clear the cookies in the controller
 
             session_regenerate_id( true );
-            User::clearInstance();
+            $this->getUser();
             startApplication( true );     // restart
 
         } catch (\Exception $e) {
             $this->alert['danger'] = $e->getMessage();
         }
 
+    }
+
+    public function joinTeam()
+    {
+        try {
+            if (!$teamId = $this->team_exists( $this->teamCode ))
+                throw new \Exception( 'The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.' );
+
+            $sql = 'SELECT COUNT(user_id) FROM StatsCoach.team_member WHERE team_id = ? AND user_id = ?';
+            $stmt = $this->db->prepare( $sql );
+            $stmt->execute( [$teamId, $this->user_id] );
+
+            if ($stmt->fetchColumn() > 0) throw new \Exception( 'It appears you are already a member of this team.' );
+
+            $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id, sport) VALUES (?,?,?)";
+            $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId, $this->user_sport] );
+
+            $this->alert['success'] = 'We successfully add you! You may need to log out and back in to see changes. We are working to fix this :)';
+        } catch (\Exception $e) {
+            $this->alert['danger'] = $e->getMessage();
+        }
     }
 
     public function facebook()
@@ -253,10 +295,10 @@ class User extends UserRelay
             $this->password = Bcrypt::genHash( $this->password );
 
             try {
-                $sql = "INSERT INTO StatsCoach.user (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_gender) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO StatsCoach.user (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $this->db->prepare( $sql )->execute(
-                    array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->gender) );
+                    array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->firstName.' '.$this->lastName,   $this->gender) );
 
                 $sql = "SELECT user_id FROM StatsCoach.user WHERE user_username = ?";
                 $stmt = $this->db->prepare( $sql );
@@ -292,7 +334,6 @@ class User extends UserRelay
 
                 throw new \Exception( $e->getMessage() ); //"Sorry, we were unable to create this account. Please try again." );
             }
-
 
             $this->alert['success'] = "Welcome to Stats Coach. Please check your email to finish your registration.";
 

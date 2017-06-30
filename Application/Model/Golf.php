@@ -9,24 +9,36 @@ use Modules\Database;
 
 class Golf extends GolfRelay
 {
-    use Singleton;
+    use Singleton; 
     const Singleton = true;
+
+    public function __construct()
+    {
+        parent::__construct();
+        try {
+            if (empty($this->stats))
+                $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
+
+            // we need both, teams were coaching and teams we have joined
+            // $this->teams
+        } catch (\Exception $e) {
+            throw new \Exception(); // idk what this would mean
+        }
+    }
+
 
     public function Golf()
     {
         try {
-            $sql = "SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?";
-            $stmt = $this->db->prepare( $sql );
-            $stmt->execute([$this->user->user_id]);
-            $this->fetch_into_current_class( $stmt->fetch() );
-            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ?' );
-            $stmt->setFetchMode( \PDO::FETCH_CLASS, Skeleton::class );
-            $stmt->execute( [$_SESSION['id']] );
-            $this->golf_rounds = $stmt->fetchAll();  // user obj
+            if (empty($this->rounds))
+                $this->rounds = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ?', $this->user->user_id );
+
+
+
         } catch (\Exception $e) {
             alert($e->getMessage());
         }
-    }   // Home page 
+    }   // Home page
 
     public function coursesByState($state)
     {
@@ -43,20 +55,7 @@ class Golf extends GolfRelay
         $stmt->execute( [$id] );
         $this->fetch_into_current_class( $stmt->fetch( \PDO::FETCH_ASSOC ) );
     }
-
-    public function joinTeam($teamCode)
-    {
-        try{
-            $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id) VALUES (?,?)";
-            $this->db->prepare( $sql )->execute([$this->user->user_id, $teamCode]);
-            
-            startApplication('Home/');
-        } catch (\Exception $e) {
-            $this->alert['danger'] = "Could Not Join Team, Please try again";
-        }
-
-    }
-
+    
     public function PostScore()
     {
         if (!empty($this->newScore)) {

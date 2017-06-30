@@ -75,7 +75,8 @@ class Golf
                 default:
                     $this->holes = 18;
             }
-
+         
+            
             $this->par = $this->request->post( 'par_1', 'par_2', 'par_3', 'par_4', 'par_5', 'par_6', 'par_7', 'par_8', 'par_9', 'par_10', 'par_11', 'par_12', 'par_13', 'par_14', 'par_15', 'par_16', 'par_17', 'par_18' )->int();
 
             $validate( $this->par );

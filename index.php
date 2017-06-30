@@ -19,7 +19,7 @@ if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
 }
 
 // Setting the following parameter to one or zero will turn on the Log file and attempt to catch all errors that slip through
-// new Modules\ErrorCatcher(0); // This Error Catching system will store any errors on the servers log file defined in the config file
+new Modules\ErrorCatcher(0); // This Error Catching system will store any errors on the servers log file defined in the config file
 // The current catching system actually blows.. need to remake
 
 

@@ -119,786 +119,790 @@
         <data-type>int(1)</data-type>
         <default-expression>&apos;1&apos;</default-expression>
       </column>
-      <column id="36" parent="3" name="user_id">
+      <column id="36" parent="3" name="score_date">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="37" parent="3" name="user_id">
         <comment>reference from users</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="37" parent="3" name="course_id">
+      <column id="38" parent="3" name="course_id">
         <comment>golf_courses(course_id)</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="38" parent="3" name="score_gnr_total">
+      <column id="39" parent="3" name="score_gnr_total">
         <data-type>int(11)</data-type>
       </column>
-      <column id="39" parent="3" name="score_ffs_total">
+      <column id="40" parent="3" name="score_ffs_total">
         <data-type>int(3)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="40" parent="3" name="score_1">
+      <column id="41" parent="3" name="score_1">
         <comment>strokes / score</comment>
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="41" parent="3" name="score_1_ffs">
+      <column id="42" parent="3" name="score_1_ffs">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="42" parent="3" name="score_1_gnr">
+      <column id="43" parent="3" name="score_1_gnr">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="43" parent="3" name="score_2">
+      <column id="44" parent="3" name="score_2">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="44" parent="3" name="score_3">
+      <column id="45" parent="3" name="score_3">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="45" parent="3" name="score_4">
+      <column id="46" parent="3" name="score_4">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="46" parent="3" name="score_5">
+      <column id="47" parent="3" name="score_5">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="47" parent="3" name="score_6">
+      <column id="48" parent="3" name="score_6">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="48" parent="3" name="score_7">
+      <column id="49" parent="3" name="score_7">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="49" parent="3" name="score_8">
+      <column id="50" parent="3" name="score_8">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="50" parent="3" name="score_9">
+      <column id="51" parent="3" name="score_9">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="51" parent="3" name="score_out">
+      <column id="52" parent="3" name="score_out">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="52" parent="3" name="score_10">
+      <column id="53" parent="3" name="score_10">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="53" parent="3" name="score_11">
+      <column id="54" parent="3" name="score_11">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="54" parent="3" name="score_12">
+      <column id="55" parent="3" name="score_12">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="55" parent="3" name="score_13">
+      <column id="56" parent="3" name="score_13">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="56" parent="3" name="score_14">
+      <column id="57" parent="3" name="score_14">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="57" parent="3" name="score_15">
+      <column id="58" parent="3" name="score_15">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="58" parent="3" name="score_16">
+      <column id="59" parent="3" name="score_16">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="59" parent="3" name="score_17">
+      <column id="60" parent="3" name="score_17">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="60" parent="3" name="score_18">
+      <column id="61" parent="3" name="score_18">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="61" parent="3" name="score_in">
+      <column id="62" parent="3" name="score_in">
         <mandatory>1</mandatory>
         <data-type>int(3)</data-type>
       </column>
-      <column id="62" parent="3" name="score_tot">
+      <column id="63" parent="3" name="score_tot">
         <mandatory>1</mandatory>
         <data-type>int(3)</data-type>
       </column>
-      <column id="63" parent="3" name="score_2_ffs">
+      <column id="64" parent="3" name="score_2_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="64" parent="3" name="score_3_ffs">
+      <column id="65" parent="3" name="score_3_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="65" parent="3" name="score_4_ffs">
+      <column id="66" parent="3" name="score_4_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="66" parent="3" name="score_5_ffs">
+      <column id="67" parent="3" name="score_5_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="67" parent="3" name="score_6_ffs">
+      <column id="68" parent="3" name="score_6_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="68" parent="3" name="score_7_ffs">
+      <column id="69" parent="3" name="score_7_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="69" parent="3" name="score_8_ffs">
+      <column id="70" parent="3" name="score_8_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="70" parent="3" name="score_9_ffs">
+      <column id="71" parent="3" name="score_9_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="71" parent="3" name="score_10_ffs">
+      <column id="72" parent="3" name="score_10_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="72" parent="3" name="score_11_ffs">
+      <column id="73" parent="3" name="score_11_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="73" parent="3" name="score_12_ffs">
+      <column id="74" parent="3" name="score_12_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="74" parent="3" name="score_13_ffs">
+      <column id="75" parent="3" name="score_13_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="75" parent="3" name="score_14_ffs">
+      <column id="76" parent="3" name="score_14_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="76" parent="3" name="score_15_ffs">
+      <column id="77" parent="3" name="score_15_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="77" parent="3" name="score_16_ffs">
+      <column id="78" parent="3" name="score_16_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="78" parent="3" name="score_17_ffs">
+      <column id="79" parent="3" name="score_17_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="79" parent="3" name="score_18_ffs">
+      <column id="80" parent="3" name="score_18_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="80" parent="3" name="score_2_gnr">
+      <column id="81" parent="3" name="score_2_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="81" parent="3" name="score_3_gnr">
+      <column id="82" parent="3" name="score_3_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="82" parent="3" name="score_4_gnr">
+      <column id="83" parent="3" name="score_4_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="83" parent="3" name="score_5_gnr">
+      <column id="84" parent="3" name="score_5_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="84" parent="3" name="score_6_gnr">
+      <column id="85" parent="3" name="score_6_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="85" parent="3" name="score_7_gnr">
+      <column id="86" parent="3" name="score_7_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="86" parent="3" name="score_8_gnr">
+      <column id="87" parent="3" name="score_8_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="87" parent="3" name="score_9_gnr">
+      <column id="88" parent="3" name="score_9_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="88" parent="3" name="score_10_gnr">
+      <column id="89" parent="3" name="score_10_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="89" parent="3" name="score_11_gnr">
+      <column id="90" parent="3" name="score_11_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="90" parent="3" name="score_12_gnr">
+      <column id="91" parent="3" name="score_12_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="91" parent="3" name="score_13_gnr">
+      <column id="92" parent="3" name="score_13_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="92" parent="3" name="score_14_gnr">
+      <column id="93" parent="3" name="score_14_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="93" parent="3" name="score_15_gnr">
+      <column id="94" parent="3" name="score_15_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="94" parent="3" name="score_16_gnr">
+      <column id="95" parent="3" name="score_16_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="95" parent="3" name="score_17_gnr">
+      <column id="96" parent="3" name="score_17_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="96" parent="3" name="score_18_gnr">
+      <column id="97" parent="3" name="score_18_gnr">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <index id="97" parent="3" name="golf_rounds_golf_course_course_id_fk">
+      <index id="98" parent="3" name="golf_rounds_golf_course_course_id_fk">
         <columns>course_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="98" parent="3" name="golf_rounds_round_id_uindex">
+      <index id="99" parent="3" name="golf_rounds_round_id_uindex">
         <columns>round_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="99" parent="3" name="golf_rounds_users_user_id_fk">
+      <index id="100" parent="3" name="golf_rounds_users_user_id_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="100" parent="3" name="golf_rounds_round_id_uindex">
+      <key id="101" parent="3" name="golf_rounds_round_id_uindex">
         <columns>round_id</columns>
         <underlying-index>golf_rounds_round_id_uindex</underlying-index>
       </key>
-      <key id="101" parent="3" name="PRIMARY">
+      <key id="102" parent="3" name="PRIMARY">
         <columns>round_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="102" parent="3" name="golf_rounds_golf_course_course_id_fk">
+      <foreign-key id="103" parent="3" name="golf_rounds_golf_course_course_id_fk">
         <columns>course_id</columns>
         <ref-key>~.golf_course.golf_courses_course_id_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="103" parent="3" name="golf_rounds_users_user_id_fk">
+      <foreign-key id="104" parent="3" name="golf_rounds_users_user_id_fk">
         <columns>user_id</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="104" parent="4" name="tournament_team_id">
+      <column id="105" parent="4" name="tournament_team_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="105" parent="4" name="tournament_team_name">
+      <column id="106" parent="4" name="tournament_team_name">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="106" parent="4" name="tournament_accepted">
+      <column id="107" parent="4" name="tournament_accepted">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="107" parent="4" name="tournament_paid">
+      <column id="108" parent="4" name="tournament_paid">
         <data-type>int(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="108" parent="4" name="tournament_id">
+      <column id="109" parent="4" name="tournament_id">
         <comment>tournaments(tournament_id)</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="109" parent="4" name="user_id">
+      <column id="110" parent="4" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="110" parent="4" name="team_id">
+      <column id="111" parent="4" name="team_id">
         <comment>teams(team_id)</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="111" parent="4" name="athlete_id_1">
+      <column id="112" parent="4" name="athlete_id_1">
         <comment>user_id</comment>
         <data-type>int(11)</data-type>
       </column>
-      <column id="112" parent="4" name="athlete_id_2">
+      <column id="113" parent="4" name="athlete_id_2">
         <comment>user_id</comment>
         <data-type>int(11)</data-type>
       </column>
-      <column id="113" parent="4" name="athlete_id_3">
+      <column id="114" parent="4" name="athlete_id_3">
         <comment>user_id</comment>
         <data-type>int(11)</data-type>
       </column>
-      <column id="114" parent="4" name="athlete_id_4">
+      <column id="115" parent="4" name="athlete_id_4">
         <comment>user_id</comment>
         <data-type>int(11)</data-type>
       </column>
-      <column id="115" parent="4" name="athlete_id_5">
+      <column id="116" parent="4" name="athlete_id_5">
         <comment>user_id</comment>
         <data-type>int(11)</data-type>
       </column>
-      <index id="116" parent="4" name="golf_tournament_teams_athlete_1_id_fk">
+      <index id="117" parent="4" name="golf_tournament_teams_athlete_1_id_fk">
         <columns>athlete_id_1</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="117" parent="4" name="golf_tournament_teams_athlete_2_id_fk">
+      <index id="118" parent="4" name="golf_tournament_teams_athlete_2_id_fk">
         <columns>athlete_id_2</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="118" parent="4" name="golf_tournament_teams_athlete_3_id_fk">
+      <index id="119" parent="4" name="golf_tournament_teams_athlete_3_id_fk">
         <columns>athlete_id_3</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="119" parent="4" name="golf_tournament_teams_athlete_4_id_fk">
+      <index id="120" parent="4" name="golf_tournament_teams_athlete_4_id_fk">
         <columns>athlete_id_4</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="120" parent="4" name="golf_tournament_teams_athlete_5_id_fk">
+      <index id="121" parent="4" name="golf_tournament_teams_athlete_5_id_fk">
         <columns>athlete_id_5</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="121" parent="4" name="golf_tournament_teams_golf_tournaments_tournament_id_fk">
+      <index id="122" parent="4" name="golf_tournament_teams_golf_tournaments_tournament_id_fk">
         <columns>tournament_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="122" parent="4" name="golf_tournament_teams_teams_team_id_fk">
+      <index id="123" parent="4" name="golf_tournament_teams_teams_team_id_fk">
         <columns>team_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="123" parent="4" name="golf_tournament_teams_tournament_team_id_uindex">
+      <index id="124" parent="4" name="golf_tournament_teams_tournament_team_id_uindex">
         <columns>tournament_team_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="124" parent="4" name="golf_tournament_teams_users_user_id_fk">
+      <index id="125" parent="4" name="golf_tournament_teams_users_user_id_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="125" parent="4" name="golf_tournament_teams_tournament_team_id_uindex">
+      <key id="126" parent="4" name="golf_tournament_teams_tournament_team_id_uindex">
         <columns>tournament_team_id</columns>
         <underlying-index>golf_tournament_teams_tournament_team_id_uindex</underlying-index>
       </key>
-      <key id="126" parent="4" name="PRIMARY">
+      <key id="127" parent="4" name="PRIMARY">
         <columns>tournament_team_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="127" parent="4" name="golf_tournament_teams_athlete_1_id_fk">
+      <foreign-key id="128" parent="4" name="golf_tournament_teams_athlete_1_id_fk">
         <columns>athlete_id_1</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="128" parent="4" name="golf_tournament_teams_athlete_2_id_fk">
+      <foreign-key id="129" parent="4" name="golf_tournament_teams_athlete_2_id_fk">
         <columns>athlete_id_2</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="129" parent="4" name="golf_tournament_teams_athlete_3_id_fk">
+      <foreign-key id="130" parent="4" name="golf_tournament_teams_athlete_3_id_fk">
         <columns>athlete_id_3</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="130" parent="4" name="golf_tournament_teams_athlete_4_id_fk">
+      <foreign-key id="131" parent="4" name="golf_tournament_teams_athlete_4_id_fk">
         <columns>athlete_id_4</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="131" parent="4" name="golf_tournament_teams_athlete_5_id_fk">
+      <foreign-key id="132" parent="4" name="golf_tournament_teams_athlete_5_id_fk">
         <columns>athlete_id_5</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="132" parent="4" name="golf_tournament_teams_golf_tournaments_tournament_id_fk">
+      <foreign-key id="133" parent="4" name="golf_tournament_teams_golf_tournaments_tournament_id_fk">
         <columns>tournament_id</columns>
         <ref-key>~.golf_tournaments.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="133" parent="4" name="golf_tournament_teams_teams_team_id_fk">
+      <foreign-key id="134" parent="4" name="golf_tournament_teams_teams_team_id_fk">
         <columns>team_id</columns>
         <ref-key>~.teams.teams_team_id_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="134" parent="4" name="golf_tournament_teams_users_user_id_fk">
+      <foreign-key id="135" parent="4" name="golf_tournament_teams_users_user_id_fk">
         <columns>user_id</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="135" parent="5" name="tournament_id">
+      <column id="136" parent="5" name="tournament_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="136" parent="5" name="tournament_name">
+      <column id="137" parent="5" name="tournament_name">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="137" parent="5" name="user_id">
+      <column id="138" parent="5" name="user_id">
         <comment>users(user_id)</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="138" parent="5" name="host_name">
+      <column id="139" parent="5" name="host_name">
         <comment>This could be a school or org
 </comment>
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="139" parent="5" name="tournament_style">
+      <column id="140" parent="5" name="tournament_style">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="140" parent="5" name="tournament_team_price">
+      <column id="141" parent="5" name="tournament_team_price">
         <data-type>int(11)</data-type>
       </column>
-      <column id="141" parent="5" name="tournament_paid">
+      <column id="142" parent="5" name="tournament_paid">
         <comment>True False</comment>
         <data-type>int(1)</data-type>
         <default-expression>&apos;1&apos;</default-expression>
       </column>
-      <column id="142" parent="5" name="course_id_day_1">
+      <column id="143" parent="5" name="course_id_day_1">
         <comment>course_id, incase double</comment>
         <data-type>int(11)</data-type>
       </column>
-      <column id="143" parent="5" name="course_id_day_2">
+      <column id="144" parent="5" name="course_id_day_2">
         <data-type>int(11)</data-type>
       </column>
-      <column id="144" parent="5" name="tournament_date">
+      <column id="145" parent="5" name="tournament_date">
         <data-type>date</data-type>
       </column>
-      <index id="145" parent="5" name="golf_tournaments_users_user_id_fk">
+      <index id="146" parent="5" name="golf_tournaments_users_user_id_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="146" parent="5" name="PRIMARY">
+      <key id="147" parent="5" name="PRIMARY">
         <columns>tournament_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="147" parent="5" name="golf_tournaments_users_user_id_fk">
+      <foreign-key id="148" parent="5" name="golf_tournaments_users_user_id_fk">
         <columns>user_id</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="148" parent="6" name="team_id">
+      <column id="149" parent="6" name="team_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="149" parent="6" name="team_code">
+      <column id="150" parent="6" name="team_code">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="150" parent="6" name="team_name">
+      <column id="151" parent="6" name="team_name">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="151" parent="6" name="team_rank">
+      <column id="152" parent="6" name="team_rank">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="152" parent="6" name="team_coach">
+      <column id="153" parent="6" name="team_coach">
         <comment>user_id</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="153" parent="6" name="team_sport">
+      <column id="154" parent="6" name="team_sport">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;golf&apos;</default-expression>
       </column>
-      <column id="154" parent="6" name="team_division">
+      <column id="155" parent="6" name="team_division">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="155" parent="6" name="team_school">
+      <column id="156" parent="6" name="team_school">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="156" parent="6" name="team_district">
+      <column id="157" parent="6" name="team_district">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="157" parent="6" name="team_membership">
+      <column id="158" parent="6" name="team_membership">
         <data-type>varchar(225)</data-type>
       </column>
-      <index id="158" parent="6" name="teams_team_code_uindex">
+      <index id="159" parent="6" name="teams_team_code_uindex">
         <columns>team_code</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="159" parent="6" name="teams_team_id_uindex">
+      <index id="160" parent="6" name="teams_team_id_uindex">
         <columns>team_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="160" parent="6" name="PRIMARY">
+      <key id="161" parent="6" name="PRIMARY">
         <columns>team_coach</columns>
         <primary>1</primary>
       </key>
-      <key id="161" parent="6" name="teams_team_code_uindex">
+      <key id="162" parent="6" name="teams_team_code_uindex">
         <columns>team_code</columns>
         <underlying-index>teams_team_code_uindex</underlying-index>
       </key>
-      <key id="162" parent="6" name="teams_team_id_uindex">
+      <key id="163" parent="6" name="teams_team_id_uindex">
         <columns>team_id</columns>
         <underlying-index>teams_team_id_uindex</underlying-index>
       </key>
-      <foreign-key id="163" parent="6" name="teams_users_user_id_fk">
+      <foreign-key id="164" parent="6" name="teams_users_user_id_fk">
         <columns>team_coach</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="164" parent="7" name="user_id">
+      <column id="165" parent="7" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="165" parent="7" name="stats_tournaments">
+      <column id="166" parent="7" name="stats_tournaments">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="166" parent="7" name="stats_rounds">
+      <column id="167" parent="7" name="stats_rounds">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="167" parent="7" name="stats_handicap">
+      <column id="168" parent="7" name="stats_handicap">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="168" parent="7" name="stats_strokes">
+      <column id="169" parent="7" name="stats_strokes">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="169" parent="7" name="stats_ffs">
+      <column id="170" parent="7" name="stats_ffs">
         <comment>Fairway First Shot</comment>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="170" parent="7" name="stats_gnr">
+      <column id="171" parent="7" name="stats_gnr">
         <comment>green in regulation</comment>
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="171" parent="7" name="stats_putts">
+      <column id="172" parent="7" name="stats_putts">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="172" parent="7" name="PRIMARY">
+      <key id="173" parent="7" name="PRIMARY">
         <columns>user_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="173" parent="7" name="golf_stats_users_user_id_fk">
+      <foreign-key id="174" parent="7" name="golf_stats_users_user_id_fk">
         <columns>user_id</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="174" parent="8" name="course_id">
+      <column id="175" parent="8" name="course_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="175" parent="8" name="user_id">
+      <column id="176" parent="8" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="176" parent="8" name="course_name">
+      <column id="177" parent="8" name="course_name">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="177" parent="8" name="created_date">
+      <column id="178" parent="8" name="created_date">
         <data-type>int(11)</data-type>
       </column>
-      <column id="178" parent="8" name="course_holes">
+      <column id="179" parent="8" name="course_holes">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
         <default-expression>&apos;18&apos;</default-expression>
       </column>
-      <column id="179" parent="8" name="course_street">
+      <column id="180" parent="8" name="course_street">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="180" parent="8" name="course_city">
+      <column id="181" parent="8" name="course_city">
         <data-type>varchar(40)</data-type>
       </column>
-      <column id="181" parent="8" name="course_state">
+      <column id="182" parent="8" name="course_state">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="182" parent="8" name="course_phone">
+      <column id="183" parent="8" name="course_phone">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="183" parent="8" name="course_elevation">
+      <column id="184" parent="8" name="course_elevation">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
       </column>
-      <column id="184" parent="8" name="course_difficulty">
+      <column id="185" parent="8" name="course_difficulty">
         <mandatory>1</mandatory>
         <data-type>int(10)</data-type>
       </column>
-      <column id="185" parent="8" name="course_rank">
+      <column id="186" parent="8" name="course_rank">
         <mandatory>1</mandatory>
         <data-type>int(5)</data-type>
       </column>
-      <column id="186" parent="8" name="box_color_1">
+      <column id="187" parent="8" name="box_color_1">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="187" parent="8" name="box_color_2">
+      <column id="188" parent="8" name="box_color_2">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="188" parent="8" name="box_color_3">
+      <column id="189" parent="8" name="box_color_3">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="189" parent="8" name="box_color_4">
+      <column id="190" parent="8" name="box_color_4">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="190" parent="8" name="box_color_5">
+      <column id="191" parent="8" name="box_color_5">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="191" parent="8" name="par_1">
+      <column id="192" parent="8" name="par_1">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="192" parent="8" name="par_2">
+      <column id="193" parent="8" name="par_2">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="193" parent="8" name="par_3">
+      <column id="194" parent="8" name="par_3">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="194" parent="8" name="par_4">
+      <column id="195" parent="8" name="par_4">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="195" parent="8" name="par_5">
+      <column id="196" parent="8" name="par_5">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="196" parent="8" name="par_6">
+      <column id="197" parent="8" name="par_6">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="197" parent="8" name="par_7">
+      <column id="198" parent="8" name="par_7">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="198" parent="8" name="par_8">
+      <column id="199" parent="8" name="par_8">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="199" parent="8" name="par_9">
+      <column id="200" parent="8" name="par_9">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="200" parent="8" name="par_out">
+      <column id="201" parent="8" name="par_out">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="201" parent="8" name="par_10">
+      <column id="202" parent="8" name="par_10">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="202" parent="8" name="par_11">
+      <column id="203" parent="8" name="par_11">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="203" parent="8" name="par_12">
+      <column id="204" parent="8" name="par_12">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="204" parent="8" name="par_13">
+      <column id="205" parent="8" name="par_13">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="205" parent="8" name="par_14">
+      <column id="206" parent="8" name="par_14">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="206" parent="8" name="par_15">
+      <column id="207" parent="8" name="par_15">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="207" parent="8" name="par_16">
+      <column id="208" parent="8" name="par_16">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="208" parent="8" name="par_17">
+      <column id="209" parent="8" name="par_17">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="209" parent="8" name="par_18">
+      <column id="210" parent="8" name="par_18">
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="210" parent="8" name="par_in">
+      <column id="211" parent="8" name="par_in">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="211" parent="8" name="par_tot">
+      <column id="212" parent="8" name="par_tot">
         <mandatory>1</mandatory>
         <data-type>int(2)</data-type>
       </column>
-      <column id="212" parent="8" name="par_hcp">
+      <column id="213" parent="8" name="par_hcp">
         <mandatory>1</mandatory>
         <data-type>int(4)</data-type>
       </column>
-      <column id="213" parent="8" name="course_type">
+      <column id="214" parent="8" name="course_type">
         <data-type>char(30)</data-type>
       </column>
-      <column id="214" parent="8" name="course_access">
+      <column id="215" parent="8" name="course_access">
         <data-type>varchar(120)</data-type>
       </column>
-      <index id="215" parent="8" name="golf_courses_course_id_uindex">
+      <index id="216" parent="8" name="golf_courses_course_id_uindex">
         <columns>course_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="216" parent="8" name="golf_course_course_id_uindex">
+      <index id="217" parent="8" name="golf_course_course_id_uindex">
         <columns>course_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="217" parent="8" name="golf_course_users_user_id_fk">
+      <index id="218" parent="8" name="golf_course_users_user_id_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="218" parent="8" name="golf_course___color">
+      <index id="219" parent="8" name="golf_course___color">
         <columns>box_color_1
 box_color_2
 box_color_3
@@ -906,245 +910,257 @@ box_color_4
 box_color_5</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="219" parent="8" name="golf_courses_course_id_uindex">
+      <key id="220" parent="8" name="golf_courses_course_id_uindex">
         <columns>course_id</columns>
         <underlying-index>golf_courses_course_id_uindex</underlying-index>
       </key>
-      <key id="220" parent="8" name="golf_course_course_id_uindex">
+      <key id="221" parent="8" name="golf_course_course_id_uindex">
         <columns>course_id</columns>
         <underlying-index>golf_course_course_id_uindex</underlying-index>
       </key>
-      <key id="221" parent="8" name="PRIMARY">
+      <key id="222" parent="8" name="PRIMARY">
         <columns>course_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="222" parent="8" name="golf_course_users_user_id_fk">
+      <foreign-key id="223" parent="8" name="golf_course_users_user_id_fk">
         <columns>user_id</columns>
         <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="223" parent="9" name="course_id">
+      <column id="224" parent="9" name="course_id">
         <comment>Reference from golf_courses</comment>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="224" parent="9" name="tee_box">
+      <column id="225" parent="9" name="tee_box">
         <comment>options ( 1 - 5 )</comment>
         <mandatory>1</mandatory>
         <data-type>int(1)</data-type>
       </column>
-      <column id="225" parent="9" name="distance_color">
+      <column id="226" parent="9" name="distance_color">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="226" parent="9" name="distance_general_slope">
+      <column id="227" parent="9" name="distance_general_slope">
         <data-type>int(4)</data-type>
       </column>
-      <column id="227" parent="9" name="distance_general_difficulty">
+      <column id="228" parent="9" name="distance_general_difficulty">
         <data-type>float</data-type>
       </column>
-      <column id="228" parent="9" name="distance_womens_slope">
+      <column id="229" parent="9" name="distance_womens_slope">
         <data-type>int(4)</data-type>
       </column>
-      <column id="229" parent="9" name="distance_womens_difficulty">
+      <column id="230" parent="9" name="distance_womens_difficulty">
         <data-type>float</data-type>
       </column>
-      <column id="230" parent="9" name="distance_1">
+      <column id="231" parent="9" name="distance_1">
         <data-type>int(7)</data-type>
       </column>
-      <column id="231" parent="9" name="distance_2">
+      <column id="232" parent="9" name="distance_2">
         <data-type>int(7)</data-type>
       </column>
-      <column id="232" parent="9" name="distance_3">
+      <column id="233" parent="9" name="distance_3">
         <data-type>int(7)</data-type>
       </column>
-      <column id="233" parent="9" name="distance_4">
+      <column id="234" parent="9" name="distance_4">
         <data-type>int(7)</data-type>
       </column>
-      <column id="234" parent="9" name="distance_5">
+      <column id="235" parent="9" name="distance_5">
         <data-type>int(7)</data-type>
       </column>
-      <column id="235" parent="9" name="distance_6">
+      <column id="236" parent="9" name="distance_6">
         <data-type>int(7)</data-type>
       </column>
-      <column id="236" parent="9" name="distance_7">
+      <column id="237" parent="9" name="distance_7">
         <data-type>int(7)</data-type>
       </column>
-      <column id="237" parent="9" name="distance_8">
+      <column id="238" parent="9" name="distance_8">
         <data-type>int(7)</data-type>
       </column>
-      <column id="238" parent="9" name="distance_9">
+      <column id="239" parent="9" name="distance_9">
         <data-type>int(7)</data-type>
       </column>
-      <column id="239" parent="9" name="distance_out">
+      <column id="240" parent="9" name="distance_out">
         <data-type>int(7)</data-type>
       </column>
-      <column id="240" parent="9" name="distance_10">
+      <column id="241" parent="9" name="distance_10">
         <data-type>int(7)</data-type>
       </column>
-      <column id="241" parent="9" name="distance_11">
+      <column id="242" parent="9" name="distance_11">
         <data-type>int(7)</data-type>
       </column>
-      <column id="242" parent="9" name="distance_12">
+      <column id="243" parent="9" name="distance_12">
         <data-type>int(7)</data-type>
       </column>
-      <column id="243" parent="9" name="distance_13">
+      <column id="244" parent="9" name="distance_13">
         <data-type>int(7)</data-type>
       </column>
-      <column id="244" parent="9" name="distance_14">
+      <column id="245" parent="9" name="distance_14">
         <data-type>int(7)</data-type>
       </column>
-      <column id="245" parent="9" name="distance_15">
+      <column id="246" parent="9" name="distance_15">
         <data-type>int(7)</data-type>
       </column>
-      <column id="246" parent="9" name="distance_16">
+      <column id="247" parent="9" name="distance_16">
         <data-type>int(7)</data-type>
       </column>
-      <column id="247" parent="9" name="distance_17">
+      <column id="248" parent="9" name="distance_17">
         <data-type>int(7)</data-type>
       </column>
-      <column id="248" parent="9" name="distance_18">
+      <column id="249" parent="9" name="distance_18">
         <data-type>int(7)</data-type>
       </column>
-      <column id="249" parent="9" name="distance_in">
+      <column id="250" parent="9" name="distance_in">
         <data-type>int(7)</data-type>
       </column>
-      <column id="250" parent="9" name="distance_tot">
+      <column id="251" parent="9" name="distance_tot">
         <data-type>int(10)</data-type>
       </column>
-      <index id="251" parent="9" name="golf_distance_golf_course_course_id_fk">
+      <index id="252" parent="9" name="golf_distance_golf_course_course_id_fk">
         <columns>course_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <foreign-key id="252" parent="9" name="golf_distance_golf_course_course_id_fk">
+      <foreign-key id="253" parent="9" name="golf_distance_golf_course_course_id_fk">
         <columns>course_id</columns>
         <ref-key>~.golf_course.golf_courses_course_id_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="253" parent="10" name="user_id">
+      <column id="254" parent="10" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(25)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="254" parent="10" name="user_type">
+      <column id="255" parent="10" name="user_type">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="255" parent="10" name="user_sport">
+      <column id="256" parent="10" name="user_sport">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
         <default-expression>&apos;Golf&apos;</default-expression>
       </column>
-      <column id="256" parent="10" name="user_facebook_id">
+      <column id="257" parent="10" name="user_facebook_id">
         <data-type>int(11)</data-type>
       </column>
-      <column id="257" parent="10" name="user_username">
+      <column id="258" parent="10" name="user_username">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="258" parent="10" name="user_first_name">
+      <column id="259" parent="10" name="user_first_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="259" parent="10" name="user_last_name">
+      <column id="260" parent="10" name="user_last_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="260" parent="10" name="user_profile_pic">
+      <column id="261" parent="10" name="user_full_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="262" parent="10" name="user_profile_pic">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;Data/Uploads/Pictures/default_avatar.png&apos;</default-expression>
       </column>
-      <column id="261" parent="10" name="user_cover_photo">
+      <column id="263" parent="10" name="user_cover_photo">
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;Data/Uploads/Pictures/default_cover.png&apos;</default-expression>
       </column>
-      <column id="262" parent="10" name="user_birth_date">
+      <column id="264" parent="10" name="user_birth_date">
         <data-type>date</data-type>
       </column>
-      <column id="263" parent="10" name="user_gender">
+      <column id="265" parent="10" name="user_gender">
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="264" parent="10" name="user_bio">
+      <column id="266" parent="10" name="user_bio">
         <data-type>text</data-type>
       </column>
-      <column id="265" parent="10" name="user_rank">
+      <column id="267" parent="10" name="user_rank">
         <data-type>int(8)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="266" parent="10" name="user_password">
+      <column id="268" parent="10" name="user_password">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="267" parent="10" name="user_email">
+      <column id="269" parent="10" name="user_email">
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="268" parent="10" name="user_email_code">
+      <column id="270" parent="10" name="user_email_code">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="269" parent="10" name="user_email_confirmed">
+      <column id="271" parent="10" name="user_email_confirmed">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="270" parent="10" name="user_generated_string">
+      <column id="272" parent="10" name="user_generated_string">
         <data-type>varchar(200)</data-type>
       </column>
-      <column id="271" parent="10" name="user_membership">
+      <column id="273" parent="10" name="user_membership">
         <data-type>int(10)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="272" parent="10" name="user_deactivated">
+      <column id="274" parent="10" name="user_deactivated">
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="273" parent="10" name="user_creation_date">
+      <column id="275" parent="10" name="user_creation_date">
         <mandatory>1</mandatory>
         <data-type>varchar(14)</data-type>
       </column>
-      <column id="274" parent="10" name="user_ip">
+      <column id="276" parent="10" name="user_ip">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <index id="275" parent="10" name="users_user_id_uindex">
+      <index id="277" parent="10" name="users_user_id_uindex">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="276" parent="10" name="PRIMARY">
+      <key id="278" parent="10" name="PRIMARY">
         <columns>user_id</columns>
         <primary>1</primary>
       </key>
-      <key id="277" parent="10" name="users_user_id_uindex">
+      <key id="279" parent="10" name="users_user_id_uindex">
         <columns>user_id</columns>
         <underlying-index>users_user_id_uindex</underlying-index>
       </key>
-      <column id="278" parent="11" name="user_id">
+      <column id="280" parent="11" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="279" parent="11" name="team_id">
+      <column id="281" parent="11" name="team_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <index id="280" parent="11" name="team_members_users_user_id_fk">
+      <column id="282" parent="11" name="sport">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="283" parent="11" name="accepted">
+        <data-type>tinyint(1)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <index id="284" parent="11" name="team_members_users_user_id_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="281" parent="11" name="PRIMARY">
+      <index id="285" parent="11" name="team_member_teams_team_id_fk">
         <columns>team_id</columns>
-        <primary>1</primary>
-      </key>
-      <foreign-key id="282" parent="11" name="team_members_teams_team_id_fk">
-        <columns>team_id</columns>
-        <ref-key>~.teams.teams_team_id_uindex</ref-key>
+        <desc-columns></desc-columns>
+      </index>
+      <foreign-key id="286" parent="11" name="team_members_users_user_id_fk">
+        <columns>user_id</columns>
+        <ref-key>~.user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="283" parent="11" name="team_members_users_user_id_fk">
-        <columns>user_id</columns>
-        <ref-key>~.user.PRIMARY</ref-key>
+      <foreign-key id="287" parent="11" name="team_member_teams_team_id_fk">
+        <columns>team_id</columns>
+        <ref-key>~.teams.teams_team_id_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>

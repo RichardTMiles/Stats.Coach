@@ -2,7 +2,7 @@
     <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="<?= SITE_PATH ?>" class="navbar-brand"><b>Stats</b>.Coach</a>
+                <a href="<?= SITE_PATH ?>Home/" class="navbar-brand"><b>Stats</b>.Coach</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -20,7 +20,7 @@
                             <li><a href="#">Barbers Hill</a></li>
                             <li><a href="#">FPGA</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Join a Team</a></li>
+                            <li><a href="<?=SITE_PATH ?>JoinTeam/">Join a Team</a></li>
                             <li class="divider"></li>
                             <li><a href="<?= SITE_PATH ?>AddCourse/">Add Course</a></li>
                         </ul>

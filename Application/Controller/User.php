@@ -16,11 +16,6 @@ class User
         $this->request = new Request;
     }
 
-    public static function getApp_id(callable $callable = null)
-    {
-        return (array_key_exists('id', $_SESSION) ? (is_callable( $callable ) ? $callable() : $_SESSION['id']): false);
-    }
-
     public static function logout()
     {
         session_unset();
@@ -31,7 +26,7 @@ class User
         \Model\User::clearInstance();   // remove sterilized data
         $_SESSION['id'] = false;
         unset($_SESSION['id']);
-        startApplication('login/');
+        startApplication(true);
     }
     
     public function login()
@@ -55,6 +50,16 @@ class User
 
         if (!$this->username || !$this->password) {
             $this->alert['warning'] = 'Sorry, but we need your username and password.';
+            return false;
+        } return true;
+    }
+
+    public function joinTeam()
+    {
+        if (empty($_POST))
+            return false;
+        if (!$this->teamCode = $this->request->post( 'teamCode' )->alnum()) {
+            $this->alert['warning'] = "Sorry, your team code appears to be invalid";
             return false;
         } return true;
     }
@@ -94,7 +99,7 @@ class User
         elseif (!$this->userType || !($this->userType == 'Coach' || $this->userType == 'Athlete') )
             $this->alert['warning'] = 'Sorry, please choose an account type. This can be changed later in the web application.';
 
-        elseif ($this->userType && !$this->teamName)
+        elseif ($this->userType == "Coach" && !$this->teamName)
             $this->alert['warning'] = "Sorry, the team name you have entered appears invalid.";
 
         elseif (!$this->password || ($len = strlen( $this->password )) < 6 || $len > 16)

@@ -50,7 +50,7 @@ define( 'VENDOR', SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'vendor' 
 define( 'ERROR_LOG', SERVER_ROOT . 'Data' . DS . 'Logs' . DS . 'Logs.php' );
 define( 'CONTENT_ROOT', SERVER_ROOT . 'Public' . DS . 'StatsCoach' . DS );
 define( 'CONTENT_PATH', SITE_PATH . 'Public' . DS . 'StatsCoach' . DS );
-define( 'CONTENT_WRAPPER', CONTENT_ROOT . 'StatsCoach.php' );
+define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Application' . DS . 'View' . DS . 'StatsCoach.php' );
 define( 'TEMPLATE_ROOT', VENDOR . 'almasaeed2010' . DS . 'adminlte' . DS );
 define( 'TEMPLATE_PATH', DS . 'Application/Services/vendor/almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
 define( 'WRAPPING_REQUIRES_LOGIN', true );
@@ -127,7 +127,7 @@ function startApplication($restart = false, callable $default_logged_out = null,
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
-        if ($restart) {
+        if ($restart === true) {
             View\View::clearInstance();             // This will help us remove any stored templates if restarted
             $controller::clearInstance();
             $model::clearInstance();
@@ -151,7 +151,7 @@ function startApplication($restart = false, callable $default_logged_out = null,
         $_SERVER['REQUEST_URI'] = ($restart === true ? ($app_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) : ($restart ?: null));
         $_POST = null;
     }
-
+    
     View\View::getInstance();   // Un-sterilize and call the wake up fn if possible
 
     // This will clear the uri, so if we must restart it will be with `default` options
@@ -181,12 +181,12 @@ function sortDump(...$mixed)
 {
     unset($_SERVER);
     echo '<pre>';
-    debug_zval_dump( $mixed[0] );
+    debug_zval_dump( $mixed );
     echo '</pre><br><br><pre>';
     var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
     echo '</pre><br><br><pre>';
     echo "################## BACK TRACE ###################\n";
-    var_dump( $GLOBALS );
+    var_dump( debug_backtrace( ) );
     echo '</pre>';
     die(1);
 }
@@ -198,7 +198,7 @@ function sortDump(...$mixed)
  *
  * @return null
  */
-function alert($string = "Made it!")
+function alert($string = "Stay woke.")
 {
     print "<script>alert('$string')</script>";
 }

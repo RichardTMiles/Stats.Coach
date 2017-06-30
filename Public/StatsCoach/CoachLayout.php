@@ -1,8 +1,6 @@
-
-
-    <header class="main-header">
+ <header class="main-header">
         <!-- Logo -->
-        <a href="<?=SITE_PATH?>" class="logo">
+        <a href="<?=SITE_PATH?>Home/" class="logo hidden-md-down">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>S</b>C</span>
             <!-- logo for regular state and mobile devices -->
@@ -300,20 +298,21 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="active">
-                            <a href="<?= SITE_PATH ?>" onclick="return Ajax(this)">
+                            <a href="<?= SITE_PATH ?>" onclick="">
                                 <i class="fa fa-circle-o"></i><?= $this->user->user_first_name ?> <?= $this->user->user_last_name ?>
                             </a>
                         </li>
+
+                        
                         <li>
-                            <a href="#"><i class="fa fa-circle-o"></i>Timeline</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-circle-o"></i> Teams <i class="fa fa-angle-left pull-right"></i></a>
-                            <ul class="treeview-menu">
+
                                 <li><a href="#"><i class="fa fa-circle-o"></i> Barbers Hill High School</a></li>
                                 <li><a href="#"><i class="fa fa-circle-o"></i> NPGA South East Boys</a></li>
-                            </ul>
                         </li>
+
+
+
+
                     </ul>
                 </li>
 
@@ -326,7 +325,7 @@
 
 
                 <li>
-                    <a href="<?= SITE_PATH ?>PostScore/" onclick="return Ajax(this);">
+                    <a href="<?= SITE_PATH ?>PostScore/" onclick="">
                         <i class="fa fa-edit"></i> <span>Post Scores</span>
                     </a>
                 </li>
@@ -335,13 +334,13 @@
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-pie-chart"></i>
-                        <span>Full Analytics</span>
+                        <span>Player Reports</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_PATH . 'Profile/' ?>" onclick="Ajax(this)"><i
+                        <li><a href="<?= SITE_PATH . 'Profile/' ?>" onclick=""><i
                                     class="fa fa-circle-o"></i> <?= $this->user_first_name ?> <?= $this->user_last_name ?>
-                            </a></li>
+                            </a>f</li>
                         <li>
                             <a href="#">
                                 Barbers Hill High School
@@ -406,7 +405,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_PATH ?>Profile/" onclick="return Ajax(this);"><i class="fa fa-circle-o"></i> Profile
+                        <li><a href="<?= SITE_PATH ?>Profile/" onclick=""><i class="fa fa-circle-o"></i> Profile
                                 Settings</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Create Team</a></li>

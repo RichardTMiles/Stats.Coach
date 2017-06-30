@@ -34,13 +34,13 @@ if (!empty($this->courses)) {
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1 style="color: #fff">
-            <?= $this->golf['course_name'] ?>
+            <?= $this->golf->course_name ?>
             <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf['course_state'] ?></a></li>
-            <li style="color: ghostwhite;"><?= $this->golf['course_name'] ?></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course_state ?></a></li>
+            <li style="color: ghostwhite;"><?= $this->golf->course_name ?></li>
             <li style="color: ghostwhite;"><?= $this->course_distance_info['distance_color'] ?></li>
             <li style="color: ghostwhite;"> Score Input</li>
         </ol>
@@ -65,7 +65,7 @@ if (!empty($this->courses)) {
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->course_distance_info["distance_$i"] ?>" data-min="1"
+                                                <input type="text" class="knob" value="<?= $this->course_distance_info["distance_$i"]?>" data-min="1"
                                                        data-max="<?= (ceil( $this->course_distance_info['distance_tot'] / 18 ) + 400) ?>"
                                                        data-thickness="0.25" data-height="180" data-width="180"
                                                        data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
@@ -77,7 +77,7 @@ if (!empty($this->courses)) {
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf["par_$i"] ?>" data-min="1" data-max="13"
+                                                <input type="text" class="knob" value="<?= $this->golf->{"par_$i"} ?>" data-min="1" data-max="9"
                                                        data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
                                                        style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                             </div>
@@ -236,12 +236,12 @@ if (!empty($this->courses)) {
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1 style="color: #fff">
-            <?= $this->golf['course_name'] ?>
+            <?= $this->golf->course_name ?>
             <small style="color: ghostwhite;">What tee box did you play from?</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf['course_state'] ?></a></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course_state ?></a></li>
             <li class="active" style="color: ghostwhite;">Box Color</li>
         </ol>
     </section>
@@ -317,7 +317,7 @@ if (!empty($this->courses)) {
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
+    <h1 style="color:#fff;">
         Post Score
         <small style="color: ghostwhite;">Course Select</small>
     </h1>

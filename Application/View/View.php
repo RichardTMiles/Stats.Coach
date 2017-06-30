@@ -17,12 +17,6 @@ class View
     public $ajax;
     public $currentPage;
 
-    public function wrapper()
-    {
-        return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
-    }
-
-
     public function __wakeup()
     {
         if (!($this->ajax = $this->ajaxActive())):      // an HTTP request
@@ -44,11 +38,15 @@ class View
             require_once(CONTENT_WRAPPER);
             $template = ob_get_clean(); // Return the Template    minify_html()
             echo(MINIFY_CONTENTS && (@include_once "minify.php") ?
-                minify_html( $template ) :
-                $template);
+                minify_html( $template ) : $template);
         } elseif ($this->ajaxActive())
             User::logout();
         // if there it is an ajax request, the user must be logged in, or container must be true
+    }
+
+    public function wrapper()
+    {
+        return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
     }
 
     private function contents($class, $fileName) // Must be called through Singleton, must be private
@@ -62,8 +60,8 @@ class View
 
         if (file_exists( $file )) {
             ob_start();
-            include CONTENT_ROOT . 'alert' . DS . 'alerts.tpl.php'; // a little hackish when not using template file
             include $file;
+            include CONTENT_ROOT . 'alert' . DS . 'alerts.tpl.php'; // a little hackish when not using template file
             echo '<div class="clearfix"></div>';
             $file = ob_get_clean();         // minify_html()
 
@@ -74,7 +72,7 @@ class View
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
 
-        } else throw new \Exception( "$file does not exist" );
+        } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
         // startApplication( true );
         // restart, this usually means the user is trying to access a protected page when logged out
         exit(1);

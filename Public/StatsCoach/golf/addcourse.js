@@ -249,7 +249,7 @@ function distance_box_generate() {
             + '</div>'
             + '<div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">'
             + '<button type="button" class="btn btn-default" onclick="'
-            + (current_hole == 1 ? 'HideMeShow(\'hole-1-distances\',\'Tee-Box-Color-Section\')' : 'HideMeShow(\'hole-' + current_hole + '-distances\',\'hole-' + (current_hole - 1) + '-distances\')')
+            + (current_hole == 1 ? 'HideMeShow(\'hole-1-distances\',\'Tee-Box-Color-Section\')' : (current_hole != 18 ? 'HideMeShow(\'hole-' + current_hole + '-distances\',\'hole-' + (current_hole - 1) + '-distances\')' : null ))
             + '"><< Back</button>'
             + '<button ' + (current_hole === 18 ? 'type="submit"' : 'type="button"')
             + ' class="btn btn-info pull-right" onclick="'

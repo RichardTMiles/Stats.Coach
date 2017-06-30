@@ -1,22 +1,25 @@
 <?php
 
 
+
 $route->match( 'Tests/*',                                               // This is how the view works
     function () {
         $view = \View\View::getInstance();
         if ($view->ajaxActive()) {
-            include SERVER_ROOT . 'Tests' . DS . 'randomHex.php';
+            include SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';
             exit(1);    }
         require_once SERVER_ROOT . 'Application' . DS . 'View' . DS . "minify.php";
         ob_start();
-        require_once SERVER_ROOT . 'Tests' . DS . 'randomHex.php';
+        require_once SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';
         $file = minify_html( ob_get_clean() );
         $view->currentPage = base64_encode( $file );
         exit(1);
     }
 );
 
-$route->signedIn()->match( 'Home/*', 'Golf', 'golf' );          // Home = golf -> golf ->home()
+$route->signedIn()->match( 'Home/*', 'Golf', 'golf' );          // TODO - Home = golf -> golf ->home()
+
+$route->signedIn()->match('JoinTeam/', 'User', 'joinTeam');
 
 $route->signedOut()->match( 'Login/facebook/*', 'User', 'facebook' );
 

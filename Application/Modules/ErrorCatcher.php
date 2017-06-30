@@ -4,6 +4,8 @@ namespace Modules;
 
 // http://php.net/manual/en/function.debug-backtrace.php
 
+use View\View;
+
 class ErrorCatcher
 {
     private $report;
@@ -21,22 +23,25 @@ class ErrorCatcher
         if ( 0 == error_reporting () ) return null;
 
         // Open the file to get existing content
+        $file = fopen(ERROR_LOG , "w");
         ob_start( );
-        print file_get_contents( ERROR_LOG ) . PHP_EOL;
-        echo date( 'D, d M Y H:i:s' , time());
+        print PHP_EOL. date( 'D, d M Y H:i:s' , time());
         print $this->generateCallTrace( ) . PHP_EOL;
         echo $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
-        print $output;
-        // file_put_contents( ERROR_LOG, $output );
-        startApplication(true);
+        fwrite( $file, $output );
+        fclose( $file );
+        // startApplication(true);
+        View::contents('error','500error');
     }
+
+    // 
 
     private function generateCallTrace()
     {
         $e = new \Exception( );
-        
+
         ob_start( );
         $trace = explode( "\n", $e->getTraceAsString() );
         // reverse array to make steps line up chronologically
@@ -60,7 +65,7 @@ class ErrorCatcher
         ob_end_clean( );
         return $this->report = $output;
     }
-    
+
 
     // TODO - add java tags/ make redirect work
     private function redirect()
