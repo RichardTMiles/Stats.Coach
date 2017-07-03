@@ -3,21 +3,21 @@
 namespace Model;
 
 use Model\Helpers\GolfRelay;
-use Modules\Helpers\Skeleton;
-use Psr\Singleton;
-use Modules\Database;
+use Modules\Singleton;
 
 class Golf extends GolfRelay
 {
-    use Singleton; 
+    use Singleton;
     const Singleton = true;
 
     public function __construct()
     {
+        $this->golf = $this;
         parent::__construct();
         try {
-            if (empty($this->stats))
+            if (empty($this->stats)) 
                 $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
+            
 
             // we need both, teams were coaching and teams we have joined
             // $this->teams
@@ -26,46 +26,36 @@ class Golf extends GolfRelay
         }
     }
 
-
     public function Golf()
     {
         try {
             if (empty($this->rounds))
                 $this->rounds = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ?', $this->user->user_id );
 
-
-
         } catch (\Exception $e) {
-            alert($e->getMessage());
+            throw new \Exception($e);
         }
     }   // Home page
-
-    public function coursesByState($state)
-    {
-        $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course WHERE course_state= ?";
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($state) );
-        return $stmt->fetchAll();
-    }
 
     public function courseById($id)
     {
         $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ?';
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$id] );
-        $this->fetch_into_current_class( $stmt->fetch( \PDO::FETCH_ASSOC ) );
+        $this->course = $this->fetch_as_object( $sql, $id );
+
+        //$this->fetch_into_current_class(  );
     }
-    
+
     public function PostScore()
     {
-        if (!empty($this->newScore)) {
 
-            $score_out=$score_in=$score_tot=$gnr_tot=$ffs_tot=0;
-            for($i=0;$i<8;$i++) $score_out+=$this->newScore[$i];
-            for($i=9;$i<18;$i++) $score_in+=$this->newScore[$i];
+        if ($this->newScore) {
+
+            $score_out = $score_in = $score_tot = $gnr_tot = $ffs_tot = 0;
+            for ($i = 0; $i < 8; $i++) $score_out += $this->newScore[$i];
+            for ($i = 9; $i < 18; $i++) $score_in += $this->newScore[$i];
             $score_tot = $score_in + $score_out;
 
-            for($i=0;$i<18;$i++) {
+            for ($i = 0; $i < 18; $i++) {
                 $gnr_tot += $this->gnr[$i];
                 $ffs_tot += $this->ffs[$i];
             }
@@ -78,8 +68,8 @@ class Golf extends GolfRelay
                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $stmt = $this->db->prepare( $sql );
 
-                if(!$stmt->execute( [
-                    1, $this->user->user_id, $this->course_id,
+                if (!$stmt->execute( [
+                    1, $this->user->user_id, $this->course->course_id,
                     $gnr_tot, $ffs_tot,
                     $this->newScore[0], $this->ffs[0], $this->gnr[0],
                     $this->newScore[1],
@@ -101,38 +91,48 @@ class Golf extends GolfRelay
                     $this->newScore[16],
                     $this->newScore[17],
                     $score_in, $score_tot,
-                    $this->ffs[1],$this->ffs[2],$this->ffs[3],$this->ffs[4],$this->ffs[5],$this->ffs[6],$this->ffs[7],$this->ffs[8],$this->ffs[9],$this->ffs[10],$this->ffs[11],$this->ffs[12],$this->ffs[13],$this->ffs[14],$this->ffs[15],$this->ffs[16],$this->ffs[17],
-                    $this->gnr[1],$this->gnr[2],$this->gnr[3],$this->gnr[4],$this->gnr[5],$this->gnr[6],$this->gnr[7],$this->gnr[8],$this->gnr[9],$this->gnr[10],$this->gnr[11],$this->gnr[12],$this->gnr[13],$this->gnr[14],$this->gnr[15],$this->gnr[16],$this->gnr[17]
-                ])) $this->alert['danger'] = "We could not process your request. Please try again.";
+                    $this->ffs[1], $this->ffs[2], $this->ffs[3], $this->ffs[4], $this->ffs[5], $this->ffs[6], $this->ffs[7], $this->ffs[8], $this->ffs[9], $this->ffs[10], $this->ffs[11], $this->ffs[12], $this->ffs[13], $this->ffs[14], $this->ffs[15], $this->ffs[16], $this->ffs[17],
+                    $this->gnr[1], $this->gnr[2], $this->gnr[3], $this->gnr[4], $this->gnr[5], $this->gnr[6], $this->gnr[7], $this->gnr[8], $this->gnr[9], $this->gnr[10], $this->gnr[11], $this->gnr[12], $this->gnr[13], $this->gnr[14], $this->gnr[15], $this->gnr[16], $this->gnr[17]
+                ] )
+                ) throw new \Exception( "We could not process your request. Please try again." );
+
 
                 $sql = "UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE user_id = ?";
-                $this->db->prepare( $sql )->execute([$score_tot, $ffs_tot, $gnr_tot, $this->user->user_id]);
-
-                return $this->alert['success'] = "Score successfully added!";
+                $this->db->prepare( $sql )->execute( [$score_tot, $ffs_tot, $gnr_tot, $this->user->user_id] );
+                $this->alert['success'] = "Score successfully added!";
+                startApplication( true );
             } catch (\Exception $e) {
-                $this->alert['danger'] = $e->getMessage();
+                echo $e->getMessage();
+                $this->alert['danger'] = "Sorry, we could not process your score at this time. Please try again later.";
             }
 
         }
 
-        if ($this->course_id != $this->courseId) {
-            if ($this->courseId == false) $this->course_id = $this->courseId;
-            else $this->courseById( $this->courseId );
-        }
+        if (!empty($this->courseId) && (!is_object( $this->course ) || $this->course->course_id != $this->courseId))
+            $this->courseById( $this->courseId );
+
 
         if (!empty($this->boxColor)) {
-            $sql = "SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?";
-            $stmt = $this->db->prepare( $sql );
-            $stmt->execute( [$this->courseId, $this->boxColor] );
-            return $this->course_distance_info = $stmt->fetch();
+            //  $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
+            if (!isset($this->course->distance) || !is_object( $this->course->distance ) || $this->course->distance->distance_color != $this->boxColor) {
+                $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
+
+                return null;
+            }
+            if (!is_object( $this->course->distacne ))
+                throw new \Exception();
+            return null;
         }
 
         if (!empty($this->courseId))
-            return $this->course_colors = [$this->box_color_1, $this->box_color_2, $this->box_color_3, $this->box_color_4, $this->box_color_5];
+            return $this->course_colors = [$this->course->box_color_1, $this->course->box_color_2, $this->course->box_color_3, $this->course->box_color_4, $this->course->box_color_5];
 
 
         if (!empty($this->state)) {
-            $this->courses = $this->coursesByState( $this->state );
+            $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course WHERE course_state = ?";
+            $stmt = $this->db->prepare( $sql );
+            $stmt->execute( [$this->state] );
+            $this->courses = $stmt->fetchAll();
             if (empty($this->courses)) $this->courses = true;
         }
     }
@@ -258,7 +258,8 @@ class Golf extends GolfRelay
                     $handicap[$i][15],
                     $handicap[$i][16],
                     $handicap[$i][17]
-                ) ) ) throw new \Exception( "Failed to insert tee handicap $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
+                ) )
+                ) throw new \Exception( "Failed to insert tee handicap $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
 
             $this->alert['success'] = "The course has been added!";
         } catch (\Exception $e) {

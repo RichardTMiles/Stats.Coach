@@ -8,18 +8,30 @@
 
 namespace Modules\Helpers;
 
-use Psr\Singleton;
+use Modules\Singleton;
 
-class Skeleton
+class Skeleton implements \ArrayAccess
 {
     use Singleton;
     const Singleton = true; // turns on auto caching
 
-    public function __sleep()
-    {
-        return ['storage'];
+    public function offsetSet($offset, $value) {
+        if (is_null($offset)) $this->storage[] = $value;
+        else $this->storage[$offset] = $value;
     }
 
+    public function offsetExists($offset) {
+        return isset($this->storage[$offset]);
+    }
+
+    public function offsetUnset($offset) {
+        unset($this->storage[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return isset($this->storage[$offset]) ? $this->storage[$offset] : null;
+    }
+    
     public function &__get($variable)
     {
         return $this->storage[$variable];

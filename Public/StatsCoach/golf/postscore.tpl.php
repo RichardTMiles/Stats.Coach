@@ -1,23 +1,195 @@
 <?php
 
+// alert('course=>'. is_object( $this->golf->course ) . '   distance=>' . is_object( $this->golf->course->distance ));
+
+// $distance = $this->golf->course->distance;
+
+// sortDump( $this->golf->course->distance );
+
+
+
+
 ##########  Step 1.5, return list of courses from given state
 if (!empty($this->courses)) {
+
     echo "<option value='' selected disabled>Course Select</option>";
     echo "<option value='Add'>Add Course</option>";
 
     if (is_array( $this->courses ) && $this->courses !== true) {
-        foreach ($this->courses as $key)
-            echo "<option value='{$key['course_id']}'>{$key['course_name']}</option>";
+        foreach ($this->courses as $key) {
+            echo "<option value='" . $key['course_id'] . "'>{$key['course_name']}</option>";
+        }
     }
-    exit (1);  // This will stop the run and just return the list
-} elseif ($this->course_distance_info) {
+    exit (1);  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
+}
+
+if (!$this->state) { ?>
+    <script>
+
+        var state = null;
+
+        function course_given_states(select) {
+            state = select.value;
+            var courses = $("#course"); // container to be placed in
+
+            courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
+
+            $.ajax({  // Get a reduced list of all courses within a state
+                url: (document.location + state + "/"), success: function (result) {
+                    courses.html(result);
+                }
+            });
+        }
+
+        function box_colors_given_id(select) {
+            var courseId = select.value;
+
+            // Jump to a new page using Pjax
+            if (courseId === "Add") {
+                return $.pjax({
+                    url: ('https://' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
+                    container: '#ajax-content'
+                });
+            }
+
+            $.pjax({
+                url: ('https://' + window.location.hostname + '/PostScore/' + state + '/' + courseId + '/'),         // Redirect
+                container: '#ajax-content'
+            });
+
+        }
+    </script>
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1 style="color:#fff;">
+            Post Score
+            <small style="color: ghostwhite;">Course Select</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#" style="color: ghostwhite;">Forms</a></li>
+            <li class="active" style="color: ghostwhite;">Advanced Elements</li>
+        </ol>
+    </section>
+
+    <!-- Alerts -->
+    <div id="alert"></div>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- SELECT COURSE -->
+        <div class="box box-custom" style="background-color: #2c3b41; border-top-color: #2c3b41; color: ghostwhite !important;">
+
+            <div class="box-header">
+                <h3 class="box-title" style="color: ghostwhite;">Where Was Your Round?</h3>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>State</label>
+                            <select class="form-control select2" style="width: 100%;" onchange="course_given_states(this)" required>
+                                <option selected="selected" disabled value="">State</option>
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska">Alaska</option>
+                                <option value="California">California</option>
+                                <option value="Delaware">Delaware</option>
+                                <option value="Tennessee">Tennessee</option>
+                                <option value="Texas">Texas</option>
+                                <option value="Washington">Washington</option>
+                            </select>
+                        </div><!-- /.form-group -->
+
+                        <div data-pjax class="form-group">
+                            <label>Course</label>
+                            <select id="course" class="form-control select2" <?= (!isset($this->courses) ? 'disabled="disabled"' : null); ?>
+                                    onchange="box_colors_given_id(this)" style="width: 100%;">
+                            </select>
+                        </div><!-- /.form-group -->
+                    </div><!-- /.col -->
+                </div>
+            </div>
+
+        </div>
+
+    </section><!-- /.content -->
+
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+        });
+    </script>
+
+
+<?php } elseif ($this->course_colors) {
+#######################  STEP 2 , Course Tee Box #####################################?>
+    <script>
+        function startScoreCard(boxColor) {
+            $.pjax({
+                url: (window.location + boxColor + '/'),         // Redirect
+                container: '#ajax-content'
+            });
+        }
+    </script>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1 style="color: #fff">
+            <?= $this->golf->course->course_name ?>
+            <small style="color: ghostwhite;">What tee box did you play from?</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
+            <li class="active" style="color: ghostwhite;">Box Color</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+
+            <?php foreach ($this->course_colors as $value) {
+                if (empty($value)) break; ?>
+                <div class="col-lg-12 col-xs-12" onclick="startScoreCard('<?= $value ?>')">
+                    <!-- small box -->
+                    <div class="small-box bg-<?= strtolower( $value ) ?>">
+                        <div class="inner">
+                            <h3><?= $value ?><sup style="font-size: 12px">Tee Box</sup></h3>
+
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-flag-o"></i>
+                        </div>
+                        <a class="small-box-footer">
+                            Enter Score <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </section>
+
+
+    <?php return 1;// This will stop the run and just return the list
+
+} elseif (is_object( $this->golf->course ) && is_object( $this->golf->course->distance )) {
+
 #######################  STEP 3 , input  #####################################{ ?>
 
     <script>
         $(document).on('submit', 'form[data-pjax]',
             function (event) {
                 event.preventDefault();
-                // document.getElementById('hole-18-distances').style.display = "none";
+                document.getElementById('input-score-hole-18').style.display = "none";
                 $.pjax.submit(event, '#ajax-content')
             });
 
@@ -31,23 +203,26 @@ if (!empty($this->courses)) {
             document.getElementById("input-score-hole-" + current).style.display = "block";
         }
     </script>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1 style="color: #fff">
-            <?= $this->golf->course_name ?>
+            <?= $this->golf->course->course_name ?>
             <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course_state ?></a></li>
-            <li style="color: ghostwhite;"><?= $this->golf->course_name ?></li>
-            <li style="color: ghostwhite;"><?= $this->course_distance_info['distance_color'] ?></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
+            <li style="color: ghostwhite;"><?= $this->golf->course->course_name ?></li>
+            <li style="color: ghostwhite;"><?= $this->golf->course->distance->distance_color ?></li>
             <li style="color: ghostwhite;"> Score Input</li>
         </ol>
     </section>
 
     <section class="content">
-        <form data-pjax class="form-horizontal" method="post" action="<?= SITE_PATH ?>PostScore/" name="addCourse">
+        <form data-pjax class="form-horizontal" method="post"
+              action="<?= SITE_PATH . 'PostScore/' . $this->golf->course->course_state . '/' . $this->golf->course->course_id . '/' . $this->golf->course->distance->distance_color . '/' ?>"
+              name="addCourse">
             <?php for ($i = 1; $i <= 18; $i++) { ?>
                 <!-- row -->
                 <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i == 1 ? "block" : "none") ?>">
@@ -65,8 +240,8 @@ if (!empty($this->courses)) {
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->course_distance_info["distance_$i"]?>" data-min="1"
-                                                       data-max="<?= (ceil( $this->course_distance_info['distance_tot'] / 18 ) + 400) ?>"
+                                                <input type="text" class="knob" value="<?= $this->golf->course->distance->{"distance_$i"} ?>" data-min="1"
+                                                       data-max="<?= (ceil( $this->golf->course->distance->distance_tot / 18 ) + 400) ?>"
                                                        data-thickness="0.25" data-height="180" data-width="180"
                                                        data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
                                                        style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
@@ -77,7 +252,7 @@ if (!empty($this->courses)) {
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->{"par_$i"} ?>" data-min="1" data-max="9"
+                                                <input type="text" class="knob" value="<?= $this->golf->course->{"par_$i"} ?>" data-min="1" data-max="9"
                                                        data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
                                                        style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                             </div>
@@ -105,12 +280,11 @@ if (!empty($this->courses)) {
                                                 <input name="hole-<?= $i ?>" type="text" class="knob" value="1" data-min="1" data-max="8"
                                                        data-fgcolor="#00c0ef" data-height="180" data-width="180"
                                                        data-angleArc="250" data-angleoffset="-125"
-                                                       style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                                       style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                             </div>
                                             <div class="knob-label">Putts</div>
 
                                         </div>
-
 
 
                                     </div>
@@ -120,14 +294,14 @@ if (!empty($this->courses)) {
                                         <div class="col-xs-6 col-sm-6 col-md-6 text-center">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input name="ffs-<?=$i?>" type="checkbox" value="1"> Fairway on first shot
+                                                    <input name="ffs-<?= $i ?>" type="checkbox" value="1"> Fairway on first shot
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-xs-6 col-sm-6 col-md-6 text-center">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input name="gnr-<?=$i?>" type="checkbox" value="1"> Green in regulation
+                                                    <input name="gnr-<?= $i ?>" type="checkbox" value="1"> Green in regulation
                                                 </label>
                                             </div>
                                         </div>
@@ -144,7 +318,8 @@ if (!empty($this->courses)) {
                                     <button type="button" class="btn btn-default" onclick="last_score_input('<?= $i ?>')"><< Back</button>
                                 <?php } ?>
                                 <!-- button -->
-                                <button class="btn btn-info pull-right" type="<?= ($i != 18 ? "button" : "submit") ?>" onclick="next_score_input('<?= $i ?>')">
+                                <button class="btn btn-info pull-right" type="<?= ($i != 18 ? "button" : "submit") ?>"
+                                        onclick="<?= ($i != 18 ? "next_score_input('$i')" : null) ?>">
                                     Next &gt;&gt;</button>
                             </div>
                             <!-- /.box-footer -->
@@ -222,165 +397,8 @@ if (!empty($this->courses)) {
     </script>
 
     <?php
+
+    // sortDump($distance);
+
     return 1;
-} elseif ($this->course_colors) {
-    #######################  STEP 2 , Course Tee Box #####################################?>
-    <script>
-        function startScoreCard(boxColor) {
-            $.pjax({
-                url: (window.location + boxColor + '/'),         // Redirect
-                container: '#ajax-content'
-            });
-        }
-    </script>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1 style="color: #fff">
-            <?= $this->golf->course_name ?>
-            <small style="color: ghostwhite;">What tee box did you play from?</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course_state ?></a></li>
-            <li class="active" style="color: ghostwhite;">Box Color</li>
-        </ol>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-        <div class="row">
-
-            <?php foreach ($this->course_colors as $value) {
-                if (empty($value)) break; ?>
-                <div class="col-lg-12 col-xs-12" onclick="startScoreCard('<?= $value ?>')">
-                    <!-- small box -->
-                    <div class="small-box bg-<?= strtolower( $value ) ?>">
-                        <div class="inner">
-                            <h3><?= $value ?><sup style="font-size: 12px">Tee Box</sup></h3>
-
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-flag-o"></i>
-                        </div>
-                        <a class="small-box-footer">
-                            Enter Score <i class="fa fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
-    </section>
-
-    <?php return 1;// This will stop the run and just return the list
 }
-
-#######################  STEP 1 , Course Select #####################################
-?>
-<script>
-
-    var state = null,
-        course_id = null;
-
-    function course_given_states(select) {
-        state = select.value;
-        var courses = $("#course"); // container to be placed in
-
-        courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
-
-        $.ajax({  // Get a reduced list of all courses within a state
-            url: (document.location + state + "/"), success: function (result) {
-                courses.html(result);
-            }
-        });
-    }
-
-    function box_colors_given_id(select) {
-        course_id = select.value;
-
-        // Jump to a new page using Pjax
-        if (course_id === "Add") {
-            return $.pjax({
-                url: ('https://' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
-                container: '#ajax-content'
-            });
-        }
-
-        $.pjax({
-            url: ('https://' + window.location.hostname + '/PostScore/' + state + '/' + course_id + '/'),         // Redirect
-            container: '#ajax-content'
-        });
-
-    }
-</script>
-
-
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1 style="color:#fff;">
-        Post Score
-        <small style="color: ghostwhite;">Course Select</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#" style="color: ghostwhite;">Forms</a></li>
-        <li class="active" style="color: ghostwhite;">Advanced Elements</li>
-    </ol>
-</section>
-
-<!-- Alerts -->
-<div id="alert"></div>
-
-<!-- Main content -->
-<section class="content">
-    <!-- SELECT COURSE -->
-    <div class="box box-custom" style="background-color: #2c3b41; border-top-color: #2c3b41; color: ghostwhite !important;">
-
-        <div class="box-header">
-            <h3 class="box-title" style="color: ghostwhite;">Where Was Your Round?</h3>
-            <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div>
-        </div>
-        <!-- /.box-header -->
-
-        <div class="box-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>State</label>
-                        <select class="form-control select2" style="width: 100%;" onchange="course_given_states(this)" required>
-                            <option selected="selected" disabled value="">State</option>
-                            <option value="Alabama">Alabama</option>
-                            <option value="Alaska">Alaska</option>
-                            <option value="California">California</option>
-                            <option value="Delaware">Delaware</option>
-                            <option value="Tennessee">Tennessee</option>
-                            <option value="Texas">Texas</option>
-                            <option value="Washington">Washington</option>
-                        </select>
-                    </div><!-- /.form-group -->
-
-                    <div data-pjax class="form-group">
-                        <label>Course</label>
-                        <select id="course" class="form-control select2" <?= (!isset($this->courses) ? 'disabled="disabled"' : null); ?>
-                                onchange="box_colors_given_id(this)" style="width: 100%;">
-                        </select>
-                    </div><!-- /.form-group -->
-                </div><!-- /.col -->
-            </div>
-        </div>
-
-    </div>
-
-</section><!-- /.content -->
-
-<script>
-    $(function () {
-        //Initialize Select2 Elements
-        $(".select2").select2();
-    });
-</script>
-
-
-

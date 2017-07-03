@@ -2,8 +2,6 @@
 
 namespace Modules;
 
-use Psr\Singleton;
-
 class Database
 {
     use Singleton;

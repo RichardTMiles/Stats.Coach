@@ -8,13 +8,13 @@ namespace View;
 */
 
 use Controller\User;
-use Psr\Singleton;
+use Modules\Singleton;
 
 class View
 {
     use Singleton;
+    const Singleton = true;
 
-    public $ajax;
     public $currentPage;
 
     public function __wakeup()
@@ -24,23 +24,30 @@ class View
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
             unset($this->currentPage);
+            self::clearInstance();
             exit(1);                                    // This is for the second inner AJAX request on first page load
-        endif;
-        // this would mean we're requesting our second page through ajax
+        endif;                                          // this would mean we're requesting our second page through ajax
+    }
+
+    public function __sleep()
+    {
+        if (empty($this->currentPage)) {
+            unset($_SESSION[__CLASS__]);
+            return null; }
+        return array('currentPage');
     }
 
     public function __construct()
     {
         if ($this->wrapper()) {
-            if ($this->ajaxActive()) return null;
+            if ($this->ajax = $this->ajaxActive()) return null;
             require_once "minify.php";
             ob_start();
             require_once(CONTENT_WRAPPER);
             $template = ob_get_clean(); // Return the Template    minify_html()
             echo(MINIFY_CONTENTS && (@include_once "minify.php") ?
                 minify_html( $template ) : $template);
-        } elseif ($this->ajaxActive())
-            User::logout();
+        } elseif ($this->ajaxActive()) User::logout();
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
@@ -112,7 +119,6 @@ class View
 
     }
 
-
     /**
      *  Given a file, i.e. /css/base.css, replaces it with a string containing the
      *  file's mtime, i.e. /css/base.1221534296.css.
@@ -135,14 +141,6 @@ class View
         return (array_key_exists( $variable, $GLOBALS ) ? $GLOBALS[$variable] : null);
     }
 
-    public function __sleep()
-    {
-        if (empty($this->currentPage)) {
-            unset($_SESSION[__CLASS__]);
-            return 0;
-        }
-        return array('currentPage');
 
-    }
 }
 

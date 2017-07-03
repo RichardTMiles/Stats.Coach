@@ -5,8 +5,8 @@ namespace Model;
 use Model\Helpers\UserRelay;
 use Modules\Helpers\Bcrypt;
 use Modules\StoreFiles;
+use Modules\Singleton;
 use Modules\Request;
-use Psr\Singleton;
 
 
 class User extends UserRelay
@@ -19,7 +19,13 @@ class User extends UserRelay
         $this->user = $this;
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
         parent::__construct();  // get database
+        if ($this->user_id == false) return null;
         if (empty($this->user_username) && $this->user_id) $this->getUser();
+        $model = "Model\\$this->user_sport";
+        $model::getInstance( );
+
+        // $GLOBALS[($class = strtolower( $this->user_sport ))] = $model::getInstance( );
+
         // Reconfig variables for dynamic path
     }
 
@@ -57,14 +63,13 @@ class User extends UserRelay
         $sql = 'SELECT * FROM StatsCoach.teams WHERE team_coach = ?';
         return $this->fetch_as_object( $sql, $this->user_id );
     }
-       // we athlete
+    // we athlete
     protected function weAthlete()
     {
         $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON teams.team_id = team_member.team_id WHERE user_id = ? AND sport = ?';
         return $this->fetch_as_object( $sql, $this->user_id, $this->user_sport);
 
     }
-    
 
     protected function updateUser()
     {

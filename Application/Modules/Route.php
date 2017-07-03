@@ -8,7 +8,6 @@
 
 namespace Modules;
 
-use Psr\Singleton;
 
 class Route
 {

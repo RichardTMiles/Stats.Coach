@@ -3,7 +3,7 @@
 namespace Controller;
 
 use Modules\Request;
-use Psr\Singleton;
+use Modules\Singleton;
 
 class User
 {

@@ -18,7 +18,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="<?= SITE_PATH ?>Public/favicon.png" type="image/x-icon"/>
-    
+
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?= $this->versionControl( "bootstrap/css/bootstrap.css" ) ?>">
@@ -155,37 +155,37 @@
 
 </style>
 <div class="wrapper">
-<?php
+    <?php
 
-// This is the body attributes for each user
+    // This is the body attributes for each user
 
-if ($this->user->user_type == 'Coach') { ?>
+    if ($this->user->user_type == 'Coach') { ?>
     <body class="skin-green fixed sidebar-mini sidebar-collapse">
     <?php require_once CONTENT_ROOT . 'CoachLayout.php';
 
-} elseif ($this->user->user_type == 'Athlete') { ?>
+    } elseif ($this->user->user_type == 'Athlete') { ?>
     <body class="hold-transition skin-green layout-top-nav">
     <?php require_once CONTENT_ROOT . 'AthleteLayout.php';
 
-} else sortDump();
+    } else sortDump();
 
-?>
+    ?>
 
-<!-- Full Width Column -->
-<div class="content-wrapper">
-    <div class="container" id="ajax-content" style=""></div>
-    <!-- /.container -->
-</div>
-<!-- /.content-wrapper -->
-<footer class="main-footer" style="">
-    <div class="container">
-        <div class="pull-right hidden-xs">
-            <a href="<?= SITE_PATH ?>Privacy/">Privacy Policy</a> <b>Version</b> 0.4.0
-        </div>
-        <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container" id="ajax-content" style=""></div>
+        <!-- /.container -->
     </div>
-    <!-- /.container -->
-</footer>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer" style="">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <a href="<?= SITE_PATH ?>Privacy/">Privacy Policy</a> <b>Version</b> 0.4.0
+            </div>
+            <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
+        </div>
+        <!-- /.container -->
+    </footer>
 </div>
 <!-- ./wrapper -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
@@ -211,9 +211,20 @@ if ($this->user->user_type == 'Coach') { ?>
 <script src="<?= TEMPLATE_PATH ?>plugins/knob/jquery.knob.js"></script>
 <!-- Sparkline -->
 <script src="<?= TEMPLATE_PATH ?>plugins/sparkline/jquery.sparkline.min.js"></script>
-
+<!-- PJAX-->
 <script src="<?= SITE_PATH ?>Public/Jquery-Pjax/jquery.pjax.js"></script>
+<!-- Better PJAX - https://github.com/defunkt/jquery-pjax/issues/469  -->
 <script>
+    $(function () {
+        $(document).on("pjax:popstate", function () {
+            $(document).one("pjax:end", function (event) {
+                $(event.target).find("script[data-exec-on-popstate]").each(function () {
+                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
+                })
+            });
+        });
+    });
+
     $(function () {
         // initial content
         $.pjax.reload('#ajax-content');
@@ -222,7 +233,9 @@ if ($this->user->user_type == 'Coach') { ?>
         $.when($(document).pjax('a', '#ajax-content')).then(function () {
             $('#ajax-content').addClass("overlay").innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
             Pace.restart();
-        }).done(function () { $('#ajax-content').removeClass('overlay');});
+        }).done(function () {
+            $('#ajax-content').removeClass('overlay');
+        });
     });
 </script>
 

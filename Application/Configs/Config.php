@@ -1,6 +1,8 @@
 <?php
 
-define( 'SITE_TITLE', 'Stats Coach' );
+const ¶ = PHP_EOL."\t";
+
+const SITE_TITLE = 'Stats Coach';
 
 ################    Reporting   ####################
 ini_set( 'display_errors', 1 );
@@ -27,8 +29,7 @@ define( 'DB_PASS', 'Huskies!99' );
 // This will get the current url on the server, note its capable of HTTP and HTTPS
 $url = (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
-        'https://' :
-        'http://') . $_SERVER['SERVER_NAME'] : null);
+        'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null);
 
 
 ################# Application Paths ########################
@@ -181,7 +182,7 @@ function sortDump(...$mixed)
 {
     unset($_SERVER);
     echo '<pre>';
-    debug_zval_dump( $mixed );
+    debug_zval_dump( (count($mixed) == 1 ? array_pop( $mixed ) : $mixed ));
     echo '</pre><br><br><pre>';
     var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
     echo '</pre><br><br><pre>';
