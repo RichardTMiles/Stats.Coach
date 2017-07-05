@@ -3,8 +3,9 @@
 const ¶ = PHP_EOL."\t";
 
 const SITE_TITLE = 'Stats Coach';
-
+const SITE_VERSION = '0.0.1';
 ################    Reporting   ####################
+date_default_timezone_set('America/Denver');
 ini_set( 'display_errors', 1 );
 error_reporting( E_ALL | E_STRICT );
 define( 'MINIFY_CONTENTS', false );
@@ -27,9 +28,9 @@ define( 'DB_PASS', 'Huskies!99' );
 
 
 // This will get the current url on the server, note its capable of HTTP and HTTPS
-$url = (isset($_SERVER['SERVER_NAME']) ?
+define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
-        'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null);
+        'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null), true);
 
 
 ################# Application Paths ########################
@@ -46,22 +47,23 @@ $url = (isset($_SERVER['SERVER_NAME']) ?
  * @constant TEMPLATE_PATH      Path to the template for public use i.e. relative path for .css includes
  * @constant WRAPPING_REQUIRES_LOGIN  Bool  If the template wrapper is dependant apon being logged in.
  */
-define( 'SITE_PATH', $url . DS );          // http(s)://example.com/  - do not change
-define( 'VENDOR', SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'vendor' . DS );
-define( 'ERROR_LOG', SERVER_ROOT . 'Data' . DS . 'Logs' . DS . 'Logs.php' );
-define( 'CONTENT_ROOT', SERVER_ROOT . 'Public' . DS . 'StatsCoach' . DS );
-define( 'CONTENT_PATH', SITE_PATH . 'Public' . DS . 'StatsCoach' . DS );
-define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Application' . DS . 'View' . DS . 'StatsCoach.php' );
-define( 'TEMPLATE_ROOT', VENDOR . 'almasaeed2010' . DS . 'adminlte' . DS );
-define( 'TEMPLATE_PATH', DS . 'Application/Services/vendor/almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
-define( 'WRAPPING_REQUIRES_LOGIN', true );
-define( 'DEFAULT_LOGGED_IN_URI', 'home/' );       // must be lower?
-define( 'DEFAULT_LOGGED_OUT_URI', 'login/' );
+define( 'SITE',             url . DS , true);    // http(s)://example.com/  - do not change
+define( 'CONTENT',          DS . 'Public/StatsCoach' . DS );
+define( 'VENDOR',           DS . 'Application/Services/vendor' . DS );
+define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
+define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Log_'. time() .'.php' );
+define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor' . DS );
+define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte' . DS );
+define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach' . DS );
+define( 'CONTENT_WRAPPER',  SERVER_ROOT . 'Application/View/StatsCoach.php' );
 
+const DEFAULT_LOGGED_OUT_MVC  = [ 'User' => 'login' ];      // must be lower?
+const DEFAULT_LOGGED_IN_MVC   = [ 'Golf' => 'golf'  ];
+define( 'WRAPPING_REQUIRES_LOGIN', false );                 // I use the same headers every where
 
 // More cache control is given in the .htaccess File
-header( 'Cache-Control: must-revalidate' );
 header( 'Content-type: text/html; charset=utf-8' );
+header( 'Cache-Control: must-revalidate' );
 
 
 #################   Functions  ######################
@@ -122,47 +124,7 @@ header( 'Content-type: text/html; charset=utf-8' );
  *
  * @throws Exception
  */
-function startApplication($restart = false, callable $default_logged_out = null, callable $default_logged_in = null)
-{
-    $mvc = function ($class, $method) use ($restart) {
-        $controller = "Controller\\$class";
-        $model = "Model\\$class";
 
-        if ($restart === true) {
-            View\View::clearInstance();             // This will help us remove any stored templates if restarted
-            $controller::clearInstance();
-            $model::clearInstance();
-        }
-
-        $controller = $controller::getInstance();   // debating to clear the instance
-        if (($argv = $controller->$method()) !== false) {
-            $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
-            $GLOBALS[$class]->$method( $argv );
-        }
-
-        // Relies on the Singleton Trait - content is private but uses attempts to use the current instance
-        View\View::contents( $class, $method );    // this will exit(1) on success
-    };
-
-    if ($restart) Model\User::clearInstance();
-    $GLOBALS['user'] = Model\User::getInstance();
-    $app_id = $GLOBALS['user']->user_id;
-
-    if ($restart || $_SERVER['REQUEST_URI'] == null) {
-        $_SERVER['REQUEST_URI'] = ($restart === true ? ($app_id ? DEFAULT_LOGGED_IN_URI : DEFAULT_LOGGED_OUT_URI) : ($restart ?: null));
-        $_POST = null;
-    }
-    
-    View\View::getInstance();   // Un-sterilize and call the wake up fn if possible
-
-    // This will clear the uri, so if we must restart it will be with `default` options
-    $route = new Modules\Route( $app_id, $mvc, $default_logged_out, $default_logged_in );
-
-    require SERVER_ROOT . 'Application/Bootstrap.php';
-
-    exit(1);  // If this is reached the route destructor should execute the home method if valid,
-    // closures provided, or startApplication(true) which replaces the given uri
-}
 
 ##################   DEV Tools   #################
 // This will cleanly print the var_dump function and kill the execution of the application
@@ -180,11 +142,12 @@ function startApplication($restart = false, callable $default_logged_out = null,
  */
 function sortDump(...$mixed)
 {
+    $mixed=(count($mixed) == 1 ? array_pop( $mixed ) : $mixed );
     unset($_SERVER);
     echo '<pre>';
-    debug_zval_dump( (count($mixed) == 1 ? array_pop( $mixed ) : $mixed ));
+    debug_zval_dump( $mixed?:$GLOBALS );
     echo '</pre><br><br><pre>';
-    var_dump( (count( $mixed ) == 0 ? $GLOBALS : $mixed) );
+    var_dump( $mixed );
     echo '</pre><br><br><pre>';
     echo "################## BACK TRACE ###################\n";
     var_dump( debug_backtrace( ) );
@@ -203,7 +166,12 @@ function alert($string = "Stay woke.")
 {
     print "<script>alert('$string')</script>";
 }
-
+// http://php.net/manual/en/debugger.php
+function console_log( $data ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $data ) .')';
+    echo '</script>';
+}
 
 
 

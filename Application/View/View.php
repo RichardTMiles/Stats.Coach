@@ -29,41 +29,28 @@ class View
         endif;                                          // this would mean we're requesting our second page through ajax
     }
 
-    public function __sleep()
+    public function __construct($sendWrapper = false)
     {
-        if (empty($this->currentPage)) {
-            unset($_SESSION[__CLASS__]);
-            return null; }
-        return array('currentPage');
-    }
-
-    public function __construct()
-    {
+        $this->restart = $sendWrapper;
         if ($this->wrapper()) {
-            if ($this->ajax = $this->ajaxActive()) return null;
+            if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;
             require_once "minify.php";
             ob_start();
-            require_once(CONTENT_WRAPPER);
-            $template = ob_get_clean(); // Return the Template    minify_html()
-            echo(MINIFY_CONTENTS && (@include_once "minify.php") ?
-                minify_html( $template ) : $template);
-        } elseif ($this->ajaxActive()) User::logout();
+            require(CONTENT_WRAPPER);   // Return the Template
+            $template = ob_get_clean();
+            echo MINIFY_CONTENTS ? minify_html( $template ) : $template;
+        } elseif ($this->ajaxActive()) User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
-    public function wrapper()
+    public function wrapper() 
     {
         return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
     }
 
     private function contents($class, $fileName) // Must be called through Singleton, must be private
     {
-        $loggedIn = $this->user->user_id;
-
-        $file = ($class != 'Tests' ?
-            (CONTENT_ROOT . strtolower( $class ) . DS .
-                strtolower( $fileName ) . ($loggedIn ? '.tpl.php' : '.php')) :
-            SERVER_ROOT . $class . DS . $fileName . '.php');
+        $file = (CONTENT_ROOT . strtolower( $class ) . DS . strtolower( $fileName ) . ($this->user->user_id ? '.tpl.php' : '.php'));
 
         if (file_exists( $file )) {
             ob_start();
@@ -72,10 +59,10 @@ class View
             echo '<div class="clearfix"></div>';
             $file = ob_get_clean();         // minify_html()
 
-            if (MINIFY_CONTENTS && (@include_once "minify.php"))
-                $file = minify_html( $file );
+            //if (MINIFY_CONTENTS && (@include_once "minify.php"))
+              //  $file = minify_html( $file );
 
-            if (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $loggedIn)) {
+            if ($this->restart || (($this->restart || !$this->ajaxActive()) && (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id))) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
 
@@ -88,25 +75,6 @@ class View
     private function ajaxActive()
     {
         return $this->ajax = (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
-    }
-
-    // This is for carbon users
-    public function activateAjax()
-    {?>
-        <script src="<?= SITE_PATH ?>Public/Jquery-Pjax/jquery.pjax.js"></script>
-        <script>
-            $(function () {
-                // initial content
-                $.pjax.reload('#ajax-content');
-
-                // Every href on 'a' element
-                // when on document load add event to every a tag, when event fired trigger smart refresh
-                $.when($(document).pjax('a', '#ajax-content')).then(function () {
-                    Pace.restart();
-                });
-            });
-        </script>
-    <?php
     }
 
     public function faceBookLoginUrl()
@@ -131,9 +99,12 @@ class View
 
     public function versionControl($file)
     {
-        $file = TEMPLATE_PATH . $file;
-        return (file_exists( $file ) ?
-            preg_replace( '{\\.([^./]+)$}', "." . filemtime( $file ) . ".\$1", $file ) : $file);
+        if (file_exists( $absolute = SERVER_ROOT . $file )) $file = DS . $file;
+        elseif (file_exists( $absolute = VENDOR_ROOT . $file )) $file = VENDOR . $file;
+        elseif (file_exists( $absolute = TEMPLATE_ROOT . $file )) $file = TEMPLATE . $file;
+        elseif (file_exists( $absolute = CONTENT_ROOT . $file ))  $file = CONTENT  . $file;
+        $control = @filemtime( $absolute );
+        return ($control ? preg_replace( '{\\.([^./]+)$}', "." . $control . ".\$1", $file ) : DS . $file );
     }
 
     public function __get($variable)

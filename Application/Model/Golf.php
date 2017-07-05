@@ -18,7 +18,6 @@ class Golf extends GolfRelay
             if (empty($this->stats)) 
                 $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
             
-
             // we need both, teams were coaching and teams we have joined
             // $this->teams
         } catch (\Exception $e) {
@@ -40,14 +39,11 @@ class Golf extends GolfRelay
     public function courseById($id)
     {
         $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ?';
-        $this->course = $this->fetch_as_object( $sql, $id );
-
-        //$this->fetch_into_current_class(  );
+        return $this->fetch_as_object( $sql, $id );
     }
 
     public function PostScore()
     {
-
         if ($this->newScore) {
 
             $score_out = $score_in = $score_tot = $gnr_tot = $ffs_tot = 0;
@@ -109,18 +105,16 @@ class Golf extends GolfRelay
         }
 
         if (!empty($this->courseId) && (!is_object( $this->course ) || $this->course->course_id != $this->courseId))
-            $this->courseById( $this->courseId );
-
-
+            $this->course = $this->courseById( $this->courseId );
+        
         if (!empty($this->boxColor)) {
+            if (!is_object( $this->course )) throw new \Error();
             //  $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
             if (!isset($this->course->distance) || !is_object( $this->course->distance ) || $this->course->distance->distance_color != $this->boxColor) {
                 $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
-
                 return null;
             }
-            if (!is_object( $this->course->distacne ))
-                throw new \Exception();
+            if (!is_object( $this->course->distance )) throw new \Exception();
             return null;
         }
 
@@ -139,13 +133,13 @@ class Golf extends GolfRelay
 
     public function AddCourse()
     {
-        $holes = &$this->holes;
-        $par = &$this->par;
-        $tee_boxes = &$this->tee_boxes;
-        $teeBox = &$this->teeBox;
-        $handicap_number = &$this->handicap_number;
-        $handicap = &$this->handicap;
-        $course = &$this->course;
+        $holes = $this->holes;
+        $par = $this->par;
+        $tee_boxes = $this->tee_boxes;
+        $teeBox = $this->teeBox;
+        $handicap_number = $this->handicap_number;
+        $handicap = $this->handicap;
+        $course = $this->course;
 
         $par = $this->par;
         $par_out = 0;

@@ -1,16 +1,8 @@
 <?php
 
-// alert('course=>'. is_object( $this->golf->course ) . '   distance=>' . is_object( $this->golf->course->distance ));
-
-// $distance = $this->golf->course->distance;
-
-// sortDump( $this->golf->course->distance );
-
-
-
-
 ##########  Step 1.5, return list of courses from given state
 if (!empty($this->courses)) {
+    if (!$this->ajax) throw new \Exception();
 
     echo "<option value='' selected disabled>Course Select</option>";
     echo "<option value='Add'>Add Course</option>";
@@ -23,6 +15,7 @@ if (!empty($this->courses)) {
     exit (1);  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
 }
 
+#### STEP 1
 if (!$this->state) { ?>
     <script>
 
@@ -93,6 +86,35 @@ if (!$this->state) { ?>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date:</label>
+
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="datepicker" value="<?= date( 'm/d/Y', time() ) ?>">
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- time Picker -->
+                            <div class="bootstrap-timepicker" style="color: #000">
+                                <div class="form-group">
+                                    <label style="color: #fff">Time picker:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control timepicker"/>
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                    </div><!-- /.input group -->
+                                </div><!-- /.form group -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>State</label>
                             <select class="form-control select2" style="width: 100%;" onchange="course_given_states(this)" required>
@@ -125,11 +147,16 @@ if (!$this->state) { ?>
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
+            //Date picker
+            $('#datepicker').datepicker({autoclose: true});
+            //Timepicker
+            $('.timepicker').timepicker({showInputs: false});
+
         });
     </script>
 
-
-<?php } elseif ($this->course_colors) {
+    <?php return 1;
+} elseif ($this->course_colors) {
 #######################  STEP 2 , Course Tee Box #####################################?>
     <script>
         function startScoreCard(boxColor) {
@@ -178,227 +205,226 @@ if (!$this->state) { ?>
         </div>
     </section>
 
+    <?php return 1;
+} elseif (is_object( $this->golf->course )) {
 
-    <?php return 1;// This will stop the run and just return the list
-
-} elseif (is_object( $this->golf->course ) && is_object( $this->golf->course->distance )) {
+    // sortDump(  );
+    if (is_object( $this->golf->course->distance )) {
 
 #######################  STEP 3 , input  #####################################{ ?>
 
-    <script>
-        $(document).on('submit', 'form[data-pjax]',
-            function (event) {
-                event.preventDefault();
-                document.getElementById('input-score-hole-18').style.display = "none";
-                $.pjax.submit(event, '#ajax-content')
-            });
+        <script>
+            $(document).on('submit', 'form[data-pjax]',
+                function (event) {
+                    event.preventDefault();
+                    document.getElementById('input-score-hole-18').style.display = "none";
+                    $.pjax.submit(event, '#ajax-content')
+                });
 
-        function next_score_input(current) {
-            document.getElementById("input-score-hole-" + current++).style.display = "none";
-            document.getElementById("input-score-hole-" + current).style.display = "block";
-        }
+            function next_score_input(current) {
+                document.getElementById("input-score-hole-" + current++).style.display = "none";
+                document.getElementById("input-score-hole-" + current).style.display = "block";
+            }
 
-        function last_score_input(current) {
-            document.getElementById("input-score-hole-" + current--).style.display = "none";
-            document.getElementById("input-score-hole-" + current).style.display = "block";
-        }
-    </script>
+            function last_score_input(current) {
+                document.getElementById("input-score-hole-" + current--).style.display = "none";
+                document.getElementById("input-score-hole-" + current).style.display = "block";
+            }
+        </script>
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1 style="color: #fff">
-            <?= $this->golf->course->course_name ?>
-            <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
-            <li style="color: ghostwhite;"><?= $this->golf->course->course_name ?></li>
-            <li style="color: ghostwhite;"><?= $this->golf->course->distance->distance_color ?></li>
-            <li style="color: ghostwhite;"> Score Input</li>
-        </ol>
-    </section>
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 style="color: #fff">
+                <?= $this->golf->course->course_name ?>
+                <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
+                <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
+                <li style="color: ghostwhite;"><?= $this->golf->course->course_name ?></li>
+                <li style="color: ghostwhite;"><?= $this->golf->course->distance->distance_color ?></li>
+                <li style="color: ghostwhite;"> Score Input</li>
+            </ol>
+        </section>
 
-    <section class="content">
-        <form data-pjax class="form-horizontal" method="post"
-              action="<?= SITE_PATH . 'PostScore/' . $this->golf->course->course_state . '/' . $this->golf->course->course_id . '/' . $this->golf->course->distance->distance_color . '/' ?>"
-              name="addCourse">
-            <?php for ($i = 1; $i <= 18; $i++) { ?>
-                <!-- row -->
-                <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i == 1 ? "block" : "none") ?>">
-                    <div class="col-xs-12">
-                        <!-- jQuery Knob -->
-                        <div class="box box-solid">
-                            <div class="box-header">
-                                <i class="fa fa-bar-chart-o"></i>
-                                <h3 class="box-title">Hole <?= $i ?> Stats</h3>
-                            </div>
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-6 text-center">
-                                        <div class="col-xs-12 col-sm-6 col-md-6 text-center">
-
-                                            <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->course->distance->{"distance_$i"} ?>" data-min="1"
-                                                       data-max="<?= (ceil( $this->golf->course->distance->distance_tot / 18 ) + 400) ?>"
-                                                       data-thickness="0.25" data-height="180" data-width="180"
-                                                       data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
-                                                       style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
-                                            </div>
-                                            <div class="knob-label">Distance</div>
-
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6 col-md-6 text-center">
-
-                                            <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->course->{"par_$i"} ?>" data-min="1" data-max="9"
-                                                       data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
-                                                       style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
-                                            </div>
-                                            <div class="knob-label">Par</div>
-                                        </div>
-
-                                    </div>
-                                    <!-- ./col -->
-                                    <div class="col-xs-12 col-sm-12 col-md-6 text-center">
-
-                                        <div class="col-xs-12 col-sm-6 col-md-6  text-center">
-                                            <div style="display:inline;width:200px;height:200px;">
-                                                <input name="hole-<?= $i ?>" type="text" class="knob" value="1" data-min="1" data-max="9"
-                                                       data-fgcolor="#00a65a" data-height="180" data-width="180"
-                                                       style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
-                                            </div>
-                                            <div class="knob-label">Strokes</div>
-
-
-                                        </div>
-
-                                        <div class="col-xs-12 col-sm-6 col-md-6 text-center">
-
-                                            <div style="display:inline;width:200px;height:200px;">
-                                                <input name="hole-<?= $i ?>" type="text" class="knob" value="1" data-min="1" data-max="8"
-                                                       data-fgcolor="#00c0ef" data-height="180" data-width="180"
-                                                       data-angleArc="250" data-angleoffset="-125"
-                                                       style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
-                                            </div>
-                                            <div class="knob-label">Putts</div>
-
-                                        </div>
-
-
-                                    </div>
-                                    <!-- ./col -->
-                                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                                        <br>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 text-center">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input name="ffs-<?= $i ?>" type="checkbox" value="1"> Fairway on first shot
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 text-center">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input name="gnr-<?= $i ?>" type="checkbox" value="1"> Green in regulation
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <br><br>
-                                    </div>
-                                    <!-- ./col -->
+        <section class="content">
+            <form data-pjax class="form-horizontal" method="post"
+                  action="<?= SITE . 'PostScore/' . $this->golf->course->course_state . '/' . $this->golf->course->course_id . '/' . $this->golf->course->distance->distance_color . '/' ?>"
+                  name="addCourse">
+                <?php for ($i = 1; $i <= 18; $i++) { ?>
+                    <!-- row -->
+                    <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i == 1 ? "block" : "none") ?>">
+                        <div class="col-xs-12">
+                            <!-- jQuery Knob -->
+                            <div class="box box-solid">
+                                <div class="box-header">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <h3 class="box-title">Hole <?= $i ?> Stats</h3>
                                 </div>
-                                <!-- /.row -->
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-6 text-center">
+                                            <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
+                                                <div style="display:inline;width:200px;height:200px;">
+                                                    <input type="text" class="knob" value="<?= $this->golf->course->distance->{"distance_$i"} ?>" data-min="1"
+                                                           data-max="<?= (ceil( $this->golf->course->distance->distance_tot / 18 ) + 400) ?>"
+                                                           data-thickness="0.25" data-height="180" data-width="180"
+                                                           data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
+                                                           style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                                </div>
+                                                <div class="knob-label">Distance</div>
+
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+
+                                                <div style="display:inline;width:200px;height:200px;">
+                                                    <input type="text" class="knob" value="<?= $this->golf->course->{"par_$i"} ?>" data-min="1" data-max="9"
+                                                           data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
+                                                           style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                                </div>
+                                                <div class="knob-label">Par</div>
+                                            </div>
+
+                                        </div>
+                                        <!-- ./col -->
+                                        <div class="col-xs-12 col-sm-12 col-md-6 text-center">
+
+                                            <div class="col-xs-12 col-sm-6 col-md-6  text-center">
+                                                <div style="display:inline;width:200px;height:200px;">
+                                                    <input name="hole-<?= $i ?>" type="text" class="knob" value="1" data-min="1" data-max="9"
+                                                           data-fgcolor="#00a65a" data-height="180" data-width="180"
+                                                           style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                                </div>
+                                                <div class="knob-label">Strokes</div>
+
+
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+
+                                                <div style="display:inline;width:200px;height:200px;">
+                                                    <input name="hole-<?= $i ?>" type="text" class="knob" value="1" data-min="1" data-max="8"
+                                                           data-fgcolor="#00c0ef" data-height="180" data-width="180"
+                                                           data-angleArc="250" data-angleoffset="-125"
+                                                           style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                                </div>
+                                                <div class="knob-label">Putts</div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <!-- ./col -->
+                                        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                                            <br>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 text-center">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input name="ffs-<?= $i ?>" type="checkbox" value="1"> Fairway on first shot
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 text-center">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input name="gnr-<?= $i ?>" type="checkbox" value="1"> Green in regulation
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <br><br>
+                                        </div>
+                                        <!-- ./col -->
+                                    </div>
+                                    <!-- /.row -->
+
+                                </div>
+                                <!-- /.box-body -->
+                                <div class="box-footer">
+                                    <?php if ($i != 1) { ?>
+                                        <button type="button" class="btn btn-default" onclick="last_score_input('<?= $i ?>')"><< Back</button>
+                                    <?php } ?>
+                                    <!-- button -->
+                                    <button class="btn btn-info pull-right" type="<?= ($i != 18 ? "button" : "submit") ?>"
+                                            onclick="<?= ($i != 18 ? "next_score_input('$i')" : null) ?>">
+                                        Next &gt;&gt;</button>
+                                </div>
+                                <!-- /.box-footer -->
                             </div>
-                            <!-- /.box-body -->
-                            <div class="box-footer">
-                                <?php if ($i != 1) { ?>
-                                    <button type="button" class="btn btn-default" onclick="last_score_input('<?= $i ?>')"><< Back</button>
-                                <?php } ?>
-                                <!-- button -->
-                                <button class="btn btn-info pull-right" type="<?= ($i != 18 ? "button" : "submit") ?>"
-                                        onclick="<?= ($i != 18 ? "next_score_input('$i')" : null) ?>">
-                                    Next &gt;&gt;</button>
-                            </div>
-                            <!-- /.box-footer -->
+                            <!-- /.box -->
                         </div>
-                        <!-- /.box -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
-            <?php } ?>
-        </form>
-    </section>
+                    <!-- /.row -->
+                <?php } ?>
+            </form>
+        </section>
 
-    <script>
-        $(function () {
-            /* jQueryKnob */
+        <script>
+            $(function () {
+                /* jQueryKnob */
 
-            $(".knob").knob({
-                /*change : function (value) {
-                 //console.log("change : " + value);
-                 },
-                 release : function (value) {
-                 console.log("release : " + value);
-                 },
-                 cancel : function () {
-                 console.log("cancel : " + this.value);
-                 },*/
-                draw: function () {
+                $(".knob").knob({
+                    /*change : function (value) {
+                     //console.log("change : " + value);
+                     },
+                     release : function (value) {
+                     console.log("release : " + value);
+                     },
+                     cancel : function () {
+                     console.log("cancel : " + this.value);
+                     },*/
+                    draw: function () {
 
-                    // "tron" case
-                    if (this.$.data('skin') == 'tron') {
+                        // "tron" case
+                        if (this.$.data('skin') == 'tron') {
 
-                        var a = this.angle(this.cv)  // Angle
-                            , sa = this.startAngle          // Previous start angle
-                            , sat = this.startAngle         // Start angle
-                            , ea                            // Previous end angle
-                            , eat = sat + a                 // End angle
-                            , r = true;
+                            var a = this.angle(this.cv)  // Angle
+                                , sa = this.startAngle          // Previous start angle
+                                , sat = this.startAngle         // Start angle
+                                , ea                            // Previous end angle
+                                , eat = sat + a                 // End angle
+                                , r = true;
 
-                        this.g.lineWidth = this.lineWidth;
+                            this.g.lineWidth = this.lineWidth;
 
-                        this.o.cursor
-                        && (sat = eat - 0.3)
-                        && (eat = eat + 0.3);
-
-                        if (this.o.displayPrevious) {
-                            ea = this.startAngle + this.angle(this.value);
                             this.o.cursor
-                            && (sa = ea - 0.3)
-                            && (ea = ea + 0.3);
+                            && (sat = eat - 0.3)
+                            && (eat = eat + 0.3);
+
+                            if (this.o.displayPrevious) {
+                                ea = this.startAngle + this.angle(this.value);
+                                this.o.cursor
+                                && (sa = ea - 0.3)
+                                && (ea = ea + 0.3);
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.previousColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                                this.g.stroke();
+                            }
+
                             this.g.beginPath();
-                            this.g.strokeStyle = this.previousColor;
-                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                            this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
                             this.g.stroke();
+
+                            this.g.lineWidth = 2;
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.o.fgColor;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                            this.g.stroke();
+
+                            return false;
                         }
-
-                        this.g.beginPath();
-                        this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-                        this.g.stroke();
-
-                        this.g.lineWidth = 2;
-                        this.g.beginPath();
-                        this.g.strokeStyle = this.o.fgColor;
-                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-                        this.g.stroke();
-
-                        return false;
                     }
-                }
+                });
+                /* END JQUERY KNOB */
+
             });
-            /* END JQUERY KNOB */
+        </script>
 
-        });
-    </script>
-
-    <?php
-
-    // sortDump($distance);
-
-    return 1;
+        <?php return 1;
+    }
+    echo "fuck";
 }

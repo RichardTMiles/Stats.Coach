@@ -24,7 +24,7 @@
                 <h3><i class="fa fa-warning text-red"></i> Oops! Something went wrong.</h3>
                 <p>
                     We will work on fixing that right away.
-                    Meanwhile, you may <a href='../../index.html'>return to dashboard</a> or try using the search form.
+                    Meanwhile, you may <a href='<?=site?>'>return to dashboard</a> or try using the search form.
                 </p>
                 <form class='search-form'>
                     <div class='input-group'>

@@ -129,7 +129,7 @@
                     </div><!-- /.table-responsive -->
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
-                    <a href="<?=SITE_PATH. "PostScore/"?>" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                    <a href="<?=SITE. "PostScore/"?>" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
                     <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
                 </div><!-- /.box-footer -->
             </div>
@@ -185,7 +185,7 @@
                     <!-- SETTINGS TAB -->
                     <div class="tab-pane" id="settings">
                         <!-- Form Start -->
-                        <form class="form-horizontal" action="<?=SITE_PATH?>Profile/" method="post" enctype="multipart/form-data">
+                        <form class="form-horizontal" action="<?=SITE?>Profile/" method="post" enctype="multipart/form-data">
 
 
                             <div class="form-group col-md-12">

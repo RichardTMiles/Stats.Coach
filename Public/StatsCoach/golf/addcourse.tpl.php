@@ -6,7 +6,7 @@
  * Time: 1:53 AM
  */ ?>
 
-<script src="<?=CONTENT_PATH?>golf/addcourse.js"></script>
+<script src="<?=CONTENT?>golf/addcourse.js"></script>
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
@@ -19,7 +19,7 @@
 
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="<?= SITE_PATH ?>AddCourse/" name="addCourse">
+    <form data-pjax class="form-horizontal" method="post" action="<?= SITE ?>AddCourse/" name="addCourse">
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->

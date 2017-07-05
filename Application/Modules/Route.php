@@ -16,83 +16,71 @@ class Route
     public $uri;
     private $matched;
     private $homeMethod;
-    private $signedStatus;
-    private $default_Signed_Out;
-    private $default_Signed_In;
     private $structure;
 
-    public function __construct($signedStatus = false, callable $structure, callable $default_Signed_Out = null, callable $default_Signed_In = null)
+    public function __construct(callable $structure)
     {
         if (key_exists( 'REQUEST_URI', $_SERVER ))
-            $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ) , '/' );
+            $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' );
 
-        if (empty($uri)) {
+        if (empty($_SERVER['REQUEST_URI'])){
             $this->matched = true;
-            if ($signedStatus) {
-                if (is_callable( $default_Signed_In )) $default_Signed_In();
-            } elseif (is_callable( $default_Signed_Out )) $default_Signed_Out();
+            $default = $user->user_id ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC;
+            if (is_array( $default )) foreach ($default as $class => $method) return $mvc($class, $method);
         }
-
         $this->matched = false;
-        $this->default_Signed_Out = $default_Signed_Out;
-        $this->default_Signed_In = $default_Signed_In;
-        $this->signedStatus = $signedStatus;
         $this->structure = $structure;
         $this->uri = explode( '/', strtolower( $uri ) );
     }
 
-    public function signedIn()
-    {
-        if ($this->signedStatus != true && $this->matched != true)
-            $this->matched = "PUSH";
-        return $this;
-    }
-
-    public function signedOut()
-    {
-        if ($this->signedStatus != false && $this->matched != true)
-            $this->matched = "PUSH";
-        return $this;
-    }
-
-    public function home($function = null)
-    {
-        if ($this->matched == false) {
-            if (is_callable( $function ))
-                $this->homeMethod = $function;
-            elseif (is_callable( $this->storage ) || (is_array( $this->storage ) && count( $this->storage ) == 2))
-                $this->homeMethod = $this->storage;
-        }
-    }
-
     public function __destruct()        //TODO- make work with new structure
     {
-        if ($this->matched) return;
+        if ($this->matched) return null;
 
-        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) == 2)
-            if (is_callable( $mvc = $this->structure)) $mvc( $this->storage[0], $this->storage[1] );
+        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
+            $mvc( $this->homeMethod[0], $this->homeMethod[1] );
 
-        if (!is_callable( $this->homeMethod ))
-            $this->homeMethod = ($this->signedStatus ? $this->default_Signed_In : $this->default_Signed_Out);
 
         if (is_callable( $this->homeMethod )) {
             $this->addMethod( 'default', $this->homeMethod );
             $restart = $this->methods['default'];
-            $restart();
-        } else startApplication(true);
+            return $restart();
+        }
+
+    }
+
+    public function signedIn()
+    {
+        if (!isset($this->user->user_id) || !$this->user->user_id) {
+            $clone = clone $this;
+            $clone->matched = true;
+            return $clone;
+        } return $this;
+    }
+
+    public function signedOut()
+    {
+        if (isset($this->user->user_id) && $this->user->user_id) {
+            $clone = clone $this;
+            $clone->matched = true;
+            return $clone;
+        } return $this;
+    }
+
+    public function home($function = null)
+    {
+        if ($this->matched) return null;
+        if (is_callable( $function ))
+            $this->homeMethod = $function;
+        elseif (is_callable( $this->storage ) || is_array( $this->storage ))
+            $this->homeMethod = $this->storage;
     }
 
     public function match($toMatch, ...$argv)       // TODO - make someone rewrite this in REGX
     {
-        if ($this->matched === true)
-            return $this;
+        #alert($toMatch.' '.$this->uri[0].' '. (!$this->matched ? 'avalible' : 'notavalible'));
 
-        $this->storage = null;
-
-        if ($this->matched === "PUSH") {
-            $this->matched = false;
-            return $this;
-        }
+        if ($this->matched === true) return $this;
 
         $this->storage = $argv;  // This is for home route function
 
@@ -102,6 +90,7 @@ class Route
 
         $pathLength = sizeof( $arrayToMatch );
         $uriLength = sizeof( $uri );
+
 
         if ($pathLength < $uriLength && substr( $toMatch, -1 ) != '*')
             return $this;
@@ -123,7 +112,7 @@ class Route
                     $this->matched = true;
                     $this->homeMethod = null;
 
-                    if(is_callable( $argv[0] )) {
+                    if (is_callable( $argv[0] )) {
                         $this->addMethod( 'routeMatched', $argv[0] );
                         if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
@@ -131,7 +120,6 @@ class Route
                         $structure = $this->structure;
                         $structure( $argv[0], $argv[1] );
                     } else throw new \InvalidArgumentException;
-
                     return $this; // Note that the application will break in the View::contents
 
                 case '{': // this is going to indicate the start of a variable name
@@ -166,7 +154,7 @@ class Route
                     if (!array_key_exists( $i, $uri ))
                         return $this;
 
-                    if (strtolower($arrayToMatch[$i]) != $uri[$i])
+                    if (strtolower( $arrayToMatch[$i] ) != $uri[$i])
                         return $this;
             }
         }

@@ -14,19 +14,18 @@ class User extends UserRelay
     use Singleton;
     const Singleton = true;
 
+  
     public function __construct()
     {
         $this->user = $this;
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
+        header( "X-PJAX-Version: v".($this->user_id?:SITE_VERSION) , true);    // force the page to reload if we login
+        // force the page to reload if we login
         parent::__construct();  // get database
         if ($this->user_id == false) return null;
         if (empty($this->user_username) && $this->user_id) $this->getUser();
         $model = "Model\\$this->user_sport";
         $model::getInstance( );
-
-        // $GLOBALS[($class = strtolower( $this->user_sport ))] = $model::getInstance( );
-
-        // Reconfig variables for dynamic path
     }
 
     private function getUser()
@@ -39,8 +38,8 @@ class User extends UserRelay
             $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
             $stmt->execute( [$this->user_id] );
             $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
-            $this->user_profile_pic = SITE_PATH . $this->user_profile_pic;
-            $this->user_cover_photo = SITE_PATH . $this->user_cover_photo;
+            $this->user_profile_pic = SITE . $this->user_profile_pic;
+            $this->user_cover_photo = SITE . $this->user_cover_photo;
 
             $work = $this->weCoach();
             if (!is_array( $work )) $work = [$work];
@@ -49,9 +48,12 @@ class User extends UserRelay
             $this->teams = (!empty($work) ? (!empty($play) ? array_merge((array) $work , (array) $play) : $work) :
                 (!empty($play) ? $play : null));
 
-            if (!empty($this->teams)) foreach ($this->teams as &$team)
-                $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
-
+            if (!empty($this->teams)) {
+                foreach ($this->teams as &$team)
+                    if (!empty($team))
+                        $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
+                    else unset($team);
+            }
         } catch (\Exception $e) {
             echo $e->getMessage();
             die();
@@ -66,7 +68,7 @@ class User extends UserRelay
     // we athlete
     protected function weAthlete()
     {
-        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON teams.team_id = team_member.team_id WHERE user_id = ? AND sport = ?';
+        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON StatsCoach.teams.team_id = StatsCoach.team_member.team_id WHERE user_id = ? AND sport = ?';
         return $this->fetch_as_object( $sql, $this->user_id, $this->user_sport);
 
     }
@@ -165,9 +167,9 @@ class User extends UserRelay
         $stmt->execute( array($generated_string, $email) );
 
         mail( $email, 'Recover Password', "Hello " . $first_name . ",\r\nPlease click the link below:\r\n\r\n
-            " . SITE_PATH . "recover/" . $email . "/" . $generated_string . "/\r\n\r\n 
+            " . SITE . "recover/" . $email . "/" . $generated_string . "/\r\n\r\n 
             We will generate a new password for you and send it back to your email.\r\n\r\n
-            --" . SITE_PATH );
+            --" . SITE );
         return true;
     }
 
@@ -213,7 +215,6 @@ class User extends UserRelay
             if (!$this->user_exists( $this->username ))
                 throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
 
-
             // if (!$this->email_confirmed( $this->username ))
             // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
@@ -222,23 +223,19 @@ class User extends UserRelay
             $stmt->execute( array($this->username) );
             $data = $stmt->fetch();
 
-
             // using the verify method to compare the password with the stored hashed password.
             if (Bcrypt::verify( $this->password, $data['user_password'] ) === true)
                 $_SESSION['id'] = $data['user_id'];    // returning the user's id.
             else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
 
-
             if ($this->rememberMe) {
-                Request::setCookie( "UserName", $this->user_username );
-                Request::setCookie( "FullName", $this->user_full_name );
-                Request::setCookie( "UserImage", $this->user_profile_pic );
+                $request = Request::getInstance();
+                $request->setCookie( "UserName" , $this->user_username );
+                $request->setCookie( "FullName" , $this->user_full_name );
+                $request->setCookie( "UserImage", $this->user_profile_pic );
             } // we clear the cookies in the controller
-
-            session_regenerate_id( true );
             $this->getUser();
-            startApplication( true );     // restart
-
+            startApplication(true);
         } catch (\Exception $e) {
             $this->alert['danger'] = $e->getMessage();
         }
@@ -333,7 +330,7 @@ class User extends UserRelay
             \r\n Password :  $this->password 
             \r\n Please visit the link below so we can activate your account:\r\n\r\n
              https://www.Stats.Coach/Activate/$this->email/$email_code/
-             \r\n\r\n--" . SITE_PATH );
+             \r\n\r\n--" . SITE );
 
             } catch (\Exception $e) {
 

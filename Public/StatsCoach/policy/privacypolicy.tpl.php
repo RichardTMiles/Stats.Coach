@@ -5,7 +5,7 @@
     <small>Stats.Coach</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="<?=SITE_PATH?>"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?=SITE?>"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Policy</a></li>
         <li class="active">Privacy</li>
       </ol>

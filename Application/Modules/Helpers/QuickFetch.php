@@ -37,11 +37,10 @@ abstract class QuickFetch
     {
         try {
             $stmt = $this->db->prepare( $sql );
-            $stmt->setFetchMode( \PDO::FETCH_CLASS, Skeleton::class );
+            $stmt->setFetchMode( \PDO::FETCH_CLASS, \stdClass::class );
             $stmt->execute( $execute );
             $stmt = $stmt->fetchAll();  // user obj
-            return (is_array( $stmt ) && count( $stmt ) == 1 ?
-                array_pop( $stmt ) : $stmt);
+            return (is_array( $stmt ) && count( $stmt ) == 1 ? array_pop( $stmt ) : $stmt);
         } catch (\Exception $e) {
             sortDump( $e );
         }

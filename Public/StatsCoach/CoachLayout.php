@@ -1,6 +1,6 @@
  <header class="main-header">
         <!-- Logo -->
-        <a href="<?=SITE_PATH?>Home/" class="logo hidden-md-down">
+        <a href="<?=SITE?>Home/" class="logo hidden-md-down">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>S</b>C</span>
             <!-- logo for regular state and mobile devices -->
@@ -9,7 +9,7 @@
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -240,10 +240,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="<?=SITE_PATH?>Profile/" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="<?=SITE?>Profile/" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="<?=SITE_PATH?>Logout/" class="btn btn-default btn-flat">Sign out</a>
+                                    <a no-pjax href="<?=SITE?>Logout/" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>
@@ -298,7 +298,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="active">
-                            <a href="<?= SITE_PATH ?>" onclick="">
+                            <a href="<?= SITE ?>" onclick="">
                                 <i class="fa fa-circle-o"></i><?= $this->user->user_first_name ?> <?= $this->user->user_last_name ?>
                             </a>
                         </li>
@@ -325,7 +325,7 @@
 
 
                 <li>
-                    <a href="<?= SITE_PATH ?>PostScore/" onclick="">
+                    <a href="<?= SITE ?>PostScore/" onclick="">
                         <i class="fa fa-edit"></i> <span>Post Scores</span>
                     </a>
                 </li>
@@ -338,7 +338,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_PATH . 'Profile/' ?>" onclick=""><i
+                        <li><a href="<?= SITE . 'Profile/' ?>" onclick=""><i
                                     class="fa fa-circle-o"></i> <?= $this->user_first_name ?> <?= $this->user_last_name ?>
                             </a>f</li>
                         <li>
@@ -405,7 +405,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?= SITE_PATH ?>Profile/" onclick=""><i class="fa fa-circle-o"></i> Profile
+                        <li><a href="<?= SITE ?>Profile/" onclick=""><i class="fa fa-circle-o"></i> Profile
                                 Settings</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Create Team</a></li>
@@ -424,7 +424,6 @@
                         <li><a href="#"><i class="fa fa-circle-o"></i> Basketball</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Volleyball</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Soccer</a></li>
-
 
                     </ul>
                 </li>

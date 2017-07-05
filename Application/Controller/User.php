@@ -18,21 +18,19 @@ class User
 
     public static function logout()
     {
-        session_unset();
-        session_destroy();
-        session_start();
-        session_regenerate_id(true);
         unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
         \Model\User::clearInstance();   // remove sterilized data
         $_SESSION['id'] = false;
         unset($_SESSION['id']);
+        session_unset();
+        session_destroy();
         startApplication(true);
     }
     
     public function login()
     {
         if (isset($this->client) && $this->client == "clear") {
-            $this->request->cookie()->except( 'PHPSESSID' )->clearCookies();
+            $this->request->cookie('UserName', 'FullName', 'UserImage')->clearCookies();
             return false;
         }
 
@@ -46,7 +44,8 @@ class User
         $this->password = $this->request->post( 'password' )->value();
         $this->rememberMe = $this->request->post('RememberMe')->int();
 
-        if (!$this->rememberMe) $this->request->cookie()->except('PHPSESSID')->clearCookies();
+        if (!$this->rememberMe)
+            $this->request->cookie('username','password','RememberMe')->clearCookies();
 
         if (!$this->username || !$this->password) {
             $this->alert['warning'] = 'Sorry, but we need your username and password.';

@@ -2,7 +2,7 @@
     <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="<?= SITE_PATH ?>Home/" class="navbar-brand"><b>Stats</b>.Coach</a>
+                <a href="<?= SITE ?>Home/" class="navbar-brand"><b>Stats</b>.Coach</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -13,16 +13,16 @@
                 <ul class="nav navbar-nav">
                     <!-- class="active" -->
                     <li>
-                        <a href="<?= SITE_PATH ?>PostScore/">Post Score</a></li>
+                        <a href="<?= SITE ?>PostScore/">Post Score</a></li>
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#">Barbers Hill</a></li>
                             <li><a href="#">FPGA</a></li>
                             <li class="divider"></li>
-                            <li><a href="<?=SITE_PATH ?>JoinTeam/">Join a Team</a></li>
+                            <li><a href="<?=SITE ?>JoinTeam/">Join a Team</a></li>
                             <li class="divider"></li>
-                            <li><a href="<?= SITE_PATH ?>AddCourse/">Add Course</a></li>
+                            <li><a href="<?= SITE ?>AddCourse/">Add Course</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -54,7 +54,7 @@
                                         <a href="#">
                                             <div class="pull-left">
                                                 <!-- User Image -->
-                                                <img src="<?= TEMPLATE_PATH ?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                <img src="<?= TEMPLATE ?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                             </div>
                                             <!-- Message title and timestamp -->
                                             <h4>
@@ -169,10 +169,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="<?= SITE_PATH ?>Profile/" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="<?= SITE ?>Profile/" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="<?= SITE_PATH ?>Logout/" class="btn btn-default btn-flat">Sign out</a>
+                                    <a href="<?= SITE ?>Logout/" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>

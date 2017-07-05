@@ -12,10 +12,22 @@ namespace Modules;
 class Request
 {
     use Singleton;
+    const Singleton = true;
+
+    private $Cookie = [];
+
+    public function __wakeup()
+    {
+        foreach ($this->Cookie as $key => $array)
+            $this->setCookie( $key, $array[0], $array[1] );
+        $this->Cookie = null;
+    }
     
     ########################## Browser Storage #############################
-    public static function setCookie($key, $value = null, $time = 604800)
+    private function setCookie($key, $value = null, $time = 604800) // Week?
     {
+        if (headers_sent()) return $this->Cookie[] = [ $key => [$value,$time]];
+        session_regenerate_id( true );
         return setcookie( $key, $value, time() + $time, '/', $_SERVER['SERVER_NAME'], (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'), true );
     }
 
@@ -37,13 +49,13 @@ class Request
     public function cookie(...$argv)
     {
         $this->storage = null;
-        $closure = function ($key) {
+        $cookie = function ($key) {
             if (array_key_exists( $key, $_COOKIE )) {
                 $this->storage[] = htmlspecialchars( $_COOKIE[$key] );
                 $_COOKIE[$key] = null;
             } else $this->storage[] = false;
         };
-        if (count( $argv ) == 0 || !array_walk( $argv, $closure )) $this->storage = $_COOKIE;
+        if (count( $argv ) == 0 || !array_walk( $argv, $cookie )) $this->storage = $_COOKIE;
         return $this;
     }
 
@@ -84,6 +96,7 @@ class Request
         return $this;
     }
 
+    /*
     private function flash()
     {
         $_SESSION['OLDRequest'][] = $this->storage;
@@ -94,18 +107,17 @@ class Request
     {
         return (!empty($key) ? $_SESSION['OLDRequest'][$key] : $_SESSION['OLDRequest']);
     }
+    */
 
     ########################## Validating ##############################
     public function clearCookies()
     {
         $only = array_keys( $this->storage );
         $this->storage = null;
-        $i = 0;
-        $clear = function ($key = SITE_PATH) {
-            setcookie( $key, "", time() - 1, '/', $_SERVER['SERVER_NAME'], true, true );
-        };
-        if (is_array( $only )) foreach ($only as $key => $value) $clear( $value );
-        else $clear( $only );
+        if (is_array( $only ))
+            foreach ($only as $key => $value)
+                $this->setCookie( $value );
+        else $this->setCookie( $only );
     }
 
 

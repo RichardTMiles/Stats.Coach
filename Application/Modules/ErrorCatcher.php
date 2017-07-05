@@ -13,25 +13,30 @@ class ErrorCatcher
     public function __construct( $active = true )
     {
         if (!$active) return;
-        $closure = function () {
+        $closure = function (...$argv) {
             // array_walk(debug_backtrace(),function($a,$b){ print "{$a['function']}()(".basename($a['file']).":{$a['line']});\n";});
-            $this->generateErrorLog();
+            $this->generateErrorLog($argv);
             // startApplication(true);
         };
         set_error_handler($closure);
         set_exception_handler($closure);
     }
 
-    private function generateErrorLog()
+    private function generateErrorLog($argv)
     {
         if ( 0 == error_reporting () ) return null;
 
         // Open the file to get existing content
-        $file = fopen(ERROR_LOG , "w");
+        $file = fopen(ERROR_LOG , "a");
         ob_start( );
         print PHP_EOL. date( 'D, d M Y H:i:s' , time());
         print $this->generateCallTrace( ) . PHP_EOL;
-        echo $output = ob_get_contents( );
+        if (count( $argv ) >=4 ){
+        echo 'Message: ' . $argv[1] . PHP_EOL;
+        echo 'line: ' . $argv[2] .'('. $argv[3] .')';
+        } else var_dump( $argv );
+        echo PHP_EOL . PHP_EOL;
+        $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
         fwrite( $file, $output );
@@ -39,9 +44,7 @@ class ErrorCatcher
 
         View::contents('error','500error');
     }
-
-    // 
-
+    
     private function generateCallTrace()
     {
 
@@ -58,7 +61,7 @@ class ErrorCatcher
         $result = array( );
 
         for ( $i = 0; $i < $length; $i++ ) {
-            $result[] = ($i + 1) . ')' . substr( $trace[$i], strpos( $trace[$i], ' ' ) ) . PHP_EOL;
+            $result[] = ($i + 1) . ') ' . substr(substr( $trace[$i], strpos( $trace[$i], ' ' ) ), 35) . PHP_EOL;
             print PHP_EOL; // replace '#someNum' with '$i)', set the right ordering
         }
 
@@ -68,13 +71,5 @@ class ErrorCatcher
         ob_end_clean( );
         return $this->report = $output;
     }
-
-
-    // TODO - add java tags/ make redirect work
-    private function redirect()
-    {
-        print '<meta http-equiv="refresh" content="0;url= ' . SITE_PATH . '"/>';
-        die(0);
-    }
-
+    
 }

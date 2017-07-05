@@ -18,7 +18,7 @@
 
     <div class="box box-widget widget-user">
         <!-- Add the bg color to the header using any of the bg-* classes -->
-        <div class="widget-user-header bg-black" style="background: url('<?= TEMPLATE_PATH ?>dist/img/photo1.png') center center;">
+        <div class="widget-user-header bg-black" style="background: url('<?= TEMPLATE ?>dist/img/photo1.png') center center;">
 
             <h3 class="widget-user-username"></h3>
             <h5 class="widget-user-desc"></h5>
@@ -115,8 +115,8 @@
                 </div><!-- /.table-responsive -->
             </div><!-- /.box-body -->
             <div class="box-footer clearfix">
-                <a href="<?=SITE_PATH?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
-                <a href="<?=SITE_PATH?>" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
+                <a href="<?=SITE?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                <a href="<?=SITE?>" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
             </div><!-- /.box-footer -->
         </div>
     </div>

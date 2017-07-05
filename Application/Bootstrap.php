@@ -1,6 +1,6 @@
 <?php
 
-
+$route = new Modules\Route( $mvc );
 
 $route->match( 'Tests/*',                                               // This is how the view works
     function () {
@@ -17,13 +17,13 @@ $route->match( 'Tests/*',                                               // This 
     }
 );
 
-$route->signedIn()->match( 'Home/*', 'Golf', 'golf' );          // TODO - Home = golf -> golf ->home()
+$route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();
 
-$route->signedIn()->match('JoinTeam/', 'User', 'joinTeam');
+$route->signedIn()->match( 'JoinTeam/', 'User', 'joinTeam');
 
 $route->signedOut()->match( 'Login/facebook/*', 'User', 'facebook' );
 
-$route->signedOut()->match( 'Login/{client?}/*',  'User', 'login' );                                   // Login
+$route->signedOut()->match( 'Login/{client?}/*',  'User', 'login' )->home();                                   // Login
 
 $route->signedIn()->match( 'Logout/*', function () { Controller\User::logout(); } );                 // Logout
 

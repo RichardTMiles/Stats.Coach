@@ -27,5 +27,54 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PHP">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/almasaeed2010/adminlte" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/components/font-awesome" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/components/jquery" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/composer" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/facebook/graph-sdk" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/firebase/php-jwt" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/apiclient" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/apiclient-services" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/auth" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/guzzle" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/promises" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/maximebf/debugbar" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/phpseclib/phpseclib" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/cache" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/http-message" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/log" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/symfony/var-dumper" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/almasaeed2010/adminlte" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/components/font-awesome" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/components/jquery" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/composer" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/facebook/graph-sdk" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/firebase/php-jwt" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/apiclient" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/apiclient-services" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/google/auth" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/guzzle" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/promises" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/maximebf/debugbar" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/phpseclib/phpseclib" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/cache" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/http-message" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/psr/log" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$MODULE_DIR$/Application/Services/vendor/symfony/var-dumper" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
