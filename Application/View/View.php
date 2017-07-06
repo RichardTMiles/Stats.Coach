@@ -33,7 +33,8 @@ class View
     {
         $this->restart = $sendWrapper;
         if ($this->wrapper()) {
-            if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;
+            if (!$sendWrapper && $this->ajax = $this->ajaxActive())
+                return null;
             require_once "minify.php";
             ob_start();
             require(CONTENT_WRAPPER);   // Return the Template

@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="<?= SITE ?>Public/favicon.png" type="image/x-icon"/>
 
     <!-- PJAC Content Control -->
-    <meta http-equiv="x-pjax-version" content="v<?=(isset($_SESSION['id'])&&$_SESSION['id']?$this->user->user_id:SITE_VERSION)?>">
+    <meta http-equiv="x-pjax-version" content="v<?=X_PJAX_Version?>">
 
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->

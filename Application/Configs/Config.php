@@ -1,9 +1,14 @@
 <?php
+use Modules\Helpers\Bcrypt;
 
 const ¶ = PHP_EOL."\t";
 
 const SITE_TITLE = 'Stats Coach';
 const SITE_VERSION = '0.0.1';
+if (!array_key_exists( 'X_PJAX_Version', $_SESSION )) 
+    $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+define( 'X_PJAX_Version', $_SESSION['X_PJAX_Version'], true);
+
 ################    Reporting   ####################
 date_default_timezone_set('America/Denver');
 ini_set( 'display_errors', 1 );

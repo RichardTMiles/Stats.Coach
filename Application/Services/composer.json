@@ -14,7 +14,6 @@
     "google/apiclient": "^2.0",
     "facebook/graph-sdk": "^5.5",
     "components/font-awesome": "^4.7",
-    "maximebf/debugbar": ">=1.0.0",
     "components/jquery": "2.2.0"
 
   }

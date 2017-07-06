@@ -19,11 +19,12 @@ class User extends UserRelay
     {
         $this->user = $this;
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
-        header( "X-PJAX-Version: v".($this->user_id?:SITE_VERSION) , true);    // force the page to reload if we login
-        // force the page to reload if we login
-        parent::__construct();  // get database
-        if ($this->user_id == false) return null;
-        if (empty($this->user_username) && $this->user_id) $this->getUser();
+        parent::__construct();                              // get database
+        if (!$this->user_id) return null;
+        if (empty($this->user_username)) $this->getUser();
+        $_SESSION['X_PJAX_Version'] = $this->user_id; // Bcrypt::genRandomHex(30);
+        if (!headers_sent()) header( "X-PJAX-Version: v".$_SESSION['X_PJAX_Version'] , true);    // force the page to reload if we login
+        else echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>'.exit(1);
         $model = "Model\\$this->user_sport";
         $model::getInstance( );
     }
