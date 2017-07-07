@@ -49,14 +49,24 @@ class View
         return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
     }
 
-    private function contents($class, $fileName) // Must be called through Singleton, must be private
+    private function contents(...$argv) // Must be called through Singleton, must be private
     {
-        $file = (CONTENT_ROOT . strtolower( $class ) . DS . strtolower( $fileName ) . ($this->user->user_id ? '.tpl.php' : '.php'));
+
+        switch (count($argv)) {
+            case 2:
+                $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
+                break;
+            case 1:
+                $file = CONTENT_ROOT . $argv[0];
+                break;
+            default:
+                throw new \InvalidArgumentException();
+        }
 
         if (file_exists( $file )) {
             ob_start();
             include $file;
-            include CONTENT_ROOT . 'alert' . DS . 'alerts.tpl.php'; // a little hackish when not using template file
+            include CONTENT_ROOT . 'alert' . DS . 'alerts.php'; // a little hackish when not using template file
             echo '<div class="clearfix"></div>';
             $file = ob_get_clean();         // minify_html()
 

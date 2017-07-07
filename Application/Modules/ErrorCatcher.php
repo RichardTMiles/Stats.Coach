@@ -22,7 +22,7 @@ class ErrorCatcher
         set_exception_handler($closure);
     }
 
-    private function generateErrorLog($argv)
+    private function generateErrorLog($argv = array())
     {
         if ( 0 == error_reporting () ) return null;
 

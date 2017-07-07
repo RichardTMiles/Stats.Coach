@@ -1,18 +1,23 @@
 <?php
 
+use View\View;
+
 $route = new Modules\Route( $mvc );
+
+$route->match('404/*', function () { View::contents('error','404error'); });
+$route->match('500/*', function () { View::contents('error','500error'); });
+
 
 $route->match( 'Tests/*',                                               // This is how the view works
     function () {
         $view = \View\View::getInstance();
-        if ($view->ajaxActive()) {
-            include SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';
-            exit(1);    }
         require_once SERVER_ROOT . 'Application' . DS . 'View' . DS . "minify.php";
         ob_start();
-        require_once SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';
+        require_once SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';;
         $file = minify_html( ob_get_clean() );
-        $view->currentPage = base64_encode( $file );
+
+        if ($view->ajaxActive()) echo $file;
+        else $view->currentPage = base64_encode( $file );
         exit(1);
     }
 );

@@ -252,7 +252,7 @@
                 $('#ajax-content').removeClass('overlay');
             });
 
-            $(document).on("click", "a[no-pjax]", false);
+            $(document).on("click", "a.no-pjax", false);
             $(document).on('submit', 'form[data-pjax]', function (event) {
                 $.pjax.submit(event, '#pjax-container')
             });

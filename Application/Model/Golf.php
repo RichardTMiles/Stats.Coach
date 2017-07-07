@@ -2,22 +2,30 @@
 
 namespace Model;
 
-use Model\Helpers\GolfRelay;
+use Modules\Helpers\QuickFetch;
 use Modules\Singleton;
 
-class Golf extends GolfRelay
+class Golf extends QuickFetch
 {
     use Singleton;
     const Singleton = true;
 
+    public $course;
+    public $distance;
+    public $handicap;
+    public $rounds;
+    public $stats;
+    public $tournament_teams;
+    public $tournaments;
+    
     public function __construct()
     {
         $this->golf = $this;
         parent::__construct();
         try {
-            if (empty($this->stats)) 
+            if (empty($this->stats))
                 $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
-            
+
             // we need both, teams were coaching and teams we have joined
             // $this->teams
         } catch (\Exception $e) {
@@ -29,7 +37,7 @@ class Golf extends GolfRelay
     {
         try {
             if (empty($this->rounds))
-                $this->rounds = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ?', $this->user->user_id );
+                $this->rounds = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ? LIMIT 3', $this->user->user_id );
 
         } catch (\Exception $e) {
             throw new \Exception($e);
@@ -38,7 +46,7 @@ class Golf extends GolfRelay
 
     public function courseById($id)
     {
-        $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ?';
+        $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ? LIMIT 1';
         return $this->fetch_as_object( $sql, $id );
     }
 
@@ -105,17 +113,14 @@ class Golf extends GolfRelay
         }
 
         if (!empty($this->courseId) && (!is_object( $this->course ) || $this->course->course_id != $this->courseId))
-            $this->course = $this->courseById( $this->courseId );
+            if (!is_object($this->course = $this->courseById( $this->courseId ))) 
+                throw new \Exception('invalid course id');
         
         if (!empty($this->boxColor)) {
-            if (!is_object( $this->course )) throw new \Error();
-            //  $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
-            if (!isset($this->course->distance) || !is_object( $this->course->distance ) || $this->course->distance->distance_color != $this->boxColor) {
-                $this->course->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->courseId, $this->boxColor );
-                return null;
-            }
-            if (!is_object( $this->course->distance )) throw new \Exception();
-            return null;
+            if (!is_object( $this->distance ) || $this->course->course_id != $this->distance->course_id || strtolower($this->distance->distance_color) != $this->boxColor) {
+                $this->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->course->course_id, $this->boxColor );
+                if (!is_object( $this->distance )) throw new \Exception(  );
+            } return null;
         }
 
         if (!empty($this->courseId))
