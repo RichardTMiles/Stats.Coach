@@ -23,10 +23,11 @@ class User extends UserRelay
         if (!$this->user_id) return null;
         if (empty($this->user_username)) $this->getUser();
         $_SESSION['X_PJAX_Version'] = $this->user_id; // Bcrypt::genRandomHex(30);
+        $model = "Model\\$this->user_sport";
+        $model::getInstance();
         if (!headers_sent()) header( "X-PJAX-Version: v".$_SESSION['X_PJAX_Version'] , true);    // force the page to reload if we login
         else echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>'.exit(1);
-        $model = "Model\\$this->user_sport";
-        $model::getInstance( );
+
     }
 
     private function getUser()
@@ -51,10 +52,10 @@ class User extends UserRelay
 
             if (!empty($this->teams)) {
                 foreach ($this->teams as &$team)
-                    if (!empty($team))
-                        $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
-                    else unset($team);
-            }
+                    if (!empty($team->team_id)) $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
+                    else unset($this->teams);
+            } else $this->teams = [];
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             die();

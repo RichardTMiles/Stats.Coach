@@ -14,27 +14,27 @@ class View
 {
     use Singleton;
     const Singleton = true;
-
+    
     public $currentPage;
+    // public $errors;
 
     public function __wakeup()
     {
         if (!($this->ajax = $this->ajaxActive())):      // an HTTP request
             $this->__construct();                       // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
-            echo base64_decode( $this->currentPage );   // . PHP_EOL . round((microtime( true ) - $GLOBALS['time_pre']), 6 );
-            unset($this->currentPage);
-            self::clearInstance();
+            echo base64_decode( $this->currentPage );   // The ajax page will be 64encoded before we store on the server
+            $this->currentPage = false;
+            self::clearInstance();                      // This will remove stored information on the server and delete its self reference
             exit(1);                                    // This is for the second inner AJAX request on first page load
-        endif;                                          // this would mean we're requesting our second page through ajax
+        endif;                                          // this would mean we're requesting our second page through ajax ie not initial page request
     }
 
-    public function __construct($sendWrapper = false)
+    public function __construct($sendWrapper = false)   // Send the content wrapper
     {
         $this->restart = $sendWrapper;
         if ($this->wrapper()) {
-            if (!$sendWrapper && $this->ajax = $this->ajaxActive())
-                return null;
+            if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;
             require_once "minify.php";
             ob_start();
             require(CONTENT_WRAPPER);   // Return the Template
@@ -44,6 +44,7 @@ class View
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
+
     public function wrapper() 
     {
         return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
@@ -51,36 +52,29 @@ class View
 
     private function contents(...$argv) // Must be called through Singleton, must be private
     {
-
         switch (count($argv)) {
-            case 2:
-                $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
+            case 2: $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
                 break;
-            case 1:
-                $file = CONTENT_ROOT . $argv[0];
+            case 1: $file = CONTENT_ROOT . $argv[0];
                 break;
-            default:
-                throw new \InvalidArgumentException();
+            default: throw new \InvalidArgumentException();
         }
 
         if (file_exists( $file )) {
             ob_start();
-            include $file;
             include CONTENT_ROOT . 'alert' . DS . 'alerts.php'; // a little hackish when not using template file
-            echo '<div class="clearfix"></div>';
-            $file = ob_get_clean();         // minify_html()
-
-            //if (MINIFY_CONTENTS && (@include_once "minify.php"))
-              //  $file = minify_html( $file );
-
+            include_once $file;
+            $file = ob_get_clean();                             // TODO minify_html()
+            if (MINIFY_CONTENTS && (@include_once "minify.php"))
+                $file = minify_html( $file );
             if ($this->restart || (($this->restart || !$this->ajaxActive()) && (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id))) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
-
+            exit(1);
         } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
+
         // startApplication( true );
         // restart, this usually means the user is trying to access a protected page when logged out
-        exit(1);
     }
 
     private function ajaxActive()
@@ -95,7 +89,7 @@ class View
 
     public function googleLoginUrl()
     {
-
+        
     }
 
     /**

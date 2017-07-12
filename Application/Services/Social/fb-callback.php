@@ -86,7 +86,7 @@ try {
     echo 'Graph returned an error: ' . $e->getMessage();
     exit;
 } catch(Facebook\Exceptions\FacebookSDKException $e) {
-    startApplication(true);
+    // startApplication(true);
     echo 'Facebook SDK returned an error: ' . $e->getMessage();
     exit;
 }

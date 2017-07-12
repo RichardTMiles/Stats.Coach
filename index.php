@@ -7,45 +7,36 @@ session_save_path(SERVER_ROOT . 'Data' . DS . 'Sessions');    // Manually Set wh
 
 ini_set('session.gc_probability', 1);               // Clear any lingering session data in default locations
 
-session_start();                // Receive the session id from the users Cookies (browser) and load variables stored on the server
+switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
+    case 'css': case 'js': case 'php': case 'jpg': case 'png': exit(1);    // A request has been made to an invalid file
+    default: continue;
+}
 
-
-// gc_disable();        -- Due to my paranoia, I have this for testing errors
-// register_shutdown_function(function () { gc_enable(); });
+session_start();    // Receive the session id from the users Cookies (browser) and load variables stored on the server
 
 // These are required for  the app to run. You must edit the Config file for your Servers
 if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
-    (include SERVER_ROOT . 'Application/Modules/Singleton.php') == false ||           // Trait that defines magic methods for session and application portability
+    (include SERVER_ROOT . 'Application/Modules/Singleton.php') == false ||             // Trait that defines magic methods for session and application portability
     (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') == false ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
     (include SERVER_ROOT . 'Application/Services/vendor/autoload.php') == false){       // Load the autoload() for composer dependencies located in the Services folder
-    echo "Internal Server Error";                                                       // These file locations will not change.
+    echo "Internal Server Error";                                                       // Composer Autoloader
     exit(1);
 }
 
-/*
-use DebugBar\StandardDebugBar;
-$debugbar = new StandardDebugBar();
-$debugbarRenderer = $debugbar->getJavascriptRenderer();
-$debugbar["messages"]->addMessage("hello world!");
-*/
+new Modules\ErrorCatcher(1);
 
-// Setting the following parameter to one or zero will turn on the Log file and attempt to catch all errors that slip through
-new Modules\ErrorCatcher(1); // This Error Catching system will store any errors on the servers log file defined in the config file
-
-// The current catching system actually blows.. need to remake
 function startApplication($restart = false)
 {
-
     if ($restart) {
-        Model\User::newInstance();
+        Model\User::newInstance();                   // This will reset the stats too.
         View\View::newInstance($restart === true);   // Un-sterilize and call the wake up fn if possible
-        $_SERVER['REQUEST_URI'] = ($restart === true ? $_POST = null : $restart);
+        $_SERVER['REQUEST_URI'] = ($restart === true ? $_POST = '/' : $restart);
     }
 
     $user = Model\User::getInstance();
     $view = View\View::getInstance();
     
-    $mvc = function ($class, $method) use ($restart, $view) {
+    $route = new Modules\Route( function ($class, $method) use ($restart, $view) {
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
@@ -56,19 +47,18 @@ function startApplication($restart = false)
 
         $controller = $controller::getInstance();   // debating to clear the instance
         if (($argv = $controller->$method()) !== false) {
-            $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
-            $GLOBALS[$class]->$method( $argv );
+            $model = $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
+            call_user_func_array( [$model, "$method"], (is_array($argv)?$argv:[$argv]) );
         }
+
         // Relies on the Singleton Trait - content is private but uses attempts to use the current instance
         $view->contents( $class, $method );    // this will exit(1) on success
-    };
-
-    if (empty($_SERVER['REQUEST_URI']) && ($restart === true && is_array( $default = $user->user_id ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC )))
-        foreach ($default as $class => $file) return $mvc($class, $file);
+    });
     
-    require SERVER_ROOT . 'Application/Bootstrap.php';
 
-    // If this is reached the route destructor should execute the home method if valid,
-    // closures provided, or startApplication(true) which replaces the given uri
+    include SERVER_ROOT . 'Application/Bootstrap.php';
 
-} startApplication();
+
+} 
+
+startApplication();

@@ -1,16 +1,15 @@
 <?php
-use Modules\Helpers\Bcrypt;
 
 const ¶ = PHP_EOL."\t";
 
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = '0.0.1';
+const SITE_VERSION = '0.3.0';
 if (!array_key_exists( 'X_PJAX_Version', $_SESSION )) 
     $_SESSION['X_PJAX_Version'] = SITE_VERSION;
 define( 'X_PJAX_Version', $_SESSION['X_PJAX_Version'], true);
 
 ################    Reporting   ####################
-date_default_timezone_set('America/Denver');
+date_default_timezone_set('America/Phoenix');
 ini_set( 'display_errors', 1 );
 error_reporting( E_ALL | E_STRICT );
 define( 'MINIFY_CONTENTS', false );
@@ -36,6 +35,10 @@ define( 'DB_PASS', 'Huskies!99' );
 define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
         'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null), true);
+
+define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true);
+
+
 
 
 ################# Application Paths ########################
@@ -148,16 +151,20 @@ header( 'Cache-Control: must-revalidate' );
 function sortDump(...$mixed)
 {
     $mixed=(count($mixed) == 1 ? array_pop( $mixed ) : $mixed );
-    unset($_SERVER);
+    $view = \View\View::getInstance();
+    ob_start();
     echo '<pre>';
     debug_zval_dump( $mixed?:$GLOBALS );
-    echo '</pre><br><br><pre>';
+    echo '</pre><br>####################### VAR DUMP ######################<br><pre>';
     var_dump( $mixed );
     echo '</pre><br><br><pre>';
     echo "################## BACK TRACE ###################\n";
     var_dump( debug_backtrace( ) );
     echo '</pre>';
-    die(1);
+    $report = ob_get_clean();
+    if ($view->ajaxActive()) echo $report;
+    else $view->currentPage = base64_encode( $report );
+    exit(1);
 }
 
 /**

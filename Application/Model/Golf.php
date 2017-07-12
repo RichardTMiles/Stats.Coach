@@ -17,44 +17,36 @@ class Golf extends QuickFetch
     public $stats;
     public $tournament_teams;
     public $tournaments;
-    
+
     public function __construct()
     {
-        $this->golf = $this;
-        parent::__construct();
-        try {
-            if (empty($this->stats))
-                $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
+        QuickFetch::__construct();
+        if (empty($this->stats))
+            $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
 
-            // we need both, teams were coaching and teams we have joined
-            // $this->teams
-        } catch (\Exception $e) {
-            throw new \Exception(); // idk what this would mean
-        }
     }
 
     public function Golf()
     {
-        try {
-            if (empty($this->rounds))
-                $this->rounds = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_rounds WHERE user_id = ? LIMIT 3', $this->user->user_id );
-
-        } catch (\Exception $e) {
-            throw new \Exception($e);
-        }
-    }   // Home page
+        if (empty($this->rounds))
+            $this->rounds = $this->fetch_as_object( 'SELECT round_id,StatsCoach.golf_course.course_name,score_date,score_total,score_total_ffs,score_total_gnr,StatsCoach.golf_course.par_tot FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON  StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE golf_rounds.user_id = ? LIMIT 3', $this->user->user_id );
+    }
 
     public function courseById($id)
     {
-        $sql = 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ? LIMIT 1';
-        return $this->fetch_as_object( $sql, $id );
+        $this->course = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_course WHERE course_id = ? LIMIT 1', $id );
+        if (!is_object( $this->course )) throw new \Exception( 'invalid course id' );
+        $this->course->course_par = unserialize( $this->course->course_par );
+        $this->course->course_handicap = unserialize( $this->course->course_handicap );
     }
 
     public function PostScore()
     {
-        if ($this->newScore) {
 
-            $score_out = $score_in = $score_tot = $gnr_tot = $ffs_tot = 0;
+
+        if (!empty($this->newScore) && is_array( $this->newScore )) {
+
+            $score_out = $score_in = $score_tot = $gnr_tot = $ffs_tot = $putts_tot = 0;
             for ($i = 0; $i < 8; $i++) $score_out += $this->newScore[$i];
             for ($i = 9; $i < 18; $i++) $score_in += $this->newScore[$i];
             $score_tot = $score_in + $score_out;
@@ -62,65 +54,55 @@ class Golf extends QuickFetch
             for ($i = 0; $i < 18; $i++) {
                 $gnr_tot += $this->gnr[$i];
                 $ffs_tot += $this->ffs[$i];
+                $putts_tot += $this->putts[$i];
             }
 
-            try {
 
+            try {
                 ################# Add Round ################
 
-                $sql = "INSERT INTO StatsCoach.golf_rounds (round_public, user_id, course_id, score_gnr_total, score_ffs_total, score_1, score_1_ffs, score_1_gnr, score_2, score_3, score_4, score_5, score_6, score_7, score_8, score_9, score_out, score_10, score_11, score_12, score_13, score_14, score_15, score_16, score_17, score_18, score_in, score_tot, score_2_ffs, score_3_ffs, score_4_ffs, score_5_ffs, score_6_ffs, score_7_ffs, score_8_ffs, score_9_ffs, score_10_ffs, score_11_ffs, score_12_ffs, score_13_ffs, score_14_ffs, score_15_ffs, score_16_ffs, score_17_ffs, score_18_ffs, score_2_gnr, score_3_gnr, score_4_gnr, score_5_gnr, score_6_gnr, score_7_gnr, score_8_gnr, score_9_gnr, score_10_gnr, score_11_gnr, score_12_gnr, score_13_gnr, score_14_gnr, score_15_gnr, score_16_gnr, score_17_gnr, score_18_gnr)
-                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $sql = "INSERT INTO StatsCoach.golf_rounds (round_public, score_date, user_id, course_id, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts) VALUES 
+(:round_public, :score_date, :user_id, :course_id, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts)";
                 $stmt = $this->db->prepare( $sql );
 
-                if (!$stmt->execute( [
-                    1, $this->user->user_id, $this->course->course_id,
-                    $gnr_tot, $ffs_tot,
-                    $this->newScore[0], $this->ffs[0], $this->gnr[0],
-                    $this->newScore[1],
-                    $this->newScore[2],
-                    $this->newScore[3],
-                    $this->newScore[4],
-                    $this->newScore[5],
-                    $this->newScore[6],
-                    $this->newScore[7],
-                    $this->newScore[8],
-                    $score_out,
-                    $this->newScore[9],
-                    $this->newScore[10],
-                    $this->newScore[11],
-                    $this->newScore[12],
-                    $this->newScore[13],
-                    $this->newScore[14],
-                    $this->newScore[15],
-                    $this->newScore[16],
-                    $this->newScore[17],
-                    $score_in, $score_tot,
-                    $this->ffs[1], $this->ffs[2], $this->ffs[3], $this->ffs[4], $this->ffs[5], $this->ffs[6], $this->ffs[7], $this->ffs[8], $this->ffs[9], $this->ffs[10], $this->ffs[11], $this->ffs[12], $this->ffs[13], $this->ffs[14], $this->ffs[15], $this->ffs[16], $this->ffs[17],
-                    $this->gnr[1], $this->gnr[2], $this->gnr[3], $this->gnr[4], $this->gnr[5], $this->gnr[6], $this->gnr[7], $this->gnr[8], $this->gnr[9], $this->gnr[10], $this->gnr[11], $this->gnr[12], $this->gnr[13], $this->gnr[14], $this->gnr[15], $this->gnr[16], $this->gnr[17]
-                ] )
-                ) throw new \Exception( "We could not process your request. Please try again." );
+                $stmt->bindValue( ':round_public', 1 );
+                $stmt->bindValue( ':score_date', '' );                  // TODO
+                $stmt->bindValue( ':user_id', $this->user->user_id );
+                $stmt->bindValue( ':course_id', $this->course->course_id );     // While pro at this TODO - we shouldn't assume that a course is serialized
+                $stmt->bindValue( ':score', serialize( $this->newScore ) );
+                $stmt->bindValue( ':score_gnr', serialize( $this->gnr ) );
+                $stmt->bindValue( ':score_ffs', serialize( $this->ffs ) );
+                $stmt->bindValue( ':score_putts', serialize( $this->putts ) );
+                $stmt->bindValue( ':score_out', $score_out );
+                $stmt->bindValue( ':score_in', $score_in );
+                $stmt->bindValue( ':score_total', $score_tot );
+                $stmt->bindValue( ':score_total_gnr', $gnr_tot );
+                $stmt->bindValue( ':score_total_ffs', $ffs_tot );
+                $stmt->bindValue( ':score_total_putts', $putts_tot );
 
-
-                $sql = "UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE user_id = ?";
-                $this->db->prepare( $sql )->execute( [$score_tot, $ffs_tot, $gnr_tot, $this->user->user_id] );
+                if (!$stmt->execute()) throw new \Exception( "We could not process your request. Please try again." );
+                $sql = "UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE user_id = ?";
+                $stmt = $this->db->prepare( $sql );
+                if (!$stmt->execute( [$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $this->user->user_id] )) throw new \Exception();
                 $this->alert['success'] = "Score successfully added!";
-                startApplication( true );
+                startApplication(true);
             } catch (\Exception $e) {
-                echo $e->getMessage();
                 $this->alert['danger'] = "Sorry, we could not process your score at this time. Please try again later.";
             }
 
         }
 
         if (!empty($this->courseId) && (!is_object( $this->course ) || $this->course->course_id != $this->courseId))
-            if (!is_object($this->course = $this->courseById( $this->courseId ))) 
-                throw new \Exception('invalid course id');
-        
+            $this->courseById( $this->courseId );
+
+
         if (!empty($this->boxColor)) {
-            if (!is_object( $this->distance ) || $this->course->course_id != $this->distance->course_id || strtolower($this->distance->distance_color) != $this->boxColor) {
+            if (!is_object( $this->distance ) || !array_key_exists( 'course_id', $this->distance ) || $this->course->course_id != $this->distance->course_id || strtolower( $this->distance->distance_color ) != $this->boxColor) {
                 $this->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ?', $this->course->course_id, $this->boxColor );
-                if (!is_object( $this->distance )) throw new \Exception(  );
-            } return null;
+                if (!is_object( $this->distance )) throw new \Exception();
+                $this->distance->distance = unserialize( $this->distance->distance );
+            }
+            return null;
         }
 
         if (!empty($this->courseId))
@@ -136,17 +118,16 @@ class Golf extends QuickFetch
         }
     }
 
-    public function AddCourse()
+    public function AddCourse($course, $handicap)
     {
         $holes = $this->holes;
         $par = $this->par;
         $tee_boxes = $this->tee_boxes;
         $teeBox = $this->teeBox;
         $handicap_number = $this->handicap_number;
-        $handicap = $this->handicap;
-        $course = $this->course;
-
         $par = $this->par;
+
+
         $par_out = 0;
         $par_in = 0;
         for ($i = 0; $i < 9; $i++) $par_out += $par[$i];
@@ -156,31 +137,37 @@ class Golf extends QuickFetch
         $time = time();
 
         try {
-            $sql = "INSERT INTO StatsCoach.golf_course (user_id, created_date, course_name, course_type, course_access, course_holes, course_street, course_city, `course_state`, `course_phone`, `box_color_1`, `box_color_2`, `box_color_3`, `box_color_4`, `box_color_5`, `par_1`, `par_2`, `par_3`, `par_4`, `par_5`, `par_6`, `par_7`, `par_8`, `par_9`, `par_out`, `par_10`, `par_11`, `par_12`, `par_13`, `par_14`, `par_15`, `par_16`, `par_17`, `par_18`, `par_in`, `par_tot`) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO StatsCoach.golf_course (user_id, course_name, creation_date, course_holes, course_street, course_city, course_state, course_phone, course_elevation, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap)
+                                VALUES (:user_id, :course_name, :creation_date, :course_holes, :course_street, :course_city, :course_state, :course_phone, :course_elevation, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap)";
+            $stmt = $this->db->prepare( $sql );
+            $stmt->bindValue( ':user_id', $this->user->user_id );
+            $stmt->bindValue( ':course_name', $course['name'] );
+            $stmt->bindValue( ':creation_date', $time );
+            $stmt->bindValue( ':course_holes', $this->holes );
+            $stmt->bindValue( ':course_street', $course['street'] );
+            $stmt->bindValue( ':course_city', $course['city'] );
+            $stmt->bindValue( ':course_state', $course['state'] );
+            $stmt->bindValue( ':course_phone', $course['phone'] );
+            $stmt->bindValue( ':course_elevation', null );
+            $stmt->bindValue( ':course_difficulty', null );
+            $stmt->bindValue( ':course_rank', null );
+            $stmt->bindValue( ':box_color_1', isset($teeBox[1]) ? $teeBox[1][0] : null );
+            $stmt->bindValue( ':box_color_2', isset($teeBox[2]) ? $teeBox[2][0] : null );
+            $stmt->bindValue( ':box_color_3', isset($teeBox[3]) ? $teeBox[3][0] : null );
+            $stmt->bindValue( ':box_color_4', isset($teeBox[4]) ? $teeBox[4][0] : null );
+            $stmt->bindValue( ':box_color_5', isset($teeBox[5]) ? $teeBox[5][0] : null );
+            $stmt->bindValue( ':course_par', serialize( $par ) );
+            $stmt->bindValue( ':course_par_out', $par_out );
+            $stmt->bindValue( ':course_par_in', $par_in );
+            $stmt->bindValue( ':par_tot', $par_tot );
+            $stmt->bindValue( ':course_par_hcp', null );
+            $stmt->bindValue( ':course_type', $this->course['style'] );
+            $stmt->bindValue( ':course_access', $this->course['access'] );
+            $stmt->bindValue( ':course_handicap', serialize( $handicap ) );
+            if (!$stmt->execute()) throw new \Exception( "Failed inserting courses" );
 
-            if (!$this->db->prepare( $sql )->execute( array(
-                $this->user->user_id,
-                $time,
-                $course['name'],
-                $course['style'],
-                $course['access'],
-                $holes,
-                $course['street'],
-                $course['city'],
-                $course['state'],
-                $course['phone'],
-                isset($teeBox[1]) ? $teeBox[1][0] : null,
-                isset($teeBox[2]) ? $teeBox[2][0] : null,
-                isset($teeBox[3]) ? $teeBox[3][0] : null,
-                isset($teeBox[4]) ? $teeBox[4][0] : null,
-                isset($teeBox[5]) ? $teeBox[5][0] : null,
-                $par[0], $par[1], $par[2], $par[3], $par[4], $par[5], $par[6], $par[7], $par[8], $par_out,
-                $par[9], $par[10], $par[11], $par[12], $par[13], $par[14], $par[15], $par[16], $par[17], $par_in, $par_tot) )
-            ) throw new \Exception( "Failed inserting courses" );
 
-
-            $sql = "SELECT StatsCoach.golf_course.course_id FROM StatsCoach.golf_course WHERE StatsCoach.golf_course.user_id AND StatsCoach.golf_course.created_date ";
+            $sql = "SELECT StatsCoach.golf_course.course_id FROM StatsCoach.golf_course WHERE StatsCoach.golf_course.user_id AND StatsCoach.golf_course.creation_date ";
 
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( array($this->user->user_id, $time) );
@@ -190,75 +177,28 @@ class Golf extends QuickFetch
             if (!$course_id) throw new \Exception( "Sorry, course id lookup failed. Please try again later" );
 
 
-            $sql = "INSERT INTO StatsCoach.golf_distance (course_id, tee_box, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_1, distance_2, distance_3, distance_4, distance_5, distance_6, distance_7, distance_8, distance_9, distance_out, distance_10, distance_11, distance_12, distance_13, distance_14, distance_15, distance_16, distance_17, distance_18, distance_in, distance_tot)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO StatsCoach.golf_distance (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES (:course_id, :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)";
             for ($i = 1; $i <= $tee_boxes; $i++) {
-
-                $par_in = $par_out = 0;
-
-                for ($j = 1; $j <= 9; $j++) $par_out += $teeBox[$i][$j];
-                for ($j = 10; $j < 19; $j++) $par_in += $teeBox[$i][$j];
-                $par_tot = $par_out + $par_in;
-
-                if (!$this->db->prepare( $sql )->execute( array(
-                    $course_id,
-                    $i,
-                    $teeBox[$i][0],
-                    $this->slope[$i][0],
-                    $this->difficulty[$i][0],
-                    $this->slope[$i][1],
-                    $this->difficulty[$i][1],
-                    $teeBox[$i][1],
-                    $teeBox[$i][2],
-                    $teeBox[$i][3],
-                    $teeBox[$i][4],
-                    $teeBox[$i][5],
-                    $teeBox[$i][6],
-                    $teeBox[$i][7],
-                    $teeBox[$i][8],
-                    $teeBox[$i][9],
-                    $par_out,
-                    $teeBox[$i][10],
-                    $teeBox[$i][11],
-                    $teeBox[$i][12],
-                    $teeBox[$i][13],
-                    $teeBox[$i][14],
-                    $teeBox[$i][15],
-                    $teeBox[$i][16],
-                    $teeBox[$i][17],
-                    $teeBox[$i][18],
-                    $par_in,
-                    $par_tot
-                ) )
-                ) throw new \Exception( "Failed to insert tee box $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
+                $dist_out = $dist_in = 0;
+                for ($j = 1; $j <= 9; $j++) $dist_out += $teeBox[$i][$j];
+                for ($j = 10; $j < 19; $j++) $dist_in += $teeBox[$i][$j];
+                $dist_tot = $dist_out + $dist_in;
+                $color = array_shift( $teeBox[$i] );
+                $stmt = $this->db->prepare( $sql );
+                $stmt->bindValue( ':course_id', $course_id );
+                $stmt->bindValue( ':tee_box', $i );
+                $stmt->bindValue( ':distance', serialize( $teeBox[$i] ) );
+                $stmt->bindValue( ':distance_color', $color );
+                $stmt->bindValue( ':distance_general_slope', $this->slope[$i][0] );
+                $stmt->bindValue( ':distance_general_difficulty', $this->difficulty[$i][0] );
+                $stmt->bindValue( ':distance_womens_slope', $this->slope[$i][1] );
+                $stmt->bindValue( ':distance_womens_difficulty', $this->difficulty[$i][1] );
+                $stmt->bindValue( ':distance_out', $dist_out );
+                $stmt->bindValue( ':distance_in', $dist_in );
+                $stmt->bindValue( ':distance_tot', $dist_tot );
+                if (!$stmt->execute()) throw new \Exception( "Failed to insert tee box $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
             }
 
-            $sql = "INSERT INTO StatsCoach.golf_handicap (course_id, handicap_number, handicap_1, handicap_2, handicap_3, handicap_4, handicap_5, handicap_6, handicap_7, handicap_8, handicap_9, handicap_10, handicap_11, handicap_12, handicap_13, handicap_14, handicap_15, handicap_16, handicap_17, handicap_18)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            for ($i = 1; $i <= $handicap_number; $i++)
-                if (!$this->db->prepare( $sql )->execute( array(
-                    $course_id,
-                    $i,
-                    $handicap[$i][0],
-                    $handicap[$i][1],
-                    $handicap[$i][2],
-                    $handicap[$i][3],
-                    $handicap[$i][4],
-                    $handicap[$i][5],
-                    $handicap[$i][6],
-                    $handicap[$i][7],
-                    $handicap[$i][8],
-                    $handicap[$i][9],
-                    $handicap[$i][10],
-                    $handicap[$i][11],
-                    $handicap[$i][12],
-                    $handicap[$i][13],
-                    $handicap[$i][14],
-                    $handicap[$i][15],
-                    $handicap[$i][16],
-                    $handicap[$i][17]
-                ) )
-                ) throw new \Exception( "Failed to insert tee handicap $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
 
             $this->alert['success'] = "The course has been added!";
         } catch (\Exception $e) {

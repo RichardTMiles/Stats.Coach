@@ -1,4 +1,3 @@
-
 <section class="content-header" style="color: #d9edf7">
     <h1>
         <?=$this->user->user_first_name ?>
@@ -55,6 +54,7 @@
 
         </div>
     </div>
+    <?php if (isset($this->golf->rounds->course_name)) { ?>
 
     <div class="box box-widget widget-user">
         <div class="box box-info">
@@ -72,43 +72,25 @@
                         <tr>
                             <th>Date</th>
                             <th>Course</th>
-                            <th>Drives</th>
-                            <th>Fairways</th>
-                            <th>putts</th>
+                            <th>Fairway First Shot</th>
+                            <th>Green in Regulation</th>
+                            <th>Putts</th>
                             <th>Strokes</th>
                             <th>Par</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php //foreach($rows as $row) { ?>
+                        <?php foreach($this->golf->rounds as $key => $stats) { ?>
                         <tr>
-                            <td><a href="#">November 4, 2015</a></td>
-                            <td>Eagle Pointe</td>
-                            <td>18</td>
-                            <td>30</td>
-                            <td>28</td>
-                            <td>76</td>
-                            <td>72</td>
+                            <td><a href="#">$<?=$stats->score_date?></a></td>
+                            <td><?=$stats->course_name?></td>
+                            <td><?=$stats->score_ffs_total?></td>
+                            <td><?=$stats->score_gnr_total?></td>
+                            <td><?=$stats->score_?></td>
+                            <td><?=$stats->score_total?></td>
+                            <td><?=$stats->par_tot?></td>
                         </tr>
-                        <tr>
-                            <td><a href="#">November 1, 2015</a></td>
-                            <td>Eagle Pointe</td>
-                            <td>18</td>
-                            <td>34</td>
-                            <td>30</td>
-                            <td>82</td>
-                            <td>72</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">october 22, 2015</a></td>
-                            <td>Lake Park</td>
-                            <td>16</td>
-                            <td>34</td>
-                            <td>30</td>
-                            <td>80</td>
-                            <td>74</td>
-                        </tr>
-                        <?php //}?>
+                        <?php }?>
 
                         </tbody>
                     </table>
@@ -120,6 +102,7 @@
             </div><!-- /.box-footer -->
         </div>
     </div>
+    <?php } ?>
 
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12" >

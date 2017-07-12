@@ -14,32 +14,30 @@ class Route
     use Singleton;
 
     public $uri;
-    private $matched;
-    private $homeMethod;
-    private $structure;
+    private $matched;             // a bool
+    private $homeMethod;          // for the ->home() method
+    private $structure;           // The MVC pattern is currently passes
 
     public function __construct(callable $structure)
     {
-        if (key_exists( 'REQUEST_URI', $_SERVER ))
-            $uri = ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' );
-
-        if (empty($_SERVER['REQUEST_URI'])){
-            $this->matched = true;
-            $default = $user->user_id ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC;
-            if (is_array( $default )) foreach ($default as $class => $method) return $mvc($class, $method);
-        }
-        $this->matched = false;
         $this->structure = $structure;
-        $this->uri = explode( '/', strtolower( $uri ) );
+        $this->uri = explode( '/', strtolower( ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' )));
+        $this->matched = true;
+        if (empty($this->uri[0])) return $this->defaultRoute();
+        $this->matched = false;
     }
 
-    public function __destruct()        //TODO- make work with new structure
+    public function defaultRoute()
     {
-        if ($this->matched) return null;
+        $mvc = $this->structure;
+        $default = (is_object( $this->user ) && $this->user->user_id ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
+        if (is_array( $default )) foreach ($default as $class => $method) return $mvc($class, $method);
+    }
 
-        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
-            $mvc( $this->homeMethod[0], $this->homeMethod[1] );
-
+    public function __destruct()
+    {
+        if ($this->matched)
+            return null;
 
         if (is_callable( $this->homeMethod )) {
             $this->addMethod( 'default', $this->homeMethod );
@@ -47,11 +45,15 @@ class Route
             return $restart();
         }
 
+        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
+            return $mvc( $this->homeMethod[0], $this->homeMethod[1] );
+
+        return $this->defaultRoute();
     }
 
     public function signedIn()
     {
-        if (!isset($this->user->user_id) || !$this->user->user_id) {
+        if ($this->matched || !is_object($this->user) || !$this->user->user_id) {
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
@@ -60,7 +62,7 @@ class Route
 
     public function signedOut()
     {
-        if (isset($this->user->user_id) && $this->user->user_id) {
+        if ($this->matched || is_object($this->user) && $this->user->user_id) {
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
@@ -69,7 +71,8 @@ class Route
 
     public function home($function = null)
     {
-        if ($this->matched) return null;
+        if ($this->matched)
+            return null;
         if (is_callable( $function ))
             $this->homeMethod = $function;
         elseif (is_callable( $this->storage ) || is_array( $this->storage ))
@@ -78,19 +81,16 @@ class Route
 
     public function match($toMatch, ...$argv)       // TODO - make someone rewrite this in REGX
     {
-        #alert($toMatch.' '.$this->uri[0].' '. (!$this->matched ? 'avalible' : 'notavalible'));
-
-        if ($this->matched === true) return $this;
+        if ($this->matched === true)
+            return $this;
 
         $this->storage = $argv;  // This is for home route function
 
         $uri = $this->uri;
 
         $arrayToMatch = explode( '/', $toMatch );
-
         $pathLength = sizeof( $arrayToMatch );
         $uriLength = sizeof( $uri );
-
 
         if ($pathLength < $uriLength && substr( $toMatch, -1 ) != '*')
             return $this;
@@ -119,7 +119,8 @@ class Route
                     } elseif (count( $argv ) == 2) {
                         $structure = $this->structure;
                         $structure( $argv[0], $argv[1] );
-                    } else throw new \InvalidArgumentException;
+                        exit(1);
+                    } else throw new \InvalidArgumentException('Are we passing a valid structure?');
                     return $this; // Note that the application will break in the View::contents
 
                 case '{': // this is going to indicate the start of a variable name

@@ -19,7 +19,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="<?= SITE ?>Public/favicon.png" type="image/x-icon"/>
 
-    <!-- PJAC Content Control -->
+    <!-- PJAX Content Control -->
     <meta http-equiv="x-pjax-version" content="v<?=X_PJAX_Version?>">
 
     <!-- REQUIRED STYLE SHEETS -->
@@ -55,7 +55,7 @@
 
     <link rel="preload" href="<?= $this->versionControl( "bower_components/bootstrap-daterangepicker/daterangepicker.css" ) ?>" as="style"
           onload="this.rel='stylesheet'">
-    <!--link rel="preload" href="<?= $this->versionControl( "bower_components/bootstrap-timepicker/css/bootstrap-timepicker.less" ) ?>" as="style" onload="this.rel='stylesheet'"-->
+    <link rel="preload" href="<?= $this->versionControl( "plugins/timepicker/bootstrap-timepicker.css" ) ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Wysihtml -->
     <link rel="preload" href="<?= $this->versionControl( "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" ) ?>" as="style"
           onload="this.rel='stylesheet'">
@@ -254,7 +254,7 @@
 
             $(document).on("click", "a.no-pjax", false);
             $(document).on('submit', 'form[data-pjax]', function (event) {
-                $.pjax.submit(event, '#pjax-container')
+                $.pjax.submit(event, '#ajax-content')
             });
 
             $(function () {
@@ -286,8 +286,6 @@
             });
 
         </script>
-
-        <!--?php echo $GLOBALS['debugbarRenderer']->render() -->
         </body>
 </html>
 

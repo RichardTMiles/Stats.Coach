@@ -16,6 +16,11 @@ class Request
 
     private $Cookie = [];
 
+    public function __sleep()
+    {
+        return ['Cookie'];
+    }
+
     public function __wakeup()
     {
         foreach ($this->Cookie as $key => $array)

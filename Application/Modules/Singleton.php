@@ -8,7 +8,8 @@ trait Singleton
 {
     private $storage;               // A Temporary variable for 'quick data'
     protected $methods = array();   // Anonymous Function Declaration
-    protected static $instance;  // Instance of the Container
+    private static $instance;        // Instance of the Container
+    
 
     public static function __callStatic($methodName, $arguments = array())
     {
@@ -31,7 +32,7 @@ trait Singleton
         // check if the object has been sterilized in the session
         // This will invoke the __wake up operator
         if (array_key_exists( $calledClass, $_SESSION ) &&
-            is_object( self::$instance = @unserialize( base64_decode( $_SESSION[$calledClass] ))))
+            is_object( self::$instance = @unserialize( ( $_SESSION[$calledClass] ))))   // TODO -base64_decode(
                 return self::$instance;
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
@@ -86,18 +87,19 @@ trait Singleton
         if (method_exists( $this, '__construct' )) self::__construct();
         $object = get_object_vars( $this );
         foreach ($object as $item => $value)    // TODO - were really going to try and objectify everything?
-            if(is_object( $temp = @unserialize(base64_decode( $this->$item ))))
+            if(is_object( $temp = @unserialize(( $this->$item ))))      // TODO - base64_decode(
                 $this->$item = $temp;
     }
 
     // for auto class serialization add: const Singleton = true; to calling class
     public function __sleep()
     {
-        if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
+        if (!defined( 'self::Singleton' ) || !self::Singleton)
+            return null;
         foreach (get_object_vars( $this ) as $key => &$value) {
             if (empty($value)) continue;    // The object could be null from serialization?
             if (is_object( $value )) {
-                try { $value = base64_encode(@serialize( $value ));
+                try { $value = (@serialize( $value ));                      // TODO - base64_encode(
                 } catch (\Exception $e){ continue; }                // Database object we need to catch the error thrown.
             } $onlyKeys[] = $key;
         } return (isset($onlyKeys) ? $onlyKeys : []);
@@ -106,7 +108,7 @@ trait Singleton
     public function __destruct()
     {   // We require a sleep function to be set manually for singleton to manage utilization
         if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
-        try { $_SESSION[__CLASS__] = base64_encode(@serialize( $this ));
+        try { $_SESSION[__CLASS__] = @serialize( $this );                               // TODO - base64_encode(
         } catch (\Exception $e){ unset($_SESSION[__CLASS__]); return null; };
     }
 

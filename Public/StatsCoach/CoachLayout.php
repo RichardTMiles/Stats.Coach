@@ -288,7 +288,7 @@
 
 
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
+            <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">MAIN NAVIGATION</li>
 
                 <li class="active treeview">
@@ -302,10 +302,7 @@
                                 <i class="fa fa-circle-o"></i><?= $this->user->user_first_name ?> <?= $this->user->user_last_name ?>
                             </a>
                         </li>
-
-                        
                         <li>
-
                                 <li><a href="#"><i class="fa fa-circle-o"></i> Barbers Hill High School</a></li>
                                 <li><a href="#"><i class="fa fa-circle-o"></i> NPGA South East Boys</a></li>
                         </li>

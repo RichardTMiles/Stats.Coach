@@ -40,18 +40,16 @@ abstract class QuickFetch
         $stmt->setFetchMode( \PDO::FETCH_CLASS, \stdClass::class );
         $stmt->execute( $execute );
         $stmt = $stmt->fetchAll();  // user obj
-        return clone (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : $stmt);
+        $stmt = (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : (is_array( $stmt ) ? (object)$stmt : null));
+        return is_object( $stmt ) ? clone $stmt : null;
     }
 
     public function fetch_to_global($sql, $execute)
     {
-        try {
-            $stmt = $this->db->prepare( $sql );
-            $stmt->setFetchMode( \PDO::FETCH_CLASS, Carbon::class );
-            $stmt->execute( $execute );
-            return $stmt->fetchAll();  // user obj
-        } catch (\Exception $e) {
-            sortDump( $e );
-        }
+        $stmt = $this->db->prepare( $sql );
+        $stmt->setFetchMode( \PDO::FETCH_CLASS, Carbon::class );
+        $stmt->execute( $execute );
+        return $stmt->fetchAll();  // user obj
+
     }
 }

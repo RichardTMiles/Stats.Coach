@@ -10,7 +10,7 @@ var AdminLTEOptions = {
     //'fast', 'normal', or 'slow'
     animationSpeed: 'normal',
     //Sidebar push menu toggle button selector
-    sidebarToggleSelector: "[data-toggle='offcanvas']",
+    sidebarToggleSelector: "[data-toggle='push-menu']",
     //Activate sidebar push menu
     sidebarPushMenu: false,
     //Activate sidebar slimscroll if the fixed layout is set (requires SlimScroll Plugin)
