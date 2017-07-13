@@ -1,4 +1,10 @@
 <?php
+
+switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
+    case 'css': case 'js': case 'php': case 'jpg': case 'png': exit(1);    // A request has been made to an invalid file
+    default: 
+}
+
 define( 'DS', DIRECTORY_SEPARATOR );
 
 define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
@@ -6,11 +12,6 @@ define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for t
 session_save_path(SERVER_ROOT . 'Data' . DS . 'Sessions');    // Manually Set where the Users Session Data is stored
 
 ini_set('session.gc_probability', 1);               // Clear any lingering session data in default locations
-
-switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
-    case 'css': case 'js': case 'php': case 'jpg': case 'png': exit(1);    // A request has been made to an invalid file
-    default: continue;
-}
 
 session_start();    // Receive the session id from the users Cookies (browser) and load variables stored on the server
 
@@ -28,9 +29,10 @@ new Modules\ErrorCatcher(1);
 function startApplication($restart = false)
 {
     if ($restart) {
+        $_POST = [];
         Model\User::newInstance();                   // This will reset the stats too.
-        View\View::newInstance($restart === true);   // Un-sterilize and call the wake up fn if possible
-        $_SERVER['REQUEST_URI'] = ($restart === true ? $_POST = '/' : $restart);
+        View\View::newInstance($restart === true);
+        $_SERVER['REQUEST_URI'] = ($restart === true ? '/' : $restart);
     }
 
     $user = Model\User::getInstance();

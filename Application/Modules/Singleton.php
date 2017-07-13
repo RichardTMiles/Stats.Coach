@@ -94,12 +94,11 @@ trait Singleton
     // for auto class serialization add: const Singleton = true; to calling class
     public function __sleep()
     {
-        if (!defined( 'self::Singleton' ) || !self::Singleton)
-            return null;
+        if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
         foreach (get_object_vars( $this ) as $key => &$value) {
             if (empty($value)) continue;    // The object could be null from serialization?
             if (is_object( $value )) {
-                try { $value = (@serialize( $value ));                      // TODO - base64_encode(
+                try { $this->$key = (@serialize( $value ));                      // TODO - base64_encode(
                 } catch (\Exception $e){ continue; }                // Database object we need to catch the error thrown.
             } $onlyKeys[] = $key;
         } return (isset($onlyKeys) ? $onlyKeys : []);

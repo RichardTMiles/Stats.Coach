@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="<?= SITE ?>Public/favicon.png" type="image/x-icon"/>
 
     <!-- PJAX Content Control -->
-    <meta http-equiv="x-pjax-version" content="v<?=X_PJAX_Version?>">
+    <meta http-equiv="x-pjax-version" content="<?=$_SESSION['X_PJAX_Version']?>">
 
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
@@ -237,6 +237,7 @@
         <!-- PJAX-->
         <script src="<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>"></script>
         <!-- Better PJAX - https://github.com/defunkt/jquery-pjax/issues/469  -->
+
         <script>
             jQuery.fn.exists = function () {
                 return this.length > 0;
@@ -244,18 +245,17 @@
 
             $(document).pjax('a', '#ajax-content');
             $.pjax.reload('#ajax-content');
+
             $.fn.on('pjax:send', function () {
                 $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
                 Pace.restart();
             });
+
             $.fn.on('pjax:complete', function () {
-                $('#ajax-content').removeClass('overlay');
-            });
+                $('#ajax-content').removeClass('overlay'); });
 
             $(document).on("click", "a.no-pjax", false);
-            $(document).on('submit', 'form[data-pjax]', function (event) {
-                $.pjax.submit(event, '#ajax-content')
-            });
+
 
             $(function () {
                 var closure = function() {$(document).on("pjax:complete", function (event) {
@@ -264,28 +264,14 @@
                     })
                 })};
                 $(document).on("pjax:popstate", function () {
-                    closure(); });  //.on("pjax:pushstate")
+                    closure();
+                });  //.on("pjax:pushstate")
 
             });
 
         </script>
 
-        <script>
-            $.fn.on('pjax:complete', function () {
-                // Place Plugin Repos Here
 
-
-                $('input').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '20%' // optional
-                });
-
-
-
-            });
-
-        </script>
         </body>
 </html>
 

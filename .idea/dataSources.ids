@@ -222,19 +222,19 @@
       </column>
       <column id="76" parent="3" name="score">
         <mandatory>1</mandatory>
-        <data-type>varchar(64)</data-type>
+        <data-type>text</data-type>
       </column>
       <column id="77" parent="3" name="score_gnr">
         <mandatory>1</mandatory>
-        <data-type>varchar(64)</data-type>
+        <data-type>text</data-type>
       </column>
       <column id="78" parent="3" name="score_ffs">
         <mandatory>1</mandatory>
-        <data-type>varchar(64)</data-type>
+        <data-type>text</data-type>
       </column>
       <column id="79" parent="3" name="score_putts">
         <mandatory>1</mandatory>
-        <data-type>varchar(64)</data-type>
+        <data-type>text</data-type>
       </column>
       <column id="80" parent="3" name="score_out">
         <mandatory>1</mandatory>

@@ -23,7 +23,6 @@ class Golf extends QuickFetch
         QuickFetch::__construct();
         if (empty($this->stats))
             $this->stats = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE user_id = ?', $this->user->user_id );
-
     }
 
     public function Golf()
@@ -92,7 +91,7 @@ class Golf extends QuickFetch
 
         }
 
-        if (!empty($this->courseId) && (!is_object( $this->course ) || $this->course->course_id != $this->courseId))
+        if (!empty($this->courseId) && (!is_object( $this->course ) || !isset($this->course->course_id) || $this->course->course_id != $this->courseId))
             $this->courseById( $this->courseId );
 
 

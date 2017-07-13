@@ -22,9 +22,6 @@ abstract class UserRelay extends QuickFetch
     public $user_full_name;
     public $user_first_name;
     public $user_last_name;
-
-    public $teams = array();    // this will hold objects, I like when it print out here in the sort dump 
-
     public $user_profile_pic;
     public $user_cover_photo;
     public $user_birth_date;
@@ -40,6 +37,9 @@ abstract class UserRelay extends QuickFetch
     public $user_deactivated;
     public $user_creation_date;
     public $user_ip;
+
+    public $teams = array();    // this will hold objects, I like when it print out here in the sort dump
+
 }
 
 

@@ -32,8 +32,9 @@ class View
 
     public function __construct($sendWrapper = false)   // Send the content wrapper
     {
-        $this->restart = $sendWrapper;
+        $this->restart = $sendWrapper ?: ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION);
         if ($this->wrapper()) {
+            if (!headers_sent()) header( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'], true );
             if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;
             require_once "minify.php";
             ob_start();
@@ -55,7 +56,8 @@ class View
         switch (count($argv)) {
             case 2: $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
                 break;
-            case 1: $file = CONTENT_ROOT . $argv[0];
+            case 1:
+                $file = file_exists( $argv[0] ) ? $argv[0]  : CONTENT_ROOT . $argv[0];
                 break;
             default: throw new \InvalidArgumentException();
         }

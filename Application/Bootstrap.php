@@ -33,7 +33,7 @@ $route->match( 'Tests/*',                                               // This 
     function () {
             $view = \View\View::getInstance();
             ob_start();
-            require_once SERVER_ROOT . 'Tests' . DS . 'recursiveSerializing.php';;
+            require_once SERVER_ROOT . 'Tests' . DS . 'index.php';;
             $file = minify_html( ob_get_clean() );
 
             if ($view->ajaxActive()) echo $file;

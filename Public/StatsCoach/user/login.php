@@ -9,7 +9,7 @@
         <div id="alert"></div>
         
         <?php if ($this->UserName == false): ?>
-            <form action="<?= SITE ?>login/" method="post">
+            <form data-pjax action="<?= SITE ?>login/" method="post">
                 <div class="form-group has-feedback">
 
                     <input type="text" class="form-control" name="username"
@@ -17,9 +17,7 @@
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-
                     <input type="password" name="password" class="form-control" placeholder="Password">
-
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
@@ -29,9 +27,9 @@
                                 <input type="checkbox" name="RememberMe" value="1"> Remember Me
                             </label>
                         </div>
-                    </div><!-- /.col -->
+                    </div><!-- /.col no-pjax -->
                     <div class="col-xs-4">
-                        <button no-pjax type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div><!-- /.col -->
                 </div>
             </form>
@@ -103,4 +101,10 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
-    });</script>
+    });
+
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $.pjax.submit(event, '#ajax-content')
+    });
+
+</script>

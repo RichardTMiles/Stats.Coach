@@ -14,64 +14,52 @@ class User extends UserRelay
     use Singleton;
     const Singleton = true;
 
-  
     public function __construct()
     {
-        $this->user = $this;
+        $this->user = $this;    // $GLOBAL['user']
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
         parent::__construct();                              // get database
-        if (!$this->user_id) return null;
-        if (empty($this->user_username)) $this->getUser();
-        $_SESSION['X_PJAX_Version'] = $this->user_id; // Bcrypt::genRandomHex(30);
-        $model = "Model\\$this->user_sport";
-        $model::getInstance();
-        if (!headers_sent()) header( "X-PJAX-Version: v".$_SESSION['X_PJAX_Version'] , true);    // force the page to reload if we login
-        else echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>'.exit(1);
+        if ($this->user_id) {
+            if (empty($this->user_username)) {
+                $this->getUser();
+                $this->getTeams();
+            } else return null;
+            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $this->user_id; // Bcrypt::genRandomHex(30);
+            $model = "Model\\$this->user_sport";
+            $model::getInstance();
+        } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+    }
 
+    private function getTeams()
+    {
+        $this->teams = [];
+        $sql = 'SELECT * FROM StatsCoach.teams WHERE team_coach = ?';
+        $work = $this->fetch_as_object( $sql, $this->user_id );
+        if (!is_array( $work )) $this->teams[] = $work;
+        else $this->teams = $work;
+
+        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON StatsCoach.teams.team_id = StatsCoach.team_member.team_id WHERE user_id = ? AND sport = ?';
+        $play = $this->fetch_as_object( $sql, $this->user_id, $this->user_sport );
+        if (!is_array( $play )) $this->teams[] = $play;
+        else $this->teams = array_merge( $this->teams, $play );
+
+        if (!empty($this->teams)) {
+            foreach ($this->teams as $key => &$team)
+                if (!empty($team->team_id))
+                    $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_full_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
+                else unset($this->teams[$key]);
+        } else $this->teams = [];
     }
 
     private function getUser()
-    {
+    {   // In theory this method is only called once per session.
         if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
-        // In theory this request is only called once per session.
         $this->user_id = $_SESSION['id'];
-
-        try {
-            $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
-            $stmt->execute( [$this->user_id] );
-            $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
-            $this->user_profile_pic = SITE . $this->user_profile_pic;
-            $this->user_cover_photo = SITE . $this->user_cover_photo;
-
-            $work = $this->weCoach();
-            if (!is_array( $work )) $work = [$work];
-            $play = $this->weAthlete();
-            if (!is_array( $play )) $play = [$play];
-            $this->teams = (!empty($work) ? (!empty($play) ? array_merge((array) $work , (array) $play) : $work) :
-                (!empty($play) ? $play : null));
-
-            if (!empty($this->teams)) {
-                foreach ($this->teams as &$team)
-                    if (!empty($team->team_id)) $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_first_name, user_last_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
-                    else unset($this->teams);
-            } else $this->teams = [];
-
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            die();
-        }
-    }
-    // We coach
-    protected function weCoach()
-    {
-        $sql = 'SELECT * FROM StatsCoach.teams WHERE team_coach = ?';
-        return $this->fetch_as_object( $sql, $this->user_id );
-    }
-    // we athlete
-    protected function weAthlete()
-    {
-        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON StatsCoach.teams.team_id = StatsCoach.team_member.team_id WHERE user_id = ? AND sport = ?';
-        return $this->fetch_as_object( $sql, $this->user_id, $this->user_sport);
+        $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
+        $stmt->execute( [$this->user_id] );
+        $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
+        $this->user_profile_pic = SITE . $this->user_profile_pic;
+        $this->user_cover_photo = SITE . $this->user_cover_photo;
 
     }
 
@@ -126,34 +114,34 @@ class User extends UserRelay
 
     protected function recoverSQL($email, $generated_string)
     {
-        if ($generated_string == 0) {
+        if ($generated_string == 0)
             return false;
-        } else {
-            $stmt = $this->db->prepare( "SELECT COUNT(`user_id`) FROM StatsCoach.user WHERE `user_email` = ? AND `user_generated_string` = ?" );
-            $stmt->execute( array($email, $generated_string) );
 
-            if ($stmt->fetch()) {   // a row exists
+        $stmt = $this->db->prepare( "SELECT COUNT(`user_id`) FROM StatsCoach.user WHERE `user_email` = ? AND `user_generated_string` = ?" );
+        $stmt->execute( array($email, $generated_string) );
 
-                $username = self::fetchSQL( 'user_username', 'user_email', $email ); // getting username for the use in the email.
-                $user_id = self::fetchSQL( 'user_id', 'user_email', $email ); // getting username for the use in the email.
+        if (!$stmt->fetch()) {   // a row exists
 
-                // We want to keep things standard and use the user's id for most of the operations. Therefore, we use id instead of email.
+            $username = self::fetchSQL( 'user_username', 'user_email', $email ); // getting username for the use in the email.
+            $user_id = self::fetchSQL( 'user_id', 'user_email', $email ); // getting username for the use in the email.
 
-                $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                $generated_password = substr( str_shuffle( $charset ), 0, 10 );
+            // We want to keep things standard and use the user's id for most of the operations. Therefore, we use id instead of email.
 
-                $this->change_password( $user_id, $generated_password );
+            $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $generated_password = substr( str_shuffle( $charset ), 0, 10 );
 
-                $stmt = $this->db->prepare( "UPDATE `users` SET `user_generated_string` = 0 WHERE `user_id` = ?" );
-                $stmt->execute( array($user_id) );
+            $this->change_password( $user_id, $generated_password );
 
-                mail( $email, 'Your password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\n
+            $stmt = $this->db->prepare( "UPDATE `users` SET `user_generated_string` = 0 WHERE `user_id` = ?" );
+            $stmt->execute( array($user_id) );
+
+            mail( $email, 'Your password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\n
                                Please change your password once you have logged in using this password.\n\n-Lil Richard" );
 
-            } else {
-                return false;
-            }
+        } else {
+            $this->alert['danger'] = "It appears the information you provided is out of date.";
         }
+
     }
 
     protected function confirm_recover($email)
@@ -212,35 +200,31 @@ class User extends UserRelay
 
     public function login()
     {
-        try {
 
-            if (!$this->user_exists( $this->username ))
-                throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
+        if (!$this->user_exists( $this->username ))
+            throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
 
-            // if (!$this->email_confirmed( $this->username ))
-            // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
+        // if (!$this->email_confirmed( $this->username ))
+        // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
 
-            $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.user WHERE `user_username` = ?";
-            $stmt = $this->db->prepare( $sql );
-            $stmt->execute( array($this->username) );
-            $data = $stmt->fetch();
+        $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.user WHERE `user_username` = ?";
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( array($this->username) );
+        $data = $stmt->fetch();
 
-            // using the verify method to compare the password with the stored hashed password.
-            if (Bcrypt::verify( $this->password, $data['user_password'] ) === true)
-                $_SESSION['id'] = $data['user_id'];    // returning the user's id.
-            else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
+        // using the verify method to compare the password with the stored hashed password.
+        if (Bcrypt::verify( $this->password, $data['user_password'] ) === true)
+            $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+        else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
 
-            if ($this->rememberMe) {
-                $request = Request::getInstance();
-                $request->setCookie( "UserName" , $this->user_username );
-                $request->setCookie( "FullName" , $this->user_full_name );
-                $request->setCookie( "UserImage", $this->user_profile_pic );
-            } // we clear the cookies in the controller
-            $this->getUser();
-            startApplication(true);
-        } catch (\Exception $e) {
-            $this->alert['danger'] = $e->getMessage();
-        }
+        if ($this->rememberMe) {
+            $request = Request::getInstance();
+            $request->setCookie( "UserName", $this->user_username );
+            $request->setCookie( "FullName", $this->user_full_name );
+            $request->setCookie( "UserImage", $this->user_profile_pic );
+        } // we clear the cookies in the controller
+
+        startApplication( true );
 
     }
 
@@ -302,7 +286,7 @@ class User extends UserRelay
                 $sql = "INSERT INTO StatsCoach.user (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $this->db->prepare( $sql )->execute(
-                    array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->firstName.' '.$this->lastName,   $this->gender) );
+                    array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) );
 
                 $sql = "SELECT user_id FROM StatsCoach.user WHERE user_username = ?";
                 $stmt = $this->db->prepare( $sql );
