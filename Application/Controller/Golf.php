@@ -26,8 +26,13 @@ class Golf
         $this->state = ucfirst( $this->request->set( $this->state )->alnum() );
         $this->boxColor = $this->request->set( $this->boxColor )->alnum();
 
-        if (!$this->state)
+        if (!$this->state) {
+            if(!$states = fopen(SERVER_ROOT . "Data/Indexes/UnitedStates.txt", "r"))
+                throw new \Exception("Unable to open states file!");
+            while(!feof($states)) $this->states[] = fgets( $states );
+            fclose($states);
             return false;
+        }
 
         if (empty($_POST))
             return true;
