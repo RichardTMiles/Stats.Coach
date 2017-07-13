@@ -3,7 +3,7 @@
 const ¶ = PHP_EOL."\t";
 
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = '0.3.0';
+const SITE_VERSION = '0.4.0';
 
 if (!array_key_exists( 'X_PJAX_Version', $_SESSION )) 
     $_SESSION['X_PJAX_Version'] = SITE_VERSION;

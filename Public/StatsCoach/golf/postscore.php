@@ -62,7 +62,7 @@ if (!$this->state) { ?>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
             <li><a href="#" style="color: ghostwhite;">Forms</a></li>
-            <li class="active" style="color: ghostwhite;">Advanced Elements</li>
+            <li class="active" style="color: ghostwhite;">Post Score</li>
         </ol>
     </section>
 
@@ -118,13 +118,7 @@ if (!$this->state) { ?>
                             <label>State</label>
                             <select class="form-control select2" style="width: 100%;" onchange="course_given_states(this)" required>
                                 <option selected="selected" disabled value="">State</option>
-                                <option value="Alabama">Alabama</option>
-                                <option value="Alaska">Alaska</option>
-                                <option value="California">California</option>
-                                <option value="Delaware">Delaware</option>
-                                <option value="Tennessee">Tennessee</option>
-                                <option value="Texas">Texas</option>
-                                <option value="Washington">Washington</option>
+                                <?php foreach($this->states as $state) echo "<option value='$state'>$state</option>"; ?>
                             </select>
                         </div><!-- /.form-group -->
 

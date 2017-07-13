@@ -12,6 +12,8 @@ $route->signedOut()->match( 'Login/facebook/*', 'User', 'facebook' );           
 
 $route->signedIn()->match( 'JoinTeam/', 'User', 'joinTeam');
 
+$route->signedIn()->match( 'Settings/', 'User', 'settings');
+
 $route->signedIn()->match( 'AddCourse/{state?}/*', 'Golf', 'AddCourse' );  // AddCourse
 
 $route->signedOut()->match( 'Register/*', 'User', 'Register' );            // Register

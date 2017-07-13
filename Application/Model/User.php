@@ -20,14 +20,26 @@ class User extends UserRelay
         $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
         parent::__construct();                              // get database
         if ($this->user_id) {
+            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $this->user_id; // Bcrypt::genRandomHex(30);
             if (empty($this->user_username)) {
                 $this->getUser();
                 $this->getTeams();
             } else return null;
-            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $this->user_id; // Bcrypt::genRandomHex(30);
             $model = "Model\\$this->user_sport";
             $model::getInstance();
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+    }
+
+    private function getUser()
+    {   // In theory this method is only called once per session.
+        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
+        $this->user_id = $_SESSION['id'];
+        $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
+        $stmt->execute( [$this->user_id] );
+        $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
+        $this->user_profile_pic = SITE . $this->user_profile_pic;
+        $this->user_cover_photo = SITE . $this->user_cover_photo;
+
     }
 
     private function getTeams()
@@ -46,21 +58,9 @@ class User extends UserRelay
         if (!empty($this->teams)) {
             foreach ($this->teams as $key => &$team)
                 if (!empty($team->team_id))
-                    $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_id, user_full_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
+                    $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_unique, user_full_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
                 else unset($this->teams[$key]);
         } else $this->teams = [];
-    }
-
-    private function getUser()
-    {   // In theory this method is only called once per session.
-        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
-        $this->user_id = $_SESSION['id'];
-        $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
-        $stmt->execute( [$this->user_id] );
-        $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
-        $this->user_profile_pic = SITE . $this->user_profile_pic;
-        $this->user_cover_photo = SITE . $this->user_cover_photo;
-
     }
 
     protected function updateUser()
@@ -161,6 +161,19 @@ class User extends UserRelay
             We will generate a new password for you and send it back to your email.\r\n\r\n
             --" . SITE );
         return true;
+    }
+
+    protected function user_by_unique($user_unique)
+    {
+        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_unique = ?';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( [$user_unique] );
+        if ($stmt->fetchColumn() != 1) return false;
+        $sql = "SELECT * FROM StatsCoach.user WHERE user_unique = ?";
+        $user = $this->fetch_as_object( $sql, $user_unique );
+        $user->user_profile_pic = SITE . $user->user_profile_pic;
+        $user->user_cover_photo = SITE . $user->user_cover_photo;
+        return $user;
     }
 
     protected function user_exists($username)
@@ -389,23 +402,19 @@ class User extends UserRelay
         }
     }
 
-    public function profile($id = null)
+    public function profile($id)
     {
+        if ($id !== true && $user = $this->user_by_unique( $id ))
+            return $this->user = $user; // Replace inner content
+    }
 
-        // TODO - Delete the old user image, Complete the full forum submit
-        /*
+    public function settings()
+    {
         if (!empty($_POST)) {
             if ('false' == $filePath = new StoreFiles( 'FileToUpload', 'Data/Uploads/Pictures/' )) {
                 echo "File Upload Fail";
-                die();
-            } else if (!empty($user_id)) {
-                $this->relay->updateRow( "UPDATE users SET user_profile_pic = ? WHERE user_id = ?", array($filePath, $user_id) );
-                $user_profile_pic = $filePath;
             }
         }
-        */
-
-
     }
 
 }

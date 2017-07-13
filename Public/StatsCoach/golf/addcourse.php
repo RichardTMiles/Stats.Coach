@@ -156,3 +156,8 @@
 
 
 </section>
+
+<script>
+    //Money Euro
+    $('[data-mask]').inputmask()
+</script>

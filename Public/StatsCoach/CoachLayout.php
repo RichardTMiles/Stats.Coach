@@ -250,7 +250,7 @@
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    <a href="<?=site?>Settings/" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
 
             </ul>
@@ -284,18 +284,17 @@
             </div>
         </form>
         <!-- /.search form -->
-
-
+        
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu tree" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
 
-            <li class="treeview">
+            <li class="treeview menu-open">
                 <a href="#">
                     <i class="fa fa-dashboard"></i> <span>Overview</span> <i
                         class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu">
+                <ul class="treeview-menu" style="display: block;">
                     <li class="active">
                         <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $this->user->user_full_name ?>
                         </a>
@@ -325,13 +324,13 @@
             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php foreach ($this->user->teams as &$team) { ?>
                 <ul class="treeview-menu">
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-circle-o"></i> <?=$team->team_name?>
+                    <li class="treeview menu-open">
+                        <a href=""><i class="fa fa-circle-o"></i> <?=$team->team_name?>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                         </a>
-                        <ul class="treeview-menu">
+                        <ul class="treeview-menu" style="display: block;">
                             <?php foreach ($team->members as $user) { ?>
-                            <li><a href="<?=SITE?>Profile/<?=$user->user_id?>/"><i class="fa fa-circle-o"></i><?=$user->user_full_name?></a></li>
+                            <li><a href="<?=SITE?>Profile/<?=$user->user_unique?>/"><i class="fa fa-circle-o"></i><?=$user->user_full_name?></a></li>
                             <?php } ?>
                         </ul>
                     </li>
@@ -347,7 +346,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="#"><i class="fa fa-circle-o"></i> Vanessa Close </a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Join Tournament</a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> Join Tournament</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Past Results</a></li>
                 </ul>
             </li>
@@ -384,11 +383,11 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?= SITE ?>Profile/" onclick=""><i class="fa fa-circle-o"></i> Profile
+                    <li><a href="<?= SITE ?>Settings/" onclick=""><i class="fa fa-circle-o"></i> Profile
                             Settings</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Create Team</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Join Team</a></li>
+                    <li><a href="<?=site?>JoinTeam/"><i class="fa fa-circle-o"></i> Join Team</a></li>
                 </ul>
             </li>
 

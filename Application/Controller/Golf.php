@@ -120,7 +120,7 @@ class Golf
 
             return [$this->course, $this->handicap];
         } catch (\Exception $e) {
-            $this->alert['danger'] = $e->getMessage();
+            $this->alert['danger'] = $e->getMessage();  // Note this will PROBABLY be a caught exception
         }
         return false;
     }

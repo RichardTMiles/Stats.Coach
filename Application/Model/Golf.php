@@ -198,8 +198,8 @@ class Golf extends QuickFetch
                 if (!$stmt->execute()) throw new \Exception( "Failed to insert tee box $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
             }
 
-
             $this->alert['success'] = "The course has been added!";
+            startApplication('Home/');
         } catch (\Exception $e) {
             $this->alert['danger'] = $e->getMessage();
         }

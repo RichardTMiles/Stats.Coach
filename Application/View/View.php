@@ -32,7 +32,7 @@ class View
 
     public function __construct($sendWrapper = false)   // Send the content wrapper
     {
-        $this->restart = $sendWrapper ?: ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION);
+        $sendWrapper = $sendWrapper ?: ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION);
         if ($this->wrapper()) {
             if (!headers_sent()) header( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'], true );
             if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;

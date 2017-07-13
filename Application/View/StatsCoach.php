@@ -167,7 +167,7 @@
 <footer class="main-footer" style="">
     <div class="container">
         <div class="pull-right hidden-xs">
-            <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> 0.4.0
+            <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?=SITE_VERSION?>
         </div>
         <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
     </div>

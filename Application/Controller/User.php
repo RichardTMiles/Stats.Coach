@@ -144,7 +144,18 @@ class User
 
     public function profile()
     {
-        $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
+        if (!empty($_POST)) 
+            return true;
+        
+        // TODO - make the first sceen function
+        //if ($this->golf->stats->rounds == 0)
+           /// $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
+
+        return $this->request->set( $this->userID )->alnum();
+    }
+
+    public function settings()
+    {
         return false;
     }
 
