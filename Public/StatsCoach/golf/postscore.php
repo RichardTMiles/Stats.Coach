@@ -61,7 +61,6 @@ if (!$this->state) { ?>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#" style="color: ghostwhite;">Forms</a></li>
             <li class="active" style="color: ghostwhite;">Post Score</li>
         </ol>
     </section>
@@ -85,40 +84,11 @@ if (!$this->state) { ?>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Date:</label>
-
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input name="datepicker" type="text" class="form-control pull-right" id="datepicker" value="<?= date( 'm/d/Y', time() ) ?>">
-                                </div>
-                                <!-- /.input group -->
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <!-- time Picker -->
-                            <div class="bootstrap-timepicker" style="color: #000">
-                                <div class="form-group">
-                                    <label style="color: #fff">Time picker:</label>
-                                    <div class="input-group">
-                                        <input name="timepicker" type="text" class="form-control timepicker"/>
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-clock-o"></i>
-                                        </div>
-                                    </div><!-- /.input group -->
-                                </div><!-- /.form group -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
                         <div class="form-group">
                             <label>State</label>
                             <select class="form-control select2" style="width: 100%;" onchange="course_given_states(this)" required>
                                 <option selected="selected" disabled value="">State</option>
-                                <?php foreach($this->states as $state) echo "<option value='$state'>$state</option>"; ?>
+                                <?php foreach ($this->states as $state) echo "<option value='$state'>$state</option>"; ?>
                             </select>
                         </div><!-- /.form-group -->
 
@@ -140,11 +110,6 @@ if (!$this->state) { ?>
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
-            //Date picker
-            $('#datepicker').datepicker({autoclose: true});
-            //Timepicker
-            $('.timepicker').timepicker({showInputs: false});
-
         });
     </script>
 
@@ -167,7 +132,7 @@ if (!$this->state) { ?>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->state ?></a></li>
             <li class="active" style="color: ghostwhite;">Box Color</li>
         </ol>
     </section>
@@ -179,7 +144,7 @@ if (!$this->state) { ?>
                 if (empty($value)) break; ?>
                 <div class="col-lg-12 col-xs-12" onclick="startScoreCard('<?= $value ?>')">
                     <!-- small box -->
-                    <div class="small-box bg-<?= strtolower( $value ) ?>">
+                    <div class="small-box bg-<?= (($color = strtolower($value)) == 'gold' ? 'yellow' : $color ) ?>">
                         <div class="inner">
                             <h3><?= $value ?><sup style="font-size: 12px">Tee Box</sup></h3>
 
@@ -199,7 +164,7 @@ if (!$this->state) { ?>
     <?php return 1;
 } elseif (is_object( $this->golf->course ) && is_object( $this->golf->distance )) {
 
-    
+
 #######################  STEP 3 , input  #####################################{ ?>
 
     <script>
@@ -229,7 +194,7 @@ if (!$this->state) { ?>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->course_state ?></a></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->state ?></a></li>
             <li style="color: ghostwhite;"><?= $this->golf->course->course_name ?></li>
             <li style="color: ghostwhite;"><?= $this->golf->distance->distance_color ?></li>
             <li style="color: ghostwhite;"> Score Input</li>
@@ -238,8 +203,55 @@ if (!$this->state) { ?>
 
     <section class="content">
         <form data-pjax class="form-horizontal" method="post"
-              action="<?= SITE . 'PostScore/' . $this->golf->course->course_state . '/' . $this->golf->course->course_id . '/' . $this->golf->distance->distance_color . '/' ?>"
+              action="<?= SITE . 'PostScore/' . $this->golf->course->state . '/' . $this->golf->course->course_id . '/' . $this->golf->distance->distance_color . '/' ?>"
               name="addCourse">
+            <div class="row" id="dateTime">
+                <div class="col-xs-12">
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <i class="fa fa-clock-o"></i>
+                            <h3 class="box-title">Tee off time?</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date:</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input name="datepicker" type="text" class="form-control pull-right" id="datepicker" value="<?= date( 'm/d/Y', time() ) ?>">
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- time Picker -->
+                                        <div class="bootstrap-timepicker" style="color: #000">
+                                            <div class="form-group">
+                                                <label style="color: #fff">Time:</label>
+                                                <div class="input-group">
+                                                    <input name="timepicker" type="text" class="form-control timepicker"/>
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </div>
+                                                </div><!-- /.input group -->
+                                            </div><!-- /.form group -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
             <?php for ($i = 1; $i <= 18; $i++) { ?>
                 <!-- row -->
                 <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i == 1 ? "block" : "none") ?>">
@@ -257,7 +269,7 @@ if (!$this->state) { ?>
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->distance->distance[$i-1] ?>" data-min="1"
+                                                <input type="text" class="knob" value="<?= $this->golf->distance->distance[$i - 1] ?>" data-min="1"
                                                        data-max="<?= (ceil( $this->golf->distance->distance_tot / 18 ) + 400) ?>"
                                                        data-thickness="0.25" data-height="180" data-width="180"
                                                        data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
@@ -269,7 +281,7 @@ if (!$this->state) { ?>
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->course->course_par[$i-1] ?>" data-min="1" data-max="9"
+                                                <input type="text" class="knob" value="<?= $this->golf->course->course_par[$i - 1] ?>" data-min="1" data-max="9"
                                                        data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
                                                        style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                             </div>
@@ -349,6 +361,16 @@ if (!$this->state) { ?>
             <?php } ?>
         </form>
     </section>
+
+    <script>
+        $(function () {
+            //Date picker
+            $('#datepicker').datepicker({autoclose: true});
+            //Timepicker
+            $('.timepicker').timepicker({showInputs: false});
+
+        });
+    </script>
 
     <script>
         $(function () {

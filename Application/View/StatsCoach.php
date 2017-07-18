@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="<?= SITE ?>Public/favicon.png" type="image/x-icon"/>
 
     <!-- PJAX Content Control -->
-    <meta http-equiv="x-pjax-version" content="<?=$_SESSION['X_PJAX_Version']?>">
+    <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
 
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
@@ -139,6 +139,7 @@
     body {
         background-color: black;
     }
+
     .content-wrapper, .stats-wrap {
         /* This image will be displayed fullscreen
         /Public/StatsCoach/img/augusta-master.jpg
@@ -167,7 +168,7 @@
 <footer class="main-footer" style="">
     <div class="container">
         <div class="pull-right hidden-xs">
-            <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?=SITE_VERSION?>
+            <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?= SITE_VERSION ?>
         </div>
         <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
     </div>
@@ -177,101 +178,103 @@
 <?php $wrapper_footer = ob_get_clean(); ?>
 
 
-<?php if ($this->user->user_type == 'Coach') { ?>
-
-<body class="skin-green fixed sidebar-mini sidebar-collapse">
-<div class="wrapper">
-    <?php require_once CONTENT_ROOT . 'CoachLayout.php';
-    echo $wrapper_footer;
-    } elseif ($this->user->user_type == 'Athlete') { ?>
-    <body class="hold-transition skin-green layout-top-nav">
-    <div class="wrapper">
-        <?php require_once CONTENT_ROOT . 'AthleteLayout.php';
+<?php
+if (is_object( $this->user )) {
+    if ($this->user->user_type == 'Coach') {
+        echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
+        require_once CONTENT_ROOT . 'CoachLayout.php';
         echo $wrapper_footer;
-        } elseif (!$this->user->user_id) { ?>
-        <body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>
-        <?php } else { ?>
-        <body><div class="alert"></div>
-        <script>bootstrapAlert('A critical error has occured', 'danger')</script>
-        <?php } ?>
+    } elseif ($this->user->user_type == 'Athlete') {
+        echo '<body class="hold-transition skin-green layout-top-nav"><div class="wrapper">';
+        require_once CONTENT_ROOT . 'AthleteLayout.php';
+        echo $wrapper_footer;
+    } elseif (!$this->user->user_id) {
+        echo '<body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>';
+    }
+} else {
+    echo '<body><div class="alert"></div><script>bootstrapAlert("A critical error has occured", "danger")</script>';
+} ?>
 
-        <!-- ./wrapper -->
-        <!-- JQuery -->
-        <script src="<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>"></script>
-        <!-- Background -->
-        <script src="<?= $this->versionControl( 'Public/jquery-backstretch/jquery.backstretch.min.js' ) ?>"></script>
-        <!-- Select 2 -->
-        <script src="<?= $this->versionControl( 'bower_components/select2/dist/js/select2.full.min.js' ) ?>"></script>
-        <!-- Bootstrap -->
-        <script src="<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>"></script>
-        <!-- Data tables -->
-        <!--script src="<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>"></script>
+<!-- ./wrapper -->
+<!-- JQuery -->
+<script src="<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>"></script>
+<!-- Background -->
+<script src="<?= $this->versionControl( 'Public/jquery-backstretch/jquery.backstretch.min.js' ) ?>"></script>
+<!-- Select 2 -->
+<script src="<?= $this->versionControl( 'bower_components/select2/dist/js/select2.full.min.js' ) ?>"></script>
+<!-- Bootstrap -->
+<script src="<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>"></script>
+<!-- Data tables -->
+<!--script src="<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>"></script>
         <!-- Input Mask -->
-        <script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.js' ) ?>"></script>
-        <script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.date.extensions.js' ) ?>"></script>
-        <script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.extensions.js' ) ?>"></script>
-        <!-- Slim Scroll -->
-        <script src="<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>"></script>
-        <!-- Fastclick -->
-        <script src="<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>"></script>
-        <!-- AJAX Pace -->
-        <script src="<?= $this->versionControl( 'bower_components/PACE/pace.js' ) ?>"></script>
-        <!-- Admin LTE -->
-        <script src="<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>"></script>
-        <!-- Stats Coach Bootstrap Alert -->
-        <script src="<?= $this->versionControl( 'alert/alerts.js' ) ?>"></script>
-        <!-- iCheck -->
-        <script src="<?= $this->versionControl( 'plugins/iCheck/icheck.min.js' ) ?>"></script>
-        <!-- bootstrap datepicker -->
-        <script src="<?= $this->versionControl( 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js' ) ?>"></script>
-        <!-- bootstrap color picker -->
-        <script src="<?= $this->versionControl( 'bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' ) ?>"></script>
-        <!-- bootstrap time picker -->
-        <script src="<?= $this->versionControl( 'plugins/timepicker/bootstrap-timepicker.min.js' ) ?>"></script>
-        <!-- Google -->
-        <script src="<?= $this->versionControl( 'Public/Analytics/google.analytics.js' ) ?>"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="<?= $this->versionControl( 'dist/js/demo.js' ) ?>"></script>
-        <!-- jQuery Knob -->
-        <script src="<?= $this->versionControl( 'bower_components/jquery-knob/js/jquery.knob.js' ) ?>"></script>
-        <!-- PJAX-->
-        <script src="<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>"></script>
-        <!-- Better PJAX - https://github.com/defunkt/jquery-pjax/issues/469  -->
+<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.js' ) ?>"></script>
+<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.date.extensions.js' ) ?>"></script>
+<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.extensions.js' ) ?>"></script>
+<!-- Slim Scroll -->
+<script src="<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>"></script>
+<!-- Fastclick -->
+<script src="<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>"></script>
+<!-- AJAX Pace -->
+<script src="<?= $this->versionControl( 'bower_components/PACE/pace.js' ) ?>"></script>
+<!-- Admin LTE -->
+<script src="<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>"></script>
+<!-- Stats Coach Bootstrap Alert -->
+<script src="<?= $this->versionControl( 'alert/alerts.js' ) ?>"></script>
+<!-- iCheck -->
+<script src="<?= $this->versionControl( 'plugins/iCheck/icheck.min.js' ) ?>"></script>
+<!-- bootstrap datepicker -->
+<script src="<?= $this->versionControl( 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js' ) ?>"></script>
+<!-- bootstrap color picker -->
+<script src="<?= $this->versionControl( 'bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' ) ?>"></script>
+<!-- bootstrap time picker -->
+<script src="<?= $this->versionControl( 'plugins/timepicker/bootstrap-timepicker.min.js' ) ?>"></script>
+<!-- Google -->
+<script src="<?= $this->versionControl( 'Public/Analytics/google.analytics.js' ) ?>"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="<?= $this->versionControl( 'dist/js/demo.js' ) ?>"></script>
+<!-- jQuery Knob -->
+<script src="<?= $this->versionControl( 'bower_components/jquery-knob/js/jquery.knob.js' ) ?>"></script>
+<!-- PJAX-->
+<script src="<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>"></script>
+<!-- Better PJAX - https://github.com/defunkt/jquery-pjax/issues/469  -->
 
-        <script>
-            jQuery.fn.exists = function () {
-                return this.length > 0;
-            };
+<script>
+    jQuery.fn.exists = function () {
+        return this.length > 0;
+    };
 
-            $(document).pjax('a', '#ajax-content');
-            $.pjax.reload('#ajax-content');
+    $(document).pjax('a', '#ajax-content');
+    $.pjax.reload('#ajax-content');
 
-            $.fn.on('pjax:send', function () {
-                $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
-                Pace.restart();
-            });
+    $.fn.on('pjax:send', function () {
+        $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
+        Pace.restart();
+    });
 
-            $.fn.on('pjax:complete', function () {
-                $('#ajax-content').removeClass('overlay'); });
+    $.fn.on('pjax:complete', function () {
+        $('#ajax-content').removeClass('overlay');
+    });
 
-            $(document).on("click", "a.no-pjax", false);
-
-
-            $(function () {
-                var closure = function() {$(document).on("pjax:complete", function (event) {
-                    $(event.target).find("script[data-exec-on-popstate]").each(function () {
-                        $.globalEval(this.text || this.textContent || this.innerHTML || '');
-                    })
-                })};
-                $(document).on("pjax:popstate", function () {
-                    closure();
-                });  //.on("pjax:pushstate")
-
-            });
-
-        </script>
+    $(document).on("click", "a.no-pjax", false);
 
 
-        </body>
+    $(function () {
+        var closure = function () {
+            $(document).on("pjax:complete", function (event) {
+                $(event.target).find("script[data-exec-on-popstate]").each(function () {
+                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
+                })
+            })
+        };
+        $(document).on("pjax:popstate", function () {
+            closure();
+        });  //.on("pjax:pushstate")
+
+    });
+
+</script>
+
+
+</body>
 </html>
 

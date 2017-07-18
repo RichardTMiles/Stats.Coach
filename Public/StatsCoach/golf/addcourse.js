@@ -2,12 +2,6 @@ var tee_boxes,
     Handicap_number,
     total_holes = 18, tee_box_colors = [];
 
-$(document).on('submit', 'form[data-pjax]', function (event) {
-    event.preventDefault();
-    document.getElementById('hole-18-distances').style.display = "none";
-    $.pjax.submit(event, '#ajax-content')
-});
-
 $(function () {
     $(".select2").select2();       //Initialize Select2 Elements
     $("[data-mask]").inputmask();  //Money Euro

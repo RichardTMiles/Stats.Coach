@@ -9,7 +9,6 @@ Email needs to be edited in function "register"
 
 namespace Model\Helpers;
 
-
 use Modules\Helpers\QuickFetch;
 
 abstract class UserRelay extends QuickFetch
@@ -39,6 +38,8 @@ abstract class UserRelay extends QuickFetch
     public $user_ip;
 
     public $teams = array();    // this will hold objects, I like when it print out here in the sort dump
+    public $stats = array();
+    public $rounds = array();   // Golf
 
 }
 

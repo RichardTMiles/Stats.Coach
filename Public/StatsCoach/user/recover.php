@@ -1,17 +1,14 @@
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?= SITE . 'index.php'; ?>"><b>Stats</b>.Coach</a>
+        <a href="<?= SITE ?>"><b>Stats</b>.Coach</a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Recover Username & Password</p>
 
-        <form action="<?= SITE ?>users/recover/" method="post">
+        <form data-pjax action="<?= SITE ?>Recover/" method="post">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="email"
-                       placeholder="Email" value="<?php if (isset($_POST['email'])) {
-                    echo htmlentities( $_POST['email'] );
-                } ?>">
+                <input type="text" class="form-control" name="user_email" placeholder="Email" >
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="row">
@@ -20,13 +17,13 @@
                 </div><!-- /.col -->
             </div>
         </form>
-        <br \>
+        <br>
 
         <div id="alert"></div>
 
 
-        <a href="<?= SITE ?>">Already Have an account? Login Here</a><br>
-        <a href="<?php echo SITE . 'users/register/'; ?>" class="text-center">Register a new membership</a>
+        <a href="<?= SITE ?>Login/">Already Have an account? Login Here </a><br>
+        <a href="<?=SITE?>Register/" class="text-center">Register a new membership</a>
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
@@ -39,4 +36,9 @@
             increaseArea: '20%' // optional
         });
     });
+
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $.pjax.submit(event, '#ajax-content')
+    });
+
 </script>

@@ -12,6 +12,18 @@ use Modules\Database;
 
 abstract class QuickFetch
 {
+    const USER = 0;
+    const USER_FOLLOWERS = 1;
+    const USER_MESSAGES = 3;
+    const USER_TASKS = 4;
+    const TEAMS = 5;
+    const TEAM_MEMBERS = 6;
+    const GOLF_TOURNAMENTS = 7;
+    const GOLF_ROUNDS = 8;
+    const GOLF_COURSE = 9;
+    const ENTITY_COMMENTS = 10;
+    const ENTITY_PHOTOS = 11;
+
     protected $db;
 
     public function __construct()
@@ -19,11 +31,17 @@ abstract class QuickFetch
         $this->db = Database::getConnection();
     }
 
-
-    // https://stackoverflow.com/questions/4697656/using-json-encode-on-objects-in-php-regardless-of-scope
-    public function jsonSerialize()
+    public function new_entity($tag_id)
     {
-        return get_object_vars( $this );      // I dont think ill include this in carbon
+        do { try {
+                $stmt = $this->db->prepare( 'INSERT INTO StatsCoach.entity (entity_pk) VALUE (?)' );
+                $stmt->execute( [$key = Bcrypt::genRandomHex()] );
+            } catch (\PDOException $e) {
+                $stmt = false;
+            }
+        } while (!$stmt);
+        $this->db->prepare( 'INSERT INTO StatsCoach.entity_tag (entity_id, user_id, tag_id, creation_date) VALUES (?,?,?,?)' )->execute([$key, (isset($_SESSION['id']) ? $_SESSION['id'] : $key), $tag_id, time()]);
+        return $key;
     }
 
     public function fetch_into_current_class($array)
@@ -38,10 +56,17 @@ abstract class QuickFetch
     {
         $stmt = $this->db->prepare( $sql );
         $stmt->setFetchMode( \PDO::FETCH_CLASS, \stdClass::class );
-        $stmt->execute( $execute );
+        if (!$stmt->execute( $execute )) return false;
         $stmt = $stmt->fetchAll();  // user obj
-        $stmt = (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : (is_array( $stmt ) ? (object)$stmt : null));
-        return is_object( $stmt ) ? clone $stmt : null;
+        return (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : (is_array( $stmt ) ? $stmt : false));
+    }
+
+    public function fetch_as_array_object()
+    {
+        $stmt = $this->db->prepare( $sql );
+        $stmt->setFetchMode( \PDO::FETCH_CLASS, Skeleton::class );
+        $stmt->execute( $execute );
+        return $stmt->fetchAll();  // user obj
     }
 
     public function fetch_to_global($sql, $execute)

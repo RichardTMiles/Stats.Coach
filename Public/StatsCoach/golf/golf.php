@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $this->golf->stats->stats_ffs ?></h5>
+                        <h5 class="description-header"><?= $this->user->stats->stats_ffs ?></h5>
                         <span class="description-text">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
@@ -38,7 +38,7 @@
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?=$this->golf->stats->stats_rounds?></h5>
+                        <h5 class="description-header"><?=$this->user->stats->stats_rounds?></h5>
                         <span class="description-text">Rounds</span>
                     </div><!-- /.description-block -->
 
@@ -46,7 +46,7 @@
 
                 <div class="col-sm-4">
                     <div class="description-block">
-                        <h5 class="description-header"><?=$this->golf->stats->stats_gnr?></h5>
+                        <h5 class="description-header"><?=$this->user->stats->stats_gnr?></h5>
                         <span class="description-text">Greens in Regulation</span>
                     </div><!-- /.description-block -->
                 </div><!-- /.col -->
@@ -54,8 +54,8 @@
 
         </div>
     </div>
-    <?php if (isset($this->golf->rounds->course_name)) { ?>
-
+    
+    <?php if (!empty($this->user->rounds) && is_array( $this->user->rounds ) && is_object( $this->user->rounds[0] )) { ?>
     <div class="box box-widget widget-user">
         <div class="box box-info">
             <div class="box-header with-border">
@@ -72,23 +72,24 @@
                         <tr>
                             <th>Date</th>
                             <th>Course</th>
-                            <th>Fairway First Shot</th>
-                            <th>Green in Regulation</th>
+                            <th>Fairway</th>
+                            <th>Green</th>
                             <th>Putts</th>
-                            <th>Strokes</th>
                             <th>Par</th>
+                            <th>Strokes</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($this->golf->rounds as $key => $stats) { ?>
+
+                        <?php foreach($this->user->rounds as $key => $round) { ?>
                         <tr>
-                            <td><a href="#">$<?=$stats->score_date?></a></td>
-                            <td><?=$stats->course_name?></td>
-                            <td><?=$stats->score_ffs_total?></td>
-                            <td><?=$stats->score_gnr_total?></td>
-                            <td><?=$stats->score_?></td>
-                            <td><?=$stats->score_total?></td>
-                            <td><?=$stats->par_tot?></td>
+                            <td><?= date( 'm/d/Y', $round->creation_date ) ?></td>
+                            <td><?=$round->course_name?></td>
+                            <td><?=$round->score_total_ffs?></td>
+                            <td><?=$round->score_total_gnr?></td>
+                            <td><?=$round->score_total_putts?></td>
+                            <td><?=$round->par_tot?></td>
+                            <td><?=$round->score_total?></td>
                         </tr>
                         <?php }?>
 
@@ -110,7 +111,7 @@
                 <span class="info-box-icon bg-aqua"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Shots</span>
-                    <span class="info-box-number"><?=$this->golf->stats->stats_strokes?></span>
+                    <span class="info-box-number"><?=$this->user->stats->stats_strokes?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -120,7 +121,7 @@
                 <span class="info-box-icon bg-green"><i class="fa fa-flag-checkered"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Rounds Played</span>
-                    <span class="info-box-number"><?=$this->golf->stats->stats_rounds?></span>
+                    <span class="info-box-number"><?=$this->user->stats->stats_rounds?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -130,7 +131,7 @@
                 <span class="info-box-icon bg-yellow"><i class="fa fa-tree"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Handicap</span>
-                    <span class="info-box-number"><?=($this->golf->stats->stats_handicap < 6 ? "You must play at least 6 rounds": $this->golf->stats_handicap)?></span>
+                    <span class="info-box-number"><?=($this->user->stats->stats_handicap < 6 ? "You must play at least 6 rounds": $this->golf->stats_handicap)?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

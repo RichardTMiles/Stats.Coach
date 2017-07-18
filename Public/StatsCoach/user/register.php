@@ -1,33 +1,12 @@
-<script>
-    function extend_registration(value = null) {
-        if (value == null) return;
-        var node = document.getElementById('extended-signup');
-        switch (value) {
-            case 'Athlete':
-                node.innerHTML =
-                    '<div class="form-group has-feedback"><input type="text" class="form-control" placeholder="Team Code (optional)" name="teamCode" value="<?= $this->teamCode ?>"> \
-                                <span class="form-control-feedback""></span></div>';
-                break;
-            case 'Coach':
-                node.innerHTML =
-                    '<div class="form-group has-feedback"><input type="text" class="form-control" placeholder="Team Name" name="teamName" value="<?= $this->teamName ?>"> \
-                                <span class="form-control-feedback""></span></div> \
-                                <div class="form-group has-feedback"><input type="text" class="form-control" placeholder="School (optional)" name="schoolName" value="<?= $this->schoolName ?>"> \
-                                <span class="form-control-feedback"></span></div>';
-                break;
-        }
-    }
-</script>
 
-    
-<div class="register-box" onload="extend_registration('<?= $this->userType ?>')">
+<div class="register-box" >
     <div class="register-logo">
         <a href="" style="font-weight: bold; color: #008d4c" "><b>Stats</b>.Coach</a>
     </div>
 
     <div class="register-box-body">
         <p class="login-box-msg">Register a new membership</p>
-        <form action="https://Stats.Coach/Register/" method="post">
+        <form data-pjax action="https://Stats.Coach/Register/" method="post">
 
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" placeholder="First Name" name="firstname" value="<?= $this->firstName ?>">
@@ -112,11 +91,35 @@
 <br>
 <br>
 <script>
+    function extend_registration(value = null) {
+        if (value == null) return;
+        var node = document.getElementById('extended-signup');
+        switch (value) {
+            case 'Athlete':
+                node.innerHTML =
+                    '<div class="form-group has-feedback"><input type="text" class="form-control" placeholder="Team Code (optional)" name="teamCode" value="<?= $this->teamCode ?>"> \
+                                <span class="form-control-feedback""></span></div>';
+                break;
+            case 'Coach':
+                node.innerHTML =
+                    '<div class="form-group has-feedback"><input type="text" class="form-control" placeholder="Team Name" name="teamName" value="<?= $this->teamName ?>"> \
+                                <span class="form-control-feedback""></span></div> \
+                                <div class="form-group has-feedback"><input type="text" class="form-control" placeholder="School (optional)" name="schoolName" value="<?= $this->schoolName ?>"> \
+                                <span class="form-control-feedback"></span></div>';
+                break;
+        }
+    }
+    extend_registration('<?= $this->userType ?>');
+
     $(function () {
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
+    });
+
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $.pjax.submit(event, '#ajax-content')
     });
 </script>

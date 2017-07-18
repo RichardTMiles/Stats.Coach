@@ -2,11 +2,11 @@
 
 namespace Modules;
 
-// Singleton
+require_once SERVER_ROOT . 'Application/Modules/Helpers/Serialized.php';
 
 trait Singleton
 {
-    private $storage;               // A Temporary variable for 'quick data'
+    public $storage;               // A Temporary variable for 'quick data'
     protected $methods = array();   // Anonymous Function Declaration
     private static $instance;        // Instance of the Container
     
@@ -31,9 +31,8 @@ trait Singleton
         $calledClass = get_called_class();
         // check if the object has been sterilized in the session
         // This will invoke the __wake up operator
-        if (array_key_exists( $calledClass, $_SESSION ) &&
-            is_object( self::$instance = @unserialize( ( $_SESSION[$calledClass] ))))   // TODO -base64_decode(
-                return self::$instance;
+        if (isset( $_SESSION[$calledClass] ) && is_serialized( $_SESSION[$calledClass], self::$instance))
+            return self::$instance;
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
         self::$instance = $class->newInstanceArgs($args);
@@ -47,7 +46,7 @@ trait Singleton
     public static function clearInstance($object = null)
     {
         self::$instance = is_object( $object ) ? $object : null;
-        if (array_key_exists( __CLASS__, $_SESSION )) unset($_SESSION[__CLASS__]);
+        unset($_SESSION[__CLASS__]);
         return self::$instance;
     }
     
@@ -86,9 +85,7 @@ trait Singleton
     {
         if (method_exists( $this, '__construct' )) self::__construct();
         $object = get_object_vars( $this );
-        foreach ($object as $item => $value)    // TODO - were really going to try and objectify everything?
-            if(is_object( $temp = @unserialize(( $this->$item ))))      // TODO - base64_decode(
-                $this->$item = $temp;
+        foreach ($object as $item => $value) is_serialized($value, $this->$item);  // TODO - base64_decode(
     }
 
     // for auto class serialization add: const Singleton = true; to calling class
@@ -137,24 +134,20 @@ trait Singleton
         return $this->storage;
     }
 
-    private function set($name, $value = null)
+    public function set(...$argv)
     {
-        $this->storage = null;
-        if ($value == null) {
-            if (is_array( $name )) $this->storage = $name;
-            else $this->storage[] = $name;
-        } else $this->storage[$name] = $value;
+        $this->storage = $argv;
         return $this;
     }
 
-    private function get($variable = null)
+    public function get($variable = null)
     {
         return ($variable == null ?
             $this->storage :
             $this->{$variable});
     }
 
-    private function has($variable)
+    public function has($variable)
     {
         return isset($this->$variable);
     }

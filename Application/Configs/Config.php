@@ -5,7 +5,7 @@ const ¶ = PHP_EOL."\t";
 const SITE_TITLE = 'Stats Coach';
 const SITE_VERSION = '0.4.0';
 
-if (!array_key_exists( 'X_PJAX_Version', $_SESSION )) 
+if (!isset($_SESSION['X_PJAX_Version']))
     $_SESSION['X_PJAX_Version'] = SITE_VERSION;
 
 define( 'X_PJAX_VERSION' , $_SESSION['X_PJAX_Version']);
@@ -41,8 +41,6 @@ define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
 define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true);
 
 
-
-
 ################# Application Paths ########################
 /**
  * The following constants MUST be used wherever applicable
@@ -61,7 +59,7 @@ define( 'SITE',             url . DS , true);    // http(s)://example.com/  - do
 define( 'CONTENT',          DS . 'Public/StatsCoach' . DS );
 define( 'VENDOR',           DS . 'Application/Services/vendor' . DS );
 define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
-define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Log_'. time() .'.php' );
+define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Log_'. time() .'_'.session_id().'.php' );
 define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor' . DS );
 define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte' . DS );
 define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach' . DS );

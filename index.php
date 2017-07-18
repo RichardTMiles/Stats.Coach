@@ -2,7 +2,7 @@
 
 switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
     case 'css': case 'js': case 'php': case 'jpg': case 'png': exit(1);    // A request has been made to an invalid file
-    default: 
+    default:
 }
 
 define( 'DS', DIRECTORY_SEPARATOR );
@@ -24,42 +24,43 @@ if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
     exit(1);
 }
 
-new Modules\ErrorCatcher(1);
+Modules\Helpers\Reporting\ErrorCatcher::start();
+
 
 function startApplication($restart = false)
 {
     if ($restart) {
         $_POST = [];
-        Model\User::newInstance();                   // This will reset the stats too.
+        Model\User::newInstance();      // This will reset the stats too.
         View\View::newInstance($restart === true);
-        $_SERVER['REQUEST_URI'] = ($restart === true ? '/' : $restart);
+        Modules\Request::changeURI($restart === true ? '/' : $restart);
     }
 
+    Modules\Request::sendHeaders();     // Send any stored headers
     $user = Model\User::getInstance();
     $view = View\View::getInstance();
-    
-    $route = new Modules\Route( function ($class, $method) use ($restart, $view) {
+
+
+    $route = new Modules\Route( function ($class, $method, ...$argv) use ($restart, $view) {
+
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
-        if ($restart === true) {
-            $controller::clearInstance();
-            $model::clearInstance();
-        }
 
-        $controller = $controller::getInstance();   // debating to clear the instance
-        if (($argv = $controller->$method()) !== false) {
-            $model = $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
-            call_user_func_array( [$model, "$method"], (is_array($argv)?$argv:[$argv]) );
-        }
+        if ($restart === true) $model::clearInstance($controller::clearInstance());
 
-        // Relies on the Singleton Trait - content is private but uses attempts to use the current instance
-        $view->contents( $class, $method );    // this will exit(1) on success
+        try {
+            $controller = $controller::getInstance();
+            if (!empty($argv = call_user_func_array( [$controller, "$method"], $argv ))) {
+                $model = $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
+                call_user_func_array( [$model, "$method"], (is_array( $argv ) ? $argv : [$argv]) );
+            }
+        } catch (\Modules\Helpers\Reporting\PublicAlert $e){};
+
+        $view->content( $class, $method );
     });
-    
 
     include SERVER_ROOT . 'Application/Bootstrap.php';
-
 
 } 
 

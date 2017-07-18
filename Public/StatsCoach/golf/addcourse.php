@@ -131,6 +131,22 @@
                             <option value="2">Mens and Womens Listed</option>
                         </select>
                     </div>
+                    <div class="form-group col-xs-12 col-md-12" id="pga_professional">
+                        <label class="control-label" for="pga_professional">Course PGA Professional
+                            <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
+                        </label>
+                        <input value="<?= $this->pga_pro ?>" type="text" class="form-control" placeholder="Course PRO"
+                               name="pga_professional">
+
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12" id="course_website">
+                        <label class="control-label" for="course_website">Course Website
+                            <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
+                        </label>
+                        <input value="<?= $this->course_website ?>" type="text" class="form-control" placeholder="Course Website"
+                               name="course_website">
+
+                    </div>
                 </div>
             </div>
 
@@ -159,5 +175,13 @@
 
 <script>
     //Money Euro
-    $('[data-mask]').inputmask()
+    $('[data-mask]').inputmask();
+    
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $.pjax.submit(event, '#ajax-content')
+    });
+
+
+
+
 </script>

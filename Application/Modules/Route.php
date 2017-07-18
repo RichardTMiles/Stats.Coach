@@ -11,7 +11,7 @@ namespace Modules;
 
 class Route
 {
-    use Singleton;
+    use Singleton; 
 
     public $uri;
     private $matched;             // a bool
@@ -21,9 +21,10 @@ class Route
     public function __construct(callable $structure)
     {
         $this->structure = $structure;
-        $this->uri = explode( '/', strtolower( ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' )));
+        $this->uri = explode( '/', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' ));
         $this->matched = true;
-        if (empty($this->uri[0])) return $this->defaultRoute();
+        if (empty($this->uri[0]))
+            return $this->defaultRoute();
         $this->matched = false;
     }
 
@@ -116,9 +117,12 @@ class Route
                         $this->addMethod( 'routeMatched', $argv[0] );
                         if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
+
                     } elseif (count( $argv ) == 2) {
                         $structure = $this->structure;
-                        $structure( $argv[0], $argv[1] );
+                        $argv = array_merge( $argv, $variables );
+                        call_user_func_array( $structure, $argv );
+                        
                         exit(1);
                     } else throw new \InvalidArgumentException('Are we passing a valid structure?');
                     return $this; // Note that the application will break in the View::contents
@@ -155,7 +159,7 @@ class Route
                     if (!array_key_exists( $i, $uri ))
                         return $this;
 
-                    if (strtolower( $arrayToMatch[$i] ) != $uri[$i])
+                    if (strtolower( $arrayToMatch[$i] ) != strtolower($uri[$i]))
                         return $this;
             }
         }

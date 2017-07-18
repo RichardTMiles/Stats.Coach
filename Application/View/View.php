@@ -10,13 +10,13 @@ namespace View;
 use Controller\User;
 use Modules\Singleton;
 
-class View
+class  View
 {
     use Singleton;
     const Singleton = true;
     
     public $currentPage;
-    // public $errors;
+    private $carryErrors;
 
     public function __wakeup()
     {
@@ -34,14 +34,22 @@ class View
     {
         $sendWrapper = $sendWrapper ?: ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION);
         if ($this->wrapper()) {
-            if (!headers_sent()) header( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'], true );
-            if (!$sendWrapper && $this->ajax = $this->ajaxActive()) return null;
-            require_once "minify.php";
+            
+            if (!headers_sent())
+                header( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'], true );
+
+            if (!$sendWrapper && $this->ajax = $this->ajaxActive())
+                return null;
+            $_POST = [];
             ob_start();
             require(CONTENT_WRAPPER);   // Return the Template
             $template = ob_get_clean();
-            echo MINIFY_CONTENTS ? minify_html( $template ) : $template;
-        } elseif ($this->ajaxActive()) User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
+            echo (MINIFY_CONTENTS && (@include_once "minify.php")) ? minify_html( $template ) : $template;
+            if ($sendWrapper) { 
+                if (!empty($GLOBALS['alert'])) $this->carryErrors = $GLOBALS['alert']; // exit(1); 
+            }
+        } elseif ($this->ajaxActive())
+            User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
@@ -51,32 +59,36 @@ class View
         return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
     }
 
-    private function contents(...$argv) // Must be called through Singleton, must be private
+    public static function contents(...$argv) {
+        $self = static::getInstance();
+        call_user_func_array( [$self, 'content' ], $argv );
+    }
+
+    public function content(...$argv) // Must be called through Singleton, must be private
     {
         switch (count($argv)) {
             case 2: $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
                 break;
             case 1:
-                $file = file_exists( $argv[0] ) ? $argv[0]  : CONTENT_ROOT . $argv[0];
+                $file = @file_exists( $argv[0] ) ? $argv[0]  : CONTENT_ROOT . $argv[0];
                 break;
             default: throw new \InvalidArgumentException();
         }
 
         if (file_exists( $file )) {
             ob_start();
+            if (empty($GLOBALS['alert']) && !empty($GLOBALS['alert'] = $this->carryErrors))
+                $this->carryErrors = null;
             include CONTENT_ROOT . 'alert' . DS . 'alerts.php'; // a little hackish when not using template file
             include_once $file;
             $file = ob_get_clean();                             // TODO minify_html()
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                 $file = minify_html( $file );
-            if ($this->restart || (($this->restart || !$this->ajaxActive()) && (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id))) {
+            if ($this->restart || (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id))) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
             exit(1);
         } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
-
-        // startApplication( true );
-        // restart, this usually means the user is trying to access a protected page when logged out
     }
 
     private function ajaxActive()
@@ -116,7 +128,7 @@ class View
 
     public function __get($variable)
     {
-        return (array_key_exists( $variable, $GLOBALS ) ? $GLOBALS[$variable] : null);
+        return (isset( $GLOBALS[$variable] ) ? $GLOBALS[$variable] : null);
     }
 
 

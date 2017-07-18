@@ -2,19 +2,14 @@
 
 namespace Controller;
 
+use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Request;
 use Modules\Singleton;
 
-class User
+class User extends Request
 {
-    use Singleton;
+    use Singleton { set as private privateSet; }
 
-    private $request;
-
-    public function __construct()
-    {
-        $this->request = new Request;
-    }
 
     public static function logout()
     {
@@ -24,43 +19,55 @@ class User
         unset($_SESSION['id']);
         session_unset();
         session_destroy();
-        startApplication(true);
+        startApplication( true );
     }
-    
-    public function login()
+
+    public function login($client = null)
     {
-        if (isset($this->client) && $this->client == "clear") {
-            $this->request->cookie('UserName', 'FullName', 'UserImage')->clearCookies();
+
+        if (isset($client) && $client == "clear") {
+            $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
             return false;
         }
 
-        list($this->UserName, $this->FullName, $this->UserImage)
-            = $this->request->cookie('UserName', 'FullName', 'UserImage')->value();
+        list($UserName, $this->FullName, $UserImage)
+            = $this->cookie( 'UserName', 'FullName', 'UserImage' )->alnum();
 
-        if (empty($_POST))
-            return false;  // If forum already submitted
+        if (empty($_POST)) return false;  // If forum already submitted
 
-        $this->username = $this->request->post( 'username' )->alnum();
-        $this->password = $this->request->post( 'password' )->value();
-        $this->rememberMe = $this->request->post('RememberMe')->int();
+        $username = $this->post( 'username' )->alnum();
+        $password = $this->post( 'password' )->value();
+        $rememberMe = $this->post( 'RememberMe' )->int();
+        
+        if (!$rememberMe) {
+            $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
+        } else {
+            $this->setCookie( "UserName", $this->user_username );
+            $this->setCookie( "FullName", $this->user_full_name );  // TODO - rethink
+            $this->setCookie( "UserImage", $this->user_profile_pic );
+        }
 
-        if (!$this->rememberMe)
-            $this->request->cookie('username','password','RememberMe')->clearCookies();
+        if (!$username || !$password)
+            throw new PublicAlert('Sorry, but we need your username and password.');
 
-        if (!$this->username || !$this->password) {
-            $this->alert['warning'] = 'Sorry, but we need your username and password.';
-            return false;
-        } return true;
+        return [$username, $password, $rememberMe];
+    }
+
+    public function createTeam()
+    {
+        if (empty($_POST)) return false;
+        list($teamName, $schoolName) = $this->post( 'teamName', 'schoolName' )->text();
+        return (empty($teamName) || empty($schoolName)) ? [$teamName, $schoolName] : false;
     }
 
     public function joinTeam()
     {
-        if (empty($_POST))
-            return false;
-        if (!$this->teamCode = $this->request->post( 'teamCode' )->alnum()) {
-            $this->alert['warning'] = "Sorry, your team code appears to be invalid";
-            return false;
-        } return true;
+        if (empty($_POST)) return false;
+
+        if (!$teamCode = $this->post( 'teamCode' )->alnum())
+            PublicAlert::warning("Sorry, your team code appears to be invalid");
+        
+        return $teamCode;
     }
 
     public function facebook()
@@ -68,26 +75,25 @@ class User
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
             $this->alert = 'Sorry, we could not connect to Facebook. Please try again later.';
         else return true;
-        return startApplication(true);     // This will load the login page
+        return startApplication( true );     // This will load the login page
     }
 
     public function register()
     {
-        if (empty($_POST))
-            return false;
+        if (empty($_POST)) return false;
 
         list($this->username, $this->firstName, $this->lastName, $this->gender, $this->userType, $this->teamCode)
-            = $this->request->post( 'username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode')->alnum();
+            = $this->post( 'username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode' )->alnum();
 
         list($this->teamName, $this->schoolName)
-            = $this->request->post( 'teamName', 'schoolName' )->text();
-        
-        list($this->password, $verifyPass )
-            = $this->request->post( 'password', 'password2' )->value();  // unsanitized
+            = $this->post( 'teamName', 'schoolName' )->text();
 
-        $this->email = $this->request->post( 'email' )->email();
+        list($this->password, $verifyPass)
+            = $this->post( 'password', 'password2' )->value();  // unsanitized
 
-        $terms = $this->request->post('Terms')->int();
+        $this->email = $this->post( 'email' )->email();
+
+        $terms = $this->post( 'Terms' )->int();
 
         if (!$this->username)
             $this->alert['warning'] = 'Please enter a username with only numbers & letters!';
@@ -95,7 +101,7 @@ class User
         elseif (!$this->gender)
             $this->alert['warning'] = 'Sorry, please enter your gender.';
 
-        elseif (!$this->userType || !($this->userType == 'Coach' || $this->userType == 'Athlete') )
+        elseif (!$this->userType || !($this->userType == 'Coach' || $this->userType == 'Athlete'))
             $this->alert['warning'] = 'Sorry, please choose an account type. This can be changed later in the web application.';
 
         elseif ($this->userType == "Coach" && !$this->teamName)
@@ -121,41 +127,44 @@ class User
         else return true;
         return false;
     }
-    
-    public function activate() 
-    {
-        $this->email = $this->request->set( $this->email )->email();
-        $this->email_code = $this->request->set( $this->email_code )->value();
 
-        if (!$this->email || !$this->email_code)
-            $this->alert['warning'] = 'Sorry the url submitted is invalid.';
-        else return true;
-        return false;
+    public function activate($email, $email_code = null)
+    {
+        $email = $this->set( $email )->email();
+        $email_code = $this->set( $email_code )->value();
+        if (!$email){
+            PublicAlert::warning( 'Sorry the url submitted is invalid.' );
+            return startApplication( 'Home/' );
+        } return [$email, $email_code];
     }
 
-    public function recover()
+    public function recover($user_email = null, $user_generated_string = null)
     {
-        $this->email = $this->request->post( 'email' )->email();
+        if (!empty($user_email) && !empty($user_generated_string)){
 
-        if ($this->email) $this->alert['warning'] = 'You have entered an invalid email address.';
+            list($user_email, $user_generated_string) = $this->set( $user_email, $user_generated_string )->base64_decode()->value();
 
-        if (isset($this->alert) === true) $this->parameter = 'verify';
-    }
+            if (!$this->set( $user_email )->email()) throw new PublicAlert('The code provided appears to be invalid.');
 
-    public function profile()
-    {
-        if (!empty($_POST)) 
-            return true;
+            return [$user_email, $user_generated_string];
+        }
+
+        if (empty($_POST)) return false;
         
-        // TODO - make the first sceen function
-        //if ($this->golf->stats->rounds == 0)
-           /// $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
+        if (!$this->user_email = $this->post( 'user_email' )->email())
+            throw new PublicAlert('You have entered an invalid email address.');
+        else return [$this->user_email, false];
+    }
 
-        return $this->request->set( $this->userID )->alnum();
+    public function profile($uri)
+    {
+        return $this->set( $uri )->alnum();
     }
 
     public function settings()
     {
+        if ($this->user->email_confirmed == 0)
+            $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
         return false;
     }
 

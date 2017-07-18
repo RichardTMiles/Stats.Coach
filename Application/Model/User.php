@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Modules\Helpers\Reporting\PublicAlert;
 use Model\Helpers\UserRelay;
 use Modules\Helpers\Bcrypt;
 use Modules\StoreFiles;
@@ -17,29 +18,30 @@ class User extends UserRelay
     public function __construct()
     {
         $this->user = $this;    // $GLOBAL['user']
-        $this->user_id = (array_key_exists( 'id', $_SESSION ) ? $_SESSION['id'] : false);
+        $this->user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
         parent::__construct();                              // get database
         if ($this->user_id) {
             $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $this->user_id; // Bcrypt::genRandomHex(30);
-            if (empty($this->user_username)) {
-                $this->getUser();
-                $this->getTeams();
-            } else return null;
-            $model = "Model\\$this->user_sport";
-            $model::getInstance();
+            Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
+            if (!empty($this->user_username))
+                return null;
+            $this->getUser();
+            $this->getTeams();
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+        // Request::setHeader( 'X-PJAX-Version: '. $_SESSION['X_PJAX_Version'] );
     }
 
     private function getUser()
     {   // In theory this method is only called once per session.
-        if (!array_key_exists( 'id', $_SESSION )) throw new \Exception( 'nope bad id' );
+        if (!isset($_SESSION['id'])) throw new \Exception( 'nope bad id' );
         $this->user_id = $_SESSION['id'];
         $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.user WHERE user_id = ?' );
         $stmt->execute( [$this->user_id] );
         $this->fetch_into_current_class( $stmt->fetch() );                 // user obj
         $this->user_profile_pic = SITE . $this->user_profile_pic;
         $this->user_cover_photo = SITE . $this->user_cover_photo;
-
+        $model = "Model\\$this->user_sport";
+        $model::newInstance();
     }
 
     private function getTeams()
@@ -50,7 +52,7 @@ class User extends UserRelay
         if (!is_array( $work )) $this->teams[] = $work;
         else $this->teams = $work;
 
-        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_member ON StatsCoach.teams.team_id = StatsCoach.team_member.team_id WHERE user_id = ? AND sport = ?';
+        $sql = 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_members ON StatsCoach.teams.team_id = StatsCoach.team_members.team_id WHERE user_id = ? AND sport = ?';
         $play = $this->fetch_as_object( $sql, $this->user_id, $this->user_sport );
         if (!is_array( $play )) $this->teams[] = $play;
         else $this->teams = array_merge( $this->teams, $play );
@@ -58,7 +60,7 @@ class User extends UserRelay
         if (!empty($this->teams)) {
             foreach ($this->teams as $key => &$team)
                 if (!empty($team->team_id))
-                    $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_unique, user_full_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_member ON StatsCoach.user.user_id = StatsCoach.team_member.user_id WHERE team_id = ? ', $team->team_id );
+                    $team->members = $this->fetch_as_object( 'SELECT StatsCoach.user.user_profile_uri, user_full_name FROM StatsCoach.user LEFT JOIN StatsCoach.team_members ON StatsCoach.user.user_id = StatsCoach.team_members.user_id WHERE team_id = ? ', $team->team_id );
                 else unset($this->teams[$key]);
         } else $this->teams = [];
     }
@@ -72,9 +74,9 @@ class User extends UserRelay
                                     user_last_name = ?, 
                                     user_profile_pic = ?,
                                     user_cover_photo = ?,
-                                    user_birth_date = ?,
+                                    user_birthday = ?,
                                     user_gender = ?, 
-                                    user_bio = ?,
+                                    user_about_me = ?,
                                     user_rank = ?,
                                     user_email = ?
                                     WHERE user_id = ?" )
@@ -92,88 +94,11 @@ class User extends UserRelay
                 $this->user_id] );
     }
 
-    protected function fetchSQL($what, $field, $value)
-    {
-        $allowed = array('user_id', 'user_profile_pic', 'user_username', 'user_full_name', 'user_first_name', 'user_last_name', 'user_gender', 'user_bio', 'user_email');
-        if (!in_array( $what, $allowed, true ) || !in_array( $field, $allowed, true ))
-            throw new \InvalidArgumentException;
-
-        $sql = "SELECT $what FROM StatsCoach.user WHERE $field = ?";
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($value) );
-        return $stmt->fetch();
-
-    } // Returns only one value from the db
-
     protected function change_password($user_id, $password)
     {   /* Two create a Hash you do */
         $password_hash = Bcrypt::genHash( $password );
         $stmt = $this->db->prepare( "UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?" );
         return $stmt->execute( array($password_hash, $user_id) );
-    }
-
-    protected function recoverSQL($email, $generated_string)
-    {
-        if ($generated_string == 0)
-            return false;
-
-        $stmt = $this->db->prepare( "SELECT COUNT(`user_id`) FROM StatsCoach.user WHERE `user_email` = ? AND `user_generated_string` = ?" );
-        $stmt->execute( array($email, $generated_string) );
-
-        if (!$stmt->fetch()) {   // a row exists
-
-            $username = self::fetchSQL( 'user_username', 'user_email', $email ); // getting username for the use in the email.
-            $user_id = self::fetchSQL( 'user_id', 'user_email', $email ); // getting username for the use in the email.
-
-            // We want to keep things standard and use the user's id for most of the operations. Therefore, we use id instead of email.
-
-            $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            $generated_password = substr( str_shuffle( $charset ), 0, 10 );
-
-            $this->change_password( $user_id, $generated_password );
-
-            $stmt = $this->db->prepare( "UPDATE `users` SET `user_generated_string` = 0 WHERE `user_id` = ?" );
-            $stmt->execute( array($user_id) );
-
-            mail( $email, 'Your password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\n
-                               Please change your password once you have logged in using this password.\n\n-Lil Richard" );
-
-        } else {
-            $this->alert['danger'] = "It appears the information you provided is out of date.";
-        }
-
-    }
-
-    protected function confirm_recover($email)
-    {
-        $first_name = $this->fetchSQL( 'first_name', 'email', $email );   // returns 1 value
-
-        $unique = uniqid( '', true );
-        $random = substr( str_shuffle( 'AdfsBCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, 10 );
-
-        $generated_string = $unique . $random;          // a random and unique string
-
-        $stmt = $this->db->prepare( "UPDATE StatsCoach.user SET `user_generated_string` = ? WHERE `user_email` = ?" );
-        $stmt->execute( array($generated_string, $email) );
-
-        mail( $email, 'Recover Password', "Hello " . $first_name . ",\r\nPlease click the link below:\r\n\r\n
-            " . SITE . "recover/" . $email . "/" . $generated_string . "/\r\n\r\n 
-            We will generate a new password for you and send it back to your email.\r\n\r\n
-            --" . SITE );
-        return true;
-    }
-
-    protected function user_by_unique($user_unique)
-    {
-        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_unique = ?';
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$user_unique] );
-        if ($stmt->fetchColumn() != 1) return false;
-        $sql = "SELECT * FROM StatsCoach.user WHERE user_unique = ?";
-        $user = $this->fetch_as_object( $sql, $user_unique );
-        $user->user_profile_pic = SITE . $user->user_profile_pic;
-        $user->user_cover_photo = SITE . $user->user_cover_photo;
-        return $user;
     }
 
     protected function user_exists($username)
@@ -185,11 +110,11 @@ class User extends UserRelay
         return $sql;
     }
 
-    protected function team_exists($teamCode)
+    protected function team_exists($team_code)
     {
         $sql = 'SELECT team_id FROM StatsCoach.teams WHERE team_code = ? AND team_sport = ?';
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$teamCode, $this->user_sport] );
+        $stmt->execute( [$team_code, $this->user_sport] );
         return $stmt->fetchColumn();
     }
 
@@ -198,68 +123,75 @@ class User extends UserRelay
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($email) );
-        $sql = $stmt->fetchColumn();
-        return $sql;
+        return $stmt->fetchColumn();
     }
 
     protected function email_confirmed($username)
     {
-        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username= ? AND user_email_confirmed = ?";
+        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ? AND user_email_confirmed = ? LIMIT 1";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($username, 1) );
-        if ($stmt->fetch()) return true;
-        throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
+        return $stmt->fetch();
     }
 
-    public function login()
+    public function login($username, $password, $rememberMe)
     {
+        if (!$this->user_exists( $username ))
+            throw new PublicAlert( 'Sorry, this Username and Password combination doesn\'t match out records.', 'warning' );
 
-        if (!$this->user_exists( $this->username ))
-            throw new \Exception( 'Sorry, this Username and Password combination doesn\'t match out records.' );
+        if (!$this->email_confirmed( $username ))
+            throw new PublicAlert( 'Sorry, you need to activate your account. Please check your email!' );
 
-        // if (!$this->email_confirmed( $this->username ))
-        // throw new \Exception( 'Sorry, you need to activate your account. Please check your email!' );
-
-        $sql = "SELECT `user_password`, `user_id` FROM StatsCoach.user WHERE `user_username` = ?";
+        $sql = "SELECT user_password, user_id FROM StatsCoach.user WHERE user_username = ?";
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($this->username) );
+        $stmt->execute( [$username] );
         $data = $stmt->fetch();
 
         // using the verify method to compare the password with the stored hashed password.
-        if (Bcrypt::verify( $this->password, $data['user_password'] ) === true)
+        if (Bcrypt::verify( $password, $data['user_password'] ) === true)
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
-        else throw new \Exception ( 'Sorry, the username and password combination you have entered is invalid.' );
+        else throw new PublicAlert ( 'Sorry, the username and password combination you have entered is invalid.', 'warning' );
 
-        if ($this->rememberMe) {
+        if ($rememberMe) {
             $request = Request::getInstance();
             $request->setCookie( "UserName", $this->user_username );
             $request->setCookie( "FullName", $this->user_full_name );
             $request->setCookie( "UserImage", $this->user_profile_pic );
-        } // we clear the cookies in the controller
-
+        }   // we clear the cookies in the controller
         startApplication( true );
 
     }
 
-    public function joinTeam()
+    public function createTeam($teamName, $schoolName = null)
     {
-        try {
-            if (!$teamId = $this->team_exists( $this->teamCode ))
-                throw new \Exception( 'The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.' );
+        $key = $this->new_entity( 5 );
+        $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
+        if (!$this->db->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
+            throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
+        PublicAlert::success( "We successfully created `$teamName`!" );
+    }
 
-            $sql = 'SELECT COUNT(user_id) FROM StatsCoach.team_member WHERE team_id = ? AND user_id = ?';
-            $stmt = $this->db->prepare( $sql );
-            $stmt->execute( [$teamId, $this->user_id] );
+    public function joinTeam($teamCode)
+    {
+        if (!$teamId = $this->team_exists( $teamCode ))
+            throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
 
-            if ($stmt->fetchColumn() > 0) throw new \Exception( 'It appears you are already a member of this team.' );
+        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.team_members WHERE team_id = ? AND user_id = ?';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( [$teamId, $this->user_id] );
 
-            $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id, sport) VALUES (?,?,?)";
-            $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId, $this->user_sport] );
+        if ($stmt->fetchColumn() > 0)
+            throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
 
-            $this->alert['success'] = 'We successfully add you! You may need to log out and back in to see changes. We are working to fix this :)';
-        } catch (\Exception $e) {
-            $this->alert['danger'] = $e->getMessage();
-        }
+        $member = $this->new_entity( 6 );
+        $sql = "INSERT INTO StatsCoach.team_members (member_id, user_id, team_id, sport) VALUES (?,?,?,?)";
+        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId, $this->user_sport] ))
+            throw new PublicAlert( 'Unable to join this team. ', '' );
+
+        $this->alert['success'] = 'We successfully add you!';
+
+        startApplication( true );
+
     }
 
     public function facebook()
@@ -268,7 +200,7 @@ class User extends UserRelay
             if (!$this->email_exists( $this->facebook['email'] )) {
 
             } else {
-                $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
+                // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
 
                 $this->getUser();
 
@@ -283,129 +215,140 @@ class User extends UserRelay
 
     public function register()
     {
-        try {
-            if ($this->user_exists( $this->username ))
-                throw new \Exception ( 'That username already exists' );
+        if ($this->user_exists( $this->username ))
+            throw new PublicAlert ( 'That username already exists', 'warning' );
 
-            if ($this->email_exists( $this->email ))
-                throw new \Exception ( 'That email already exists.' );
+        if ($this->email_exists( $this->email ))
+            throw new PublicAlert ( 'That email already exists.', 'warning' );
 
-            $time = time();
-            $ip = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-            $email_code = $email_code = uniqid( 'code_', true ); // Creating a unique string.
-            $this->password = Bcrypt::genHash( $this->password );
+        $email_code = uniqid( 'code_', true ); // Creating a unique string.
+        $password = Bcrypt::genHash( $this->password );
 
-            try {
-                $sql = "INSERT INTO StatsCoach.user (user_username, user_password, user_type, user_email, user_ip, user_creation_date, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                $this->db->prepare( $sql )->execute(
-                    array($this->username, $this->password, $this->userType, $this->email, $ip, $time, $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) );
+        $this->db->beginTransaction();
+        $_SESSION['id'] = $this->new_entity( 0 );
+        $sql = "INSERT INTO StatsCoach.user (user_id, user_username, user_password, user_type, user_email, user_ip, user_last_login, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                $sql = "SELECT user_id FROM StatsCoach.user WHERE user_username = ?";
-                $stmt = $this->db->prepare( $sql );
-                $stmt->execute( [$this->username] );
-                $_SESSION['id'] = $stmt->fetchColumn();
+        if (!$this->db->prepare( $sql )->execute( array($_SESSION['id'], $this->username, $password, $this->userType, $this->email, $_SERVER['REMOTE_ADDR'], time(), $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) ))
+            throw new PublicAlert ( 'Your account could not be created.', 'danger' );
 
-                $sql = "INSERT INTO StatsCoach.golf_stats (user_id) VALUES (?)";
-                $this->db->prepare( $sql )->execute( [$_SESSION['id']] );
+        if (!$this->db->prepare( 'INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)' )->execute( [$_SESSION['id']] ))
+            throw new PublicAlert ( 'Your account could not be created.', 'danger' );;
+        $this->db->commit();
 
-                if ($this->userType == 'Coach') {
-                    do $teamCode = \Modules\Helpers\Bcrypt::genRandomHex( 25 );
-                    while ($this->team_exists( $teamCode ));
-                    $sql = "INSERT INTO StatsCoach.teams (team_name, team_school, team_coach, team_code) VALUES (?,?,?,?)";
-                    $this->db->prepare( $sql )->execute( [$this->teamName, $this->schoolName, $_SESSION['id'], $teamCode] );
-                } elseif ($this->teamCode) {
-                    if ($teamId = $this->team_exists( $this->teamCode )) {
-                        $sql = "INSERT INTO StatsCoach.team_member (user_id, team_id, sport) VALUES (?,?,?)";
-                        $this->db->prepare( $sql )->execute( [$_SESSION['id'], $teamId, 'Golf'] );
-                    } else {
-                        $this->alert['danger'] = "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.";
-                    }
-                }
+        if ($this->userType == 'Coach')
+            $this->createTeam( $this->teamName, $this->schoolName );
 
-                mail( $this->email, 'Please activate your account', "Hello $this->firstName ,
+        elseif ($this->teamCode) {
+            $member = $this->new_entity( 6 );
+            if ($teamId = $this->team_exists( $this->teamCode ))
+                $this->db->prepare( 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id, sport) VALUES (?,?,?,?)' )->execute( [$member, $_SESSION['id'], $teamId, 'Golf'] );
+            else PublicAlert::danger( "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again." );
+        }
+
+        mail( $this->email, 'Please activate your account', "Hello $this->firstName ,
             \r\nThank you for registering with us. 
             \r\n Username :  $this->username 
             \r\n Password :  $this->password 
             \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             https://www.Stats.Coach/Activate/$this->email/$email_code/
-             \r\n\r\n--" . SITE );
+             https://www.Stats.Coach/Activate/" . base64_encode( $this->email ) . "/" . base64_encode( $email_code ) . "/ \r\n\r\n--" . SITE );
 
-            } catch (\Exception $e) {
-
-                throw new \Exception( $e->getMessage() ); //"Sorry, we were unable to create this account. Please try again." );
-            }
-
-            $this->alert['success'] = "Welcome to Stats Coach. Please check your email to finish your registration.";
-
-            startApplication( true );
-
-        } catch (\Exception $e) {
-            $this->alert['danger'] = $e->getMessage();
-        }
+        PublicAlert::success( "Welcome to Stats Coach. Please check your email to finish your registration." );
+        startApplication( true );
     }
 
-    public function activate()
+    public function activate($email, $email_code)
     {
-        // Need to validate the success with database
-        try {
-            if (!$this->email_exists( $this->email ))
-                throw new \Exception( 'Please make sure the Url you have entered is correct.' );
+        if (!$this->email_exists( $email ))
+            throw new PublicAlert( 'Please make sure the Url you have entered is correct.', 'danger' );
 
-            $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ? AND user_email_confirmed = ?";
+        $stmt = $this->db->prepare( "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ?" );
+        $stmt->execute( [$email, $email_code] );
+
+        if ($stmt->fetch() == 0) {
+            PublicAlert::warning( 'Sorry, you may be using an old activation code.' );
+            return startApplication( 'Home/' );
+        }
+
+        $this->db->prepare( "UPDATE StatsCoach.user SET user_email_confirmed = 1 WHERE user_email = ?" )->execute( array($email) );
+        $sql = "SELECT user_id FROM StatsCoach.user WHERE user_email = ?";
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( [$email] );
+        $login = $stmt->fetch();
+        session_destroy();
+        session_regenerate_id( true );
+        $_SESSION['id'] = $login;
+        return startApplication( 'Home/' ); // there is not an activate template file
+    }
+
+    public function recover($email, $generated_string)
+    {
+        $alert = function () {
+            throw new PublicAlert( "An account could not be found with the email provided.", 'warning' );
+        };
+
+        if (!$this->email_exists( $email )) $alert();
+
+        $generated = Bcrypt::genRandomHex( 20 );
+
+        if (empty($generated_string)) {
+            $sql = 'SELECT user_first_name  FROM StatsCoach.user WHERE user_email = ?';
             $stmt = $this->db->prepare( $sql );
-            $stmt->execute( array($this->email, $this->email_code, '0') );
+            $stmt->execute( [$email] );
+            $this->user_first_name = $stmt->fetchColumn();
 
-            if ($stmt->fetch() == 0)
-                startApplication( true );
+            $stmt = $this->db->prepare( 'UPDATE StatsCoach.user SET user_generated_string = ? WHERE user_email = ?' );
+            if (!$stmt->execute([$generated, $email]))
+                throw new PublicAlert('Sorry, we failed to recover your account.', 'danger');
 
-            $sql = "UPDATE StatsCoach.user SET `user_email_confirmed` = 1 WHERE `user_email` = ?";
-            $this->db->prepare( $sql )->execute( array($this->email) );
-            $login = $this->fetchSQL( 'id', 'email', $this->email );
-            session_destroy();
-            session_regenerate_id( true );
-            $_SESSION['id'] = $login;
+            $subject = 'Your' . SITE_TITLE . ' password';
+            $headers = 'From: Support@Stats.Coach' . "\r\n" .
+                'Reply-To: Support@Stats.Coach' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
 
-        } catch (\Exception $e) {
-            $this->alert['danger'] = 'Sorry, we have failed to activate your account. Please contact us for further assistance.';
+            $message = "Hello " . $this->user_first_name . ",
+            \r\nPlease click the link below:\r\n\r\n" . SITE . "Recover/" . base64_encode( $email ) . "/" . base64_encode( $generated ) . "/\r\n\r\n 
+            We will generate a new password for you and send it back to your email.\r\n\r\n--" . SITE_TITLE;
+
+            mail( $email, $subject, $message, $headers );
+
+            PublicAlert::info( "If an account is found, an email will be sent to the account provided." );
+
+        } else {
+
+            $sql = 'SELECT user_id, user_first_name FROM StatsCoach.user WHERE user_email = ? AND user_generated_string = ?';
+            $stmt = $this->db->prepare( $sql );
+            if (!$stmt->execute( [$email, $generated_string] )) $alert();
+            if (empty($user = $stmt->fetch())) $alert();
+            $this->fetch_into_current_class( $user );
+
+            $this->change_password( $this->user_id, $generated );
+            $stmt = $this->db->prepare( 'UPDATE StatsCoach.user SET user_generated_string = 0 AND user_email_code = 0 AND user_email_confirmed = 1 WHERE user_id = ?' );
+            $stmt->execute( [$this->user_id] );
+            $this->user_id = null;
+
+            $subject = 'Your' . SITE_TITLE . ' password';
+            $headers = 'From: Support@Stats.Coach' . "\r\n" .
+                'Reply-To: Support@Stats.Coach' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            $message = "Hello " . $this->user_first_name . ",\n\nYour your new password is: " . $generated .
+                "\n\nPlease change your password once you have logged in using this password.\n\n-- " . SITE_TITLE;
+
+            mail( $email, $subject, $message, $headers );
+            PublicAlert::success( "Your password has been successfully reset." );
         }
-        startApplication( true ); // there is not activate template file
+        startApplication( 'login/' );
+
     }
 
-    public function recover()
-    {
-        try {
-            if (isset($parameter) & isset($unique)) {
-                if (!$this->email_exists( $email ))
-                    throw new \Exception ( "Sorry, we have detected an invalid url. Please contact us for further support." );
-
-                if (!$this->recoverSQL( $email, $unique ))
-                    throw new \Exception ( "Sorry, something went wrong and we could not recover your password." );
-
-
-                // throw new /Exception ('');
-
-            }
-            if (isset($email) === true) {   // and only email
-
-                if (!$this->email_exists( $email ))
-                    throw new \Exception ( 'Sorry, that email doesn\'t exist.' );
-
-                if (!$this->confirm_recover( $email ))     // Sends Email  // if didn't work
-                    throw new \Exception ( 'Sorry, we are having an internal error. Please contact us for more support.' );
-
-                return header( "LOCATION: http://Stats.Coach/login/sent/" ); // This Re-directs to new url/ No $_Post
-                // TODO - recover
-            }
-        } catch (\Exception $e) {
-            $this->alert['danger'] = $e->getMessage();
-        }
-    }
 
     public function profile($id)
     {
-        if ($id !== true && $user = $this->user_by_unique( $id ))
-            return $this->user = $user; // Replace inner content
+        $sql = "SELECT * FROM StatsCoach.user WHERE user_profile_uri = ?";
+        $user = $this->fetch_as_object( $sql, $id ) or $this;
+        $user->user_profile_pic = SITE . $user->user_profile_pic;
+        $user->user_cover_photo = SITE . $user->user_cover_photo;
+        $this->user = $user;
     }
 
     public function settings()

@@ -1,35 +1,41 @@
 <?php
 
-namespace Modules;
-
 // http://php.net/manual/en/function.debug-backtrace.php
 
+namespace Modules\Helpers\Reporting;
+
+use Modules\Singleton;
 use View\View;
 
 class ErrorCatcher
 {
-    private $report;
+    use Singleton;
 
-    public function __construct( $active = true )
+    public static function start( )
     {
-        if (!$active) return;
+        ini_set( 'display_errors', 1 );
+        ini_set( 'track_errors', 1 );
+        error_reporting(E_ALL);
         $closure = function (...$argv) {
-            // array_walk(debug_backtrace(),function($a,$b){ print "{$a['function']}()(".basename($a['file']).":{$a['line']});\n";});
-            $this->generateErrorLog($argv);
-            // startApplication(true);
+            ErrorCatcher::generateErrorLog($argv);
+            View::contents('error','500error');
         };
         set_error_handler($closure);
         set_exception_handler($closure);
     }
 
-    private function generateErrorLog($argv = array())
-    {
-        if ( 0 == error_reporting () ) return null;
+    public static function generateErrorLog($argv = array()){
+        $self = static::getInstance();
+        $self->generateLog($argv);
+    }
 
-        // Open the file to get existing content
+    public function generateLog($argv = array())
+    {
         $file = fopen(ERROR_LOG , "a");
+
         ob_start( );
         print PHP_EOL. date( 'D, d M Y H:i:s' , time());
+        print 'Printout of Function Stack: ' . PHP_EOL;
         print $this->generateCallTrace( ) . PHP_EOL;
         if (count( $argv ) >=4 ){
         echo 'Message: ' . $argv[1] . PHP_EOL;
@@ -41,15 +47,12 @@ class ErrorCatcher
         // Write the contents back to the file
         fwrite( $file, $output );
         fclose( $file );
-
-        View::contents('error','500error');
     }
     
     private function generateCallTrace()
     {
 
         $e = new \Exception( );
-
         ob_start( );
         $trace = explode( "\n", $e->getTraceAsString() );
         // reverse array to make steps line up chronologically
@@ -69,7 +72,10 @@ class ErrorCatcher
 
         $output = ob_get_contents( );
         ob_end_clean( );
-        return $this->report = $output;
+        return $output;
     }
     
 }
+
+
+

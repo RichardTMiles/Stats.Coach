@@ -250,7 +250,7 @@
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>
-                    <a href="<?=site?>Settings/" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    <a href="<?= site ?>Settings/" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
 
             </ul>
@@ -284,7 +284,7 @@
             </div>
         </form>
         <!-- /.search form -->
-        
+
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu tree" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
@@ -300,7 +300,7 @@
                         </a>
                     </li>
                     <?php foreach ($this->user->teams as &$team) {
-                        echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
+                        if (is_object( $team )) echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
                     } ?>
 
 
@@ -315,26 +315,31 @@
             </li>
 
             <li>
-                <a href="<?=SITE?>PostScore/">
+                <a href="<?= SITE ?>PostScore/">
                     <i class="fa fa-edit"></i><span>Post Score</span>
                 </a>
             </li>
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
-            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php foreach ($this->user->teams as &$team) { ?>
-                <ul class="treeview-menu">
-                    <li class="treeview menu-open">
-                        <a href=""><i class="fa fa-circle-o"></i> <?=$team->team_name?>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                        </a>
-                        <ul class="treeview-menu" style="display: block;">
-                            <?php foreach ($team->members as $user) { ?>
-                            <li><a href="<?=SITE?>Profile/<?=$user->user_unique?>/"><i class="fa fa-circle-o"></i><?=$user->user_full_name?></a></li>
+                    <ul class="treeview-menu">
+                        <li class="treeview menu-open">
+                            <a href=""><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
+                                <?php if (empty($team->members))
+                                echo '</a>';
+                                else { ?>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu" style="display: block;">
+                                <?php foreach ($team->members as $user) { ?>
+                                    <li><a href="<?= SITE ?>Profile/<?= $user->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $user->user_full_name ?></a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
                             <?php } ?>
-                        </ul>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
                 <?php } ?>
             </li>
 
@@ -386,8 +391,8 @@
                     <li><a href="<?= SITE ?>Settings/" onclick=""><i class="fa fa-circle-o"></i> Profile
                             Settings</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Create Team</a></li>
-                    <li><a href="<?=site?>JoinTeam/"><i class="fa fa-circle-o"></i> Join Team</a></li>
+                    <li><a href="<?= site ?>CreateTeam/"><i class="fa fa-circle-o"></i> Create Team</a></li>
+                    <li><a href="<?= site ?>JoinTeam/"><i class="fa fa-circle-o"></i> Join Team</a></li>
                 </ul>
             </li>
 
