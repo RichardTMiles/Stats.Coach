@@ -31,7 +31,7 @@ class Route
     public function defaultRoute()
     {
         $mvc = $this->structure;
-        $default = (is_object( $this->user ) && $this->user->user_id ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
+        $default = ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
         if (is_array( $default )) foreach ($default as $class => $method) return $mvc($class, $method);
     }
 
@@ -54,7 +54,7 @@ class Route
 
     public function signedIn()
     {
-        if ($this->matched || !is_object($this->user) || !$this->user->user_id) {
+        if ($this->matched || !$_SESSION['id']) {
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
@@ -63,7 +63,7 @@ class Route
 
     public function signedOut()
     {
-        if ($this->matched || is_object($this->user) && $this->user->user_id) {
+        if ($this->matched || ($_SESSION['id'] && is_object($this->user[$_SESSION['id']]))) {
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
@@ -104,25 +104,27 @@ class Route
             // set up our ending condition
             if ($pathLength == $i || $arrayToMatch[$i] == null)
                 $arrayToMatch[$i] = '*';
-
+            
             switch ($arrayToMatch[$i][0]) {
                 case  '*':
-                    foreach ($variables as $key => $value)
-                        $this->{$key} = $value;
-
+                    $referenceVariables = [];
+                    foreach ($variables as $key => $value) {
+                        $GLOBALS[$key] = $value;
+                        $referenceVariables[] = &$GLOBALS[$key];
+                    }
+                    
                     $this->matched = true;
                     $this->homeMethod = null;
 
                     if (is_callable( $argv[0] )) {
                         $this->addMethod( 'routeMatched', $argv[0] );
-                        if (call_user_func_array( $this->methods['routeMatched'], $variables ) === false)
+                        if (call_user_func_array( $this->methods['routeMatched'], $referenceVariables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
 
                     } elseif (count( $argv ) == 2) {
                         $structure = $this->structure;
-                        $argv = array_merge( $argv, $variables );
+                        $argv[] = &$referenceVariables;
                         call_user_func_array( $structure, $argv );
-                        
                         exit(1);
                     } else throw new \InvalidArgumentException('Are we passing a valid structure?');
                     return $this; // Note that the application will break in the View::contents
@@ -130,7 +132,7 @@ class Route
                 case '{': // this is going to indicate the start of a variable name
 
                     if (substr( $arrayToMatch[$i], -1 ) != '}')
-                        throw new \InvalidArgumentException;
+                        throw new \InvalidArgumentException('Variable declaration must be rapped in brackets. ie `/{var}/ ');
 
                     $variable = null;
                     $variable = rtrim( ltrim( $arrayToMatch[$i], '{' ), '}' );

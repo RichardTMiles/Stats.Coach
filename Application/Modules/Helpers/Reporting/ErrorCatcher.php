@@ -31,11 +31,10 @@ class ErrorCatcher
 
     public function generateLog($argv = array())
     {
-        $file = fopen(ERROR_LOG , "a");
 
         ob_start( );
         print PHP_EOL. date( 'D, d M Y H:i:s' , time());
-        print 'Printout of Function Stack: ' . PHP_EOL;
+        print PHP_EOL. PHP_EOL .'Printout of Function Stack: ' . PHP_EOL;
         print $this->generateCallTrace( ) . PHP_EOL;
         if (count( $argv ) >=4 ){
         echo 'Message: ' . $argv[1] . PHP_EOL;
@@ -45,10 +44,9 @@ class ErrorCatcher
         $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file
-        fwrite( $file, $output );
-        fclose( $file );
+        $this->storeFile(ERROR_LOG, $output);
     }
-    
+
     private function generateCallTrace()
     {
 
@@ -74,6 +72,15 @@ class ErrorCatcher
         ob_end_clean( );
         return $output;
     }
+
+
+    private function storeFile($file, $output)
+    {
+        $file = fopen($file , "a");
+        fwrite( $file, $output );
+        fclose( $file );
+    }
+
     
 }
 

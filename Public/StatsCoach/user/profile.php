@@ -1,3 +1,8 @@
+<?php $user = $this->user[$this->id ?: $_SESSION['id']];
+
+
+?>
+
 <script>
     $(document).on('submit', 'form[data-pjax]', function (event) {
         $.pjax.submit(event, '#pjax-container')
@@ -8,7 +13,7 @@
 
 <section class="content-header" style="color: ghostwhite">
     <h1>
-        <?= $this->user->user_full_name ?>
+        <?= $user->user_full_name ?>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -28,8 +33,8 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<?= $this->user->user_profile_pic ?>" alt="User profile picture">
-                    <h3 class="profile-username text-center"><?= $this->user->user_full_name ?></h3>
+                    <img class="profile-user-img img-responsive img-circle" src="<?= $user->user_profile_pic ?>" alt="User profile picture">
+                    <h3 class="profile-username text-center"><?= $user->user_full_name ?></h3>
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
@@ -45,10 +50,102 @@
                     <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
+
+            <!-- DIRECT CHAT SUCCESS -->
+            <div class="box box-success direct-chat direct-chat-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Direct Chat</h3>
+
+                    <div class="box-tools pull-right">
+                        <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
+                                data-original-title="Contacts">
+                            <i class="fa fa-comments"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- Conversations are loaded here -->
+                    <div class="direct-chat-messages">
+                        <!-- Message. Default to the left -->
+                        <div class="direct-chat-msg">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-left">Alexander Pierce</span>
+                                <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                            </div>
+                            <!-- /.direct-chat-info -->
+                            <img class="direct-chat-img" src="../dist/img/user1-128x128.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
+                            <div class="direct-chat-text">
+                                Is this template really for free? That's unbelievable!
+                            </div>
+                            <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+
+                        <!-- Message to the right -->
+                        <div class="direct-chat-msg right">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
+                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                            </div>
+                            <!-- /.direct-chat-info -->
+                            <img class="direct-chat-img" src="../dist/img/user3-128x128.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
+                            <div class="direct-chat-text">
+                                You better believe it!
+                            </div>
+                            <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+                    </div>
+                    <!--/.direct-chat-messages-->
+
+                    <!-- Contacts are loaded here -->
+                    <div class="direct-chat-contacts">
+                        <ul class="contacts-list">
+                            <li>
+                                <a href="#">
+                                    <img class="contacts-list-img" src="../dist/img/user1-128x128.jpg" alt="User Image">
+
+                                    <div class="contacts-list-info">
+                            <span class="contacts-list-name">
+                              Count Dracula
+                              <small class="contacts-list-date pull-right">2/28/2015</small>
+                            </span>
+                                        <span class="contacts-list-msg">How have you been? I was...</span>
+                                    </div>
+                                    <!-- /.contacts-list-info -->
+                                </a>
+                            </li>
+                            <!-- End Contact Item -->
+                        </ul>
+                        <!-- /.contatcts-list -->
+                    </div>
+                    <!-- /.direct-chat-pane -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <form action="#" method="post">
+                        <div class="input-group">
+                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn btn-success btn-flat">Send</button>
+                      </span>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-footer-->
+            </div>
+            <!--/.direct-chat -->
+
         </div>
 
         <div class="col-md-9">
             <div class="row">
+
+                <!-- Display User Info -->
                 <div class="col-md-auto">
                     <div class="box box-solid">
                         <div class="box-header with-border">
@@ -59,22 +156,225 @@
                         <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>About Me</dt>
-                                <dd><?=$this->user->user_about_me?></dd>
+                                <dd><?= $user->user_about_me ?></dd>
                                 <dt>Birthday</dt>
-                                <dd><?=$this->user->birthday?></dd>
+                                <dd><?= $user->user_birthday ?></dd>
                                 <dt>Education History</dt>
-                                <dd><?=$this->user->user_education_history?></dd>
+                                <dd><?= $user->user_education_history ?></dd>
                                 <dt>Mutual Friends</dt>
-                                <dd><?=$this->user->user_about_me?>
-                                </dd>
+                                <dd><?= $user->user_about_me ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
                 </div>
+                <!-- /.user info -->
 
-                <?php if (!empty($this->user->rounds) && is_array( $this->user->rounds )) { ?>
+                <?php if ($user->user_id != $_SESSION['id']) { ?>
+                    <!-- Chat box -->
+                    <div class="box box-success">
+                        <div class="box-header ui-sortable-handle" style="cursor: move;">
+                            <i class="fa fa-comments-o"></i>
+
+                            <h3 class="box-title">Chat</h3>
+
+                            <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+                                <div class="btn-group" data-toggle="btn-toggle">
+                                    <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;">
+                            <div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
+                                <!-- chat item -->
+                                <div class="item">
+                                    <img src="dist/img/user4-128x128.jpg" alt="user image" class="online">
+
+                                    <p class="message">
+                                        <a href="#" class="name">
+                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
+                                            Mike Doe
+                                        </a>
+                                        I would like to meet you to discuss the latest news about
+                                        the arrival of the new theme. They say it is going to be one the
+                                        best themes on the market
+                                    </p>
+                                    <div class="attachment">
+                                        <h4>Attachments:</h4>
+
+                                        <p class="filename">
+                                            Theme-thumbnail-image.jpg
+                                        </p>
+
+                                        <div class="pull-right">
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat">Open</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.attachment -->
+                                </div>
+                                <!-- /.item -->
+                                <!-- chat item -->
+                                <div class="item">
+                                    <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline">
+
+                                    <p class="message">
+                                        <a href="#" class="name">
+                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
+                                            Alexander Pierce
+                                        </a>
+                                        I would like to meet you to discuss the latest news about
+                                        the arrival of the new theme. They say it is going to be one the
+                                        best themes on the market
+                                    </p>
+                                </div>
+                                <!-- /.item -->
+                                <!-- chat item -->
+                                <div class="item">
+                                    <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline">
+
+                                    <p class="message">
+                                        <a href="#" class="name">
+                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
+                                            Susan Doe
+                                        </a>
+                                        I would like to meet you to discuss the latest news about
+                                        the arrival of the new theme. They say it is going to be one the
+                                        best themes on the market
+                                    </p>
+                                </div>
+                                <!-- /.item -->
+                            </div>
+                            <div class="slimScrollBar"
+                                 style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 184.9112426035503px; background-position: initial initial; background-repeat: initial initial;"></div>
+                            <div class="slimScrollRail"
+                                 style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div>
+                        </div>
+                        <!-- /.chat -->
+                        <div class="box-footer">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="Type message...">
+
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box (chat box) -->
+                <?php } else { ?>
+
+
+                    <div class="col-md-auto">
+                        <!-- Horizontal Form -->
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Profile Settings</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
+
+                            <!-- Form Start -->
+                            <form class="form-horizontal" action="<?= SITE ?>Profile/" method="post" enctype="multipart/form-data">
+
+                                <div class="box-body">
+                                    <div class="form-group col-md-12">
+
+                                        <div class="form-group">
+                                            <label for="exampleInputFile" class="col-sm-3 control-label">Profile Picture</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" type="file" id="InputFile" name="FileToUpload">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="inputName" class="col-sm-3 control-label">First Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="inputName"
+                                                       placeholder="<?= $user->user_first_name ?>" name="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputName" class="col-sm-3 control-label">Last Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="inputName"
+                                                       placeholder="<?= $user->user_last_name ?>" name="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail" class="col-sm-3 control-label">Email</label>
+                                            <div class="col-sm-8">
+                                                <input type="email" class="form-control" id="inputEmail"
+                                                       placeholder="<?= $user->user_email ?>" name="email">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputName" class="col-sm-3 control-label">Username</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="inputName" disabled="disabled"
+                                                       placeholder="<?= $user->user_username ?>" name="username">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputSkills" class="col-sm-3 control-label">Password</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="inputSkills"
+                                                       placeholder="Protected" name="password">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="inputGender" class="col-sm-3 control-label">Gender</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" id="inputGender" name="gender">
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="inputExperience" class="col-sm-3 control-label">Biography</label>
+                                            <div class="col-sm-8">
+                                    <textarea class="form-control" id="inputExperience"
+                                              placeholder="Experience"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-10">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="1"> I agree to the <a href="#">terms and
+                                                        conditions</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- /.box-body -->
+                                <div class="box-footer">
+                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    <button type="submit" class="btn btn-danger pull-right">Submit</button>
+                                </div>
+                                <!-- /.box-footer -->
+                            </form>
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <?php
+                }
+
+                if (!empty($user->rounds) && is_array( $user->rounds )) { ?>
                     <div class="col-md-auto">
                         <div class="box box-widget widget-user">
                             <div class="box box-info">
@@ -100,7 +400,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <?php foreach ($this->user->rounds as $key => $stats) { ?>
+                                            <?php foreach ($user->rounds as $key => $stats) { ?>
                                                 <tr>
                                                     <td><?= date( 'm/d/Y', $stats->creation_date ) ?></td>
                                                     <td><?= $stats->course_name ?></td>

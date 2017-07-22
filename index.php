@@ -1,15 +1,12 @@
-<?php
-
-switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
+<?php switch(pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION)) {
     case 'css': case 'js': case 'php': case 'jpg': case 'png': exit(1);    // A request has been made to an invalid file
-    default:
-}
+    default: }
 
-define( 'DS', DIRECTORY_SEPARATOR );
+const DS = DIRECTORY_SEPARATOR;
 
 define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
 
-session_save_path(SERVER_ROOT . 'Data' . DS . 'Sessions');    // Manually Set where the Users Session Data is stored
+session_save_path(SERVER_ROOT . 'Data/Sessions');    // Manually Set where the Users Session Data is stored
 
 ini_set('session.gc_probability', 1);               // Clear any lingering session data in default locations
 
@@ -29,35 +26,43 @@ Modules\Helpers\Reporting\ErrorCatcher::start();
 
 function startApplication($restart = false)
 {
+    global $user, $team, $course;
+
     if ($restart) {
         $_POST = [];
+        if ($reset = ($restart === true))
+            $user = $team = $course = null;
         Model\User::newInstance();      // This will reset the stats too.
-        View\View::newInstance($restart === true);
-        Modules\Request::changeURI($restart === true ? '/' : $restart);
+        View\View::newInstance($reset);
+        Modules\Request::changeURI($reset ? '/' : $restart);
+        $restart = $reset;
     }
 
     Modules\Request::sendHeaders();     // Send any stored headers
-    $user = Model\User::getInstance();
-    $view = View\View::getInstance();
+    
+    
+    Model\User::getInstance();
 
 
-    $route = new Modules\Route( function ($class, $method, ...$argv) use ($restart, $view) {
+    View\View::getInstance();
 
+
+    $route = new Modules\Route( function ($class, $method, &$argv = []) use ($restart) {
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
-
-        if ($restart === true) $model::clearInstance($controller::clearInstance());
+        if ($restart) if (array_key_exists( 'Modules/Singleton', class_uses($model, true)))
+            $model::clearInstance();
 
         try {
-            $controller = $controller::getInstance();
-            if (!empty($argv = call_user_func_array( [$controller, "$method"], $argv ))) {
-                $model = $GLOBALS[($class = strtolower( $class ))] = $model::getInstance( $argv );
-                call_user_func_array( [$model, "$method"], (is_array( $argv ) ? $argv : [$argv]) );
-            }
-        } catch (\Modules\Helpers\Reporting\PublicAlert $e){};
+            if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
+                call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
+        } catch (\Modules\Helpers\Reporting\PublicAlert $e){
 
-        $view->content( $class, $method );
+        } finally {
+            \Modules\Helpers\DataFetch::verify();
+        };
+        View\View::getInstance()->content( $class, $method );
     });
 
     include SERVER_ROOT . 'Application/Bootstrap.php';

@@ -8,9 +8,9 @@
 
 namespace Modules;
 
-use Modules\Interfaces\MagicMethods;
+use Modules\Interfaces\iSingleton;
 
-abstract class Request implements MagicMethods
+abstract class Request implements iSingleton
 {
     private $storage = array();
 
@@ -24,6 +24,8 @@ abstract class Request implements MagicMethods
     ########################## Session Storage #############################
     public static function sendHeaders()
     {
+        if (headers_sent()) return null;
+
         if (isset($_SESSION['Cookies']) && is_array( $_SESSION['Cookies'] ))
             foreach ($_SESSION['Cookies'] as $key => $array) static::setCookie( $key, $array[0], $array[1] );
 
@@ -94,15 +96,21 @@ abstract class Request implements MagicMethods
 
 
     ##########################  Storage Shifting  #########################
-    public function base64_decode()
+    public function base64_decode()     // TODO - fix this shit
     {
         $array = [];
         $lambda = function ($key) use (&$array) {
             $array[] = base64_decode( $key, true );
         };
+
+        alert(is_array( $array));
         if (is_array( $this->storage )) array_walk( $this->storage, $lambda );
         elseif ($this->storage != null) $lambda( $this->storage );
+        alert($lambda($this->storage[0]));
+
         $this->storage = $array;
+
+
         return $this;
     }
 

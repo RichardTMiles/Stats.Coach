@@ -21,13 +21,13 @@ trait Singleton
         self::clearInstance();
         $class = new \ReflectionClass( get_called_class() );
         self::$instance = $class->newInstanceArgs( $args );
+        $GLOBALS['Singleton'][__CLASS__] = &self::$instance;
         return self::$instance;
     }
 
     public static function getInstance(...$args)
     {   // see if the class has already been called this run
-        if (!empty(self::$instance))
-            return self::$instance;
+        if (!empty(self::$instance)) return self::$instance;
         $calledClass = get_called_class();
         // check if the object has been sterilized in the session
         // This will invoke the __wake up operator
@@ -40,13 +40,16 @@ trait Singleton
     }
 
     /**
-     * @param null $object
+     * @param null $class
      * @return object|null
      */
-    public static function clearInstance($object = null)
+    public static function clearInstance($class = null)
     {
-        self::$instance = is_object( $object ) ? $object : null;
+        self::$instance = null;
+        $GLOBALS['Singleton'][__CLASS__] = null;
         unset($_SESSION[__CLASS__]);
+        self::$instance = is_object( $class ) ? $class : null;
+        $GLOBALS['Singleton'][__CLASS__] = &self::$instance;
         return self::$instance;
     }
     
@@ -83,9 +86,9 @@ trait Singleton
 
     public function __wakeup()
     {
-        if (method_exists( $this, '__construct' )) self::__construct();
         $object = get_object_vars( $this );
         foreach ($object as $item => $value) is_serialized($value, $this->$item);  // TODO - base64_decode(
+        if (method_exists( $this, '__construct' )) self::__construct();
     }
 
     // for auto class serialization add: const Singleton = true; to calling class

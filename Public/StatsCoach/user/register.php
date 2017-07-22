@@ -1,8 +1,8 @@
 
 <div class="register-box" >
     <div class="register-logo">
-        <a href="" style="font-weight: bold; color: #008d4c" "><b>Stats</b>.Coach</a>
-    </div>
+        <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
+    </div><!-- /.login-logo -->
 
     <div class="register-box-body">
         <p class="login-box-msg">Register a new membership</p>

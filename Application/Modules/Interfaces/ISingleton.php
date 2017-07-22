@@ -8,8 +8,7 @@
 
 namespace Modules\Interfaces;
 
-
-interface MagicMethods
+interface iSingleton
 {
     public static function __callStatic($methodName, $arguments = array());
 

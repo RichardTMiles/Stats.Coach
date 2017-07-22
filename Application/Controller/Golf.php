@@ -14,13 +14,13 @@ class Golf extends Request
         return true;
     }
 
-    public function PostScore($state, $courseId, $boxColor)
+    public function PostScore(&$state, &$course_id, &$boxColor)
     {
-        $this->state = ucfirst( parent::set( $state )->alnum() );
-        $this->courseId = parent::set( $courseId )->int();
-        $this->boxColor = parent::set( $boxColor )->alnum();
+        $state = ucfirst( parent::set( $state )->alnum() );
+        $courseId = parent::set( $course_id )->int();
+        $boxColor = parent::set( $boxColor )->alnum();
 
-        if (!$this->state) {
+        if (!$state) {
             if (!$states = fopen( SERVER_ROOT . "Data/Indexes/UnitedStates.txt", "r" ))
                 throw new \Exception( "Unable to open states file!" );
             while (!feof( $states )) $this->states[] = fgets( $states );
@@ -28,16 +28,16 @@ class Golf extends Request
             return false;
         }
 
-        if (empty($_POST)) return [$state, $courseId, $boxColor];
+        if (empty($_POST)) return [$state, $course_id, $boxColor];
 
-        $datepicker = $this->post( 'datepicker' )->regex( '#^\d{1,2}\/\d{1,2}\/\d{4}$#' );
-        $timepicker = $this->post( 'timepicker' )->regex( '#^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s(A|P)M$#' );
+        $datePicker = $this->post( 'datepicker' )->regex( '#^\d{1,2}\/\d{1,2}\/\d{4}$#' );
+        $timePicker = $this->post( 'timepicker' )->regex( '#^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s(A|P)M$#' );
 
-        if (!$datepicker || !$timepicker) throw new PublicAlert('Sorry, invalid tee time provided');
+        if (!$datePicker || !$timePicker) throw new PublicAlert('Sorry, invalid tee time provided');
 
-        list($timepicker, $midday) = explode( ' ', $timepicker ); // trim the last to chars
-        list($hour, $minute) = explode( ':', $timepicker );
-        list($day, $month, $year) = explode( '/', $datepicker ) or [0, 0, 0];
+        list($timePicker, $midday) = explode( ' ', $timePicker ); // trim the last to chars
+        list($hour, $minute) = explode( ':', $timePicker );
+        list($day, $month, $year) = explode( '/', $datePicker );
         if ($midday = 'PM') $hour += 12;
 
         $this->roundDate = mktime( $hour, $minute, 0, $month, $day, $year ) ?: time(); 
@@ -53,7 +53,7 @@ class Golf extends Request
             $this->gnr = $this->post( 'gnr-1', 'gnr-2', 'gnr-3', 'gnr-4', 'gnr-5', 'gnr-6', 'gnr-7', 'gnr-8', 'gnr-9', 'gnr-10', 'gnr-11', 'gnr-12', 'gnr-13', 'gnr-14', 'gnr-15', 'gnr-16', 'gnr-17', 'gnr-18' )->int();
             $this->putts = $this->post( 'putts-1', 'putts-2', 'putts-3', 'putts-4', 'putts-5', 'putts-6', 'putts-7', 'putts-8', 'putts-9', 'putts-10', 'putts-11', 'putts-12', 'putts-13', 'putts-14', 'putts-15', 'putts-16', 'putts-17', 'putts-18' )->int();
         }
-        return [$state, $courseId, $boxColor];
+        return [$state, $course_id, $boxColor];
     }
 
     public function AddCourse($state)

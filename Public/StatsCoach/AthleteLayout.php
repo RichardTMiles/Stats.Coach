@@ -1,3 +1,6 @@
+<?php $user = $this->user[$_SESSION['id']] ?>
+
+
 <header class="main-header">
     <nav class="navbar navbar-static-top">
         <div class="container">
@@ -137,18 +140,18 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="<?= $this->user->user_profile_pic ?>" class="user-image" alt="User Image">
+                            <img src="<?= $user->user_profile_pic ?>" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"><?= $this->user->user_full_name ?></span>
+                            <span class="hidden-xs"><?= $user->user_full_name ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="<?= $this->user->user_profile_pic ?>" class="img-circle" alt="User Image">
+                                <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image">
 
                                 <p>
-                                    <?= $this->user->user_full_name ?>
-                                    <small>Member since <?= date( 'm/d/Y', $this->user->user_creation_date ) ?></small>
+                                    <?= $user->user_full_name ?>
+                                    <small>Member since <?= date( 'm/d/Y', $user->creation_date ) ?></small>
                                 </p>
                             </li>
                             <!-- Menu Body -->

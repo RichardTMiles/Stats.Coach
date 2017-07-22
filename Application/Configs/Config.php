@@ -3,10 +3,17 @@
 const ¶ = PHP_EOL."\t";
 
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = '0.4.0';
+const SITE_VERSION = 'Beta 0.7.0';
+
+// TODO - Message System
+// TODO - Notifications
+// TODO - Tasks
+// TODO - Calendar
 
 if (!isset($_SESSION['X_PJAX_Version']))
     $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+
+if (empty($_SESSION['id'])) $_SESSION['id'] = false;
 
 define( 'X_PJAX_VERSION' , $_SESSION['X_PJAX_Version']);
 
@@ -40,7 +47,6 @@ define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
 
 define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true);
 
-
 ################# Application Paths ########################
 /**
  * The following constants MUST be used wherever applicable
@@ -56,13 +62,13 @@ define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PAT
  * @constant WRAPPING_REQUIRES_LOGIN  Bool  If the template wrapper is dependant apon being logged in.
  */
 define( 'SITE',             url . DS , true);    // http(s)://example.com/  - do not change
-define( 'CONTENT',          DS . 'Public/StatsCoach' . DS );
-define( 'VENDOR',           DS . 'Application/Services/vendor' . DS );
-define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte' . DS ); // TEMPLATE HTML FILES PLUGIN HERE
-define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Log_'. time() .'_'.session_id().'.php' );
-define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor' . DS );
-define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte' . DS );
-define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach' . DS );
+define( 'CONTENT',          '/Public/StatsCoach/');
+define( 'VENDOR',           '/Application/Services/vendor/');
+define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte/'); // TEMPLATE HTML FILES PLUGIN HERE
+define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Error/Log_'. time() .'_'.session_id().'.php' );
+define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor/');
+define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte/');
+define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach/');
 define( 'CONTENT_WRAPPER',  SERVER_ROOT . 'Application/View/StatsCoach.php' );
 
 const DEFAULT_LOGGED_OUT_MVC  = [ 'User' => 'login' ];      // must be lower?
@@ -137,6 +143,14 @@ header( 'Cache-Control: must-revalidate' );
 ##################   DEV Tools   #################
 // This will cleanly print the var_dump function and kill the execution of the application
 
+function dump(...$argv) {
+    echo '<pre>';
+    var_dump( count( $argv ) == 1 ? array_shift( $argv ) : $argv);
+    echo '</pre>';
+    exit(1);
+}
+
+
 /**
  * This will cleanly print the var_dump function and kill the execution of the application.
  *
@@ -150,20 +164,35 @@ header( 'Cache-Control: must-revalidate' );
  */
 function sortDump(...$mixed)
 {
-    $mixed=(count($mixed) == 1 ? array_pop( $mixed ) : $mixed );
-    $view = \View\View::getInstance();
+    // Notify or error
+    alert(__FUNCTION__);
+
+
+    // Generate Report
     ob_start();
+    echo '####################### VAR DUMP ########################<br><pre>';
+    var_dump( $mixed );
+    echo '</pre><br><br><br>';
+    echo '####################### MIXED DUMP ######################<br><pre>';
+    $mixed=(count($mixed) == 1 ? array_pop( $mixed ) : $mixed );
     echo '<pre>';
     debug_zval_dump( $mixed?:$GLOBALS );
-    echo '</pre><br>####################### VAR DUMP ######################<br><pre>';
-    var_dump( $mixed );
-    echo '</pre><br><br><pre>';
-    echo "################## BACK TRACE ###################\n";
+    echo '</pre><br>################## BACK TRACE #################<br><pre>';
     var_dump( debug_backtrace( ) );
     echo '</pre>';
     $report = ob_get_clean();
-    if ($view->ajaxActive()) echo $report;
-    else $view->currentPage = base64_encode( $report );
+
+    // Output to file
+    $file = fopen(SERVER_ROOT . 'Data/Logs/Dumped/Sort_'.time().'.txt' , "a");
+    fwrite( $file, $report );
+    fclose( $file );
+
+    print $report;
+
+    // Output to browser
+    // $view = \View\View::getInstance();
+    //if ($view->ajaxActive()) echo $report;
+    // else $view->currentPage = base64_encode( $report );
     exit(1);
 }
 
@@ -176,7 +205,9 @@ function sortDump(...$mixed)
  */
 function alert($string = "Stay woke.")
 {
-    print "<script>alert('$string')</script>";
+    static $count = 0;
+    $count++;
+    print "<script>alert('$count )  $string')</script>";
 }
 // http://php.net/manual/en/debugger.php
 function console_log( $data ){

@@ -14,19 +14,19 @@
       <table id="5" parent="1" name="golf_tournaments"/>
       <table id="6" parent="1" name="teams"/>
       <table id="7" parent="1" name="golf_course"/>
-      <table id="8" parent="1" name="golf_distance"/>
-      <table id="9" parent="1" name="user"/>
-      <table id="10" parent="1" name="golf_stats"/>
-      <table id="11" parent="1" name="entity"/>
-      <table id="12" parent="1" name="entity_tag"/>
-      <table id="13" parent="1" name="tag"/>
-      <table id="14" parent="1" name="entity_comments"/>
-      <table id="15" parent="1" name="entity_photos"/>
-      <table id="16" parent="1" name="user_tasks"/>
-      <table id="17" parent="1" name="user_messages"/>
-      <table id="18" parent="1" name="user_followers"/>
-      <table id="19" parent="1" name="team_members"/>
-      <table id="20" parent="1" name="entity_location"/>
+      <table id="8" parent="1" name="user"/>
+      <table id="9" parent="1" name="golf_stats"/>
+      <table id="10" parent="1" name="entity"/>
+      <table id="11" parent="1" name="entity_tag"/>
+      <table id="12" parent="1" name="tag"/>
+      <table id="13" parent="1" name="entity_comments"/>
+      <table id="14" parent="1" name="entity_photos"/>
+      <table id="15" parent="1" name="user_tasks"/>
+      <table id="16" parent="1" name="user_messages"/>
+      <table id="17" parent="1" name="user_followers"/>
+      <table id="18" parent="1" name="team_members"/>
+      <table id="19" parent="1" name="entity_location"/>
+      <table id="20" parent="1" name="golf_tee_box"/>
       <view id="21" parent="2" name="CHARACTER_SETS">
         <is-system>1</is-system>
       </view>
@@ -274,13 +274,13 @@
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="97" parent="3" name="golf_rounds_entity_entity_pk_fk">
+      <index id="97" parent="3" name="golf_rounds_entity_user_pk_fk">
+        <columns>user_id</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="98" parent="3" name="golf_rounds_entity_entity_pk_fk">
         <columns>round_id</columns>
         <underlying-index>golf_rounds_entity_entity_pk_fk</underlying-index>
-      </key>
-      <key id="98" parent="3" name="PRIMARY">
-        <columns>user_id</columns>
-        <primary>1</primary>
       </key>
       <foreign-key id="99" parent="3" name="golf_rounds_entity_course_pk_fk">
         <columns>course_id</columns>
@@ -571,615 +571,614 @@
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="168" parent="8" name="course_id">
-        <comment>Reference from golf_courses</comment>
+      <column id="168" parent="8" name="user_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="169" parent="8" name="tee_box">
-        <comment>options ( 1 - 5 )</comment>
-        <mandatory>1</mandatory>
-        <data-type>int(1)</data-type>
-      </column>
-      <column id="170" parent="8" name="distance">
-        <mandatory>1</mandatory>
-        <data-type>blob</data-type>
-      </column>
-      <column id="171" parent="8" name="distance_color">
-        <mandatory>1</mandatory>
-        <data-type>varchar(10)</data-type>
-      </column>
-      <column id="172" parent="8" name="distance_general_slope">
-        <data-type>int(4)</data-type>
-      </column>
-      <column id="173" parent="8" name="distance_general_difficulty">
-        <data-type>float</data-type>
-      </column>
-      <column id="174" parent="8" name="distance_womens_slope">
-        <data-type>int(4)</data-type>
-      </column>
-      <column id="175" parent="8" name="distance_womens_difficulty">
-        <data-type>float</data-type>
-      </column>
-      <column id="176" parent="8" name="distance_out">
-        <data-type>int(7)</data-type>
-      </column>
-      <column id="177" parent="8" name="distance_in">
-        <data-type>int(7)</data-type>
-      </column>
-      <column id="178" parent="8" name="distance_tot">
-        <data-type>int(10)</data-type>
-      </column>
-      <index id="179" parent="8" name="golf_distance_entity_entity_pk_fk">
-        <columns>course_id</columns>
-        <desc-columns></desc-columns>
-      </index>
-      <foreign-key id="180" parent="8" name="golf_distance_entity_entity_pk_fk">
-        <columns>course_id</columns>
-        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
-        <cascade-update-rule>restrict</cascade-update-rule>
-        <cascade-delete-rule>restrict</cascade-delete-rule>
-      </foreign-key>
-      <column id="181" parent="9" name="user_id">
-        <mandatory>1</mandatory>
-        <data-type>varchar(225)</data-type>
-      </column>
-      <column id="182" parent="9" name="user_type">
+      <column id="169" parent="8" name="user_type">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="183" parent="9" name="user_sport">
+      <column id="170" parent="8" name="user_sport">
         <comment>This is used to start the model
 </comment>
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
         <default-expression>&apos;Golf&apos;</default-expression>
       </column>
-      <column id="184" parent="9" name="user_facebook_id">
+      <column id="171" parent="8" name="user_facebook_id">
         <data-type>int(11)</data-type>
       </column>
-      <column id="185" parent="9" name="user_username">
+      <column id="172" parent="8" name="user_username">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="186" parent="9" name="user_first_name">
+      <column id="173" parent="8" name="user_first_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="187" parent="9" name="user_last_name">
+      <column id="174" parent="8" name="user_last_name">
         <mandatory>1</mandatory>
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="188" parent="9" name="user_full_name">
+      <column id="175" parent="8" name="user_full_name">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="189" parent="9" name="user_profile_pic">
+      <column id="176" parent="8" name="user_profile_pic">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;Data/Uploads/Pictures/default_avatar.png&apos;</default-expression>
       </column>
-      <column id="190" parent="9" name="user_profile_uri">
+      <column id="177" parent="8" name="user_profile_uri">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="191" parent="9" name="user_cover_photo">
+      <column id="178" parent="8" name="user_cover_photo">
         <data-type>varchar(225)</data-type>
         <default-expression>&apos;Data/Uploads/Pictures/default_cover.png&apos;</default-expression>
       </column>
-      <column id="192" parent="9" name="user_birthday">
+      <column id="179" parent="8" name="user_birthday">
         <data-type>text</data-type>
       </column>
-      <column id="193" parent="9" name="user_gender">
+      <column id="180" parent="8" name="user_gender">
         <data-type>varchar(25)</data-type>
       </column>
-      <column id="194" parent="9" name="user_about_me">
+      <column id="181" parent="8" name="user_about_me">
         <data-type>text</data-type>
       </column>
-      <column id="195" parent="9" name="user_rank">
+      <column id="182" parent="8" name="user_rank">
         <data-type>int(8)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="196" parent="9" name="user_password">
+      <column id="183" parent="8" name="user_password">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="197" parent="9" name="user_email">
+      <column id="184" parent="8" name="user_email">
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="198" parent="9" name="user_email_code">
+      <column id="185" parent="8" name="user_email_code">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="199" parent="9" name="user_email_confirmed">
+      <column id="186" parent="8" name="user_email_confirmed">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="200" parent="9" name="user_generated_string">
+      <column id="187" parent="8" name="user_generated_string">
         <data-type>varchar(200)</data-type>
       </column>
-      <column id="201" parent="9" name="user_membership">
+      <column id="188" parent="8" name="user_membership">
         <data-type>int(10)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="202" parent="9" name="user_deactivated">
+      <column id="189" parent="8" name="user_deactivated">
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="203" parent="9" name="user_last_login">
+      <column id="190" parent="8" name="user_last_login">
         <mandatory>1</mandatory>
         <data-type>varchar(14)</data-type>
       </column>
-      <column id="204" parent="9" name="user_ip">
+      <column id="191" parent="8" name="user_ip">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="205" parent="9" name="user_visited">
+      <column id="192" parent="8" name="user_visited">
         <data-type>blob</data-type>
       </column>
-      <column id="206" parent="9" name="user_education_history">
+      <column id="193" parent="8" name="user_education_history">
         <data-type>text</data-type>
       </column>
-      <column id="207" parent="9" name="user_location">
+      <column id="194" parent="8" name="user_location">
         <data-type>text</data-type>
       </column>
-      <index id="208" parent="9" name="user_user_profile_uri_uindex">
+      <column id="195" parent="8" name="user_online">
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="196" parent="8" name="user_user_profile_uri_uindex">
         <columns>user_profile_uri</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="209" parent="9" name="PRIMARY">
+      <key id="197" parent="8" name="PRIMARY">
         <columns>user_id</columns>
         <primary>1</primary>
       </key>
-      <key id="210" parent="9" name="user_user_profile_uri_uindex">
+      <key id="198" parent="8" name="user_user_profile_uri_uindex">
         <columns>user_profile_uri</columns>
         <underlying-index>user_user_profile_uri_uindex</underlying-index>
       </key>
-      <foreign-key id="211" parent="9" name="user_entity_entity_pk_fk">
+      <foreign-key id="199" parent="8" name="user_entity_entity_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="212" parent="10" name="stats_id">
+      <column id="200" parent="9" name="stats_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="213" parent="10" name="stats_tournaments">
+      <column id="201" parent="9" name="stats_tournaments">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="214" parent="10" name="stats_rounds">
+      <column id="202" parent="9" name="stats_rounds">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="215" parent="10" name="stats_handicap">
+      <column id="203" parent="9" name="stats_handicap">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="216" parent="10" name="stats_strokes">
+      <column id="204" parent="9" name="stats_strokes">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="217" parent="10" name="stats_ffs">
+      <column id="205" parent="9" name="stats_ffs">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="218" parent="10" name="stats_gnr">
+      <column id="206" parent="9" name="stats_gnr">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="219" parent="10" name="stats_putts">
+      <column id="207" parent="9" name="stats_putts">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="220" parent="10" name="PRIMARY">
+      <key id="208" parent="9" name="PRIMARY">
         <columns>stats_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="221" parent="10" name="golf_stats_entity_entity_pk_fk">
+      <foreign-key id="209" parent="9" name="golf_stats_entity_entity_pk_fk">
         <columns>stats_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="222" parent="11" name="entity_pk">
+      <column id="210" parent="10" name="entity_pk">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <index id="223" parent="11" name="entity_entity_pk_uindex">
+      <index id="211" parent="10" name="entity_entity_pk_uindex">
         <columns>entity_pk</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="224" parent="11" name="entity_entity_pk_uindex">
+      <key id="212" parent="10" name="entity_entity_pk_uindex">
         <columns>entity_pk</columns>
         <underlying-index>entity_entity_pk_uindex</underlying-index>
       </key>
-      <key id="225" parent="11" name="PRIMARY">
+      <key id="213" parent="10" name="PRIMARY">
         <columns>entity_pk</columns>
         <primary>1</primary>
       </key>
-      <column id="226" parent="12" name="entity_id">
+      <column id="214" parent="11" name="entity_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="227" parent="12" name="user_id">
+      <column id="215" parent="11" name="user_id">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="228" parent="12" name="tag_id">
+      <column id="216" parent="11" name="tag_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="229" parent="12" name="creation_date">
+      <column id="217" parent="11" name="creation_date">
         <mandatory>1</mandatory>
         <data-type>int(20)</data-type>
       </column>
-      <index id="230" parent="12" name="entity_tag_entity_entity_pk_fk">
+      <index id="218" parent="11" name="entity_tag_entity_entity_pk_fk">
         <columns>entity_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="231" parent="12" name="entity_tag_entity_user_pk_fk">
+      <index id="219" parent="11" name="entity_tag_entity_user_pk_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="232" parent="12" name="entity_tag_tag_tag_id_fk">
+      <index id="220" parent="11" name="entity_tag_tag_tag_id_fk">
         <columns>tag_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <foreign-key id="233" parent="12" name="entity_tag_entity_entity_pk_fk">
+      <foreign-key id="221" parent="11" name="entity_tag_entity_entity_pk_fk">
         <columns>entity_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="234" parent="12" name="entity_tag_entity_user_pk_fk">
+      <foreign-key id="222" parent="11" name="entity_tag_entity_user_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="235" parent="12" name="entity_tag_tag_tag_id_fk">
+      <foreign-key id="223" parent="11" name="entity_tag_tag_tag_id_fk">
         <columns>tag_id</columns>
         <ref-key>~.tag.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="236" parent="13" name="tag_id">
+      <column id="224" parent="12" name="tag_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="237" parent="13" name="tag_description">
+      <column id="225" parent="12" name="tag_description">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="238" parent="13" name="tag_name">
+      <column id="226" parent="12" name="tag_name">
         <data-type>text</data-type>
       </column>
-      <index id="239" parent="13" name="tag_tag_id_uindex">
+      <index id="227" parent="12" name="tag_tag_id_uindex">
         <columns>tag_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="240" parent="13" name="PRIMARY">
+      <key id="228" parent="12" name="PRIMARY">
         <columns>tag_id</columns>
         <primary>1</primary>
       </key>
-      <key id="241" parent="13" name="tag_tag_id_uindex">
+      <key id="229" parent="12" name="tag_tag_id_uindex">
         <columns>tag_id</columns>
         <underlying-index>tag_tag_id_uindex</underlying-index>
       </key>
+      <column id="230" parent="13" name="parent_id">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="231" parent="13" name="comment_id">
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="232" parent="13" name="user_id">
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="233" parent="13" name="date">
+        <data-type>datetime</data-type>
+      </column>
+      <column id="234" parent="13" name="comment">
+        <mandatory>1</mandatory>
+        <data-type>blob</data-type>
+      </column>
+      <index id="235" parent="13" name="comments_entity_entity_pk_fk">
+        <columns>comment_id</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <index id="236" parent="13" name="comments_entity_user_pk_fk">
+        <columns>user_id</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="237" parent="13" name="comments_entity_entity_pk_fk">
+        <columns>comment_id</columns>
+        <underlying-index>comments_entity_entity_pk_fk</underlying-index>
+      </key>
+      <key id="238" parent="13" name="PRIMARY">
+        <columns>parent_id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="239" parent="13" name="comments_entity_entity_pk_fk">
+        <columns>comment_id</columns>
+        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="240" parent="13" name="comments_entity_user_pk_fk">
+        <columns>user_id</columns>
+        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="241" parent="13" name="entity_comments_entity_entity_pk_fk">
+        <columns>parent_id</columns>
+        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
       <column id="242" parent="14" name="parent_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="243" parent="14" name="comment_id">
+      <column id="243" parent="14" name="photo_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
       <column id="244" parent="14" name="user_id">
+        <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="245" parent="14" name="date">
-        <data-type>datetime</data-type>
-      </column>
-      <column id="246" parent="14" name="comment">
+      <column id="245" parent="14" name="photo_path">
         <mandatory>1</mandatory>
-        <data-type>blob</data-type>
+        <data-type>varchar(225)</data-type>
       </column>
-      <index id="247" parent="14" name="comments_entity_entity_pk_fk">
-        <columns>comment_id</columns>
+      <column id="246" parent="14" name="photo_description">
+        <data-type>text</data-type>
+      </column>
+      <index id="247" parent="14" name="entity_photos_photo_id_uindex">
+        <columns>photo_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="248" parent="14" name="comments_entity_user_pk_fk">
+      <index id="248" parent="14" name="photos_entity_user_pk_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="249" parent="14" name="comments_entity_entity_pk_fk">
-        <columns>comment_id</columns>
-        <underlying-index>comments_entity_entity_pk_fk</underlying-index>
+      <key id="249" parent="14" name="entity_photos_photo_id_uindex">
+        <columns>photo_id</columns>
+        <underlying-index>entity_photos_photo_id_uindex</underlying-index>
       </key>
       <key id="250" parent="14" name="PRIMARY">
         <columns>parent_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="251" parent="14" name="comments_entity_entity_pk_fk">
-        <columns>comment_id</columns>
-        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
-        <cascade-update-rule>restrict</cascade-update-rule>
-        <cascade-delete-rule>restrict</cascade-delete-rule>
-      </foreign-key>
-      <foreign-key id="252" parent="14" name="comments_entity_user_pk_fk">
-        <columns>user_id</columns>
-        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
-        <cascade-update-rule>restrict</cascade-update-rule>
-        <cascade-delete-rule>restrict</cascade-delete-rule>
-      </foreign-key>
-      <foreign-key id="253" parent="14" name="entity_comments_entity_entity_pk_fk">
-        <columns>parent_id</columns>
-        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
-        <cascade-update-rule>restrict</cascade-update-rule>
-        <cascade-delete-rule>restrict</cascade-delete-rule>
-      </foreign-key>
-      <column id="254" parent="15" name="parent_id">
-        <mandatory>1</mandatory>
-        <data-type>varchar(225)</data-type>
-      </column>
-      <column id="255" parent="15" name="photo_id">
-        <mandatory>1</mandatory>
-        <data-type>varchar(225)</data-type>
-      </column>
-      <column id="256" parent="15" name="user_id">
-        <mandatory>1</mandatory>
-        <data-type>varchar(225)</data-type>
-      </column>
-      <column id="257" parent="15" name="photo_path">
-        <mandatory>1</mandatory>
-        <data-type>varchar(225)</data-type>
-      </column>
-      <column id="258" parent="15" name="photo_description">
-        <data-type>text</data-type>
-      </column>
-      <index id="259" parent="15" name="entity_photos_photo_id_uindex">
-        <columns>photo_id</columns>
-        <desc-columns></desc-columns>
-        <unique>1</unique>
-      </index>
-      <index id="260" parent="15" name="photos_entity_user_pk_fk">
-        <columns>user_id</columns>
-        <desc-columns></desc-columns>
-      </index>
-      <key id="261" parent="15" name="entity_photos_photo_id_uindex">
-        <columns>photo_id</columns>
-        <underlying-index>entity_photos_photo_id_uindex</underlying-index>
-      </key>
-      <key id="262" parent="15" name="PRIMARY">
-        <columns>parent_id</columns>
-        <primary>1</primary>
-      </key>
-      <foreign-key id="263" parent="15" name="entity_photos_entity_entity_pk_fk">
+      <foreign-key id="251" parent="14" name="entity_photos_entity_entity_pk_fk">
         <columns>photo_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="264" parent="15" name="photos_entity_entity_pk_fk">
+      <foreign-key id="252" parent="14" name="photos_entity_entity_pk_fk">
         <columns>parent_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="265" parent="15" name="photos_entity_user_pk_fk">
+      <foreign-key id="253" parent="14" name="photos_entity_user_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="266" parent="16" name="task_id">
+      <column id="254" parent="15" name="task_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="267" parent="16" name="user_id">
+      <column id="255" parent="15" name="user_id">
         <comment>This is the user the task is being assigned to</comment>
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="268" parent="16" name="from_id">
+      <column id="256" parent="15" name="from_id">
         <comment>Keeping this colum so forgen key will remove task if user deleted</comment>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="269" parent="16" name="task_name">
+      <column id="257" parent="15" name="task_name">
         <mandatory>1</mandatory>
         <data-type>varchar(40)</data-type>
       </column>
-      <column id="270" parent="16" name="task_description">
+      <column id="258" parent="15" name="task_description">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="271" parent="16" name="percent_complete">
+      <column id="259" parent="15" name="percent_complete">
         <data-type>int(11)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="272" parent="16" name="start_date">
+      <column id="260" parent="15" name="start_date">
         <data-type>datetime</data-type>
       </column>
-      <column id="273" parent="16" name="end_date">
+      <column id="261" parent="15" name="end_date">
         <data-type>datetime</data-type>
       </column>
-      <index id="274" parent="16" name="user_tasks_entity_entity_pk_fk">
+      <index id="262" parent="15" name="user_tasks_entity_entity_pk_fk">
         <columns>from_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="275" parent="16" name="user_tasks_entity_task_pk_fk">
+      <index id="263" parent="15" name="user_tasks_entity_task_pk_fk">
         <columns>task_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="276" parent="16" name="PRIMARY">
+      <key id="264" parent="15" name="PRIMARY">
         <columns>user_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="277" parent="16" name="tasks_entity_entity_pk_fk">
+      <foreign-key id="265" parent="15" name="tasks_entity_entity_pk_fk">
         <columns>task_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="278" parent="16" name="user_tasks_entity_entity_pk_fk">
+      <foreign-key id="266" parent="15" name="user_tasks_entity_entity_pk_fk">
         <columns>from_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="279" parent="16" name="user_tasks_entity_user_pk_fk">
+      <foreign-key id="267" parent="15" name="user_tasks_entity_user_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="280" parent="17" name="message_id">
+      <column id="268" parent="16" name="message_id">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="281" parent="17" name="user_id">
+      <column id="269" parent="16" name="user_id">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="282" parent="17" name="message">
+      <column id="270" parent="16" name="message">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <index id="283" parent="17" name="messages_entity_entity_pk_fk">
+      <index id="271" parent="16" name="messages_entity_entity_pk_fk">
         <columns>message_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="284" parent="17" name="messages_entity_user_from_pk_fk">
+      <index id="272" parent="16" name="messages_entity_user_from_pk_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <foreign-key id="285" parent="17" name="messages_entity_entity_pk_fk">
+      <foreign-key id="273" parent="16" name="messages_entity_entity_pk_fk">
         <columns>message_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="286" parent="17" name="messages_entity_user_from_pk_fk">
+      <foreign-key id="274" parent="16" name="messages_entity_user_from_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="287" parent="18" name="follows_user_id">
+      <column id="275" parent="17" name="follows_user_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="288" parent="18" name="user_id">
+      <column id="276" parent="17" name="user_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <index id="289" parent="18" name="followers_entity_entity_pk_fk">
+      <index id="277" parent="17" name="followers_entity_entity_pk_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="290" parent="18" name="PRIMARY">
+      <key id="278" parent="17" name="PRIMARY">
         <columns>follows_user_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="291" parent="18" name="followers_entity_entity_follows_pk_fk">
+      <foreign-key id="279" parent="17" name="followers_entity_entity_follows_pk_fk">
         <columns>follows_user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="292" parent="18" name="followers_entity_entity_pk_fk">
+      <foreign-key id="280" parent="17" name="followers_entity_entity_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="293" parent="19" name="member_id">
+      <column id="281" parent="18" name="member_id">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="294" parent="19" name="team_id">
+      <column id="282" parent="18" name="team_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="295" parent="19" name="user_id">
+      <column id="283" parent="18" name="user_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="296" parent="19" name="sport">
-        <mandatory>1</mandatory>
-        <data-type>varchar(20)</data-type>
-      </column>
-      <column id="297" parent="19" name="accepted">
+      <column id="284" parent="18" name="accepted">
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <index id="298" parent="19" name="team_members_entity_entity_pk_fk">
+      <index id="285" parent="18" name="team_members_entity_entity_pk_fk">
         <columns>member_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="299" parent="19" name="team_member_entity_entity_pk_fk">
+      <index id="286" parent="18" name="team_member_entity_entity_pk_fk">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="300" parent="19" name="team_member_entity_team_pk_fk">
+      <index id="287" parent="18" name="team_member_entity_team_pk_fk">
         <columns>team_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <foreign-key id="301" parent="19" name="team_members_entity_entity_pk_fk">
+      <foreign-key id="288" parent="18" name="team_members_entity_entity_pk_fk">
         <columns>member_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="302" parent="19" name="team_member_entity_entity_pk_fk">
+      <foreign-key id="289" parent="18" name="team_member_entity_entity_pk_fk">
         <columns>user_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="303" parent="19" name="team_member_entity_team_pk_fk">
+      <foreign-key id="290" parent="18" name="team_member_entity_team_pk_fk">
         <columns>team_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="304" parent="20" name="entity_id">
+      <column id="291" parent="19" name="entity_id">
         <mandatory>1</mandatory>
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="305" parent="20" name="latitude">
+      <column id="292" parent="19" name="latitude">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="306" parent="20" name="longitude">
+      <column id="293" parent="19" name="longitude">
         <data-type>varchar(225)</data-type>
       </column>
-      <column id="307" parent="20" name="street">
+      <column id="294" parent="19" name="street">
         <data-type>text</data-type>
       </column>
-      <column id="308" parent="20" name="city">
+      <column id="295" parent="19" name="city">
         <data-type>varchar(40)</data-type>
       </column>
-      <column id="309" parent="20" name="state">
+      <column id="296" parent="19" name="state">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="310" parent="20" name="elevation">
+      <column id="297" parent="19" name="elevation">
         <data-type>varchar(40)</data-type>
       </column>
-      <index id="311" parent="20" name="entity_location_entity_id_uindex">
+      <index id="298" parent="19" name="entity_location_entity_id_uindex">
         <columns>entity_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="312" parent="20" name="entity_location_entity_id_uindex">
+      <key id="299" parent="19" name="entity_location_entity_id_uindex">
         <columns>entity_id</columns>
         <underlying-index>entity_location_entity_id_uindex</underlying-index>
       </key>
-      <key id="313" parent="20" name="PRIMARY">
+      <key id="300" parent="19" name="PRIMARY">
         <columns>entity_id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="314" parent="20" name="entity_location_entity_entity_pk_fk">
+      <foreign-key id="301" parent="19" name="entity_location_entity_entity_pk_fk">
         <columns>entity_id</columns>
+        <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="302" parent="20" name="course_id">
+        <comment>Reference from golf_courses</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="303" parent="20" name="tee_box">
+        <comment>options ( 1 - 5 )</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(1)</data-type>
+      </column>
+      <column id="304" parent="20" name="distance">
+        <mandatory>1</mandatory>
+        <data-type>blob</data-type>
+      </column>
+      <column id="305" parent="20" name="distance_color">
+        <mandatory>1</mandatory>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="306" parent="20" name="distance_general_slope">
+        <data-type>int(4)</data-type>
+      </column>
+      <column id="307" parent="20" name="distance_general_difficulty">
+        <data-type>float</data-type>
+      </column>
+      <column id="308" parent="20" name="distance_womens_slope">
+        <data-type>int(4)</data-type>
+      </column>
+      <column id="309" parent="20" name="distance_womens_difficulty">
+        <data-type>float</data-type>
+      </column>
+      <column id="310" parent="20" name="distance_out">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="311" parent="20" name="distance_in">
+        <data-type>int(7)</data-type>
+      </column>
+      <column id="312" parent="20" name="distance_tot">
+        <data-type>int(10)</data-type>
+      </column>
+      <index id="313" parent="20" name="golf_distance_entity_entity_pk_fk">
+        <columns>course_id</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <foreign-key id="314" parent="20" name="golf_distance_entity_entity_pk_fk">
+        <columns>course_id</columns>
         <ref-key>~.entity.entity_entity_pk_uindex</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>

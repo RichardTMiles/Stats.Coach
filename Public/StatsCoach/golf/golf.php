@@ -1,3 +1,5 @@
+<?php $this->user = $this->user[$_SESSION['id']]; ?>
+
 <section class="content-header" style="color: #d9edf7">
     <h1>
         <?=$this->user->user_first_name ?>
@@ -18,7 +20,6 @@
     <div class="box box-widget widget-user">
         <!-- Add the bg color to the header using any of the bg-* classes -->
         <div class="widget-user-header bg-black" style="background: url('<?= TEMPLATE ?>dist/img/photo1.png') center center;">
-
             <h3 class="widget-user-username"></h3>
             <h5 class="widget-user-desc"></h5>
         </div>
@@ -83,7 +84,7 @@
 
                         <?php foreach($this->user->rounds as $key => $round) { ?>
                         <tr>
-                            <td><?= date( 'm/d/Y', $round->creation_date ) ?></td>
+                            <td><?= date( 'm/d/Y', $round->score_date ) ?></td>
                             <td><?=$round->course_name?></td>
                             <td><?=$round->score_total_ffs?></td>
                             <td><?=$round->score_total_gnr?></td>

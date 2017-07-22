@@ -9,6 +9,7 @@ namespace View;
 
 use Controller\User;
 use Modules\Singleton;
+use Modules\Request;
 
 class  View
 {
@@ -20,7 +21,9 @@ class  View
 
     public function __wakeup()
     {
-        if (!($this->ajax = $this->ajaxActive())):      // an HTTP request
+        global $ajax;
+        if (!($ajax = $this->ajaxActive())):      // an HTTP request
+            $_POST = [];
             $this->__construct();                       // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // The ajax page will be 64encoded before we store on the server
@@ -32,13 +35,12 @@ class  View
 
     public function __construct($sendWrapper = false)   // Send the content wrapper
     {
-        $sendWrapper = $sendWrapper ?: ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION);
+        global $ajax;
+        $ajax = $this->ajaxActive();
         if ($this->wrapper()) {
-            
             if (!headers_sent())
-                header( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'], true );
-
-            if (!$sendWrapper && $this->ajax = $this->ajaxActive())
+                Request::setHeader( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'] );
+            if (!($sendWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && $ajax)
                 return null;
             $_POST = [];
             ob_start();
@@ -56,7 +58,7 @@ class  View
 
     public function wrapper() 
     {
-        return (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id);
+        return (!WRAPPING_REQUIRES_LOGIN ?: $_SESSION['id']);
     }
 
     public static function contents(...$argv) {
@@ -79,12 +81,12 @@ class  View
             ob_start();
             if (empty($GLOBALS['alert']) && !empty($GLOBALS['alert'] = $this->carryErrors))
                 $this->carryErrors = null;
-            include CONTENT_ROOT . 'alert' . DS . 'alerts.php'; // a little hackish when not using template file
+            include CONTENT_ROOT . 'alert/alerts.php'; // a little hackish when not using template file
             include_once $file;
             $file = ob_get_clean();                             // TODO minify_html()
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                 $file = minify_html( $file );
-            if ($this->restart || (!$this->ajaxActive() && (!WRAPPING_REQUIRES_LOGIN ?: $this->user->user_id))) {
+            if ($this->restart || (!$this->ajaxActive() && $this->wrapper())) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
             exit(1);
@@ -98,7 +100,7 @@ class  View
 
     public function faceBookLoginUrl()
     {
-        return (include SERVER_ROOT . 'Application' . DS . 'Services' . DS . 'Social' . DS . 'fb-login-url.php');
+        return (include SERVER_ROOT . 'Application/Services/Social/fb-login-url.php');
     }
 
     public function googleLoginUrl()

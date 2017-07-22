@@ -4,11 +4,9 @@ $route->signedOut()->match( 'Login/{client?}/*',  'User', 'login' )->home();
 
 $route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();
 
-$route->signedIn()->match( 'Logout/*', function () { Controller\User::logout(); } );                 // Logout
+$route->match( 'Logout/*', function () { Controller\User::logout(); } );   // Logout
 
-$route->signedIn()->match( 'PostScore/{state?}/{courseId?}/{boxColor?}/*', 'Golf', 'postScore' );  // PostScore $state
-
-$route->signedOut()->match( 'Login/facebook/*', 'User', 'facebook' );                   // TODO - better client handling
+$route->signedIn()->match( 'PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore' );  // PostScore $state
 
 $route->signedIn()->match( 'JoinTeam/', 'User', 'joinTeam');
 
@@ -36,7 +34,7 @@ $route->match( 'Tests/*',                                               // This 
     function () {
             $view = \View\View::getInstance();
             ob_start();
-            require_once SERVER_ROOT . 'Tests' . DS . 'index.php';;
+            require_once SERVER_ROOT . 'Tests/index.php';;
             $file = minify_html( ob_get_clean() );
             if ($view->ajaxActive()) echo $file;
             else $view->currentPage = base64_encode( $file );

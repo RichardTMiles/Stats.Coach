@@ -2,59 +2,52 @@
 
 namespace Model;
 
-use Modules\Helpers\QuickFetch;
+use Model\Helpers\iSport;
+use Modules\Helpers\DataFetch;
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Singleton;
 
-class Golf extends QuickFetch
+class Golf extends DataFetch implements iSport
 {
     use Singleton;
-    const Singleton = true;
-
-    public $course;
-    public $distance;
-    public $handicap;
-    public $tournaments;
-    public $tournament_teams;
-
-    public function __construct()
-    {
-        QuickFetch::__construct();
-        if (empty($this->user->stats)) $this->user->stats = $this->stats( $this->user->user_id );
-    }
 
     public function golf()
     {
-        if (empty($this->user->rounds))
-            $this->rounds( $this->user->user_id );
+        if (empty($this->user[$_SESSION['id']]->rounds)) $this->rounds( $_SESSION['id'] );
     }
 
     public function stats($id)
     {
-        return $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ?', $id );
+        $this->user[$id]->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
     }
 
     public function rounds($id)
     {
-        $stmt = $this->db->prepare( 'SELECT count(user_id) FROM StatsCoach.golf_rounds WHERE user_id = ? LIMIT 1' );
+        $stmt = $this->db->prepare( 'SELECT count(user_id) FROM StatsCoach.golf_rounds WHERE user_id = ?' );
         $stmt->execute([$id]);
-
-        $this->user->rounds[] = ($stmt->fetchColumn() ? $this->fetch_as_object(
-            'SELECT round_id,course_name,creation_date,score_total,score_total_ffs,score_total_gnr,score_total_putts,par_tot 
-         FROM ((StatsCoach.golf_rounds INNER JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id)
-         INNER JOIN StatsCoach.entity_tag ON entity_id = round_id) 
-         WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 3', $id) : null);
+        $this->user[$id]->rounds = ($stmt->fetchColumn() ? $this->fetch_classes( 'SELECT round_id,par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 5', $id) : []);
     }
     
     public function course($id)
     {
-        $this->course = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_course INNER JOIN StatsCoach.entity_location ON entity_id = course_id WHERE course_id = ?', $id );
-        if (!is_object( $this->course )) throw new \Exception( 'invalid course id' );
-        $this->course->course_par = unserialize( $this->course->course_par );
-        $this->course->course_handicap = unserialize( $this->course->course_handicap );
+        $this->course[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_course JOIN StatsCoach.entity_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
+        if (!is_object( $course = $this->course[$id] )) throw new \Exception( 'invalid course id' );
+        $course->course_par = unserialize( $course->course_par );
+        $course->course_handicap = unserialize( $course->course_handicap );
+        return $course;
     }
 
-    public function postScore($state, $courseId, $boxColor)
+    public function teeBox($id, $color)
+    {
+        if (!is_object($this->course[$id])) throw new \Exception('invalid distance lookup');
+        $sql = "SELECT * FROM StatsCoach.golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1";
+        $teeBox = $this->course[$id]->teeBox = $this->fetch_object( $sql, $id, $color);
+        $teeBox->distance = unserialize( $teeBox->distance );
+        $this->course[$id]->teeBox->distance_color = $color;
+        return $teeBox;
+    }
+
+    public function postScore($state, $course_id, $boxColor)
     {
         // Insert into database
         if (!empty($this->newScore) && is_array( $this->newScore ))
@@ -71,7 +64,8 @@ class Golf extends QuickFetch
                 $putts_tot += $this->putts[$i];
             }
 
-            if (!is_object( $this->course )) $this->course( $this->courseId );
+            if (!isset($this->course[$course_id]) || !is_object( $this->course[$course_id] ))
+                $course = $this->course( $course_id );
 
             ################# Add Round ################
             $roundId = $this->new_entity( 8 );
@@ -80,10 +74,10 @@ class Golf extends QuickFetch
             $stmt = $this->db->prepare( $sql );
 
             $stmt->bindValue( ':round_id', $roundId );
-            $stmt->bindValue( ':round_public', 1 );
+            $stmt->bindValue( ':user_id', $_SESSION['id'] );
             $stmt->bindValue( ':score_date', $this->roundDate );                  // TODO
-            $stmt->bindValue( ':user_id', $this->user->user_id );
-            $stmt->bindValue( ':course_id', $this->course->course_id );     // While pro at this TODO - we shouldn't assume that a course is serialized
+            $stmt->bindValue( ':round_public', 1 );
+            $stmt->bindValue( ':course_id', $course->course_id );     // While pro at this TODO - we shouldn't assume that a course is serialized
             $stmt->bindValue( ':score', serialize( $this->newScore ) );
             $stmt->bindValue( ':score_gnr', serialize( $this->gnr ) );
             $stmt->bindValue( ':score_ffs', serialize( $this->ffs ) );
@@ -95,40 +89,34 @@ class Golf extends QuickFetch
             $stmt->bindValue( ':score_total_ffs', $ffs_tot );
             $stmt->bindValue( ':score_total_putts', $putts_tot );
 
-            if (!$stmt->execute())
-                throw new PublicAlert( "We could not process your request. Please try again.", 'warning' );
+            if (!$stmt->execute()) throw new PublicAlert( "We could not process your request. Please try again.", 'warning' );
 
             $sql = "UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE stats_id = ?";
             $stmt = $this->db->prepare( $sql );
 
-            if (!$stmt->execute( [$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $this->user->user_id] ))
+            if (!$stmt->execute( [$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']] ))
                 throw new \Exception( 'stats update failed' );
 
-            $this->alert['success'] = "Score successfully added!";
+            PublicAlert::success("Score successfully added!");
             startApplication( 'Home/' );
-
-
         }
-
+        
        // Get Course so we can display the tee box colors
-        if (!empty($courseId) && (!is_object( $this->course ) || !isset($this->course->course_id) || $this->course->course_id != $this->courseId))
-            $this->course( $courseId );
+        if (!empty($course_id) && !is_array($this->course) || (!array_key_exists( $course_id, $this->course) || !is_object( $course = $this->course[$course_id] ) || !isset($course->course_id) || $course->course_id != $course_id))
+            $course = $this->course( $course_id );
 
         // A tee box color is set, get the distances.
         // I dont like that the tee box color is stored twice
         if (!empty($boxColor)) {
-            if (!is_object( $this->distance ) || !isset( $this->distance['course_id'] ) || $this->course->course_id != $this->distance->course_id || strtolower( $this->distance->distance_color ) != $this->boxColor) {
-                $this->distance = $this->fetch_as_object( 'SELECT * FROM StatsCoach.golf_distance WHERE course_id = ? AND distance_color = ? LIMIT 1', $this->course->course_id, $boxColor );
-                if (!is_object( $this->distance )) throw new \Exception( 'Distance Could not be fetched' );
-                $this->distance->distance = unserialize( $this->distance->distance );
+            if (!isset($course->teeBox) || !is_object( $course->teeBox )) {
+                $this->teeBox( $course_id, $boxColor );
             } return null;
         }
 
-        if (!empty($courseId))
-            return $this->course_colors = [$this->course->box_color_1, $this->course->box_color_2, $this->course->box_color_3, $this->course->box_color_4, $this->course->box_color_5];
+        if (!empty($course_id) && is_object( $course ))
+            return $this->course_colors = [$course->box_color_1, $course->box_color_2, $course->box_color_3, $course->box_color_4, $course->box_color_5];
 
         if (!empty($this->state)) {
-
             $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.entity_location ON entity_id = course_id WHERE state = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( [$state] );
@@ -194,7 +182,7 @@ class Golf extends QuickFetch
         if (!$stmt->execute()) throw new \Exception( "Failed inserting courses" );
 
 
-        $sql = "INSERT INTO StatsCoach.golf_distance (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES (:course_id, :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)";
+        $sql = "INSERT INTO StatsCoach.golf_tee_box (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES (:course_id, :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)";
         for ($i = 1; $i <= $tee_boxes; $i++) {
             $dist_out = $dist_in = 0;
             for ($j = 1; $j <= 9; $j++) $dist_out += $teeBox[$i][$j];

@@ -1,8 +1,11 @@
 
 <div class="login-box">
-    <div class="login-logo">
-        <a href="<?= SITE ?>"><b>Stats</b>.Coach</a>
+    <div class="register-logo">
+        <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
     </div><!-- /.login-logo -->
+
+
+
     <div class="login-box-body">
         <p class="login-box-msg">Recover Username & Password</p>
 

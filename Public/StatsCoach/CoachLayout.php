@@ -1,3 +1,7 @@
+<?php
+$user = $this->user[$_SESSION['id']];
+?>
+
 <header class="main-header">
     <!-- Logo -->
     <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
@@ -31,7 +35,7 @@
                                 <li><!-- start message -->
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $this->user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
+                                            <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
                                         </div>
                                         <h4>
                                             Support Team
@@ -213,16 +217,16 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $this->user->user_profile_pic ?>" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs"><?= $this->user->user_full_name ?></span>
+                        <img src="<?= $user->user_profile_pic ?>" class="user-image" alt="User Image"/>
+                        <span class="hidden-xs"><?= $user->user_full_name ?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $this->user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
+                            <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
                             <p>
-                                <?= $this->user->user_full_name ?> - <?= $this->user->user_sport ?>
-                                <small>Member since <?= date( 'm/d/Y', $this->user->user_creation_date ) ?></small>
+                                <?= $user->user_full_name ?> - <?= $user->user_sport ?>
+                                <small>Member since <?= date( 'm/d/Y', $user->creation_date ) ?></small>
                             </p>
                         </li>
                         <!-- Menu Body -->
@@ -265,10 +269,10 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $this->user->user_profile_pic ?>" class="img-circle" alt="User Image">
+                <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p><?= $this->user->user_first_name ?> <?= $this->user->user_last_name ?></p>
+                <p><?= $user->user_first_name ?> <?= $user->user_last_name ?></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -296,10 +300,10 @@
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
-                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $this->user->user_full_name ?>
+                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $user->user_full_name ?>
                         </a>
                     </li>
-                    <?php foreach ($this->user->teams as &$team) {
+                    <?php foreach ($user->teams as &$team) {
                         if (is_object( $team )) echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
                     } ?>
 
@@ -322,18 +326,19 @@
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <?php foreach ($this->user->teams as &$team) { ?>
+                <?php foreach ($user->teams as &$team_id) {
+                    $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
                             <a href=""><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
-                                <?php if (empty($team->members))
+                                <?php if (empty($team->member_id))
                                 echo '</a>';
                                 else { ?>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
-                                <?php foreach ($team->members as $user) { ?>
-                                    <li><a href="<?= SITE ?>Profile/<?= $user->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $user->user_full_name ?></a>
+                                <?php foreach ($team->member_id as $user_id) { ?>
+                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_full_name ?></a>
                                     </li>
                                 <?php } ?>
                             </ul>
@@ -423,4 +428,6 @@
     </section>
     <!-- /.sidebar -->
 </aside>
+
+
 

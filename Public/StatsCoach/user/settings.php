@@ -25,6 +25,7 @@
                 <div class="tab-content">
                     <!-- SETTINGS TAB -->
                     <div class="tab-pane" id="settings">
+
                         <!-- Form Start -->
                         <form class="form-horizontal" action="<?=SITE?>Profile/" method="post" enctype="multipart/form-data">
 
@@ -118,6 +119,9 @@
                             </div>
 
                         </form>
+
+
+
                     </div><!-- /.tab-pane -->
                 </div><!-- /.tab-content -->
             </div><!-- /.nav-tabs-custom -->

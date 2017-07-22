@@ -9,25 +9,27 @@ use Modules\Singleton;
 class User extends Request
 {
     use Singleton { set as private privateSet; }
-
-
+    
     public static function logout()
     {
         unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
         \Model\User::clearInstance();   // remove sterilized data
-        $_SESSION['id'] = false;
-        unset($_SESSION['id']);
-        session_unset();
         session_destroy();
-        startApplication( true );
+        $_SESSION['id'] = false;
+        startApplication( 'login/' );
     }
 
     public function login($client = null)
     {
 
-        if (isset($client) && $client == "clear") {
-            $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
-            return false;
+        switch ($this->set($client)->alnum()) {
+            case "clear":
+                $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
+                return false;
+            case 'FaceBook':
+                return $this->facebook();
+            default:
+
         }
 
         list($UserName, $this->FullName, $UserImage)
@@ -38,13 +40,9 @@ class User extends Request
         $username = $this->post( 'username' )->alnum();
         $password = $this->post( 'password' )->value();
         $rememberMe = $this->post( 'RememberMe' )->int();
-        
+
         if (!$rememberMe) {
             $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
-        } else {
-            $this->setCookie( "UserName", $this->user_username );
-            $this->setCookie( "FullName", $this->user_full_name );  // TODO - rethink
-            $this->setCookie( "UserImage", $this->user_profile_pic );
         }
 
         if (!$username || !$password)
@@ -73,9 +71,8 @@ class User extends Request
     public function facebook()
     {
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
-            $this->alert = 'Sorry, we could not connect to Facebook. Please try again later.';
-        else return true;
-        return startApplication( true );     // This will load the login page
+            throw new PublicAlert('Sorry, we could not connect to Facebook. Please try again later.');
+        return true;
     }
 
     public function register()
@@ -130,9 +127,16 @@ class User extends Request
 
     public function activate($email, $email_code = null)
     {
-        $email = $this->set( $email )->email();
-        $email_code = $this->set( $email_code )->value();
+
+        $email = $this->set( $email )->base64_decode();
+
+        dump( $email );
+
+        $email_code = $this->set( $email_code )->base64_decode()->value();
         if (!$email){
+
+            alert($email);
+
             PublicAlert::warning( 'Sorry the url submitted is invalid.' );
             return startApplication( 'Home/' );
         } return [$email, $email_code];

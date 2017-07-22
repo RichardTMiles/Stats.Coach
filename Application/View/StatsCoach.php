@@ -179,20 +179,31 @@
 
 
 <?php
-if (is_object( $this->user )) {
-    if ($this->user->user_type == 'Coach') {
+$refresh = true;
+
+if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
+    if ($this->user[$_SESSION['id']]->user_type == 'Coach') {
         echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
         require_once CONTENT_ROOT . 'CoachLayout.php';
         echo $wrapper_footer;
-    } elseif ($this->user->user_type == 'Athlete') {
+    } elseif ($this->user[$_SESSION['id']]->user_type == 'Athlete') {
         echo '<body class="hold-transition skin-green layout-top-nav"><div class="wrapper">';
         require_once CONTENT_ROOT . 'AthleteLayout.php';
         echo $wrapper_footer;
-    } elseif (!$this->user->user_id) {
-        echo '<body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>';
     }
+} elseif (!$_SESSION['id']) {
+    echo '<body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>';
 } else {
-    echo '<body><div class="alert"></div><script>bootstrapAlert("A critical error has occured", "danger")</script>';
+    session_destroy();
+    session_regenerate_id(TRUE);
+    echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>';
+    /*
+    echo '<body class="stats-wrap" onload="bootstrapAlert(\'A critical error has occured\', \'danger\')"><div class="container" id="ajax-content" style=""></div><div class="alert"></div>';
+    $refresh = false;
+    echo '<pre>';
+    var_dump( $GLOBALS );
+    echo '</pre>';
+    */
 } ?>
 
 <!-- ./wrapper -->
@@ -243,6 +254,7 @@ if (is_object( $this->user )) {
         return this.length > 0;
     };
 
+    <?php if ($refresh) { ?>
     $(document).pjax('a', '#ajax-content');
     $.pjax.reload('#ajax-content');
 
@@ -256,7 +268,6 @@ if (is_object( $this->user )) {
     });
 
     $(document).on("click", "a.no-pjax", false);
-
 
     $(function () {
         var closure = function () {
@@ -272,9 +283,10 @@ if (is_object( $this->user )) {
 
     });
 
+    <?php } ?>
+
 </script>
 
 
 </body>
 </html>
-

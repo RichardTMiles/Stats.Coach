@@ -1,5 +1,11 @@
 <?php
 
+// URI vars
+
+$state = $this->state;
+$course_id = $this->course_id;
+$boxColor = $this->boxColor;
+
 ##########  Step 1.5, return list of courses from given state
 if (!empty($this->courses)) {
     if (!$this->ajax) throw new \Exception();
@@ -15,7 +21,7 @@ if (!empty($this->courses)) {
     exit (1);  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
 }
 #### STEP 1
-if (!$this->state) { ?>
+if (!$state) { ?>
     <script>
 
         var state = null;
@@ -94,7 +100,7 @@ if (!$this->state) { ?>
 
                         <div data-pjax class="form-group">
                             <label>Course</label>
-                            <select id="course" class="form-control select2" <?= (!isset($this->courses) ? 'disabled="disabled"' : null); ?>
+                            <select id="course" class="form-control select2" disabled="disabled"
                                     onchange="box_colors_given_id(this)" style="width: 100%;">
                             </select>
                         </div><!-- /.form-group -->
@@ -114,7 +120,11 @@ if (!$this->state) { ?>
     </script>
 
     <?php return 1;
-} elseif ($this->course_colors) {
+}
+
+elseif ($this->course_colors && $course_id) {
+    $course = $this->course[$course_id];
+
 #######################  STEP 2 , Course Tee Box #####################################?>
     <script>
         function startScoreCard(boxColor) {
@@ -127,12 +137,12 @@ if (!$this->state) { ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1 style="color: #fff">
-            <?= $this->golf->course->course_name ?>
+            <?= $course->course_name ?>
             <small style="color: ghostwhite;">What tee box did you play from?</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->state ?></a></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $course->state ?></a></li>
             <li class="active" style="color: ghostwhite;">Box Color</li>
         </ol>
     </section>
@@ -147,7 +157,6 @@ if (!$this->state) { ?>
                     <div class="small-box bg-<?= (($color = strtolower($value)) == 'gold' ? 'yellow' : $color ) ?>">
                         <div class="inner">
                             <h3><?= $value ?><sup style="font-size: 12px">Tee Box</sup></h3>
-
                         </div>
                         <div class="icon">
                             <i class="fa fa-flag-o"></i>
@@ -162,8 +171,9 @@ if (!$this->state) { ?>
     </section>
 
     <?php return 1;
-} elseif (is_object( $this->golf->course ) && is_object( $this->golf->distance )) {
+}
 
+elseif (is_object( $course = $this->course[$course_id] ) && is_object( $course->teeBox )) {
 
 #######################  STEP 3 , input  #####################################{ ?>
 
@@ -189,21 +199,21 @@ if (!$this->state) { ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1 style="color: #fff">
-            <?= $this->golf->course->course_name ?>
+            <?= $course->course_name ?>
             <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-            <li><a href="#" style="color: ghostwhite;"><?= $this->golf->course->state ?></a></li>
-            <li style="color: ghostwhite;"><?= $this->golf->course->course_name ?></li>
-            <li style="color: ghostwhite;"><?= $this->golf->distance->distance_color ?></li>
+            <li><a href="#" style="color: ghostwhite;"><?= $course->state ?></a></li>
+            <li style="color: ghostwhite;"><?= $course->course_name ?></li>
+            <li style="color: ghostwhite;"><?= $course->teeBox->distance_color ?></li>
             <li style="color: ghostwhite;"> Score Input</li>
         </ol>
     </section>
 
     <section class="content">
         <form data-pjax class="form-horizontal" method="post"
-              action="<?= SITE . 'PostScore/' . $this->golf->course->state . '/' . $this->golf->course->course_id . '/' . $this->golf->distance->distance_color . '/' ?>"
+              action="<?= SITE . 'PostScore/' . $course->state . '/' . $course->course_id . '/' . $course->teeBox->distance_color . '/' ?>"
               name="addCourse">
             <div class="row" id="dateTime">
                 <div class="col-xs-12">
@@ -269,8 +279,8 @@ if (!$this->state) { ?>
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->distance->distance[$i - 1] ?>" data-min="1"
-                                                       data-max="<?= (ceil( $this->golf->distance->distance_tot / 18 ) + 400) ?>"
+                                                <input type="text" class="knob" value="<?= $course->teeBox->distance[$i - 1] ?>" data-min="1"
+                                                       data-max="<?= (ceil( $course->teeBox->distance_tot / 18 ) + 400) ?>"
                                                        data-thickness="0.25" data-height="180" data-width="180"
                                                        data-fgcolor="#3c8dbc" data-readonly="true" readonly="readonly"
                                                        style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
@@ -281,7 +291,7 @@ if (!$this->state) { ?>
                                         <div class="col-xs-12 col-sm-6 col-md-6 text-center">
 
                                             <div style="display:inline;width:200px;height:200px;">
-                                                <input type="text" class="knob" value="<?= $this->golf->course->course_par[$i - 1] ?>" data-min="1" data-max="9"
+                                                <input type="text" class="knob" value="<?= $course->course_par[$i - 1] ?>" data-min="1" data-max="9"
                                                        data-fgcolor="#f56954" data-readonly="true" readonly="readonly" data-height="180" data-width="180"
                                                        style="idth: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                             </div>
