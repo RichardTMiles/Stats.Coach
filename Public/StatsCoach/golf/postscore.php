@@ -20,7 +20,7 @@ if (!empty($this->courses)) {
     }
     exit (1);  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
 }
-#### STEP 1
+##########  STEP 1 Choose a US State
 if (!$state) { ?>
     <script>
 

@@ -40,7 +40,6 @@ class ErrorCatcher
         echo 'Message: ' . $argv[1] . PHP_EOL;
         echo 'line: ' . $argv[2] .'('. $argv[3] .')';
         } else var_dump( $argv );
-        echo PHP_EOL . PHP_EOL;
         $output = ob_get_contents( );
         ob_end_clean( );
         // Write the contents back to the file

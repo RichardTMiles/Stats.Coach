@@ -49,6 +49,7 @@ class Golf extends DataFetch implements iSport
 
     public function postScore($state, $course_id, $boxColor)
     {
+        global $course_colors, $courses;
         // Insert into database
         if (!empty($this->newScore) && is_array( $this->newScore ))
         {
@@ -102,7 +103,7 @@ class Golf extends DataFetch implements iSport
         }
         
        // Get Course so we can display the tee box colors
-        if (!empty($course_id) && !is_array($this->course) || (!array_key_exists( $course_id, $this->course) || !is_object( $course = $this->course[$course_id] ) || !isset($course->course_id) || $course->course_id != $course_id))
+        if (!empty($course_id) && (is_array($this->course) && !array_key_exists( $course_id, $this->course) || !is_object( $course = $this->course[$course_id] ) || !isset($course->course_id) || $course->course_id != $course_id))
             $course = $this->course( $course_id );
 
         // A tee box color is set, get the distances.
@@ -114,14 +115,14 @@ class Golf extends DataFetch implements iSport
         }
 
         if (!empty($course_id) && is_object( $course ))
-            return $this->course_colors = [$course->box_color_1, $course->box_color_2, $course->box_color_3, $course->box_color_4, $course->box_color_5];
+            return $course_colors = [$course->box_color_1, $course->box_color_2, $course->box_color_3, $course->box_color_4, $course->box_color_5];
 
-        if (!empty($this->state)) {
+        if (!empty($state)) {
             $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.entity_location ON entity_id = course_id WHERE state = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( [$state] );
-            $this->courses = $stmt->fetchAll();                 // setting to global
-            if (empty($this->courses)) $this->courses = true;
+            $courses = $stmt->fetchAll();                 // setting to global
+            if (empty($courses)) $courses = true;
         }
     }
 

@@ -39,13 +39,13 @@ abstract class DataFetch
         global $user, $team, $course, $tournament;
         $this->db = Database::getConnection();
         static::$inTransaction = false;
-        if ($build && !empty($this->user)) {
+        if ($build && !empty($this->user)):
             $user = $this->user;
             $team = $this->team;
             $course = $this->course;
             $tournament = $this->tournament;
             $build = false;
-        }
+        endif;
         $this->user = &$user;
         $this->team = &$team;
         $this->course = &$course;
