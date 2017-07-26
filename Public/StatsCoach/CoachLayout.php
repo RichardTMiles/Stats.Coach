@@ -1,5 +1,5 @@
-<?php
-$user = $this->user[$_SESSION['id']];
+<?php $user = $this->user[$_SESSION['id']];
+
 ?>
 
 <header class="main-header">
@@ -326,7 +326,7 @@ $user = $this->user[$_SESSION['id']];
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <?php foreach ($user->teams as &$team_id) {
+                <?php if (!empty($user->teams)) foreach ($user->teams as &$team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">

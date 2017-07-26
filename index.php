@@ -12,26 +12,29 @@ ini_set('session.gc_probability', 1);               // Clear any lingering sessi
 
 session_start();    // Receive the session id from the users Cookies (browser) and load variables stored on the server
 
-// These are required for  the app to run. You must edit the Config file for your Servers
-if ((include SERVER_ROOT . 'Application/Configs/Config.php') == false ||
-    (include SERVER_ROOT . 'Application/Modules/Singleton.php') == false ||             // Trait that defines magic methods for session and application portability
-    (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') == false ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
-    (include SERVER_ROOT . 'Application/Services/vendor/autoload.php') == false){       // Load the autoload() for composer dependencies located in the Services folder
+// These files are required for the app to run. You must edit the Config file for your Servers
+if (false == (include SERVER_ROOT . 'Application/Configs/Config.php') ||
+    false == (include SERVER_ROOT . 'Application/Modules/Helpers/Serialized.php') ||
+    false == (include SERVER_ROOT . 'Application/Modules/Singleton.php')  ||             // Trait that defines magic methods for session and application portability
+    false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
+    false == (include SERVER_ROOT . 'Application/Services/vendor/autoload.php')){       // Load the autoload() for composer dependencies located in the Services folder
     echo "Internal Server Error";                                                       // Composer Autoloader
     exit(1);
 }
 
 Modules\Helpers\Reporting\ErrorCatcher::start();
+Modules\Helpers\Serialized::start('user','team','course','tournaments');
 
+$ajax = (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
+    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
 
 function startApplication($restart = false)
 {
-    global $user, $team, $course;
-
     if ($restart) {
         $_POST = [];
+        global $user, $team, $course, $tournaments;
         if ($reset = ($restart === true))
-            $user = $team = $course = null;
+            Modules\Helpers\Serialized::clear();
         Model\User::newInstance();      // This will reset the stats too.
         View\View::newInstance($reset);
         Modules\Request::changeURI($reset ? '/' : $restart);
@@ -39,11 +42,7 @@ function startApplication($restart = false)
     }
 
     Modules\Request::sendHeaders();     // Send any stored headers
-    
-    
     Model\User::getInstance();
-
-
     View\View::getInstance();
 
 
@@ -51,22 +50,20 @@ function startApplication($restart = false)
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
-        if ($restart) if (array_key_exists( 'Modules/Singleton', class_uses($model, true)))
+        if ($restart && array_key_exists( 'Modules/Singleton', class_uses($model, true)))
             $model::clearInstance();
 
         try {
             if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
                 call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
-        } catch (\Modules\Helpers\Reporting\PublicAlert $e){
 
-        } finally {
-            \Modules\Helpers\DataFetch::verify();
-        };
+        } catch (\Modules\Helpers\Reporting\PublicAlert $e){
+        } finally { \Modules\Helpers\DataFetch::verify(); };
+
         View\View::getInstance()->content( $class, $method );
     });
 
     include SERVER_ROOT . 'Application/Bootstrap.php';
-
 } 
 
 startApplication();

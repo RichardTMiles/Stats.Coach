@@ -35,17 +35,9 @@ abstract class DataFetch
 
     public function __construct()
     {
-        static $build = true;
+        static::$inTransaction = false;
         global $user, $team, $course, $tournament;
         $this->db = Database::getConnection();
-        static::$inTransaction = false;
-        if ($build && !empty($this->user)):
-            $user = $this->user;
-            $team = $this->team;
-            $course = $this->course;
-            $tournament = $this->tournament;
-            $build = false;
-        endif;
         $this->user = &$user;
         $this->team = &$team;
         $this->course = &$course;
@@ -83,7 +75,9 @@ abstract class DataFetch
             try {
                 $stmt = $db->prepare( 'INSERT INTO StatsCoach.entity (entity_pk) VALUE (?)' );
                 $stmt->execute( [$stmt = Bcrypt::genRandomHex()] );
-            } catch (\PDOException $e) { $stmt = false; }
+            } catch (\PDOException $e) {
+                $stmt = false;
+            }
         } while (!$stmt);
         $db->prepare( 'INSERT INTO StatsCoach.entity_tag (entity_id, user_id, tag_id, creation_date) VALUES (?,?,?,?)' )->execute( [$stmt, (!empty($_SESSION['id']) ? $_SESSION['id'] : $stmt), $tag_id, time()] );
         static::$entityTransactionKeys[] = $stmt;
@@ -102,9 +96,9 @@ abstract class DataFetch
         $stmt->setFetchMode( \PDO::FETCH_CLASS, \stdClass::class );
         if (!$stmt->execute( $execute )) return false;
         $stmt = $stmt->fetchAll();  // user obj
-        return (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : $stmt );
+        return (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : $stmt);
     }
-    
+
     public function fetch_classes($sql, ...$execute)
     {
         $stmt = $this->db->prepare( $sql );

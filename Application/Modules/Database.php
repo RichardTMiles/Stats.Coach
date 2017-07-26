@@ -14,8 +14,7 @@ class Database
 
     public static function getConnection($dbName = null)
     {
-        if (!empty(self::$database))
-            return static::$database;
+        if (!empty(self::$database)) return static::$database;
 
         $attempts = 0;
         $host = static::$host;

@@ -47,6 +47,9 @@ define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
 
 define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true);
 
+define( 'AJAX' , (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
+    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')));
+
 ################# Application Paths ########################
 /**
  * The following constants MUST be used wherever applicable
@@ -65,7 +68,7 @@ define( 'SITE',             url . DS , true);    // http(s)://example.com/  - do
 define( 'CONTENT',          '/Public/StatsCoach/');
 define( 'VENDOR',           '/Application/Services/vendor/');
 define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte/'); // TEMPLATE HTML FILES PLUGIN HERE
-define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Error/Log_'. time() .'_'.session_id().'.php' );
+define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Error/Log_'. time() .'_'.session_id().'.log' );
 define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor/');
 define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte/');
 define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach/');
@@ -183,7 +186,7 @@ function sortDump(...$mixed)
     $report = ob_get_clean();
 
     // Output to file
-    $file = fopen(SERVER_ROOT . 'Data/Logs/Dumped/Sort_'.time().'.txt' , "a");
+    $file = fopen(SERVER_ROOT . 'Data/Logs/Dumped/Sort_'.time().'.log' , "a");
     fwrite( $file, $report );
     fclose( $file );
 

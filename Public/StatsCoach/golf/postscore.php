@@ -3,7 +3,7 @@
 // URI vars
 
 $state = $this->state;
-$course_id = $this->course_id;
+$course_id = $this->course_id; 
 $boxColor = $this->boxColor;
 
 ##########  Step 1.5, return list of courses from given state

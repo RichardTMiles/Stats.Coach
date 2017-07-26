@@ -1,13 +1,13 @@
-<?php $this->user = $this->user[$_SESSION['id']]; ?>
+<?php $user = $this->user[$_SESSION['id']]; ?>
 
 <section class="content-header" style="color: #d9edf7">
     <h1>
-        <?=$this->user->user_first_name ?>
+        <?=$user->user_first_name ?>
         <small style="color: #d9edf7">Profile</small>
     </h1>
     <ol class="breadcrumb">
         <li ><a href="#"style="color: #d9edf7"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li><?= $this->user->user_full_name ?></li>
+        <li><?= $user->user_full_name ?></li>
         <li class="active" style="color: #d9edf7">Profile</li>
     </ol>
 </section>
@@ -24,14 +24,14 @@
             <h5 class="widget-user-desc"></h5>
         </div>
         <div class="widget-user-image">
-            <img class="img-circle" src="<?= $this->user->user_profile_pic ?>" alt="User Avatar">
+            <img class="img-circle" src="<?= $user->user_profile_pic ?>" alt="User Avatar">
         </div>
 
         <div class="box-footer">
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $this->user->stats->stats_ffs ?></h5>
+                        <h5 class="description-header"><?= $user->stats->stats_ffs ?></h5>
                         <span class="description-text">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
@@ -39,7 +39,7 @@
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?=$this->user->stats->stats_rounds?></h5>
+                        <h5 class="description-header"><?=$user->stats->stats_rounds?></h5>
                         <span class="description-text">Rounds</span>
                     </div><!-- /.description-block -->
 
@@ -47,7 +47,7 @@
 
                 <div class="col-sm-4">
                     <div class="description-block">
-                        <h5 class="description-header"><?=$this->user->stats->stats_gnr?></h5>
+                        <h5 class="description-header"><?=$user->stats->stats_gnr?></h5>
                         <span class="description-text">Greens in Regulation</span>
                     </div><!-- /.description-block -->
                 </div><!-- /.col -->
@@ -56,7 +56,7 @@
         </div>
     </div>
     
-    <?php if (!empty($this->user->rounds) && is_array( $this->user->rounds ) && is_object( $this->user->rounds[0] )) { ?>
+    <?php if (!empty($user->rounds) && is_array( $user->rounds ) && is_object( $user->rounds[0] )) { ?>
     <div class="box box-widget widget-user">
         <div class="box box-info">
             <div class="box-header with-border">
@@ -82,7 +82,7 @@
                         </thead>
                         <tbody>
 
-                        <?php foreach($this->user->rounds as $key => $round) { ?>
+                        <?php foreach($user->rounds as $key => $round) { ?>
                         <tr>
                             <td><?= date( 'm/d/Y', $round->score_date ) ?></td>
                             <td><?=$round->course_name?></td>
@@ -112,7 +112,7 @@
                 <span class="info-box-icon bg-aqua"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Shots</span>
-                    <span class="info-box-number"><?=$this->user->stats->stats_strokes?></span>
+                    <span class="info-box-number"><?=$user->stats->stats_strokes?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -122,7 +122,7 @@
                 <span class="info-box-icon bg-green"><i class="fa fa-flag-checkered"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Rounds Played</span>
-                    <span class="info-box-number"><?=$this->user->stats->stats_rounds?></span>
+                    <span class="info-box-number"><?=$user->stats->stats_rounds?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -132,7 +132,7 @@
                 <span class="info-box-icon bg-yellow"><i class="fa fa-tree"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Handicap</span>
-                    <span class="info-box-number"><?=($this->user->stats->stats_handicap < 6 ? "You must play at least 6 rounds": $this->golf->stats_handicap)?></span>
+                    <span class="info-box-number"><?=($user->stats->stats_handicap < 6 ? "You must play at least 6 rounds": $this->golf->stats_handicap)?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

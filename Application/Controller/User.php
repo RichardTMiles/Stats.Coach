@@ -21,7 +21,6 @@ class User extends Request
 
     public function login($client = null)
     {
-
         switch ($this->set($client)->alnum()) {
             case "clear":
                 $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();

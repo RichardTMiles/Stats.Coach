@@ -13,32 +13,22 @@ use Modules\Request;
 
 class User extends Team
 {
-    use Singleton { __sleep as private catNap; }
-    const Singleton = true;
-
-    public function __sleep()
-    {   // define the globals & unset the pointers
-        unset($this->user, $this->team, $this->course, $this->tournament);
-        global $user, $team, $course, $tournament;
-        $this->user = $user;
-        $this->team = $team;
-        $this->course = $course;
-        $this->tournament = $tournament;
-        return $this->catNap();
-    }
+    use Singleton;
 
     public function __construct()   // What do we need from the logged in user for the template?
     {
+        global $user;
         parent::__construct();
         $id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
-        if ($_SESSION['id']) {
-            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $_SESSION['id']; // Bcrypt::genRandomHex(30);
+        if ($id) {
+            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // Bcrypt::genRandomHex(30);
             Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
-            // if (!empty($this->user[$_SESSION['id']])) return null;
-            $this->profile( $_SESSION['id'] );
-            if (!empty($teams = $this->user[$_SESSION['id']]->teams))
+            if (is_array($user) && !empty($user[$id]))
+                return null;
+            $this->profile( $id );
+            if (!empty($teams = $this->user[$id]->teams))
                 foreach ($teams as $team_id)
-                    $this->teamMembers($team_id);
+                    $this->teamMembers( $team_id );
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
     }
 
@@ -121,6 +111,7 @@ class User extends Team
 
     public function login($username, $password, $rememberMe)
     {
+
         if (!$this->user_exists( $username ))
             throw new PublicAlert( 'Sorry, this Username and Password combination doesn\'t match out records.', 'warning' );
 
@@ -142,6 +133,7 @@ class User extends Team
             Request::setCookie( "FullName", $data['user_full_name'] );
             Request::setCookie( "UserImage", $data['user_profile_pic'] );
         }
+
         return startApplication( true );
     }
 
@@ -205,14 +197,14 @@ class User extends Team
 
         if (!$this->db->prepare( 'INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)' )->execute( [$_SESSION['id']] ))
             throw new PublicAlert ( 'Your account could not be created.', 'danger' );;
-        
+
         $this->commit();
 
         if ($this->userType == 'Coach')
             $this->createTeam( $this->teamName, $this->schoolName );
 
         elseif ($this->teamCode)
-            $this->newTeamMember($this->teamCode);
+            $this->newTeamMember( $this->teamCode );
 
 
         $subject = 'Your' . SITE_TITLE . ' password';
@@ -321,10 +313,10 @@ class User extends Team
     public function profile($id)
     {
         $this->user( $id );
-        $this->userTeams( $id  );
+        $this->userTeams( $id );
         if (!empty($this->user[$id]->teams))
             foreach ($this->user[$id]->teams as $team_id)
-                $this->team($team_id);
+                $this->team( $team_id );
         $model = $this->user[$id]->user_sport;
         $model = "Model\\$model";
         $model = new $model;

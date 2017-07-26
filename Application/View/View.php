@@ -18,11 +18,11 @@ class  View
     
     public $currentPage;
     private $carryErrors;
+    private $forceStoreContent;
 
     public function __wakeup()
     {
-        global $ajax;
-        if (!($ajax = $this->ajaxActive())):      // an HTTP request
+        if (!AJAX):      // an HTTP request
             $_POST = [];
             $this->__construct();                       // and reprocess the dependencies, wrapper is a global closure
         elseif (!empty($this->currentPage)):            // Implies AJAX && a page has already been rendered and stored
@@ -33,25 +33,22 @@ class  View
         endif;                                          // this would mean we're requesting our second page through ajax ie not initial page request
     }
 
-    public function __construct($sendWrapper = false)   // Send the content wrapper
+    public function __construct($forceWrapper = false)   // Send the content wrapper
     {
-        global $ajax;
-        $ajax = $this->ajaxActive();
         if ($this->wrapper()) {
             if (!headers_sent())
                 Request::setHeader( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'] );
-            if (!($sendWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && $ajax)
-                return null;
+            if (!($forceWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && AJAX) return null;
             $_POST = [];
             ob_start();
             require(CONTENT_WRAPPER);   // Return the Template
             $template = ob_get_clean();
             echo (MINIFY_CONTENTS && (@include_once "minify.php")) ? minify_html( $template ) : $template;
-            if ($sendWrapper) { 
+            if ($forceWrapper):
                 if (!empty($GLOBALS['alert'])) $this->carryErrors = $GLOBALS['alert']; // exit(1); 
-            }
-        } elseif ($this->ajaxActive())
-            User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
+                $this->forceStoreContent = true;
+            endif;
+        } elseif (AJAX) User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
@@ -86,18 +83,14 @@ class  View
             $file = ob_get_clean();                             // TODO minify_html()
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                 $file = minify_html( $file );
-            if ($this->restart || (!$this->ajaxActive() && $this->wrapper())) {
+            if ($this->forceStoreContent || (!AJAX && $this->wrapper())) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
+            $this->forceStoreContent = false;
             exit(1);
         } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
     }
-
-    private function ajaxActive()
-    {
-        return $this->ajax = (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) || ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'));
-    }
-
+    
     public function faceBookLoginUrl()
     {
         return (include SERVER_ROOT . 'Application/Services/Social/fb-login-url.php');

@@ -50,6 +50,7 @@ abstract class Team extends DataFetch
 
     protected function teamMembers($id)
     {
+        // alert();
         if (!isset($this->team[$id]))
             throw new \InvalidArgumentException("No team[ $id ] found in array");
         $team = $this->team[$id];
@@ -63,7 +64,5 @@ abstract class Team extends DataFetch
             foreach ($team->members as $user_id)
                 $this->user[$user_id] = $this->user( $user_id );
     }
-
-
 
 }

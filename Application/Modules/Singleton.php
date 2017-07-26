@@ -2,7 +2,7 @@
 
 namespace Modules;
 
-require_once SERVER_ROOT . 'Application/Modules/Helpers/Serialized.php';
+use Modules\Helpers\Serialized;
 
 trait Singleton
 {
@@ -30,8 +30,8 @@ trait Singleton
         if (!empty(self::$instance)) return self::$instance;
         $calledClass = get_called_class();
         // check if the object has been sterilized in the session
-        // This will invoke the __wake up operator
-        if (isset( $_SESSION[$calledClass] ) && is_serialized( $_SESSION[$calledClass], self::$instance))
+        // This will invoke the __wake up operator   TODO - base64_decode
+        if (isset( $_SESSION[$calledClass] ) && Serialized::is_serialized( $_SESSION[$calledClass] , self::$instance))
             return self::$instance;
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( get_called_class() );
@@ -87,7 +87,7 @@ trait Singleton
     public function __wakeup()
     {
         $object = get_object_vars( $this );
-        foreach ($object as $item => $value) is_serialized($value, $this->$item);  // TODO - base64_decode(
+        foreach ($object as $item => $value) Serialized::is_serialized($value, $this->$item);
         if (method_exists( $this, '__construct' )) self::__construct();
     }
 
@@ -98,7 +98,7 @@ trait Singleton
         foreach (get_object_vars( $this ) as $key => &$value) {
             if (empty($value)) continue;    // The object could be null from serialization?
             if (is_object( $value )) {
-                try { $this->$key = (@serialize( $value ));                      // TODO - base64_encode(
+                try { $this->$key = (@serialize( $value ));
                 } catch (\Exception $e){ continue; }                // Database object we need to catch the error thrown.
             } $onlyKeys[] = $key;
         } return (isset($onlyKeys) ? $onlyKeys : []);
@@ -107,7 +107,7 @@ trait Singleton
     public function __destruct()
     {   // We require a sleep function to be set manually for singleton to manage utilization
         if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
-        try { $_SESSION[__CLASS__] = @serialize( $this );                               // TODO - base64_encode(
+        try { $_SESSION[__CLASS__] =  @serialize( $this );     // TODO - base64_encode(
         } catch (\Exception $e){ unset($_SESSION[__CLASS__]); return null; };
     }
 
