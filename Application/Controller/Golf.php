@@ -2,14 +2,12 @@
 namespace Controller;
 
 use Modules\Helpers\Reporting\PublicAlert;
-use Modules\Singleton;
 use Modules\Request;
 
 class Golf extends Request
 {
-    use Singleton { set as private stuff; }
 
-    public function Golf()
+    public function golf()
     {
         return true;
     }
@@ -23,8 +21,10 @@ class Golf extends Request
         if (!$state) {
             if (!$states = fopen( SERVER_ROOT . "Data/Indexes/UnitedStates.txt", "r" ))
                 throw new \Exception( "Unable to open states file!" );
+
             while (!feof( $states )) $this->states[] = fgets( $states );
             fclose( $states );
+
             return false;
         }
 
@@ -126,6 +126,5 @@ class Golf extends Request
 
         return [$this->course, $this->handicap];
     }
-
 
 }

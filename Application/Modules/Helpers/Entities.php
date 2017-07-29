@@ -2,46 +2,24 @@
 /**
  * Created by IntelliJ IDEA.
  * User: Miles
- * Date: 6/26/17
- * Time: 8:47 PM
+ * Date: 7/28/17
+ * Time: 5:48 AM
  */
 
 namespace Modules\Helpers;
 
+
 use Modules\Database;
 
-abstract class DataFetch
+abstract class Entities
 {
-    const USER = 0;
-    const USER_FOLLOWERS = 1;
-    const USER_MESSAGES = 3;
-    const USER_TASKS = 4;
-    const TEAMS = 5;
-    const TEAM_MEMBERS = 6;
-    const GOLF_TOURNAMENTS = 7;
-    const GOLF_ROUNDS = 8;
-    const GOLF_COURSE = 9;
-    const ENTITY_COMMENTS = 10;
-    const ENTITY_PHOTOS = 11;
-
-    protected $user = array();
-    protected $team = array();
-    protected $course = array();
-    protected $tournament = array();
-
     protected $db;
     public static $inTransaction;
     public static $entityTransactionKeys;
 
     public function __construct()
     {
-        static::$inTransaction = false;
-        global $user, $team, $course, $tournament;
         $this->db = Database::getConnection();
-        $this->user = &$user;
-        $this->team = &$team;
-        $this->course = &$course;
-        $this->tournament = &$tournament;
     }
 
     static function verify()
@@ -131,4 +109,5 @@ abstract class DataFetch
         return $stmt->fetchAll();  // user obj
 
     }
+
 }

@@ -6,7 +6,6 @@ use Model\Helpers\iSport;
 use Model\Helpers\Team;
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Helpers\Bcrypt;
-use Modules\StoreFiles;
 use Modules\Singleton;
 use Modules\Request;
 
@@ -17,56 +16,62 @@ class User extends Team
 
     public function __construct()   // What do we need from the logged in user for the template?
     {
+
         global $user;
         parent::__construct();
         $id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
         if ($id) {
-            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // Bcrypt::genRandomHex(30);
+            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // force reload occurs when X_PJAX_Version changes between requests
             Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
-            if (is_array($user) && !empty($user[$id]))
-                return null;
-            $this->profile( $id );
+            if (is_array( $user ) && !empty($user[$id])) return null;
+            $this->session( $id );
+            $this->user( $id );
             if (!empty($teams = $this->user[$id]->teams))
                 foreach ($teams as $team_id)
                     $this->teamMembers( $team_id );
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
     }
 
-    private function user($id)
-    {   // In theory this method is only called once per session.
-        $this->user[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
-        if (empty($this->user[$id])) throw new \Exception( 'Could not find user  ' . $id );
-        $this->user[$id]->user_profile_pic = SITE . $this->user[$id]->user_profile_pic;
-        $this->user[$id]->user_cover_photo = SITE . $this->user[$id]->user_cover_photo;
+
+    private function session($id)
+    {
+
+        $currentSession = session_id();
+        $stmt = $this->db->prepare( "SELECT user_session_id FROM StatsCoach.user WHERE user_id = ?" );
+        $stmt->execute( [$id] );
+        $oldSession = $stmt->fetchColumn();
+        if ($currentSession == $oldSession) return null;
+
+        if (!empty($oldSession) && file_exists( session_save_path() . '/sess_' . $oldSession )) {
+            session_destroy();
+            session_id( $oldSession );
+            session_start();
+            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // force reload occurs when X_PJAX_Version changes between requests
+            Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
+        } else {
+            $stmt = $this->db->prepare( 'UPDATE StatsCoach.user SET user_session_id = ? WHERE user_id = ?' );
+            if (!$stmt->execute( [$currentSession, $id] ))
+                throw new \Exception( 'failed to update session' );
+        }
+
     }
 
-    protected function updateUser()
+    private function user($id)
     {
-        return $this->db->prepare( "UPDATE StatsCoach.user SET 
-                                    user_facebook_id = ?, 
-                                    user_username = ?, 
-                                    user_first_name = ?, 
-                                    user_last_name = ?, 
-                                    user_profile_pic = ?,
-                                    user_cover_photo = ?,
-                                    user_birthday = ?,
-                                    user_gender = ?, 
-                                    user_about_me = ?,
-                                    user_rank = ?,
-                                    user_email = ?
-                                    WHERE user_id = ?" )
-            ->execute( [$this->user_facebook_id,
-                $this->user_username,
-                $this->user_first_name,
-                $this->user_last_name,
-                $this->user_profile_pic,
-                $this->user_cover_photo,
-                $this->user_birth_date,
-                $this->user_gender,
-                $this->user_bio,
-                $this->user_rank,
-                $this->user_email,
-                $this->user_id] );
+        $this->user[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
+        if (empty($this->user[$id])) throw new \Exception( 'Could not find user  ' . $id );
+        $this->user[$id]->user_profile_picture = SITE . $this->user[$id]->user_profile_pic;
+        $this->user[$id]->user_cover_photo = SITE . $this->user[$id]->user_cover_photo;
+        $this->user[$id]->user_full_name = $this->user[$id]->user_first_name . ' ' . $this->user[$id]->user_last_name;
+        $this->userTeams( "$id" );
+        if (!empty($this->user[$id]->teams))
+            foreach ($this->user[$id]->teams as $team_id)
+                $this->team( $team_id );
+        $model = $this->user[$id]->user_sport;
+        $model = "Model\\$model";
+        $model = new $model;
+        if ($model instanceof iSport)
+            $model->stats( $id );
     }
 
     protected function change_password($user_id, $password)
@@ -111,14 +116,13 @@ class User extends Team
 
     public function login($username, $password, $rememberMe)
     {
-
         if (!$this->user_exists( $username ))
             throw new PublicAlert( 'Sorry, this Username and Password combination doesn\'t match out records.', 'warning' );
 
         if (!$this->email_confirmed( $username ))
             throw new PublicAlert( 'Sorry, you need to activate your account. Please check your email!' );
 
-        $sql = "SELECT user_password, user_profile_pic, user_full_name, user_id FROM StatsCoach.user WHERE user_username = ?";
+        $sql = "SELECT user_password, user_first_name, user_last_name, user_profile_pic, user_id FROM StatsCoach.user WHERE user_username = ?";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$username] );
         $data = $stmt->fetch();
@@ -130,7 +134,7 @@ class User extends Team
 
         if ($rememberMe) {
             Request::setCookie( "UserName", $username );
-            Request::setCookie( "FullName", $data['user_full_name'] );
+            Request::setCookie( "FullName", $data['user_first_name'] . ' ' . $data['user_last_name'] );
             Request::setCookie( "UserImage", $data['user_profile_pic'] );
         }
 
@@ -149,8 +153,8 @@ class User extends Team
         if ($stmt->fetchColumn() > 0) throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
 
         $member = $this->beginTransaction( 6 );
-        $sql = "INSERT INTO StatsCoach.team_members (member_id, user_id, team_id, sport) VALUES (?,?,?,?)";
-        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId, $this->user_sport] ))
+        $sql = "INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)";
+        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId] ))
             throw new PublicAlert( 'Unable to join this team. ', '' );
         $this->commit();
 
@@ -191,8 +195,8 @@ class User extends Team
 
         $_SESSION['id'] = $this->beginTransaction( 0 );
 
-        $sql = "INSERT INTO StatsCoach.user (user_id, user_username, user_password, user_type, user_email, user_ip, user_last_login, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        if (!$this->db->prepare( $sql )->execute( array($_SESSION['id'], $this->username, $password, $this->userType, $this->email, $_SERVER['REMOTE_ADDR'], time(), $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) ))
+        $sql = "INSERT INTO StatsCoach.user (user_id, user_profile_uri, user_username, user_password, user_type, user_email, user_ip, user_last_login, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (!$this->db->prepare( $sql )->execute( array($_SESSION['id'], $_SESSION['id'], $this->username, $password, $this->userType, $this->email, $_SERVER['REMOTE_ADDR'], time(), $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) ))
             throw new PublicAlert ( 'Your account could not be created.', 'danger' );
 
         if (!$this->db->prepare( 'INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)' )->execute( [$_SESSION['id']] ))
@@ -207,9 +211,9 @@ class User extends Team
             $this->newTeamMember( $this->teamCode );
 
 
-        $subject = 'Your' . SITE_TITLE . ' password';
-        $headers = 'From: Support@Stats.Coach' . "\r\n" .
-            'Reply-To: Support@Stats.Coach' . "\r\n" .
+        $subject = 'Your ' . SITE_TITLE . ' Password';
+        $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
+            'Reply-To: ' . REPLY_EMAIL . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
 
         $message = "Hello $this->firstName ,
@@ -217,7 +221,7 @@ class User extends Team
             \r\n Username :  $this->username 
             \r\n Password :  $this->password 
             \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             https://www.Stats.Coach/Activate/" . base64_encode( $this->email ) . "/" . base64_encode( $email_code ) . "/ \r\n\r\n--" . SITE;
+             https://www.Stats.Coach/Activate/" . base64_encode( $this->email ) . "/" . base64_encode( $email_code ) . "/ \r\n\r\n Have a good day! \r\n--" . SITE;
 
 
         mail( $this->email, $subject, $message, $headers );
@@ -240,15 +244,16 @@ class User extends Team
             return startApplication( 'Home/' );
         }
 
-        $this->db->prepare( "UPDATE StatsCoach.user SET user_email_confirmed = 1 WHERE user_email = ?" )->execute( array($email) );
-        $sql = "SELECT user_id FROM StatsCoach.user WHERE user_email = ?";
-        $stmt = $this->db->prepare( $sql );
+        if (!$this->db->prepare( "UPDATE StatsCoach.user SET user_email_confirmed = 1 WHERE user_email = ?" )->execute( array($email) ))
+            throw new PublicAlert( 'The code provided appears to be invalid.', 'danger' );
+
+
+        $stmt = $this->db->prepare( "SELECT user_id FROM StatsCoach.user WHERE user_email = ?" );
         $stmt->execute( [$email] );
-        $login = $stmt->fetch();
-        session_destroy();
-        session_regenerate_id( true );
-        $_SESSION['id'] = $login;
-        return startApplication( 'Home/' ); // there is not an activate template file
+        $_SESSION['id'] = $stmt->fetchColumn();
+        PublicAlert::success( 'We successfully activated your account.' );
+        startApplication( true ); // there is not an activate template file
+        exit(1);
     }
 
     public function recover($email, $generated_string)
@@ -310,18 +315,49 @@ class User extends Team
 
     }
 
-    public function profile($id)
+    public function profile($user_id)
     {
-        $this->user( $id );
-        $this->userTeams( $id );
-        if (!empty($this->user[$id]->teams))
-            foreach ($this->user[$id]->teams as $team_id)
-                $this->team( $team_id );
-        $model = $this->user[$id]->user_sport;
-        $model = "Model\\$model";
-        $model = new $model;
-        if ($model instanceof iSport)
-            $model->stats( $id );
+        if ($user_id !== true) return $this->user( $user_id );
+
+        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
+
+        $user = $this->user[$_SESSION['id']];
+
+        $sql = 'UPDATE StatsCoach.user SET user_profile_pic = :user_profile_pic, user_first_name = :user_first_name, user_last_name = :user_last_name, user_birthday = :user_birthday, user_email = :user_email, user_email_confirmed = :user_email_confirmed,  user_gender = :user_gender, user_about_me = :user_about_me WHERE user_id = :user_id';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->bindValue( ':user_profile_pic', $profile_pic ?: $user->user_profile_pic );
+        $stmt->bindValue( ':user_first_name', $first ?: $user->user_first_name );
+        $stmt->bindValue( ':user_last_name', $last ?: $user->user_last_name );
+        $stmt->bindValue( ':user_birthday', $dob ?: $user->user_birthday );
+        $stmt->bindValue( ':user_gender', $gender ?: $user->user_gender );
+        $stmt->bindValue( ':user_email', $email ?: $user->user_email );
+        $stmt->bindValue( ':user_email_confirmed', $email ? 0 : $user->user_email_confirmed );
+        $stmt->bindValue( ':user_about_me', $about_me ?: $user->user_about_me );
+        $stmt->bindValue( ':user_id', $_SESSION['id'] );
+        if (!$stmt->execute())
+            throw new PublicAlert( 'Sorry, we could not process your information at this time.', 'warning' );
+
+        if (!empty($profile_pic) && $profile_pic != $user->user_profile_pic)
+            unlink( SERVER_ROOT . $user->user_profile_pic );
+
+        if (!empty($email) && $email != $user->user_email) {
+            $subject = 'Please confirm your email';
+            $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
+                'Reply-To: ' . REPLY_EMAIL . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            $message = "Hello " . ($first ?: $user->user_first_name) . ",
+            \r\n Please visit the link below so we can activate your account:\r\n\r\n
+             https://www.Stats.Coach/Activate/" . base64_encode( $email ) . "/" . base64_encode( $user->user_email_code ) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
+
+
+            if (!mail( $email ?: $user->user_email, $subject, $message, $headers ))
+                throw new PublicAlert( 'Our email system failed.' );
+
+            PublicAlert::success( 'Please check your email to activate your account' );
+        }
+
+        startApplication( true );
     }
 
     public function settings()

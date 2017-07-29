@@ -12,9 +12,9 @@
 namespace Modules\Helpers\Reporting;
 
 
-use Modules\Interfaces\IException;
+use Modules\Interfaces\iException;
 
-abstract class CustomException extends \Exception implements IException
+abstract class CustomException extends \Exception implements iException
 {
     protected $message = 'Unknown exception';     // Exception message
     private   $string;                            // Unknown

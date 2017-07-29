@@ -4,18 +4,17 @@ namespace Controller;
 
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Request;
-use Modules\Singleton;
 
 class User extends Request
 {
-    use Singleton { set as private privateSet; }
-    
     public static function logout()
     {
         unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
         \Model\User::clearInstance();   // remove sterilized data
+        session_unset();
         session_destroy();
-        $_SESSION['id'] = false;
+        session_start();
+        $_SESSION = [];
         startApplication( 'login/' );
     }
 
@@ -126,18 +125,12 @@ class User extends Request
 
     public function activate($email, $email_code = null)
     {
-
-        $email = $this->set( $email )->base64_decode();
-
-        dump( $email );
-
+        $email = $this->set( $email )->base64_decode()->email();
         $email_code = $this->set( $email_code )->base64_decode()->value();
+
         if (!$email){
-
-            alert($email);
-
             PublicAlert::warning( 'Sorry the url submitted is invalid.' );
-            return startApplication( 'Home/' );
+            return startApplication( true ); // who knows what state we're in, best just restart.
         } return [$email, $email_code];
     }
 
@@ -159,9 +152,29 @@ class User extends Request
         else return [$this->user_email, false];
     }
 
-    public function profile($uri)
+    public function profile($user_id)
     {
-        return $this->set( $uri )->alnum();
+        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
+
+        if ($user_id) return $this->set( $user_id )->alnum();
+
+        if (empty($_POST)) return false;
+
+        list($first, $last, $gender) = $this->post('first_name','last_name', 'gender')->word();
+
+        $dob = $this->post( 'datepicker' )->date();
+
+        $email = $this->post( 'email' )->email();
+
+        $password = $this->post( 'password' )->value();
+
+        $about_me = $this->post( 'about_me' )->text();
+
+        // if file was attached
+        if ($_FILES['FileToUpload']['error'] != UPLOAD_ERR_NO_FILE)
+            $profile_pic = $this->files( 'FileToUpload' )->storeFiles();
+        
+        return true;
     }
 
     public function settings()

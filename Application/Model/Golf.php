@@ -2,23 +2,25 @@
 
 namespace Model;
 
-use Model\Helpers\iSport;
-use Modules\Helpers\DataFetch;
-use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Singleton;
+use Model\Helpers\iSport;
+use Model\Helpers\DataMap;
+use Modules\Helpers\Reporting\PublicAlert;
 
-class Golf extends DataFetch implements iSport
+class Golf extends DataMap implements iSport
 {
     use Singleton;
 
     public function golf()
     {
-        if (empty($this->user[$_SESSION['id']]->rounds)) $this->rounds( $_SESSION['id'] );
+        if (empty($this->user[$_SESSION['id']]->rounds))
+            $this->rounds( $_SESSION['id'] );
     }
 
     public function stats($id)
     {
         $this->user[$id]->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
+        $this->rounds( $id );
     }
 
     public function rounds($id)

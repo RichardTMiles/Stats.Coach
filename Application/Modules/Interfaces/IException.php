@@ -9,7 +9,7 @@
 namespace Modules\Interfaces;
 
 
-interface IException
+interface iException
 {
     /* Protected methods inherited from Exception class */
     public function getMessage();                 // Exception message

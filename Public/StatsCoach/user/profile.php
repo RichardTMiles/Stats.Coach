@@ -1,19 +1,12 @@
 <?php $user = $this->user[$this->id ?: $_SESSION['id']];
 
-
 ?>
-
-<script>
-    $(document).on('submit', 'form[data-pjax]', function (event) {
-        $.pjax.submit(event, '#pjax-container')
-    })
-</script>
 
 <!-- Content Header (Page header) -->
 
 <section class="content-header" style="color: ghostwhite">
     <h1>
-        <?= $user->user_full_name ?>
+        <?= $user->user_first_name . ' ' . $user->user_last_name ?>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -22,7 +15,6 @@
     <p>
     </p>
 </section>
-
 <!-- Main content -->
 
 <section class="content">
@@ -33,8 +25,10 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<?= $user->user_profile_pic ?>" alt="User profile picture">
-                    <h3 class="profile-username text-center"><?= $user->user_full_name ?></h3>
+                    <img class="profile-user-img img-responsive img-circle" src="<?= $user->user_profile_picture ?>" alt="User profile picture">
+                    <h3 class="profile-username text-center">
+                        <?= $user->user_first_name . ' ' . $user->user_last_name ?>
+                    </h3>
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
@@ -50,6 +44,9 @@
                     <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
+
+
+            <?php if($user->user_id != $_SESSION['id']) { ?>
 
             <!-- DIRECT CHAT SUCCESS -->
             <div class="box box-success direct-chat direct-chat-success">
@@ -77,7 +74,7 @@
                                 <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
                             </div>
                             <!-- /.direct-chat-info -->
-                            <img class="direct-chat-img" src="../dist/img/user1-128x128.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
+                            <img class="direct-chat-img" src="" alt="Message User Image"><!-- /.direct-chat-img -->
                             <div class="direct-chat-text">
                                 Is this template really for free? That's unbelievable!
                             </div>
@@ -92,7 +89,7 @@
                                 <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
                             </div>
                             <!-- /.direct-chat-info -->
-                            <img class="direct-chat-img" src="../dist/img/user3-128x128.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
+                            <img class="direct-chat-img" src="" alt="Message User Image"><!-- /.direct-chat-img -->
                             <div class="direct-chat-text">
                                 You better believe it!
                             </div>
@@ -107,7 +104,7 @@
                         <ul class="contacts-list">
                             <li>
                                 <a href="#">
-                                    <img class="contacts-list-img" src="../dist/img/user1-128x128.jpg" alt="User Image">
+                                    <img class="contacts-list-img" src="" alt="User Image">
 
                                     <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -140,6 +137,8 @@
             </div>
             <!--/.direct-chat -->
 
+            <? } ?>
+
         </div>
 
         <div class="col-md-9">
@@ -157,12 +156,15 @@
                             <dl class="dl-horizontal">
                                 <dt>About Me</dt>
                                 <dd><?= $user->user_about_me ?></dd>
+                                <br>
                                 <dt>Birthday</dt>
                                 <dd><?= $user->user_birthday ?></dd>
+                                <br>
                                 <dt>Education History</dt>
                                 <dd><?= $user->user_education_history ?></dd>
+                                <br>
                                 <dt>Mutual Friends</dt>
-                                <dd><?= $user->user_about_me ?></dd>
+                                <dd><?= !empty($user->user_facebook_id) ? $user->user_facebook_id : 'Connect to Facebook'; ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
@@ -171,7 +173,11 @@
                 </div>
                 <!-- /.user info -->
 
-                <?php if ($user->user_id != $_SESSION['id']) { ?>
+
+                <?php
+                // Show settings or chat box
+                if ($user->user_id != $_SESSION['id']) // Chat box
+                { ?>
                     <!-- Chat box -->
                     <div class="box box-success">
                         <div class="box-header ui-sortable-handle" style="cursor: move;">
@@ -191,7 +197,7 @@
                             <div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
                                 <!-- chat item -->
                                 <div class="item">
-                                    <img src="dist/img/user4-128x128.jpg" alt="user image" class="online">
+                                    <img src="" alt="user image" class="online">
 
                                     <p class="message">
                                         <a href="#" class="name">
@@ -218,7 +224,7 @@
                                 <!-- /.item -->
                                 <!-- chat item -->
                                 <div class="item">
-                                    <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline">
+                                    <img src="<?= $user->user_profile_picture ?>" alt="user image" class="offline">
 
                                     <p class="message">
                                         <a href="#" class="name">
@@ -233,7 +239,7 @@
                                 <!-- /.item -->
                                 <!-- chat item -->
                                 <div class="item">
-                                    <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline">
+                                    <img src="" alt="user image" class="offline">
 
                                     <p class="message">
                                         <a href="#" class="name">
@@ -266,10 +272,9 @@
                     <!-- /.box (chat box) -->
                 <?php } else { ?>
 
-
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
-                        <div class="box box-info">
+                        <div class="box box-info" id="ProfileSettings">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Profile Settings</h3>
                                 <div class="box-tools pull-right">
@@ -281,7 +286,7 @@
                             <!-- form start -->
 
                             <!-- Form Start -->
-                            <form class="form-horizontal" action="<?= SITE ?>Profile/" method="post" enctype="multipart/form-data">
+                            <form data-pjax class="form-horizontal" action="<?= SITE ?>Profile/" method="post" enctype="multipart/form-data">
 
                                 <div class="box-body">
                                     <div class="form-group col-md-12">
@@ -294,37 +299,52 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-3 control-label">First Name</label>
+                                            <label for="first" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="inputName"
+                                                <input type="text" class="form-control" id="first"
                                                        placeholder="<?= $user->user_first_name ?>" name="first_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-3 control-label">Last Name</label>
+                                            <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="inputName"
-                                                       placeholder="<?= $user->user_last_name ?>" name="first_name">
+                                                <input type="text" class="form-control" id="lastName"
+                                                       placeholder="<?= $user->user_last_name ?>" name="last_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="lastName" class="col-sm-3 control-label">Birthday:</label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input name="datepicker" type="text" class="form-control pull-right" id="datepicker"
+                                                           value="<?= $user->user_birthday ?>">
+                                                </div>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                        <div class="form-group <?=$user->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
                                             <label for="inputEmail" class="col-sm-3 control-label">Email</label>
                                             <div class="col-sm-8">
                                                 <input type="email" class="form-control" id="inputEmail"
                                                        placeholder="<?= $user->user_email ?>" name="email">
+                                                <span class="help-block"><?=$user->user_email_confirmed == 1? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
+
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-3 control-label">Username</label>
+                                            <label for="username" class="col-sm-3 control-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="inputName" disabled="disabled"
-                                                       placeholder="<?= $user->user_username ?>" name="username">
+                                                <input type="text" class="form-control" id="username" disabled="disabled"
+                                                       placeholder="<?= $user->user_username ?>">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputSkills" class="col-sm-3 control-label">Password</label>
+                                            <label for="password" class="col-sm-3 control-label">Password</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="inputSkills"
+                                                <input type="text" class="form-control" id="password"
                                                        placeholder="Protected" name="password">
                                             </div>
                                         </div>
@@ -342,8 +362,7 @@
                                         <div class="form-group">
                                             <label for="inputExperience" class="col-sm-3 control-label">Biography</label>
                                             <div class="col-sm-8">
-                                    <textarea class="form-control" id="inputExperience"
-                                              placeholder="Experience"></textarea>
+                                                <textarea name="about_me" class="form-control" id="inputExperience" placeholder="Experience"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -364,7 +383,7 @@
                                 <!-- /.box-body -->
                                 <div class="box-footer">
                                     <button type="reset" class="btn btn-default">Reset</button>
-                                    <button type="submit" class="btn btn-danger pull-right">Submit</button>
+                                    <button name="terms" type="submit" class="btn btn-danger pull-right">Submit</button>
                                 </div>
                                 <!-- /.box-footer -->
                             </form>
@@ -400,17 +419,17 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <?php foreach ($user->rounds as $key => $stats) { ?>
-                                                <tr>
-                                                    <td><?= date( 'm/d/Y', $stats->creation_date ) ?></td>
-                                                    <td><?= $stats->course_name ?></td>
-                                                    <td><?= $stats->score_total_ffs ?></td>
-                                                    <td><?= $stats->score_total_gnr ?></td>
-                                                    <td><?= $stats->score_total_putts ?></td>
-                                                    <td><?= $stats->par_tot ?></td>
-                                                    <td><?= $stats->score_total ?></td>
-                                                </tr>
-                                            <?php } ?>
+
+                                            <?php foreach ($user->rounds as $stats) {
+                                                echo '<tr>
+                                                    <td>' . date( 'm/d/Y', $stats->score_date ) . "</td>
+                                                    <td> $stats->course_name </td>
+                                                    <td> $stats->score_total_ffs </td>
+                                                    <td> $stats->score_total_gnr </td>
+                                                    <td> $stats->score_total_putts </td>
+                                                    <td> $stats->par_tot </td>
+                                                    <td> $stats->score_total </td>";
+                                            } ?>
 
                                             </tbody>
                                         </table>
@@ -430,6 +449,22 @@
     </div><!-- /.row -->
 
 </section>
+
+
+<script>
+    var loading = '<!-- Loading (remove the following to stop the loading)--><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div><!-- end loading -->';
+
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $(event.target).closest('box').append(loading);
+        $.pjax.submit(event, '#ajax-content')
+    });
+
+    $(function () {
+        //Date picker
+        $('#datepicker').datepicker({autoclose: true});
+    });
+
+</script>
 
 
 <!-- /.content -->

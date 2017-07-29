@@ -179,7 +179,6 @@
 
 
 <?php
-$refresh = true;
 
 if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
     if ($this->user[$_SESSION['id']]->user_type == 'Coach') {
@@ -197,13 +196,7 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
     session_destroy();
     session_regenerate_id(TRUE);
     echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>';
-    /*
-    echo '<body class="stats-wrap" onload="bootstrapAlert(\'A critical error has occured\', \'danger\')"><div class="container" id="ajax-content" style=""></div><div class="alert"></div>';
-    $refresh = false;
-    echo '<pre>';
-    var_dump( $GLOBALS );
-    echo '</pre>';
-    */
+    // TODO - how often does this happen
 } ?>
 
 <!-- ./wrapper -->
@@ -254,21 +247,25 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
         return this.length > 0;
     };
 
-    <?php if ($refresh) { ?>
+    // All links will be sent with ajax
     $(document).pjax('a', '#ajax-content');
     $.pjax.reload('#ajax-content');
 
+    // On an ajax request start the internal load bar
     $.fn.on('pjax:send', function () {
         $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
         Pace.restart();
     });
 
+    // Stop the 'Pace' bar on complete
     $.fn.on('pjax:complete', function () {
         $('#ajax-content').removeClass('overlay');
     });
 
+    // Set a data mask to force https request
     $(document).on("click", "a.no-pjax", false);
 
+    // This is still in beta, set functions to run each load
     $(function () {
         var closure = function () {
             $(document).on("pjax:complete", function (event) {
@@ -277,13 +274,13 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
                 })
             })
         };
-        $(document).on("pjax:popstate", function () {
+        $(document).on("pjax:complete", function () {
+            //$.pjax.reload({container: "#ajax-content", timeout: false});
             closure();
-        });  //.on("pjax:pushstate")
+        });
 
     });
 
-    <?php } ?>
 
 </script>
 

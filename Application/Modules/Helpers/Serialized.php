@@ -35,17 +35,18 @@
 
 namespace Modules\Helpers;
 
-class Serialized {
+abstract class Serialized {
 
     private static $sessionVar;
 
 	public static function start(...$argv)
 	{
         self::$sessionVar = $argv;
-		foreach ($argv as $value){
+		foreach (self::$sessionVar as $value){
 			if (isset($_SESSION[__CLASS__][$value]))
 				self::is_serialized( base64_decode(  $_SESSION[__CLASS__][$value] ), $GLOBALS[$value] );
 		}
+
 		register_shutdown_function( function () use ($argv) {
 			foreach ($argv as $value) if (isset($GLOBALS[$value]))
                 $_SESSION[__CLASS__][$value] = base64_encode( serialize( $GLOBALS[$value] ) );

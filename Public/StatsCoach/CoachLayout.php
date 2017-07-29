@@ -1,5 +1,7 @@
 <?php $user = $this->user[$_SESSION['id']];
 
+$fullName = $user->user_first_name . ' ' . $user->user_last_name;
+
 ?>
 
 <header class="main-header">
@@ -35,7 +37,7 @@
                                 <li><!-- start message -->
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
+                                            <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image"/>
                                         </div>
                                         <h4>
                                             Support Team
@@ -44,54 +46,7 @@
                                         <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li><!-- end message -->
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="../../dist/img/user3-128x128.jpg" class="img-circle" alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            AdminLTE Design Team
-                                            <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="../../dist/img/user4-128x128.jpg" class="img-circle" alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Developers
-                                            <small><i class="fa fa-clock-o"></i> Today</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="../../dist/img/user3-128x128.jpg" class="img-circle" alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Sales Department
-                                            <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="../../dist/img/user4-128x128.jpg" class="img-circle" alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Reviewers
-                                            <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
+
                             </ul>
                         </li>
                         <li class="footer"><a href="#">See All Messages</a></li>
@@ -217,15 +172,15 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $user->user_profile_pic ?>" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs"><?= $user->user_full_name ?></span>
+                        <img src="<?= $user->user_profile_picture ?>" class="user-image" alt="User Image"/>
+                        <span class="hidden-xs"><?= $fullName ?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image"/>
+                            <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image"/>
                             <p>
-                                <?= $user->user_full_name ?> - <?= $user->user_sport ?>
+                                <?= $fullName ?> - <?= $user->user_sport ?>
                                 <small>Member since <?= date( 'm/d/Y', $user->creation_date ) ?></small>
                             </p>
                         </li>
@@ -269,10 +224,10 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image">
+                <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p><?= $user->user_first_name ?> <?= $user->user_last_name ?></p>
+                <p><?= $fullName ?></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -300,11 +255,12 @@
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
-                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $user->user_full_name ?>
+                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $fullName ?>
                         </a>
                     </li>
-                    <?php foreach ($user->teams as &$team) {
-                        if (is_object( $team )) echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
+                    <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
+                        $team = $this->team[$team_id];
+                        echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
                     } ?>
 
 
@@ -326,7 +282,7 @@
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <?php if (!empty($user->teams)) foreach ($user->teams as &$team_id) {
+                <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
@@ -338,7 +294,7 @@
                             </a>
                             <ul class="treeview-menu" style="display: block;">
                                 <?php foreach ($team->member_id as $user_id) { ?>
-                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_full_name ?></a>
+                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_first_name . ' ' . $this->user[$user_id]->user_last_name ?></a>
                                     </li>
                                 <?php } ?>
                             </ul>
@@ -355,9 +311,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Vanessa Close </a></li>
-                    <li><a href=""><i class="fa fa-circle-o"></i> Join Tournament</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Past Results</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i> Coming Soon </a></li>
                 </ul>
             </li>
 

@@ -1,14 +1,13 @@
 <?php
 
 // URI vars
-
 $state = $this->state;
 $course_id = $this->course_id; 
 $boxColor = $this->boxColor;
 
 ##########  Step 1.5, return list of courses from given state
 if (!empty($this->courses)) {
-    if (!$this->ajax) throw new \Exception();
+    if (!AJAX) throw new \Exception();
 
     echo "<option value='' selected disabled>Course Select</option>";
     echo "<option value='Add'>Add Course</option>";
@@ -176,25 +175,6 @@ elseif ($this->course_colors && $course_id) {
 elseif (is_object( $course = $this->course[$course_id] ) && is_object( $course->teeBox )) {
 
 #######################  STEP 3 , input  #####################################{ ?>
-
-    <script>
-        $(document).on('submit', 'form[data-pjax]',
-            function (event) {
-                event.preventDefault();
-                document.getElementById('input-score-hole-18').style.display = "none";
-                $.pjax.submit(event, '#ajax-content')
-            });
-
-        function next_score_input(current) {
-            document.getElementById("input-score-hole-" + current++).style.display = "none";
-            document.getElementById("input-score-hole-" + current).style.display = "block";
-        }
-
-        function last_score_input(current) {
-            document.getElementById("input-score-hole-" + current--).style.display = "none";
-            document.getElementById("input-score-hole-" + current).style.display = "block";
-        }
-    </script>
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -371,6 +351,22 @@ elseif (is_object( $course = $this->course[$course_id] ) && is_object( $course->
             <?php } ?>
         </form>
     </section>
+    <script>
+        $(document).on('submit', 'form[data-pjax]',
+            function (event) {
+                $.pjax.submit(event, '#ajax-content')
+            });
+
+        function next_score_input(current) {
+            document.getElementById("input-score-hole-" + current++).style.display = "none";
+            document.getElementById("input-score-hole-" + current).style.display = "block";
+        }
+
+        function last_score_input(current) {
+            document.getElementById("input-score-hole-" + current--).style.display = "none";
+            document.getElementById("input-score-hole-" + current).style.display = "block";
+        }
+    </script>
 
     <script>
         $(function () {
@@ -380,9 +376,7 @@ elseif (is_object( $course = $this->course[$course_id] ) && is_object( $course->
             $('.timepicker').timepicker({showInputs: false});
 
         });
-    </script>
-
-    <script>
+  
         $(function () {
             /* jQueryKnob */
 

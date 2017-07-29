@@ -1,27 +1,9 @@
 <?php
-
-const ¶ = PHP_EOL."\t";
-
+############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.7.0';
-
-// TODO - Message System
-// TODO - Notifications
-// TODO - Tasks
-// TODO - Calendar
-
-if (!isset($_SESSION['X_PJAX_Version']))
-    $_SESSION['X_PJAX_Version'] = SITE_VERSION;
-
-if (empty($_SESSION['id'])) $_SESSION['id'] = false;
-
-define( 'X_PJAX_VERSION' , $_SESSION['X_PJAX_Version']);
-
-################    Reporting   ####################
-date_default_timezone_set('America/Phoenix');
-ini_set( 'display_errors', 1 );
-error_reporting( E_ALL | E_STRICT );
-define( 'MINIFY_CONTENTS', false );
+const SITE_VERSION = 'Beta 0.8.0';
+const SYSTEM_EMAIL = 'Support@Stats.Coach';
+const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 
 ################    Database    ####################
 /**
@@ -34,21 +16,56 @@ define( 'MINIFY_CONTENTS', false );
  * @constant DB_PASS The users password if applicable
  *
  */
-define( 'DB_HOST', 'miles.systems' );
-define( 'DB_NAME', 'StatsCoach' );
-define( 'DB_USER', 'tmiles199' );
-define( 'DB_PASS', 'Huskies!99' );
+const  DB_HOST = 'miles.systems';
+const DB_NAME = 'StatsCoach';
+const DB_USER = 'tmiles199';
+const DB_PASS = 'Huskies!99';
 
 
-// This will get the current url on the server, note its capable of HTTP and HTTPS
-define( 'URL' , (isset($_SERVER['SERVER_NAME']) ?
+################    Reporting   ####################
+date_default_timezone_set( 'America/Phoenix' );
+error_reporting( E_ALL | E_STRICT );
+ini_set( 'display_errors', 1 );
+
+
+################    Session     ####################
+new \Modules\Session();
+
+if (empty($_SESSION['id'])) $_SESSION['id'] = false;  // This will be the users account id found in [database].user.user_id
+
+################    Reporting   ####################
+date_default_timezone_set( 'America/Phoenix' );
+error_reporting( E_ALL | E_STRICT );
+ini_set( 'display_errors', 1 );
+
+################  Up the Speed  ####################
+define( 'MINIFY_CONTENTS', false );
+
+// TODO - followers
+// TODO - Message System
+// TODO - Notifications
+// TODO - Tasks
+// TODO - Calendar
+
+################  Ajax Refresh  ####################
+define( 'AJAX', (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
+    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')) );
+
+/* If the session variable changes from the constant we will
+ * send the full html page and notify the pjax js to reload
+ * everything
+ * */
+
+if (!isset($_SESSION['X_PJAX_Version'])) $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+define( 'X_PJAX_VERSION', $_SESSION['X_PJAX_Version'] );
+
+/* Find the current url on the server */
+define( 'URL', (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
-        'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null), true);
+        'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null), true );
 
-define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true);
+define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true );
 
-define( 'AJAX' , (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
-    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')));
 
 ################# Application Paths ########################
 /**
@@ -64,26 +81,26 @@ define( 'AJAX' , (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_
  * @constant TEMPLATE_PATH      Path to the template for public use i.e. relative path for .css includes
  * @constant WRAPPING_REQUIRES_LOGIN  Bool  If the template wrapper is dependant apon being logged in.
  */
-define( 'SITE',             url . DS , true);    // http(s)://example.com/  - do not change
-define( 'CONTENT',          '/Public/StatsCoach/');
-define( 'VENDOR',           '/Application/Services/vendor/');
-define( 'TEMPLATE',         VENDOR  . 'almasaeed2010/adminlte/'); // TEMPLATE HTML FILES PLUGIN HERE
-define( 'ERROR_LOG',        SERVER_ROOT . 'Data/Logs/Error/Log_'. time() .'_'.session_id().'.log' );
-define( 'VENDOR_ROOT',      SERVER_ROOT . 'Application/Services/vendor/');
-define( 'TEMPLATE_ROOT',    VENDOR_ROOT . 'almasaeed2010/adminlte/');
-define( 'CONTENT_ROOT',     SERVER_ROOT . 'Public/StatsCoach/');
-define( 'CONTENT_WRAPPER',  SERVER_ROOT . 'Application/View/StatsCoach.php' );
+define( 'SITE', url . DS, true );                                               // http(s)://example.com/  - do not change
+define( 'CONTENT', '/Public/StatsCoach/' );
+define( 'VENDOR', '/Application/Services/vendor/' );
+define( 'TEMPLATE', VENDOR . 'almasaeed2010/adminlte/' );                       // TEMPLATE HTML FILES PLUGIN HERE
+define( 'ERROR_LOG', SERVER_ROOT . 'Data/Logs/Error/Log_' . $_SESSION['id'] . '_' . time() . '.log' );
+define( 'VENDOR_ROOT', SERVER_ROOT . 'Application/Services/vendor/' );
+define( 'TEMPLATE_ROOT', VENDOR_ROOT . 'almasaeed2010/adminlte/' );
+define( 'CONTENT_ROOT', SERVER_ROOT . 'Public/StatsCoach/' );
+define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Application/View/StatsCoach.php' );
 
-const DEFAULT_LOGGED_OUT_MVC  = [ 'User' => 'login' ];      // must be lower?
-const DEFAULT_LOGGED_IN_MVC   = [ 'Golf' => 'golf'  ];
-define( 'WRAPPING_REQUIRES_LOGIN', false );                 // I use the same headers every where
+const DEFAULT_LOGGED_OUT_MVC = ['Class' => 'User', 'Method' => 'login'];                             // must be lower?
+const DEFAULT_LOGGED_IN_MVC = ['Class' =>  'Golf', 'Method' => 'golf'];
+define( 'WRAPPING_REQUIRES_LOGIN', false );                                     // I use the same headers every where
 
 // More cache control is given in the .htaccess File
 header( 'Content-type: text/html; charset=utf-8' );
 header( 'Cache-Control: must-revalidate' );
 
 
-#################   Functions  ######################
+#################   Development   ######################
 /**
  * This will run the application in an MVC style.
  * The classes will be defined in the the first param while
@@ -146,11 +163,11 @@ header( 'Cache-Control: must-revalidate' );
 ##################   DEV Tools   #################
 // This will cleanly print the var_dump function and kill the execution of the application
 
-function dump(...$argv) {
+function dump(...$argv)
+{
     echo '<pre>';
-    var_dump( count( $argv ) == 1 ? array_shift( $argv ) : $argv);
+    var_dump( count( $argv ) == 1 ? array_shift( $argv ) : $argv );
     echo '</pre>';
-    exit(1);
 }
 
 
@@ -165,10 +182,10 @@ function dump(...$argv) {
  *
  * @return die(1);
  */
-function sortDump(...$mixed)
+function sortDump($mixed)
 {
     // Notify or error
-    alert(__FUNCTION__);
+    alert( __FUNCTION__ );
 
 
     // Generate Report
@@ -177,16 +194,16 @@ function sortDump(...$mixed)
     var_dump( $mixed );
     echo '</pre><br><br><br>';
     echo '####################### MIXED DUMP ######################<br><pre>';
-    $mixed=(count($mixed) == 1 ? array_pop( $mixed ) : $mixed );
+    $mixed = (count( $mixed ) == 1 ? array_pop( $mixed ) : $mixed);
     echo '<pre>';
-    debug_zval_dump( $mixed?:$GLOBALS );
+    debug_zval_dump( $mixed ?: $GLOBALS );
     echo '</pre><br>################## BACK TRACE #################<br><pre>';
-    var_dump( debug_backtrace( ) );
+    var_dump( debug_backtrace() );
     echo '</pre>';
     $report = ob_get_clean();
 
     // Output to file
-    $file = fopen(SERVER_ROOT . 'Data/Logs/Dumped/Sort_'.time().'.log' , "a");
+    $file = fopen( SERVER_ROOT . 'Data/Logs/Dumped/Sort_' . time() . '.log', "a" );
     fwrite( $file, $report );
     fclose( $file );
 
@@ -212,10 +229,12 @@ function alert($string = "Stay woke.")
     $count++;
     print "<script>alert('$count )  $string')</script>";
 }
+
 // http://php.net/manual/en/debugger.php
-function console_log( $data ){
+function console_log($data)
+{
     echo '<script>';
-    echo 'console.log('. json_encode( $data ) .')';
+    echo 'console.log(' . json_encode( $data ) . ')';
     echo '</script>';
 }
 

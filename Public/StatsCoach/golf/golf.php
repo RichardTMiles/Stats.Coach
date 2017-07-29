@@ -2,7 +2,7 @@
 
 <section class="content-header" style="color: #d9edf7">
     <h1>
-        <?=$user->user_first_name ?>
+        <?= $user->user_first_name ?>
         <small style="color: #d9edf7">Profile</small>
     </h1>
     <ol class="breadcrumb">
@@ -13,7 +13,6 @@
 </section>
 
 <!-- Main content -->
-
 <section class="content">
     <div id="alert"></div>
 
@@ -24,7 +23,7 @@
             <h5 class="widget-user-desc"></h5>
         </div>
         <div class="widget-user-image">
-            <img class="img-circle" src="<?= $user->user_profile_pic ?>" alt="User Avatar">
+            <img class="img-circle" src="<?= $user->user_profile_picture ?>" alt="User Avatar">
         </div>
 
         <div class="box-footer">

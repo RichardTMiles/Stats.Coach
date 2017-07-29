@@ -9,10 +9,12 @@
 namespace Modules;
 
 use Modules\Interfaces\iSingleton;
+use Modules\Helpers\StoreFiles;
+
 
 abstract class Request implements iSingleton
 {
-    private $storage = array();
+    use Singleton;
 
     ########################## Manual Input ################################
     public function set(...$argv)
@@ -65,18 +67,22 @@ abstract class Request implements iSingleton
 
 
     ########################### Request Data ###############################
-    private function request($argv, &$array, $noHTML = false)
+    private function request($argv, &$array, $removeHTML = false)
     {
-
         $this->storage = null;
-        $closure = function ($key) use ($noHTML, &$array) {
+        $closure = function ($key) use ($removeHTML, &$array) {
             if (array_key_exists( $key, $array )) {
-                $this->storage[] = $noHTML ? htmlspecialchars( $array[$key] ) : $array[$key];
-                $array[$key] = null;
+                $this->storage[] = $removeHTML ? htmlspecialchars( $array[$key] ) : $array[$key];
+                $array[$key] = null;    // by reference, if we validate it then we should ensure no one uses it
             } else $this->storage[] = false;
         };
-        if (count( $argv ) == 0 || !array_walk( $argv, $closure )) $this->storage = $array;
+        if (count( $argv ) == 0 || !array_walk( $argv, $closure )) $this->storage = [];
         return $this;
+    }
+
+    public function get($variable = null)
+    {
+        return $this->request( $argv, $_GET );
     }
 
     public function post(...$argv)
@@ -91,25 +97,31 @@ abstract class Request implements iSingleton
 
     public function files(...$argv)
     {
-        return $this->request( $argv, $_FILES, true );
+        return $this->request( $argv, $_FILES );
     }
 
+    ########################### Store Files   #############################
+    public function storeFiles($location = null)
+    {
+        if ($location == null) $location = 'Data/Uploads/Pictures/';
+        $storagePath = array();
+
+        array_walk( $this->storage, function ($file) use ($location, &$storagePath) {
+            $storagePath[] = StoreFiles::singleFile( $file, $location ); });
+        return count($storagePath) == 1 ? array_shift($storagePath) : $storagePath;
+    }        
 
     ##########################  Storage Shifting  #########################
-    public function base64_decode()     // TODO - fix this shit
+    public function base64_decode() // TODO - fix this shit
     {
         $array = [];
         $lambda = function ($key) use (&$array) {
             $array[] = base64_decode( $key, true );
         };
 
-        alert(is_array( $array));
         if (is_array( $this->storage )) array_walk( $this->storage, $lambda );
         elseif ($this->storage != null) $lambda( $this->storage );
-        alert($lambda($this->storage[0]));
-
         $this->storage = $array;
-
 
         return $this;
     }
@@ -119,12 +131,11 @@ abstract class Request implements iSingleton
         return array_key_exists( $key, $this->storage );
     }
 
-    public function except()
+    public function except(...$argv)
     {
-        $arg = func_get_args();
-        array_walk( $arg, function ($key) {
+        array_walk( $argv, function ($key) {
             if (array_key_exists( $key, $this->storage )) unset($this->storage[$key]);
-        } );
+        });
         return $this;
     }
 
@@ -149,6 +160,21 @@ abstract class Request implements iSingleton
             count( $array ) == 1 ? array_shift( $array ) : $array :
             array_shift( $regex( $this->storage ) ));
     }   // Match a pcal regex expression
+    
+    public function noHTML($complete = false)
+    {   // Disallow: $, ", ', <, >
+        if ($this->storage == null) return false;
+        $array = [];
+        $lambda = function ($key) use (&$array) {
+            return $array[] = htmlspecialchars( $key ); };
+
+        $this->storage = (array_walk( $this->storage, $lambda ) ? $array : false);
+
+        return ($complete && $this->storage ?
+            (count( $array ) == 1 ? array_shift( $array )
+                : $array )
+            : $this);
+    }
 
     public function int($min = null, $max = null)   // inclusive max and min
     {
@@ -166,6 +192,11 @@ abstract class Request implements iSingleton
         return (array_walk( $this->storage, $integer ) ?
             (count( $array ) == 1 ? array_shift( $array ) : $array) :
             false);
+    }
+
+    public function date()
+    {
+        return $this->regex( '#^\d{1,2}\/\d{1,2}\/\d{4}$#' );
     }
 
     public function float()
@@ -197,10 +228,14 @@ abstract class Request implements iSingleton
     }           // One word alpha numeric
 
     public function text()
-    {
+    {   // Multiple word alpha numeric
         return $this->regex( '/([^\w])+/' );
-    }            // Multiple word alpha numeric
+    }
 
+    public function word()
+    {   // One word alpha
+        return $this->regex( '/^[a-zA-Z]+$/' );
+    }
     public function phone()
     {
         return (preg_match( '#((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}#', $this->storage[0] ) ? $this->storage[0] : false);

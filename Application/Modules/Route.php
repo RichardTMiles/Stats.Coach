@@ -24,15 +24,22 @@ class Route
         $this->uri = explode( '/', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' ));
         $this->matched = true;
         if (empty($this->uri[0]))
-            return $this->defaultRoute();
-        $this->matched = false;
+             $this->defaultRoute();
+        else
+            $this->matched = false;
     }
 
     public function defaultRoute()
     {
+        static $count = true;
         $mvc = $this->structure;
         $default = ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
-        if (is_array( $default )) foreach ($default as $class => $method) return $mvc($class, $method);
+        if (is_array( $default )) {
+            if($count) {
+                $count = false;
+                call_user_func_array( $mvc, array_values($default) );
+            } dump($default);
+        }
     }
 
     public function __destruct()
@@ -49,7 +56,7 @@ class Route
         if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
             return $mvc( $this->homeMethod[0], $this->homeMethod[1] );
 
-        return $this->defaultRoute();
+        $this->defaultRoute();
     }
 
     public function signedIn()
@@ -70,7 +77,7 @@ class Route
         } return $this;
     }
 
-    public function home($function = null)
+    public function home($function = null)  // TODO - I dont think this is working correctly
     {
         if ($this->matched)
             return null;

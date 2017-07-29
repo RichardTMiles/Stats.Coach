@@ -1,0 +1,2 @@
+Sessions will be stored in this directory. We currently use the
+built-in session control system proved by PHP; an open address hash table.
