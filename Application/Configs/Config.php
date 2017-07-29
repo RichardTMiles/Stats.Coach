@@ -192,8 +192,7 @@ function sortDump($mixed)
 {
     // Notify or error
     alert( __FUNCTION__ );
-
-
+    
     // Generate Report
     ob_start();
     echo '####################### VAR DUMP ########################<br><pre>';

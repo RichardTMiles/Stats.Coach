@@ -48,8 +48,9 @@ class Route
             return $restart();
         }
 
-        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
-            return $mvc( $this->homeMethod[0], $this->homeMethod[1] );
+        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure )) {
+            return $mvc( $this->homeMethod['Class'], $this->homeMethod['Method'] );
+        }
 
         $this->defaultRoute();
     }

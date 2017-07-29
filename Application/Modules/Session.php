@@ -24,7 +24,7 @@ class Session implements \SessionHandlerInterface
         #session_save_path( SERVER_ROOT . 'Data/Sessions' );   // Manually Set where the Users Session Data is stored
         #ini_set( 'session.gc_probability', 1 );               // Clear any lingering session data in default locations
 
-        session_set_save_handler( $this, true);                // Comment this out to stop storing session on the server
+        session_set_save_handler( $this, true );                // Comment this out to stop storing session on the server
 
         session_start();
 

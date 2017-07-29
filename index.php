@@ -50,10 +50,7 @@ function startApplication($restart = false)
     $route = new Modules\Route( function ($class, $method, &$argv = []) use ($restart, &$view) {
         $controller = "Controller\\$class";
         $model = "Model\\$class";
-
-        if ($restart && array_key_exists( 'Modules/Singleton', class_uses($model, true)))
-            $model::clearInstance();
-
+        
         try {
             if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
                 call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
