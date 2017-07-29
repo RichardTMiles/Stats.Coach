@@ -11,7 +11,7 @@ namespace Modules;
 
 class Route
 {
-    use Singleton; 
+    use Singleton;
 
     public $uri;
     private $matched;             // a bool
@@ -21,25 +21,20 @@ class Route
     public function __construct(callable $structure)
     {
         $this->structure = $structure;
-        $this->uri = explode( '/', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' ));
+        $this->uri = explode( '/', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' ) );
         $this->matched = true;
         if (empty($this->uri[0]))
-             $this->defaultRoute();
+            $this->defaultRoute();
         else
             $this->matched = false;
     }
 
     public function defaultRoute()
     {
-        static $count = true;
         $mvc = $this->structure;
         $default = ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
-        if (is_array( $default )) {
-            if($count) {
-                $count = false;
-                call_user_func_array( $mvc, array_values($default) );
-            } dump($default);
-        }
+        if (is_array( $default ))
+            $mvc( $default['Class'], $default['Method'] );
     }
 
     public function __destruct()
@@ -65,16 +60,18 @@ class Route
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
-        } return $this;
+        }
+        return $this;
     }
 
     public function signedOut()
     {
-        if ($this->matched || ($_SESSION['id'] && is_object($this->user[$_SESSION['id']]))) {
+        if ($this->matched || ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ))) {
             $clone = clone $this;
             $clone->matched = true;
             return $clone;
-        } return $this;
+        }
+        return $this;
     }
 
     public function home($function = null)  // TODO - I dont think this is working correctly
@@ -111,7 +108,7 @@ class Route
             // set up our ending condition
             if ($pathLength == $i || $arrayToMatch[$i] == null)
                 $arrayToMatch[$i] = '*';
-            
+
             switch ($arrayToMatch[$i][0]) {
                 case  '*':
                     $referenceVariables = [];
@@ -119,7 +116,7 @@ class Route
                         $GLOBALS[$key] = $value;
                         $referenceVariables[] = &$GLOBALS[$key];
                     }
-                    
+
                     $this->matched = true;
                     $this->homeMethod = null;
 
@@ -133,13 +130,13 @@ class Route
                         $argv[] = &$referenceVariables;
                         call_user_func_array( $structure, $argv );
                         exit(1);
-                    } else throw new \InvalidArgumentException('Are we passing a valid structure?');
+                    } else throw new \InvalidArgumentException( 'Are we passing a valid structure?' );
                     return $this; // Note that the application will break in the View::contents
 
                 case '{': // this is going to indicate the start of a variable name
 
                     if (substr( $arrayToMatch[$i], -1 ) != '}')
-                        throw new \InvalidArgumentException('Variable declaration must be rapped in brackets. ie `/{var}/ ');
+                        throw new \InvalidArgumentException( 'Variable declaration must be rapped in brackets. ie `/{var}/ ' );
 
                     $variable = null;
                     $variable = rtrim( ltrim( $arrayToMatch[$i], '{' ), '}' );
@@ -168,7 +165,7 @@ class Route
                     if (!array_key_exists( $i, $uri ))
                         return $this;
 
-                    if (strtolower( $arrayToMatch[$i] ) != strtolower($uri[$i]))
+                    if (strtolower( $arrayToMatch[$i] ) != strtolower( $uri[$i] ))
                         return $this;
             }
         }

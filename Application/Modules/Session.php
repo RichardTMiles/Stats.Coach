@@ -16,7 +16,7 @@ namespace Modules;
 class Session implements \SessionHandlerInterface
 {
     private $db;
-    private $sessionVerified;
+    private $sessionVerified;           // we should check between each request for browsers and ip if both change logout
     private static $user_id;
 
     public function __construct()
@@ -27,6 +27,10 @@ class Session implements \SessionHandlerInterface
         session_set_save_handler( $this, true);                // Comment this out to stop storing session on the server
 
         session_start();
+
+        if (empty($_SESSION['id'])) $_SESSION['id'] = false;  // This will be the users account id found in [database].user.user_id
+
+        static::$user_id = $_SESSION['id'];
     }
 
 
@@ -58,7 +62,7 @@ class Session implements \SessionHandlerInterface
 
     public function destroy($id)
     {
-        return ($this->db->prepare( 'DELETE FROM StatsCoach.user_session WHERE user_id = ?' )->execute( [static::$user_id] )) ?
+        return ($this->db->prepare( 'DELETE FROM StatsCoach.user_session WHERE user_id = ?' )->execute( [self::$user_id] )) ?
             true : false;
     }
 

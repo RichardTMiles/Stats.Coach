@@ -11,10 +11,8 @@ class User extends Request
     {
         unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
         \Model\User::clearInstance();   // remove sterilized data
-        session_unset();
+        session_unset();                // This wont clear the user session row, just data in row
         session_destroy();
-        session_start();
-        $_SESSION = [];
         startApplication( 'login/' );
     }
 

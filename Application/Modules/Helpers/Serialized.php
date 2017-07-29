@@ -64,7 +64,6 @@ abstract class Serialized {
 		if (!is_string( $value ))
 			return false;
 
-
 		// Serialized false, return true. unserialize() returns false on an
 		// invalid string or it could return false if the string is serialized
 		// false, eliminate that possibility.

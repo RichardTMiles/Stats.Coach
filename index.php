@@ -37,13 +37,13 @@ function startApplication($restart = false)
         global $user, $team, $course, $tournaments;
         if ($reset = ($restart === true))
             Modules\Helpers\Serialized::clear();
+        Modules\Request::changeURI($reset ? '/' : $restart);
         Model\User::newInstance();      // This will reset the stats too.
         View\View::newInstance($reset);
-        Modules\Request::changeURI($reset ? '/' : $restart);
         $restart = $reset;
     }
 
-    Modules\Request::sendHeaders();     // Send any stored headers
+    Modules\Request::sendHeaders();     // Send ansy stored headers
     Model\User::getInstance();
     $view = View\View::getInstance();
 
@@ -57,7 +57,6 @@ function startApplication($restart = false)
         try {
             if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
                 call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
-
         } catch (Modules\Helpers\Reporting\PublicAlert $e){
         } finally { Modules\Helpers\Entities::verify(); };
 

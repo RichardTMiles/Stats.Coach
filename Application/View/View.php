@@ -36,8 +36,7 @@ class  View
     public function __construct($forceWrapper = false)   // Send the content wrapper
     {
         if ($this->wrapper()) {
-            if (!headers_sent())
-                Request::setHeader( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'] );
+            Request::setHeader( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'] );
             if (!($forceWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && AJAX) return null;
             $_POST = [];
             ob_start();

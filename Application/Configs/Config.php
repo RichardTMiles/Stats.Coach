@@ -31,8 +31,6 @@ ini_set( 'display_errors', 1 );
 ################    Session     ####################
 new \Modules\Session();
 
-if (empty($_SESSION['id'])) $_SESSION['id'] = false;  // This will be the users account id found in [database].user.user_id
-
 ################    Reporting   ####################
 date_default_timezone_set( 'America/Phoenix' );
 error_reporting( E_ALL | E_STRICT );
@@ -91,12 +89,20 @@ define( 'TEMPLATE_ROOT', VENDOR_ROOT . 'almasaeed2010/adminlte/' );
 define( 'CONTENT_ROOT', SERVER_ROOT . 'Public/StatsCoach/' );
 define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Application/View/StatsCoach.php' );
 
-const DEFAULT_LOGGED_OUT_MVC = ['Class' => 'User', 'Method' => 'login'];                             // must be lower?
-const DEFAULT_LOGGED_IN_MVC = ['Class' =>  'Golf', 'Method' => 'golf'];
+
+const DEFAULT_LOGGED_OUT_MVC = [
+    'Class' => 'User',
+    'Method' => 'login'];
+
+const DEFAULT_LOGGED_IN_MVC = [
+    'Class' =>  'Golf',
+    'Method' => 'golf'];
+
+
 define( 'WRAPPING_REQUIRES_LOGIN', false );                                     // I use the same headers every where
 
 // More cache control is given in the .htaccess File
-header( 'Content-type: text/html; charset=utf-8' );
+# header( 'Content-type: text/html; charset=utf-8' );   done in htaccess
 header( 'Cache-Control: must-revalidate' );
 
 
