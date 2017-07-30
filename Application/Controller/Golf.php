@@ -6,7 +6,7 @@ use Modules\Request;
 
 class Golf extends Request
 {
-
+    
     public function golf()
     {
         return true;

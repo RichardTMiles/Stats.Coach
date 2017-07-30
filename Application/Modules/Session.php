@@ -16,13 +16,16 @@ namespace Modules;
 class Session implements \SessionHandlerInterface
 {
     private $db;
-    private $sessionVerified;           // we should check between each request for browsers and ip if both change logout
+    #private $sessionVerified;           // we should check between each request for browsers and ip if both change logout
     private static $user_id;
 
     public function __construct()
     {
         #session_save_path( SERVER_ROOT . 'Data/Sessions' );   // Manually Set where the Users Session Data is stored
-        #ini_set( 'session.gc_probability', 1 );               // Clear any lingering session data in default locations
+
+        $this->db = Database::getConnection();
+
+        ini_set( 'session.gc_probability', 1 );               // Clear any lingering session data in default locations
 
         session_set_save_handler( $this, true );                // Comment this out to stop storing session on the server
 
@@ -36,7 +39,8 @@ class Session implements \SessionHandlerInterface
 
     public function open($savePath, $sessionName)
     {
-        $this->db = Database::getConnection();
+        if (!isset($this->db))
+            $this->db = Database::getConnection();
         return true;
     }
 

@@ -100,6 +100,10 @@ class  View
         
     }
 
+    public function AJAXJavaScript(){
+        include SERVER_ROOT . 'Public/JavaScript.js.php';
+    }
+
     /**
      *  Given a file, i.e. /css/base.css, replaces it with a string containing the
      *  file's mtime, i.e. /css/base.1221534296.css.

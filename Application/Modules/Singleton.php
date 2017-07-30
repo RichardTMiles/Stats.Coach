@@ -6,10 +6,8 @@ use Modules\Helpers\Serialized;
 
 trait Singleton
 {
-    public $storage;               // A Temporary variable for 'quick data'
+    public $storage;                // A Temporary variable for 'quick data'
     protected $methods = array();   // Anonymous Function Declaration
-    private static $instance;        // Instance of the Container
-    
 
     public static function __callStatic($methodName, $arguments = array())
     {
@@ -19,38 +17,33 @@ trait Singleton
     public static function newInstance(...$args)
     {   // Start a new instance of the class and pass any arguments
         self::clearInstance();
-        $class = new \ReflectionClass( get_called_class() );
-        self::$instance = $class->newInstanceArgs( $args );
-        $GLOBALS['Singleton'][__CLASS__] = &self::$instance;
-        return self::$instance;
+        $reflect = new \ReflectionClass( $class = get_called_class() );
+        $GLOBALS['Singleton'][$class] = $reflect->newInstanceArgs( $args );
+        return $GLOBALS['Singleton'][$class];
     }
 
     public static function getInstance(...$args)
     {   // see if the class has already been called this run
-        if (!empty(self::$instance)) return self::$instance;
-        $calledClass = get_called_class();
+        if (!empty($GLOBALS['Singleton'][$calledClass = get_called_class()])) return $GLOBALS['Singleton'][$calledClass];
         // check if the object has been sterilized in the session
         // This will invoke the __wake up operator   TODO - base64_decode
-        if (isset( $_SESSION[$calledClass] ) && Serialized::is_serialized( $_SESSION[$calledClass] , self::$instance))
-            return self::$instance;
+        if (isset( $_SESSION[$calledClass] ) && Serialized::is_serialized( $_SESSION[$calledClass] , $GLOBALS['Singleton'][$calledClass]))
+            return $GLOBALS['Singleton'][$calledClass];
         // Start a new instance of the class and pass any arguments
-        $class = new \ReflectionClass( get_called_class() );
-        self::$instance = $class->newInstanceArgs($args);
-        return self::$instance;
+        $class = new \ReflectionClass( $calledClass );
+        $GLOBALS['Singleton'][$calledClass] = $class->newInstanceArgs($args);
+        return $GLOBALS['Singleton'][$calledClass];
     }
 
     /**
-     * @param null $class
+     * @param null $object
      * @return object|null
      */
-    public static function clearInstance($class = null)
+    public static function clearInstance($object = null)
     {
-        self::$instance = null;
-        $GLOBALS['Singleton'][__CLASS__] = null;
-        unset($_SESSION[__CLASS__]);
-        self::$instance = is_object( $class ) ? $class : null;
-        $GLOBALS['Singleton'][__CLASS__] = &self::$instance;
-        return self::$instance;
+        unset($_SESSION[$calledClass = get_called_class()], $GLOBALS['Singleton'][$calledClass]);
+        $GLOBALS['Singleton'][$calledClass] = is_object( $object ) ? $object : null;
+        return $GLOBALS['Singleton'][$calledClass];
     }
     
     public function __call($methodName, $arguments = array())

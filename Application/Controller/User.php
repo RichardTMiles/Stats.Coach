@@ -13,11 +13,14 @@ class User extends Request
         \Model\User::clearInstance();   // remove sterilized data
         session_unset();                // This wont clear the user session row, just data in row
         session_destroy();
+        $_SESSION['id'] = false;
         startApplication( 'login/' );
     }
 
     public function login($client = null)
     {
+        global $UserName, $FullName, $UserImage;    // validate cookies
+
         switch ($this->set($client)->alnum()) {
             case "clear":
                 $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
@@ -28,42 +31,30 @@ class User extends Request
 
         }
 
-        list($UserName, $this->FullName, $UserImage)
-            = $this->cookie( 'UserName', 'FullName', 'UserImage' )->alnum();
+        list($UserName, $FullName) = $this->cookie( 'UserName', 'FullName' )->alnum();
+
+        $UserImage = $this->cookie( 'UserImage' )->value();
+
+        $UserImage = file_exists( SERVER_ROOT . $UserImage ) ? SITE . $UserImage : false;
 
         if (empty($_POST)) return false;  // If forum already submitted
 
         $username = $this->post( 'username' )->alnum();
+
         $password = $this->post( 'password' )->value();
+        
         $rememberMe = $this->post( 'RememberMe' )->int();
 
-        if (!$rememberMe) {
+        if (!$rememberMe) 
             $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
-        }
+        
 
         if (!$username || !$password)
             throw new PublicAlert('Sorry, but we need your username and password.');
 
         return [$username, $password, $rememberMe];
     }
-
-    public function createTeam()
-    {
-        if (empty($_POST)) return false;
-        list($teamName, $schoolName) = $this->post( 'teamName', 'schoolName' )->text();
-        return (empty($teamName) || empty($schoolName)) ? [$teamName, $schoolName] : false;
-    }
-
-    public function joinTeam()
-    {
-        if (empty($_POST)) return false;
-
-        if (!$teamCode = $this->post( 'teamCode' )->alnum())
-            PublicAlert::warning("Sorry, your team code appears to be invalid");
-        
-        return $teamCode;
-    }
-
+    
     public function facebook()
     {
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
@@ -177,8 +168,6 @@ class User extends Request
 
     public function settings()
     {
-        if ($this->user->email_confirmed == 0)
-            $this->alert['warning'] = "There are over seven million high school student-athletes in the United States. Standing out as a athlete can be difficult, but made easier with the paired accompaniments in your academia. The information you present here should be considered public, to be seen by peers and coaches alike; so please keep it classy.";
         return false;
     }
 

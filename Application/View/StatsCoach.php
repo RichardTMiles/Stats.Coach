@@ -25,6 +25,8 @@
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?= $this->versionControl( "bower_components/bootstrap/dist/css/bootstrap.min.css" ) ?>">
+    <!-- Ajax Data Togles -->
+    <link rel="stylesheet" href="<?= $this->versionControl( "Public/Bootstrap-Toggle/bootstrap-toggle.min.css" ) ?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= $this->versionControl( "dist/css/AdminLTE.min.css" ) ?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -122,6 +124,30 @@
                 }
             }
         }(this);
+
+        /*! loadJS: load a JS file asynchronously. [c]2014 @scottjehl, Filament Group, Inc. (Based on http://goo.gl/REQGQ by Paul Irish). Licensed MIT */
+        (function (w) {
+            var loadJS = function (src, cb) {
+                "use strict";
+                var ref = w.document.getElementsByTagName("script")[0];
+                var script = w.document.createElement("script");
+                script.src = src;
+                script.async = true;
+                ref.parentNode.insertBefore(script, ref);
+                if (cb && typeof(cb) === "function") {
+                    script.onload = cb;
+                }
+                return script;
+            };
+            // commonjs
+            if (typeof module !== "undefined") {
+                module.exports = loadJS;
+            }
+            else {
+                w.loadJS = loadJS;
+            }
+        }(typeof global !== "undefined" ? global : this));
+
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -190,97 +216,90 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
         require_once CONTENT_ROOT . 'AthleteLayout.php';
         echo $wrapper_footer;
     }
-} elseif (!$_SESSION['id']) {
+} elseif (array_key_exists( 'id', $_SESSION ) && !$_SESSION['id']) {
     echo '<body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>';
 } else {
     session_destroy();
-    session_regenerate_id(TRUE);
-    echo '<script type="text/javascript"> window.location = "'.SITE.'" </script>';
+    session_regenerate_id( TRUE );
+    echo '<script type="text/javascript"> window.location = "' . SITE . '" </script>';
     // TODO - how often does this happen
 } ?>
 
 <!-- ./wrapper -->
-<!-- JQuery -->
-<script src="<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>"></script>
-<!-- Background -->
-<script src="<?= $this->versionControl( 'Public/jquery-backstretch/jquery.backstretch.min.js' ) ?>"></script>
-<!-- Select 2 -->
-<script src="<?= $this->versionControl( 'bower_components/select2/dist/js/select2.full.min.js' ) ?>"></script>
-<!-- Bootstrap -->
-<script src="<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>"></script>
-<!-- Data tables -->
-<!--script src="<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>"></script>
-        <!-- Input Mask -->
-<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.js' ) ?>"></script>
-<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.date.extensions.js' ) ?>"></script>
-<script src="<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.extensions.js' ) ?>"></script>
-<!-- Slim Scroll -->
-<script src="<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>"></script>
-<!-- Fastclick -->
-<script src="<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>"></script>
-<!-- AJAX Pace -->
-<script src="<?= $this->versionControl( 'bower_components/PACE/pace.js' ) ?>"></script>
-<!-- Admin LTE -->
-<script src="<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>"></script>
-<!-- Stats Coach Bootstrap Alert -->
-<script src="<?= $this->versionControl( 'alert/alerts.js' ) ?>"></script>
-<!-- iCheck -->
-<script src="<?= $this->versionControl( 'plugins/iCheck/icheck.min.js' ) ?>"></script>
-<!-- bootstrap datepicker -->
-<script src="<?= $this->versionControl( 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js' ) ?>"></script>
-<!-- bootstrap color picker -->
-<script src="<?= $this->versionControl( 'bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' ) ?>"></script>
-<!-- bootstrap time picker -->
-<script src="<?= $this->versionControl( 'plugins/timepicker/bootstrap-timepicker.min.js' ) ?>"></script>
-<!-- Google -->
-<script src="<?= $this->versionControl( 'Public/Analytics/google.analytics.js' ) ?>"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?= $this->versionControl( 'dist/js/demo.js' ) ?>"></script>
-<!-- jQuery Knob -->
-<script src="<?= $this->versionControl( 'bower_components/jquery-knob/js/jquery.knob.js' ) ?>"></script>
-<!-- PJAX-->
-<script src="<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>"></script>
-<!-- Better PJAX - https://github.com/defunkt/jquery-pjax/issues/469  -->
-
 <script>
-    jQuery.fn.exists = function () {
-        return this.length > 0;
-    };
-
-    // All links will be sent with ajax
-    $(document).pjax('a', '#ajax-content');
-    $.pjax.reload('#ajax-content');
-
-    // On an ajax request start the internal load bar
-    $.fn.on('pjax:send', function () {
-        $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
-        Pace.restart();
-    });
-
-    // Stop the 'Pace' bar on complete
-    $.fn.on('pjax:complete', function () {
-        $('#ajax-content').removeClass('overlay');
-    });
-
-    // Set a data mask to force https request
-    $(document).on("click", "a.no-pjax", false);
-
-    // This is still in beta, set functions to run each load
-    $(function () {
-        var closure = function () {
-            $(document).on("pjax:complete", function (event) {
-                $(event.target).find("script[data-exec-on-popstate]").each(function () {
-                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
-                })
-            })
-        };
-        $(document).on("pjax:complete", function () {
-            //$.pjax.reload({container: "#ajax-content", timeout: false});
-            closure();
+    // JQuery
+    loadJS("<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>", function () {
+        //-- Bootstrap -->
+        loadJS("<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>", function () {
+            <!-- Slim Scroll -->
+            loadJS("<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>");
+            <!-- Fastclick -->
+            loadJS("<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>");
+            <!-- AJAX Pace -->
+            loadJS("<?= $this->versionControl( 'bower_components/PACE/pace.js' ) ?>");
+            <!-- Admin LTE -->
+            loadJS("<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>", function () {
+                $("[data-widget='collapse']").click(function() {
+                    //Find the box parent
+                    var box = $(this).parents(".box").first();
+                    //Find the body and the footer
+                    var bf = box.find(".box-body, .box-footer");
+                    if (!box.hasClass("collapsed-box")) {
+                        box.addClass("collapsed-box");
+                        bf.slideUp();
+                    } else {
+                        box.removeClass("collapsed-box");
+                        bf.slideDown();
+                    }
+                });
+            });
         });
+        <!-- PJAX-->
+        loadJS("<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>", function () {
 
+            jQuery.fn.exists = function () {
+                return this.length > 0;
+            };
+
+            $(document).on('pjax:end pjax:start', function () {
+                <?=$this->AJAXJavaScript()?>
+            });
+
+            $(document).on('pjax:start', function () {
+                console.log("PJAX loaded!");
+            });
+
+            // All links will be sent with ajax
+            $(document).pjax('a', '#ajax-content');
+
+            // Set a data mask to force https request
+            $(document).on("click", "a.no-pjax", false);
+
+            $(document).on('pjax:click', function () {
+                var content = $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
+                content.hide();
+                Pace.restart();
+            });
+
+            $(document).on('pjax:success', function (event) {
+                var url = (typeof event.data !== 'undefined') ? event.data.url : '';
+                console.log("Successfully loaded " + url);
+            });
+
+            $(document).on('pjax:error', function (event) {
+                var url = (typeof event.data !== 'undefined') ? event.data.url : '';
+                console.log("Could not load " + url);
+            });
+
+            $(document).on('pjax:complete', function () {
+                $('#ajax-content').fadeIn('fast').removeClass('overlay');
+            });
+
+            // On initial html page request, get already loaded inner content from server
+            $.pjax.reload('#ajax-content');
+
+        });
     });
-
 
 </script>
 

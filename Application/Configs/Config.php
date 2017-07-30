@@ -1,7 +1,8 @@
 <?php
+
 ############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.8.0';
+const SITE_VERSION = 'Beta 0.8.57';
 const SYSTEM_EMAIL = 'Support@Stats.Coach';
 const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 
@@ -21,7 +22,6 @@ const DB_NAME = 'StatsCoach';
 const DB_USER = 'tmiles199';
 const DB_PASS = 'Huskies!99';
 
-
 ################    Reporting   ####################
 date_default_timezone_set( 'America/Phoenix' );
 error_reporting( E_ALL | E_STRICT );
@@ -30,11 +30,6 @@ ini_set( 'display_errors', 1 );
 
 ################    Session     ####################
 new \Modules\Session();
-
-################    Reporting   ####################
-date_default_timezone_set( 'America/Phoenix' );
-error_reporting( E_ALL | E_STRICT );
-ini_set( 'display_errors', 1 );
 
 ################  Up the Speed  ####################
 define( 'MINIFY_CONTENTS', false );
@@ -192,7 +187,7 @@ function sortDump($mixed)
 {
     // Notify or error
     alert( __FUNCTION__ );
-    
+
     // Generate Report
     ob_start();
     echo '####################### VAR DUMP ########################<br><pre>';

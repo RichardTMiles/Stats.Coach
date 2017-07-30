@@ -201,6 +201,4 @@ class Autoload
     }
 }
 
-
 new Autoload;   // start the class!
-

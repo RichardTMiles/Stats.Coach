@@ -33,8 +33,7 @@ class Route
     {
         $mvc = $this->structure;
         $default = ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
-        if (is_array( $default ))
-            $mvc( $default['Class'], $default['Method'] );
+        if (is_array( $default )) $mvc( $default['Class'], $default['Method'] );
     }
 
     public function __destruct()
@@ -42,17 +41,19 @@ class Route
         if ($this->matched)
             return null;
 
+        
         if (is_callable( $this->homeMethod )) {
             $this->addMethod( 'default', $this->homeMethod );
             $restart = $this->methods['default'];
             return $restart();
         }
 
-        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure )) {
-            return $mvc( $this->homeMethod['Class'], $this->homeMethod['Method'] );
-        }
+        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
+            return $mvc( $this->homeMethod[0], $this->homeMethod[1] );
 
         $this->defaultRoute();
+        
+        return null;
     }
 
     public function signedIn()

@@ -3,7 +3,6 @@
 namespace Model;
 
 use Model\Helpers\iSport;
-use Model\Helpers\Team;
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Helpers\Bcrypt;
 use Modules\Singleton;
@@ -16,7 +15,6 @@ class User extends Team
 
     public function __construct()   // What do we need from the logged in user for the template?
     {
-
         global $user;
         parent::__construct();
         $id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
@@ -26,7 +24,7 @@ class User extends Team
             if (is_array( $user ) && !empty($user[$id])) return null;
             $this->session( $id );
             $this->user( $id );
-            if (!empty($teams = $this->user[$id]->teams))
+            if (!empty($teams = $user[$id]->teams))
                 foreach ($teams as $team_id)
                     $this->teamMembers( $team_id );
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
@@ -89,15 +87,7 @@ class User extends Team
         $sql = $stmt->fetchColumn();
         return $sql;
     }
-
-    protected function team_exists($team_code)
-    {
-        $sql = 'SELECT team_id FROM StatsCoach.teams WHERE team_code = ? AND team_sport = ?';
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$team_code, $this->user_sport] );
-        return $stmt->fetchColumn();
-    }
-
+    
     protected function email_exists($email)
     {
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
@@ -141,28 +131,6 @@ class User extends Team
         return startApplication( true );
     }
 
-    public function joinTeam($teamCode)
-    {
-        if (!$teamId = $this->team_exists( $teamCode ))
-            throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
-
-        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.team_members WHERE team_id = ? AND user_id = ?';
-        $stmt = $this->db->prepare( $sql );
-        $stmt->execute( [$teamId, $_SESSION['id']] );
-
-        if ($stmt->fetchColumn() > 0) throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
-
-        $member = $this->beginTransaction( 6 );
-        $sql = "INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)";
-        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId] ))
-            throw new PublicAlert( 'Unable to join this team. ', '' );
-        $this->commit();
-
-        PublicAlert::success( 'We successfully add you!' );
-        startApplication( true );
-
-    }
-
     public function facebook()
     {
         try {
@@ -171,7 +139,7 @@ class User extends Team
             } else {
                 // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
 
-                $this->user();
+                $this->user($_SESSION['id']);
 
                 if ($this->user_facebook_id == null) ;
                 #self::update_user();
@@ -195,8 +163,8 @@ class User extends Team
 
         $_SESSION['id'] = $this->beginTransaction( 0 );
 
-        $sql = "INSERT INTO StatsCoach.user (user_id, user_profile_uri, user_username, user_password, user_type, user_email, user_ip, user_last_login, user_email_code, user_first_name, user_last_name, user_full_name, user_gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        if (!$this->db->prepare( $sql )->execute( array($_SESSION['id'], $_SESSION['id'], $this->username, $password, $this->userType, $this->email, $_SERVER['REMOTE_ADDR'], time(), $email_code, $this->firstName, $this->lastName, $this->firstName . ' ' . $this->lastName, $this->gender) ))
+        $sql = "INSERT INTO StatsCoach.user (user_id, user_profile_uri, user_username, user_password, user_type, user_email, user_ip, user_last_login, user_email_code, user_first_name, user_last_name, user_gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (!$this->db->prepare( $sql )->execute( array($_SESSION['id'], $_SESSION['id'], $this->username, $password, $this->userType, $this->email, $_SERVER['REMOTE_ADDR'], time(), $email_code, $this->firstName, $this->lastName, $this->gender) ))
             throw new PublicAlert ( 'Your account could not be created.', 'danger' );
 
         if (!$this->db->prepare( 'INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)' )->execute( [$_SESSION['id']] ))
@@ -319,6 +287,7 @@ class User extends Team
     {
         if ($user_id !== true) return $this->user( $user_id );
 
+        // we can assume post is active then
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
 
         $user = $this->user[$_SESSION['id']];

@@ -6,14 +6,31 @@
  * Time: 1:24 PM
  */
 
-namespace Model\Helpers;
+namespace Model;
 
+
+use Model\Helpers\DataMap;
+use Modules\Helpers\Bcrypt;
+use Modules\Helpers\Reporting\PublicAlert;
 
 class Team extends DataMap
 {
-    protected function team($team_id)
+
+    protected function team_exists($team_code)
     {
-        $this->team[$team_id] = $this->fetch_object( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $team_id );
+        $sql = 'SELECT count(team_coach) FROM StatsCoach.teams WHERE team_id = :id OR team_code = :id';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->bindValue( ':id', $team_code );
+        $stmt->execute( );
+        return $stmt->fetchColumn();
+    }
+
+    public function team($team_id)
+    {
+        if ($this->team_exists( $team_id ))
+            $this->team[$team_id] = $this->fetch_object( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $team_id );
+        else
+            startApplication( 'Home/' );
     }
 
     protected function createTeam($teamName, $schoolName = null)
@@ -24,6 +41,28 @@ class Team extends DataMap
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
         $this->commit();
         PublicAlert::success( "We successfully created `$teamName`!" );
+    }
+    
+    public function joinTeam($teamCode)
+    {
+        if (!$teamId = $this->team_exists( $teamCode ))
+            throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
+
+        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.team_members WHERE team_id = ? AND user_id = ?';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute( [$teamId, $_SESSION['id']] );
+
+        if ($stmt->fetchColumn() > 0) throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
+
+        $member = $this->beginTransaction( 6 );
+        $sql = "INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)";
+        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId] ))
+            throw new PublicAlert( 'Unable to join this team. ', '' );
+        $this->commit();
+
+        PublicAlert::success( 'We successfully add you!' );
+        startApplication( true );
+
     }
 
     protected function newTeamMember($team_code)
@@ -52,9 +91,13 @@ class Team extends DataMap
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([$id]);
         $team->members = is_array( $stmt = $stmt->fetchAll()) ? $stmt : [];
+        $user = User::getInstance();
         if (!empty($team->members))
             foreach ($team->members as $user_id)
-                $this->user[$user_id] = $this->user( $user_id );
+                $this->user[$user_id] = $user->user( $user_id );
     }
 
+    
+    
+    
 }

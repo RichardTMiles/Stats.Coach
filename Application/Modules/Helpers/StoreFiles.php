@@ -16,7 +16,7 @@ class StoreFiles
             // Undefined | Multiple Files | $_FILES Corruption Attack
             // If this request falls under any of them, treat it invalid.
             if (!isset($fileArray['error']) || is_array( $fileArray['error'] ))
-                throw new \RuntimeException( 'Invalid parameters.' );
+                throw new \ErrorException( 'Invalid parameters.' );                 // changes to catch via error handler
 
             // Check $_FILES['upfile']['error'] value.
             switch ($fileArray['error']) {
@@ -65,8 +65,7 @@ class StoreFiles
             return $relative;
 
         } catch (\RuntimeException $e) {
-            PublicAlert::warning( $e->getMessage() );
-            return false;
+            throw new PublicAlert($e->getMessage());
         }
     }
 }

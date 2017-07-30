@@ -12,7 +12,7 @@ $route->signedIn()->match( 'JoinTeam/', 'User', 'joinTeam');
 
 $route->signedIn()->match( 'CreateTeam/', 'User', 'createTeam');
 
-$route->signedIn()->match( 'Settings/', 'User', 'settings');
+# $route->signedIn()->match( 'Settings/', 'User', 'settings');
 
 $route->signedIn()->match( 'AddCourse/{state?}/*', 'Golf', 'AddCourse' );  // AddCourse
 
@@ -41,5 +41,6 @@ $route->match( 'Tests/*',                                               // This 
             exit(1);
     }
 );
+
 
 

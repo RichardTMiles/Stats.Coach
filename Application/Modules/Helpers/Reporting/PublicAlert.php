@@ -34,6 +34,11 @@ class PublicAlert extends CustomException {
         parent::__construct($message, 0);
     }
 
+    public function __call($code = null, $message)
+    {
+        static::alert( $message[0], $code );
+    }
+
     public static function __callStatic($code = null, $message)
     {
         static::alert( $message[0], $code );
