@@ -20,8 +20,10 @@
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Barbers Hill</a></li>
-                            <li><a href="#">FPGA</a></li>
+                            <?php if (isset($user->teams)) foreach ($user->teams as $team_id)
+                                $team = $this->team[$team_id];
+                                echo '<li><a href="'.SITE.'Team/'.$team->team_code.'/">'.$team->team_name.'</a></li>';
+                            ?>
                             <li class="divider"></li>
                             <li><a href="<?=SITE ?>JoinTeam/">Join a Team</a></li>
                             <li class="divider"></li>
@@ -140,14 +142,14 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="<?= $user->user_profile_pic ?>" class="user-image" alt="User Image">
+                            <img src="<?= $user->user_profile_picture ?>" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs"><?= $user->user_full_name ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="<?= $user->user_profile_pic ?>" class="img-circle" alt="User Image">
+                                <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image">
 
                                 <p>
                                     <?= $user->user_full_name ?>

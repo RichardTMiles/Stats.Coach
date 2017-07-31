@@ -14,8 +14,9 @@ use Modules\Request;
 
 class Team extends Request
 {
-    public function team($team_id)
+    public function team($team_id = false)
     {
+        if (!$team_id) startApplication( 'Home/' );
         return $this->set( $team_id )->alnum();
     }
 

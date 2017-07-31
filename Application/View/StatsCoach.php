@@ -17,10 +17,12 @@
     <title><?= SITE_TITLE ?></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="shortcut icon" href="<?= SITE ?>Public/favicon.png" type="image/x-icon"/>
 
+    <?php include CONTENT_ROOT . 'img/icons/icons.php'; ?>
+    
     <!-- PJAX Content Control -->
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
+    
 
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
@@ -158,8 +160,6 @@
     <![endif]-->
 
 
-    <!-- Debugbar TODO remove -->
-    <!--?php echo $GLOBALS['debugbarRenderer']->renderHead() ?-->
 </head>
 <style>
     body {
@@ -206,6 +206,9 @@
 
 <?php
 
+# dump($GLOBALS);
+
+
 if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
     if ($this->user[$_SESSION['id']]->user_type == 'Coach') {
         echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
@@ -229,6 +232,7 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
 <script>
     // JQuery
     loadJS("<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>", function () {
+        loadJS("<?= $this->versionControl( 'Public/jquery-backstretch/jquery.backstretch.min.js' ) ?>");
         //-- Bootstrap -->
         loadJS("<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>", function () {
             <!-- Slim Scroll -->
@@ -277,7 +281,6 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
 
             $(document).on('pjax:click', function () {
                 var content = $('#ajax-content').addClass('overlay').innerHTML = "<i class='fa fa-refresh fa-spin'></i>";
-                content.hide();
                 Pace.restart();
             });
 

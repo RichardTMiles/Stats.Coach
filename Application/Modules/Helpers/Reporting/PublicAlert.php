@@ -28,6 +28,25 @@ class PublicAlert extends CustomException {
         $GLOBALS['alert'][$code] = $message;
     }
 
+    public static function success($message)
+    {
+        $GLOBALS['alert']['success'] = $message;
+    }
+    public static function info($message)
+    {
+        $GLOBALS['alert']['info'] = $message;
+
+    }
+    public static function danger($message)
+    {
+        $GLOBALS['alert']['danger'] = $message;
+
+    }
+    public static function warning($message)
+    {
+        $GLOBALS['alert']['warning'] = $message;
+    }
+    
     public function __construct($message = null, $code = 'warning')
     {
         if (!empty($message)) static::alert( $message, $code );

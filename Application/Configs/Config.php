@@ -2,7 +2,7 @@
 
 ############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.8.57';
+const SITE_VERSION = 'Beta 0.8.7';
 const SYSTEM_EMAIL = 'Support@Stats.Coach';
 const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 
@@ -194,7 +194,7 @@ function sortDump($mixed)
     var_dump( $mixed );
     echo '</pre><br><br><br>';
     echo '####################### MIXED DUMP ######################<br><pre>';
-    $mixed = (count( $mixed ) == 1 ? array_pop( $mixed ) : $mixed);
+    $mixed = (is_array( $mixed ) && count( $mixed ) == 1 ? array_pop( $mixed ) : $mixed);
     echo '<pre>';
     debug_zval_dump( $mixed ?: $GLOBALS );
     echo '</pre><br>################## BACK TRACE #################<br><pre>';

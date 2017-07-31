@@ -5,60 +5,50 @@ namespace Model;
 use Model\Helpers\iSport;
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Helpers\Bcrypt;
-use Modules\Singleton;
 use Modules\Request;
 
 
 class User extends Team
 {
-    use Singleton;
-
-    public function __construct()   // What do we need from the logged in user for the template?
+    public function __construct()  
     {
         global $user;
         parent::__construct();
-        $id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
+        $_SESSION['id'] = $id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
+
         if ($id) {
             $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // force reload occurs when X_PJAX_Version changes between requests
             Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
             if (is_array( $user ) && !empty($user[$id])) return null;
-            $this->session( $id );
-            $this->user( $id );
+            $this->fullUser( $id );
             if (!empty($teams = $user[$id]->teams))
                 foreach ($teams as $team_id)
                     $this->teamMembers( $team_id );
+
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
+
     }
 
-
-    private function session($id)
+    private function onlineStatus($id)
     {
-
-        $currentSession = session_id();
-        $stmt = $this->db->prepare( "SELECT user_session_id FROM StatsCoach.user WHERE user_id = ?" );
-        $stmt->execute( [$id] );
-        $oldSession = $stmt->fetchColumn();
-        if ($currentSession == $oldSession) return null;
-
-        if (!empty($oldSession) && file_exists( session_save_path() . '/sess_' . $oldSession )) {
-            session_destroy();
-            session_id( $oldSession );
-            session_start();
-            $_SESSION['X_PJAX_Version'] = 'v' . SITE_VERSION . 'u' . $id; // force reload occurs when X_PJAX_Version changes between requests
-            Request::setHeader( 'X-PJAX-Version: ' . $_SESSION['X_PJAX_Version'] );
-        } else {
-            $stmt = $this->db->prepare( 'UPDATE StatsCoach.user SET user_session_id = ? WHERE user_id = ?' );
-            if (!$stmt->execute( [$currentSession, $id] ))
-                throw new \Exception( 'failed to update session' );
-        }
-
+        $stmt = $this->db->prepare( 'SELECT user_online_status FROM StatsCoach.user_session WHERE user_id = ? LIMIT 1' );
+        $stmt->execute([$id]);
+        $this->user[$id]->online = (bool) $stmt->fetchColumn();
     }
 
-    private function user($id)
+    private function changeStatus($id, $status = false)
+    {
+        $sql = 'UPDATE StatsCoach.user_session SET user_online_status = ? WHERE user_id = ?';
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute([$status, $id]);
+        $this->user[$id]->online = (bool) $stmt->fetchColumn();
+    }
+
+    private function fullUser($id)
     {
         $this->user[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
         if (empty($this->user[$id])) throw new \Exception( 'Could not find user  ' . $id );
-        $this->user[$id]->user_profile_picture = SITE . $this->user[$id]->user_profile_pic;
+        $this->user[$id]->user_profile_picture = SITE . (!empty($this->user[$id]->user_profile_pic) ? $this->user[$id]->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $this->user[$id]->user_cover_photo = SITE . $this->user[$id]->user_cover_photo;
         $this->user[$id]->user_full_name = $this->user[$id]->user_first_name . ' ' . $this->user[$id]->user_last_name;
         $this->userTeams( "$id" );
@@ -70,6 +60,12 @@ class User extends Team
         $model = new $model;
         if ($model instanceof iSport)
             $model->stats( $id );
+        $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
+        $stmt->execute( [$id] );
+        $this->user[$id]->stats->followers = (int)$stmt->fetchAll();
+        $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
+        $stmt->execute( [$id] );
+        $this->user[$id]->stats->following = (int)$stmt->fetchAll();
     }
 
     protected function change_password($user_id, $password)
@@ -87,7 +83,7 @@ class User extends Team
         $sql = $stmt->fetchColumn();
         return $sql;
     }
-    
+
     protected function email_exists($email)
     {
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
@@ -117,6 +113,7 @@ class User extends Team
         $stmt->execute( [$username] );
         $data = $stmt->fetch();
 
+
         // using the verify method to compare the password with the stored hashed password.
         if (Bcrypt::verify( $password, $data['user_password'] ) === true)
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
@@ -126,9 +123,17 @@ class User extends Team
             Request::setCookie( "UserName", $username );
             Request::setCookie( "FullName", $data['user_first_name'] . ' ' . $data['user_last_name'] );
             Request::setCookie( "UserImage", $data['user_profile_pic'] );
-        }
+        } #else Request::clearCookies();
 
         return startApplication( true );
+    }
+
+    public function basicUser($id)
+    {
+        $user = $this->user[$id] = $this->fetch_object( 'SELECT user_profile_uri, user_profile_pic, user_first_name, user_last_name FROM StatsCoach.user WHERE user_id = ?', $id );
+        $user->user_profile_picture = SITE . (!empty($user->user_profile_pic) ? $user->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $user->user_full_name = $user->user_first_name . ' ' . $user->user_last_name;
+        return $user;
     }
 
     public function facebook()
@@ -139,7 +144,7 @@ class User extends Team
             } else {
                 // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
 
-                $this->user($_SESSION['id']);
+                $this->fullUser( $_SESSION['id'] );
 
                 if ($this->user_facebook_id == null) ;
                 #self::update_user();
@@ -196,7 +201,7 @@ class User extends Team
 
 
         PublicAlert::success( "Welcome to Stats Coach. Please check your email to finish your registration." );
-        startApplication( true );
+        startApplication( 'home/' );
     }
 
     public function activate($email, $email_code)
@@ -221,7 +226,6 @@ class User extends Team
         $_SESSION['id'] = $stmt->fetchColumn();
         PublicAlert::success( 'We successfully activated your account.' );
         startApplication( true ); // there is not an activate template file
-        exit(1);
     }
 
     public function recover($email, $generated_string)
@@ -283,9 +287,13 @@ class User extends Team
 
     }
 
-    public function profile($user_id)
+    public function profile($user_uri)
     {
-        if ($user_id !== true) return $this->user( $user_id );
+        if ($user_uri !== true) {
+            $stmt = $this->db->prepare( 'SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ?' );
+            $stmt->execute( [$user_uri] );
+            return $this->fullUser( $stmt->fetch( \PDO::FETCH_COLUMN ) );
+        }
 
         // we can assume post is active then
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
@@ -306,7 +314,7 @@ class User extends Team
         if (!$stmt->execute())
             throw new PublicAlert( 'Sorry, we could not process your information at this time.', 'warning' );
 
-        if (!empty($profile_pic) && $profile_pic != $user->user_profile_pic)
+        if (!empty($profile_pic) && !empty($user->user_profile_pic) && $profile_pic != $user->user_profile_pic)
             unlink( SERVER_ROOT . $user->user_profile_pic );
 
         if (!empty($email) && $email != $user->user_email) {

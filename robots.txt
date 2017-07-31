@@ -1,5 +1,8 @@
 User-agent: Google
-Disallow:
-
-User-agent: *
+Disallow:           
+                    
+User-agent: *       
 Disallow: /
+
+
+

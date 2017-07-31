@@ -13,6 +13,7 @@ class User extends Request
         \Model\User::clearInstance();   // remove sterilized data
         session_unset();                // This wont clear the user session row, just data in row
         session_destroy();
+        #session_regenerate_id( TRUE );
         $_SESSION['id'] = false;
         startApplication( 'login/' );
     }
@@ -28,6 +29,7 @@ class User extends Request
             case 'FaceBook':
                 return $this->facebook();
             default:
+                
 
         }
 
@@ -37,17 +39,16 @@ class User extends Request
 
         $UserImage = file_exists( SERVER_ROOT . $UserImage ) ? SITE . $UserImage : false;
 
+        $rememberMe = $this->post( 'RememberMe' )->int();
+
+        if (!$rememberMe)
+            $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
+
         if (empty($_POST)) return false;  // If forum already submitted
 
         $username = $this->post( 'username' )->alnum();
 
         $password = $this->post( 'password' )->value();
-        
-        $rememberMe = $this->post( 'RememberMe' )->int();
-
-        if (!$rememberMe) 
-            $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
-        
 
         if (!$username || !$password)
             throw new PublicAlert('Sorry, but we need your username and password.');

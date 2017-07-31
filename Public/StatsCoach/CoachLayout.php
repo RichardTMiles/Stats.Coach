@@ -202,7 +202,7 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
                                 <a href="<?= SITE ?>Profile/" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a no-pjax href="<?= SITE ?>Logout/" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="<?= SITE ?>Logout/" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
@@ -260,7 +260,7 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
                     </li>
                     <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
                         $team = $this->team[$team_id];
-                        echo '<li><a href="#"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
+                        echo '<li><a href="' .SITE . 'Team/'. $team_id . '/"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
                     } ?>
 
 
@@ -283,17 +283,17 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
-                    $team = $this->team[$team_id]; ?>
+                    $team = $this->team[$team_id];?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
-                            <a href=""><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
-                                <?php if (empty($team->member_id))
+                            <a href="<?=SITE . 'Team/'. $team_id . '/'?>"><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
+                                <?php if (empty($team->members))
                                 echo '</a>';
                                 else { ?>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
-                                <?php foreach ($team->member_id as $user_id) { ?>
+                                <?php foreach ($team->members as $user_id) { ?>
                                     <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_first_name . ' ' . $this->user[$user_id]->user_last_name ?></a>
                                     </li>
                                 <?php } ?>

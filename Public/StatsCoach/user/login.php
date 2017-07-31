@@ -64,7 +64,7 @@
                     <!-- /.lockscreen-image -->
 
                     <!-- lockscreen credentials (contains the form) -->
-                    <form class="lockscreen-credentials" action="<?= SITE ?>login/" method="post">
+                    <form data-pjax class="lockscreen-credentials" action="<?= SITE ?>login/" method="post">
                         <div class="input-group">
                             <input style="display: none" type="text" value="1" name="RememberMe">
                             <input style="display: none" type="text" class="form-control" name="username" placeholder="Username" value="<?= $this->UserName ?>">
@@ -95,16 +95,3 @@
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<script>  $(function () {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-        });
-    });
-
-    $(document).on('submit', 'form[data-pjax]', function (event) {
-        $.pjax.submit(event, '#ajax-content')
-    });
-
-</script>

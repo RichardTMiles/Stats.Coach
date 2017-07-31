@@ -1,6 +1,4 @@
-<?php $user = $this->user[$this->id ?: $_SESSION['id']];
-
-?>
+<?php $user = $this->user[$this->user_uri ?: $_SESSION['id']]; ?>
 
 <!-- Content Header (Page header) -->
 
@@ -32,13 +30,13 @@
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right">1,322</a>
+                            <b>Followers</b> <a class="pull-right"><?=$user->stats->followers?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right">543</a>
+                            <b>Following</b> <a class="pull-right"><?=$user->stats->following?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right">13,287</a>
+                            <b>Strokes</b> <a class="pull-right"><?=$user->stats->stats_strokes?></a>
                         </li>
                     </ul>
                     <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
@@ -55,7 +53,7 @@
 
                     <div class="box-tools pull-right">
                         <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        <button type="button" class="btn btn-box-tool collapse" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
                                 data-original-title="Contacts">
@@ -271,7 +269,6 @@
                     </div>
                     <!-- /.box (chat box) -->
                 <?php } else { ?>
-
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -449,22 +446,5 @@
     </div><!-- /.row -->
 
 </section>
-
-
-<script>
-    var loading = '<!-- Loading (remove the following to stop the loading)--><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div><!-- end loading -->';
-
-    $(document).on('submit', 'form[data-pjax]', function (event) {
-        $(event.target).closest('box').append(loading);
-        $.pjax.submit(event, '#ajax-content')
-    });
-
-    $(function () {
-        //Date picker
-        $('#datepicker').datepicker({autoclose: true});
-    });
-
-</script>
-
 
 <!-- /.content -->

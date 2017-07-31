@@ -33,14 +33,13 @@ class Session implements \SessionHandlerInterface
 
         if (empty($_SESSION['id'])) $_SESSION['id'] = false;  // This will be the users account id found in [database].user.user_id
 
-        static::$user_id = $_SESSION['id'];
+        static::$user_id = $_SESSION['id'];             
     }
 
 
     public function open($savePath, $sessionName)
     {
-        if (!isset($this->db))
-            $this->db = Database::getConnection();
+        if (!isset($this->db)) $this->db = Database::getConnection();
         return true;
     }
 

@@ -38,21 +38,21 @@ abstract class Entities
         static::$entityTransactionKeys = [];
     }
 
-    static function beginTransaction($tag_id)
+    static function beginTransaction($tag_id, $dependant = null)
     {
         static::$inTransaction = true;
-        $key = self::new_entity( $tag_id );
+        $key = self::new_entity( $tag_id, $dependant );
         Database::getConnection()->beginTransaction();
         return $key;
     }
 
-    static function new_entity($tag_id)
+    static function new_entity($tag_id, $dependant)
     {
         $db = Database::getConnection();
         do {
             try {
-                $stmt = $db->prepare( 'INSERT INTO StatsCoach.entity (entity_pk) VALUE (?)' );
-                $stmt->execute( [$stmt = Bcrypt::genRandomHex()] );
+                $stmt = $db->prepare( 'INSERT INTO StatsCoach.entity (entity_pk, entity_fk) VALUE (?,?)' );
+                $stmt->execute( [$stmt = Bcrypt::genRandomHex(), $dependant] );
             } catch (\PDOException $e) {
                 $stmt = false;
             }

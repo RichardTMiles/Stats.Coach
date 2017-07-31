@@ -8,7 +8,9 @@ $route->match( 'Logout/*', function () { Controller\User::logout(); } );   // Lo
 
 $route->signedIn()->match( 'PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore' );  // PostScore $state
 
-$route->signedIn()->match( 'JoinTeam/', 'User', 'joinTeam');
+$route->signedIn()->match( 'JoinTeam/', 'Team', 'joinTeam');
+
+$route->signedIn()->match( 'Team/{team_id}/*', 'Team', 'team');
 
 $route->signedIn()->match( 'CreateTeam/', 'User', 'createTeam');
 
@@ -22,7 +24,7 @@ $route->match( 'Activate/{email?}/{email_code?}/', 'User', 'activate' );   // Ac
 
 $route->signedOut()->match( 'Recover/{user_email?}/{user_generated_string?}/', 'User', 'recover' );     // Recover $userId
 
-$route->signedIn()->match( 'Profile/{userID?}/',  'User', 'profile' );     // Profile $user
+$route->signedIn()->match( 'Profile/{user_uri?}/',  'User', 'profile' );     // Profile $user
 
 $route->match('404/*', function () { \View\View::contents('error','404error'); });
 
