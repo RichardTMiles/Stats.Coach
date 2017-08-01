@@ -357,9 +357,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputExperience" class="col-sm-3 control-label">Biography</label>
+                                            <label for="inputExperience" class="col-sm-3 control-label">About Me</label>
                                             <div class="col-sm-8">
-                                                <textarea name="about_me" class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                                <textarea name="about_me" class="form-control" id="inputExperience" placeholder="<?=$user->user_about_me ?>"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -368,7 +368,7 @@
                                         <div class="col-sm-offset-3 col-sm-10">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" value="1"> I agree to the <a href="#">terms and
+                                                    <input name='Terms' type="checkbox" value="1"> I agree to the <a href="<?=SITE?>Privacy/">terms and
                                                         conditions</a>
                                                 </label>
                                             </div>

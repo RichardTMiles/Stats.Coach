@@ -143,9 +143,7 @@ class Golf extends DataMap implements iSport
         for ($i = 9; $i < 18; $i++) $par_in += $par[$i];
         $par_tot = $par_out + $par_in;
 
-        $this->db->beginTransaction();
-        
-        $course_id = $this->new_entity( 9 );
+        $course_id = $this->beginTransaction( 'GOLF_COURSE' );
         
         $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
                                 VALUES (:course_id, :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga, :site)";
@@ -206,7 +204,8 @@ class Golf extends DataMap implements iSport
             $stmt->bindValue( ':distance_tot', $dist_tot );
             if (!$stmt->execute()) throw new \Exception( "Failed to insert tee box $i. Critical Error id = $course_id  Please Contact Meh. 817-789-3294" );
         }
-        $this->db->commit();
+        if (!$this->commit())
+            throw new PublicAlert ('Sorry, we could not process your request.', 'danger');
 
         PublicAlert::success( 'The course has been added!' );
         startApplication( 'Home/' );

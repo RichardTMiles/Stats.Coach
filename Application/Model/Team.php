@@ -34,6 +34,7 @@ class Team extends DataMap
             return startApplication( 'Home/' );
 
         $team = $this->team[$team_id] = $this->fetch_object( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $team_id );
+        $this->teamMembers( $team_id );
         if (isset($this->user[$team->team_coach])) return null;
         $user = User::getInstance();
         $user->basicUser( $team->team_coach );
@@ -90,8 +91,6 @@ class Team extends DataMap
 
     protected function teamMembers($id)
     {
-        if (!isset($this->team[$id]))
-            throw new \InvalidArgumentException( "No team[ $id ] found in array" );
         $team = $this->team[$id];
         $sql = 'SELECT user_id FROM StatsCoach.team_members WHERE team_id = ?';
         $stmt = $this->db->prepare( $sql );

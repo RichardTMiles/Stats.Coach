@@ -144,12 +144,15 @@ class User extends Request
 
     public function profile($user_id)
     {
-        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
-
         if ($user_id) return $this->set( $user_id )->alnum();
 
         if (empty($_POST)) return false;
 
+        if (!$this->post( 'Terms' )->int())
+            throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
+
+        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
+        
         list($first, $last, $gender) = $this->post('first_name','last_name', 'gender')->word();
 
         $dob = $this->post( 'datepicker' )->date();

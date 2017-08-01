@@ -36,7 +36,7 @@ class User extends Team
         $this->user[$id]->online = (bool) $stmt->fetchColumn();
     }
 
-    private function changeStatus($id, $status = false)
+    public function changeStatus($id, $status = false)
     {
         $sql = 'UPDATE StatsCoach.user_session SET user_online_status = ? WHERE user_id = ?';
         $stmt = $this->db->prepare( $sql );
@@ -51,7 +51,8 @@ class User extends Team
         $this->user[$id]->user_profile_picture = SITE . (!empty($this->user[$id]->user_profile_pic) ? $this->user[$id]->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $this->user[$id]->user_cover_photo = SITE . $this->user[$id]->user_cover_photo;
         $this->user[$id]->user_full_name = $this->user[$id]->user_first_name . ' ' . $this->user[$id]->user_last_name;
-        $this->userTeams( "$id" );
+        $this->onlineStatus( $id );
+        $this->userTeams( $id );
         if (!empty($this->user[$id]->teams))
             foreach ($this->user[$id]->teams as $team_id)
                 $this->team( $team_id );

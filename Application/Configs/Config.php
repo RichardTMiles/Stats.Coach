@@ -2,7 +2,7 @@
 
 ############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.8.7';
+const SITE_VERSION = 'Beta 0.8.87';
 const SYSTEM_EMAIL = 'Support@Stats.Coach';
 const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 

@@ -12,18 +12,6 @@ use Modules\Helpers\Entities;
 
 abstract class DataMap extends Entities
 {
-    const USER = 0;
-    const USER_FOLLOWERS = 1;
-    const USER_MESSAGES = 3;
-    const USER_TASKS = 4;
-    const TEAMS = 5;
-    const TEAM_MEMBERS = 6;
-    const GOLF_TOURNAMENTS = 7;
-    const GOLF_ROUNDS = 8;
-    const GOLF_COURSE = 9;
-    const ENTITY_COMMENTS = 10;
-    const ENTITY_PHOTOS = 11;
-
     protected $user = array();
     protected $team = array();
     protected $course = array();
@@ -33,7 +21,6 @@ abstract class DataMap extends Entities
     public function __construct()
     {
         parent::__construct();
-        static::$inTransaction = false;
         global $user, $team, $course, $tournament;
         $this->user = &$user;
         $this->team = &$team;
