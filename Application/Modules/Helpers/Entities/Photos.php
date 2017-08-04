@@ -17,7 +17,7 @@ class Photos extends Entities implements iEntity
     static function get($object, $id)
     {
         $sql = 'SELECT * FROM StatsCoach.entity_photos WHERE parent_id = ?';
-        $object->photos = static::fetch_as_array_object( $sql, $id );
+        $object->photos = static::fetch_classes( $sql, $id );
     }
 
     static function add($object, $id, $array)

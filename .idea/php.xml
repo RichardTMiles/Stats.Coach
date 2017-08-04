@@ -3,8 +3,10 @@
   <component name="PhpProjectServersManager">
     <servers>
       <server host="127.0.0.1" id="cabc654f-d9cf-4fdc-bd2f-0ed2d436e00d" name="Localhost" port="8080" />
+      <server host="miles.systems" id="44a2eb94-36ae-4030-9c55-571350190f32" name="Godaddy" use_path_mappings="true" />
     </servers>
   </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings />

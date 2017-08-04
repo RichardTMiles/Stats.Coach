@@ -18,7 +18,7 @@ class Comments extends Entities implements iEntity
     static function get($object, $id)
     {
         $sql = 'SELECT * FROM StatsCoach.entity_comments JOIN StatsCoach.entity_tag ON comment_id = entity_id WHERE parent_id = ?';
-        $object->comments = static::fetch_as_array_object( $sql, $id );
+        $object->comments = static::fetch_classes( $sql, $id );
         return true;
     }
     

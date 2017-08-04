@@ -146,8 +146,6 @@ class User extends Request
     {
         if ($user_id) return $this->set( $user_id )->alnum();
 
-        if (empty($_POST)) return false;
-
         if (!$this->post( 'Terms' )->int())
             throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
 

@@ -11,13 +11,12 @@ namespace Modules;
 use Modules\Interfaces\iSingleton;
 use Modules\Helpers\StoreFiles;
 
-
 abstract class Request implements iSingleton
 {
     use Singleton;
 
     ########################## Manual Input ################################
-    public function set(...$argv)
+    public function set(...$argv) : self
     {
         $this->storage = $argv;
         return $this;
@@ -67,7 +66,7 @@ abstract class Request implements iSingleton
 
 
     ########################### Request Data ###############################
-    private function request($argv, &$array, $removeHTML = false)
+    private function request($argv, &$array, $removeHTML = false): self
     {
         $this->storage = null;
         $closure = function ($key) use ($removeHTML, &$array) {
@@ -80,22 +79,22 @@ abstract class Request implements iSingleton
         return $this;
     }
 
-    public function get($variable = null)
+    public function get($variable = null): self
     {
         return $this->request( $argv, $_GET );
     }
 
-    public function post(...$argv)
+    public function post(...$argv): self
     {
         return $this->request( $argv, $_POST );
     }
 
-    public function cookie(...$argv)
+    public function cookie(...$argv): self
     {
         return $this->request( $argv, $_COOKIE, true );
     }
 
-    public function files(...$argv)
+    public function files(...$argv): self
     {
         return $this->request( $argv, $_FILES );
     }
@@ -112,7 +111,7 @@ abstract class Request implements iSingleton
     }        
 
     ##########################  Storage Shifting  #########################
-    public function base64_decode() // TODO - fix this shit
+    public function base64_decode(): self
     {
         $array = [];
         $lambda = function ($key) use (&$array) {
@@ -126,12 +125,12 @@ abstract class Request implements iSingleton
         return $this;
     }
 
-    public function has($key)
+    public function has($key): bool
     {
         return array_key_exists( $key, $this->storage );
     }
 
-    public function except(...$argv)
+    public function except(...$argv): self
     {
         array_walk( $argv, function ($key) {
             if (array_key_exists( $key, $this->storage )) unset($this->storage[$key]);
@@ -140,7 +139,7 @@ abstract class Request implements iSingleton
     }
 
     ########################## Validating    ##############################
-    public function is($type)
+    public function is($type): bool
     {
         $type = 'is_' . strtolower( $type );
         if (function_exists( $type )) return $type( $this->storage );
@@ -176,7 +175,7 @@ abstract class Request implements iSingleton
             : $this);
     }
 
-    public function int($min = null, $max = null)   // inclusive max and min
+    public function int(int $min = null,int $max = null)   // inclusive max and min
     {
         if ($this->storage == null) return false;
 
@@ -236,6 +235,7 @@ abstract class Request implements iSingleton
     {   // One word alpha
         return $this->regex( '/^[a-zA-Z]+$/' );
     }
+
     public function phone()
     {
         return (preg_match( '#((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}#', $this->storage[0] ) ? $this->storage[0] : false);

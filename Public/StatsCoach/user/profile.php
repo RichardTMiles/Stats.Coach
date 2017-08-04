@@ -1,4 +1,6 @@
-<?php $user = $this->user[$this->user_uri ?: $_SESSION['id']]; ?>
+<?php $user = $this->user[$this->user_uri ?: $_SESSION['id']];
+$me = (($user->user_id ?? null) == $_SESSION['id']);
+?>
 
 <!-- Content Header (Page header) -->
 
@@ -30,112 +32,123 @@
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right"><?=$user->stats->followers?></a>
+                            <b>Followers</b> <a class="pull-right"><?= $user->stats->followers ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right"><?=$user->stats->following?></a>
+                            <b>Following</b> <a class="pull-right"><?= $user->stats->following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Strokes</b> <a class="pull-right"><?=$user->stats->stats_strokes?></a>
+                            <b>Rounds</b> <a class="pull-right"><?= $user->stats->stats_rounds ?></a>
                         </li>
                     </ul>
-                    <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                    <?php if (!$me) {
+                        print '<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>';
+                    } else { ?>
+                        <a href="" class="btn btn-success btn-block">
+                        Messages
+                        </a>
+                    <?php } ?>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
+            <?php if (!$me) { ?>
 
-            <?php if($user->user_id != $_SESSION['id']) { ?>
+                <!-- DIRECT CHAT SUCCESS -->
+                <div id="my-box" class="my-box box box-success direct-chat direct-chat-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Direct Chat</h3>
 
-            <!-- DIRECT CHAT SUCCESS -->
-            <div class="box box-success direct-chat direct-chat-success">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Direct Chat</h3>
-
-                    <div class="box-tools pull-right">
-                        <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
-                        <button type="button" class="btn btn-box-tool collapse" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
-                                data-original-title="Contacts">
-                            <i class="fa fa-comments"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <!-- Conversations are loaded here -->
-                    <div class="direct-chat-messages">
-                        <!-- Message. Default to the left -->
-                        <div class="direct-chat-msg">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                                <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                            </div>
-                            <!-- /.direct-chat-info -->
-                            <img class="direct-chat-img" src="" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                Is this template really for free? That's unbelievable!
-                            </div>
-                            <!-- /.direct-chat-text -->
+                        <div class="box-tools pull-right">
+                            <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
+                            <button type="button" class="btn btn-box-tool collapse" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
+                                    data-original-title="Contacts">
+                                <i class="fa fa-comments"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
-                        <!-- /.direct-chat-msg -->
-
-                        <!-- Message to the right -->
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                            </div>
-                            <!-- /.direct-chat-info -->
-                            <img class="direct-chat-img" src="" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
-                            </div>
-                            <!-- /.direct-chat-text -->
-                        </div>
-                        <!-- /.direct-chat-msg -->
                     </div>
-                    <!--/.direct-chat-messages-->
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- Conversations are loaded here -->
+                        <div class="direct-chat-messages">
+                            <?php foreach ($user->messages as $ASC => $message) {
 
-                    <!-- Contacts are loaded here -->
-                    <div class="direct-chat-contacts">
-                        <ul class="contacts-list">
-                            <li>
-                                <a href="#">
-                                    <img class="contacts-list-img" src="" alt="User Image">
+                                if ($message->user_id == $user->user_id) { ?>
 
-                                    <div class="contacts-list-info">
+                                    <!-- Message. Default to the left -->
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left"><?=$user->user_first_name?></span>
+                                            <span class="direct-chat-timestamp pull-right"><?=date("F j, Y, g:i a", $message->creation_date)?></span>
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+                                        <img class="direct-chat-img" src="<?=$user->user_profile_picture?>" alt="Message User Image"><!-- /.direct-chat-img -->
+                                        <div class="direct-chat-text">
+                                            <?=$message->messagae?>
+                                        </div>
+                                        <!-- /.direct-chat-text -->
+                                    </div>
+                                    <!-- /.direct-chat-msg -->
+                                <?php } else { ?>
+                                    <!-- Message to the right -->
+                                    <div class="direct-chat-msg right">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-right"><?=$this->user[$message->user_id]->user_first_name?></span>
+                                            <span class="direct-chat-timestamp pull-left"><?=date("F j, Y, g:i a",$message->creation_date)?></span>
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+                                        <img class="direct-chat-img" src="<?=$this->user[$message->user_id]->user_profile_picture?>" alt="Message User Image"><!-- /.direct-chat-img -->
+                                        <div class="direct-chat-text">
+                                            <?=$message->message?>
+                                        </div>
+                                        <!-- /.direct-chat-text -->
+                                    </div>
+                                <?php }
+                            } ?>
+                            <!-- /.direct-chat-msg -->
+                        </div>
+                        <!--/.direct-chat-messages-->
+
+                        <!-- Contacts are loaded here -->
+                        <div class="direct-chat-contacts">
+                            <ul class="contacts-list">
+                                <li>
+                                    <a href="#">
+                                        <img class="contacts-list-img" src="" alt="User Image">
+
+                                        <div class="contacts-list-info">
                             <span class="contacts-list-name">
                               Count Dracula
                               <small class="contacts-list-date pull-right">2/28/2015</small>
                             </span>
-                                        <span class="contacts-list-msg">How have you been? I was...</span>
-                                    </div>
-                                    <!-- /.contacts-list-info -->
-                                </a>
-                            </li>
-                            <!-- End Contact Item -->
-                        </ul>
-                        <!-- /.contatcts-list -->
+                                            <span class="contacts-list-msg">How have you been? I was...</span>
+                                        </div>
+                                        <!-- /.contacts-list-info -->
+                                    </a>
+                                </li>
+                                <!-- End Contact Item -->
+                            </ul>
+                            <!-- /.contatcts-list -->
+                        </div>
+                        <!-- /.direct-chat-pane -->
                     </div>
-                    <!-- /.direct-chat-pane -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <form action="#" method="post">
-                        <div class="input-group">
-                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <form data-pjax action="<?= SITE . 'Messages/' . $user->user_profile_uri ?>/" method="post">
+                            <div class="input-group">
+                                <input type="text" name="message" placeholder="Type Message ..." class="form-control">
                       <span class="input-group-btn">
                         <button type="submit" class="btn btn-success btn-flat">Send</button>
                       </span>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-footer-->
                 </div>
-                <!-- /.box-footer-->
-            </div>
-            <!--/.direct-chat -->
+                <!--/.direct-chat -->
 
-            <? } ?>
+            <?php } ?>
 
         </div>
 
@@ -162,7 +175,7 @@
                                 <dd><?= $user->user_education_history ?></dd>
                                 <br>
                                 <dt>Mutual Friends</dt>
-                                <dd><?= !empty($user->user_facebook_id) ? $user->user_facebook_id : 'Connect to Facebook'; ?></dd>
+                                <dd><?=$user->user_facebook_id ??'Connect to Facebook'; ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
@@ -170,105 +183,7 @@
                     <!-- /.box -->
                 </div>
                 <!-- /.user info -->
-
-
-                <?php
-                // Show settings or chat box
-                if ($user->user_id != $_SESSION['id']) // Chat box
-                { ?>
-                    <!-- Chat box -->
-                    <div class="box box-success">
-                        <div class="box-header ui-sortable-handle" style="cursor: move;">
-                            <i class="fa fa-comments-o"></i>
-
-                            <h3 class="box-title">Chat</h3>
-
-                            <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
-                                <div class="btn-group" data-toggle="btn-toggle">
-                                    <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;">
-                            <div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
-                                <!-- chat item -->
-                                <div class="item">
-                                    <img src="" alt="user image" class="online">
-
-                                    <p class="message">
-                                        <a href="#" class="name">
-                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
-                                            Mike Doe
-                                        </a>
-                                        I would like to meet you to discuss the latest news about
-                                        the arrival of the new theme. They say it is going to be one the
-                                        best themes on the market
-                                    </p>
-                                    <div class="attachment">
-                                        <h4>Attachments:</h4>
-
-                                        <p class="filename">
-                                            Theme-thumbnail-image.jpg
-                                        </p>
-
-                                        <div class="pull-right">
-                                            <button type="button" class="btn btn-primary btn-sm btn-flat">Open</button>
-                                        </div>
-                                    </div>
-                                    <!-- /.attachment -->
-                                </div>
-                                <!-- /.item -->
-                                <!-- chat item -->
-                                <div class="item">
-                                    <img src="<?= $user->user_profile_picture ?>" alt="user image" class="offline">
-
-                                    <p class="message">
-                                        <a href="#" class="name">
-                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
-                                            Alexander Pierce
-                                        </a>
-                                        I would like to meet you to discuss the latest news about
-                                        the arrival of the new theme. They say it is going to be one the
-                                        best themes on the market
-                                    </p>
-                                </div>
-                                <!-- /.item -->
-                                <!-- chat item -->
-                                <div class="item">
-                                    <img src="" alt="user image" class="offline">
-
-                                    <p class="message">
-                                        <a href="#" class="name">
-                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
-                                            Susan Doe
-                                        </a>
-                                        I would like to meet you to discuss the latest news about
-                                        the arrival of the new theme. They say it is going to be one the
-                                        best themes on the market
-                                    </p>
-                                </div>
-                                <!-- /.item -->
-                            </div>
-                            <div class="slimScrollBar"
-                                 style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 184.9112426035503px; background-position: initial initial; background-repeat: initial initial;"></div>
-                            <div class="slimScrollRail"
-                                 style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div>
-                        </div>
-                        <!-- /.chat -->
-                        <div class="box-footer">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="Type message...">
-
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-success"><i class="fa fa-plus"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.box (chat box) -->
-                <?php } else { ?>
+                <?php if ($user->user_id == $_SESSION['id']){ ?>
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -446,5 +361,6 @@
     </div><!-- /.row -->
 
 </section>
+
 
 <!-- /.content -->

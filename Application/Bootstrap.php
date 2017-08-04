@@ -1,8 +1,23 @@
 <?php
 
+$route = new Modules\Route( $mvc );
+
 $route->signedOut()->match( 'Login/{client?}/*',  'User', 'login' )->home();
 
 $route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();
+
+// AJAX REQUEST
+$route->signedIn()->match( 'Messages/{user_uri?}/', function (string $user_uri = null) use ($user) {
+        $id = $user->user_id_from_uri($user_uri);
+    
+         // if post isset we can assume an add
+        if (!empty($_POST) && AJAX) \Model\Helpers\Messages::add( $this->user[$id], $id, (new class extends \Modules\Request{})->post( 'message' )->text() );
+
+        // else were grabbing content (json, html,etc)
+        if (empty($action)) dump( \Model\Helpers\Messages::get( $this->user[$id], $id ) );
+        return 1;
+    } );
+
 
 $route->match( 'Logout/*', function () { Controller\User::logout(); } );   // Logout
 
@@ -37,8 +52,8 @@ $route->match( 'Tests/*',                                               // This 
             $view = \View\View::getInstance();
             ob_start();
             require_once SERVER_ROOT . 'Tests/index.php';;
-            $file = minify_html( ob_get_clean() );
-            if ($view->ajaxActive()) echo $file;
+            $file = ob_get_clean();
+            if (AJAX) echo $file;
             else $view->currentPage = base64_encode( $file );
             exit(1);
     }

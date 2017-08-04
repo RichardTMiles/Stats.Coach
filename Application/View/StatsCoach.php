@@ -235,25 +235,34 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
     loadJS("<?= $this->versionControl( 'alert/alerts.js' ) ?>");
 
     // JQuery
-    loadJS("<?= $this->versionControl( 'components/jquery/jquery.min.js' ) ?>", function () {
+    //components/jquery/jquery.min.js
+    // bower_components/jquery/dist/jquery.min.js
+    loadJS("<?= $this->versionControl( 'bower_components/jquery/dist/jquery.min.js' ) ?>", function () {
         jQuery.fn.exists = function () {
             return this.length > 0;
         };
 
-        //-- Admin LTE -->
-        loadJS("<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>");
 
         //-- Background Stretch -->
         loadJS("<?= $this->versionControl( 'Public/jquery-backstretch/jquery.backstretch.min.js' ) ?>");
 
+        //-- Slim Scroll -->
+        loadJS("<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>");
+
+        //-- Fastclick -->
+        loadJS("<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>", function () {
+            //-- Admin LTE -->
+            loadJS("<?= $this->versionControl( 'dist/js/adminlte.min.js' ) ?>", function () {
+                loadJS("<?= $this->versionControl( 'build/js/BoxRefresh.js' )?>", function () {
+                    // data-widget="box-refresh" data-source=""
+
+                });
+            });
+        });
+
+
         //-- Bootstrap -->
         loadJS("<?= $this->versionControl( 'bower_components/bootstrap/dist/js/bootstrap.min.js' ) ?>", function () {
-
-            //-- Slim Scroll -->
-            loadJS("<?= $this->versionControl( 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' ) ?>");
-
-            //-- Fastclick -->
-            loadJS("<?= $this->versionControl( 'bower_components/fastclick/lib/fastclick.js' ) ?>");
 
             //-- AJAX Pace -->
             loadJS("<?= $this->versionControl( 'bower_components/PACE/pace.js' ) ?>", function () {
@@ -269,7 +278,7 @@ if (!empty($_SESSION['id']) && is_object( $this->user[$_SESSION['id']] )) {
             loadJS("<?= $this->versionControl( 'plugins/iCheck/icheck.min.js' )?>");
 
             //-- Input Mask -->
-            loadJS("<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.js' ) ?>", function() {
+            loadJS("<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.js' ) ?>", function () {
                 loadJS("<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.date.extensions.js' ) ?>");
                 loadJS("<?= $this->versionControl( 'plugins/input-mask/jquery.inputmask.extensions.js' ) ?>");
             });

@@ -10,7 +10,7 @@ namespace Modules\Helpers;
 
 use Modules\Singleton;
 
-class Skeleton implements \ArrayAccess
+class Skeleton implements \Traversable
 {
     use Singleton;
     const Singleton = true; // turns on auto caching
@@ -31,7 +31,7 @@ class Skeleton implements \ArrayAccess
     public function offsetGet($offset) {
         return isset($this->storage[$offset]) ? $this->storage[$offset] : null;
     }
-    
+
     public function &__get($variable)
     {
         return $this->storage[$variable];

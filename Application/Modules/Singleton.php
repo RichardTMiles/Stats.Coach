@@ -17,21 +17,28 @@ trait Singleton
     public static function newInstance(...$args)
     {   // Start a new instance of the class and pass any arguments
         self::clearInstance();
+
         $reflect = new \ReflectionClass( $class = get_called_class() );
+
         $GLOBALS['Singleton'][$class] = $reflect->newInstanceArgs( $args );
+
         return $GLOBALS['Singleton'][$class];
     }
 
     public static function getInstance(...$args)
     {   // see if the class has already been called this run
-        if (!empty($GLOBALS['Singleton'][$calledClass = get_called_class()])) return $GLOBALS['Singleton'][$calledClass];
+        if (!empty($GLOBALS['Singleton'][$calledClass = get_called_class()]))
+            return $GLOBALS['Singleton'][$calledClass];
+
         // check if the object has been sterilized in the session
         // This will invoke the __wake up operator   TODO - base64_decode
         if (isset( $_SESSION[$calledClass] ) && Serialized::is_serialized( $_SESSION[$calledClass] , $GLOBALS['Singleton'][$calledClass]))
             return $GLOBALS['Singleton'][$calledClass];
+
         // Start a new instance of the class and pass any arguments
         $class = new \ReflectionClass( $calledClass );
         $GLOBALS['Singleton'][$calledClass] = $class->newInstanceArgs($args);
+
         return $GLOBALS['Singleton'][$calledClass];
     }
 
@@ -115,7 +122,7 @@ trait Singleton
         $GLOBALS[$variable] = $value;
     }
 
-    public function __isset($variable)
+    public function __isset($variable): bool
     {
         return array_key_exists( $variable, $GLOBALS );
     }
@@ -130,7 +137,7 @@ trait Singleton
         return $this->storage;
     }
 
-    public function set(...$argv)
+    public function set(...$argv): self
     {
         $this->storage = $argv;
         return $this;
@@ -143,7 +150,7 @@ trait Singleton
             $this->{$variable});
     }
 
-    public function has($variable)
+    public function has($variable): bool
     {
         return isset($this->$variable);
     }

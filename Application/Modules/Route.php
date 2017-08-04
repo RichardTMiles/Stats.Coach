@@ -56,7 +56,7 @@ class Route
         return null;
     }
 
-    public function signedIn()
+    public function signedIn() : Route
     {
         if ($this->matched || !$_SESSION['id']) {
             $clone = clone $this;
@@ -66,7 +66,7 @@ class Route
         return $this;
     }
 
-    public function signedOut()
+    public function signedOut() : Route
     {
         if ($this->matched || ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ))) {
             $clone = clone $this;
@@ -86,7 +86,7 @@ class Route
             $this->homeMethod = $this->storage;
     }
 
-    public function match($toMatch, ...$argv)       // TODO - make someone rewrite this in REGX
+    public function match(string $toMatch, ...$argv) : self     // TODO - make someone rewrite this in REGX
     {
         if ($this->matched === true)
             return $this;

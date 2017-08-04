@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Helpers\iSport;
+use Model\Helpers\Messages;
 use Modules\Helpers\Reporting\PublicAlert;
 use Modules\Helpers\Bcrypt;
 use Modules\Request;
@@ -10,7 +11,7 @@ use Modules\Request;
 
 class User extends Team
 {
-    public function __construct()  
+    public function __construct()
     {
         global $user;
         parent::__construct();
@@ -24,70 +25,83 @@ class User extends Team
             if (!empty($teams = $user[$id]->teams))
                 foreach ($teams as $team_id)
                     $this->teamMembers( $team_id );
-
         } else $_SESSION['X_PJAX_Version'] = SITE_VERSION;
-
     }
 
     private function onlineStatus($id)
     {
-        $stmt = $this->db->prepare( 'SELECT user_online_status FROM StatsCoach.user_session WHERE user_id = ? LIMIT 1' );
-        $stmt->execute([$id]);
-        $this->user[$id]->online = (bool) $stmt->fetchColumn();
+        $sql = 'SELECT user_online_status FROM StatsCoach.user_session WHERE user_id = ? LIMIT 1';
+        $this->fetch_into_class( $this->user[$id], $sql, $id );
     }
 
     public function changeStatus($id, $status = false)
     {
         $sql = 'UPDATE StatsCoach.user_session SET user_online_status = ? WHERE user_id = ?';
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute([$status, $id]);
-        $this->user[$id]->online = (bool) $stmt->fetchColumn();
+        $stmt->execute( [$status, $id] );
+        $this->user[$id]->online = (bool)$stmt->fetchColumn();
+    }
+
+    public function user_id_from_uri(string $user_uri)
+    {
+        $stmt = $this->db->prepare( 'SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ?' );
+        $stmt->execute( [$user_uri] );
+        return $stmt->fetch( \PDO::FETCH_COLUMN );
     }
 
     private function fullUser($id)
     {
+
         $this->user[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
         if (empty($this->user[$id])) throw new \Exception( 'Could not find user  ' . $id );
         $this->user[$id]->user_profile_picture = SITE . (!empty($this->user[$id]->user_profile_pic) ? $this->user[$id]->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $this->user[$id]->user_cover_photo = SITE . $this->user[$id]->user_cover_photo;
         $this->user[$id]->user_full_name = $this->user[$id]->user_first_name . ' ' . $this->user[$id]->user_last_name;
+
         $this->onlineStatus( $id );
-        $this->userTeams( $id );
+        $this->userTeams( $id );                        // get teams
         if (!empty($this->user[$id]->teams))
             foreach ($this->user[$id]->teams as $team_id)
                 $this->team( $team_id );
+
         $model = $this->user[$id]->user_sport;
         $model = "Model\\$model";
         $model = new $model;
-        if ($model instanceof iSport)
+        if ($model instanceof iSport)                   // load stats
             $model->stats( $id );
+
+
         $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
         $stmt->execute( [$id] );
-        $this->user[$id]->stats->followers = (int)$stmt->fetchAll();
+        $this->user[$id]->stats->followers = (int)$stmt->fetchColumn();
         $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
         $stmt->execute( [$id] );
-        $this->user[$id]->stats->following = (int)$stmt->fetchAll();
+        $this->user[$id]->stats->following = (int)$stmt->fetchColumn();
+
+        // load messages
+
+        Messages::get( $this->user[$id], $id );
+
+        //sortDump($this->user[$id]);
     }
 
     protected function change_password($user_id, $password)
     {   /* Two create a Hash you do */
-        $password_hash = Bcrypt::genHash( $password );
-        $stmt = $this->db->prepare( "UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?" );
-        return $stmt->execute( array($password_hash, $user_id) );
+        $password = Bcrypt::genHash( $password );
+        return $this->db->prepare( "UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?" )->execute( [$password, $user_id] );
     }
 
-    protected function user_exists($username)
+    public function user_exists($username): bool
     {
-        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ?';
+        $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ? LIMIT 1';
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( [$username] );
-        $sql = $stmt->fetchColumn();
-        return $sql;
+        return $stmt->fetchColumn();
     }
 
-    protected function email_exists($email)
+    protected function email_exists($email): bool
     {
-        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ?";
+        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ? LIMIT 1";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute( array($email) );
         return $stmt->fetchColumn();
@@ -95,10 +109,10 @@ class User extends Team
 
     protected function email_confirmed($username)
     {
-        $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ? AND user_email_confirmed = ? LIMIT 1";
+        $sql = "SELECT user_email_confirmed FROM StatsCoach.user WHERE user_username = ? LIMIT 1";
         $stmt = $this->db->prepare( $sql );
-        $stmt->execute( array($username, 1) );
-        return $stmt->fetch();
+        $stmt->execute( [$username] );
+        return $stmt->fetchColumn();
     }
 
     public function login($username, $password, $rememberMe)
@@ -126,13 +140,13 @@ class User extends Team
             Request::setCookie( "UserImage", $data['user_profile_pic'] );
         } #else Request::clearCookies();
 
-        return startApplication( true );
+        startApplication( true );
     }
 
-    public function basicUser($id)
+    public function basicUser($id): \stdClass
     {
         $user = $this->user[$id] = $this->fetch_object( 'SELECT user_profile_uri, user_profile_pic, user_first_name, user_last_name FROM StatsCoach.user WHERE user_id = ?', $id );
-        $user->user_profile_picture = SITE . (!empty($user->user_profile_pic) ? $user->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $user->user_profile_picture = SITE . $user->user_profile_pic ?? 'Data/Uploads/Pictures/Defaults/default_avatar.png';
         $user->user_full_name = $user->user_first_name . ' ' . $user->user_last_name;
         return $user;
     }
@@ -291,9 +305,7 @@ class User extends Team
     public function profile($user_uri)
     {
         if ($user_uri !== true) {
-            $stmt = $this->db->prepare( 'SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ?' );
-            $stmt->execute( [$user_uri] );
-            return $this->fullUser( $stmt->fetch( \PDO::FETCH_COLUMN ) );
+            return $this->fullUser( $this->user_id_from_uri( $user_uri ) );
         }
 
         // we can assume post is active then
@@ -333,19 +345,11 @@ class User extends Team
                 throw new PublicAlert( 'Our email system failed.' );
 
             PublicAlert::success( 'Please check your email to activate your account' );
-        }
-
+        } else
+            PublicAlert::success( 'Your account has been updated!' );
         startApplication( true );
     }
 
-    public function settings()
-    {
-        if (!empty($_POST)) {
-            if ('false' == $filePath = new StoreFiles( 'FileToUpload', 'Data/Uploads/Pictures/' )) {
-                echo "File Upload Fail";
-            }
-        }
-    }
 
 }
 

@@ -14,6 +14,9 @@ Options All -Indexes
 # Set the directory index
 DirectoryIndex index.php
 
+# Redirect Specific Files
+RewriteRule ^favicon.ico Public/StatsCoach/img/icons/favicon.png [L]
+
 # Remove www.
 RewriteBase /
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]

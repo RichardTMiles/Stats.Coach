@@ -30,10 +30,8 @@ class Session implements \SessionHandlerInterface
         session_set_save_handler( $this, true );                // Comment this out to stop storing session on the server
 
         session_start();
-
-        if (empty($_SESSION['id'])) $_SESSION['id'] = false;  // This will be the users account id found in [database].user.user_id
-
-        static::$user_id = $_SESSION['id'];             
+        
+        static::$user_id = $_SESSION['id'] = ($_SESSION['id'] ?? false);
     }
 
 
@@ -57,7 +55,7 @@ class Session implements \SessionHandlerInterface
 
     public function write($id, $data)
     {
-        if (empty(static::$user_id = $_SESSION['id'])) return false;
+        if (empty(static::$user_id = $_SESSION['id'])) return true;     // must be true for php 7.0
         $NewDateTime = date( 'Y-m-d H:i:s', strtotime( date( 'Y-m-d H:i:s' ) . ' + 1 day' ) );  // so from time of last write and whenever the gc_collector hits
         return ($this->db->prepare( 'REPLACE INTO StatsCoach.user_session SET session_id = ?, user_id = ?, Session_Expires = ?, Session_Data = ?' )->execute( [$id, static::$user_id, $NewDateTime, $data] )) ?
             true : false;

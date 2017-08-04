@@ -2,8 +2,4 @@
 
 use Modules\Singleton;
 
-class Carbon
-{
-    use Singleton;
-    const Singleton = true;
-}
+class Carbon { use Singleton; } // Fetch to globals uses this class

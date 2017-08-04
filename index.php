@@ -30,46 +30,44 @@ if (false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||    
 
 
 
-$user = $team = $course = $tournaments = array();
 Modules\Helpers\Reporting\ErrorCatcher::start();
+
+$user = $team = $course = $tournaments = array();
 Modules\Helpers\Serialized::start('user','team','course','tournaments');
 // Pull theses from session, and store on shutdown
 
-
+Modules\Request::sendHeaders();     // Send any stored headers
 
 function startApplication($restart = false)
 {
     if ($restart) {
         $_POST = [];
-        global $user, $team, $course, $tournaments;
-        if ($reset = ($restart === true))
+        if ($reset = ($restart === true)) 
             Modules\Helpers\Serialized::clear();
-        Modules\Request::changeURI($reset ? '/' : $restart);
-        Model\User::newInstance();      // This will reset the stats too.
-        View\View::newInstance($reset);
+        Modules\Request::changeURI($reset ? '/' : $restart);    // dynamically using pjax and headers
+        $user = Model\User::newInstance();                      // This will reset the stats too.
+        $view = View\View::newInstance($reset);
         $restart = $reset;
     }
 
-    Modules\Request::sendHeaders();     // Send any stored headers
-    Model\User::getInstance();
+    $user = $user ?? Model\User::getInstance();     // if(AJAX && $_SESSION['id']) sortDump( $GLOBALS );
+    $view = $view ?? View\View::getInstance();
     
-    // if(AJAX && $_SESSION['id']) sortDump( $GLOBALS );
-
-    $view = View\View::getInstance();
-    
-    $route = new Modules\Route( function ($class, $method, &$argv = []) use ($restart, &$view) {
+    $mvc = function ($class, $method, &$argv = []) use ($restart, &$view) {
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
         try {
             if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
                 call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
-        } catch (Modules\Helpers\Reporting\PublicAlert $e){
+        } catch (Modules\Helpers\Reporting\PublicAlert $e) {
+        } catch (TypeError $e) {
+            \Modules\Helpers\Reporting\PublicAlert::danger( $e->getMessage() ); // TODO - Change logging
         } finally { Modules\Helpers\Entities::verify(); };
 
         $view->content( $class, $method );
-    });
-
+    };
+    
     include SERVER_ROOT . 'Application/Bootstrap.php';
 } 
 

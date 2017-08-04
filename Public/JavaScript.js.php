@@ -23,6 +23,8 @@ $('input').iCheck({
 });
 
 
+$('#my-box-widget').boxRefresh('load');
+
 // Select 2 -->
 $(".select2").select2();
 

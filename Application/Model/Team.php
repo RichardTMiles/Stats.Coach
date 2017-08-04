@@ -27,7 +27,7 @@ class Team extends DataMap
         return $stmt->fetchColumn();
     }
 
-    public function team($teamIdentifier)
+    public function team(string $teamIdentifier)
     {
         global $team_id;
         if (!$team_id = $this->team_exists( $teamIdentifier ))
@@ -83,8 +83,9 @@ class Team extends DataMap
 
     protected function userTeams($id)
     {
-        $stmt = $this->db->prepare( 'SELECT StatsCoach.team_members.team_id FROM StatsCoach.team_members WHERE StatsCoach.team_members.user_id = ? UNION SELECT StatsCoach.teams.team_id FROM StatsCoach.teams WHERE StatsCoach.teams.team_coach = ?' );
-        $stmt->execute( [$id, $id] );
+        $stmt = $this->db->prepare( 'SELECT StatsCoach.team_members.team_id FROM StatsCoach.team_members WHERE StatsCoach.team_members.user_id = :id UNION SELECT StatsCoach.teams.team_id FROM StatsCoach.teams WHERE StatsCoach.teams.team_coach = :id' );
+        $stmt->bindValue( ':id', $id );
+        $stmt->execute();
         $stmt = $stmt->fetchAll( \PDO::FETCH_COLUMN );
         $this->user[$id]->teams = $stmt;
     }

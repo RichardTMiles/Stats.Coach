@@ -17,7 +17,7 @@ const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
  * @constant DB_PASS The users password if applicable
  *
  */
-const  DB_HOST = 'miles.systems';
+const DB_HOST = 'miles.systems';
 const DB_NAME = 'StatsCoach';
 const DB_USER = 'tmiles199';
 const DB_PASS = 'Huskies!99';
@@ -39,6 +39,7 @@ define( 'MINIFY_CONTENTS', false );
 // TODO - Notifications
 // TODO - Tasks
 // TODO - Calendar
+// TODO - add session open to sessions class/database to see is race conditions will be a factor in development
 
 ################  Ajax Refresh  ####################
 define( 'AJAX', (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||

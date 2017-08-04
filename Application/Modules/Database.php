@@ -2,6 +2,8 @@
 
 namespace Modules;
 
+use PDO;
+
 class Database
 {
     private static $database;
@@ -12,18 +14,19 @@ class Database
 
     # Build the connection
 
-    public static function getConnection($dbName = null)
+    public static function getConnection(string $dbName = null): PDO
     {
-        if (!empty(self::$database)) return static::$database;
+        if (!empty(self::$database))
+            return static::$database;
 
         $attempts = 0;
         $host = static::$host;
         if (empty($dbName)) $dbName = static::$dbName;
 
         do { try {
-                $db = new \PDO( "mysql:host={$host};dbname={$dbName}", static::$username, static::$password );
-                $db->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-                $db->setAttribute( \PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC );
+                $db = new PDO( "mysql:host={$host};dbname={$dbName}", static::$username, static::$password );
+                $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+                $db->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC );
                 self::$database = $db;
                 return self::$database;
             } catch (\PDOException $e) {
