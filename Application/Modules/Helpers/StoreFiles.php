@@ -5,7 +5,7 @@
 
 namespace Modules\Helpers;
 
-use Modules\Helpers\Reporting\PublicAlert;
+use Modules\Error\PublicAlert;
 
 class StoreFiles
 {
@@ -23,7 +23,9 @@ class StoreFiles
                 case UPLOAD_ERR_OK:             // We hope
                     break;
                 case UPLOAD_ERR_NO_FILE:
-                    throw new \RuntimeException( 'No file sent.' );
+                    # Stats Coach Edit
+                    return false;
+                    #throw new \RuntimeException( 'No file sent.' );
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
                     throw new \RuntimeException( 'Exceeded filesize limit.' );

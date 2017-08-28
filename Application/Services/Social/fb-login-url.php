@@ -20,6 +20,6 @@ $permissions = [
     'user_education_history', 'user_hometown',
     'user_location', 'user_photos', 'user_friends'];           // Optional permissions
 
-$loginUrl = $helper->getLoginUrl( 'https://stats.coach/Login/Facebook/', $permissions ); 
+$loginUrl = $helper->getLoginUrl( 'https://stats.coach/Facebook/', $permissions );
 
 return $loginUrl;

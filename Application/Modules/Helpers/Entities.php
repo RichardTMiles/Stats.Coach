@@ -11,14 +11,12 @@ namespace Modules\Helpers;
 use PDO;
 use stdClass;
 use Modules\Database;
-use Modules\Helpers\Entities\Comments;
-use Modules\Helpers\Entities\iEntity;
-use Modules\Helpers\Entities\Location;
-use Modules\Helpers\Entities\Photos;
-use Modules\Helpers\Reporting\PublicAlert;
+use Modules\Interfaces\iEntity;
+use Modules\Error\PublicAlert;
 
 abstract class Entities
 {
+    // Tables that require a unique identifier
     const USER = 0;
     const USER_FOLLOWERS = 1;
     const USER_MESSAGES = 3;
@@ -40,22 +38,12 @@ abstract class Entities
     {
         $this->db = Database::getConnection();
         if ($this instanceof iEntity) $this::get( $object, $id );
-        elseif (is_object($object) && $id) static::getEntities($object, $id);
+        #elseif (is_object($object) && $id) static::getEntities($object, $id);
     }
 
     static protected function database()
     {
         return Database::getConnection();
-    }
-
-    public static function getEntities($object = null, $id = null)
-    {
-        if (!is_object( $object ) || $id == null)
-            return false;
-        Comments::get($object, $id);
-        Location::get($object, $id);
-        Photos::get($object, $id);
-        return true;
     }
 
     static function verify(string $errorMessage = null): bool

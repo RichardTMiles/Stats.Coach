@@ -141,7 +141,7 @@
                 <span class="info-box-icon bg-red"><i class="fa fa-book"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Last Round</span>
-                    <span class="info-box-number">78</span>
+                    <span class="info-box-number"><?=$user->rounds[0]->score_total ?? 'We\'re waiting.'?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

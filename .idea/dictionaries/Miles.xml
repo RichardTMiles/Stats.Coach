@@ -2,6 +2,10 @@
   <dictionary name="Miles">
     <words>
       <w>bcrypt</w>
+      <w>onclose</w>
+      <w>onerror</w>
+      <w>onmessage</w>
+      <w>onopen</w>
     </words>
   </dictionary>
 </component>

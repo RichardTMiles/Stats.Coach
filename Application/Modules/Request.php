@@ -100,11 +100,9 @@ abstract class Request implements iSingleton
     }
 
     ########################### Store Files   #############################
-    public function storeFiles($location = null)
+    public function storeFiles($location = 'Data/Uploads/Temp/')
     {
-        if ($location == null) $location = 'Data/Uploads/Pictures/';
         $storagePath = array();
-
         array_walk( $this->storage, function ($file) use ($location, &$storagePath) {
             $storagePath[] = StoreFiles::singleFile( $file, $location ); });
         return count($storagePath) == 1 ? array_shift($storagePath) : $storagePath;

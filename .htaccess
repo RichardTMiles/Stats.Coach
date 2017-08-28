@@ -1,8 +1,10 @@
+#Fix Rewrite
+Options -Multiviews
+
 RewriteEngine on
 
 # enable symbolic links
 Options +FollowSymLinks
-
 
 # increase performance by disabling AllowOverride
 # this htacces will be the default across the server
@@ -21,6 +23,8 @@ RewriteRule ^favicon.ico Public/StatsCoach/img/icons/favicon.png [L]
 RewriteBase /
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+
 
 # Turn on https
 RewriteCond %{HTTPS} off
@@ -64,10 +68,10 @@ ErrorDocument 404 https://stats.coach/404/
 # Version Control for Dependancies
 RewriteRule ^(.*)\.[\d]{10}\.(css|js|html)$ $1.$2 [L]
 
-# Redirect anyhting thats not of the following file types to index
+# Redirect anyhting thats not of the following file types to the index
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.icon|\.js|\.css|\.woff|.\woff2|\.map)$
+RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.icon|\.js|\.css|\.woff|.\woff2|\.map|\.mst)$
 RewriteRule (.*) index.php [QSA]
 </IfModule>
 
@@ -78,8 +82,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /index.php [NC,L,QSA]
 
 # God forbit an uncaught error - Display contact method
-ServerSignature EMail
-SetEnv SERVER_ADMIN RicardMiles@stats.coach
+#ServerSignature EMail
+#SetEnv SERVER_ADMIN RicardMiles@stats.coach
 
 # 1 YEAR - 29030400; 1 WEEK - 604800; 2 DAYS - 172800; 1 MIN  - 60
 
@@ -95,9 +99,10 @@ Header set Cache-Control "max-age=604800, public"
 Header set Cache-Control "max-age=604800, proxy-revalidate"
 </FilesMatch>
 
-
+# TODO - Eventually we should cache mustache files
+#
 # normally 60
-<FilesMatch "\.(html|htm|php)$">
+<FilesMatch "\.(html|htm|php|mst)$">
 Header set Cache-Control "max-age=0, private, proxy-revalidate"
 </FilesMatch>
 

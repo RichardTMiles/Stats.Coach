@@ -26,6 +26,8 @@
         <div class="row">
             <div class="col-xs-12 table-responsive">
                 <div class="box-body">
+                    <h1>We are committed to advancing student success, developing leaders, and encouraging lifelong wellness.</h1>
+
                     <h2>Stats Coach </h2> ("us", "we", or "our") operates https://Stats.Coach (the "Site"). This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
                     We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.
 

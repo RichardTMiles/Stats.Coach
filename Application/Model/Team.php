@@ -9,12 +9,13 @@
 namespace Model;
 
 
-use Model\Helpers\DataMap;
+use Model\Helpers\GlobalMap;
 use Modules\Helpers\Bcrypt;
-use Modules\Helpers\Reporting\PublicAlert;
+use Modules\Helpers\Entities\Photos;
+use Modules\Error\PublicAlert;
 use Modules\Singleton;
 
-class Team extends DataMap
+class Team extends GlobalMap
 {
     use Singleton;
 
@@ -29,15 +30,27 @@ class Team extends DataMap
 
     public function team(string $teamIdentifier)
     {
-        global $team_id;
+        global $team_id, $team_photo;
+
         if (!$team_id = $this->team_exists( $teamIdentifier ))
             return startApplication( 'Home/' );
 
-        $team = $this->team[$team_id] = $this->fetch_object( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $team_id );
+        $team = $this->team[$team_id] = $this->fetch_object( 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.entity_photos ON parent_id = team_id WHERE StatsCoach.teams.team_id = ?', $team_id );
+        
+        if ($team_photo && $team->team_coach == $_SESSION['id']) {
+            alert('change photo');
+            unlink( $team->photo_path );
+            Photos::add( $team, $team_id, [
+                'photo_path'=>"$team_photo",
+                'photo_description'=>""] );
+        }
+
+        $team->photo = SITE . ($team->photo_path ?? 'Data/Uploads/Pictures/Defaults/team-icon.png');
         $this->teamMembers( $team_id );
         if (isset($this->user[$team->team_coach])) return null;
         $user = User::getInstance();
         $user->basicUser( $team->team_coach );
+
         return $team;
     }
 

@@ -2,7 +2,7 @@
 
 ############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.8.87';
+const SITE_VERSION = 'Beta 0.9.01';
 const SYSTEM_EMAIL = 'Support@Stats.Coach';
 const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 
@@ -28,9 +28,6 @@ error_reporting( E_ALL | E_STRICT );
 ini_set( 'display_errors', 1 );
 
 
-################    Session     ####################
-new \Modules\Session();
-
 ################  Up the Speed  ####################
 define( 'MINIFY_CONTENTS', false );
 
@@ -39,11 +36,20 @@ define( 'MINIFY_CONTENTS', false );
 // TODO - Notifications
 // TODO - Tasks
 // TODO - Calendar
-// TODO - add session open to sessions class/database to see is race conditions will be a factor in development
+
+################    Socket      ####################
+if (!defined('SOCKET'))
+    define('SOCKET', false);
+
+################    Session     ####################
+new \Modules\Session();         // Pull From Database, manage socket ip
 
 ################  Ajax Refresh  ####################
 define( 'AJAX', (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
     ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')) );
+
+if (!AJAX) $_POST = [];
+
 
 /* If the session variable changes from the constant we will
  * send the full html page and notify the pjax js to reload
@@ -208,7 +214,7 @@ function sortDump($mixed)
     fwrite( $file, $report );
     fclose( $file );
 
-    print $report;
+    print $report . PHP_EOL;
 
     // Output to browser
     // $view = \View\View::getInstance();
@@ -234,9 +240,13 @@ function alert($string = "Stay woke.")
 // http://php.net/manual/en/debugger.php
 function console_log($data)
 {
-    echo '<script>';
-    echo 'console.log(' . json_encode( $data ) . ')';
-    echo '</script>';
+    ob_start();
+    echo $data;
+    $report = ob_get_clean();
+    $file = fopen(SERVER_ROOT . 'Data/Logs/Log_'.time().'.log' , "a");
+    fwrite( $file, $report );
+    fclose( $file );
+    echo '<script>console.log(\'' . json_encode( $data ) . '\')</script>';
 }
 
 

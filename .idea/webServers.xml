@@ -2,8 +2,24 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="7b6b8fe6-96e1-47f8-9600-2d4326d7925e" name="StatsCoach" url="http://ftp.miles.systems">
-        <fileTransfer host="ftp.miles.systems" port="21" rootFolder="/public_html/Stats.Coach">
+      <webServer id="7b6b8fe6-96e1-47f8-9600-2d4326d7925e" name="StatsCoach" url="https://stats.coach/">
+        <fileTransfer explicitFtps="false" host="45.40.160.145" port="21" rootFolder="/public_html">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="20578a2f-9a84-4ad4-9365-98ddf848d463" name="Shared Hosting" url="http://richardmiles.us">
+        <fileTransfer host="richardmiles.us" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="6a44d6c9-4fab-41be-b8dd-59f4e1a9b6ea" name="VPS" url="https://miles.systems/">
+        <fileTransfer host="166.62.122.246" port="21">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>

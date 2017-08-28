@@ -8,9 +8,9 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
-    <h1>Team</h1>
+    <h1>Stats</h1>
     <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Join Team</a></li>
+        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Coach</a></li>
     </ol>
 </section>
 
@@ -24,7 +24,7 @@
         <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
 
             <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Join Your Team</h3>
+                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Join a team</h3>
             </div>
 
             <div class="box-body" style="color: ghostwhite">
@@ -33,7 +33,7 @@
                 <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
                     <div class="form-group col-xs-12 col-md-12" id="teamCode">
-                        <label for="teamCode">Please enter the team code</label>
+                        <label for="teamCode">Please enter the team's code</label>
                         <input type="text" class="form-control " placeholder="Team Code" name="teamCode"
                                value="<?= $this->teamCode ?>">
                     </div>

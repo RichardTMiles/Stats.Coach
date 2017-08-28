@@ -1,11 +1,10 @@
 <?php
 
-const ¶ = PHP_EOL;
 const DS = DIRECTORY_SEPARATOR;
-
 define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
 
-if (pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION) != null) {
+// Is this an https request to a file
+if (!defined('SOCKET') && pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION) != null) {
     if ($_SERVER['REQUEST_URI'] == '/robots.txt') {
         echo include SERVER_ROOT . 'robots.txt';
         exit(1);
@@ -19,7 +18,6 @@ if (pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION) != null) {
     exit(0);    // A request has been made to an invalid file
 }
 
-
 // These files are required for the app to run. You must edit the Config file for your Servers
 if (false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
     false == (include SERVER_ROOT . 'Application/Configs/Config.php')     ||
@@ -28,18 +26,18 @@ if (false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||    
     exit(3);
 }
 
-
-
-Modules\Helpers\Reporting\ErrorCatcher::start();
-
-$user = $team = $course = $tournaments = array();
-Modules\Helpers\Serialized::start('user','team','course','tournaments');
-// Pull theses from session, and store on shutdown
+Modules\Error\ErrorCatcher::start();
 
 Modules\Request::sendHeaders();     // Send any stored headers
 
+$user = $team = $course = $tournaments = array();   // For clarity
+
+Modules\Helpers\Serialized::start('user','team','course','tournaments');  // Pull theses from session, and store on shutdown
+
 function startApplication($restart = false)
 {
+    static $count = 0;
+
     if ($restart) {
         $_POST = [];
         if ($reset = ($restart === true)) 
@@ -60,15 +58,20 @@ function startApplication($restart = false)
         try {
             if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
                 call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
-        } catch (Modules\Helpers\Reporting\PublicAlert $e) {
+        } catch (Modules\Error\PublicAlert $e) {
         } catch (TypeError $e) {
-            \Modules\Helpers\Reporting\PublicAlert::danger( $e->getMessage() ); // TODO - Change logging
+            \Modules\Error\PublicAlert::danger( $e->getMessage() ); // TODO - Change logging
         } finally { Modules\Helpers\Entities::verify(); };
 
         $view->content( $class, $method );
     };
-    
-    include SERVER_ROOT . 'Application/Bootstrap.php';
+
+    $route = new Modules\Route( $mvc );
+
+    if (!$count++) include SERVER_ROOT . 'Application/Events.php';
+
+    include SERVER_ROOT . 'Application/Route.php';
 } 
 
-startApplication();
+if (!SOCKET) startApplication();
+

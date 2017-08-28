@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-use Modules\Helpers\Reporting\PublicAlert;
+use Modules\Error\PublicAlert;
 use Modules\Request;
 
 class User extends Request
@@ -15,22 +15,23 @@ class User extends Request
         session_destroy();
         #session_regenerate_id( TRUE );
         $_SESSION['id'] = false;
-        startApplication( 'login/' );
+        startApplication( true );
     }
 
     public function login($client = null)
     {
         global $UserName, $FullName, $UserImage;    // validate cookies
 
-        switch ($this->set($client)->alnum()) {
+        switch ($this->set( $client )->alnum()) {
             case "clear":
                 $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
                 return false;
             case 'FaceBook':
-                return $this->facebook();
-            default:
-                
 
+                alert('hellllo');
+                $this->facebook();
+                //sortDump($GLOBALS);
+            default:
         }
 
         list($UserName, $FullName) = $this->cookie( 'UserName', 'FullName' )->alnum();
@@ -51,15 +52,17 @@ class User extends Request
         $password = $this->post( 'password' )->value();
 
         if (!$username || !$password)
-            throw new PublicAlert('Sorry, but we need your username and password.');
+            throw new PublicAlert( 'Sorry, but we need your username and password.' );
 
         return [$username, $password, $rememberMe];
     }
-    
+
     public function facebook()
     {
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
-            throw new PublicAlert('Sorry, we could not connect to Facebook. Please try again later.');
+            throw new PublicAlert( 'Sorry, we could not connect to Facebook. Please try again later.' );
+
+
         return true;
     }
 
@@ -118,40 +121,43 @@ class User extends Request
         $email = $this->set( $email )->base64_decode()->email();
         $email_code = $this->set( $email_code )->base64_decode()->value();
 
-        if (!$email){
+        if (!$email) {
             PublicAlert::warning( 'Sorry the url submitted is invalid.' );
             return startApplication( true ); // who knows what state we're in, best just restart.
-        } return [$email, $email_code];
+        }
+        return [$email, $email_code];
     }
 
     public function recover($user_email = null, $user_generated_string = null)
     {
-        if (!empty($user_email) && !empty($user_generated_string)){
+        if (!empty($user_email) && !empty($user_generated_string)) {
 
             list($user_email, $user_generated_string) = $this->set( $user_email, $user_generated_string )->base64_decode()->value();
 
-            if (!$this->set( $user_email )->email()) throw new PublicAlert('The code provided appears to be invalid.');
+            if (!$this->set( $user_email )->email()) throw new PublicAlert( 'The code provided appears to be invalid.' );
 
             return [$user_email, $user_generated_string];
         }
 
         if (empty($_POST)) return false;
-        
+
         if (!$this->user_email = $this->post( 'user_email' )->email())
-            throw new PublicAlert('You have entered an invalid email address.');
+            throw new PublicAlert( 'You have entered an invalid email address.' );
         else return [$this->user_email, false];
     }
 
-    public function profile($user_id)
+    public function profile($user_id = false)
     {
         if ($user_id) return $this->set( $user_id )->alnum();
 
+        if (empty($_POST)) return false;                // dont go onto the model
+
         if (!$this->post( 'Terms' )->int())
-            throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
+            throw new PublicAlert( 'Sorry, you must accept the terms and conditions.', 'warning' );
 
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
-        
-        list($first, $last, $gender) = $this->post('first_name','last_name', 'gender')->word();
+
+        list($first, $last, $gender) = $this->post( 'first_name', 'last_name', 'gender' )->word();
 
         $dob = $this->post( 'datepicker' )->date();
 
@@ -161,10 +167,8 @@ class User extends Request
 
         $about_me = $this->post( 'about_me' )->text();
 
-        // if file was attached
-        if ($_FILES['FileToUpload']['error'] != UPLOAD_ERR_NO_FILE)
-            $profile_pic = $this->files( 'FileToUpload' )->storeFiles();
-        
+        $profile_pic = $this->files( 'FileToUpload' )->storeFiles( 'Data/Uploads/Pictures/Profile/' );
+
         return true;
     }
 

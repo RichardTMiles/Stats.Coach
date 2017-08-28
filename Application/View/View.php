@@ -38,6 +38,7 @@ class  View
         if ($this->wrapper()) {
             Request::setHeader( "X-PJAX-Version: " . $_SESSION['X_PJAX_Version'] );
             if (!($forceWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && AJAX) return null;
+
             $_POST = [];
             ob_start();
             require(CONTENT_WRAPPER);   // Return the Template
@@ -74,6 +75,7 @@ class  View
         }
 
         if (file_exists( $file )) {
+
             ob_start();
             if (empty($GLOBALS['alert']) && !empty($GLOBALS['alert'] = $this->carryErrors))
                 $this->carryErrors = null;

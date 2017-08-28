@@ -1,4 +1,4 @@
-<?php $user = $this->user[$_SESSION['id']] ?>
+<?php $user = $this->user[$_SESSION['id']] ?? die(1) ?>
 
 
 <header class="main-header">

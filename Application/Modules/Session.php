@@ -16,8 +16,22 @@ namespace Modules;
 class Session implements \SessionHandlerInterface
 {
     private $db;
-    #private $sessionVerified;           // we should check between each request for browsers and ip if both change logout
+    #private $sessionVerified;                                  // we should check between each request for browsers and ip if both change logout
     private static $user_id;
+
+
+    private function verifySocket ()
+    {
+        $sql = "SELECT session_id FROM StatsCoach.user_session WHERE user_ip = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$_SERVER['REMOTE_ADDR']]);
+        $session = $stmt->fetchColumn();
+        if (empty($session)) {
+            if (SOCKET) echo "BAD ADDRESS :: ". $_SERVER['REMOTE_ADDR'] ."\n\n";
+            exit(0);
+        }
+        session_id($session);
+    }
 
     public function __construct()
     {
@@ -25,9 +39,11 @@ class Session implements \SessionHandlerInterface
 
         $this->db = Database::getConnection();
 
-        ini_set( 'session.gc_probability', 1 );               // Clear any lingering session data in default locations
+        ini_set( 'session.gc_probability', 1 );  // Clear any lingering session data in default locations
 
         session_set_save_handler( $this, true );                // Comment this out to stop storing session on the server
+
+        if (SOCKET) $this->verifySocket();
 
         session_start();
         
@@ -57,7 +73,7 @@ class Session implements \SessionHandlerInterface
     {
         if (empty(static::$user_id = $_SESSION['id'])) return true;     // must be true for php 7.0
         $NewDateTime = date( 'Y-m-d H:i:s', strtotime( date( 'Y-m-d H:i:s' ) . ' + 1 day' ) );  // so from time of last write and whenever the gc_collector hits
-        return ($this->db->prepare( 'REPLACE INTO StatsCoach.user_session SET session_id = ?, user_id = ?, Session_Expires = ?, Session_Data = ?' )->execute( [$id, static::$user_id, $NewDateTime, $data] )) ?
+        return ($this->db->prepare( 'REPLACE INTO StatsCoach.user_session SET session_id = ?, user_id = ?, StatsCoach.user_session.user_ip = ?,  Session_Expires = ?, Session_Data = ?' )->execute( [$id, static::$user_id, $_SERVER['REMOTE_ADDR'], $NewDateTime, $data] )) ?
             true : false;
     }
 

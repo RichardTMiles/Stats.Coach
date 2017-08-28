@@ -174,8 +174,10 @@
 
         var containerType = $.type(options.container)
         if (containerType !== 'string') {
-            throw "expected string value for 'container' option; got " + containerType
+            throw "expected string for 'container' option; got " + containerType
         }
+
+//
         var context = options.context = $(options.container)
         if (!context.length) {
             throw "the container selector '" + options.container + "' did not match anything"

@@ -3,8 +3,9 @@
 namespace Model;
 
 use Model\Helpers\iSport;
-use Model\Helpers\Messages;
-use Modules\Helpers\Reporting\PublicAlert;
+use Model\Helpers\Tables\Followers;
+use Model\Helpers\Tables\Messages;
+use Modules\Error\PublicAlert;
 use Modules\Helpers\Bcrypt;
 use Modules\Request;
 
@@ -51,7 +52,6 @@ class User extends Team
 
     private function fullUser($id)
     {
-
         $this->user[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
         if (empty($this->user[$id])) throw new \Exception( 'Could not find user  ' . $id );
         $this->user[$id]->user_profile_picture = SITE . (!empty($this->user[$id]->user_profile_pic) ? $this->user[$id]->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
@@ -70,19 +70,14 @@ class User extends Team
         if ($model instanceof iSport)                   // load stats
             $model->stats( $id );
 
+        
+        Followers::get( $this->user[$id], $id );
+        
+        if ($id != $_SESSION['id'])                     // only get messages when loading another user
+            Messages::get( $this->user[$id], $id );
 
-        $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
-        $stmt->execute( [$id] );
-        $this->user[$id]->stats->followers = (int)$stmt->fetchColumn();
-        $stmt = $this->db->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
-        $stmt->execute( [$id] );
-        $this->user[$id]->stats->following = (int)$stmt->fetchColumn();
+        #sortDump( $this->user[$id]->messages[count($this->user[$id]->messages)-1]->message);
 
-        // load messages
-
-        Messages::get( $this->user[$id], $id );
-
-        //sortDump($this->user[$id]);
     }
 
     protected function change_password($user_id, $password)
@@ -305,7 +300,8 @@ class User extends Team
     public function profile($user_uri)
     {
         if ($user_uri !== true) {
-            return $this->fullUser( $this->user_id_from_uri( $user_uri ) );
+            global $user_id;
+            return $this->fullUser( $user_id = $this->user_id_from_uri( $user_uri ) );
         }
 
         // we can assume post is active then

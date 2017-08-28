@@ -4,6 +4,7 @@ $(document).on('submit', 'form[data-pjax]', function (event) {
     $.pjax.submit(event, '#ajax-content')
 });
 
+
 // Set up Box Annotations
 $(".box").boxWidget({
     animationSpeed: 500,

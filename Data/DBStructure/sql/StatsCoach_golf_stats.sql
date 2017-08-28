@@ -1,0 +1,3 @@
+INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ('1', 0, 1, 0, 154, 9, 10, 89);
+INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ('38fcfc7f50f', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ('3d9e8463546', 0, 0, 0, 0, 0, 0, 0);

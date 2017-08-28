@@ -1,4 +1,4 @@
-<?php $user = $this->user[$this->user_uri ?: $_SESSION['id']];
+<?php $user = $this->user[$this->user_id ?: $_SESSION['id']];
 $me = (($user->user_id ?? null) == $_SESSION['id']);
 ?>
 
@@ -23,7 +23,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
     <div class="row">
         <div class="col-md-3">
             <!-- Profile Image -->
-            <div class="box box-primary">
+            <div class="box box-primary" data-widget="">
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle" src="<?= $user->user_profile_picture ?>" alt="User profile picture">
                     <h3 class="profile-username text-center">
@@ -45,110 +45,13 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                         print '<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>';
                     } else { ?>
                         <a href="" class="btn btn-success btn-block">
-                        Messages
+                            Messages
                         </a>
                     <?php } ?>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
-            <?php if (!$me) { ?>
-
-                <!-- DIRECT CHAT SUCCESS -->
-                <div id="my-box" class="my-box box box-success direct-chat direct-chat-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Direct Chat</h3>
-
-                        <div class="box-tools pull-right">
-                            <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
-                            <button type="button" class="btn btn-box-tool collapse" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
-                                    data-original-title="Contacts">
-                                <i class="fa fa-comments"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <!-- Conversations are loaded here -->
-                        <div class="direct-chat-messages">
-                            <?php foreach ($user->messages as $ASC => $message) {
-
-                                if ($message->user_id == $user->user_id) { ?>
-
-                                    <!-- Message. Default to the left -->
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left"><?=$user->user_first_name?></span>
-                                            <span class="direct-chat-timestamp pull-right"><?=date("F j, Y, g:i a", $message->creation_date)?></span>
-                                        </div>
-                                        <!-- /.direct-chat-info -->
-                                        <img class="direct-chat-img" src="<?=$user->user_profile_picture?>" alt="Message User Image"><!-- /.direct-chat-img -->
-                                        <div class="direct-chat-text">
-                                            <?=$message->messagae?>
-                                        </div>
-                                        <!-- /.direct-chat-text -->
-                                    </div>
-                                    <!-- /.direct-chat-msg -->
-                                <?php } else { ?>
-                                    <!-- Message to the right -->
-                                    <div class="direct-chat-msg right">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-right"><?=$this->user[$message->user_id]->user_first_name?></span>
-                                            <span class="direct-chat-timestamp pull-left"><?=date("F j, Y, g:i a",$message->creation_date)?></span>
-                                        </div>
-                                        <!-- /.direct-chat-info -->
-                                        <img class="direct-chat-img" src="<?=$this->user[$message->user_id]->user_profile_picture?>" alt="Message User Image"><!-- /.direct-chat-img -->
-                                        <div class="direct-chat-text">
-                                            <?=$message->message?>
-                                        </div>
-                                        <!-- /.direct-chat-text -->
-                                    </div>
-                                <?php }
-                            } ?>
-                            <!-- /.direct-chat-msg -->
-                        </div>
-                        <!--/.direct-chat-messages-->
-
-                        <!-- Contacts are loaded here -->
-                        <div class="direct-chat-contacts">
-                            <ul class="contacts-list">
-                                <li>
-                                    <a href="#">
-                                        <img class="contacts-list-img" src="" alt="User Image">
-
-                                        <div class="contacts-list-info">
-                            <span class="contacts-list-name">
-                              Count Dracula
-                              <small class="contacts-list-date pull-right">2/28/2015</small>
-                            </span>
-                                            <span class="contacts-list-msg">How have you been? I was...</span>
-                                        </div>
-                                        <!-- /.contacts-list-info -->
-                                    </a>
-                                </li>
-                                <!-- End Contact Item -->
-                            </ul>
-                            <!-- /.contatcts-list -->
-                        </div>
-                        <!-- /.direct-chat-pane -->
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <form data-pjax action="<?= SITE . 'Messages/' . $user->user_profile_uri ?>/" method="post">
-                            <div class="input-group">
-                                <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                      <span class="input-group-btn">
-                        <button type="submit" class="btn btn-success btn-flat">Send</button>
-                      </span>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.box-footer-->
-                </div>
-                <!--/.direct-chat -->
-
-            <?php } ?>
+            <?php if (!$me) \View\AdminLTE::direct_messages( $user->user_id ); ?>
 
         </div>
 
@@ -175,7 +78,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                 <dd><?= $user->user_education_history ?></dd>
                                 <br>
                                 <dt>Mutual Friends</dt>
-                                <dd><?=$user->user_facebook_id ??'Connect to Facebook'; ?></dd>
+                                <dd><?= $user->user_facebook_id ??'Connect to Facebook'; ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
@@ -183,7 +86,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                     <!-- /.box -->
                 </div>
                 <!-- /.user info -->
-                <?php if ($user->user_id == $_SESSION['id']){ ?>
+                <?php if ($user->user_id == $_SESSION['id']) { ?>
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -237,12 +140,13 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                             </div>
                                             <!-- /.input group -->
                                         </div>
-                                        <div class="form-group <?=$user->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
+                                        <div class="form-group <?= $user->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
                                             <label for="inputEmail" class="col-sm-3 control-label">Email</label>
                                             <div class="col-sm-8">
                                                 <input type="email" class="form-control" id="inputEmail"
                                                        placeholder="<?= $user->user_email ?>" name="email">
-                                                <span class="help-block"><?=$user->user_email_confirmed == 1? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
+                                                <span
+                                                    class="help-block"><?= $user->user_email_confirmed == 1 ? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
 
                                             </div>
                                         </div>
@@ -274,7 +178,8 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                         <div class="form-group">
                                             <label for="inputExperience" class="col-sm-3 control-label">About Me</label>
                                             <div class="col-sm-8">
-                                                <textarea name="about_me" class="form-control" id="inputExperience" placeholder="<?=$user->user_about_me ?>"></textarea>
+                                                <textarea name="about_me" class="form-control" id="inputExperience"
+                                                          placeholder="<?= $user->user_about_me ?>"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -283,7 +188,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                         <div class="col-sm-offset-3 col-sm-10">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input name='Terms' type="checkbox" value="1"> I agree to the <a href="<?=SITE?>Privacy/">terms and
+                                                    <input name='Terms' type="checkbox" value="1"> I agree to the <a href="<?= SITE ?>Privacy/">terms and
                                                         conditions</a>
                                                 </label>
                                             </div>

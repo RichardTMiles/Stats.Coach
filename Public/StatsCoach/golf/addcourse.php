@@ -174,14 +174,5 @@
 </section>
 
 <script>
-    //Money Euro
-    $('[data-mask]').inputmask();
     
-    $(document).on('submit', 'form[data-pjax]', function (event) {
-        $.pjax.submit(event, '#ajax-content')
-    });
-
-
-
-
 </script>
