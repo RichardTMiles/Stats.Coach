@@ -16,7 +16,7 @@ class Database
 
     public static function getConnection(string $dbName = null): PDO
     {
-        if (!empty(self::$database))
+        if (!empty(self::$database) && self::$database instanceof PDO)
             return static::$database;
 
         $attempts = 0;

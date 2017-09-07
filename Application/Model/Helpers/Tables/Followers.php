@@ -6,7 +6,7 @@
  * Time: 10:33 PM
  */
 
-namespace Model\Helpers\Tables;
+namespace Tables;
 
 
 use Modules\Helpers\Entities;
@@ -23,6 +23,17 @@ class Followers extends Entities implements iEntity
         $stmt = self::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
         $stmt->execute( [$id] );
         $object->stats->following = (int)$stmt->fetchColumn();
+    }
+
+
+    static function all($object, $id)
+    {
+
+    }
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
     }
 
     static function add($object, $id, $argv)

@@ -18,7 +18,8 @@ class ErrorCatcher
         error_reporting(E_ALL);
         $closure = function (...$argv) {
             ErrorCatcher::generateErrorLog($argv);
-            View::contents('error','500error');
+            //View::contents('error','500error');
+            exit(1);                                // TODO - Uncomment
         };
         set_error_handler($closure);
         set_exception_handler($closure);

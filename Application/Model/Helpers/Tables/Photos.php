@@ -6,7 +6,7 @@
  * Time: 10:38 PM
  */
 
-namespace Modules\Helpers\Entities;
+namespace Tables;
 
 
 use Modules\Helpers\Entities;
@@ -19,6 +19,17 @@ class Photos extends Entities implements iEntity
     {
         $sql = 'SELECT * FROM StatsCoach.entity_photos WHERE parent_id = ?';
         $object->photos = static::fetch_classes( $sql, $id );
+    }
+
+
+    static function all($object, $id)
+    {
+
+    }
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
     }
 
     static function add($object, $id, $argv)

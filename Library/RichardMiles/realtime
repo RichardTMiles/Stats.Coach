@@ -1,0 +1,23 @@
+Assuming this is running on a Linux machine, I've always handled it like this:
+
+exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+This launches the command $cmd, redirects the command output to $outputfile, and writes the process id to $pidfile.
+
+That lets you easily monitor what the process is doing and if it's still running.
+
+function isRunning($pid){
+    try{
+        $result = shell_exec(sprintf("ps %d", $pid));
+        if( count(preg_split("/\n/", $result)) > 2){
+            return true;
+        }
+    }catch(Exception $e){}
+
+    return false;
+}
+
+
+
+https://stackoverflow.com/questions/45953/php-execute-a-background-process
+
+

@@ -6,17 +6,27 @@
  * Time: 9:21 AM
  */
 
-namespace Model\Helpers\Tables;
+namespace Tables;
 
-
+use Tables\Location;
 use Modules\Helpers\Entities;
-use Modules\Helpers\Tables\Location;
 use Modules\Interfaces\iEntity;
 
 class Course extends Entities implements iEntity
 {
-    static function get($object, $id) {
+    static function get($object, $id)
+    {
 
+    }
+
+    static function all($object, $id)
+    {
+
+    }
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
     }
 
     static function add($object, $id, $argv)

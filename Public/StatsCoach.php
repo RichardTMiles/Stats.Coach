@@ -1,14 +1,3 @@
-<?php
-
-/*
- * This file selects the content wrappers for our different types of users
- * Currently this equates to:
- *  Athlete
- *  Coach
- */
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +8,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <?php include CONTENT_ROOT . 'img/icons/icons.php';
-    include SERVER_ROOT . 'Application/View/Helpers/htmlLogo.php';
+    /** @noinspection Annotator */
+    //include SERVER_ROOT . 'Application/View/Helpers/htmlLogo.php';
     ?>
     <!-- PJAX Content Control -->
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
@@ -147,21 +137,42 @@
             }
         }(typeof global !== "undefined" ? global : this));// Hierarchical PJAX Request
 
-        let MustacheWidgets = function (data, options) {
-            console.log(data);
-            if (data.hasOwnProperty('Mustache')) {
-                $.get(data.Mustache, function (template) {
-                    var rendered = Mustache.render(template, data);
-                    options.widget.html(rendered);
-                    if (options.hasOwnProperty('scroll')) {
-                        $(options.scroll).slimscroll({start: 'bottom'});
-                    }
-                })
-            } else {
-                console.log(options)
+
+        function IsJsonString(str) {
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                return 0;
             }
         }
 
+        const MustacheWidgets = function (data, url = '') {
+            if (data !== null) {
+                if (typeof data === "string") data = IsJsonString(data);
+                if (data.hasOwnProperty('Mustache') && data.hasOwnProperty('widget')) {
+                    console.log('Valid Mustache $(' + data.widget + ')\n');
+                    $.get(data.Mustache, function (template) {
+                        Mustache.parse(template);
+                        $(data.widget).html(Mustache.render(template, data));
+                        if (data.hasOwnProperty('scroll')) {
+                            $(data.scroll).slimscroll({start: data.scrollTo});
+                        }
+                    })
+                } else {
+                    console.log("Bad Trimmers :: ");
+                    console.log(data);
+                }
+            } else {
+                console.log('Bad Handlebar :: ' + data);
+                if (typeof data === "object")
+                    if (url !== '') {
+                        console.log('Attempting Socket');
+                        setTimeout(function () {
+                            $.fn.sendEvent(url);
+                        }, 2000);
+                    }
+            }
+        };
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -185,7 +196,9 @@
         */
         opacity: .7;
 
-        background: url('https://c1.staticflickr.com/9/8394/8637537151_227a0b7baf_b.jpg') no-repeat center fixed;
+        background: url('<?=SITE?>/Public/StatsCoach/img/final.jpg') no-repeat fixed;
+
+        background-position: center; /* Chrome */
 
         scroll-x /* Ensure the html element always takes up the full height of the browser window */ min-height: 100%;
         /* The Magic */
@@ -219,11 +232,11 @@
 <?php
 
 if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
-    if ($this->user[$_SESSION['id']]->user_type == 'Coach') {
+    if ($this->user[$_SESSION['id']]->user_type ?? false == 'Coach') {
         echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
         require_once CONTENT_ROOT . 'CoachLayout.php';
         echo $wrapper;
-    } elseif ($this->user[$_SESSION['id']]->user_type == 'Athlete') {
+    } elseif ($this->user[$_SESSION['id']]->user_type ?? false == 'Athlete') {
         echo '<body class="hold-transition skin-green layout-top-nav"><div class="wrapper">';
         require_once CONTENT_ROOT . 'AthleteLayout.php';
         echo $wrapper;
@@ -232,7 +245,7 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
     echo '<body class="stats-wrap"><div class="container" id="ajax-content" style=""></div>';
 } else {
     session_destroy();
-    session_regenerate_id( TRUE );
+    #session_regenerate_id( TRUE );
     echo '<script type="text/javascript"> window.location = "' . SITE . '" </script>';
     // TODO - how often does this happen
 } ?>
@@ -320,62 +333,154 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
             loadJS("<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>", function () {
                 loadJS("<?= $this->versionControl( 'Public/Mustache/mustache.js' ) ?>", function () {
 
-                    function IsJsonString(str) {
-                        try {
-                            JSON.parse(str);
-                        } catch (e) {
-                            return false;
-                        }
-                        return true;
-                    }
-
                     <?php if ($_SESSION['id']) { ?>
-                    let socketBuffer;
                     let statsSocket = new WebSocket('wss://stats.coach:8080/');
                     statsSocket.onopen = function () {
-                        console.log('CONNECT');
-                    };
-                    statsSocket.onmessage = function (data) {
-                        socketBuffer += data.data + "\n";
-                        console.log(data.data);
-                    };
-                    statsSocket.onclose = function () {
-                        if (IsJsonString(socketBuffer)) {
-                            console.log('Mustache');
-                            MustacheWidgets(data, {
-                                widget: $('#ajax-content'),
-                                scroll: '#messages',
-                                scrollTo: 'bottom'
-                            });
-                        }
-                    };
-                    statsSocket.onerror = function () {
-                        console.log('Web Socket Error');
-                    };
-                    <?php } ?>
+                        console.log('Socket Started');
 
+                        $.fn.sendEvent = function (url) {
+                            console.log('URI ' + url);
+                            statsSocket.send(url);
+                        };
 
-                    $(document).on('pjax:start', function () {
-                        console.log("PJAX");
-                        // Messages in Navigation
+                        // Messages in Navigation, faster to initially load over http
                         $.get("<?= SITE . 'Messages/' ?>", function (data) {
-                            MustacheWidgets(data, {widget: $('#NavMessages')})
+                            MustacheWidgets(data)
                         }, "json");
 
                         // Notifications in Navigation
                         $.get("<?= SITE . 'Notifications/' ?>", function (data) {
-                            MustacheWidgets(data, {widget: $('#NavNotifications')})
+                            MustacheWidgets(data)
                         }, "json");
 
                         // Tasks in Navigation
                         $.get("<?= SITE . 'Tasks/' ?>", function (data) {
-                            MustacheWidgets(data, {widget: $('#NavTasks')})
+                            MustacheWidgets(data)
                         }, "json");
+
+                        $.pjax.reload('#ajax-content');
+                    };
+                    statsSocket.onmessage = function (data) {
+                        if (IsJsonString(data.data)) {
+                            console.log('On Message');
+                            MustacheWidgets(JSON.parse(data.data));
+                        } else console.log(data.data);
+                    };
+                    statsSocket.onclose = function () {
+                        console.log('Closed Socket');
+                    };
+                    statsSocket.onerror = function () {
+                        console.log('Web Socket Error');
+                    };
+
+                    <?php } ?>
+
+                    $(document).on('pjax:start', function () {
+                        console.log("PJAX");
                     });
 
-
                     $(document).on('pjax:end', function () {
-                        <?=$this->AJAXJavaScript()?>
+                        // PJAX Forum Request
+                        $(document).on('submit', 'form[data-pjax]', function (event) {
+                            $('#ajax-content').hide();
+                            $.pjax.submit(event, '#ajax-content')
+                        });
+
+
+// Set up Box Annotations
+                        $(".box").boxWidget({
+                            animationSpeed: 500,
+                            collapseTrigger: '[data-widget="collapse"]',
+                            removeTrigger: '[data-widget="remove"]',
+                            collapseIcon: 'fa-minus',
+                            expandIcon: 'fa-plus',
+                            removeIcon: 'fa-times'
+                        });
+
+
+                        //-- iCheck -->
+                        $('input').iCheck({
+                            checkboxClass: 'icheckbox_square-blue',
+                            radioClass: 'iradio_square-blue',
+                            increaseArea: '20%' // optional
+                        });
+
+
+                        $('#my-box-widget').boxRefresh('load');
+
+                        // Select 2 -->
+                        $(".select2").select2();
+
+                        <?php // Data tables loadJS("<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>//");-->
+
+                        // Input Mask -->
+                        $("[data-mask]").inputmask();  //Money Euro
+
+                        // Bootstrap Datepicker -->
+                        $('#datepicker').datepicker({autoclose: true});
+
+                        //-- Bootstrap Time Picker -->
+                        $('.timepicker').timepicker({showInputs: false});
+
+                        <?php //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl( 'dist/js/demo.js' ) ?>//");
+
+                        //-- jQuery Knob -->
+                        $(".knob").knob({
+                            /*change : function (value) {
+                             //console.log("change : " + value);
+                             },
+                             release : function (value) {
+                             console.log("release : " + value);
+                             },
+                             cancel : function () {
+                             console.log("cancel : " + this.value);
+                             },*/
+                            draw: function () {
+
+                                // "tron" case
+                                if (this.$.data('skin') == 'tron') {
+
+                                    var a = this.angle(this.cv)  // Angle
+                                        , sa = this.startAngle          // Previous start angle
+                                        , sat = this.startAngle         // Start angle
+                                        , ea                            // Previous end angle
+                                        , eat = sat + a                 // End angle
+                                        , r = true;
+
+                                    this.g.lineWidth = this.lineWidth;
+
+                                    this.o.cursor
+                                    && (sat = eat - 0.3)
+                                    && (eat = eat + 0.3);
+
+                                    if (this.o.displayPrevious) {
+                                        ea = this.startAngle + this.angle(this.value);
+                                        this.o.cursor
+                                        && (sa = ea - 0.3)
+                                        && (ea = ea + 0.3);
+                                        this.g.beginPath();
+                                        this.g.strokeStyle = this.previousColor;
+                                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                                        this.g.stroke();
+                                    }
+
+                                    this.g.beginPath();
+                                    this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                                    this.g.stroke();
+
+                                    this.g.lineWidth = 2;
+                                    this.g.beginPath();
+                                    this.g.strokeStyle = this.o.fgColor;
+                                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                                    this.g.stroke();
+
+                                    return false;
+                                }
+                            }
+                        });
+                        /* END JQUERY KNOB */
+
                     });
 
                     // Set a data mask to force https request
@@ -406,15 +511,28 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
                     });
 
                     // On initial html page request, get already loaded inner content from server
+                    <?php if (!$_SESSION['id']): ?>
                     $.pjax.reload('#ajax-content');
-
+                    <?php endif; ?>
                 });
             });
         });
     });
 
-    //-- Google -->
-    loadJS("<?= $this->versionControl( 'Public/Analytics/google.analytics.js' ) ?>");
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-100885582-1', 'auto');
+    ga('send', 'pageview');
 
 </script>
 

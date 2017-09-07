@@ -1,7 +1,7 @@
 <?php
 
-
 $route->signedOut()->match( 'Login/{client?}/*', 'User', 'login' )->home();
+
 $route->signedOut()->match( 'Facebook/*', 'User', 'facebook' );
 
 $route->signedIn()->match( 'Home/*', 'Golf', 'golf' )->home();

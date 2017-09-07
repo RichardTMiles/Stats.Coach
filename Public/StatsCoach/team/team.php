@@ -40,8 +40,8 @@ $team = $this->team[$this->team_id] or die(1);
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="#">Team Code <span class="pull-right badge bg-blue"><?= $team->team_code ?></span></a></li>
-                                <li><a href="#">Members <span class="pull-right badge bg-aqua"><?= count( $team->members ) ?></span></a></li>
+                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $team->team_code ?></span></a></li>
+                                <li><a onclick="$.fn.sendEvent('Team/<?= $team->team_id ?>/Members/')">Members <span class="pull-right badge bg-aqua"><?= count( $team->members ) ?></span></a></li>
                                 <li><a href="#">Rounds <span class="pull-right badge bg-green">12</span></a></li>
                                 <li><a href="#">Tournaments <span class="pull-right badge bg-red">842</span></a></li>
                                 <li><a href="#">Strokes <span class="pull-right badge bg-red">842</span></a></li>

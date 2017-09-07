@@ -57,11 +57,12 @@ abstract class Entities
         } else throw new \Exception('Failed to remove unused keys');
     }
 
-    static function commit(): bool
+    static function commit(callable $lambda = null): bool
     {
         if (!self::database()->commit()) return static::verify();
         self::$inTransaction = false;
         self::$entityTransactionKeys = [];
+        if (is_callable($lambda)) $lambda();
         return true;
     }
 

@@ -75,7 +75,6 @@ RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.icon|\.js|\.css|\
 RewriteRule (.*) index.php [QSA]
 </IfModule>
 
-
 # Everything to the index
 RewriteCond %{REQUEST_FILENAME} !-f
 # RewriteCond %{REQUEST_FILENAME} !-d   -- We dont want to redirect into direcotries
@@ -95,14 +94,13 @@ Header set Cache-Control "max-age=29030400, public"
 Header set Cache-Control "max-age=604800, public"
 </FilesMatch>
 
-<FilesMatch "\.(xml|txt|css|js)$">
+<FilesMatch "\.(xml|txt|css|js|mst)$">
 Header set Cache-Control "max-age=604800, proxy-revalidate"
 </FilesMatch>
 
 # TODO - Eventually we should cache mustache files
-#
 # normally 60
-<FilesMatch "\.(html|htm|php|mst)$">
+<FilesMatch "\.(html|htm|php)$">
 Header set Cache-Control "max-age=0, private, proxy-revalidate"
 </FilesMatch>
 

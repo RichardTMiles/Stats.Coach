@@ -1,0 +1,2 @@
+// print substr(sprintf('%o', fileperms($fifoPath)), -4) . PHP_EOL;
+

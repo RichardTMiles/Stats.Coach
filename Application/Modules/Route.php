@@ -9,9 +9,12 @@
 namespace Modules;
 
 
-class Route
+use Model\Helpers\GlobalMap;
+use Psr\Log\InvalidArgumentException;
+
+class Route extends GlobalMap
 {
-    use Singleton;
+    use Singleton;  // We use the add method function to bind the closure to the class
 
     public $uri;
     private $matched;             // a bool
@@ -20,39 +23,59 @@ class Route
 
     public function __construct(callable $structure)
     {
+        parent::__construct();
+
         $this->structure = $structure;
-        $this->uri = explode( '/', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), ' /' ) );
+        $this->uri = explode( '/', ltrim( urldecode(parse_url(trim(preg_replace('/\s+/', ' ', $_SERVER['REQUEST_URI'])), PHP_URL_PATH ) ), ' /' ) );
+
         $this->matched = true;
+
         if (empty($this->uri[0]))
             $this->defaultRoute();
         else
             $this->matched = false;
     }
 
+    public function changeStructure(callable $struct):Route
+    {
+        $this->structure = $struct;
+        return $this;
+    }
+
     public function defaultRoute()
     {
-        $mvc = $this->structure;
-        $default = ($_SESSION['id'] && is_object( $this->user[$_SESSION['id']] ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
-        if (is_array( $default )) $mvc( $default['Class'], $default['Method'] );
+        global $user;
+
+        if (is_object($this->user)) sortDump($user); //throw new InvalidArgumentException('Bad User Defalting on');
+
+        $argv = ($_SESSION['id'] && is_object( $user[$_SESSION['id']] ?? false ) ? DEFAULT_LOGGED_IN_MVC : DEFAULT_LOGGED_OUT_MVC);
+
+        $argc = (new \ReflectionFunction($lambda = $this->structure))->getNumberOfRequiredParameters();
+
+        if (!is_array($argv) || $argc > count($argv))
+            throw new \InvalidArgumentException('Bad Default Route Provided');
+
+        call_user_func_array( $lambda, array_values($argv) );
+
     }
 
     public function __destruct()
     {
-        if ($this->matched)
-            return null;
+        if ($this->matched) return null;
 
-        
         if (is_callable( $this->homeMethod )) {
             $this->addMethod( 'default', $this->homeMethod );
             $restart = $this->methods['default'];
             return $restart();
         }
 
-        if (is_array( $this->homeMethod ) && count( $this->homeMethod ) >= 2 && is_callable( $mvc = $this->structure ))
-            return $mvc( $this->homeMethod[0], $this->homeMethod[1] );
+        // we can assume it is the mvc structure
+        if (is_array( $this->homeMethod ) && is_callable( $structure = $this->structure ) &&
+            count( $this->homeMethod ) >= (new \ReflectionFunction($structure))->getNumberOfRequiredParameters())
+            return call_user_func_array( $structure, $this->homeMethod );
 
         $this->defaultRoute();
-        
+
         return null;
     }
 
@@ -76,7 +99,7 @@ class Route
         return $this;
     }
 
-    public function home($function = null)  // TODO - I dont think this is working correctly
+    public function home($function = null)  // TODO - I don't think this is working correctly
     {
         if ($this->matched)
             return null;
@@ -86,7 +109,7 @@ class Route
             $this->homeMethod = $this->storage;
     }
 
-    public function match(string $toMatch, ...$argv) : self     // TODO - make someone rewrite this in REGX
+    public function match(string $toMatch, ...$argv) : self     // TODO - rewrite this in REGX
     {
         if ($this->matched === true)
             return $this;
@@ -113,27 +136,28 @@ class Route
 
             switch ($arrayToMatch[$i][0]) {
                 case  '*':
+                    $this->matched = true;
+                    $this->homeMethod = null;
                     $referenceVariables = [];
+
                     foreach ($variables as $key => $value) {
                         $GLOBALS[$key] = $value;
                         $referenceVariables[] = &$GLOBALS[$key];
                     }
-
-                    $this->matched = true;
-                    $this->homeMethod = null;
 
                     if (is_callable( $argv[0] )) {
                         $this->addMethod( 'routeMatched', $argv[0] );
                         if (call_user_func_array( $this->methods['routeMatched'], $referenceVariables ) === false)
                             throw new \Error( 'Bad Closure Passed to Route::match()' );
 
-                    } elseif (count( $argv ) == 2) {
-                        $structure = $this->structure;
+                    } elseif (is_callable($structure = $this->structure) &&
+                        (new \ReflectionFunction($structure))->getNumberOfRequiredParameters() <= count($argv)) {
                         $argv[] = &$referenceVariables;
                         call_user_func_array( $structure, $argv );
-                        exit(1);
-                    } else throw new \InvalidArgumentException( 'Are we passing a valid structure?' );
-                    return $this; // Note that the application will break in the View::contents
+
+                    } else throw new \InvalidArgumentException( 'Invalid closure or arguments' );
+
+                    exit(1); // Note that the application will break in the View::contents
 
                 case '{': // this is going to indicate the start of a variable name
 
@@ -146,7 +170,7 @@ class Route
                     if (substr( $variable, -1 ) == '?') {
                         $variable = rtrim( $variable, '?' );
                         $required = false;
-                    } elseif ($required == false)
+                    } elseif ($required == false) // TODO - this should be true?
                         return $this;
 
 

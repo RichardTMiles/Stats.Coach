@@ -7,13 +7,13 @@ use Modules\Request;
 
 class User extends Request
 {
-    public static function logout()
+    static function logout()
     {
-        unset($GLOBALS['user']);        // if the destructor is called we want to make sure any sterilized data is then removed
-        \Model\User::clearInstance();   // remove sterilized data
+        $_SESSION = [];
+        $GLOBALS['user'] = null;        // if the destructor is called we want to make sure any sterilized data is then removed
         session_unset();                // This wont clear the user session row, just data in row
         session_destroy();
-        #session_regenerate_id( TRUE );
+        #session_regenerate_id( TRUE ); // headers sent .
         $_SESSION['id'] = false;
         startApplication( true );
     }

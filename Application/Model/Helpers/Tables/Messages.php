@@ -6,10 +6,11 @@
  * Time: 12:46 PM
  */
 
-namespace Model\Helpers\Tables;
+namespace Tables;
 
 use Modules\Helpers\Entities;
 use Modules\Interfaces\iEntity;
+use Modules\Helpers\Pipe;
 
 class Messages extends Entities implements iEntity
 {
@@ -22,6 +23,17 @@ class Messages extends Entities implements iEntity
                     StatsCoach.user_messages.to_user_id = ? AND StatsCoach.entity_tag.user_id = ?', $id, $_SESSION['id'], $_SESSION['id'], $id);
     }
 
+
+    static function all($object, $id)
+    {
+
+    }
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
+    }
+
     static function add($object, $id, $argv)
     {
         $message_id = self::beginTransaction( Entities::USER_MESSAGES, $_SESSION['id'] );
@@ -30,7 +42,11 @@ class Messages extends Entities implements iEntity
         $stmt->bindValue( ':message_id', $message_id );
         $stmt->bindValue( ':user_id', $id );
         $stmt->bindValue( ':message', $argv );
-        return $stmt->execute() ? self::commit() : self::verify('Failed to send your message.');
+        return $stmt->execute() ? self::commit(function () use ($id) {
+            Pipe::send('Messages/', $id);
+            Pipe::send('Messages/'.$_SESSION['id'].'/', $id );
+            Pipe::send('Messages/', $_SESSION['id']);
+        }) : self::verify('Failed to send your message.');
     }
 
     static function remove($object, $id)

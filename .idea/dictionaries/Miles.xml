@@ -6,6 +6,7 @@
       <w>onerror</w>
       <w>onmessage</w>
       <w>onopen</w>
+      <w>webcache</w>
     </words>
   </dictionary>
 </component>

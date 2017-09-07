@@ -1,6 +1,9 @@
-<?php $user = $this->user[$_SESSION['id']];
+<?php
 
-$fullName = $user->user_first_name . ' ' . $user->user_last_name;
+
+$me = $this->user[$_SESSION['id']];
+
+$fullName = $me->user_first_name . ' ' . $me->user_last_name;
 
 ?>
 
@@ -34,16 +37,16 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $user->user_profile_picture ?>" class="user-image" alt="User Image"/>
+                        <img src="<?= $me->user_profile_picture ?>" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?= $fullName ?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image"/>
+                            <img src="<?= $me->user_profile_picture ?>" class="img-circle" alt="User Image"/>
                             <p>
-                                <?= $fullName ?> - <?= $user->user_sport ?>
-                                <small>Member since <?= date( 'm/d/Y', $user->creation_date ) ?></small>
+                                <?= $fullName ?> - <?= $me->user_sport ?>
+                                <small>Member since <?= date( 'm/d/Y', $me->creation_date ) ?></small>
                             </p>
                         </li>
                         <!-- Menu Body -->
@@ -87,7 +90,7 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $user->user_profile_picture ?>" class="img-circle" alt="User Image">
+                <img src="<?= $me->user_profile_picture ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p><?= $fullName ?></p>
@@ -98,7 +101,7 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
         <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
-                              <span class="input-group-btn">
+                <span class="input-group-btn">
                                 <button type="submit" name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -114,16 +117,16 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
             <li class="treeview menu-open">
                 <a href="#">
                     <i class="fa fa-dashboard"></i> <span>Overview</span> <i
-                        class="fa fa-angle-left pull-right"></i>
+                            class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
                         <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $fullName ?>
                         </a>
                     </li>
-                    <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
+                    <?php if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
                         $team = $this->team[$team_id];
-                        echo '<li><a href="' .SITE . 'Team/'. $team_id . '/"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
+                        echo '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
                     } ?>
 
 
@@ -145,19 +148,21 @@ $fullName = $user->user_first_name . ' ' . $user->user_last_name;
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <?php if (!empty($user->teams)) foreach ($user->teams as $team_id) {
-                    $team = $this->team[$team_id];?>
+                <?php if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
+                    $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
-                            <a href="<?=SITE . 'Team/'. $team_id . '/'?>"><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
-                                <?php if (empty($team->members))
+                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
+                                <?php if (empty( $team->members ))
                                 echo '</a>';
                                 else { ?>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
                                 <?php foreach ($team->members as $user_id) { ?>
-                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_first_name . ' ' . $this->user[$user_id]->user_last_name ?></a>
+                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i
+                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_first_name . ' ' . $this->user[$user_id]->user_last_name ?>
+                                        </a>
                                     </li>
                                 <?php } ?>
                             </ul>

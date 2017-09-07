@@ -1,73 +1,52 @@
 <?php
 
+
+################  Filter Malicious Requests  #################
+if (pathinfo( $_SERVER['REQUEST_URI'], PATHINFO_EXTENSION ) != null)
+{
+    if ($_SERVER['REQUEST_URI'] == '/robots.txt') {
+        echo include SERVER_ROOT . 'robots.txt';
+        exit( 1 );
+    }
+    ob_start();
+    echo inet_pton($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'Fuck this hacker shit' . PHP_EOL;
+    echo "\n\n\t\n" . $_SERVER['REQUEST_URI'];
+    $report = ob_get_clean();
+    $file = fopen( SERVER_ROOT . 'Data/Logs/Request/url_' . time() . '.log', "a" );
+    fwrite( $file, $report );
+    fclose( $file );
+    if ($_SERVER['REQUEST_URI'] == '//a2billing/admin/Public/index.php')
+        echo 'Fuck off!';
+    exit( 0 );    // A request has been made to an invalid file
+}
+
+
+
+################    Socket      ####################
+if (!defined('SOCKET')) {
+    define( 'SOCKET', false );
+    if ('webcache' !== getservbyport('8080','tcp')) {
+        echo "Socket Not Active \n\n";
+        die(1);
+    }
+}
+
 ############# Basic Information  ##################
 const SITE_TITLE = 'Stats Coach';
-const SITE_VERSION = 'Beta 0.9.01';
+const SITE_VERSION = 'Beta 0.9.41';
 const SYSTEM_EMAIL = 'Support@Stats.Coach';
 const REPLY_EMAIL = 'RichardMiles2@my.unt.edu';
 
-################    Database    ####################
-/**
- * The following constants are used by the Database
- * Which uses a MYSQL database with a PDO wrapper
- *
- * @constant DB_HOST The databases Host i.e. localhost
- * @constant DB_NAME The name of the location on the database
- * @constant DB_USER The user name if required
- * @constant DB_PASS The users password if applicable
- *
- */
-const DB_HOST = 'miles.systems';
-const DB_NAME = 'StatsCoach';
-const DB_USER = 'tmiles199';
-const DB_PASS = 'Huskies!99';
 
-################    Reporting   ####################
-date_default_timezone_set( 'America/Phoenix' );
-error_reporting( E_ALL | E_STRICT );
-ini_set( 'display_errors', 1 );
+################# Application Paths ########################
 
-
-################  Up the Speed  ####################
-define( 'MINIFY_CONTENTS', false );
-
-// TODO - followers
-// TODO - Message System
-// TODO - Notifications
-// TODO - Tasks
-// TODO - Calendar
-
-################    Socket      ####################
-if (!defined('SOCKET'))
-    define('SOCKET', false);
-
-################    Session     ####################
-new \Modules\Session();         // Pull From Database, manage socket ip
-
-################  Ajax Refresh  ####################
-define( 'AJAX', (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
-    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')) );
-
-if (!AJAX) $_POST = [];
-
-
-/* If the session variable changes from the constant we will
- * send the full html page and notify the pjax js to reload
- * everything
- * */
-
-if (!isset($_SESSION['X_PJAX_Version'])) $_SESSION['X_PJAX_Version'] = SITE_VERSION;
-define( 'X_PJAX_VERSION', $_SESSION['X_PJAX_Version'] );
-
-/* Find the current url on the server */
+# Dynamically Find the current url on the server
 define( 'URL', (isset($_SERVER['SERVER_NAME']) ?
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ?
         'https://' : 'http://') . $_SERVER['SERVER_NAME'] : null), true );
 
 define( 'URI', ltrim( urldecode( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ), '/' ), true );
 
-
-################# Application Paths ########################
 /**
  * The following constants MUST be used wherever applicable
  * The template and dependence path
@@ -89,7 +68,7 @@ define( 'ERROR_LOG', SERVER_ROOT . 'Data/Logs/Error/Log_' . $_SESSION['id'] . '_
 define( 'VENDOR_ROOT', SERVER_ROOT . 'Application/Services/vendor/' );
 define( 'TEMPLATE_ROOT', VENDOR_ROOT . 'almasaeed2010/adminlte/' );
 define( 'CONTENT_ROOT', SERVER_ROOT . 'Public/StatsCoach/' );
-define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Application/View/StatsCoach.php' );
+define( 'CONTENT_WRAPPER', SERVER_ROOT . 'Public/StatsCoach.php' );
 
 
 const DEFAULT_LOGGED_OUT_MVC = [
@@ -101,11 +80,61 @@ const DEFAULT_LOGGED_IN_MVC = [
     'Method' => 'golf'];
 
 
-define( 'WRAPPING_REQUIRES_LOGIN', false );                                     // I use the same headers every where
+const WRAPPING_REQUIRES_LOGIN = false;                                     // I use the same headers every where
 
-// More cache control is given in the .htaccess File
-# header( 'Content-type: text/html; charset=utf-8' );   done in htaccess
-header( 'Cache-Control: must-revalidate' );
+
+################    Database    ####################
+/**
+ * The following constants are used by the Database
+ * Which uses a MYSQL database with a PDO wrapper
+ *
+ * @constant DB_HOST The databases Host i.e. localhost
+ * @constant DB_NAME The name of the location on the database
+ * @constant DB_USER The user name if required
+ * @constant DB_PASS The users password if applicable
+ *
+ */
+const DB_HOST = 'miles.systems';
+const DB_NAME = 'StatsCoach';
+const DB_USER = 'tmiles199';
+const DB_PASS = 'Huskies!99';
+
+
+###############   Autoloading   ####################
+# PSR4 Autoloader, with common case first added for namespace = currentDir
+# Composer Autoloader
+if (false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||
+    false == (include SERVER_ROOT . 'Application/Services/vendor/autoload.php')) {
+    print 'App Map Error \n';
+    die(1);
+}
+
+################    Reporting   ####################
+date_default_timezone_set( 'America/Phoenix' );
+error_reporting( E_ALL | E_STRICT );
+ini_set( 'display_errors', 1 );
+
+
+Modules\Error\ErrorCatcher::start();    // Catch application errors and log
+
+
+################  Up the Speed  ####################
+define( 'MINIFY_CONTENTS', false );
+
+// TODO - followers
+// TODO - Message System
+// TODO - Notifications
+// TODO - Tasks
+// TODO - Calendar
+
+################  Ajax Refresh  ####################
+define( 'AJAX', (isset($_GET['_pjax']) || (isset($_SERVER["HTTP_X_PJAX"]) && $_SERVER["HTTP_X_PJAX"])) ||
+    ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest')) );
+
+if (!AJAX) $_POST = [];
+
+################    Session     ####################
+new \Modules\Session();         // Pull From Database, manage socket ip
 
 
 #################   Development   ######################
@@ -203,8 +232,9 @@ function sortDump($mixed)
     echo '####################### MIXED DUMP ######################<br><pre>';
     $mixed = (is_array( $mixed ) && count( $mixed ) == 1 ? array_pop( $mixed ) : $mixed);
     echo '<pre>';
-    debug_zval_dump( $mixed ?: $GLOBALS );
-    echo '</pre><br>################## BACK TRACE #################<br><pre>';
+    //debug_zval_dump( $mixed ?: $GLOBALS );
+    echo '</pre><br><br>';
+    echo '################## BACK TRACE #################<br><pre>';
     var_dump( debug_backtrace() );
     echo '</pre>';
     $report = ob_get_clean();

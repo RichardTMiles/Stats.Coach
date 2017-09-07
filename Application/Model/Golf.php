@@ -2,8 +2,9 @@
 
 namespace Model;
 
-use Model\Helpers\Tables\Course;
-use Model\Helpers\Tables\Rounds;
+use Psr\Log\InvalidArgumentException;
+use Tables\Course;
+use Tables\Rounds;
 use Modules\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
@@ -13,24 +14,19 @@ class Golf extends GlobalMap implements iSport
 {
     use Singleton;
 
-    public function golf()
+    public function golf()  // This is the home page for the user
     {
-        if (empty($this->user[$_SESSION['id']]->rounds))
-            $this->rounds( $_SESSION['id'] );
+        return true;
     }
 
-    public function stats($id)
+    public function stats($user, $id)
     {
-        $this->user[$id]->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
-        $this->rounds( $id );
+        if (!is_object($user)) throw new InvalidArgumentException('Bad User Passed To Golf Stats');
+        $user->rounds = Rounds::get( \stdClass::class, $id );
+        $user->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
+        return $user;
     }
 
-    public function rounds($id)
-    {
-        $stmt = $this->db->prepare( 'SELECT count(user_id) FROM StatsCoach.golf_rounds WHERE user_id = ?' );
-        $stmt->execute( [$id] );
-        $this->user[$id]->rounds = ($stmt->fetchColumn() ? $this->fetch_classes( 'SELECT round_id,par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 5', $id ) : []);
-    }
 
     public function course($id)
     {
@@ -116,6 +112,7 @@ class Golf extends GlobalMap implements iSport
             $courses = $stmt->fetchAll();                 // setting to global
             if (empty($courses)) $courses = true;
         }
+        return true;
     }
 
     public function addCourse($course, $handicap)

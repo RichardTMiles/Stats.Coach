@@ -13,7 +13,7 @@ use Modules\Interfaces\iSingleton;
 
 interface iSport extends iSingleton
 {
-    public function stats($id);
+    public function stats($object ,$id);
 }
 
 

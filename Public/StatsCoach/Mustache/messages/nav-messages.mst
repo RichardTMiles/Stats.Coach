@@ -10,9 +10,9 @@
     <li>
         <!-- inner menu: contains the actual data -->
         <ul class="menu">
-            {{#messages}}
+            {{#users}}
             <li><!-- start message -->
-                <a href="#">
+                <a href="{{user_uri}}">
                     <div class="pull-left">
                         <img src="{{user_profile_picture}}" class="img-circle" alt="User Image"/>
                     </div>
@@ -23,7 +23,7 @@
                     <p>{{message}}</p>
                 </a>
             </li><!-- end message -->
-            {{/messages}}
+            {{/users}}
         </ul>
     </li>
     <li class="footer"><a href="#">See All Messages</a></li>

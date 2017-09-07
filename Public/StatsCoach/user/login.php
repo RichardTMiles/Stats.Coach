@@ -9,7 +9,7 @@
         <div id="alert"></div>
         
         <?php if ($this->UserName == false): ?>
-            <form data-pjax action="<?= SITE ?>login/" method="post">
+            <form data-pjax action="<?= SITE ?>login/" method="post" onsubmit="return false;">
                 <div class="form-group has-feedback">
 
                     <input type="text" class="form-control" name="username"

@@ -74,7 +74,6 @@ if (!$accessToken->isLongLived()) {
         // startApplication(true);
         exit;
     }
-
 }
 
 $_SESSION['fb_access_token'] = (string)$accessToken;
@@ -96,7 +95,7 @@ $user = $response->getGraphUser();
 $GLOBALS['facebook'] = $user->all();
 
 
-sortDump( $GLOBALS['facebook'] );
+// sortDump( $GLOBALS['facebook'] );
 
 
 // User is logged in with a long-lived access token.

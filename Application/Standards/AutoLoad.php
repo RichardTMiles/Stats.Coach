@@ -67,6 +67,7 @@ class Autoload
         spl_autoload_register( array($this, 'loadClass') );
         $this->addNamespace( 'View',        '/Application/View' );
         $this->addNamespace( 'Psr',         '/Application/Standards' );
+        $this->addNamespace( 'Tables',         '/Application/Model/Helpers/Tables' );
         $this->addNamespace( 'Modules',     '/Application/Modules' );
         $this->addNamespace( 'Controller',  '/Application/Controller' );
         $this->addNamespace( 'Model',       '/Application/Model' );

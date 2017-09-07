@@ -6,7 +6,7 @@
  * Time: 11:16 PM
  */
 
-namespace Model\Helpers\Tables;
+namespace Tables;
 
 
 class Stats

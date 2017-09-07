@@ -6,7 +6,7 @@
  * Time: 7:53 PM
  */
 
-namespace Modules\Helpers\Tables;
+namespace Tables;
 
 
 use Modules\Helpers\Entities;
@@ -33,6 +33,16 @@ class Location extends Entities implements iEntity
         $stmt->bindValue( ':city',      $argv['city']  ?? null  );
         $stmt->bindValue( ':state',     $argv['state']  ?? null  );
         return $stmt->execute();
+    }
+
+    static function all($object, $id)
+    {
+
+    }
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
     }
 
     static function remove($object, $id)

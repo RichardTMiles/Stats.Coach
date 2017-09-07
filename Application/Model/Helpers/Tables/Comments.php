@@ -6,7 +6,7 @@
  * Time: 6:55 PM
  */
 
-namespace Modules\Helpers\Tables;
+namespace Tables;
 
 
 use Modules\Helpers\Entities;
@@ -18,11 +18,25 @@ class Comments extends Entities implements iEntity
     
     static function get($object, $id)
     {
+        $sql = 'SELECT * FROM StatsCoach.entity_comments JOIN StatsCoach.entity_tag ON comment_id = entity_id WHERE parent_id = ? LIMIT 10';
+        $object->comments = static::fetch_classes( $sql, $id );
+        return true;
+    }
+
+
+    static function all($object, $id)
+    {
         $sql = 'SELECT * FROM StatsCoach.entity_comments JOIN StatsCoach.entity_tag ON comment_id = entity_id WHERE parent_id = ?';
         $object->comments = static::fetch_classes( $sql, $id );
         return true;
     }
-    
+
+    static function range($object, $id, $argv)
+    {
+        // TODO: Implement range() method.
+    }
+
+
     static function add($object, $id, $argv)
     {
         $comment_id = static::beginTransaction( 'ENTITY_COMMENTS', $id );

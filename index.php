@@ -1,77 +1,106 @@
 <?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: Miles
+ * Date: 9/3/17
+ * Time: 11:16 PM
+ *
+ * Let it be known the basic commands of IntelliJ
+ *
+ * Jump to function definition:     (Command + click)
+ *
+ */
 
 const DS = DIRECTORY_SEPARATOR;
 define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
 
-// Is this an https request to a file
-if (!defined('SOCKET') && pathinfo( $_SERVER['REQUEST_URI'] , PATHINFO_EXTENSION) != null) {
-    if ($_SERVER['REQUEST_URI'] == '/robots.txt') {
-        echo include SERVER_ROOT . 'robots.txt';
-        exit(1);
-    }
-    ob_start();
-    echo $_SERVER['REQUEST_URI'];
-    $report = ob_get_clean();
-    $file = fopen(SERVER_ROOT . 'Data/Logs/Request/url_'.time().'.log' , "a");
-    fwrite( $file, $report );
-    fclose( $file );
-    exit(0);    // A request has been made to an invalid file
-}
-
 // These files are required for the app to run. You must edit the Config file for your Servers
-if (false == (include SERVER_ROOT . 'Application/Standards/AutoLoad.php') ||            // PSR4 Autoloader, with common case first added for namespace = currentDir
-    false == (include SERVER_ROOT . 'Application/Configs/Config.php')     ||
-    false == (include SERVER_ROOT . 'Application/Services/vendor/autoload.php')){       // Load the autoload() for composer dependencies located in the Services folder
-    echo "Internal Server Error";                                                       // Composer Autoloader
-    exit(3);
+if (false == (include SERVER_ROOT . 'Application/Configs/Config.php')) {       // Load the autoload() for composer dependencies located in the Services folder
+    echo "Internal Server Error";                                              // Composer autoload
+    exit( 3 );
 }
 
-Modules\Error\ErrorCatcher::start();
+use Modules\Session;
+use Tables\Users;
+use Modules\Route;
+use Modules\Helpers\Serialized;
+use Modules\Error\PublicAlert;
+use Modules\Request;
+use Modules\Helpers\Entities;
 
-Modules\Request::sendHeaders();     // Send any stored headers
+Serialized::clear();
 
-$user = $team = $course = $tournaments = array();   // For clarity
-
-Modules\Helpers\Serialized::start('user','team','course','tournaments');  // Pull theses from session, and store on shutdown
-
-function startApplication($restart = false)
+function startApplication($restartURI = false)
 {
-    static $count = 0;
+    static $view;                                           // TODO - to statics hold objects
 
-    if ($restart) {
+    global $user, $team, $course, $tournaments;
+
+    if ($restartURI) {                                      // This will always be se in a socket
         $_POST = [];
-        if ($reset = ($restart === true)) 
-            Modules\Helpers\Serialized::clear();
-        Modules\Request::changeURI($reset ? '/' : $restart);    // dynamically using pjax and headers
-        $user = Model\User::newInstance();                      // This will reset the stats too.
-        $view = View\View::newInstance($reset);
-        $restart = $reset;
+        Request::changeURI( $restartURI ?: '/' );    // Dynamically using pjax + headers
+        if ( $restartURI === true )                                // This should stop the socket
+            Serialized::clear();
     }
 
-    $user = $user ?? Model\User::getInstance();     // if(AJAX && $_SESSION['id']) sortDump( $GLOBALS );
-    $view = $view ?? View\View::getInstance();
-    
-    $mvc = function ($class, $method, &$argv = []) use ($restart, &$view) {
+    #$_SESSION['id'] = 1;
+
+    Session::update();
+
+
+    $view = new View\View( $restartURI === true );      // use set headers to determine what view to load
+
+    #sortDump($user);
+
+    $mustache = function ($path, $options = array()) {
+        global $json;
+        $json = array_merge( is_array( $json ) ? $json : [], is_array( $options ) ? $options : [] );
+        $file = SERVER_ROOT . "Public/StatsCoach/Mustache/$path.php";
+        if (file_exists( $file ) && is_array( $options = include $file ))
+            $json = array_merge( $json, $options );
+
+        $json = array_merge( $json, array(
+            'UID' => $_SESSION['id'],
+            'Mustache' => SITE . "Public/StatsCoach/Mustache/$path.mst") );
+
+        print json_encode( $json ) . PHP_EOL;
+    };
+
+    $mvc = function ($class, $method, &$argv = []) use (&$view) {
         $controller = "Controller\\$class";
         $model = "Model\\$class";
 
+        $run = function ($class, $argv) use ($method) {
+            return call_user_func_array( [new $class, "$method"],
+                is_array( $argv ) ? $argv : [$argv] );
+        };
+
         try {
-            if (!empty($argv = call_user_func_array( [$controller::getInstance(), "$method"], $argv )))
-                call_user_func_array( [$model::getInstance($argv), "$method"],  is_array($argv) ? $argv : [$argv]);
-        } catch (Modules\Error\PublicAlert $e) {
+
+            if (!empty( $argv = $run( $controller, $argv ) )) $run( $model, $argv );
+
+        } catch (PublicAlert $e) {
         } catch (TypeError $e) {
-            \Modules\Error\PublicAlert::danger( $e->getMessage() ); // TODO - Change logging
-        } finally { Modules\Helpers\Entities::verify(); };
+            PublicAlert::danger( $e->getMessage() ); // TODO - Change what is logged
+        } finally {
+            Entities::verify();
+        };
 
         $view->content( $class, $method );
     };
 
-    $route = new Modules\Route( $mvc );
+    $route = new Route( $mvc );    // Start the route with the structure of the default route const
 
-    if (!$count++) include SERVER_ROOT . 'Application/Events.php';
+    $route->changeStructure( $mustache );   // Switch to the event closure
 
-    include SERVER_ROOT . 'Application/Route.php';
-} 
+    include SERVER_ROOT . 'Application/Events.php';
+
+    if (SOCKET) return 1;
+
+    $route->changeStructure( $mvc );
+
+    include SERVER_ROOT . 'Application/Routes.php';
+}
 
 if (!SOCKET) startApplication();
 
