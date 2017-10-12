@@ -1,9 +1,6 @@
 <?php
 
-// Including this file will automatically initiate this class
-
-
-namespace Psr;
+namespace Modules;
 
 /**         Psr4AutoloaderClass
  *
@@ -65,14 +62,6 @@ class Autoload
     public function __construct()
     {
         spl_autoload_register( array($this, 'loadClass') );
-        $this->addNamespace( 'View',        '/Application/View' );
-        $this->addNamespace( 'Psr',         '/Application/Standards' );
-        $this->addNamespace( 'Tables',         '/Application/Model/Helpers/Tables' );
-        $this->addNamespace( 'Modules',     '/Application/Modules' );
-        $this->addNamespace( 'Controller',  '/Application/Controller' );
-        $this->addNamespace( 'Model',       '/Application/Model' );
-        $this->addNamespace( 'Facebook',    '/Application/Services/Facebook');
-        $this->addNamespace( 'App',         '/Application' );
     }
 
     /**
@@ -180,7 +169,6 @@ class Autoload
             return false;
         }
 
-
         // look through base directories for this namespace prefix
         foreach ($this->prefixes[$prefix] as $base_dir) {
 
@@ -202,4 +190,3 @@ class Autoload
     }
 }
 
-new Autoload;   // start the class!

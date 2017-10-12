@@ -13,6 +13,11 @@ class Database
     private static $host = DB_HOST;
 
     # Build the connection
+    public static function resetConnection()
+    {
+        self::$database = null;
+        self::getConnection();
+    }
 
     public static function getConnection(string $dbName = null): PDO
     {

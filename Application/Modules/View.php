@@ -1,17 +1,11 @@
 <?php
 
-namespace View;
+namespace Modules;
 
 /* The function View is auto loaded on the initial view class call.
     the view class will only point to the 'current-master' template
             Which in this case is the class AdminLTE
 */
-
-use Controller\User;
-use Tables\Users;
-use Modules\Singleton;
-use Modules\Request;
-use Facebook\Facebook;
 
 class View
 {
@@ -28,11 +22,11 @@ class View
         if (!AJAX):      // an HTTP request
             $_POST = [];
             $this->__construct();                       // and reprocess the dependencies, wrapper is a global closure
-        elseif (!empty( $this->currentPage )):            // Implies AJAX && a page has already been rendered and stored
+        elseif (!empty( $this->currentPage )):          // Implies AJAX && a page has already been rendered and stored
             echo base64_decode( $this->currentPage );   // The ajax page will be 64encoded before we store on the server
             $this->currentPage = false;
             self::clearInstance();                      // Remove stored information on the server and delete its self reference
-            exit( 1 );                                    // This is for the second inner AJAX request on first page load
+            exit( 1 );                                  // This is for the second inner AJAX request on first page load
         endif;                                          // We're requesting our second page through ajax ie not initial page request
     }
 
@@ -40,22 +34,29 @@ class View
     {
         global $user;
 
-        if (SOCKET) return;
+        if (SOCKET) return null;
+
+        #if (AJAX)
+        # $closure = AJAX_SIGNED_OUT;
 
         if (!WRAPPING_REQUIRES_LOGIN ?: $_SESSION['id']) {
             if (!($forceWrapper || ($_SESSION['X_PJAX_Version'] != X_PJAX_VERSION)) && AJAX)
                 return null;
             $_POST = [];
+
             ob_start();
+
             require(CONTENT_WRAPPER);   // Return the Template
+
             $template = ob_get_clean();
-            echo (MINIFY_CONTENTS && (@include_once "minify.php")) ? minify_html( $template ) : $template;
+
+            echo (MINIFY_CONTENTS && (@include_once "Extras/minify.php")) ? minify_html( $template ) : $template;
 
             if ($forceWrapper):
                 if (!empty( $GLOBALS['alert'] )) $this->carryErrors = $GLOBALS['alert']; // exit(1);
                 $this->forceStoreContent = true;
             endif;
-        } elseif (AJAX) User::logout();  // This would only be executed it wrapper_requires_login = true and user logged out
+        } // elseif (AJAX && is_callable($closure)) $closure();  // This would only be executed it wrapper_requires_login = true and user logged out, this can be helpful for making sure the user doesnt back into a state
         // if there it is an ajax request, the user must be logged in, or container must be true
     }
 
@@ -67,6 +68,7 @@ class View
 
     public function content(...$argv) // Must be called through Singleton, must be private
     {
+
         switch (count( $argv )) {
             case 2:
                 $file = CONTENT_ROOT . strtolower( $argv[0] ) . DS . strtolower( $argv[1] ) . '.php';   //($this->user->user_id ? '.tpl.php' : '.php'));
@@ -80,43 +82,28 @@ class View
 
         if (file_exists( $file )) {
             if (SOCKET) return $file;
+
             ob_start();
             if (empty( $GLOBALS['alert'] ) && !empty( $GLOBALS['alert'] = $this->carryErrors ))
                 $this->carryErrors = null;
             include CONTENT_ROOT . 'alert/alerts.php'; // a little hackish when not using template file
             include_once $file;
-            $file = ob_get_clean();                             // TODO minify_html()
+            $file = ob_get_clean();
+            // TODO minify_html()
+
             if (MINIFY_CONTENTS && (@include_once "minify.php"))
                 $file = minify_html( $file );
+
+
             if ($this->forceStoreContent || (!AJAX && (!WRAPPING_REQUIRES_LOGIN ?: $_SESSION['id']))) {
                 $this->currentPage = base64_encode( $file );
             } else echo $file;
+
             $this->forceStoreContent = false;
             exit( 1 );
+
         } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
-    }
 
-    public function faceBookLoginUrl()
-    {
-        return (new Facebook( [
-            'app_id' => '1456106104433760', // Replace {app-id} with your app id
-            'app_secret' => 'c35d6779a1e5eebf7a4a3bd8f1e16026',
-            'default_graph_version' => 'v2.2',
-        ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/', [
-            'public_profile', 'user_friends', 'email',
-            'user_about_me', 'user_birthday',
-            'user_education_history', 'user_hometown',
-            'user_location', 'user_photos', 'user_friends'] );
-    }
-
-    public function googleLoginUrl()
-    {
-
-    }
-
-    public function AJAXJavaScript()
-    {
-        include SERVER_ROOT . 'Public/JavaScript.js.php';
     }
 
     /**

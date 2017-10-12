@@ -65,9 +65,11 @@ trait Singleton
             return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ? $this : $result);
         // Is the method in the current scope ( public, protected, private ).
         // Note declaring the method as private is the only way to ensure single instancing
-        if (method_exists( $this, $methodName )) {
+        if (method_exists( $this, $methodName ))
             return (null === ($result = call_user_func_array( array($this, $methodName), $arguments )) ? $this : $result);
-        }
+
+        if (is_callable($this->{$methodName})) return call_user_func_array($this->{$methodName}, $arguments); // closure binding
+
         if (key_exists( 'closures', $GLOBALS ) && key_exists( $methodName, $GLOBALS['closures'] )) {
             $function = $GLOBALS['closures'][$methodName];
             $this->addMethod( $methodName, $function );
@@ -111,7 +113,6 @@ trait Singleton
         } catch (\Exception $e){ unset($_SESSION[__CLASS__]); return null; };
     }
 
-    // The rest of the methods are for the sake of methods
     public function &__get($variable)
     {
         return $GLOBALS[$variable];
@@ -119,7 +120,8 @@ trait Singleton
 
     public function __set($variable, $value)
     {
-        $GLOBALS[$variable] = $value;
+        if (is_callable($value)) $this->{$variable} = $value->bindTo($this, $this);
+        else $GLOBALS[$variable] = $value;
     }
 
     public function __isset($variable): bool

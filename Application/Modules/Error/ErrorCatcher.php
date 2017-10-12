@@ -44,7 +44,7 @@ class ErrorCatcher
         $output = ob_get_contents( );
         ob_end_clean( );
 
-        print "<pre>$output</pre>";
+        #print "<pre>$output</pre>";    // dev
 
         // Write the contents back to the file
         $this->storeFile(ERROR_LOG, $output);

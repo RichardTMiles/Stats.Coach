@@ -44,18 +44,25 @@ abstract class Serialized {
         self::$sessionVar = $argv;
 		foreach (self::$sessionVar as $value){
 			if (isset($_SESSION[__CLASS__][$value]))
-				self::is_serialized( base64_decode(  $_SESSION[__CLASS__][$value] ), $GLOBALS[$value] );
+                $GLOBALS[$value] = $_SESSION[__CLASS__][$value];
+			    //self::is_serialized( base64_decode(  $_SESSION[__CLASS__][$value] ), $GLOBALS[$value] );
 		}
 
 		register_shutdown_function( function () use ($argv) {
-			foreach ($argv as $value) if (isset($GLOBALS[$value]))
-                $_SESSION[__CLASS__][$value] = base64_encode( serialize( $GLOBALS[$value] ) );
+            $last_error = error_get_last();
+            if ($last_error['type'] === E_ERROR) {
+                sortDump($last_error);
+            } else foreach ($argv as $value) if (isset($GLOBALS[$value]))  $_SESSION[__CLASS__][$value] = $GLOBALS[$value];
+
+            /// $_SESSION[__CLASS__][$value] = base64_encode( serialize( $GLOBALS[$value] ) );
 		} );
 	}
 
     public static function clear()
     {
-        foreach (self::$sessionVar as $value) $GLOBALS[$value] = null;
+        if (!empty(self::$sessionVar))
+            foreach (self::$sessionVar as $value)
+                $GLOBALS[$value] = $_SESSION[$value] = null;
     }
 
 	public static function is_serialized($value, &$result = null)

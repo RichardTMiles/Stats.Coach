@@ -8,7 +8,7 @@
 
 namespace Modules;
 
-use Modules\Helpers\StoreFiles;
+use Modules\Helpers\Files;
 
 class Request
 {
@@ -106,7 +106,7 @@ class Request
     {
         $storagePath = array();
         array_walk( $this->storage, function ($file) use ($location, &$storagePath) {
-            $storagePath[] = StoreFiles::singleFile( $file, $location );
+            $storagePath[] = Files::storeFile( $file, $location );
         } );
         return count( $storagePath ) == 1 ? array_shift( $storagePath ) : $storagePath;
     }

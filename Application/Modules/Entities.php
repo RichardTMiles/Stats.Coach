@@ -6,30 +6,15 @@
  * Time: 5:48 AM
  */
 
-namespace Modules\Helpers;
+namespace Modules;
 
 use PDO;
 use stdClass;
-use Modules\Database;
 use Modules\Interfaces\iEntity;
 use Modules\Error\PublicAlert;
 
 abstract class Entities
 {
-    // Tables that require a unique identifier
-    const USER = 0;
-    const USER_FOLLOWERS = 1;
-    const USER_MESSAGES = 3;
-    const USER_TASKS = 4;
-    const TEAMS = 5;
-    const TEAM_MEMBERS = 6;
-    const GOLF_TOURNAMENTS = 7;
-    const GOLF_ROUNDS = 8;
-    const GOLF_COURSE = 9;
-    const ENTITY_COMMENTS = 10;
-    const ENTITY_PHOTOS = 11;
-
-
     protected $db;
     private static $inTransaction;
     private static $entityTransactionKeys;
@@ -37,7 +22,7 @@ abstract class Entities
     public function __construct( $object = null, $id = null)
     {
         $this->db = Database::getConnection();
-        if ($this instanceof iEntity) $this::get( $object, $id );
+        if ($this instanceof iEntity) return $this::get( $object, $id );
         #elseif (is_object($object) && $id) static::getEntities($object, $id);
     }
 
@@ -103,9 +88,10 @@ abstract class Entities
     {
         $stmt = self::database()->prepare( $sql );
         $stmt->setFetchMode( PDO::FETCH_CLASS, stdClass::class );
-        if (!$stmt->execute( $execute )) return false;
+        if (!$stmt->execute( $execute ))
+            throw new \Exception('Failed to Execute');
         $stmt = $stmt->fetchAll();  // user obj
-        return (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : $stmt);
+        return (is_array( $stmt ) && count( $stmt ) == 1 ? $stmt[0] : new stdClass);
     }
 
     static function fetch_classes(string $sql, ...$execute): array
@@ -127,7 +113,7 @@ abstract class Entities
     static function fetch_to_global(string $sql, $execute)
     {
         $stmt = self::database()->prepare( $sql );
-        $stmt->setFetchMode( PDO::FETCH_CLASS, Carbon::class );
+        $stmt->setFetchMode( PDO::FETCH_CLASS, Globals::class );
         $stmt->execute( $execute );
         $stmt->fetchAll();  // user obj
     }

@@ -7,9 +7,15 @@ namespace Modules\Helpers;
 
 use Modules\Error\PublicAlert;
 
-class StoreFiles
+class Files
 {
-    public static function singleFile($fileArray, $location)
+    public static function wrightFile($location, $data)
+    {
+        if(!$handle = fopen($location, 'w')) return false;
+        return fwrite($handle, $data) && fclose($handle);    //write some data here
+    }
+
+    public static function storeFile($fileArray, $location)
     {
         try {
 

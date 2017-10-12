@@ -9,6 +9,8 @@
 namespace Modules\Helpers;
 
 
+use Modules\Database;
+
 class Fork
 {
     public function __construct(callable $lambda, $argv = null)
@@ -19,33 +21,42 @@ class Fork
         }
     }
 
-
     private static function build()
     {
         define('FORK', TRUE);
     }
-    public static function deamon()
+
+    public static function become_daemon()          // do not use this unless you know what you are doing
     {
-        if ($pid = pcntl_fork()) return 0;     // Parent
+        if ($pid = pcntl_fork()) exit(1);     // Parent
         elseif ($pid < 0) throw new \Exception('Failed to fork');
         self::build();
 
-        fclose(STDIN);  // Close all of the standard
-        fclose(STDOUT); // file descriptors as we
-        fclose(STDERR); // are running as a daemon.
 
-        register_shutdown_function(function () { session_abort(); posix_kill(posix_getpid(), SIGHUP); exit(1); });
+        /* child becomes our daemon */
+        posix_setsid();
 
-        return 1;
+        chdir('/');   // What does this do ?
+
+        umask(0);       // bump..
+
+        register_shutdown_function(function () {
+            session_abort();
+            posix_kill(posix_getpid(), SIGHUP);
+            exit(1);
+        });
+
+        return posix_getpid();
     }
 
 
     public static function safe()
     {
-        if ($pid = pcntl_fork())
+        if ($pid = pcntl_fork())    // return child id for parent and 0 for child
             return 0;     // Parent
         elseif ($pid < 0) throw new \Exception('Failed to fork');
         self::build();
+        // Database::resetConnection();
         // fclose(STDIN); -- unset
         register_shutdown_function(function () { session_abort(); posix_kill(posix_getpid(), SIGHUP); exit(1); });
         return 1;

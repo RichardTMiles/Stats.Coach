@@ -11,13 +11,13 @@ namespace Modules\Interfaces;
 
 interface iEntity
 {
-    static function get($object, $id);
+    static function get(&$object, $id);
 
-    static function add($object, $id, $argv);
+    static function add(&$object, $id, $argv);
 
-    static function remove($object, $id);
+    static function remove(&$object, $id);
 
-    static function all($object, $id);
+    static function all(&$object, $id);
 
-    static function range($object, $id, $argv);
+    static function range(&$object, $id, $argv);
 }
