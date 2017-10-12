@@ -2,9 +2,9 @@
 
 namespace Model;
 
-use Modules\Helpers\Entities;
-use Tables\Users;
 use Model\Helpers\GlobalMap;
+use Psr\Log\InvalidArgumentException;
+use Tables\Users;
 use Model\Helpers\iSport;
 use Tables\Followers;
 use Tables\Messages;
@@ -16,14 +16,21 @@ use Modules\Request;
 
 class User extends GlobalMap
 {
-    public function __construct($id = null)
+    public function __construct(string $id = null)
     {
+        // Used to get team member
         parent::__construct();
-        if (!($_SESSION['id'] ?? false && $id))
-            return;
 
-        $this->user[$id] = Users::get($this->user[$id] = null, $id);
+        if (!is_array( $this->user ))
+            throw new InvalidArgumentException( 'Users is no longer an array' );
 
+        if ($_SESSION['id'] == $id) return; // We've already gotten current user data
+
+        if ($_SESSION['id'] && $id !== null) {
+            Users::get( $this->user[$id], $id );
+            Followers::get( $this->user[$id], $id );
+            Messages::get( $this->user[$id], $id );
+        }
     }
 
     /**
@@ -49,7 +56,6 @@ class User extends GlobalMap
         // using the verify method to compare the password with the stored hashed password.
         if (Bcrypt::verify( $password, $data['user_password'] ) === true) {
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
-            #$this->user[$_SESSION['id']] = Users::all( null, $_SESSION['id'] );
         } else throw new PublicAlert ( 'Sorry, the username and password combination you have entered is invalid.', 'warning' );
 
         if ($rememberMe) {
@@ -67,12 +73,12 @@ class User extends GlobalMap
             //if (!Users::email_exists( $facebook['email'] )) {
 
             //} else {
-                // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
+            // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
 
-                //$this->fullUser( $_SESSION['id'] );
+            //$this->fullUser( $_SESSION['id'] );
 
-                //if ($this->user_facebook_id == null) ;
-                #self::update_user();
+            //if ($this->user_facebook_id == null) ;
+            #self::update_user();
             //}
             startApplication( true );
         } catch (\Exception $e) {
@@ -90,7 +96,9 @@ class User extends GlobalMap
         if (Users::email_exists( $email ))
             throw new PublicAlert ( 'That email already exists.', 'warning' );
 
-        Users::add( $null = null, null, [
+        $null = null;
+        // Tables self validate and throw public errors
+        Users::add( $null, $null, [
             'username' => $username,
             'password' => $password,
             'email' => $email,
@@ -100,10 +108,9 @@ class User extends GlobalMap
             'gender' => $gender
         ] );
 
-
         if ($userType == 'Coach') {
             global $teamName, $schoolName;
-            Teams::add( null, null, [
+            Teams::add( $null, $null, [
                 'teamName' => $teamName,
                 'schoolName' => $schoolName
             ] );
@@ -165,7 +172,7 @@ class User extends GlobalMap
 
         $generated = Bcrypt::genRandomHex( 20 );
 
-        if (empty($generated_string)) {
+        if (empty( $generated_string )) {
             $sql = 'SELECT user_first_name  FROM StatsCoach.user WHERE user_email = ?';
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( [$email] );
@@ -193,7 +200,7 @@ class User extends GlobalMap
             $sql = 'SELECT user_id, user_first_name FROM StatsCoach.user WHERE user_email = ? AND user_generated_string = ?';
             $stmt = $this->db->prepare( $sql );
             if (!$stmt->execute( [$email, $generated_string] )) $alert();
-            if (empty($user = $stmt->fetch())) $alert();
+            if (empty( $user = $stmt->fetch() )) $alert();
 
             $this->change_password( $user['user_id'], $generated );
             $stmt = $this->db->prepare( 'UPDATE StatsCoach.user SET user_generated_string = 0 AND user_email_code = 0 AND user_email_confirmed = 1 WHERE user_id = ?' );
@@ -216,12 +223,17 @@ class User extends GlobalMap
 
     public function profile($user_uri = false)
     {
-        if ($user_uri)
-            return Users::all( $this->user[$id = Users::user_id_from_uri( $user_uri )], $id);
-        else
-            Users::all( $this->user[$_SESSION['id']], $_SESSION['id'] );
+        global $user_id;
 
-        if (empty($_POST)) return null;
+        if ($user_uri) {
+            $user_id = Users::user_id_from_uri( $user_uri );
+            if (!empty( $user_id ))
+                return new User( $user_id );
+        }
+
+        Users::all( $this->user[$_SESSION['id']], $_SESSION['id'] );
+
+        if (empty( $_POST )) return null;
 
         // we can assume post is active then
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
@@ -244,11 +256,11 @@ class User extends GlobalMap
             throw new PublicAlert( 'Sorry, we could not process your information at this time.', 'warning' );
 
         // Remove old picture
-        if (!empty($profile_pic) && !empty($user->user_profile_pic) && $profile_pic != $user->user_profile_pic)
+        if (!empty( $profile_pic ) && !empty( $user->user_profile_pic ) && $profile_pic != $user->user_profile_pic)
             unlink( SERVER_ROOT . $user->user_profile_pic );
 
         // Send new activation code
-        if (!empty($email) && $email != $user->user_email) {
+        if (!empty( $email ) && $email != $user->user_email) {
             $subject = 'Please confirm your email';
             $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
                 'Reply-To: ' . REPLY_EMAIL . "\r\n" .

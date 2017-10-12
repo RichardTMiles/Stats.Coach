@@ -9,27 +9,27 @@
 namespace Tables;
 
 
-use Modules\Helpers\Entities;
+use Modules\Entities;
 use Modules\Interfaces\iEntity;
 
 class Rounds extends Entities implements iEntity
 {
-    static function get($object, $id)
+    static function get(&$object, $id)
     {
         return self::fetch_classes( 'SELECT round_id,par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 5', $id);
     }
 
-    static function all($object, $id)
+    static function all(&$object, $id)
     {
-        return ($stmt->fetchColumn() ? self::fetch_classes( 'SELECT round_id,par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ?', $id ) : []);
+        return self::fetch_classes( 'SELECT round_id,par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ?', $id );
     }
 
-    static function range($object, $id, $argv)
+    static function range(&$object, $id, $argv)
     {
         // TODO: Implement range() method.
     }
 
-    static function add($object, $id, $argv)
+    static function add(&$object, $id, $argv)
     {
         ################# Add Round ################
         $roundId = self::beginTransaction( Entities::GOLF_ROUNDS, $_SESSION['id']);
@@ -56,7 +56,7 @@ class Rounds extends Entities implements iEntity
 
     }
 
-    static function remove($object, $id)
+    static function remove(&$object, $id)
     {
 
     }

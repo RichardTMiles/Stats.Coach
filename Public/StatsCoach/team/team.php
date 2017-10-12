@@ -5,7 +5,8 @@
  * Date: 7/29/17
  * Time: 10:12 PM
  */
-$team = $this->team[$this->team_id] or die(1);
+
+$myTeam = $this->team[$this->team_id] or die( 1 );
 
 ?>
 <!-- Content Header (Page header) -->
@@ -25,23 +26,26 @@ $team = $this->team[$this->team_id] or die(1);
         <div class="col-md-4">
             <div class="row">
                 <div class="col-md-12">
-                    <!-- Widget: user widget style 1 -->
+                    <!-- Team Info -->
                     <div class="box box-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-green">
                             <div class="widget-user-image">
-                                <img class="img-circle" src="<?= $team->photo ?>" alt="User Avatar">
+                                <img class="img-circle"
+                                     src="<?= SITE . ((!empty( $myTeam->team_photo ) && ($myTeam->photo[$myTeam->team_photo] ?? false) && ($photo = $myTeam->photo[$myTeam->team_photo]->photo ?? false)) ? $photo : 'Data/Uploads/Pictures/Defaults/team-icon.png') ?>"
+                                     alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username"><?= $team->team_name ?></h3>
+                            <h3 class="widget-user-username"><?= $myTeam->team_name ?></h3>
                             <h5 class="widget-user-desc"><a style="color: #0c0c0c"
-                                                            href="<?= SITE . 'Profile/' . $this->user[$team->team_coach]->user_profile_uri ?>/"><?= $this->user[$team->team_coach]->user_full_name ?></a>
+                                                            href="<?= SITE . 'Profile/' . $this->user[$myTeam->team_coach]->user_profile_uri ?>/"><?= $this->user[$myTeam->team_coach]->user_full_name ?></a>
                             </h5>
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $team->team_code ?></span></a></li>
-                                <li><a onclick="$.fn.sendEvent('Team/<?= $team->team_id ?>/Members/')">Members <span class="pull-right badge bg-aqua"><?= count( $team->members ) ?></span></a></li>
+                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam->team_code ?></span></a></li>
+                                <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam->team_id ?>/Members/')">Members <span
+                                                class="pull-right badge bg-aqua"><?= count( $myTeam->members ) ?></span></a></li>
                                 <li><a href="#">Rounds <span class="pull-right badge bg-green">12</span></a></li>
                                 <li><a href="#">Tournaments <span class="pull-right badge bg-red">842</span></a></li>
                                 <li><a href="#">Strokes <span class="pull-right badge bg-red">842</span></a></li>
@@ -50,20 +54,20 @@ $team = $this->team[$this->team_id] or die(1);
                             </ul>
                         </div>
                     </div>
-                    <!-- /.widget-user -->
+                    <!-- /.widget-team -->
                 </div>
 
-                <?php if ($team->team_coach == $_SESSION['id']) { ?>
+                <?php if ($myTeam->team_coach == $_SESSION['id']) { ?>
 
                     <div class="col-md-12">
                         <div class="box box-widget">
                             <div class="box-body">
 
-                                <form data-pjax class="form-horizontal" action="<?= SITE . 'Team/' . $team->team_id ?>" method="post"
+                                <form data-pjax class="form-horizontal" action="<?= SITE . 'Team/' . $myTeam->team_id ?>" method="post"
                                       enctype="multipart/form-data">
                                     <div class="input-group input-group-sm">
                                         <input class="form-control" type="file" id="InputFile" name="FileToUpload">
-                            <span class="input-group-btn">
+                                        <span class="input-group-btn">
                                 <button type="submit" class="btn btn-info btn-flat">upload</button>
                             </span>
                                     </div>
@@ -75,8 +79,177 @@ $team = $this->team[$this->team_id] or die(1);
 
             </div>
 
+        </div>
+        <div class="col-md-8">
 
+            <!-- User team member -->
+            <?php foreach ($myTeam->members as $an => $id) {
+            $obj = $this->user[$id];
+            ?>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <a href="<?=SITE. 'Profile/'.$obj->user_profile_uri ?>/">
+                            <?= $obj->user_first_name . ' ' . $obj->user_last_name ?>
+                        </a>
+                    </h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-wrench"></i></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Add Goal</a></li>
+                                <li><a href="#">Edit Goals</a></li>
+                                <li><a href="#">Send Message</a></li>
+                                <li><a href="#">View All Rounds</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Remove Team Member</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="box box-widget widget-user">
+                                <!-- Add the bg color to the header using any of the bg-* classes -->
+                                <div class="widget-user-header bg-black"
+                                     style="background: url('/Application/Services/vendor/almasaeed2010/adminlte/dist/img/photo1.png') center center;">
+                                    <h3 class="widget-user-username"></h3>
+                                    <h5 class="widget-user-desc"></h5>
+                                </div>
+                                <div class="widget-user-image">
+                                    <img class="img-circle" src="<?= SITE . $obj->user_profile_pic ?>" alt="User Avatar">
+                                </div>
+
+                                <div class="box-footer">
+                                    <div class="row">
+                                        <div class="col-sm-4 border-right">
+                                            <div class="description-block">
+                                                <h5 class="description-header">12</h5>
+                                                <span class="description-text">FFS</span>
+                                            </div><!-- /.description-block -->
+
+                                        </div><!-- /.col -->
+
+                                        <div class="col-sm-4 border-right">
+                                            <div class="description-block">
+                                                <h5 class="description-header">3</h5>
+                                                <span class="description-text">Rounds</span>
+                                            </div><!-- /.description-block -->
+
+                                        </div><!-- /.col -->
+
+                                        <div class="col-sm-4">
+                                            <div class="description-block">
+                                                <h5 class="description-header">16</h5>
+                                                <span class="description-text">GNR</span>
+                                            </div><!-- /.description-block -->
+                                        </div><!-- /.col -->
+                                    </div><!-- /.row -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-4">
+                            <p class="text-center">
+                                <strong>Goal Completion</strong>
+                            </p>
+
+                            <div class="progress-group">
+                                <span class="progress-text">Rounds this month</span>
+                                <span class="progress-number"><b>160</b>/200</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+                            <div class="progress-group">
+                                <span class="progress-text">Hours on Range</span>
+                                <span class="progress-number"><b>10</b>/400</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-red" style="width: 03%"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+                            <div class="progress-group">
+                                <span class="progress-text">Handicap</span>
+                                <span class="progress-number"><b>3</b>/6</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-green" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+                            <div class="progress-group">
+                                <span class="progress-text">Send Inquiries</span>
+                                <span class="progress-number"><b>250</b>/500</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- ./box-body -->
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="description-block border-right">
+                                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                                <h5 class="description-header">230</h5>
+                                <span class="description-text">Rounds</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="description-block border-right">
+                                <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                                <h5 class="description-header">32</h5>
+                                <span class="description-text">Putts</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="description-block border-right">
+                                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                                <h5 class="description-header">Profit</h5>
+                                <span class="description-text">TOTAL PROFIT</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-3 col-xs-6">
+                            <div class="description-block">
+                                <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                                <h5 class="description-header">1200</h5>
+                                <span class="description-text">GOAL COMPLETIONS</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+            </div>
         </div>
 
+        <?php } ?>
 
 </section>
+

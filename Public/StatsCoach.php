@@ -146,7 +146,7 @@
             }
         }
 
-        const MustacheWidgets = function (data, url = '') {
+        function MustacheWidgets(data, url = '') {
             if (data !== null) {
                 if (typeof data === "string") data = IsJsonString(data);
                 if (data.hasOwnProperty('Mustache') && data.hasOwnProperty('widget')) {
@@ -167,7 +167,7 @@
                 if (typeof data === "object")
                     if (url !== '') {
                         console.log('Attempting Socket');
-                        setTimeout(function () {
+                        setTimeout(function () {            // wait 2 seconds
                             $.fn.sendEvent(url);
                         }, 2000);
                     }
@@ -222,23 +222,32 @@
             <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?= SITE_VERSION ?>
         </div>
         <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
+
+        <!--script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script-->
     </div>
     <!-- /.container -->
 </footer>
 </div>
+
 <?php $wrapper = ob_get_clean(); ?>
 
 
-<?php
 
+
+<?php
 if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
-    if ($this->user[$_SESSION['id']]->user_type ?? false == 'Coach') {
+
+    $me = $this->user[$_SESSION['id']];
+
+    $fullName = $me->user_first_name . ' ' . $me->user_last_name;
+
+    if (($this->user[$_SESSION['id']]->user_type ?? false) == 'Coach') {
         echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
-        require_once CONTENT_ROOT . 'CoachLayout.php';
+        require_once CONTENT_ROOT . 'AdminLTE/CoachLayout.php';
         echo $wrapper;
-    } elseif ($this->user[$_SESSION['id']]->user_type ?? false == 'Athlete') {
+    } elseif (($this->user[$_SESSION['id']]->user_type ?? false) == 'Athlete') {
         echo '<body class="hold-transition skin-green layout-top-nav"><div class="wrapper">';
-        require_once CONTENT_ROOT . 'AthleteLayout.php';
+        require_once CONTENT_ROOT . 'AdminLTE/AthleteLayout.php';
         echo $wrapper;
     }
 } elseif (array_key_exists( 'id', $_SESSION ) && !$_SESSION['id']) {
@@ -247,7 +256,7 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
     session_destroy();
     #session_regenerate_id( TRUE );
     echo '<script type="text/javascript"> window.location = "' . SITE . '" </script>';
-    // TODO - how often does this happen
+    // TODO - how often does this happen?
 } ?>
 
 
@@ -333,51 +342,9 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
             loadJS("<?= $this->versionControl( 'Public/Jquery-Pjax/jquery.pjax.js' ) ?>", function () {
                 loadJS("<?= $this->versionControl( 'Public/Mustache/mustache.js' ) ?>", function () {
 
-                    <?php if ($_SESSION['id']) { ?>
-                    let statsSocket = new WebSocket('wss://stats.coach:8080/');
-                    statsSocket.onopen = function () {
-                        console.log('Socket Started');
-
-                        $.fn.sendEvent = function (url) {
-                            console.log('URI ' + url);
-                            statsSocket.send(url);
-                        };
-
-                        // Messages in Navigation, faster to initially load over http
-                        $.get("<?= SITE . 'Messages/' ?>", function (data) {
-                            MustacheWidgets(data)
-                        }, "json");
-
-                        // Notifications in Navigation
-                        $.get("<?= SITE . 'Notifications/' ?>", function (data) {
-                            MustacheWidgets(data)
-                        }, "json");
-
-                        // Tasks in Navigation
-                        $.get("<?= SITE . 'Tasks/' ?>", function (data) {
-                            MustacheWidgets(data)
-                        }, "json");
-
-                        $.pjax.reload('#ajax-content');
-                    };
-                    statsSocket.onmessage = function (data) {
-                        if (IsJsonString(data.data)) {
-                            console.log('On Message');
-                            MustacheWidgets(JSON.parse(data.data));
-                        } else console.log(data.data);
-                    };
-                    statsSocket.onclose = function () {
-                        console.log('Closed Socket');
-                    };
-                    statsSocket.onerror = function () {
-                        console.log('Web Socket Error');
-                    };
-
-                    <?php } ?>
-
-                    $(document).on('pjax:start', function () {
+                    /*$(document).on('pjax:start', function () {
                         console.log("PJAX");
-                    });
+                    });*/
 
                     $(document).on('pjax:end', function () {
                         // PJAX Forum Request
@@ -387,7 +354,7 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
                         });
 
 
-// Set up Box Annotations
+                        // Set up Box Annotations
                         $(".box").boxWidget({
                             animationSpeed: 500,
                             collapseTrigger: '[data-widget="collapse"]',
@@ -434,7 +401,7 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
                              },
                              cancel : function () {
                              console.log("cancel : " + this.value);
-                             },*/
+                             }, */
                             draw: function () {
 
                                 // "tron" case
@@ -495,6 +462,7 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
 
                     $(document).on('pjax:success', function () {
                         console.log("Successfully loaded " + window.location.href);
+
                     });
 
                     $(document).on('pjax:timeout', function (event) {
@@ -510,10 +478,61 @@ if (!empty( $_SESSION['id'] ) && is_object( $this->user[$_SESSION['id']] )) {
                         $('#ajax-content').fadeIn('fast').removeClass('overlay');
                     });
 
-                    // On initial html page request, get already loaded inner content from server
-                    <?php if (!$_SESSION['id']): ?>
+                    // Get inner contents already buffered on server
                     $.pjax.reload('#ajax-content');
-                    <?php endif; ?>
+
+                    <?php if ($_SESSION['id']): ?>
+
+                    var defaultOnSocket = false,
+                        statsSocket = new WebSocket('wss://stats.coach:8080/');
+
+                    $.fn.trySocket = function () {
+                        if (statsSocket.readyState === 1) return 1;
+                        var count = 0;
+                        console.log('Attempting Reconnect');
+                        do {
+                            count++;
+                            if (statsSocket != null && typeof statsSocket === 'object' && statsSocket.readyState === 1) break;            // help avoid race
+                            statsSocket = new WebSocket('wss://stats.coach:8080/');
+                        } while (statsSocket.readyState === 3 && count <= 3);  // 6 seconds 3 attempts
+                        if (statsSocket.readyState === 3)
+                            console.log = "Could not connect to socket. TrySocket aborted";
+                        return (statsSocket.readyState === 1);
+                    };
+
+                    $.fn.sendEvent = function (url) {
+                        if (defaultOnSocket && $.fn.trySocket) {           //defaultOnSocket &&
+                            console.log('URI ' + url);
+                            statsSocket.send(url);
+                        } else $.get(url, function (data) {
+                            MustacheWidgets(data)
+                        }); // json
+                    };
+
+                    statsSocket.onmessage = function (data) {
+                        if (IsJsonString(data.data)) {
+                            MustacheWidgets(JSON.parse(data.data));
+                        } else console.log(data.data);
+                    };
+
+                    statsSocket.onerror = function () {
+                        console.log('Web Socket Error');
+                    };
+
+                    statsSocket.onopen = function () {
+                        console.log('Socket Started');
+
+                        // prevent the race condition
+                        statsSocket.onclose = function () {
+                            console.log('Closed Socket');
+                            $.fn.trySocket();
+                        };
+                        // Messages in Navigation, faster to initially load over http
+                        $.fn.sendEvent('<?= SITE . 'Messages/' ?>');
+                        $.fn.sendEvent('<?= SITE . 'Notifications/' ?>');
+                        $.fn.sendEvent('<?= SITE . 'Tasks/' ?>');
+                    };
+                <?php endif; ?>
                 });
             });
         });

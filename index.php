@@ -5,6 +5,10 @@
  * Date: 9/3/17
  * Time: 11:16 PM
  *
+ * // Let the list of carbon_php dependencies
+ *
+ *
+ *
  * Let it be known the basic commands of IntelliJ
  *
  * Jump to function definition:     (Command + click)
@@ -12,95 +16,124 @@
  */
 
 const DS = DIRECTORY_SEPARATOR;
-define( 'SERVER_ROOT', dirname( __FILE__ ) . DS );  // Set our root folder for the application
+
+define('SERVER_ROOT', dirname(__FILE__) . DS);  // Set our root folder for the application
 
 // These files are required for the app to run. You must edit the Config file for your Servers
-if (false == (include SERVER_ROOT . 'Application/Configs/Config.php')) {       // Load the autoload() for composer dependencies located in the Services folder
+
+
+if (false == (include SERVER_ROOT . 'Application/Modules/Carbon.php')) {       // Load the autoload() for composer dependencies located in the Services folder
     echo "Internal Server Error";                                              // Composer autoload
-    exit( 3 );
+    exit(3);
 }
 
-use Modules\Session;
-use Tables\Users;
-use Modules\Route;
-use Modules\Helpers\Serialized;
-use Modules\Error\PublicAlert;
-use Modules\Request;
-use Modules\Helpers\Entities;
 
-Serialized::clear();
+// Tables that require a unique identifier
+const USER = 0;
+const USER_FOLLOWERS = 1;
+const USER_MESSAGES = 3;
+const USER_TASKS = 4;
+const TEAMS = 5;
+const TEAM_MEMBERS = 6;
+const GOLF_TOURNAMENTS = 7;
+const GOLF_ROUNDS = 8;
+const GOLF_COURSE = 9;
+const ENTITY_COMMENTS = 10;
+const ENTITY_PHOTOS = 11;
 
-function startApplication($restartURI = false)
-{
-    static $view;                                           // TODO - to statics hold objects
+const FACEBOOK_APP_ID = '1456106104433760';
+const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
-    global $user, $team, $course, $tournaments;
 
-    if ($restartURI) {                                      // This will always be se in a socket
-        $_POST = [];
-        Request::changeURI( $restartURI ?: '/' );    // Dynamically using pjax + headers
-        if ( $restartURI === true )                                // This should stop the socket
-            Serialized::clear();
+$session_callback = function ($reset) {
+    if ($_SESSION['id']) {
+        global $user;
+
+        if (!is_array($user)) $user = [];
+
+        if (!is_object($user[$_SESSION['id']] ?? false))            // || $reset  /  but this shouldn't matter
+            Tables\Users::all($user[$_SESSION['id']], $_SESSION['id']);
+
+        Model\Helpers\Events::refresh($user[$_SESSION['id']], $_SESSION['id']);
     }
-
-    #$_SESSION['id'] = 1;
-
-    Session::update();
+};
 
 
-    $view = new View\View( $restartURI === true );      // use set headers to determine what view to load
+CarbonPHP([
 
-    #sortDump($user);
+    'REPORTING' => [
+        'LEVEL' => E_ALL | E_STRICT,
+        'STORE' => true,
+        'PRINT' => true,
+        'FULL' => true
+    ],
 
-    $mustache = function ($path, $options = array()) {
-        global $json;
-        $json = array_merge( is_array( $json ) ? $json : [], is_array( $options ) ? $options : [] );
-        $file = SERVER_ROOT . "Public/StatsCoach/Mustache/$path.php";
-        if (file_exists( $file ) && is_array( $options = include $file ))
-            $json = array_merge( $json, $options );
+    'ROUTES' => 'Application/Routes.php',
 
-        $json = array_merge( $json, array(
-            'UID' => $_SESSION['id'],
-            'Mustache' => SITE . "Public/StatsCoach/Mustache/$path.mst") );
+    'URL' => 'stats.coach',
 
-        print json_encode( $json ) . PHP_EOL;
-    };
+    'SITE_TITLE' => 'Stats Coach',
 
-    $mvc = function ($class, $method, &$argv = []) use (&$view) {
-        $controller = "Controller\\$class";
-        $model = "Model\\$class";
+    'SITE_VERSION' => 'Beta 1',
 
-        $run = function ($class, $argv) use ($method) {
-            return call_user_func_array( [new $class, "$method"],
-                is_array( $argv ) ? $argv : [$argv] );
-        };
+    'SYSTEM_EMAIL' => 'Support@Stats.Coach',
 
-        try {
+    'REPLY_EMAIL' => 'RichardMiles2@my.unt.edu',
 
-            if (!empty( $argv = $run( $controller, $argv ) )) $run( $model, $argv );
+    'SERIALIZE' => [        // These are application specific
+        'user',
+        'team',
+        'course',
+        'tournaments'
+    ],
 
-        } catch (PublicAlert $e) {
-        } catch (TypeError $e) {
-            PublicAlert::danger( $e->getMessage() ); // TODO - Change what is logged
-        } finally {
-            Entities::verify();
-        };
+    'MINIFY_CONTENTS' => false,
 
-        $view->content( $class, $method );
-    };
+    'USERS' => true,
 
-    $route = new Route( $mvc );    // Start the route with the structure of the default route const
+    'SESSION_UPDATE_CALLBACK' => $session_callback,
 
-    $route->changeStructure( $mustache );   // Switch to the event closure
+    'WRAPPING_REQUIRES_LOGIN' => false,
 
-    include SERVER_ROOT . 'Application/Events.php';
+    'AJAX_OUT' => 'null',
 
-    if (SOCKET) return 1;
+    'CONTENT' => 'Public/StatsCoach/',
 
-    $route->changeStructure( $mvc );
+    'CONTENT_WRAPPER' => 'Public/StatsCoach.php',
 
-    include SERVER_ROOT . 'Application/Routes.php';
-}
+    'TEMPLATE' => 'Data/vendor/almasaeed2010/adminlte/',
 
-if (!SOCKET) startApplication();
+    'VENDOR' => 'Data/vendor/',
+
+    'SOCKET' => false,      //[ 'port' => 8080, ]
+
+    'HTTP' => true,
+
+    'HTTPS' => true,
+
+    'AJAX' => true,
+
+    'PJAX' => true,
+
+    'DB_HOST' => 'miles.systems',
+
+    'DB_NAME' => 'StatsCoach',
+
+    'DB_USER' => 'tmiles199',
+
+    'DB_PASS' => 'Huskies!99',
+
+    'AUTOLOAD' => [
+        'View' => '/Application/View',
+        'Tables' => '/Application/Services',
+        'Modules' => '/Application/Modules',
+        'Controller' => '/Application/Controller',
+        'Model' => '/Application/Model',
+        'App' => '/Application'
+    ]
+
+])();
+
+
+
 

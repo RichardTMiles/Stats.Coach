@@ -1,2 +1,10 @@
 // print substr(sprintf('%o', fileperms($fifoPath)), -4) . PHP_EOL;
 
+// print substr(sprintf('%o', fileperms($fifoPath)), -4) . PHP_EOL;
+/*
+if (pcntl_fork() == 0) {   // child, non-blocking
+    $file = fopen( $fifoPath, "w" );
+    usleep( 20 );
+    exit( 0 );
+} else
+*/

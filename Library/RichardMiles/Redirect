@@ -5,3 +5,8 @@ header( "LOCATION: http://example.com/" );  // Note that this will not change ur
 <head><meta http-equiv="refresh" content="2;url=http://example.com" /></head>
 
 <script type="text/javascript"> window.location = "http://www.example.com/" </script>
+
+
+
+stop pjax
+class="no-pjax"

@@ -24,7 +24,7 @@
         <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
 
             <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Join Your Team</h3>
+                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Create Your Team</h3>
             </div>
 
             <div class="box-body" style="color: ghostwhite">

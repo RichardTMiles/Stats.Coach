@@ -2,36 +2,8 @@
 <project version="4">
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/Application/Services/vendor/composer" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/components/font-awesome" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/components/jquery" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/almasaeed2010/adminlte" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/guzzlehttp/psr7" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/guzzlehttp/promises" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/phpseclib/phpseclib" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/guzzlehttp/guzzle" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/firebase/php-jwt" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/mustache/mustache" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/monolog/monolog" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/facebook/graph-sdk" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/google/auth" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/google/apiclient" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/psr/log" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/google/apiclient-services" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/psr/http-message" />
-      <path value="$PROJECT_DIR$/Application/Services/vendor/psr/cache" />
+      <path value="" />
     </include_path>
   </component>
-  <component name="PhpProjectServersManager">
-    <servers>
-      <server host="127.0.0.1" id="cabc654f-d9cf-4fdc-bd2f-0ed2d436e00d" name="Localhost" port="8080" />
-      <server host="miles.systems" id="44a2eb94-36ae-4030-9c55-571350190f32" name="Godaddy" use_path_mappings="true" />
-    </servers>
-  </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
-  <component name="PhpUnit">
-    <phpunit_settings>
-      <PhpUnitSettings />
-    </phpunit_settings>
-  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
 </project>

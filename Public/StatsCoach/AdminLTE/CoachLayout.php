@@ -1,12 +1,3 @@
-<?php
-
-
-$me = $this->user[$_SESSION['id']];
-
-$fullName = $me->user_first_name . ' ' . $me->user_last_name;
-
-?>
-
 <header class="main-header">
     <!-- Logo -->
     <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
@@ -24,61 +15,12 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
+
+
         <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <!-- Messages: style can be found in dropdown.less-->
-                <li id="NavMessages" class="dropdown messages-menu"></li>
-                <!-- Notifications: style can be found in dropdown.less -->
-                <li id="NavNotifications" class="dropdown notifications-menu"></li>
-                <!-- Tasks: style can be found in dropdown.less -->
-                <li id="NavTasks" class="dropdown tasks-menu">
 
-                </li>
-                <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $me->user_profile_picture ?>" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs"><?= $fullName ?></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <!-- User image -->
-                        <li class="user-header">
-                            <img src="<?= $me->user_profile_picture ?>" class="img-circle" alt="User Image"/>
-                            <p>
-                                <?= $fullName ?> - <?= $me->user_sport ?>
-                                <small>Member since <?= date( 'm/d/Y', $me->creation_date ) ?></small>
-                            </p>
-                        </li>
-                        <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Rounds</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Following</a>
-                            </div>
-                        </li>
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="<?= SITE ?>Profile/" class="btn btn-default btn-flat">Profile</a>
-                            </div>
-                            <div class="pull-right">
-                                <a href="<?= SITE ?>Logout/" class="btn btn-default btn-flat">Sign out</a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <!-- Control Sidebar Toggle Button -->
-                <li>
-                    <a href="" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+            <?php include 'navbar-nav.php' ?>
 
-
-            </ul>
         </div>
     </nav>
 </header>
@@ -133,12 +75,14 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
                 </ul>
             </li>
 
+            <!--
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-calendar"></i> <span>Event Schedule</span>
-                    <small class="label pull-right bg-red">3</small>
+                    <small class="label pull-right bg-red"></small>
                 </a>
             </li>
+            -->
 
             <li>
                 <a href="<?= SITE ?>PostScore/">
@@ -148,7 +92,9 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <?php if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
+                <?php
+
+                if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
@@ -172,7 +118,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
                 <?php } ?>
             </li>
 
-
+            <!--
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-table"></i> <span>Tournaments</span>
@@ -182,6 +128,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
                     <li><a href="#"><i class="fa fa-circle-o"></i> Coming Soon </a></li>
                 </ul>
             </li>
+            -->
 
             <!-- Messages -->
 
@@ -193,7 +140,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
             </li>
 
             <!-- Drills -->
-
+            <!--
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-folder"></i> <span>Drills</span>
@@ -206,6 +153,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
                     <li><a href="#"><i class="fa fa-circle-o"></i> Distance</a></li>
                 </ul>
             </li>
+            -->
 
 
             <li class="treeview">
@@ -215,15 +163,18 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?= SITE ?>Settings/" onclick=""><i class="fa fa-circle-o"></i> Profile
-                            Settings</a></li>
+                    <!--
                     <li><a href="#"><i class="fa fa-circle-o"></i> Tournament Finder</a></li>
+                    -->
+                    <li><a href="<?= SITE ?>Profile/" onclick=""><i class="fa fa-circle-o"></i> Profile
+                            Settings</a></li>
                     <li><a href="<?= site ?>CreateTeam/"><i class="fa fa-circle-o"></i> Create Team</a></li>
                     <li><a href="<?= site ?>JoinTeam/"><i class="fa fa-circle-o"></i> Join Team</a></li>
                 </ul>
             </li>
 
 
+            <!--
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-share"></i> <span>MultiSport</span>
@@ -239,6 +190,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
             </li>
 
 
+
             <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
 
 
@@ -246,6 +198,7 @@ $fullName = $me->user_first_name . ' ' . $me->user_last_name;
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Individual</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Team Standings</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Division</span></a></li>
+            -->
         </ul>
     </section>
     <!-- /.sidebar -->

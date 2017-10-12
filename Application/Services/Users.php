@@ -12,40 +12,36 @@ namespace Tables;
 use Model\Helpers\iSport;
 use Modules\Error\PublicAlert;
 use Modules\Helpers\Bcrypt;
-use Modules\Helpers\Entities;
+use Modules\Entities;
 use Modules\Interfaces\iEntity;
 use Psr\Log\InvalidArgumentException;
 
 class Users extends Entities implements iEntity
 {
 
-    static function get($object, $id)
+    static function get(&$object, $id)
     {
-        if (!is_object($object))
-            throw new InvalidArgumentException();
 
-        $object = static::fetch_object( 'SELECT user_profile_uri, user_profile_pic, user_sport, user_first_name, user_last_name FROM StatsCoach.user WHERE user_id = ?', $id );
-        $object->user_profile_picture = SITE . $object->user_profile_pic ?? 'Data/Uploads/Pictures/Defaults/default_avatar.png';
+        $object = static::fetch_object( 'SELECT * FROM StatsCoach.user WHERE user_id = ?', $id );
+
+        $object->user_profile_picture = SITE . ($object->user_profile_pic ?? 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $object->user_full_name = $object->user_first_name . ' ' . $object->user_last_name;
+        $object->user_id = $id;
 
-        $sport = $object->user_sport;
-        $sport = "Model\\$sport";
-        $sport = new $sport;
-        if ($sport instanceof iSport)                   // load stats
-            $sport->stats( $id );
+        Users::sport( $object, $id );
 
         return $object;
     }
 
-    static function add($object, $id, $argv)        // object and id will be null
+    static function add(&$object, $id, $argv)        // object and id will be null
     {
         $lambda = function (...$required) use ($argv) {
             foreach ($required as $item => $value)
-                 $array = $argv[$item] ?? false or die(1);
+                 $array = $argv[$value] ?? false or sortDump( [ 'sorry you saw this', $value, $argv ] );
             return $array;
         };
 
-        list($username, $password, $email, $userType, $fistName, $lastName, $gender) =
+        list($username, $password, $email, $userType, $firstName, $lastName, $gender) =
         $lambda('username', 'password', 'email', 'userType', 'fistName', 'lastName', 'gender');
 
         $email_code = uniqid( 'code_', true ); // Creating a unique string.
@@ -65,23 +61,32 @@ class Users extends Entities implements iEntity
         self::commit();
     }
 
-    static function remove($user, $id)
+    static function remove(&$user, $id)
     {
         // TODO: Implement remove() method.
     }
 
-    static function all($user, $id)
+    static function all(&$user, $id)
     {
         $user = static::fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
         if (!is_object( $user )) throw new \Exception( 'Could not find user  ' . $id );
+
         $user->user_profile_picture = SITE . (!empty( $user->user_profile_pic ) ? $user->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $user->user_cover_photo = SITE . $user->user_cover_photo;
         $user->user_full_name = $user->user_first_name . ' ' . $user->user_last_name;
+        $user->user_id = $id;
+
+        Users::sport( $user, $id );
+        Teams::all( $user, $id );
+
         return $user;
     }
 
-    static function sport($user, $id)
+    static function sport(&$user, $id)
     {
+        //if (SOCKET)
+          //  var_dump( [$GLOBALS['user'] , "SOCK", $user] ) . PHP_EOL and die( 1 );
+
         if (!is_object($user))
             throw new InvalidArgumentException('Non Object Passed');
 
@@ -89,20 +94,19 @@ class Users extends Entities implements iEntity
         $sport = "Model\\$sport";
         $sport = new $sport;
         if ($sport instanceof iSport)                   // load stats
-            return $sport->stats( $user, $id );         // B/C we don't not work?
-
+            return $sport->stats( $user, $id );
     }
 
 
-    static function range($object, $id, $argv)
+    static function range(&$object, $id, $argv)
     {
         // TODO: Implement range() method.
     }
 
     static function user_id_from_uri(string $user_uri)
     {
-        $stmt = self::database()->prepare( 'SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ?' );
-        $stmt->execute( [$user_uri] );
+        $stmt = self::database()->prepare( 'SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ? OR user_id = ?' );
+        $stmt->execute( [$user_uri, $user_uri] );
         return $stmt->fetch( \PDO::FETCH_COLUMN );
     }
 

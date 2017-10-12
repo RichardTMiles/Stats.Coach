@@ -27,7 +27,6 @@ class User extends Request
                 $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
                 return false;
             case 'FaceBook':
-
                 alert('hellllo');
                 $this->facebook();
                 //sortDump($GLOBALS);

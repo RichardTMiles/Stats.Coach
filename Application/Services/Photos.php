@@ -9,30 +9,42 @@
 namespace Tables;
 
 
-use Modules\Helpers\Entities;
+use Modules\Entities;
 use Modules\Error\PublicAlert;
 use Modules\Interfaces\iEntity;
 
 class Photos extends Entities implements iEntity
 {
-    static function get($object, $id)
+    static function get(&$object, $id)
+    {
+        if (!($object instanceof \stdClass))
+            throw new \Exception( 'Invalid Object Passed' );
+        $object->photo = [];
+
+        $sql = 'SELECT * FROM StatsCoach.entity_photos WHERE parent_id = ? OR photo_id = ?LIMIT 1';
+        $stmt = self::fetch_classes( $sql, $id, $id );
+
+        //sortDump($object);
+
+        foreach ($stmt as $item => $value)
+            if (is_object( $value ))
+                $object->photo[$value->photo_id] = $value;
+
+        return $object;
+    }
+
+    static function all(&$object, $id)
     {
         $sql = 'SELECT * FROM StatsCoach.entity_photos WHERE parent_id = ?';
-        $object->photos = static::fetch_classes( $sql, $id );
+        $object->photo = static::fetch_classes( $sql, $id );
     }
 
-
-    static function all($object, $id)
-    {
-
-    }
-
-    static function range($object, $id, $argv)
+    static function range(&$object, $id, $argv)
     {
         // TODO: Implement range() method.
     }
 
-    static function add($object, $id, $argv)
+    static function add(&$object, $id, $argv)
     {
         $photo_id = static::beginTransaction( Entities::ENTITY_PHOTOS, $id );
         $sql = 'REPLACE INTO StatsCoach.entity_photos (parent_id, photo_id, user_id, photo_path, photo_description) VALUES (:parent_id, :photo_id, :user_id, :photo_path, :photo_description)';
@@ -43,16 +55,16 @@ class Photos extends Entities implements iEntity
         $stmt->bindValue( ':photo_path', $argv['photo_path'] );
         $stmt->bindValue( ':photo_description', $argv['photo_description'] );
         if (!$stmt->execute())
-            throw new PublicAlert('Sorry, we could not process your request.','danger');
+            throw new PublicAlert( 'Sorry, we could not process your request.', 'danger' );
         return static::commit();
     }
 
-    static function remove($object, $id)
+    static function remove(&$object, $id)
     {
         $sql = 'DELETE * FROM StatsCoach.entity_photos WHERE photo_id = ?';
         if (array_key_exists( $id, $object->photos ))
-            unset($object->photos[$id]);    // I may not need the array_key_exists
-        return self::database()->prepare( $sql )->execute([$id]);
+            unset( $object->photos[$id] );    // I may not need the array_key_exists
+        return self::database()->prepare( $sql )->execute( [$id] );
     }
 
 }

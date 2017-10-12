@@ -9,6 +9,7 @@ use Modules\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
 use Modules\Error\PublicAlert;
+use Tables\Users;
 
 class Golf extends GlobalMap implements iSport
 {
@@ -19,14 +20,22 @@ class Golf extends GlobalMap implements iSport
         return true;
     }
 
-    public function stats($user, $id)
+    public function rounds($user_uri)
+    {
+        global $user_id;
+        if ($user_uri !== $_SESSION['id'])
+            $user_id = Users::user_id_from_uri( $user_uri );
+
+        Rounds::all($this->user[$user_id], $user_id);
+    }
+
+    public function stats(&$user, $id)
     {
         if (!is_object($user)) throw new InvalidArgumentException('Bad User Passed To Golf Stats');
-        $user->rounds = Rounds::get( \stdClass::class, $id );
+        $user->rounds = Rounds::get( $user->rounds, $id );
         $user->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
         return $user;
     }
-
 
     public function course($id)
     {

@@ -9,10 +9,18 @@
 namespace Model\Helpers;
 
 
-class Events
-{
-    static function refresh()
-    {
+use Psr\Log\InvalidArgumentException;
+use Tables\Followers;
+use Tables\Messages;
 
+class Events extends GlobalMap
+{
+
+    static function refresh(&$user, $id)
+    {
+        if (!is_object($user)) throw new InvalidArgumentException('Not logged in');
+
+        Messages::all($user, $id);
+        Followers::get($user, $id);
     }
 }

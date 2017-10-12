@@ -4,12 +4,18 @@ namespace Controller;
 use Modules\Error\PublicAlert;
 use Modules\Request;
 
-class Golf extends Request
+class Golf extends Request  // Validation
 {
     
     public function golf()
     {
         return true;
+    }
+
+    public function Rounds($user_uri)
+    {
+        global $user_id;
+        return $this->set( $user_uri )->alnum() ?: $user_id = $_SESSION['id'];  // session id must be set (route)
     }
 
     public function PostScore(&$state, &$course_id, &$boxColor)

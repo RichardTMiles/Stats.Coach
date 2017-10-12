@@ -1,12 +1,17 @@
-<?php $user = $this->user[$this->user_id ?: $_SESSION['id']];
-$me = (($user->user_id ?? null) == $_SESSION['id']);
+<?php
+
+global $user_id;
+$profile = $this->user[$user_id ?: $user_id = $_SESSION['id']];    // get the users object
+
+$me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
+
 ?>
 
 <!-- Content Header (Page header) -->
 
 <section class="content-header" style="color: ghostwhite">
     <h1>
-        <?= $user->user_first_name . ' ' . $user->user_last_name ?>
+        <?= $profile->user_first_name . ' ' . $profile->user_last_name ?>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -25,20 +30,20 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
             <!-- Profile Image -->
             <div class="box box-primary" data-widget="">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<?= $user->user_profile_picture ?>" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="<?= $profile->user_profile_picture ?>" alt="User profile picture">
                     <h3 class="profile-username text-center">
-                        <?= $user->user_first_name . ' ' . $user->user_last_name ?>
+                        <?= $profile->user_first_name . ' ' . $profile->user_last_name ?>
                     </h3>
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right"><?= $user->stats->followers ?></a>
+                            <b>Followers</b> <a class="pull-right"><?= $profile->stats->followers ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right"><?= $user->stats->following ?></a>
+                            <b>Following</b> <a class="pull-right"><?= $profile->stats->following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Rounds</b> <a class="pull-right"><?= $user->stats->stats_rounds ?></a>
+                            <b>Rounds</b> <a class="pull-right"><?= $profile->stats->stats_rounds ?></a>
                         </li>
                     </ul>
                     <?php if (!$me) {
@@ -51,7 +56,45 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
-            <?php if (!$me) \View\AdminLTE::direct_messages( $user->user_id ); ?>
+            <?php if (!$me): ?>
+                <!-- DIRECT CHAT SUCCESS -->
+                <div id="hierarchical" class="box box-success direct-chat direct-chat-success"></div>
+
+                <!--/.direct-chat -->
+                <script>
+                    function Messages() {
+                        $.get('<?= SITE . 'Messages/' . $profile->user_profile_uri ?>/', function (data) {
+                            MustacheWidgets(data, {
+                                widget: '#hierarchical',
+                                scroll: '#messages'
+                            })
+                        });
+
+                        $(document).on('submit', 'form#data-hierarchical', function (event) {
+                            $("#data-hierarchical").ajaxSubmit({
+                                url: '<?= SITE . 'Messages/' . $profile->user_profile_uri ?>/',
+                                type: 'post',
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    MustacheWidgets(data, {
+                                        widget: '#hierarchical',
+                                        scroll: '#messages'
+                                    });
+                                    return false;
+                                }
+                            });
+                            event.preventDefault();
+                        });
+                    }
+
+                    Messages();
+
+
+                </script>
+
+
+            <?php endif; ?>
 
         </div>
 
@@ -69,16 +112,16 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                         <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>About Me</dt>
-                                <dd><?= $user->user_about_me ?></dd>
+                                <dd><?= $profile->user_about_me ?></dd>
                                 <br>
                                 <dt>Birthday</dt>
-                                <dd><?= $user->user_birthday ?></dd>
+                                <dd><?= $profile->user_birthday ?></dd>
                                 <br>
                                 <dt>Education History</dt>
-                                <dd><?= $user->user_education_history ?></dd>
+                                <dd><?= $profile->user_education_history ?></dd>
                                 <br>
                                 <dt>Mutual Friends</dt>
-                                <dd><?= $user->user_facebook_id ??'Connect to Facebook'; ?></dd>
+                                <dd><?= $profile->user_facebook_id ?? 'Connect to Facebook'; ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
@@ -86,7 +129,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                     <!-- /.box -->
                 </div>
                 <!-- /.user info -->
-                <?php if ($user->user_id == $_SESSION['id']) { ?>
+                <?php if ($profile->user_id == $_SESSION['id']) { ?>
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -117,14 +160,14 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                             <label for="first" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="first"
-                                                       placeholder="<?= $user->user_first_name ?>" name="first_name">
+                                                       placeholder="<?= $profile->user_first_name ?>" name="first_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="lastName"
-                                                       placeholder="<?= $user->user_last_name ?>" name="last_name">
+                                                       placeholder="<?= $profile->user_last_name ?>" name="last_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -135,18 +178,18 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                     <input name="datepicker" type="text" class="form-control pull-right" id="datepicker"
-                                                           value="<?= $user->user_birthday ?>">
+                                                           value="<?= $profile->user_birthday ?>">
                                                 </div>
                                             </div>
                                             <!-- /.input group -->
                                         </div>
-                                        <div class="form-group <?= $user->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
+                                        <div class="form-group <?= $profile->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
                                             <label for="inputEmail" class="col-sm-3 control-label">Email</label>
                                             <div class="col-sm-8">
                                                 <input type="email" class="form-control" id="inputEmail"
-                                                       placeholder="<?= $user->user_email ?>" name="email">
+                                                       placeholder="<?= $profile->user_email ?>" name="email">
                                                 <span
-                                                    class="help-block"><?= $user->user_email_confirmed == 1 ? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
+                                                        class="help-block"><?= $profile->user_email_confirmed == 1 ? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
 
                                             </div>
                                         </div>
@@ -154,7 +197,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                             <label for="username" class="col-sm-3 control-label">Username</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="username" disabled="disabled"
-                                                       placeholder="<?= $user->user_username ?>">
+                                                       placeholder="<?= $profile->user_username ?>">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -179,7 +222,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                             <label for="inputExperience" class="col-sm-3 control-label">About Me</label>
                                             <div class="col-sm-8">
                                                 <textarea name="about_me" class="form-control" id="inputExperience"
-                                                          placeholder="<?= $user->user_about_me ?>"></textarea>
+                                                          placeholder="<?= $profile->user_about_me ?>"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +253,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                     <?php
                 }
 
-                if (!empty($user->rounds) && is_array( $user->rounds )) { ?>
+                if (!empty( $profile->rounds ) && is_array( $profile->rounds )) { ?>
                     <div class="col-md-auto">
                         <div class="box box-widget widget-user">
                             <div class="box box-info">
@@ -237,7 +280,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                             </thead>
                                             <tbody>
 
-                                            <?php foreach ($user->rounds as $stats) {
+                                            <?php foreach ($profile->rounds as $stats) {
                                                 echo '<tr>
                                                     <td>' . date( 'm/d/Y', $stats->score_date ) . "</td>
                                                     <td> $stats->course_name </td>
@@ -254,7 +297,7 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
                                 </div><!-- /.box-body -->
                                 <div class="box-footer clearfix">
                                     <a href="<?= SITE ?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
-                                    <a href="<?= SITE ?>" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
+                                    <a href="<?= SITE . 'Rounds/' . $user_id ?>/" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
                                 </div><!-- /.box-footer -->
                             </div>
                         </div>
@@ -267,5 +310,5 @@ $me = (($user->user_id ?? null) == $_SESSION['id']);
 
 </section>
 
-
 <!-- /.content -->
+

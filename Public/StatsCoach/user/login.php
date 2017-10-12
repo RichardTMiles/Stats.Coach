@@ -11,7 +11,6 @@
         <?php if ($this->UserName == false): ?>
             <form data-pjax action="<?= SITE ?>login/" method="post" onsubmit="return false;">
                 <div class="form-group has-feedback">
-
                     <input type="text" class="form-control" name="username"
                            placeholder="Username" value="<?= (isset($_POST['username']) ? htmlentities( $_POST['username'] ) : null); ?>">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -34,9 +33,16 @@
                 </div>
             </form>
 
-
             <div class="social-auth-links text-center">
-                <p>- OR -</p><a href="<?= $this->faceBookLoginUrl() ?>" class="btn btn-block btn-social btn-facebook btn-flat">
+                <p>- OR -</p><a href="<?= (new Facebook\Facebook( [
+                    'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
+                    'app_secret' => FACEBOOK_APP_SECRET,
+                    'default_graph_version' => 'v2.2',
+                ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/', [
+                    'public_profile', 'user_friends', 'email',
+                    'user_about_me', 'user_birthday',
+                    'user_education_history', 'user_hometown',
+                    'user_location', 'user_photos', 'user_friends'] ); ?>" class="btn btn-block btn-social btn-facebook btn-flat">
                     <i class="fa fa-facebook"></i> Sign in using Facebook</a>
                 <a href="#" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
@@ -44,7 +50,7 @@
 
             <br/>
             <div class="categories-bottom">
-                <a class="no-pjax" href="<?= SITE . 'recover/'; ?>">Forgot password<br></a>
+                <a href="<?= SITE . 'recover/'; ?>">Forgot password<br></a>
                 <a href="<?= SITE . 'register/'; ?>" class="text-center">Register a new membership</a>
             </div>
 

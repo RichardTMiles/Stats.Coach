@@ -8,28 +8,27 @@
 
 namespace Tables;
 
-use Tables\Location;
-use Modules\Helpers\Entities;
+use Modules\Entities;
 use Modules\Interfaces\iEntity;
 
 class Course extends Entities implements iEntity
 {
-    static function get($object, $id)
+    static function get(&$object, $id)
     {
 
     }
 
-    static function all($object, $id)
+    static function all(&$object, $id)
     {
 
     }
 
-    static function range($object, $id, $argv)
+    static function range(&$object, $id, $argv)
     {
         // TODO: Implement range() method.
     }
 
-    static function add($object, $id, $argv)
+    static function add(&$object, $id, $argv)
     {
         $course_id = self::beginTransaction( Entities::GOLF_COURSE );
 
@@ -95,7 +94,7 @@ class Course extends Entities implements iEntity
         return self::commit();
     }
 
-    static function remove($object, $id){
+    static function remove(&$object, $id){
 
     }
 

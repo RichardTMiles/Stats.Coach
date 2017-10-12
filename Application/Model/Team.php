@@ -10,6 +10,7 @@ namespace Model;
 
 use Model\Helpers\GlobalMap;
 use Modules\Helpers\Bcrypt;
+use Psr\Log\InvalidArgumentException;
 use Tables\Photos;
 use Tables\Teams;
 use Tables\Users;
@@ -22,27 +23,31 @@ class Team extends GlobalMap
 
     public function team(string $teamIdentifier)
     {
-        global $team_id, $team;
+        global $team_id, $team_photo;
         if (!$team_id = Teams::team_exists( $teamIdentifier ))
             return startApplication( 'Home/' );
 
-        if (!is_object($team[$team_id] ?? false))
-            Teams::all($team[$team_id], $team_id);
+        // if (!is_object($this->team[$team_id] ?? false))
+        $team = Teams::get($this->team[$team_id], $team_id);
 
-        if ($team_photo && $team->team_coach == $_SESSION['id']) {
+        if ($team_photo ?? false && $team->team_coach == $_SESSION['id']) {
             alert( 'change photo' );
-            unlink( $team->photo_path );
+            // unlink( $team->photo_path ); TODO - Delete photo from db
             Photos::add( $team, $team_id, [
                 'photo_path' => "$team_photo",
                 'photo_description' => "profile pic"] );
         }
 
-        $team->photo = SITE . ($team->photo_path ?? 'Data/Uploads/Pictures/Defaults/team-icon.png');
-        Teams::teamMembers( $team_id );
-        if (isset( $this->user[$team->team_coach] ))
-            return null;
-        Users::get( $team[$team->team_coach], $team->team_coach );
-        return $team;
+
+        if (isset( $this->user[$this->team[$team_id]->team_coach] ))
+            return true;
+
+        if ($team->team_coach === null)
+            throw new InvalidArgumentException( 'Why is there no coach?' );
+
+        Users::get( $this->user[$team->team_coach], $team->team_coach );
+
+        return true;
     }
 
 
@@ -61,7 +66,7 @@ class Team extends GlobalMap
         if (!$teamId = Teams::team_exists( $teamCode ))
             throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
 
-        Teams::all( $team[$teamId], $teamId );
+        Teams::all( $this->user[$_SESSION['id']], $_SESSION['id'] );
 
         if (array_key_exists( $teamCode, $this->user[$_SESSION['id']]->teams ))
             throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );

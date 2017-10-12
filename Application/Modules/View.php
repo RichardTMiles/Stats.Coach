@@ -91,7 +91,7 @@ class View
             $file = ob_get_clean();
             // TODO minify_html()
 
-            if (MINIFY_CONTENTS && (@include_once "minify.php"))
+            if (MINIFY_CONTENTS && (@include_once "Extras/minify.php"))
                 $file = minify_html( $file );
 
 
