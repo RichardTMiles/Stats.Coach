@@ -1,5 +1,5 @@
-<?php namespace Modules\Helpers;
+<?php namespace Carbon\Helpers;
 
-use Modules\Singleton;
+use Carbon\Singleton;
 
 class Globals { use Singleton; } // Fetch to globals uses this class

@@ -6,9 +6,9 @@
  * Time: 11:29 PM
  */
 
-namespace Modules\Helpers;
+namespace Carbon\Helpers;
 
-use Modules\Singleton;
+use Carbon\Singleton;
 
 class Skeleton implements \Traversable
 {

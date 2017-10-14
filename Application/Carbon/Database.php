@@ -1,6 +1,6 @@
 <?php // Parent of Model class, can only be called indirectly
 
-namespace Modules;
+namespace Carbon;
 
 use PDO;
 
@@ -36,16 +36,22 @@ class Database
                 return self::$database;
             } catch (\PDOException $e) {
                 $attempts++;
+
             }
         } while($attempts < 3);
-        throw new \Exception( "Could not establish database connection. \n" );
+
+
+        print 'We failed to connect to our database, please try again later.' . PHP_EOL;
+
+        print $e->getMessage();
+
+        exit(1);
     }
 
-    protected static function setUp()
+    public static function setUp()
     {
-        if (file_exists( SERVER_ROOT . "Scripts/Build/DBSetup.php" )) {
-            require_once SERVER_ROOT . "Scripts/Build/DBSetup.php";
-        }
+        if (file_exists(  CARBON_ROOT . 'Extras/buildDatabase.php' ))
+            require_once  CARBON_ROOT . 'Extras/buildDatabase.php';
     }
 
 } 

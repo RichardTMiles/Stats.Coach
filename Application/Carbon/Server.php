@@ -19,10 +19,10 @@ const SOCKET = true;
 
 include_once '../../index.php';    // This will load our configuration + auto-loaders
 
-use Modules\Helpers\Fork;
-use \Modules\Helpers\Pipe;
-use \Modules\Request;
-use \Modules\Helpers\Socket;
+use Carbon\Helpers\Fork;
+use \Carbon\Helpers\Pipe;
+use \Carbon\Request;
+use \Carbon\Helpers\Socket;
 
 # https://www.leaseweb.com/labs/2013/08/catching-signals-in-php-scripts/
 
@@ -84,7 +84,7 @@ class Server extends Thread
 
 
         // we should verify our connection now
-        new \Modules\Session($ip);             // Pull From Database, manage socket ip
+        new \Carbon\Session($ip);             // Pull From Database, manage socket ip
 
 
         fclose(STDOUT);              // output has to be preprocessed for websites and javascript
@@ -131,7 +131,7 @@ class Server extends Thread
                         $handshake++;
 
                     elseif ($fd == $UPDATE):
-                        // Application sends a request to update via route uri
+                        // Application.php sends a request to update via route uri
                         $data = fread($UPDATE, $bytes = 1024);  // This will read multiple lines
                         // we only send uri's to help with validation, and to update the applicable users session data
                         if (!empty($data)):

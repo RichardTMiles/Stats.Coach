@@ -9,10 +9,10 @@
  * Time: 5:11 PM
  */
 
-namespace Modules\Error;
+namespace Carbon\Error;
 
 
-use Modules\Interfaces\iException;
+use Carbon\Interfaces\iException;
 
 abstract class CustomException extends \Exception implements iException
 {

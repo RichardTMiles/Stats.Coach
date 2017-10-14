@@ -4,7 +4,7 @@
  *
 */
 
-namespace Modules\Helpers;
+namespace Carbon\Helpers;
 
 class Bcrypt
 {

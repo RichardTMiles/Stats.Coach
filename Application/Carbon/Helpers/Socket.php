@@ -6,7 +6,7 @@
  * Time: 11:06 AM
  */
 
-namespace Modules\Helpers;
+namespace Carbon\Helpers;
 
 
 class Socket

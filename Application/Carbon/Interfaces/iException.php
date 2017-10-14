@@ -6,7 +6,7 @@
  * Time: 5:09 PM
  */
 
-namespace Modules\Interfaces;
+namespace Carbon\Interfaces;
 
 
 interface iException

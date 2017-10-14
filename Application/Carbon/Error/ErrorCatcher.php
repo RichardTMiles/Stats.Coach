@@ -2,22 +2,27 @@
 
 // http://php.net/manual/en/function.debug-backtrace.php
 
-namespace Modules\Error;
+namespace Carbon\Error;
 
-use Modules\Singleton;
-use View\View;
+use Carbon\Singleton;
 
 class ErrorCatcher
 {
-    use Singleton;
+    use Singleton;                              // todo - put notes also why singleton is used in each class
 
-    public static function start( )
+    private $defaultLocation;
+    private $printToScreen;
+
+    public static function start( string $logLocation, bool $printToScreen )
     {
         ini_set( 'display_errors', 1 );
         ini_set( 'track_errors', 1 );
         error_reporting(E_ALL);
-        $closure = function (...$argv) {
-            ErrorCatcher::generateErrorLog($argv);
+        $closure = function (...$argv) use ($logLocation, $printToScreen) {
+            $error = new ErrorCatcher();
+            $error->defaultLocation = SERVER_ROOT . $logLocation;
+            $error->printToScreen = $printToScreen;
+            $error->generateLog($argv);
             //View::contents('error','500error');
             exit(1);                                // TODO - Uncomment
         };
@@ -25,14 +30,14 @@ class ErrorCatcher
         set_exception_handler($closure);
     }
 
-    public static function generateErrorLog($argv = array()){
+    public static function generateErrorLog($argv = array())
+    {
         $self = static::getInstance();
         $self->generateLog($argv);
     }
 
     public function generateLog($argv = array())
     {
-
         ob_start( );
         print PHP_EOL. date( 'D, d M Y H:i:s' , time());
         print PHP_EOL. PHP_EOL .'Printout of Function Stack: ' . PHP_EOL;
@@ -44,15 +49,19 @@ class ErrorCatcher
         $output = ob_get_contents( );
         ob_end_clean( );
 
-        #print "<pre>$output</pre>";    // dev
+        if ($this->printToScreen)
+            print "<pre>$output</pre>";    // dev
 
-        // Write the contents back to the file
-        $this->storeFile(ERROR_LOG, $output);
+        // Write the contents to server
+        $file = (defined('ERROR_LOG' ) ? ERROR_LOG : $this->defaultLocation);
+
+        $this->storeFile($file, $output);
+
+
     }
 
     private function generateCallTrace()
     {
-
         $e = new \Exception( );
         ob_start( );
         $trace = explode( "\n", $e->getTraceAsString() );
@@ -81,7 +90,7 @@ class ErrorCatcher
     {
         if(!file_exists(dirname($file)))
             mkdir(dirname($file));
-        $file = fopen($file , "a");
+        $file = fopen($file , "w");
         fwrite( $file, $output );
         fclose( $file );
     }

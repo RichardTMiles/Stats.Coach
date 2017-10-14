@@ -3,9 +3,9 @@
 // Modified from
 // http://php.net/manual/en/features.file-upload.php
 
-namespace Modules\Helpers;
+namespace Carbon\Helpers;
 
-use Modules\Error\PublicAlert;
+use Carbon\Error\PublicAlert;
 
 class Files
 {

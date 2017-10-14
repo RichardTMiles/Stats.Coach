@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules;
+namespace Carbon;
 
-use Modules\Helpers\Serialized;
+use Carbon\Helpers\Serialized;
 
 trait Singleton
 {
@@ -14,7 +14,7 @@ trait Singleton
         return self::getInstance()->Skeleton( $methodName, $arguments );
     }
 
-    public static function newInstance(...$args)
+    public static function newInstance(...$args) : self
     {   // Start a new instance of the class and pass any arguments
         self::clearInstance();
 
@@ -25,7 +25,7 @@ trait Singleton
         return $GLOBALS['Singleton'][$class];
     }
 
-    public static function getInstance(...$args)
+    public static function getInstance(...$args) : self
     {   // see if the class has already been called this run
         if (!empty($GLOBALS['Singleton'][$calledClass = get_called_class()]))
             return $GLOBALS['Singleton'][$calledClass];
@@ -42,15 +42,14 @@ trait Singleton
         return $GLOBALS['Singleton'][$calledClass];
     }
 
-    /**
-     * @param null $object
-     * @return object|null
-     */
-    public static function clearInstance($object = null)
+    public static function setInstance(self $object) : self
+    {
+        return $GLOBALS['Singleton'][ get_called_class()] = $object;
+    }
+
+    public static function clearInstance() : void
     {
         unset($_SESSION[$calledClass = get_called_class()], $GLOBALS['Singleton'][$calledClass]);
-        $GLOBALS['Singleton'][$calledClass] = is_object( $object ) ? $object : null;
-        return $GLOBALS['Singleton'][$calledClass];
     }
     
     public function __call($methodName, $arguments = array())
@@ -68,16 +67,21 @@ trait Singleton
         if (method_exists( $this, $methodName ))
             return (null === ($result = call_user_func_array( array($this, $methodName), $arguments )) ? $this : $result);
 
-        if (is_callable($this->{$methodName})) return call_user_func_array($this->{$methodName}, $arguments); // closure binding
+        if (is_callable($this->{$methodName})) {
+            self::addMethod($methodName, $this->{$methodName});
+            return call_user_func_array($this->{$methodName}, $arguments);
+        } // closure binding
 
         if (key_exists( 'closures', $GLOBALS ) && key_exists( $methodName, $GLOBALS['closures'] )) {
             $function = $GLOBALS['closures'][$methodName];
             $this->addMethod( $methodName, $function );
             return (null === ($result = call_user_func_array( $this->methods[$methodName], $arguments )) ? $this : $result);
-        } throw new \Exception( "There is valid method or closure with the given name '$methodName' to call" );
+        }
+
+        throw new \Exception( "There is valid method or closure with the given name '$methodName' to call" );
     }
 
-    private function addMethod($name, $closure)
+    private function addMethod($name, $closure) : void
     {
         if (is_callable( $closure )):
             $this->methods[$name] = \Closure::bind( $closure, $this, get_called_class() );

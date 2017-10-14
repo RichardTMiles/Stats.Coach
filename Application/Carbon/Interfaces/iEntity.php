@@ -6,7 +6,7 @@
  * Time: 6:57 PM
  */
 
-namespace Modules\Interfaces;
+namespace Carbon\Interfaces;
 
 
 interface iEntity

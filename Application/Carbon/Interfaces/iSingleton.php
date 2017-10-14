@@ -6,7 +6,7 @@
  * Time: 12:18 PM
  */
 
-namespace Modules\Interfaces;
+namespace Carbon\Interfaces;
 
 interface iSingleton
 {

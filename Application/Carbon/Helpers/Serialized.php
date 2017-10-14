@@ -33,7 +33,7 @@
  * @return		boolean			True if $value is serialized data, otherwise false
  */
 
-namespace Modules\Helpers;
+namespace Carbon\Helpers;
 
 abstract class Serialized {
 

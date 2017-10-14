@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules;
+namespace Carbon;
 
 /* The function View is auto loaded on the initial view class call.
     the view class will only point to the 'current-master' template
@@ -32,8 +32,6 @@ class View
 
     public function __construct($forceWrapper = false)   // Send the content wrapper
     {
-        global $user;
-
         if (SOCKET) return null;
 
         #if (AJAX)
@@ -52,6 +50,7 @@ class View
 
             echo (MINIFY_CONTENTS && (@include_once "Extras/minify.php")) ? minify_html( $template ) : $template;
 
+
             if ($forceWrapper):
                 if (!empty( $GLOBALS['alert'] )) $this->carryErrors = $GLOBALS['alert']; // exit(1);
                 $this->forceStoreContent = true;
@@ -66,7 +65,7 @@ class View
         call_user_func_array( [$self, 'content'], $argv );
     }
 
-    public function content(...$argv) // Must be called through Singleton, must be private
+    public function content(...$argv) : void // Must be called through Singleton, must be private
     {
 
         switch (count( $argv )) {
@@ -81,14 +80,21 @@ class View
         }
 
         if (file_exists( $file )) {
-            if (SOCKET) return $file;
+            if (SOCKET) {
+                // include $file;          // we not need compression / buffering for sockets
+                return;
+            }
 
             ob_start();
+
             if (empty( $GLOBALS['alert'] ) && !empty( $GLOBALS['alert'] = $this->carryErrors ))
                 $this->carryErrors = null;
+
             include CONTENT_ROOT . 'alert/alerts.php'; // a little hackish when not using template file
-            include_once $file;
+
+            include $file;
             $file = ob_get_clean();
+
             // TODO minify_html()
 
             if (MINIFY_CONTENTS && (@include_once "Extras/minify.php"))
@@ -96,11 +102,11 @@ class View
 
 
             if ($this->forceStoreContent || (!AJAX && (!WRAPPING_REQUIRES_LOGIN ?: $_SESSION['id']))) {
+                # $this->forceStoreContent = false;
                 $this->currentPage = base64_encode( $file );
+                exit(1);
             } else echo $file;
 
-            $this->forceStoreContent = false;
-            exit( 1 );
 
         } else throw new \Exception( "$file does not exist" );  // TODO - throw 404 error
 

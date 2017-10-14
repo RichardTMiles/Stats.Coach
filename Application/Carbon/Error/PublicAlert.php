@@ -6,7 +6,7 @@
  * Time: 5:19 PM
  */
 
-namespace Modules\Error;
+namespace Carbon\Error;
 
 
 /**

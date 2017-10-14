@@ -6,12 +6,12 @@
  * Time: 5:48 AM
  */
 
-namespace Modules;
+namespace Carbon;
 
 use PDO;
 use stdClass;
-use Modules\Interfaces\iEntity;
-use Modules\Error\PublicAlert;
+use Carbon\Interfaces\iEntity;
+use Carbon\Error\PublicAlert;
 
 abstract class Entities
 {
@@ -67,7 +67,7 @@ abstract class Entities
         $db = self::database();
         do {
             try {
-                $stmt = $db->prepare( 'INSERT INTO StatsCoach.entity (entity_pk, entity_fk) VALUE (?,?)' );
+                $stmt = $db->prepare( 'INSERT INTO StatsCoach.carbon (entity_pk, entity_fk) VALUE (?,?)' );
                 $stmt->execute( [$stmt = Bcrypt::genRandomHex(), $dependant] );
             } catch (\PDOException $e) {
                 $stmt = false;
@@ -80,7 +80,7 @@ abstract class Entities
 
     static protected function remove_entity($id)
     {
-        if (!self::database()->prepare( 'DELETE FROM StatsCoach.entity WHERE entity_pk = ?' )->execute( [$id] ))
+        if (!self::database()->prepare( 'DELETE FROM StatsCoach.carbon WHERE entity_pk = ?' )->execute( [$id] ))
             throw new \Exception( "Bad Entity Delete $id" );
     }
 
@@ -124,6 +124,21 @@ abstract class Entities
         $stmt->execute( $execute );
         $array = $stmt->fetchAll();
         foreach ($array as $key => $value) $object->$key = $value;
+    }
+
+
+    static function buildDatabase()
+    {
+        $sql = <<<END
+        CREATE TABLE `entity` (
+    `entity_pk` varchar(225) NOT NULL,
+  `entity_fk` varchar(225) DEFAULT NULL,
+  PRIMARY KEY (`entity_pk`),
+  UNIQUE KEY `entity_entity_pk_uindex` (`entity_pk`),
+  KEY `entity_entity_entity_pk_fk` (`entity_fk`),
+  CONSTRAINT `entity_entity_entity_pk_fk` FOREIGN KEY (`entity_fk`) REFERENCES carbon (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+END;
     }
 
 
