@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="d934cf23-1a19-468f-b06e-c94bf0d52f06" name="Stats Coach" url="http://stats.coach">
-        <fileTransfer port="0" mountedRoot="/Library/Server/Web/Data/Sites/Default" accessType="MOUNT" />
+        <fileTransfer port="0" mountedRoot="/Library/Server/Web/Data/Sites/Stats.Coach" accessType="MOUNT" />
       </webServer>
     </option>
   </component>

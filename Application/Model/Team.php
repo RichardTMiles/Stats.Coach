@@ -9,13 +9,13 @@
 namespace Model;
 
 use Model\Helpers\GlobalMap;
-use Modules\Helpers\Bcrypt;
+use Carbon\Helpers\Bcrypt;
 use Psr\Log\InvalidArgumentException;
 use Tables\Photos;
 use Tables\Teams;
 use Tables\Users;
-use Modules\Error\PublicAlert;
-use Modules\Singleton;
+use Carbon\Error\PublicAlert;
+use Carbon\Singleton;
 
 class Team extends GlobalMap
 {

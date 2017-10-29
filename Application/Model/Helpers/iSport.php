@@ -9,7 +9,7 @@ Email needs to be edited in function "register"
 
 namespace Model\Helpers;
 
-use Modules\Interfaces\iSingleton;
+use Carbon\Interfaces\iSingleton;
 
 interface iSport extends iSingleton
 {

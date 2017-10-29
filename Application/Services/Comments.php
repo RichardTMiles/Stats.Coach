@@ -9,17 +9,17 @@
 namespace Tables;
 
 
-use Modules\Entities;
-use Modules\Error\PublicAlert;
-use Modules\Interfaces\iEntity;
+use Carbon\Entities;
+use Carbon\Error\PublicAlert;
+use Carbon\Interfaces\iEntity;
 
 class Comments extends Entities implements iEntity
 {
     
-    static function get(&$object, $id)
+    static function get(&$array, $id)
     {
         $sql = 'SELECT * FROM StatsCoach.entity_comments JOIN StatsCoach.entity_tag ON comment_id = entity_id WHERE parent_id = ? LIMIT 10';
-        $object->comments = static::fetch_classes( $sql, $id );
+        $array->comments = static::fetch_classes( $sql, $id );
         return true;
     }
 

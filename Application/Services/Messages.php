@@ -9,27 +9,27 @@
 namespace Tables;
 
 use Model\User;
-use Modules\Entities;
-use Modules\Interfaces\iEntity;
-use Modules\Helpers\Pipe;
+use Carbon\Entities;
+use Carbon\Interfaces\iEntity;
+use Carbon\Helpers\Pipe;
 
 class Messages extends Entities implements iEntity
 {
-    static function get(&$object, $id)
+    static function get(&$array, $id)
     {
-        $to_user = $object->user_id ?? false;
+        $to_user = $array->user_id ?? false;
         if (!$to_user) throw new \Exception( 'Cannot get messages from a non-user.' );
-        $object->messages = self::fetch_classes( 'SELECT * FROM StatsCoach.user_messages INNER JOIN StatsCoach.entity_tag ON entity_id = message_id WHERE 
-                    StatsCoach.user_messages.to_user_id = ? AND StatsCoach.entity_tag.user_id = ? OR 
-                    StatsCoach.user_messages.to_user_id = ? AND StatsCoach.entity_tag.user_id = ?', $id, $_SESSION['id'], $_SESSION['id'], $id );
-        return $object;
+        $array->messages = self::fetch( 'SELECT * FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
+                    StatsCoach.user_messages.to_user_id = ? AND StatsCoach.carbon_tag.user_id = ? OR 
+                    StatsCoach.user_messages.to_user_id = ? AND StatsCoach.carbon_tag.user_id = ?', $id, $_SESSION['id'], $_SESSION['id'], $id );
+        return $array;
     }
 
 
     static function all(&$object, $id)   // signed in user
     {
-        $stmt = self::database()->prepare( 'SELECT user_id, to_user_id FROM StatsCoach.user_messages INNER JOIN StatsCoach.entity_tag ON entity_id = message_id WHERE 
-                    StatsCoach.user_messages.to_user_id = ? OR StatsCoach.entity_tag.user_id = ?' );
+        $stmt = self::database()->prepare( 'SELECT user_id, to_user_id FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
+                    StatsCoach.user_messages.to_user_id = ? OR StatsCoach.carbon_tag.user_id = ?' );
         $stmt->execute( [$id, $id] );
         $stmt = $stmt->fetchAll();
 
@@ -51,7 +51,7 @@ class Messages extends Entities implements iEntity
 
     static function add(&$object, $id, $argv)   // id is the user to be sent to
     {
-        $message_id = self::beginTransaction( Entities::USER_MESSAGES, $_SESSION['id'] );
+        $message_id = self::beginTransaction( USER_MESSAGES, $_SESSION['id'] );
         $sql = 'INSERT INTO StatsCoach.user_messages (message_id, to_user_id, message) VALUES (:message_id, :user_id, :message)';
         $stmt = self::database()->prepare( $sql );
         $stmt->bindValue( ':message_id', $message_id );
@@ -70,7 +70,7 @@ class Messages extends Entities implements iEntity
 
     static function remove(&$object, $id)
     {
-        $sql = 'DELETE * FROM StatsCoach.entity_location WHERE entity_id = ?';
+        $sql = 'DELETE * FROM StatsCoach.carbon_location WHERE entity_id = ?';
         if (self::database()->prepare( $sql )->execute( [$id] )) {
             unset( $object->location );
             return true;

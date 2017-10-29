@@ -2,8 +2,8 @@
 
 namespace Controller;
 
-use Modules\Error\PublicAlert;
-use Modules\Request;
+use Carbon\Error\PublicAlert;
+use Carbon\Request;
 
 class User extends Request
 {

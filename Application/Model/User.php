@@ -9,9 +9,9 @@ use Model\Helpers\iSport;
 use Tables\Followers;
 use Tables\Messages;
 use Tables\Teams;
-use Modules\Error\PublicAlert;
-use Modules\Helpers\Bcrypt;
-use Modules\Request;
+use Carbon\Error\PublicAlert;
+use Carbon\Helpers\Bcrypt;
+use Carbon\Request;
 
 
 class User extends GlobalMap

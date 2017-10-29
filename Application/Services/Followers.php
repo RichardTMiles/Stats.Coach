@@ -9,23 +9,23 @@
 namespace Tables;
 
 
-use Modules\Entities;
-use Modules\Interfaces\iEntity;
+use Carbon\Entities;
+use Carbon\Interfaces\iEntity;
 
 class Followers extends Entities implements iEntity
 {
 
-    static function get(&$object, $id)
+    static function get(&$array, $id)
     {
-        if (!property_exists($object , 'stats') || !is_object($object->stats))
-            $object->stats = new \stdClass;
+        if (!property_exists($array , 'stats') || !is_object($array->stats))
+            $array->stats = new \stdClass;
         $stmt = self::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
         $stmt->execute( [$id] );
-        $object->stats->followers = (int)$stmt->fetchColumn();
+        $array->stats->followers = (int)$stmt->fetchColumn();
         $stmt = self::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
         $stmt->execute( [$id] );
-        $object->stats->following = (int)$stmt->fetchColumn();
-        return $object;
+        $array->stats->following = (int)$stmt->fetchColumn();
+        return $array;
     }
 
 

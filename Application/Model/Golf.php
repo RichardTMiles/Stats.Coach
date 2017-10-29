@@ -5,10 +5,10 @@ namespace Model;
 use Psr\Log\InvalidArgumentException;
 use Tables\Course;
 use Tables\Rounds;
-use Modules\Singleton;
+use Carbon\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
-use Modules\Error\PublicAlert;
+use Carbon\Error\PublicAlert;
 use Tables\Users;
 
 class Golf extends GlobalMap implements iSport

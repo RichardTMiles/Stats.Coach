@@ -10,9 +10,9 @@ include '..\..\index.php';
 # this was originally created with websocketd written in go
 # this is still here for users with PHP => 7.2  which is  thread unsafe
 
-use Modules\Helpers\Fork;
-use \Modules\Helpers\Pipe;
-use \Modules\Request;
+use Carbon\Helpers\Fork;
+use \Carbon\Helpers\Pipe;
+use \Carbon\Request;
 
 /* We need a way to safely exit if the socket process is forced closed by websocketd
  * The signalHandler will attempt to unlink opened file descriptors after a force
@@ -82,8 +82,8 @@ while (true) {  // loop.
                 endif;
                 $handshake++;
 
-            elseif ($fd == $fifoFile):  // Application
-                // Application sends a request to update.
+            elseif ($fd == $fifoFile):  // Application.php
+                // Application.php sends a request to update.
                 $data = fread( $fifoFile, $bytes = 1024 );  // This will read multiple lines
                 // we only send uri's to help with validation, and to update the applicable users session data
                 if (!empty( $data )):

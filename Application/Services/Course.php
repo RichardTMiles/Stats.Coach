@@ -8,12 +8,12 @@
 
 namespace Tables;
 
-use Modules\Entities;
-use Modules\Interfaces\iEntity;
+use Carbon\Entities;
+use Carbon\Interfaces\iEntity;
 
 class Course extends Entities implements iEntity
 {
-    static function get(&$object, $id)
+    static function get(&$array, $id)
     {
 
     }

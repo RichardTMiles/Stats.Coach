@@ -8,7 +8,7 @@
 
 namespace Model\Helpers;
 
-use Modules\Entities;
+use Carbon\Entities;
 
 abstract class GlobalMap extends Entities
 {

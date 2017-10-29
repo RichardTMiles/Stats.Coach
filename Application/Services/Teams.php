@@ -9,17 +9,17 @@
 namespace Tables;
 
 use Model\User;
-use Modules\Error\PublicAlert;
-use Modules\Helpers\Bcrypt;
-use \Modules\Entities;
-use Modules\Interfaces\iEntity;
+use Carbon\Error\PublicAlert;
+use Carbon\Helpers\Bcrypt;
+use \Carbon\Entities;
+use Carbon\Interfaces\iEntity;
 
 class Teams extends Entities implements iEntity
 {
     static function get(&$team, $id) : \stdClass  // team obj
     {
-        $team = self::fetch_object( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $id );
-        if (!is_object($team))
+        $team[$id] = self::fetch( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $id );
+        if (!is_array($team))
             throw new \Exception('Fetch teams invalid');
         Photos::get( $team, $id );
         Photos::all( $team, $id );
@@ -30,13 +30,13 @@ class Teams extends Entities implements iEntity
     static function all(&$user, $id) : \stdClass  // user obj, reset teams
     {
         global $team; // array, referenced for static function
-        $temp = self::fetch_classes( 'SELECT teams.team_id, team_coach, parent_team,team_code, team_name, team_rank, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo, accepted FROM StatsCoach.teams LEFT JOIN team_members ON StatsCoach.teams.team_coach = ? or member_id = ?', $id ,$id );
+        $temp = self::fetch( 'SELECT teams.team_id, team_coach, parent_team,team_code, team_name, team_rank, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo, accepted FROM StatsCoach.teams LEFT JOIN team_members ON StatsCoach.teams.team_coach = ? or member_id = ?', $id ,$id );
 
-        foreach ($temp as $id => $obj) {
-            $team[$obj->team_id] = $obj;
-            $user->teams[] = $obj->team_id;
-            self::members( $team[$obj->team_id], $obj->team_id );
-            Photos::all( $team[$obj->team_id], $obj->team_id);
+        foreach ($temp as $id => $array) {
+            $team[$array['team_id']] = $array;
+            $user['teams'][] = $array['team_id'];
+            self::members( $team[$array->team_id], $array->team_id );
+            Photos::all( $team[$array->team_id], $array->team_id);
         }
 
         return $user;
@@ -49,10 +49,9 @@ class Teams extends Entities implements iEntity
         $sql = 'SELECT user_id FROM StatsCoach.team_members WHERE team_id = ?';
         $stmt = self::database()->prepare( $sql );
         $stmt->execute( [$id] );
-        $team->members = is_array( $stmt = $stmt->fetchAll( \PDO::FETCH_COLUMN ) ) ? $stmt : [$stmt];
+        $team['members'] = is_array( $stmt = $stmt->fetchAll( \PDO::FETCH_COLUMN ) ) ? $stmt : [$stmt];
 
-        //sortDump($team->members);
-        if (!empty( $team->members )) foreach ($team->members as $user_id)
+        if (!empty( $team['members'] )) foreach ($team['members'] as $user_id)
             if (!is_array($user) || !array_key_exists($user_id, $user))     // cache
                 new User( $user_id );
 
@@ -100,8 +99,7 @@ class Teams extends Entities implements iEntity
     }
 
     static function newTeamMember($team_code) : bool
-    {
-        // We can assume its the session id
+    {   // We can assume its the session id
         $member = self::beginTransaction( 6, $_SESSION['id'] );
         if ($team_id = self::team_exists( $team_code ))
             self::database()->prepare( 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)' )->execute( [$member, $_SESSION['id'], $team_id] );

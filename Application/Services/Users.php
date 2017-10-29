@@ -9,28 +9,26 @@
 namespace Tables;
 
 
+use Model\Helpers\Events;
 use Model\Helpers\iSport;
-use Modules\Error\PublicAlert;
-use Modules\Helpers\Bcrypt;
-use Modules\Entities;
-use Modules\Interfaces\iEntity;
+use Carbon\Error\PublicAlert;
+use Carbon\Helpers\Bcrypt;
+use Carbon\Entities;
+use Carbon\Interfaces\iEntity;
 use Psr\Log\InvalidArgumentException;
 
 class Users extends Entities implements iEntity
 {
 
-    static function get(&$object, $id)
+    static function get(&$array, $id)
     {
 
-        $object = static::fetch_object( 'SELECT * FROM StatsCoach.user WHERE user_id = ?', $id );
-
-        $object->user_profile_picture = SITE . ($object->user_profile_pic ?? 'Data/Uploads/Pictures/Defaults/default_avatar.png');
-        $object->user_full_name = $object->user_first_name . ' ' . $object->user_last_name;
-        $object->user_id = $id;
-
-        Users::sport( $object, $id );
-
-        return $object;
+        $array = static::fetch( 'SELECT * FROM StatsCoach.user WHERE user_id = ?', $id );
+        $array['user_profile_picture'] = SITE . ($array['user_profile_pic'] ?? 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
+        $array['user_id'] = $id;
+        Users::sport( $array, $id );
+        return $array;
     }
 
     static function add(&$object, $id, $argv)        // object and id will be null
@@ -68,30 +66,32 @@ class Users extends Entities implements iEntity
 
     static function all(&$user, $id)
     {
-        $user = static::fetch_object( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.entity_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
+        $user = static::fetch( 'SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.carbon_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id );
         if (!is_object( $user )) throw new \Exception( 'Could not find user  ' . $id );
 
-        $user->user_profile_picture = SITE . (!empty( $user->user_profile_pic ) ? $user->user_profile_pic : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
-        $user->user_cover_photo = SITE . $user->user_cover_photo;
-        $user->user_full_name = $user->user_first_name . ' ' . $user->user_last_name;
-        $user->user_id = $id;
+        $user['user_profile_picture'] = SITE . (!empty( $user['user_profile_pic'] ) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $user['user_cover_photo'] = SITE . $user['user_cover_photo'];
+        $user['user_full_name'] = $user['user_first_name'] . ' ' . $user['user_last_name'];
+        $user['user_id'] = $id;
 
         Users::sport( $user, $id );
-        Teams::all( $user, $id );
+
+        Events::refresh($user[$_SESSION['id']], $_SESSION['id']);
 
         return $user;
     }
 
     static function sport(&$user, $id)
     {
-        //if (SOCKET)
-          //  var_dump( [$GLOBALS['user'] , "SOCK", $user] ) . PHP_EOL and die( 1 );
+        if (!is_array($user)) throw new \InvalidArgumentException('Non Object Passed');
 
-        if (!is_object($user))
-            throw new InvalidArgumentException('Non Object Passed');
-
-        $sport = $user->user_sport;
+        $sport = $user['user_sport'];
         $sport = "Model\\$sport";
+
+        if (!class_exists($sport)) return null;
+
+        Teams::all( $user, $id );
+
         $sport = new $sport;
         if ($sport instanceof iSport)                   // load stats
             return $sport->stats( $user, $id );
@@ -113,10 +113,10 @@ class Users extends Entities implements iEntity
     static function changeStatus($status = false)
     {
         global $user;
-        $sql = 'UPDATE StatsCoach.user_session SET user_online_status = ? WHERE user_id = ?';
+        $sql = 'UPDATE StatsCoach.carbon_session SET user_online_status = ? WHERE user_id = ?';
         $stmt = self::database()->prepare( $sql );
         $stmt->execute( [$status, $_SESSION['id']] );
-        return $user[$id]->online = (bool) $stmt->fetchColumn();
+        return $user[$_SESSION['id']]['online'] = (bool) $stmt->fetchColumn();
     }
 
     private static function change_password($user_id, $password)
@@ -128,9 +128,9 @@ class Users extends Entities implements iEntity
     static function onlineStatus($id): bool
     {
         global $user;
-        $sql = 'SELECT user_online_status FROM StatsCoach.user_session WHERE user_id = ? LIMIT 1';
+        $sql = 'SELECT user_online_status FROM StatsCoach.carbon_session WHERE user_id = ? LIMIT 1';
         self::fetch_into_class( $user[$id], $sql, $id );
-        return $user[$id]->user_online_status;
+        return $user[$id]['user_online_status'];
     }
 
     static function user_exists($username): bool
