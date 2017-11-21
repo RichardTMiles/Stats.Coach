@@ -41,6 +41,8 @@ class User extends GlobalMap
      */
     public function login($username, $password, $rememberMe)
     {
+        alert('logged in.. session set ');
+
         if (!Users::user_exists( $username ))
             throw new PublicAlert( 'Sorry, this Username and Password combination doesn\'t match out records.', 'warning' );
 
@@ -55,6 +57,7 @@ class User extends GlobalMap
 
         // using the verify method to compare the password with the stored hashed password.
         if (Bcrypt::verify( $password, $data['user_password'] ) === true) {
+
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
         } else throw new PublicAlert ( 'Sorry, the username and password combination you have entered is invalid.', 'warning' );
 
@@ -88,7 +91,7 @@ class User extends GlobalMap
 
     public function register()
     {
-        global $username, $password, $userType, $email, $firstName, $lastName, $gender;
+        global $username, $password, $userType, $email, $firstName, $lastName, $gender, $teamCode;
 
         if (Users::user_exists( $username ))
             throw new PublicAlert ( 'That username already exists', 'warning' );
@@ -97,8 +100,9 @@ class User extends GlobalMap
             throw new PublicAlert ( 'That email already exists.', 'warning' );
 
         $null = null;
+
         // Tables self validate and throw public errors
-        Users::add( $null, $null, [
+        $email_code = Users::add( $null, $null, [
             'username' => $username,
             'password' => $password,
             'email' => $email,
@@ -107,6 +111,7 @@ class User extends GlobalMap
             'lastName' => $lastName,
             'gender' => $gender
         ] );
+
 
         if ($userType == 'Coach') {
             global $teamName, $schoolName;
@@ -140,7 +145,7 @@ class User extends GlobalMap
 
     public function activate($email, $email_code)
     {
-        if (!$this->email_exists( $email ))
+        if (!Users::email_exists( $email ))
             throw new PublicAlert( 'Please make sure the Url you have entered is correct.', 'danger' );
 
         $stmt = $this->db->prepare( "SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ?" );
@@ -168,7 +173,7 @@ class User extends GlobalMap
             throw new PublicAlert( "An account could not be found with the email provided.", 'warning' );
         };
 
-        if (!$this->email_exists( $email )) $alert();
+        if (!Users::email_exists( $email )) $alert();   // todo
 
         $generated = Bcrypt::genRandomHex( 20 );
 
@@ -243,35 +248,35 @@ class User extends GlobalMap
 
         $sql = 'UPDATE StatsCoach.user SET user_profile_pic = :user_profile_pic, user_first_name = :user_first_name, user_last_name = :user_last_name, user_birthday = :user_birthday, user_email = :user_email, user_email_confirmed = :user_email_confirmed,  user_gender = :user_gender, user_about_me = :user_about_me WHERE user_id = :user_id';
         $stmt = $this->db->prepare( $sql );
-        $stmt->bindValue( ':user_profile_pic', $profile_pic ?: $user->user_profile_pic );
-        $stmt->bindValue( ':user_first_name', $first ?: $user->user_first_name );
-        $stmt->bindValue( ':user_last_name', $last ?: $user->user_last_name );
-        $stmt->bindValue( ':user_birthday', $dob ?: $user->user_birthday );
-        $stmt->bindValue( ':user_gender', $gender ?: $user->user_gender );
-        $stmt->bindValue( ':user_email', $email ?: $user->user_email );
-        $stmt->bindValue( ':user_email_confirmed', $email ? 0 : $user->user_email_confirmed );
-        $stmt->bindValue( ':user_about_me', $about_me ?: $user->user_about_me );
+        $stmt->bindValue( ':user_profile_pic', $profile_pic ?: $user['user_profile_pic'] );
+        $stmt->bindValue( ':user_first_name', $first ?: $user['user_first_name'] );
+        $stmt->bindValue( ':user_last_name', $last ?: $user['user_last_name'] );
+        $stmt->bindValue( ':user_birthday', $dob ?: $user['user_birthday'] );
+        $stmt->bindValue( ':user_gender', $gender ?: $user['user_gender'] );
+        $stmt->bindValue( ':user_email', $email ?: $user['user_email'] );
+        $stmt->bindValue( ':user_email_confirmed', $email ? 0 : $user['user_email_confirmed'] );
+        $stmt->bindValue( ':user_about_me', $about_me ?: $user['user_about_me'] );
         $stmt->bindValue( ':user_id', $_SESSION['id'] );
         if (!$stmt->execute())
             throw new PublicAlert( 'Sorry, we could not process your information at this time.', 'warning' );
 
         // Remove old picture
-        if (!empty( $profile_pic ) && !empty( $user->user_profile_pic ) && $profile_pic != $user->user_profile_pic)
-            unlink( SERVER_ROOT . $user->user_profile_pic );
+        if (!empty( $profile_pic ) && !empty( $user['user_profile_pic'] ) && $profile_pic != $user['user_profile_pic'])
+            unlink( SERVER_ROOT . $user['user_profile_pic'] );
 
         // Send new activation code
-        if (!empty( $email ) && $email != $user->user_email) {
+        if (!empty( $email ) && $email != $user['user_email']) {
             $subject = 'Please confirm your email';
             $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
                 'Reply-To: ' . REPLY_EMAIL . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
-            $message = "Hello " . ($first ?: $user->user_first_name) . ",
+            $message = "Hello " . ($first ?: $user['user_first_name']) . ",
             \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             https://www.Stats.Coach/Activate/" . base64_encode( $email ) . "/" . base64_encode( $user->user_email_code ) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
+             https://www.Stats.Coach/Activate/" . base64_encode( $email ) . "/" . base64_encode( $user['user_email_code'] ) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
 
 
-            if (!mail( $email ?: $user->user_email, $subject, $message, $headers ))
+            if (!mail( $email ?: $user['user_email'], $subject, $message, $headers ))
                 throw new PublicAlert( 'Our email system failed.' );
 
             PublicAlert::success( 'Please check your email to activate your account' );

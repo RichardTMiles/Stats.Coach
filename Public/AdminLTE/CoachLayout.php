@@ -32,10 +32,10 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $me->user_profile_picture ?>" class="img-circle" alt="User Image">
+                <img src="<?= $my['user_profile_picture'] ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p><?= $fullName ?></p>
+                <p><?= $my['user_first_last'] ?></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -66,9 +66,9 @@
                         <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $fullName ?>
                         </a>
                     </li>
-                    <?php if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
+                    <?php if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
                         $team = $this->team[$team_id];
-                        echo '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team->team_name . '</a></li>';
+                        echo '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team['team_name'] . '</a></li>';
                     } ?>
 
 
@@ -94,20 +94,20 @@
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php
 
-                if (!empty( $me->teams )) foreach ($me->teams as $team_id) {
+                if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
                             <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
-                                <?php if (empty( $team->members ))
+                                <?php if (empty( $team['members'] ))
                                 echo '</a>';
                                 else { ?>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
-                                <?php foreach ($team->members as $user_id) { ?>
-                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]->user_profile_uri ?>/"><i
-                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]->user_first_name . ' ' . $this->user[$user_id]->user_last_name ?>
+                                <?php foreach ($team['members'] as $user_id) { ?>
+                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]['user_profile_uri'] ?>/"><i
+                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]['user_first_name'] . ' ' . $this->user[$user_id]->user_last_name ?>
                                         </a>
                                     </li>
                                 <?php } ?>

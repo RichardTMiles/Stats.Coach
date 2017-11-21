@@ -45,7 +45,7 @@ if (!$state) { ?>
             if (courseId === "Add") {
                 return $.pjax({
                     url: ('https://' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
-                    container: '#ajax-content'
+                    container: '#pjax-content'
                 });
             }
 

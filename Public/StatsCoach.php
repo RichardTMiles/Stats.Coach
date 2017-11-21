@@ -3,7 +3,6 @@
 const COMPOSER = 'Data' . DS . 'vendor' . DS;
 const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
 
-
 ?>
 
 <!DOCTYPE html>
@@ -19,9 +18,10 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="<?= $this->versionControl( TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css")?>">
+    <link rel="stylesheet"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
     <!-- Theme style -->
-    <link rel="stylesheet" href="<?= $this->versionControl( TEMPLATE . "dist/css/AdminLTE.min.css" )?>">
+    <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "dist/css/AdminLTE.min.css") ?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
     <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style"
@@ -168,59 +168,6 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
             }
         }(typeof global !== "undefined" ? global : this));// Hierarchical PJAX Request
 
-
-        function IsJsonString(str) {
-            try {
-                return JSON.parse(str);
-            } catch (e) {
-                return 0;
-            }
-        }
-
-        function MustacheWidgets(data, url = '') {
-            if (data !== null) {
-                if (typeof data === "string") data = IsJsonString(data);
-                if (data.hasOwnProperty('Mustache') && data.hasOwnProperty('widget')) {
-                    console.log('Valid Mustache $(' + data.widget + ')\n');
-                    $.get(data.Mustache, function (template) {
-                        Mustache.parse(template);
-                        $(data.widget).html(Mustache.render(template, data));
-                        if (data.hasOwnProperty('scroll')) {
-                            $(data.scroll).slimscroll({start: data.scrollTo});
-                        }
-                    })
-                } else {
-                    console.log("Bad Trimmers :: ");
-                    console.log(data);
-                }
-            } else {
-                console.log('Bad Handlebar :: ' + data);
-                if (typeof data === "object")
-                    if (url !== '') {
-                        console.log('Attempting Socket');
-                        setTimeout(function () {            // wait 2 seconds
-                            $.fn.sendEvent(url);
-                        }, 2000);
-                    }
-            }
-        }
-
-        function bootstrapAlert(message, level) {
-            if (level == null) level = 'info';
-            var container = document.getElementById('alert'),
-                node = document.createElement("DIV"), text;
-
-            text = level.charAt(0).toUpperCase() + level.slice(1);
-
-            if (container == null)
-                return false;
-
-            node.innerHTML = '<div id="row"><div class="alert alert-' + level + ' alert-dismissible">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-                '<h4><i class="icon fa fa-' + (level == "danger" ? "ban" : (level == "success" ? "check" : level)) + '"></i>' + text + '!</h4>' + message + '</div></div>';
-
-            container.innerHTML = node.innerHTML + container.innerHTML;
-        }
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -230,100 +177,60 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- ./wrapper -->
-
 </head>
 
-<?php ob_start(); ?>
-<!-- Full Width Column -->
-<div class="content-wrapper">
-    <div id="alert"></div>
-    <article id="ajax-content">
-        <!-- /.content -->
-    </article>
-    <div class="clearfix"></div>
-    <!-- /.container -->
-</div>
-<!-- /.content-wrapper -->
-<footer class="main-footer" style="">
-    <div class="container">
-        <div class="pull-right hidden-xs">
-            <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?= SITE_VERSION ?>
-        </div>
-        <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
-
-        <!--script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script-->
-    </div>
-    <!-- /.container -->
-</footer>
-</div>
-
 <?php
-$wrapper = ob_get_clean();
 
-if (!empty($_SESSION['id']) && is_array($this->user[$_SESSION['id']])):
+$userType = ($this->user[$_SESSION['id']]['user_type'] ?? false);
+$layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav' :
+    (($userType == 'Coach') ? 'skin-green fixed sidebar-mini sidebar-collapse' :
+        'stats-wrap');
+?>
 
-    $me = $this->user[$_SESSION['id']];
+<!-- Full Width Column -->
+<body class="<?= $layout ?>" style="background: transparent">
+<div <?= (($userType == 'Athlete' || $userType == 'Coach') ? 'class="wrapper"' : 'class="container" id="pjax-content"') ?> style="background: transparent">
 
-    $fullName = $me->user_first_name . ' ' . $me->user_last_name;
+    <?php
 
-    if (($this->user[$_SESSION['id']]->user_type ?? false) == 'Coach') :
-        echo '<body class="skin-green fixed sidebar-mini sidebar-collapse"><div class="wrapper">';
-        require_once SERVER_ROOT . 'Public/AdminLTE/CoachLayout.php';
-        echo $wrapper;
-    elseif (($this->user[$_SESSION['id']]->user_type ?? false) == 'Athlete'):
-        echo '<body class="hold-transition skin-green layout-top-nav"><div class="wrapper">';
-        require_once SERVER_ROOT . 'Public/AdminLTE/AthleteLayout.php';
-        echo $wrapper;
-    endif;
+    if (($_SESSION['id'] ?? false) && is_array($this->user[$_SESSION['id']])):
+        $my = $this->user[$_SESSION['id']];
 
-elseif (array_key_exists('id', $_SESSION) && !$_SESSION['id']):
-    echo "<body class='stats-wrap'><div class='container' id='ajax-content'></div>";
+        if ($userType == 'Coach'):
+            require_once SERVER_ROOT . 'Public/AdminLTE/CoachLayout.php';
+        else:
+            require_once SERVER_ROOT . 'Public/AdminLTE/AthleteLayout.php';
+        endif;
+        ?>
 
-else:
-    session_destroy();
-    #session_regenerate_id( TRUE );
-    echo '<script type="text/javascript"> window.location = "' . SITE . '" </script>';
-    // TODO - how often does this happen?
-endif; ?>
+        <div class="content-wrapper" style="background: transparent">
+            <div class="container">
+                <div id="alert"></div>
+                <!-- content -->
+                <div id="pjax-content"></div>
+                <!-- /.content -->
+            </div>
+            <div class="clearfix"></div>
+            <!-- /.container -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer" style="">
+            <div class="container">
+                <div class="pull-right hidden-xs">
+                    <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?= SITE_VERSION ?>
+                </div>
+                <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
 
+                <!--script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script-->
+            </div>
+            <!-- /.container -->
+        </footer>
 
+    <?php endif; ?>
+</div>
 <script>
-    //-- Stats Coach Bootstrap Alert -->
-    function bootstrapAlert(message, level) {
-        if (level == null) level = 'info';
-        var container = document.getElementById('alert'),
-            node = document.createElement("DIV"), text;
-
-        text = level.charAt(0).toUpperCase() + level.slice(1);
-
-        if (container == null)
-            return false;
-
-        node.innerHTML = '<div id="row"><div class="alert alert-' + level + ' alert-dismissible">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-            '<h4><i class="icon fa fa-' + (level == "danger" ? "ban" : (level == "success" ? "check" : level)) + '"></i>' + text + '!</h4>' + message + '</div></div>';
-
-        container.innerHTML = node.innerHTML + container.innerHTML;
-    }
-
-    // JQuery
-    //components/jquery/jquery.min.js
-    // bower_components/jquery/dist/jquery.min.js
+    //-- JQuery -->
     loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery/dist/jquery.min.js') ?>", function () {
-        // A better closest function
-        (function ($) {
-            $.fn.closest_descendant = function (filter) {
-                var $found = $(),
-                    $currentSet = this; // Current place
-                while ($currentSet.length) {
-                    $found = $currentSet.filter(filter);
-                    if ($found.length) break;  // At least one match: break loop
-                    // Get all children of the current set
-                    $currentSet = $currentSet.children();
-                }
-                return $found.first(); // Return first match of the collection
-            }
-        })(jQuery);
 
         //-- Jquery Form -->
         loadJS('<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-form/src/jquery.form.js')?>');
@@ -379,218 +286,13 @@ endif; ?>
             //-- PJAX-->
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", function () {
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", function () {
-
-                    /*$(document).on('pjax:start', function () {
-                        console.log("PJAX");
-                    });*/
-
-                    $(document).on('pjax:end', function () {
-                        // PJAX Forum Request
-                        $(document).on('submit', 'form[data-pjax]', function (event) {
-                            $('#ajax-content').hide();
-                            $.pjax.submit(event, '#ajax-content')
-                        });
-
-
-                        // Set up Box Annotations
-                        $(".box").boxWidget({
-                            animationSpeed: 500,
-                            collapseTrigger: '[data-widget="collapse"]',
-                            removeTrigger: '[data-widget="remove"]',
-                            collapseIcon: 'fa-minus',
-                            expandIcon: 'fa-plus',
-                            removeIcon: 'fa-times'
-                        });
-
-
-                        //-- iCheck -->
-                        $('input').iCheck({
-                            checkboxClass: 'icheckbox_square-blue',
-                            radioClass: 'iradio_square-blue',
-                            increaseArea: '20%' // optional
-                        });
-
-
-                        $('#my-box-widget').boxRefresh('load');
-
-                        // Select 2 -->
-                        $(".select2").select2();
-
-                        <?php // Data tables loadJS("<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>//");-->
-
-                        // Input Mask -->
-                        $("[data-mask]").inputmask();  //Money Euro
-
-                        // Bootstrap Datepicker -->
-                        $('#datepicker').datepicker({autoclose: true});
-
-                        //-- Bootstrap Time Picker -->
-                        $('.timepicker').timepicker({showInputs: false});
-
-                        <?php //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl( 'dist/js/demo.js' ) ?>//");
-
-                        //-- jQuery Knob -->
-                        $(".knob").knob({
-                            /*change : function (value) {
-                             //console.log("change : " + value);
-                             },
-                             release : function (value) {
-                             console.log("release : " + value);
-                             },
-                             cancel : function () {
-                             console.log("cancel : " + this.value);
-                             }, */
-                            draw: function () {
-
-                                // "tron" case
-                                if (this.$.data('skin') == 'tron') {
-
-                                    var a = this.angle(this.cv)  // Angle
-                                        , sa = this.startAngle          // Previous start angle
-                                        , sat = this.startAngle         // Start angle
-                                        , ea                            // Previous end angle
-                                        , eat = sat + a                 // End angle
-                                        , r = true;
-
-                                    this.g.lineWidth = this.lineWidth;
-
-                                    this.o.cursor
-                                    && (sat = eat - 0.3)
-                                    && (eat = eat + 0.3);
-
-                                    if (this.o.displayPrevious) {
-                                        ea = this.startAngle + this.angle(this.value);
-                                        this.o.cursor
-                                        && (sa = ea - 0.3)
-                                        && (ea = ea + 0.3);
-                                        this.g.beginPath();
-                                        this.g.strokeStyle = this.previousColor;
-                                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-                                        this.g.stroke();
-                                    }
-
-                                    this.g.beginPath();
-                                    this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-                                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-                                    this.g.stroke();
-
-                                    this.g.lineWidth = 2;
-                                    this.g.beginPath();
-                                    this.g.strokeStyle = this.o.fgColor;
-                                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-                                    this.g.stroke();
-
-                                    return false;
-                                }
-                            }
-                        });
-                        /* END JQUERY KNOB */
-
+                    loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", function () {
+                        Carbon('#pjax-content', '');
                     });
-
-                    // Set a data mask to force https request
-                    $(document).on("click", "a.no-pjax", false);
-
-                    // All links will be sent with ajax
-                    $(document).pjax('a', '#ajax-content');
-
-                    $(document).on('pjax:click', function () {
-                        $('#ajax-content').hide();
-                    });
-
-                    $(document).on('pjax:success', function () {
-                        console.log("Successfully loaded " + window.location.href);
-
-                    });
-
-                    $(document).on('pjax:timeout', function (event) {
-                        // Prevent default timeout redirection behavior, this would cause infinite loop
-                        event.preventDefault()
-                    });
-
-                    $(document).on('pjax:error', function (event) {
-                        console.log("Could not load " + window.location.href);
-                    });
-
-                    $(document).on('pjax:complete', function () {
-                        $('#ajax-content').fadeIn('fast').removeClass('overlay');
-                    });
-
-                    // Get inner contents already buffered on server
-                    $.pjax.reload('#ajax-content');
-
-                    <?php if ($_SESSION['id']): ?>
-
-                    var defaultOnSocket = false,
-                        statsSocket = new WebSocket('wss://stats.coach:8080/');
-
-                    $.fn.trySocket = function () {
-                        if (statsSocket.readyState === 1) return 1;
-                        var count = 0;
-                        console.log('Attempting Reconnect');
-                        do {
-                            count++;
-                            if (statsSocket != null && typeof statsSocket === 'object' && statsSocket.readyState === 1) break;            // help avoid race
-                            statsSocket = new WebSocket('wss://stats.coach:8080/');
-                        } while (statsSocket.readyState === 3 && count <= 3);  // 6 seconds 3 attempts
-                        if (statsSocket.readyState === 3)
-                            console.log = "Could not connect to socket. TrySocket aborted";
-                        return (statsSocket.readyState === 1);
-                    };
-
-                    $.fn.sendEvent = function (url) {
-                        if (defaultOnSocket && $.fn.trySocket) {           //defaultOnSocket &&
-                            console.log('URI ' + url);
-                            statsSocket.send(url);
-                        } else $.get(url, function (data) {
-                            MustacheWidgets(data)
-                        }); // json
-                    };
-
-                    statsSocket.onmessage = function (data) {
-                        if (IsJsonString(data.data)) {
-                            MustacheWidgets(JSON.parse(data.data));
-                        } else console.log(data.data);
-                    };
-
-                    statsSocket.onerror = function () {
-                        console.log('Web Socket Error');
-                    };
-
-                    statsSocket.onopen = function () {
-                        console.log('Socket Started');
-
-                        // prevent the race condition
-                        statsSocket.onclose = function () {
-                            console.log('Closed Socket');
-                            $.fn.trySocket();
-                        };
-                        // Messages in Navigation, faster to initially load over http
-                        $.fn.sendEvent('<?= SITE . 'Messages/' ?>');
-                        $.fn.sendEvent('<?= SITE . 'Notifications/' ?>');
-                        $.fn.sendEvent('<?= SITE . 'Tasks/' ?>');
-                    };
-                    <?php endif; ?>
                 });
             });
         });
     });
-
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-100885582-1', 'auto');
-    ga('send', 'pageview');
-
 
 </script>
 

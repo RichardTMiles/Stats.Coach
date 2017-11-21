@@ -1,10 +1,3 @@
-<?php
-
-$me = $this->user[$_SESSION['id']] ?? die( 1 );
-
-?>
-
-
 <header class="main-header">
     <nav class="navbar navbar-static-top">
         <div class="container">
@@ -24,9 +17,9 @@ $me = $this->user[$_SESSION['id']] ?? die( 1 );
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <?php if (isset( $me->teams )) foreach ($me->teams as $team_id) {
+                            <?php if (isset( $my['teams'] )) foreach ($my['teams'] as $team_id) {
                                 $myTeam = $this->team[$team_id];
-                                echo '<li><a href="' . SITE . 'Team/' . $myTeam->team_code . '/">' . $myTeam->team_name . '</a></li>';
+                                echo '<li><a href="' . SITE . 'Team/' . $myTeam['team_code'] . '/">' . $myTeam['team_name'] . '</a></li>';
                             }
                             ?>
                             <li class="divider"></li>
@@ -48,7 +41,6 @@ $me = $this->user[$_SESSION['id']] ?? die( 1 );
 
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
-
                 <?php
                 include 'navbar-nav.php'
                 ?>

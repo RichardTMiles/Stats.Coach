@@ -4,6 +4,7 @@ namespace Controller;
 
 use Carbon\Error\PublicAlert;
 use Carbon\Request;
+use Carbon\View;
 
 class User extends Request
 {
@@ -27,7 +28,6 @@ class User extends Request
                 $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
                 return false;
             case 'FaceBook':
-                alert('hellllo');
                 $this->facebook();
                 //sortDump($GLOBALS);
             default:
@@ -43,6 +43,7 @@ class User extends Request
 
         if (!$rememberMe)
             $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
+
 
         if (empty($_POST)) return false;  // If forum already submitted
 
@@ -60,7 +61,6 @@ class User extends Request
     {
         if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
             throw new PublicAlert( 'Sorry, we could not connect to Facebook. Please try again later.' );
-
 
         return true;
     }
@@ -94,8 +94,8 @@ class User extends Request
         elseif ($this->userType == "Coach" && !$this->teamName)
             $this->alert['warning'] = "Sorry, the team name you have entered appears invalid.";
 
-        elseif (!$this->password || ($len = strlen( $this->password )) < 6 || $len > 16)
-            $this->alert['warning'] = 'Sorry, your password must be between 6 and 16 characters!';
+        elseif (!$this->password || ($len = strlen( $this->password )) < 6)
+            $this->alert['warning'] = 'Sorry, your password must be more than 6 characters!';
 
         elseif ($this->password != $verifyPass)
             $this->alert['warning'] = 'The passwords entered must match!';

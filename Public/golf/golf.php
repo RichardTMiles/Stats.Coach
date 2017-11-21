@@ -1,17 +1,17 @@
 <?php
 
-$me = $this->user[$_SESSION['id']];
+$my = $this->user[$_SESSION['id']];
 
 ?>
 
 <section class="content-header" style="color: #d9edf7">
     <h1>
-        <?= $me->user_first_name ?>
+        <?= $my['user_first_name'] ?>
         <small style="color: #d9edf7">Profile</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: #d9edf7"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li><?= $me->user_full_name ?></li>
+        <li><?= $my['user_first_last'] ?></li>
         <li class="active" style="color: #d9edf7">Profile</li>
     </ol>
 </section>
@@ -22,19 +22,19 @@ $me = $this->user[$_SESSION['id']];
 
     <div class="box box-widget widget-user">
         <!-- Add the bg color to the header using any of the bg-* classes -->
-        <div class="widget-user-header bg-black" style="background: url('<?= TEMPLATE ?>dist/img/photo1.png') center center;">
+        <div class="widget-user-header bg-black" style="background: url('<?= $my['user_cover_photo'] ?>') center center;">
             <h3 class="widget-user-username"></h3>
             <h5 class="widget-user-desc"></h5>
         </div>
         <div class="widget-user-image">
-            <img class="img-circle" src="<?= $me->user_profile_picture ?>" alt="User Avatar">
+            <img class="img-circle" src="<?= $my['user_profile_picture'] ?>" alt="User Avatar">
         </div>
 
         <div class="box-footer">
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $me->stats->stats_ffs ?></h5>
+                        <h5 class="description-header"><?= $my['stats']['stats_ffs'] ?></h5>
                         <span class="description-text">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
@@ -42,7 +42,7 @@ $me = $this->user[$_SESSION['id']];
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $me->stats->stats_rounds ?></h5>
+                        <h5 class="description-header"><?= $my['stats']['stats_rounds'] ?></h5>
                         <span class="description-text">Rounds</span>
                     </div><!-- /.description-block -->
 
@@ -50,7 +50,7 @@ $me = $this->user[$_SESSION['id']];
 
                 <div class="col-sm-4">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $me->stats->stats_gnr ?></h5>
+                        <h5 class="description-header"><?= $my['stats']['stats_gnr'] ?></h5>
                         <span class="description-text">Greens in Regulation</span>
                     </div><!-- /.description-block -->
                 </div><!-- /.col -->
@@ -59,7 +59,7 @@ $me = $this->user[$_SESSION['id']];
         </div>
     </div>
 
-    <?php if (!empty( $me->rounds ) && is_array( $me->rounds ) && is_object( $me->rounds[0] )) { ?>
+    <?php if (!empty( $my['rounds'] ) && is_array( $my['rounds'] ) && is_array( $my['rounds'][0] )) { ?>
         <div class="box box-widget widget-user">
             <div class="box box-info">
                 <div class="box-header with-border">
@@ -85,15 +85,15 @@ $me = $this->user[$_SESSION['id']];
                             </thead>
                             <tbody>
 
-                            <?php foreach ($me->rounds as $key => $round) { ?>
+                            <?php foreach ($my['rounds'] as $key => $round) { ?>
                                 <tr>
                                     <td><?= date( 'm/d/Y', $round->score_date ) ?></td>
-                                    <td><?= $round->course_name ?></td>
-                                    <td><?= $round->score_total_ffs ?></td>
-                                    <td><?= $round->score_total_gnr ?></td>
-                                    <td><?= $round->score_total_putts ?></td>
-                                    <td><?= $round->par_tot ?></td>
-                                    <td><?= $round->score_total ?></td>
+                                    <td><?= $round['course_name'] ?></td>
+                                    <td><?= $round['score_total_ffs'] ?></td>
+                                    <td><?= $round['score_total_gnr'] ?></td>
+                                    <td><?= $round['score_total_putts'] ?></td>
+                                    <td><?= $round['par_tot'] ?></td>
+                                    <td><?= $round['score_total'] ?></td>
                                 </tr>
                             <?php } ?>
 
@@ -115,7 +115,7 @@ $me = $this->user[$_SESSION['id']];
                 <span class="info-box-icon bg-aqua"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Shots</span>
-                    <span class="info-box-number"><?= $me->stats->stats_strokes ?></span>
+                    <span class="info-box-number"><?= $my['stats']['stats_strokes'] ?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -125,7 +125,7 @@ $me = $this->user[$_SESSION['id']];
                 <span class="info-box-icon bg-green"><i class="fa fa-flag-checkered"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Rounds Played</span>
-                    <span class="info-box-number"><?= $me->stats->stats_rounds ?></span>
+                    <span class="info-box-number"><?= $my['stats']['stats_rounds'] ?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -135,7 +135,9 @@ $me = $this->user[$_SESSION['id']];
                 <span class="info-box-icon bg-yellow"><i class="fa fa-tree"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Handicap</span>
-                    <span class="info-box-number"><?= ($me->stats->stats_handicap < 6 ? "You must play at least 6 rounds" : $this->golf->stats_handicap) ?></span>
+                    <?php // TODO - the handicap system ?>
+                    <span class="info-box-number"><?= ($my['stats']['stats_handicap'] < 6 ? "You must play at least 6 rounds" : $this->golf->stats_handicap) ?></span>
+
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
@@ -145,7 +147,7 @@ $me = $this->user[$_SESSION['id']];
                 <span class="info-box-icon bg-red"><i class="fa fa-book"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Last Round</span>
-                    <span class="info-box-number"><?= $me->rounds[0]->score_total ?? 'We\'re waiting.' ?></span>
+                    <span class="info-box-number"><?= $my['rounds'][0]['score_total'] ?? 'We\'re waiting.' ?></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

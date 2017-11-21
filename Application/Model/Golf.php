@@ -31,16 +31,16 @@ class Golf extends GlobalMap implements iSport
 
     public function stats(&$user, $id)
     {
-        if (!is_object($user)) throw new InvalidArgumentException('Bad User Passed To Golf Stats');
-        $user->rounds = Rounds::get( $user->rounds, $id );
-        $user->stats = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
+        if (!is_array($user)) throw new InvalidArgumentException('Bad User Passed To Golf Stats');
+        $user['rounds'] = Rounds::get( $user['rounds'], $id );
+        $user['stats'] = $this->fetch( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
         return $user;
     }
 
     public function course($id)
     {
-        $this->course[$id] = $this->fetch_object( 'SELECT * FROM StatsCoach.golf_course JOIN StatsCoach.entity_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
-        if (!is_object( $course = $this->course[$id] )) throw new \Exception( 'invalid course id' );
+        $this->course[$id] = $this->fetch( 'SELECT * FROM StatsCoach.golf_course JOIN StatsCoach.entity_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
+        if (!is_array( $course = &$this->course[$id] )) throw new \Exception( 'invalid course id' );
         $course->course_par = unserialize( $course->course_par );
         $course->course_handicap = unserialize( $course->course_handicap );
         return $course;
@@ -48,9 +48,9 @@ class Golf extends GlobalMap implements iSport
 
     public function teeBox($id, $color)
     {
-        if (!is_object( $this->course[$id] )) throw new \Exception( 'invalid distance lookup' );
+        if (!is_array( $this->course[$id] )) throw new \Exception( 'invalid distance lookup' );
         $sql = "SELECT * FROM StatsCoach.golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1";
-        $teeBox = $this->course[$id]->teeBox = $this->fetch_object( $sql, $id, $color );
+        $teeBox = $this->course[$id]['teeBox'] = $this->fetch_object( $sql, $id, $color );
         $teeBox->distance = unserialize( $teeBox->distance );
         $this->course[$id]->teeBox->distance_color = $color;
         return $teeBox;
@@ -73,7 +73,7 @@ class Golf extends GlobalMap implements iSport
                 $putts_tot += $putts[$i];
             }
 
-            $course = $this->course[$course_id]->course_id ?? $this->course( $course_id );
+            $course = $this->course[$course_id]['course_id'] ?? $this->course( $course_id );
 
             ################# Add Round ################
             Rounds::add( $this->user[$_SESSION['id']], $course_id, [
@@ -99,23 +99,29 @@ class Golf extends GlobalMap implements iSport
         }
 
         // Get Course so we can display the tee box colors
-        if (!empty($course_id) && (is_array( $this->course ) && !array_key_exists( $course_id, $this->course ) || !is_object( $course = $this->course[$course_id] ) || !isset($course->course_id) || $course->course_id != $course_id))
+        if (!empty($course_id) && (is_array( $this->course ) && !array_key_exists( $course_id, $this->course ) ||
+                !is_array( $course = $this->course[$course_id] ) ||
+                !isset($course['course_id']) || $course['course_id'] != ['$course_id']))
             $course = $this->course( $course_id );
 
         // A tee box color is set, get the distances.
         // I dont like that the tee box color is stored twice
         if (!empty($boxColor)) {
-            if (!isset($course->teeBox) || !is_object( $course->teeBox )) {
+            if (!isset($course->teeBox) || !is_array( $course['teeBox'] )) {
                 $this->teeBox( $course_id, $boxColor );
             }
             return null;
         }
 
-        if (!empty($course_id) && is_object( $course ))
-            return $course_colors = [$course->box_color_1, $course->box_color_2, $course->box_color_3, $course->box_color_4, $course->box_color_5];
+        if (!empty($course_id) && is_array( $course ))
+            return $course_colors = [
+                $course['box_color_1'], $course['box_color_2'], $course['box_color_3'],
+                $course['box_color_4'], $course['box_color_5']
+            ];
+
 
         if (!empty($state)) {
-            $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.entity_location ON entity_id = course_id WHERE state = ?";
+            $sql = "SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_location ON entity_id = course_id WHERE state = ?";
             $stmt = $this->db->prepare( $sql );
             $stmt->execute( [$state] );
             $courses = $stmt->fetchAll();                 // setting to global
@@ -134,7 +140,8 @@ class Golf extends GlobalMap implements iSport
         for ($i = 9; $i < 18; $i++) $par_in += $par[$i];
         $par_tot = $par_out + $par_in;
 
-        Course::add( null, null, $argv = [
+        $null = null;
+        Course::add( $null, $null, $argv = [
             'course' => $course,
             'handicap' => $handicap,
             'holes' => $holes,

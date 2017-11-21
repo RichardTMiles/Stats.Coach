@@ -120,7 +120,7 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                             <div class="box box-widget widget-user">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header bg-black"
-                                     style="background: url('/Application/Services/vendor/almasaeed2010/adminlte/dist/img/photo1.png') center center;">
+                                     style="background: url('/Application/Tables/vendor/almasaeed2010/adminlte/dist/img/photo1.png') center center;">
                                     <h3 class="widget-user-username"></h3>
                                     <h5 class="widget-user-desc"></h5>
                                 </div>

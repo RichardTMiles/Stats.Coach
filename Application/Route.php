@@ -1,47 +1,34 @@
 <?php
 
 use Carbon\Route;
-
 use Carbon\View;
 
-
-$route = Route::setInstance(new class extends Route        // Start the route with the structure of the default route const
+$route = new class extends Route
 {
-    public function defaultRoute($run = false): void
+    public function defaultRoute(): void
     {
-        if (SOCKET) return;
-
-        if ($run || empty($this->uri[0])):
-            $this->matched = true;
-            if (!$_SESSION['id']):
-                MVC('User', 'login');
-                exit(1);
-            else:
-                MVC('Golf', 'golf');
-                exit(1);
-            endif;
+        if (!$_SESSION['id']):
+            MVC('user', 'login');
+        else:
+            MVC('golf', 'golf');
         endif;
+        exit(1);
     }
-});
+};
 
-$route->defaultRoute(false);    // false means don't run unless the url is null
-
-$mvc = function (...$argv) {
-    call_user_func_array('MVC', $argv);
+$json = function ($path, $options) {
+    Mustache($path, $options);
     exit(1);
 };
 
-$json = function (...$argv) {
-    call_user_func('Mustache', $argv);
-    exit(1);
-};
-
-$route->structure($mvc);  // Event for empty closure & lambdas
+$route->structure($mvc = function (string $class, string $method, array &$argv = []) {
+    MVC($class,$method,$argv) and exit(1);
+});  // Event for empty closure & lambdas
 
 
 if (!$_SESSION['id']):
 
-    $route->match('Login/{client?}/*', 'User', 'login');
+    $route->match('Login/*', 'User', 'login');
 
     $route->match('Facebook/*', 'User', 'facebook');
 
@@ -51,20 +38,20 @@ if (!$_SESSION['id']):
 
     exit(1);
 
-else:
+else:   // logged in
 
     if (SOCKET || AJAX):
-        $route->structure($json);  // Event closure
+        $route->structure($json);               // Event closure
 
         $route->match('Messages/', 'messages/nav-messages', ['widget' => '#NavMessages']);
 
         $route->match('Messages/{user_uri?}/',
-            function ($user_uri = false) use ($view, $json) {
-                global $user_id; // for later..
-                $user_id = \Tables\Users::user_id_from_uri($user_uri) or die(1); // if post isset we can assume an add
+            function ($user_uri = false) use ($json) {
+                global $user_id;                                                        // for later..
+                $user_id = \Tables\Users::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
 
                 if (!empty($_POST) && !empty(($string = (new \Carbon\Request)->post('message')->noHTML()->value())))
-                    Tables\Messages::add($this->user[$user_id], $user_id, $string);// else were grabbing content (json, html, etc)
+                    Tables\Messages::add($this->user[$user_id], $user_id, $string);     // else were grabbing content (json, html, etc)
 
                 Tables\Messages::get($this->user[$user_id], $user_id);
 
@@ -75,14 +62,16 @@ else:
 
         $route->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
 
-        if (SOCKET) return null;  // Sockets only get json
+        if (SOCKET) return null;                // Sockets only get json
 
         $route->structure($mvc);                // Load the mvc lambda
     endif;
 
     $route->match('Home/*', 'Golf', 'golf');
 
-    $route->match('Profile/{user_uri?}/', 'User', 'profile');     // Profile $user
+    $route->match('Golf/*', 'Golf', 'golf');
+
+    $route->match('Profile/{user_uri?}/', 'User', 'profile');           // Profile $user
 
     $route->match('CreateTeam/', 'Team', 'createTeam');
 
@@ -94,7 +83,7 @@ else:
 
     $route->match('Rounds/{user_uri?}/', 'Golf', 'rounds');
 
-    $route->match('AddCourse/{state?}/*', 'Golf', 'AddCourse');  // AddCourse
+    $route->match('AddCourse/{state?}/*', 'Golf', 'AddCourse');         // AddCourse
 
     $route->match('Logout/*', function () {
         Controller\User::logout();
@@ -112,18 +101,18 @@ $route->match('500/*', function () {
 });
 
 $route->match('Privacy/*', function () {
-    View::contents('policy', 'privacypolicy');
+    View::contents(SERVER_ROOT . 'Public/policy/privacypolicy.php');
 });
 
 $route->match('Tests/*',                                // This is how the view works
-    function () use ($view) {
+    function () {
         if (AJAX) {
             require_once SERVER_ROOT . 'Tests/index.php';;
-            $view->currentPage = null;
         }
         exit(1);
     }
 );
+
 
 
 // What now?

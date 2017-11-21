@@ -6,7 +6,6 @@
  * Time: 11:14 AM
  */
 
-
 $session_callback = function ($reset) {
     if ($_SESSION['id']) {
         global $user;
@@ -19,17 +18,18 @@ $session_callback = function ($reset) {
 };
 
 // Tables that require a unique identifier
-const USER = 0;
-const USER_FOLLOWERS = 1;
-const USER_MESSAGES = 3;
-const USER_TASKS = 4;
-const TEAMS = 5;
-const TEAM_MEMBERS = 6;
-const GOLF_TOURNAMENTS = 7;
-const GOLF_ROUNDS = 8;
-const GOLF_COURSE = 9;
-const ENTITY_COMMENTS = 10;
-const ENTITY_PHOTOS = 11;
+const USER = 1;
+const USER_FOLLOWERS = 2;
+const USER_NOTIFICATIONS = 3;
+const USER_MESSAGES = 4;
+const USER_TASKS = 5;
+const TEAMS = 6;
+const TEAM_MEMBERS = 7;
+const GOLF_TOURNAMENTS = 8;
+const GOLF_ROUNDS = 9;
+const GOLF_COURSE = 10;
+const ENTITY_COMMENTS = 11;
+const ENTITY_PHOTOS = 12;
 const FACEBOOK_APP_ID = '1456106104433760';
 const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
@@ -41,23 +41,25 @@ return [
 
         'TIMEZONE' => 'America/Phoenix',
 
-        'TITLE' => 'CarbonPHP',
+        'TITLE' => 'Stats.Coach',
 
-        'VERSION' => '1.0.01',
+        'VERSION' => '1.1.4',
 
-        'SEND_EMAIL' => 'notice@example.com',
+        'SEND_EMAIL' => 'Support@Stats.Coach',
 
-        'REPLY_EMAIL' => 'support@example.com',
+        'REPLY_EMAIL' => 'Richard@Miles.Systmes',
 
         'BOOTSTRAP' => 'Application/Route.php',
 
         'HTTP' => (bool) true,
     ],
 
-    'SESSION' => [
-        'PATH' => (string) SERVER_ROOT . 'Data/Session/',
+    'SERIALIZE' => [ 'user' , 'team' , 'course', 'tournament' ],
 
-        'REMOTE' => (bool) false,
+    'SESSION' => [
+        'REMOTE' => (bool) true,
+
+        'PATH' => (string) SERVER_ROOT . 'Data/Sessions/',
 
         'CALLBACK' => $session_callback,
     ],
@@ -65,7 +67,7 @@ return [
     'ERROR' => [
         'LEVEL' => (int)E_ALL | E_STRICT,
 
-        'LOCATION' => (string) 'Data/Logs/Error.txt',
+        'LOCATION' => (string) SERVER_ROOT . 'Data/Logs/',
 
         'STORE' => (bool) true,
 
@@ -93,16 +95,15 @@ return [
     ],
 
     'AUTOLOAD' => [                                     // 'Carbon' => '',
+        'View' => SERVER_ROOT . 'Application/View',
 
-        'View' => '/Application/View',
+        'Tables' => SERVER_ROOT . 'Application/Tables',
 
-        'Tables' => '/Application/Services',
+        'Controller' => SERVER_ROOT . 'Application/Controller',
 
-        'Controller' => '/Application/Controller',
+        'Model' => SERVER_ROOT . 'Application/Model',
 
-        'Model' => '/Application/Model',
-
-        'App' => '/Application'
+        'App' => SERVER_ROOT . 'Application'
     ]
 ];
 

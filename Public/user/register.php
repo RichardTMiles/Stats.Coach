@@ -5,6 +5,8 @@
     </div><!-- /.login-logo -->
 
     <div class="register-box-body">
+        <div id="alert"></div>
+
         <p class="login-box-msg">Register a new membership</p>
         <form data-pjax action="https://Stats.Coach/Register/" method="post">
 

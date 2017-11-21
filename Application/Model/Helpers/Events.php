@@ -18,6 +18,7 @@ class Events extends GlobalMap
     static function refresh(&$user, $id)
     {
         Messages::all($user, $id);
+
         Followers::get($user, $id);
     }
 }

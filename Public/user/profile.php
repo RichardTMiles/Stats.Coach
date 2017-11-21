@@ -1,9 +1,12 @@
-<?php
+
+<?php // This page is dynamic for any user
+
+$my = $my ?? $this->user[$_SESSION['id']];
 
 global $user_id;
-$profile = $this->user[$user_id ?: $user_id = $_SESSION['id']];    // get the users object
 
-$me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
+$profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user_id];
+
 
 ?>
 
@@ -11,7 +14,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
 
 <section class="content-header" style="color: ghostwhite">
     <h1>
-        <?= $profile->user_first_name . ' ' . $profile->user_last_name ?>
+        <?= $profile['user_first_last'] ?>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -30,20 +33,20 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
             <!-- Profile Image -->
             <div class="box box-primary" data-widget="">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<?= $profile->user_profile_picture ?>" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="<?= $profile['user_profile_picture'] ?>" alt="User profile picture">
                     <h3 class="profile-username text-center">
-                        <?= $profile->user_first_name . ' ' . $profile->user_last_name ?>
+                        <?= $profile['user_first_last'] ?>
                     </h3>
                     <p class="text-muted text-center">Software Engineer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right"><?= $profile->stats->followers ?></a>
+                            <b>Followers</b> <a class="pull-right"><?= $profile['stats']['followers'] ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right"><?= $profile->stats->following ?></a>
+                            <b>Following</b> <a class="pull-right"><?= $profile['stats']['following'] ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Rounds</b> <a class="pull-right"><?= $profile->stats->stats_rounds ?></a>
+                            <b>Rounds</b> <a class="pull-right"><?= $profile['stats']['stats_rounds'] ?></a>
                         </li>
                     </ul>
                     <?php if (!$me) {
@@ -63,7 +66,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                 <!--/.direct-chat -->
                 <script>
                     function Messages() {
-                        $.get('<?= SITE . 'Messages/' . $profile->user_profile_uri ?>/', function (data) {
+                        $.get('<?= SITE . 'Messages/' . $profile['user_profile_uri'] ?>/', function (data) {
                             MustacheWidgets(data, {
                                 widget: '#hierarchical',
                                 scroll: '#messages'
@@ -72,7 +75,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
 
                         $(document).on('submit', 'form#data-hierarchical', function (event) {
                             $("#data-hierarchical").ajaxSubmit({
-                                url: '<?= SITE . 'Messages/' . $profile->user_profile_uri ?>/',
+                                url: '<?= SITE . 'Messages/' . $profile['user_profile_uri'] ?>/',
                                 type: 'post',
                                 dataType: 'json',
                                 success: function (data) {
@@ -112,16 +115,16 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                         <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>About Me</dt>
-                                <dd><?= $profile->user_about_me ?></dd>
+                                <dd><?= $profile['user_about_me'] ?></dd>
                                 <br>
                                 <dt>Birthday</dt>
-                                <dd><?= $profile->user_birthday ?></dd>
+                                <dd><?= $profile['user_birthday'] ?></dd>
                                 <br>
                                 <dt>Education History</dt>
-                                <dd><?= $profile->user_education_history ?></dd>
+                                <dd><?= $profile['user_education_history'] ?></dd>
                                 <br>
                                 <dt>Mutual Friends</dt>
-                                <dd><?= $profile->user_facebook_id ?? 'Connect to Facebook'; ?></dd>
+                                <dd><?= $profile['user_facebook_id'] ?? 'Connect to Facebook'; ?></dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->
@@ -129,7 +132,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                     <!-- /.box -->
                 </div>
                 <!-- /.user info -->
-                <?php if ($profile->user_id == $_SESSION['id']) { ?>
+                <?php if ($me) { ?>
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -160,14 +163,14 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                             <label for="first" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="first"
-                                                       placeholder="<?= $profile->user_first_name ?>" name="first_name">
+                                                       placeholder="<?= $profile['user_first_name'] ?>" name="first_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="lastName"
-                                                       placeholder="<?= $profile->user_last_name ?>" name="last_name">
+                                                       placeholder="<?= $profile['user_last_name'] ?>" name="last_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -178,18 +181,20 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                     <input name="datepicker" type="text" class="form-control pull-right" id="datepicker"
-                                                           value="<?= $profile->user_birthday ?>">
+                                                           value="<?= $profile['user_birthday'] ?>">
                                                 </div>
                                             </div>
                                             <!-- /.input group -->
                                         </div>
-                                        <div class="form-group <?= $profile->user_email_confirmed == 0 ? 'has-error' : 'has-success' ?>">
+                                        <div class="form-group <?= $profile['user_email_confirmed'] == 0 ? 'has-error' : 'has-success' ?>">
                                             <label for="inputEmail" class="col-sm-3 control-label">Email</label>
                                             <div class="col-sm-8">
                                                 <input type="email" class="form-control" id="inputEmail"
-                                                       placeholder="<?= $profile->user_email ?>" name="email">
+                                                       placeholder="<?= $profile['user_email'] ?>" name="email">
                                                 <span
-                                                        class="help-block"><?= $profile->user_email_confirmed == 1 ? 'Email Verified' : 'Please check this email to activate your account!' ?></span>
+                                                        class="help-block"><?= $profile['user_email_confirmed'] == 1 ?
+                                                        'Email Verified' :
+                                                        'Please check this email to activate your account!' ?></span>
 
                                             </div>
                                         </div>
@@ -197,7 +202,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                             <label for="username" class="col-sm-3 control-label">Username</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="username" disabled="disabled"
-                                                       placeholder="<?= $profile->user_username ?>">
+                                                       placeholder="<?= $profile['user_username'] ?>">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -222,7 +227,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                             <label for="inputExperience" class="col-sm-3 control-label">About Me</label>
                                             <div class="col-sm-8">
                                                 <textarea name="about_me" class="form-control" id="inputExperience"
-                                                          placeholder="<?= $profile->user_about_me ?>"></textarea>
+                                                          placeholder="<?= $profile['user_about_me'] ?>"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -231,8 +236,8 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                         <div class="col-sm-offset-3 col-sm-10">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input name='Terms' type="checkbox" value="1"> I agree to the <a href="<?= SITE ?>Privacy/">terms and
-                                                        conditions</a>
+                                                    <input name='Terms' type="checkbox" value="1"> I agree to the
+                                                    <a href="<?= SITE ?>Privacy/">terms and conditions</a>
                                                 </label>
                                             </div>
                                         </div>
@@ -253,7 +258,7 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                     <?php
                 }
 
-                if (!empty( $profile->rounds ) && is_array( $profile->rounds )) { ?>
+                if (!empty( $profile['rounds'] ) && is_array( $profile['rounds'] )) { ?>
                     <div class="col-md-auto">
                         <div class="box box-widget widget-user">
                             <div class="box box-info">
@@ -280,15 +285,15 @@ $me = (($profile->user_id ?? null) == $_SESSION['id']); // Bool
                                             </thead>
                                             <tbody>
 
-                                            <?php foreach ($profile->rounds as $stats) {
+                                            <?php foreach ($profile['rounds'] as $stats) {
                                                 echo '<tr>
-                                                    <td>' . date( 'm/d/Y', $stats->score_date ) . "</td>
-                                                    <td> $stats->course_name </td>
-                                                    <td> $stats->score_total_ffs </td>
-                                                    <td> $stats->score_total_gnr </td>
-                                                    <td> $stats->score_total_putts </td>
-                                                    <td> $stats->par_tot </td>
-                                                    <td> $stats->score_total </td>";
+                                                    <td>' . date( 'm/d/Y', $stats['score_date'] ) . "</td>
+                                                    <td> {$stats['course_name']} </td>
+                                                    <td> {$stats['score_total_ffs']} </td>
+                                                    <td> {$stats['score_total_gnr']} </td>
+                                                    <td> {$stats['score_total_putts']} </td>
+                                                    <td> {$stats['par_tot']} </td>
+                                                    <td> {$stats['score_total']} </td>";
                                             } ?>
 
                                             </tbody>
