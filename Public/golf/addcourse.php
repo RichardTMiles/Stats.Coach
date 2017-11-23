@@ -6,7 +6,7 @@
  * Time: 1:53 AM
  */ ?>
 
-<script src="/Public/golf/addcourse.js"></script>
+<script>loadJS('<?=$this->versionControl("Public/golf/addcourse.js")?>');</script>
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
@@ -15,7 +15,6 @@
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Add Course</a></li>
     </ol>
 </section>
-
 
 <!-- Main content -->
 <section class="content" id="content-pane">
@@ -27,6 +26,10 @@
 
             <div class="box-header with-border" style="width: 100%; text-align: center">
                 <h3 class="box-title" style="font-size: 200%; color: #ffffff;">New Course</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="box-body" style="color: ghostwhite">
@@ -174,5 +177,5 @@
 </section>
 
 <script>
-    
+    $.fn.widgetRefresh();
 </script>

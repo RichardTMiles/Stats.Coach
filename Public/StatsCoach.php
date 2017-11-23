@@ -3,9 +3,7 @@
 const COMPOSER = 'Data' . DS . 'vendor' . DS;
 const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
 
-?>
-
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -220,7 +218,6 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
                     <a href="<?= SITE ?>Privacy/">Privacy Policy</a> <b>Version</b> <?= SITE_VERSION ?>
                 </div>
                 <strong>Copyright &copy; 2014-2017 <a href="http://lilRichard.com">Stats Coach</a>.</strong>
-
                 <!--script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script-->
             </div>
             <!-- /.container -->

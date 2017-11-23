@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="803f7fce-ebb5-4584-ad1d-070cf3b3b64f" name="Default" comment="Staring to segregate application vs Carbon">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/richardmiles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Application/Modules/Carbon.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Application/Modules/Extras/.htaccess" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Application/Modules/Helpers/Socket.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Application/Services/Messages.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Scripts/Build/Socket.php" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/Stats.Coach.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/StatsCoach.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources/c97059cc-cd93-4ca6-a4e2-3e4a92b9ec9e.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources/f29dcd24-9ec9-4af2-8e14-53c3f1212b94.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/Miles.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-exported-files.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-navigator.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-navigator/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/webResources.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Configs/Config.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Events.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Messages.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Services/Social/fb-callback.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Services/composer.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Application/Services/composer.phar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_courses.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_distances.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_handicap.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_rounds.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_tournament_teams.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_golf_tournaments.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_team_members.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_teams.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/DBStructure/StatsCoach_users.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/StatsCoach.psd" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/basic.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/click.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/lazyloading.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/multires.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/sample2_1280.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/sample2_1920.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/slideshow.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/slideshow_transitions.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/examples/slideshow_video.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/libs/qunit/qunit.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Backstretch/test/backstretch.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/Gemfile.lock" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/run-qunit.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/aliens.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/anchor.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/boom.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/boom_sans_pjax.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/dinosaurs.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/double_title.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/empty.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/env.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/fragment.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/hello.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/home.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/layout.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/long.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/nested_title.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/qunit.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/referer.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/scripts.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/test/views/timeout.erb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Jquery-Pjax/vendor/qunit.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/.zuul.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/CHANGELOG.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/MIGRATING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/mustache.js.nuspec" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/spec/_files/bom_as_whitespace.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/ampersand_escape.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/apostrophe.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/array_of_strings.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/avoids_obj_prototype_in_view_cache.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/backslashes.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/bug_11_eating_whitespace.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/bug_length_property.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/changing_delimiters.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/check_falsy.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/cli.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/cli.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/cli_with_partials.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/cli_with_partials.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/comments.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/complex.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/context_lookup.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/delimiters.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/disappearing_whitespace.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/dot_notation.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/double_render.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/empty_list.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/empty_sections.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/empty_string.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/empty_template.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/error_not_found.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/error_not_found.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/escaped.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/falsy.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/falsy_array.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/grandparent_context.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/higher_order_sections.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/implicit_iterator.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/included_tag.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/inverted_section.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/keys_with_questionmarks.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/malicious_template.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/multiline_comment.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/nested_dot.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/nested_higher_order_sections.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/nested_iterating.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/nesting.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/nesting_same_name.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/null_lookup_array.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/null_lookup_object.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/null_string.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/null_view.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array_of_partials.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array_of_partials.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array_of_partials_implicit.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_array_of_partials_implicit.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_empty.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_empty.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_template.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_template.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_view.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_view.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_whitespace.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/partial_whitespace.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/recursion_with_same_names.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/reuse_of_enumerables.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/section_as_context.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/section_functions_in_partials.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/section_functions_in_partials.partial" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/simple.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/string_as_context.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/two_in_a_row.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/two_sections.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/two_sections.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/unescaped.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/uses_props_from_view_prototype.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/whitespace.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/_files/zero_view.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/test/render-test-browser-tmpl.mustache" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/dojo/mustache.js.post" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/dojo/mustache.js.pre" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/jquery/mustache.js.post" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/jquery/mustache.js.pre" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/mootools/mustache.js.post" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/mootools/mustache.js.pre" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/qooxdoo/mustache.js.post" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/Mustache/wrappers/qooxdoo/mustache.js.pre" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Public/StatsCoach/img/velodrome.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Socket.php" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Comments.php" afterPath="$PROJECT_DIR$/Application/Services/Comments.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Course.php" afterPath="$PROJECT_DIR$/Application/Services/Course.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Followers.php" afterPath="$PROJECT_DIR$/Application/Services/Followers.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Location.php" afterPath="$PROJECT_DIR$/Application/Services/Location.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Photos.php" afterPath="$PROJECT_DIR$/Application/Services/Photos.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Rounds.php" afterPath="$PROJECT_DIR$/Application/Services/Rounds.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Stats.php" afterPath="$PROJECT_DIR$/Application/Services/Stats.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Teams.php" afterPath="$PROJECT_DIR$/Application/Services/Teams.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Tables/Users.php" afterPath="$PROJECT_DIR$/Application/Services/Users.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Modules/Helpers/Carbon.php" afterPath="$PROJECT_DIR$/Application/Modules/Helpers/Globals.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Modules/Helpers/Entities.php" afterPath="$PROJECT_DIR$/Application/Modules/Entities.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/Standards/AutoLoad.php" afterPath="$PROJECT_DIR$/Application/Modules/AutoLoad.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/View/Helpers/htmlLogo.php" afterPath="$PROJECT_DIR$/Application/Modules/Extras/htmlLogo.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/View/Helpers/minify.php" afterPath="$PROJECT_DIR$/Application/Modules/Extras/minify.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Application/View/View.php" afterPath="$PROJECT_DIR$/Application/Modules/View.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/AthleteLayout.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/AdminLTE/AthleteLayout.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/CoachLayout.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/AdminLTE/CoachLayout.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/messages/messages.mst" afterPath="$PROJECT_DIR$/Application/View/Mustache/messages/messages.mst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/messages/messages.php" afterPath="$PROJECT_DIR$/Application/View/Mustache/messages/messages.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/messages/nav-messages.mst" afterPath="$PROJECT_DIR$/Application/View/Mustache/messages/nav-messages.mst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/messages/nav-messages.php" afterPath="$PROJECT_DIR$/Application/View/Mustache/messages/nav-messages.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/notifications/notifications.mst" afterPath="$PROJECT_DIR$/Application/View/Mustache/notifications/notifications.mst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/notifications/notifications.php" afterPath="$PROJECT_DIR$/Application/View/Mustache/notifications/notifications.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Public/StatsCoach/Mustache/tasks/tasks.mst" afterPath="$PROJECT_DIR$/Application/View/Mustache/tasks/tasks.mst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/communicate.php" afterPath="$PROJECT_DIR$/Library/communicate.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/jquery-backstretch" afterPath="$PROJECT_DIR$/Public/jquery-backstretch" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.htaccess" afterPath="$PROJECT_DIR$/.htaccess" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/webServers.xml" afterPath="$PROJECT_DIR$/.idea/webServers.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Controller/Golf.php" afterPath="$PROJECT_DIR$/Application/Controller/Golf.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Controller/User.php" afterPath="$PROJECT_DIR$/Application/Controller/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/Golf.php" afterPath="$PROJECT_DIR$/Application/Model/Golf.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/Helpers/Events.php" afterPath="$PROJECT_DIR$/Application/Model/Helpers/Events.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/Helpers/GlobalMap.php" afterPath="$PROJECT_DIR$/Application/Model/Helpers/GlobalMap.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/Helpers/iSport.php" afterPath="$PROJECT_DIR$/Application/Model/Helpers/iSport.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/Team.php" afterPath="$PROJECT_DIR$/Application/Model/Team.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Model/User.php" afterPath="$PROJECT_DIR$/Application/Model/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Database.php" afterPath="$PROJECT_DIR$/Application/Modules/Database.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Error/ErrorCatcher.php" afterPath="$PROJECT_DIR$/Application/Modules/Error/ErrorCatcher.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Helpers/Fork.php" afterPath="$PROJECT_DIR$/Application/Modules/Helpers/Fork.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Helpers/Pipe.php" afterPath="$PROJECT_DIR$/Application/Modules/Helpers/Pipe.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Helpers/Serialized.php" afterPath="$PROJECT_DIR$/Application/Modules/Helpers/Serialized.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Interfaces/iEntity.php" afterPath="$PROJECT_DIR$/Application/Modules/Interfaces/iEntity.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Route.php" afterPath="$PROJECT_DIR$/Application/Modules/Route.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Session.php" afterPath="$PROJECT_DIR$/Application/Modules/Session.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Modules/Singleton.php" afterPath="$PROJECT_DIR$/Application/Modules/Singleton.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Routes.php" afterPath="$PROJECT_DIR$/Application/Routes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Library/RichardMiles/Redirect" afterPath="$PROJECT_DIR$/Library/RichardMiles/Redirect" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Library/RichardMiles/filepermPHP" afterPath="$PROJECT_DIR$/Library/RichardMiles/filepermPHP" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Library/RichardMiles/websocketd+ssl" afterPath="$PROJECT_DIR$/Library/RichardMiles/websocketd+ssl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach.php" afterPath="$PROJECT_DIR$/Public/StatsCoach.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/golf/golf.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/golf/golf.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/policy/privacypolicy.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/policy/privacypolicy.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/team/createteam.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/team/createteam.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/team/team.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/team/team.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/user/login.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/user/login.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach/user/profile.php" afterPath="$PROJECT_DIR$/Public/StatsCoach/user/profile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="StatsCoach@Miles.systems" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="StatsCoach@Miles.systems" type="e3449647:DbNodeDescriptor" />
+        <item name="StatsCoach" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="StatsCoach@Miles.systems" type="e3449647:DbNodeDescriptor" />
+        <item name="StatsCoach" type="e3449647:DbNodeDescriptor" />
+        <item name="user" type="e3449647:DbNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6">
+              <caret line="49" column="21" lean-forward="true" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Model/User.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="127">
+              <caret line="251" column="31" lean-forward="false" selection-start-line="251" selection-start-column="31" selection-end-line="251" selection-end-column="31" />
+              <folding>
+                <marker date="1507733344000" expanded="true" signature="1428:1553" ph="SELECT user_... user" />
+                <marker date="1507733344000" expanded="true" signature="5128:5215" ph="SELECT COUNT... user" />
+                <marker date="1507733344000" expanded="true" signature="5485:5557" ph="UPDATE Stats... " />
+                <marker date="1507733344000" expanded="true" signature="5718:5774" ph="SELECT user_... user" />
+                <marker date="1507733344000" expanded="true" signature="6398:6463" ph="SELECT user_... user" />
+                <marker date="1507733344000" expanded="true" signature="6649:6722" ph="UPDATE Stats... " />
+                <marker date="1507733344000" expanded="true" signature="7631:7734" ph="SELECT user_... user" />
+                <marker date="1507733344000" expanded="true" signature="8028:8151" ph="UPDATE Stats... " />
+                <marker date="1507733344000" expanded="true" signature="9468:9791" ph="UPDATE Stats... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Events.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Model/Helpers/Events.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Session.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Modules/Session.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="100">
+              <caret line="26" column="43" lean-forward="false" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
+              <folding>
+                <marker date="1507736146000" expanded="true" signature="2612:2676" ph="SELECT sessi... user_session" />
+                <marker date="1507736146000" expanded="true" signature="3371:3453" ph="SELECT sessi... user_session" />
+                <marker date="1507736146000" expanded="true" signature="4388:4441" ph="DELETE FROM " />
+                <marker date="1507736146000" expanded="true" signature="4621:4705" ph="DELETE FROM " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Carbon.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Modules/Carbon.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2235">
+              <caret line="158" column="56" lean-forward="false" selection-start-line="158" selection-start-column="56" selection-end-line="158" selection-end-column="56" />
+              <folding>
+                <element signature="e#2641#2761#0#PHP" expanded="false" />
+                <element signature="n#dump#0;n#!!top" expanded="false" />
+                <element signature="n#sortDump#0;n#!!top" expanded="false" />
+                <element signature="n#alert#0;n#!!top" expanded="false" />
+                <element signature="n#console_log#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatsCoach.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Public/StatsCoach.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3420">
+              <caret line="228" column="9" lean-forward="false" selection-start-line="228" selection-start-column="9" selection-end-line="228" selection-end-column="9" />
+              <folding>
+                <marker date="1507735367000" expanded="true" signature="22154:22871" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22154:24397" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="22154:24404" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="22154:24424" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22154:24440" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22154:24452" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22154:24460" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22154:24998" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="22254:22559" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22926:23297" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="22991:23155" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23188:23265" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23360:23561" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23415:23510" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23618:23698" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23754:24373" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="23924:24055" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="24186:24206" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="24255:24280" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="24329:24346" ph="..." />
+                <marker date="1507735367000" expanded="true" signature="24500:24830" ph="{...}" />
+                <marker date="1507735367000" expanded="true" signature="24577:24640" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Users.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Services/Users.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="945">
+              <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+              <folding>
+                <element signature="e#113#138#0#PHP" expanded="true" />
+                <marker date="1507735855000" expanded="true" signature="2820:3264" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="2820:5934" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="3304:3742" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="3792:3847" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="3903:4142" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="4193:4491" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="4557:4796" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="4841:5078" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="5128:5360" ph="{...}" />
+                <marker date="1507735855000" expanded="true" signature="5408:5640" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Routes.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Application/Routes.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="71">
+              <caret line="83" column="0" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>events</find>
+      <find>WRAPPING_REQUIRES_LOGIN</find>
+      <find>User</find>
+      <find>user</find>
+      <find>It works!</find>
+      <find>Socke</find>
+      <find>SESSION_UPDATE_CALLBACK</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Socket.php" />
+        <option value="$PROJECT_DIR$/Scripts/Build/Socket.php" />
+        <option value="$PROJECT_DIR$/Application/View/View.php" />
+        <option value="$PROJECT_DIR$/Application/Configs/Config.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/GlobalMap.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Helpers/Entities.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Server.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Helpers/Config.php" />
+        <option value="$PROJECT_DIR$/Application/Controller/User.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/AutoLoad.php" />
+        <option value="$PROJECT_DIR$/Public/StatsCoach/user/login.php" />
+        <option value="$PROJECT_DIR$/Application/Model/Helpers/Events.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Traits/DynamicDefinition.php" />
+        <option value="$PROJECT_DIR$/Application/Model/Helpers/GlobalMap.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Entities.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Route.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Singleton.php" />
+        <option value="$PROJECT_DIR$/Application/Model/User.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Teams.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Rounds.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Photos.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Messages.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Location.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Followers.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Course.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Comments.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/Carbon.php" />
+        <option value="$PROJECT_DIR$/Public/StatsCoach.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Users.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/Application/Modules/View.php" />
+        <option value="$PROJECT_DIR$/.htaccess" />
+        <option value="$PROJECT_DIR$/Application/Modules/Session.php" />
+        <option value="$PROJECT_DIR$/Application/Routes.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="y" value="22" />
+    <option name="width" value="1920" />
+    <option name="height" value="1058" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Stats.Coach" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Stats.Coach" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Stats.Coach" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Stats.Coach" type="462c0819:PsiDirectoryNode" />
+              <item name="Application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Stats.Coach" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Stats.Coach" type="462c0819:PsiDirectoryNode" />
+              <item name="Application" type="462c0819:PsiDirectoryNode" />
+              <item name="Modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Stats.Coach" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Stats.Coach" type="462c0819:PsiDirectoryNode" />
+              <item name="Public" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/richardmiles/Documents/WebServer/Stats.Coach/Application/Model/Helpers/Events.php" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Application/Modules/Extras" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Application/Modules" />
+      <recent name="$PROJECT_DIR$/Application/Model/Helpers" />
+      <recent name="$PROJECT_DIR$/Application/Modules/Helpers" />
+      <recent name="$PROJECT_DIR$/Application/View" />
+      <recent name="$PROJECT_DIR$/Application/Modules/Extras" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="803f7fce-ebb5-4584-ad1d-070cf3b3b64f" name="Default" comment="" />
+      <created>1507590622624</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1507590622624</updated>
+      <workItem from="1507590642533" duration="4566000" />
+      <workItem from="1507617311421" duration="579000" />
+      <workItem from="1507667588729" duration="602000" />
+      <workItem from="1507679582992" duration="30806000" />
+      <workItem from="1507728322588" duration="6733000" />
+      <workItem from="1507759225579" duration="668000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="43985000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
+    <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19709209" sideWeight="0.11416781" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34856007" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19709209" sideWeight="0.8858322" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14135703" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25997248" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10275081" sideWeight="0.4951989" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2164846" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18446602" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10275081" sideWeight="0.4951989" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14164004" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2164846" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13365282" sideWeight="0.41509435" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34856007" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13365282" sideWeight="0.5849057" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19761668" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Staring to segregate application vs Carbon" />
+    <option name="LAST_COMMIT_MESSAGE" value="Staring to segregate application vs Carbon" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Application/Modules/Singleton.php</url>
+          <line>78</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="5" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="38" column="17" lean-forward="false" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Session.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2265">
+          <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+          <folding>
+            <marker date="1507736146000" expanded="true" signature="2612:2676" ph="SELECT sessi... user_session" />
+            <marker date="1507736146000" expanded="true" signature="3371:3453" ph="SELECT sessi... user_session" />
+            <marker date="1507736146000" expanded="true" signature="4388:4441" ph="DELETE FROM " />
+            <marker date="1507736146000" expanded="true" signature="4621:4705" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Server.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="84" column="30" lean-forward="false" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Build/Socket.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Stats.Coach.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Build/Socket.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Error/CustomException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Error/ErrorCatcher.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Error/PublicAlert.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_PLUGINS_DIR$/php/lib/php.jar!/stubs/standard/standard_1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="974">
+          <caret line="562" column="7" lean-forward="true" selection-start-line="562" selection-start-column="7" selection-end-line="562" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Helpers/Globals.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Helpers/Bcrypt.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/Helpers/fb-callback.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Extras/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_PLUGINS_DIR$/php/lib/php.jar!/stubs/standard/standard_0.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="130" column="9" lean-forward="false" selection-start-line="130" selection-start-column="9" selection-end-line="130" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Server.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
+          <folding>
+            <element signature="e#244#269#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Controller/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="7" column="6" lean-forward="false" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Public/StatsCoach/user/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="53" lean-forward="true" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Request.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/AutoLoad.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="35" lean-forward="false" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Database.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="7" column="1" lean-forward="false" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_PLUGINS_DIR$/php/lib/php.jar!/stubs/standard/standard_4.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="27" lean-forward="true" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Traits/DynamicDefinition.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="46" lean-forward="false" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Entities.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="16" column="1" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+          <folding>
+            <element signature="e#113#121#0#PHP" expanded="false" />
+            <marker date="1507722941000" expanded="true" signature="1938:2002" ph="INSERT INTO StatsCoach.entity... " />
+            <marker date="1507722941000" expanded="true" signature="2222:2316" ph="INSERT INTO StatsCoach.entity_tag... " />
+            <marker date="1507722941000" expanded="true" signature="2584:2633" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/Helpers/GlobalMap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Controller/Golf.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Singleton.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="117" column="35" lean-forward="true" selection-start-line="117" selection-start-column="35" selection-end-line="117" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Helpers/Fork.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="52" column="27" lean-forward="false" selection-start-line="52" selection-start-column="27" selection-end-line="52" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Route.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="749">
+          <caret line="130" column="99" lean-forward="true" selection-start-line="130" selection-start-column="99" selection-end-line="130" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/Team.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding>
+            <marker date="1505203877000" expanded="true" signature="1498:1602" ph="INSERT INTO StatsCoach.teams... " />
+            <marker date="1505203877000" expanded="true" signature="2479:2559" ph="INSERT INTO StatsCoach.team_members... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/Golf.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <marker date="1506455340000" expanded="true" signature="882:944" ph="SELECT * FRO... golf_stats" />
+            <marker date="1506455340000" expanded="true" signature="1072:1193" ph="SELECT * FRO... golf_course" />
+            <marker date="1506455340000" expanded="true" signature="1636:1724" ph="SELECT * FRO... golf_tee_box" />
+            <marker date="1506455340000" expanded="true" signature="3345:3548" ph="UPDATE Stats... " />
+            <marker date="1506455340000" expanded="true" signature="4777:4912" ph="SELECT cours... golf_course" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Stats.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Teams.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="13" column="12" lean-forward="false" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
+          <folding>
+            <marker date="1507733399000" expanded="true" signature="398:463" ph="SELECT * FRO... teams" />
+            <marker date="1507733399000" expanded="true" signature="879:1158" ph="SELECT teams... teams" />
+            <marker date="1507733399000" expanded="true" signature="1579:1640" ph="SELECT user_... team_members" />
+            <marker date="1507733399000" expanded="true" signature="2492:2596" ph="INSERT INTO StatsCoach.teams... " />
+            <marker date="1507733399000" expanded="true" signature="3148:3231" ph="SELECT team_... teams" />
+            <marker date="1507733399000" expanded="true" signature="3670:3750" ph="INSERT INTO StatsCoach.team_members... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Rounds.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Photos.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Messages.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+          <folding>
+            <marker date="1507733418000" expanded="true" signature="490:794" ph="SELECT * FRO... user_messages" />
+            <marker date="1507733418000" expanded="true" signature="984:1203" ph="SELECT user_... user_messages" />
+            <marker date="1507733418000" expanded="true" signature="1881:1992" ph="INSERT INTO StatsCoach.user_messages... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Location.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Followers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+          <folding>
+            <marker date="1507733434000" expanded="true" signature="399:471" ph="SELECT COUNT... user_followers" />
+            <marker date="1507733434000" expanded="true" signature="616:680" ph="SELECT COUNT... user_followers" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Course.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="e#111#132#0#PHP" expanded="false" />
+            <marker date="1507733457000" expanded="true" signature="566:1224" ph="INSERT INTO StatsCoach.golf_course... " />
+            <marker date="1507733457000" expanded="true" signature="3058:3495" ph="INSERT INTO StatsCoach.golf_tee_box... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Comments.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/55e2a112-7e61-47f1-aaf4-fe526385bcf1/StatsCoach.user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Carbon.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2235">
+          <caret line="158" column="56" lean-forward="false" selection-start-line="158" selection-start-column="56" selection-end-line="158" selection-end-column="56" />
+          <folding>
+            <element signature="e#2641#2761#0#PHP" expanded="false" />
+            <element signature="n#dump#0;n#!!top" expanded="false" />
+            <element signature="n#sortDump#0;n#!!top" expanded="false" />
+            <element signature="n#alert#0;n#!!top" expanded="false" />
+            <element signature="n#console_log#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Public/StatsCoach.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3420">
+          <caret line="228" column="9" lean-forward="false" selection-start-line="228" selection-start-column="9" selection-end-line="228" selection-end-column="9" />
+          <folding>
+            <marker date="1507735367000" expanded="true" signature="22154:22871" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22154:24397" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="22154:24404" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="22154:24424" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22154:24440" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22154:24452" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22154:24460" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22154:24998" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="22254:22559" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22926:23297" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="22991:23155" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23188:23265" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23360:23561" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23415:23510" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23618:23698" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23754:24373" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="23924:24055" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="24186:24206" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="24255:24280" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="24329:24346" ph="..." />
+            <marker date="1507735367000" expanded="true" signature="24500:24830" ph="{...}" />
+            <marker date="1507735367000" expanded="true" signature="24577:24640" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="945">
+          <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding>
+            <element signature="e#113#138#0#PHP" expanded="true" />
+            <marker date="1507735855000" expanded="true" signature="2820:3264" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="2820:5934" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="3304:3742" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="3792:3847" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="3903:4142" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="4193:4491" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="4557:4796" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="4841:5078" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="5128:5360" ph="{...}" />
+            <marker date="1507735855000" expanded="true" signature="5408:5640" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/View.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-300">
+          <caret line="58" column="13" lean-forward="false" selection-start-line="58" selection-start-column="13" selection-end-line="58" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="26" lean-forward="true" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Modules/Session.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="26" column="43" lean-forward="false" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
+          <folding>
+            <marker date="1507736146000" expanded="true" signature="2612:2676" ph="SELECT sessi... user_session" />
+            <marker date="1507736146000" expanded="true" signature="3371:3453" ph="SELECT sessi... user_session" />
+            <marker date="1507736146000" expanded="true" signature="4388:4441" ph="DELETE FROM " />
+            <marker date="1507736146000" expanded="true" signature="4621:4705" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="251" column="31" lean-forward="false" selection-start-line="251" selection-start-column="31" selection-end-line="251" selection-end-column="31" />
+          <folding>
+            <marker date="1507733344000" expanded="true" signature="1428:1553" ph="SELECT user_... user" />
+            <marker date="1507733344000" expanded="true" signature="5128:5215" ph="SELECT COUNT... user" />
+            <marker date="1507733344000" expanded="true" signature="5485:5557" ph="UPDATE Stats... " />
+            <marker date="1507733344000" expanded="true" signature="5718:5774" ph="SELECT user_... user" />
+            <marker date="1507733344000" expanded="true" signature="6398:6463" ph="SELECT user_... user" />
+            <marker date="1507733344000" expanded="true" signature="6649:6722" ph="UPDATE Stats... " />
+            <marker date="1507733344000" expanded="true" signature="7631:7734" ph="SELECT user_... user" />
+            <marker date="1507733344000" expanded="true" signature="8028:8151" ph="UPDATE Stats... " />
+            <marker date="1507733344000" expanded="true" signature="9468:9791" ph="UPDATE Stats... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Model/Helpers/Events.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6">
+          <caret line="49" column="21" lean-forward="true" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="71">
+          <caret line="83" column="0" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>Stats.Coach</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

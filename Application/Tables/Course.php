@@ -43,7 +43,7 @@ class Course extends Entities implements iEntity
         $stmt->bindValue( ':course_phone',  $argv['phone'] );
         $stmt->bindValue( ':course_difficulty', null );
         $stmt->bindValue( ':course_rank',   null );
-        $stmt->bindValue( ':box_color_1',   $argv['teeBox'][1] ?? null );
+        $stmt->bindValue( ':box_color_1',   $argv['teeBox'][1][0] ?? null );
         $stmt->bindValue( ':box_color_2',   $argv['teeBox'][2][0] ?? null );
         $stmt->bindValue( ':box_color_3',   $argv['teeBox'][3][0] ?? null );
         $stmt->bindValue( ':box_color_4',   $argv['teeBox'][4][0] ?? null );
@@ -59,6 +59,7 @@ class Course extends Entities implements iEntity
         if (!$stmt->execute()) throw new \Exception( "Failed inserting courses" );
 
         $null = null;
+
         if (!Location::add( $null, $course_id, [
             'street' => $argv['course']['street'],
             'city' => $argv['course']['city'],
@@ -83,10 +84,10 @@ class Course extends Entities implements iEntity
             $stmt->bindValue( ':tee_box', $i );
             $stmt->bindValue( ':distance', serialize( $argv['teeBox'][$i] ) );
             $stmt->bindValue( ':distance_color', $color );
-            $stmt->bindValue( ':distance_general_slope',        $argv['slope'][$i][0] );
-            $stmt->bindValue( ':distance_general_difficulty',   $argv['difficulty'][$i][0] );
-            $stmt->bindValue( ':distance_womens_slope',         $argv['slope'][$i][1] );
-            $stmt->bindValue( ':distance_womens_difficulty',    $argv['difficulty'][$i][1] );
+            $stmt->bindValue( ':distance_general_slope',        $argv['slope'][$i][0] ?? null);
+            $stmt->bindValue( ':distance_general_difficulty',   $argv['difficulty'][$i][0] ?? null);
+            $stmt->bindValue( ':distance_womens_slope',         $argv['slope'][$i][1] ?? null);
+            $stmt->bindValue( ':distance_womens_difficulty',    $argv['difficulty'][$i][1] ?? null );
             $stmt->bindValue( ':distance_out', $dist_out );
             $stmt->bindValue( ':distance_in', $dist_in );
             $stmt->bindValue( ':distance_tot', $dist_tot );

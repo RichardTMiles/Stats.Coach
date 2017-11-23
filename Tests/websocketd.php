@@ -10,7 +10,6 @@
         }
     </style>
 
-
     <div id="count"></div>
 
     <script>
@@ -22,7 +21,7 @@
             document.body.style.backgroundColor = null;
         };
         ws.onerror = function () {
-            bootstrapAlert('Socket Failed');
+            $.fn.bootstrapAlert('Socket Failed');
         };
         ws.onmessage = function (event) {
             document.getElementById('count').textContent = event.data;

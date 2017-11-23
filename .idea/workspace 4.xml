@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="803f7fce-ebb5-4584-ad1d-070cf3b3b64f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Route.php" afterPath="$PROJECT_DIR$/Application/Route.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Configs/Config.php" afterPath="$PROJECT_DIR$/Application/Configs/Config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Controller/User.php" afterPath="$PROJECT_DIR$/Application/Controller/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/StatsCoach.php" afterPath="$PROJECT_DIR$/Public/StatsCoach.php" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="@localhost" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="@localhost" type="e3449647:DbNodeDescriptor" />
+        <item name="StatsCoach" type="e3449647:DbNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Config.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Configs/Config.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="29" lean-forward="false" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+              <folding>
+                <element signature="e#6#100#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Users.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Services/Users.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+              <folding>
+                <marker date="1511041976881" expanded="true" signature="442:489" ph="SELECT * FRO... user" />
+                <marker date="1511041976881" expanded="true" signature="1615:1856" ph="INSERT INTO StatsCoach.user... " />
+                <marker date="1511041976881" expanded="true" signature="2184:2239" ph="INSERT INTO StatsCoach.golf_stats... " />
+                <marker date="1511041976881" expanded="true" signature="2727:2861" ph="SELECT * FRO... user" />
+                <marker date="1511041976881" expanded="true" signature="4137:4214" ph="SELECT user_... user" />
+                <marker date="1511041976881" expanded="true" signature="4421:4498" ph="UPDATE Stats... " />
+                <marker date="1511041976881" expanded="true" signature="4889:4951" ph="UPDATE Stats... " />
+                <marker date="1511041976881" expanded="true" signature="5085:5167" ph="SELECT user_... carbon_session" />
+                <marker date="1511041976881" expanded="true" signature="5354:5428" ph="SELECT COUNT... user" />
+                <marker date="1511041976881" expanded="true" signature="5634:5706" ph="SELECT COUNT... user" />
+                <marker date="1511041976881" expanded="true" signature="5920:6000" ph="SELECT user_... user" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatsCoach.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Public/StatsCoach.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="298" column="35" lean-forward="true" selection-start-line="298" selection-start-column="35" selection-end-line="298" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/Controller/User.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-89">
+              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding>
+                <element signature="e#118#556#0#PHP" expanded="false" />
+                <element signature="e#4133#4582#0#PHP" expanded="false" />
+                <element signature="e#4588#5314#0#PHP" expanded="false" />
+                <element signature="e#5320#6196#0#PHP" expanded="false" />
+                <element signature="e#6202#6262#0#PHP" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="tsconfig.json" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>events</find>
+      <find>User</find>
+      <find>user</find>
+      <find>It works!</find>
+      <find>Socke</find>
+      <find>SESSION_UPDATE_CALLBACK</find>
+      <find>FACEBOOK_APP_ID</find>
+      <find>homeMethod</find>
+      <find>ERROR_LOG</find>
+      <find>photos</find>
+      <find>session</find>
+      <find>default</find>
+      <find>view</find>
+      <find>WRAPPING_REQUIRES_LOGIN</find>
+      <find>backstretch</find>
+      <find>jquery</find>
+      <find>article</find>
+      <find>articl</find>
+      <find>Logs</find>
+      <find>he</find>
+      <find>here</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Application/CarbonPHP/Helpers/Application.php" />
+        <option value="$PROJECT_DIR$/Application/CarbonPHP/Carbon.php" />
+        <option value="$PROJECT_DIR$/Application/CarbonPHP/Session.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Error/ErrorCatcher.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Database.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Extras/buildDatabase.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Session.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Carbon.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Singleton.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Helpers/Application.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Route.php" />
+        <option value="$PROJECT_DIR$/Public/StatsCoach/user/register.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/View.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Entities.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Teams.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Rounds.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Photos.php" />
+        <option value="$PROJECT_DIR$/Application/Carbon/Helpers/Pipe.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Location.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Messages.php" />
+        <option value="$PROJECT_DIR$/Application/Routes.php" />
+        <option value="$PROJECT_DIR$/Public/Jquery-Pjax/package.json" />
+        <option value="$PROJECT_DIR$/robots.txt" />
+        <option value="$PROJECT_DIR$/Public/StatsCoach/alert/alerts.php" />
+        <option value="$PROJECT_DIR$/Application/CarbonPHP/Structure/Carbon.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/.htaccess" />
+        <option value="$PROJECT_DIR$/.htaccess" />
+        <option value="$PROJECT_DIR$/Public/AdminLTE/AdminLTE.js" />
+        <option value="$PROJECT_DIR$/Public/AdminLTE/AdminLTE.js.php" />
+        <option value="$PROJECT_DIR$/Public/alert/alerts.js" />
+        <option value="$PROJECT_DIR$/Application/Model/Helpers/Events.php" />
+        <option value="&lt;d934cf23-1a19-468f-b06e-c94bf0d52f06&gt;/Library/Server/Web/Data/Sites/Stats.Coach/index.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/View.php" />
+        <option value="$PROJECT_DIR$/Data/composer.json" />
+        <option value="$PROJECT_DIR$/Library/RichardMiles/composer" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Route.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/AutoLoad.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Carbon.php" />
+        <option value="$PROJECT_DIR$/Application/Route.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Request.php" />
+        <option value="$PROJECT_DIR$/Application/Model/User.php" />
+        <option value="$PROJECT_DIR$/Public/user/register.php" />
+        <option value="$PROJECT_DIR$/Application/Configs/buildDatabase.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Entities.php" />
+        <option value="$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Helpers/Application.php" />
+        <option value="$PROJECT_DIR$/Application/Configs/Config.php" />
+        <option value="$PROJECT_DIR$/Application/Controller/User.php" />
+        <option value="$PROJECT_DIR$/Application/Services/Users.php" />
+        <option value="$PROJECT_DIR$/Public/StatsCoach.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7.1">
+    <include_path>
+      <path value="" />
+    </include_path>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="1113" />
+    <option name="height" value="800" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="Scope" currentSubView="Project Files" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Stats.Coach" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Stats.Coach" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Application" type="cbb8eebc:String" user="Application" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Application" type="cbb8eebc:String" user="Application" />
+              <item name="Configs" type="cbb8eebc:String" user="Configs" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Application" type="cbb8eebc:String" user="Application" />
+              <item name="Model" type="cbb8eebc:String" user="Model" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Application" type="cbb8eebc:String" user="Application" />
+              <item name="Model" type="cbb8eebc:String" user="Model" />
+              <item name="Helpers" type="cbb8eebc:String" user="Helpers" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Application" type="cbb8eebc:String" user="Application" />
+              <item name="Services" type="cbb8eebc:String" user="Services" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+              <item name="vendor" type="cbb8eebc:String" user="vendor" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+              <item name="vendor" type="cbb8eebc:String" user="vendor" />
+              <item name="richardtmiles" type="cbb8eebc:String" user="richardtmiles" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+              <item name="vendor" type="cbb8eebc:String" user="vendor" />
+              <item name="richardtmiles" type="cbb8eebc:String" user="richardtmiles" />
+              <item name="carbonphp" type="cbb8eebc:String" user="carbonphp" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+              <item name="vendor" type="cbb8eebc:String" user="vendor" />
+              <item name="richardtmiles" type="cbb8eebc:String" user="richardtmiles" />
+              <item name="carbonphp" type="cbb8eebc:String" user="carbonphp" />
+              <item name="Structure" type="cbb8eebc:String" user="Structure" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="Stats.Coach" type="cbb8eebc:String" user="Stats.Coach" />
+              <item name="Public" type="cbb8eebc:String" user="Public" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="SearchEverywhereHistoryKey" value="herere&#9;null&#9;null&#10;view&#9;FILE&#9;file:///Users/richardmiles/Documents/WebServer/Stats.Coach/Data/vendor/richardtmiles/carbonphp/Structure/View.php" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+  </component>
+  <component name="Push.Settings">
+    <excluded-roots>
+      <path value="$PROJECT_DIR$/Public/Jquery-Backstretch" />
+    </excluded-roots>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Application/Modules/Extras" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Public" />
+      <recent name="$PROJECT_DIR$/Application/Configs" />
+      <recent name="$PROJECT_DIR$/Application/Modules" />
+      <recent name="$PROJECT_DIR$/Application/Model/Helpers" />
+      <recent name="$PROJECT_DIR$/Application/Modules/Helpers" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="PHP Script.index.php">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+    </configuration>
+    <configuration name="buildDatabase.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/Application/Carbon/Extras/buildDatabase.php" />
+    <configuration name="index.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/index.php" />
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="PHP Script.index.php" />
+      <item index="1" class="java.lang.String" itemvalue="PHP Script.buildDatabase.php" />
+    </list>
+    <recent_temporary>
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="PHP Script.index.php" />
+        <item index="1" class="java.lang.String" itemvalue="PHP Script.buildDatabase.php" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="803f7fce-ebb5-4584-ad1d-070cf3b3b64f" name="Default" comment="" />
+      <created>1507590622624</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1507590622624</updated>
+      <workItem from="1507590642533" duration="4566000" />
+      <workItem from="1507617311421" duration="579000" />
+      <workItem from="1507667588729" duration="602000" />
+      <workItem from="1507679582992" duration="30806000" />
+      <workItem from="1507728322588" duration="15880000" />
+      <workItem from="1507825323357" duration="7899000" />
+      <workItem from="1507912735844" duration="43437000" />
+      <workItem from="1508084495587" duration="9779000" />
+      <workItem from="1508109675832" duration="739000" />
+      <workItem from="1508111942962" duration="61000" />
+      <workItem from="1508139494420" duration="25000" />
+      <workItem from="1508192901989" duration="2427000" />
+      <workItem from="1508196931024" duration="170000" />
+      <workItem from="1508217700381" duration="598000" />
+      <workItem from="1508252059784" duration="10000" />
+      <workItem from="1508269637967" duration="234000" />
+      <workItem from="1508405538744" duration="1567000" />
+      <workItem from="1508439932225" duration="34000" />
+      <workItem from="1509139365029" duration="1692000" />
+      <workItem from="1509263453658" duration="15251000" />
+      <workItem from="1509312593691" duration="3323000" />
+      <workItem from="1509483732850" duration="1491000" />
+      <workItem from="1509611420609" duration="4715000" />
+      <workItem from="1509673745690" duration="478000" />
+      <workItem from="1509915355878" duration="2682000" />
+      <workItem from="1509991207716" duration="1111000" />
+      <workItem from="1510266985795" duration="4069000" />
+      <workItem from="1510443928968" duration="7672000" />
+      <workItem from="1510857603875" duration="8415000" />
+      <workItem from="1510943208052" duration="80000" />
+      <workItem from="1510949501762" duration="21035000" />
+    </task>
+    <task id="LOCAL-00001" summary="done segregating application vs Carbon">
+      <created>1507830393256</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1507830393256</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Staring to segregate application vs Carbon">
+      <created>1507844406249</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1507844406249</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Segregate application vs Carbon">
+      <created>1508025404294</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1508025404294</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Stats Coach now uses CarbonPHP">
+      <created>1509316126163</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1509316126163</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="210228000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
+    <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16368638" sideWeight="0.20193861" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1987076" sideWeight="0.24621733" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13204952" sideWeight="0.80290794" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20770289" sideWeight="0.7980614" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14378029" sideWeight="0.5584594" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18416801" sideWeight="0.7537827" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14378029" sideWeight="0.44154057" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2530949" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2164846" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.183714" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10275081" sideWeight="0.4951989" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14164004" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2164846" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22294022" sideWeight="0.37001374" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18012924" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34856007" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22294022" sideWeight="0.6299862" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19761668" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+      <path value="$PROJECT_DIR$/Application/CarbonPHP" />
+      <path value="$PROJECT_DIR$/Public/Jquery-Backstretch" />
+    </ignored-roots>
+    <MESSAGE value="done segregating application vs Carbon" />
+    <MESSAGE value="Finished segregating application vs Carbon" />
+    <MESSAGE value="Staring to segregate application vs Carbon" />
+    <MESSAGE value="Segregate application vs Carbon" />
+    <MESSAGE value="Stats Coach now uses CarbonPHP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stats Coach now uses CarbonPHP" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Application/Services/Followers.php</url>
+          <line>23</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Public/AdminLTE/navbar-nav.php</url>
+          <line>21</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Application/Carbon/Session.php</url>
+          <line>82</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Application/Carbon/Route.php</url>
+          <line>61</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Application/Controller/User.php</url>
+          <line>24</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>85</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>9</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>36</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>111</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>148</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>179</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>219</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>245</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>289</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>323</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Extras/buildDatabase.php</url>
+          <line>360</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Entities.php</url>
+          <line>68</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="48" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.user_tasks">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Configs/buildDatabase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="375" column="16" lean-forward="false" selection-start-line="375" selection-start-column="16" selection-end-line="375" selection-end-column="16" />
+          <folding>
+            <element signature="e#7#100#0#PHP" expanded="true" />
+            <element signature="e#406#1413#0#PHP" expanded="false" />
+            <element signature="e#1486#2979#0#PHP" expanded="false" />
+            <element signature="e#1689#2907#0#PHP" expanded="false" />
+            <element signature="e#2986#3775#0#PHP" expanded="false" />
+            <element signature="e#3187#3705#0#PHP" expanded="false" />
+            <element signature="e#3782#4790#0#PHP" expanded="false" />
+            <element signature="e#3987#4714#0#PHP" expanded="false" />
+            <element signature="e#4797#5864#0#PHP" expanded="false" />
+            <element signature="e#5020#5831#0#PHP" expanded="false" />
+            <element signature="e#5870#7091#0#PHP" expanded="false" />
+            <element signature="e#6127#7057#0#PHP" expanded="false" />
+            <element signature="e#7096#8256#0#PHP" expanded="false" />
+            <element signature="e#7334#8189#0#PHP" expanded="false" />
+            <element signature="e#8454#9773#0#PHP" expanded="false" />
+            <marker date="1511037672122" expanded="true" signature="239:272" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="417:1406" ph="create table... golf_course" />
+            <marker date="1511037672122" expanded="true" signature="1522:1555" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="1696:2751" ph="create table... golf_rounds" />
+            <marker date="1511037672122" expanded="true" signature="2755:2827" ph="create index... golf_rounds_entity_course_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="2831:2899" ph="create index... golf_rounds_entity_user_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="3022:3054" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="3194:3696" ph="create table... golf_stats" />
+            <marker date="1511037672122" expanded="true" signature="3818:3852" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="3994:4626" ph="create table... golf_tee_box" />
+            <marker date="1511037672122" expanded="true" signature="4630:4705" ph="create index... golf_distance_entity_entity_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="4833:4876" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="5027:5626" ph="create table... golf_tournament_teams" />
+            <marker date="1511037672122" expanded="true" signature="5630:5718" ph="create index... golf_tournament_teams_entity_team_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="5722:5822" ph="create index... golf_tournament_teams_entity_tournament_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="5906:5944" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="6134:6873" ph="create table... golf_tournaments" />
+            <marker date="1511037672122" expanded="true" signature="6877:6959" ph="create index... golf_tournaments_entity_course_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="6963:7049" ph="create index... golf_tournaments_entity_entity_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="7132:7166" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="7341:7955" ph="create table... team_members" />
+            <marker date="1511037672122" expanded="true" signature="7959:8033" ph="create index... team_members_entity_entity_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="8037:8108" ph="create index... team_member_entity_entity_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="8112:8181" ph="create index... team_member_entity_team_pk_fk" />
+            <marker date="1511037672122" expanded="true" signature="8299:8326" ph="SELECT 1 FRO... carbon" />
+            <marker date="1511037672122" expanded="true" signature="8461:9567" ph="create table... teams" />
+            <marker date="1511037672122" expanded="false" signature="9571:9631" ph="create index... teams_entity_coach_pk_fk" />
+            <marker date="1511037672122" expanded="false" signature="9635:9702" ph="create index... teams_entity_photos_photo_id_fk" />
+            <marker date="1511037672122" expanded="false" signature="9706:9765" ph="create index... teams_teams_team_id_fk" />
+            <marker date="1511037672122" expanded="true" signature="9879:9965" ph="INSERT INTO StatsCoach.carbon_tags... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_location">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tag">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon_tags">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.carbon">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Helpers/Application.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Carbon.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="108" column="0" lean-forward="true" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/vendor/richardtmiles/carbonphp/Structure/Entities.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="76" column="12" lean-forward="true" selection-start-line="76" selection-start-column="12" selection-end-line="76" selection-end-column="12" />
+          <folding>
+            <element signature="e#112#138#0#PHP" expanded="true" />
+            <marker date="1511039202240" expanded="true" signature="2076:2129" ph="INSERT INTO carbon... " />
+            <marker date="1511039202240" expanded="true" signature="2350:2433" ph="INSERT INTO carbon_tag... " />
+            <marker date="1511039202240" expanded="true" signature="2708:2746" ph="DELETE FROM " />
+            <marker date="1511039202240" expanded="true" signature="4694:5105" ph="CREATE TABLE... entity" />
+            <marker date="1511039202240" expanded="true" signature="4778:5105" ph="CREATE TABLE... entity" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Configs/Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="29" lean-forward="false" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+          <folding>
+            <element signature="e#6#100#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Services/Users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding>
+            <marker date="1511041976881" expanded="true" signature="442:489" ph="SELECT * FRO... user" />
+            <marker date="1511041976881" expanded="true" signature="1615:1856" ph="INSERT INTO StatsCoach.user... " />
+            <marker date="1511041976881" expanded="true" signature="2184:2239" ph="INSERT INTO StatsCoach.golf_stats... " />
+            <marker date="1511041976881" expanded="true" signature="2727:2861" ph="SELECT * FRO... user" />
+            <marker date="1511041976881" expanded="true" signature="4137:4214" ph="SELECT user_... user" />
+            <marker date="1511041976881" expanded="true" signature="4421:4498" ph="UPDATE Stats... " />
+            <marker date="1511041976881" expanded="true" signature="4889:4951" ph="UPDATE Stats... " />
+            <marker date="1511041976881" expanded="true" signature="5085:5167" ph="SELECT user_... carbon_session" />
+            <marker date="1511041976881" expanded="true" signature="5354:5428" ph="SELECT COUNT... user" />
+            <marker date="1511041976881" expanded="true" signature="5634:5706" ph="SELECT COUNT... user" />
+            <marker date="1511041976881" expanded="true" signature="5920:6000" ph="SELECT user_... user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Controller/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-89">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="e#118#556#0#PHP" expanded="false" />
+            <element signature="e#4133#4582#0#PHP" expanded="false" />
+            <element signature="e#4588#5314#0#PHP" expanded="false" />
+            <element signature="e#5320#6196#0#PHP" expanded="false" />
+            <element signature="e#6202#6262#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/968cea2a/2d789f55-fea8-48e3-9c04-c5da97efa291/StatsCoach.user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Public/StatsCoach.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="298" column="35" lean-forward="true" selection-start-line="298" selection-start-column="35" selection-end-line="298" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>Stats.Coach</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
