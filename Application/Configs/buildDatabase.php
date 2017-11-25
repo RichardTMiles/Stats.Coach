@@ -369,8 +369,7 @@ END;
 
     Try {
         $sql = <<<END
-INSERT INTO StatsCoach.carbon_tags (tag_id, tag_description, tag_name) 
-VALUES (?,?,?);
+REPLACE INTO carbon_tags (tag_id, tag_description, tag_name) VALUES (?,?,?);
 END;
 
         $tag = [

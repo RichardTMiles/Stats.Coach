@@ -83,15 +83,15 @@ return [
     ],
 
     'DATABASE' => [
-        'DB_HOST' => '127.0.0.1',
+        'DB_HOST' => 'localhost',
 
-        'DB_NAME' => 'StatsCoach',
+        'DB_NAME' => 'stats_coach',
 
-        'DB_USER' => 'root',
+        'DB_USER' => 'stats_coach',
 
         'DB_PASS' => 'Huskies!99',
 
-        'INITIAL_SETUP' => false,                       // no tables
+        'INITIAL_SETUP' => true                       // no tables
     ],
 
     'AUTOLOAD' => [                                     // 'Carbon' => '',

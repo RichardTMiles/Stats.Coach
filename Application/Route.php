@@ -3,6 +3,7 @@
 use Carbon\Route;
 use Carbon\View;
 
+
 $route = new class extends Route
 {
     public function defaultRoute(): void

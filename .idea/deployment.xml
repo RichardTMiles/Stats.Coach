@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Stats Coach" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Godaddy" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
     <serverData>
+      <paths name="Godaddy">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="Stats Coach">
         <serverdata>
           <mappings>
