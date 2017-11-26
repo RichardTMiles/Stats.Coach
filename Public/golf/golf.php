@@ -59,7 +59,9 @@ $my = $this->user[$_SESSION['id']];
         </div>
     </div>
 
-    <?php if (!empty( $my['rounds'] ) && is_array( $my['rounds'] ) && is_array( $my['rounds'][0] )) { ?>
+    <?php if (!empty( $my['rounds'] ) && is_array( $my['rounds'] ) && is_array( $my['rounds'][0] ?? false ) && !empty($my['rounds'][0])) {
+
+        ?>
         <div class="box box-widget widget-user">
             <div class="box box-info">
                 <div class="box-header with-border">
@@ -87,7 +89,7 @@ $my = $this->user[$_SESSION['id']];
 
                             <?php foreach ($my['rounds'] as $key => $round) { ?>
                                 <tr>
-                                    <td><?= date( 'm/d/Y', $round->score_date ) ?></td>
+                                    <td><?= date( 'm/d/Y', $round['score_date'] ) ?></td>
                                     <td><?= $round['course_name'] ?></td>
                                     <td><?= $round['score_total_ffs'] ?></td>
                                     <td><?= $round['score_total_gnr'] ?></td>

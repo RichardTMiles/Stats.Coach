@@ -15,6 +15,7 @@
                            placeholder="Username" value="<?= (isset($_POST['username']) ? htmlentities( $_POST['username'] ) : null); ?>">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
+
                 <div class="form-group has-feedback">
                     <input type="password" name="password" class="form-control" placeholder="Password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
@@ -23,7 +24,7 @@
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
                             <label>
-                                <input type="checkbox" name="RememberMe" value="1"> Remember Me
+                                <input type="checkbox" name="RememberMe" value="1"> Remember Me!
                             </label>
                         </div>
                     </div><!-- /.col no-pjax -->
@@ -38,7 +39,7 @@
                     'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
                     'app_secret' => FACEBOOK_APP_SECRET,
                     'default_graph_version' => 'v2.2',
-                ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/', [
+                ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/SignIn/', [
                     'public_profile', 'user_friends', 'email',
                     'user_about_me', 'user_birthday',
                     'user_education_history', 'user_hometown',

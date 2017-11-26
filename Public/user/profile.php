@@ -257,7 +257,8 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                     <?php
                 }
 
-                if (!empty( $profile['rounds'] ) && is_array( $profile['rounds'] )) { ?>
+                if (!empty( $profile['rounds'] ) && is_array( $profile['rounds'] )
+                    && is_array($profile['rounds'][0] ?? false) && !empty($profile['rounds'][0] )) { ?>
                     <div class="col-md-auto">
                         <div class="box box-widget widget-user">
                             <div class="box box-info">

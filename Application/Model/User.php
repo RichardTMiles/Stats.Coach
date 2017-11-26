@@ -24,7 +24,8 @@ class User extends GlobalMap
         if (!is_array( $this->user ))
             throw new InvalidArgumentException( 'Users is no longer an array' );
 
-        if ($_SESSION['id'] == $id) return; // We've already gotten current user data
+        if ($_SESSION['id'] == $id)
+            return; // We've already gotten current user data
 
         if ($_SESSION['id'] && $id !== null) {
             Users::get( $this->user[$id], $id );
@@ -41,8 +42,6 @@ class User extends GlobalMap
      */
     public function login($username, $password, $rememberMe)
     {
-        alert('logged in.. session set ');
-
         if (!Users::user_exists( $username ))
             throw new PublicAlert( 'Sorry, this Username and Password combination doesn\'t match out records.', 'warning' );
 
@@ -74,6 +73,8 @@ class User extends GlobalMap
     {
         global $facebook;
 
+        if (empty($facebook)) startApplication(true);
+
         $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
         $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));
 
@@ -82,6 +83,7 @@ class User extends GlobalMap
 
         if (empty($_SESSION['id']) && empty($fb_id)) { // create new account
             if ($request == 'SignUp') {
+
                 Users::add($null, $null, [
                     'username' => $user_facebook_id,
                     'password' => null,
@@ -89,22 +91,22 @@ class User extends GlobalMap
                     'profile_picture' => $facebook["picture"]["url"],
                     'profile_cover' => $facebook["cover"]["source"],
                     'email' => $facebook["email"],
-                    'userType' => "Athlete",
-                    'fistName' => $facebook["first_name"],
-                    'lastName' => $facebook["last_name"],
+                    'type' => "Athlete",
+                    'first_name' => $facebook["first_name"],
+                    'last_name' => $facebook["last_name"],
                     'gender' => $facebook["gender"]
                 ]);
             } else {                                            // were trying to signin when signup
                 $_SESSION['facebook'] = $facebook;
-                return true;    // Sign into a non-existing account
+                return $facebook = "SignUp";        // Sign into a non-existing account
             }
         } elseif ($_SESSION['id'] && empty($fb_id)) {
             if ($request == 'SignIn') {
                 $sql = "UPDATE StatsCoach.user SET user_facebook_id = ? WHERE user_id = ?";
                 $this->db->prepare($sql)->execute([$facebook['id'], $_SESSION['id']]);
             } else {
-                $_SESSION['facebook'] = $facebook;              // were trying to signup when we need to signin
-                return true;
+                $_SESSION['facebook'] = $facebook;  // were trying to signup when we need to signin
+                return $facebook = "SignIn";
             }
         }
         return startApplication(true);
@@ -127,9 +129,9 @@ class User extends GlobalMap
             'username' => $username,
             'password' => $password,
             'email' => $email,
-            'userType' => $userType,
-            'fistName' => $firstName,
-            'lastName' => $lastName,
+            'type' => $userType,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'gender' => $gender
         ] );
 

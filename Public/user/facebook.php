@@ -1,34 +1,38 @@
+<?php
+global $facebook;
+
+if ($facebook == "SignUp"){
+    $alert = "It appears you do not already have an account with us.";
+} else {
+    $alert = "You're Facebook email address matches an account that has not previously been linked to ";
+}
+
+
+?>
 
 <div class="login-box">
     <div class="login-logo">
         <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
     </div><!-- /.login-logo -->
     <div class="login-box-body" style="background-color: #ECF0F1; color: #0c0c0c; border: medium">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg"><?=$alert?></p>
 
             <form data-pjax action="<?= SITE ?>login/" method="post">
                 <div class="box-body">
-                    <div class="callout callout-danger">
-                        <h4>It appears you have not linked your facebook account t</h4>
-
-                        <p>There is a problem that we need to fix. A wonderful serenity has taken possession of my entire soul,
-                            like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                    </div>
-                    <div class="callout callout-info">
-                        <h4>I am an info callout!</h4>
-
-                        <p>Follow the steps to continue to payment.</p>
-                    </div>
-                    <div class="callout callout-warning">
-                        <h4>I am a warning callout!</h4>
-
-                        <p>This is a yellow callout.</p>
-                    </div>
+                    <a href="https://stats.coach/Facebook/<?=$facebook?>/">
                     <div class="callout callout-success">
-                        <h4>I am a success callout!</h4>
+                        <h4>Link My Facebook Account</h4>
 
-                        <p>This is a green callout.</p>
-                    </div>
+                        <p>Take me to Stats.Coach</p>
+                    </div></a>
+                    <a href="https://stats.coach/login/">
+                    <div class="callout callout-danger">
+                        <h4>Don't link my Facebook</h4>
+
+                        <p>Return to login page!</p>
+                    </div></a>
+
+
                 </div>
             </form>
 

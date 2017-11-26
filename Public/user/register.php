@@ -79,7 +79,7 @@
                 'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
                 'app_secret' => FACEBOOK_APP_SECRET,
                 'default_graph_version' => 'v2.2',
-            ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/', [
+            ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/SignUp/', [
                 'public_profile', 'user_friends', 'email',
                 'user_about_me', 'user_birthday',
                 'user_education_history', 'user_hometown',

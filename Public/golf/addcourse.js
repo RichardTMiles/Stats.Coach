@@ -1,7 +1,8 @@
 var tee_boxes,
     Handicap_number,
-    total_holes = 18, tee_box_colors = [];
-
+    total_holes = 18,
+    course_hc = [],
+    tee_box_colors = [];
 
 
 function hasDuplicates(array) {
@@ -9,8 +10,9 @@ function hasDuplicates(array) {
 }
 
 function HideMeShow(hide, show) {
-    if (hide != null) document.getElementById(hide).style.display = "none";
-    if (show != null) document.getElementById(show).style.display = "block";
+    if (hide !== '') $('#' + hide).boxWidget('collapse');
+    if (show !== '') document.getElementById(show).style.display = "block";
+    if (show !== '') $('#' + show).boxWidget('expand');
 }
 
 /* validate course data <int> */
@@ -21,7 +23,7 @@ function validateGeneral() {
         lengthF = fields.length, e = false;
 
     for (var i = 0; i < lengthF; i++) {
-        if (Form[fields[i]].value == null || Form[fields[i]].value == "") {
+        if (Form[fields[i]].value === null || Form[fields[i]].value === "") {
             $("#" + fields[i]).removeClass("has-success").addClass("has-error");
             e = true;
         } else $("#" + fields[i]).removeClass("has-error").addClass("has-success");
@@ -32,8 +34,8 @@ function validateGeneral() {
 
     tee_boxes = Form[fields[6]].value;
     Handicap_number = Form[fields[7]].value;
-    new_tee_box_color_input();
-    return HideMeShow('CourseInfo', 'Tee-Box-Color-Section'); // on success
+    new_tee_box_color_input();                                  // Generate new tee boxes
+    return HideMeShow('CourseInfo', 'Tee-Box-Color-Section');   // on success
 }
 
 function addColor(number, color) {
@@ -50,7 +52,8 @@ function new_tee_box_color_input() {
     container.innerHTML = null;
     do {
         var html =
-            "<!-- Add Tee Box Selection --><div id='tee-box-color-"+current_hole+"' style='display:"+(current_hole === 1 ? 'block' : 'none')+";'><div class='box box-success' id='Tee-Box-Color-Section'style='background-color: #2c3b41; color: ghostwhite !important;'><div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title' style='font-size: 200%; color: #ffffff;'>Tee Box Color Selection</h3></div> \
+            "<!-- Add Tee Box Selection --><div id='tee-box-color-" + current_hole + "' style='display:" + (current_hole === 1 ? 'block' : 'none') + ";'><div class='box box-success' id='Tee-Box-Color-Section'style='background-color: #2c3b41; color: ghostwhite !important;'><div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title' style='font-size: 200%; color: #ffffff;'>Tee Box Color Selection</h3> \<\
+                            <div class=\"box-tools pull-right\"><button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button></div></div> \
                 <div class='box-body' style='background-color: #2c3b41; color: ghostwhite !important;'> <h3>Tee Box " + current_hole + " Color</h3> \
                 <div class='row col-lg-12 col-md-12'><div id='color-tee-box-selection' class='input-group input-group-lgsd'> \
                 <div class='input-group-btn '><button type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>      Color Select    <span class='fa fa-caret-down'></span></button><ul class='dropdown-menu'> \
@@ -60,97 +63,41 @@ function new_tee_box_color_input() {
 
 
         var h2 =
-            "</ul></div><input id='tee_"+ current_hole +"_color' name='tee_" + current_hole + "_color' type='text' class='form-control' disabled></div></div><br><br><br><br><div class='row'><div class='col-md-6 col-sm-6'> \
-                <div class='col-xs-6 col-md-6 text-center'><input name='general_difficulty_"+ current_hole +"' type='text' class='knob' value='0' data-step='0.1' data-min='0' data-max='90' data-anglearc='250' data-angleoffset='145' data-width='90' data-height='90' data-fgcolor='#3c8dbc' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'></div> \
-                <div class='col-xs-6 col-md-6 text-center'><input name='general_slope_"+current_hole+"' type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#f56954' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
+            "</ul></div><input id='tee_" + current_hole + "_color' name='tee_" + current_hole + "_color' type='text' class='form-control' disabled></div></div><br><br><br><br><div class='row'><div class='col-md-6 col-sm-6'> \
+                <div class='col-xs-6 col-md-6 text-center'><input name='general_difficulty_" + current_hole + "' type='text' class='knob' value='0' data-step='0.1' data-min='0' data-max='90' data-anglearc='250' data-angleoffset='145' data-width='90' data-height='90' data-fgcolor='#3c8dbc' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'></div> \
+                <div class='col-xs-6 col-md-6 text-center'><input name='general_slope_" + current_hole + "' type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#f56954' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
                 </div><div class='col-xs-12 col-md-12'><div class='knob-label' style='color: #fff;'>General<br>Difficulty / Slope</div></div></div> \
-                <div class='col-md-6 col-sm-6'><div class='col-xs-6 col-md-6 text-center'><input name='women_difficulty_"+current_hole+"' type='text' class='knob' value='0' data-step='0.1' data-min='0' data-max='90' data-anglearc='250' data-angleoffset='145' data-width='90' data-height='90' data-fgcolor='#00a65a' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'></div> \
-                <div class='col-xs-6 col-md-6 text-center'><input name='women_slope_"+current_hole+"'type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#00c0ef' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 192, 239); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
+                <div class='col-md-6 col-sm-6'><div class='col-xs-6 col-md-6 text-center'><input name='women_difficulty_" + current_hole + "' type='text' class='knob' value='0' data-step='0.1' data-min='0' data-max='90' data-anglearc='250' data-angleoffset='145' data-width='90' data-height='90' data-fgcolor='#00a65a' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'></div> \
+                <div class='col-xs-6 col-md-6 text-center'><input name='women_slope_" + current_hole + "'type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#00c0ef' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 192, 239); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
                 </div><div class='col-xs-12 col-md-12'><div class='knob-label' style='color: #fff;;'>Women\'s<br>Difficulty / Slope</div></div></div></div><!-- ./col -->";
 
         var back =
-            "<button type='button' class='btn btn-default' onclick=\"HideMeShow('tee-box-color-"+current_hole+"','"+(current_hole == 1 ? 'CourseInfo' : ('tee-box-color-'+(current_hole-1)))+"')\"><< Back</button>";
+            "<button type='button' class='btn btn-default' onclick=\"HideMeShow('tee-box-color-" + current_hole + "','" + (current_hole == 1 ? 'CourseInfo' : ('tee-box-color-' + (current_hole - 1))) + "')\"><< Back</button>";
 
         var next =
-            "<button type='button' class='btn btn-info pull-right' onclick='"+(current_hole != 18 ? 'validate_tee_box_colors(\"'+current_hole+'\")' : null)+"'>Next >></button></div></div>";
+            "<button type='button' class='btn btn-info pull-right' onclick='" + (current_hole != 18 ? 'validate_tee_box_colors(\"' + current_hole + '\")' : null) + "'>Next >></button></div></div>";
 
-        node.innerHTML =  html + h2 + back + next;
+        node.innerHTML = html + h2 + back + next;
         container.innerHTML += node.innerHTML;
     } while (current_hole++ < tee_boxes);
 
-    bootstrapAlert("Tee boxes difficulty and slope maybe left at 0 if not set.", "info");
+    $.fn.bootstrapAlert("Tee boxes difficulty and slope may be left at 0 if not set.", "info");
 
-    $(".select2").select2();
-    $(".knob").knob({
-        /*change : function (value) {
-         //console.log("change : " + value);
-         },
-         release : function (value) {
-         console.log("release : " + value);
-         },
-         cancel : function () {
-         console.log("cancel : " + this.value);
-         },*/
-        draw: function () {
-
-            // "tron" case
-            if (this.$.data('skin') == 'tron') {
-
-                var a = this.angle(this.cv)  // Angle
-                    , sa = this.startAngle          // Previous start angle
-                    , sat = this.startAngle         // Start angle
-                    , ea                            // Previous end angle
-                    , eat = sat + a                 // End angle
-                    , r = true;
-
-                this.g.lineWidth = this.lineWidth;
-
-                this.o.cursor
-                && (sat = eat - 0.3)
-                && (eat = eat + 0.3);
-
-                if (this.o.displayPrevious) {
-                    ea = this.startAngle + this.angle(this.value);
-                    this.o.cursor
-                    && (sa = ea - 0.3)
-                    && (ea = ea + 0.3);
-                    this.g.beginPath();
-                    this.g.strokeStyle = this.previousColor;
-                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-                    this.g.stroke();
-                }
-
-                this.g.beginPath();
-                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-                this.g.stroke();
-
-                this.g.lineWidth = 2;
-                this.g.beginPath();
-                this.g.strokeStyle = this.o.fgColor;
-                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-                this.g.stroke();
-
-                return false;
-            }
-        }
-    });
+    $.fn.widgetRefresh();
 
 }
 
-
 function validate_tee_box_colors(current) {
-    if (hasDuplicates(tee_box_colors) || tee_box_colors.length == 0) {
+    if (hasDuplicates(tee_box_colors) || tee_box_colors.length === 0) {
         return alert("Sorry, you must enter all colors with no duplicates.");
     }
 
-    if (tee_box_colors.length != tee_boxes && current != tee_boxes) {
-        return HideMeShow("tee-box-color-"+current , "tee-box-color-"+(++current));
+    if (tee_box_colors.length !== tee_boxes && current !== tee_boxes) {
+        return HideMeShow("tee-box-color-" + current, "tee-box-color-" + (++current));
     }
 
     distance_box_generate();
-    document.getElementById("tee-box-color-"+current).style.display = "none";
-    document.getElementById('hole-1-distances').style.display = "block";
+    HideMeShow("tee-box-color-" + current, 'hole-1-distances');
 }
 
 function validateDistance(current_hole) {
@@ -169,9 +116,11 @@ function validateDistance(current_hole) {
     }
     for (i = 0; i < Handicap_number; i++) {
         input = "hc_" + (i + 1) + "_" + current_hole;
-        input = Form[input].value;
+        course_hc[current_hole-1] = input = Form[input].value;
         if (input < 1 || input > 18)
             return alert("The handicap value(s) must be a valid integer between 1 and 18 inclusively.")
+        if(hasDuplicates(course_hc))
+            return alert("You have entered the same Handicap twice.")
     }
     HideMeShow('hole-' + current_hole + '-distances', 'hole-' + (++current_hole) + '-distances');
 }
@@ -220,7 +169,7 @@ function distance_box_generate() {
         for (i = 2; i < tee_boxes; i++)
             box_color_input.innerHTML +=
                 '<div class="col-xs-12 col-sm-6 col-md-3 text-center centered"><div style="display:inline;width:180px;height:180px;">' +
-                '<input name="tee_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="1000" data-width="180" data-height="180" data-fgcolor="' + tee_box_colors[i]+ '" ' +
+                '<input name="tee_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="1000" data-width="180" data-height="180" data-fgcolor="' + tee_box_colors[i] + '" ' +
                 'style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;"> ' +
                 '</div><div class="knob-label" style="color: white;">' + tee_box_colors[i] + '\'s Distance</div></div>';
 
@@ -235,7 +184,9 @@ function distance_box_generate() {
 
 
         node.innerHTML = '<div id="hole-' + current_hole + '-distances" class="box box-success" style="background-color: #2c3b41; border-top-color: #2c3b41; display: none">'
-            + '<div class="box-header with-border" style="width: 100%; text-align: center"><h3 class="box-title" style="text-align: center; font-size: 200%; color: ghostwhite">HOLE #' + current_hole + '</h3></div>'
+            + '<div class="box-header with-border" style="width: 100%; text-align: center"><h3 class="box-title" style="text-align: center; font-size: 200%; color: ghostwhite">HOLE #' + current_hole + '</h3>'
+            + '<div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div>'
+            + '</div>'
             + '<div class="box-body" style="background-color: #2c3b41; border-top-color: #2c3b41;">'
             + box_color_input.innerHTML
             + '</div>'
@@ -251,7 +202,7 @@ function distance_box_generate() {
         container.innerHTML += node.innerHTML;
     } while (current_hole++ < total_holes);
 
-
+    $.fn.widgetRefresh();
 
 }
 

@@ -4,6 +4,9 @@ use Carbon\Route;
 use Carbon\View;
 
 
+
+
+
 $route = new class extends Route
 {
     public function defaultRoute()
@@ -31,7 +34,7 @@ if (!$_SESSION['id']):
 
     $route->match('Login/*', 'User', 'login');
 
-    $route->match('Facebook/*', 'User', 'facebook');
+    $route->match('Facebook/{request}/*', 'User', 'facebook');
 
     $route->match('Register/*', 'User', 'Register');            // Register
 

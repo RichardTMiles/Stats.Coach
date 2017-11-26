@@ -57,12 +57,15 @@ class User extends Request
         return [$username, $password, $rememberMe];
     }
 
-    public function facebook()
+    public function facebook($request)
     {
-        if ((include SERVER_ROOT . 'Application/Services/Social/fb-callback.php') == false)
+        global $facebook;
+        if (array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook'])) {
+            $facebook = $_SESSION['facebook'];
+            $_SESSION['facebook'] = null;
+        } elseif ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') == false)
             throw new PublicAlert( 'Sorry, we could not connect to Facebook. Please try again later.' );
-
-        return true;
+        return (new Request())->set($request)->alnum();
     }
 
     public function register()
@@ -177,6 +180,4 @@ class User extends Request
     }
 
 }
-
-
 
