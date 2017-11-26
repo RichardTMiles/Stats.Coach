@@ -3,6 +3,7 @@
 const COMPOSER = 'Data' . DS . 'vendor' . DS;
 const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
 
+
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -16,71 +17,44 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
+    <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "dist/css/AdminLTE.min.css") ?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- DataTables.Bootstrap -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>"
-          as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- iCheck -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/square/blue.css"); ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/square/blue.css"); ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Ionicons -->
     <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/Ionicons/css/ionicons.min.css") ?>"
           as="style" onload="this.rel='stylesheet'">
     <!-- Back color -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Multiple input dynamic form -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Check Ratio Box -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- I dont know but keep it -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- fun ajax refresh -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Jquery -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- datepicker -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>"
-          as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
 
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>"
-          as="style"
-          onload="this.rel='stylesheet'">
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
+
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Wysihtml -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>"
-          as="style"
-          onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>" as="style" onload="this.rel='stylesheet'">
     <!-- Font Awesome -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>" as="style" onload="this.rel='stylesheet'">
 
     <!-- Font Awesome -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>" as="style" onload="this.rel='stylesheet'">
 
     <script>
         /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
@@ -187,7 +161,8 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
 <!-- Full Width Column -->
 <body class="<?= $layout ?>" style="background: transparent">
-<div <?= (($userType == 'Athlete' || $userType == 'Coach') ? 'class="wrapper"' : 'class="container" id="pjax-content"') ?> style="background: transparent">
+<div <?= (($userType == 'Athlete' || $userType == 'Coach') ? 'class="wrapper"' : 'class="container" id="pjax-content"') ?>
+        style="background: transparent">
 
     <?php
 
@@ -207,6 +182,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
                 <!-- content -->
                 <div id="pjax-content"></div>
                 <!-- /.content -->
+                <div class="clearfix"></div>
             </div>
             <div class="clearfix"></div>
             <!-- /.container -->
@@ -223,7 +199,9 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             <!-- /.container -->
         </footer>
 
-    <?php endif; ?>
+    <?php else:
+        include SERVER_ROOT . 'Public/User/login.php';
+    endif; ?>
 </div>
 <script>
     //-- JQuery -->
@@ -285,6 +263,9 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", function () {
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", function () {
                         Carbon('#pjax-content', '');
+                        $.fn.sendEvent('Messages/');
+                        $.fn.sendEvent('Notifications/');
+                        $.fn.sendEvent('tasks/');
                     });
                 });
             });

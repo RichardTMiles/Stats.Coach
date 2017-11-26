@@ -67,26 +67,47 @@ class User extends GlobalMap
             Request::setCookie( "UserImage", $data['user_profile_pic'] );
         } else (new Request)->clearCookies();
 
-        startApplication( 'Home/' );
+        startApplication( true );
     }
 
-    public function facebook()
+    public function facebook($request)
     {
-        try {
-            //if (!Users::email_exists( $facebook['email'] )) {
+        global $facebook;
 
-            //} else {
-            // $_SESSION['id'] = $this->fetchSQL( 'user_id', 'user_email', $this->facebook['email'] )['user_id'];
+        $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
+        $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));
 
-            //$this->fullUser( $_SESSION['id'] );
+        $_SESSION['id'] = $sql['user_id'] ?? null;
+        $user_facebook_id = $sql['user_facebook_id'] ?? null;
 
-            //if ($this->user_facebook_id == null) ;
-            #self::update_user();
-            //}
-            startApplication( true );
-        } catch (\Exception $e) {
-            throw new \Exception( 'Sorry, there appears to be an error in Facebook SDK.' );
+        if (empty($_SESSION['id']) && empty($fb_id)) { // create new account
+            if ($request == 'SignUp') {
+                Users::add($null, $null, [
+                    'username' => $user_facebook_id,
+                    'password' => null,
+                    'facebook_id' => $user_facebook_id,
+                    'profile_picture' => $facebook["picture"]["url"],
+                    'profile_cover' => $facebook["cover"]["source"],
+                    'email' => $facebook["email"],
+                    'userType' => "Athlete",
+                    'fistName' => $facebook["first_name"],
+                    'lastName' => $facebook["last_name"],
+                    'gender' => $facebook["gender"]
+                ]);
+            } else {                                            // were trying to signin when signup
+                $_SESSION['facebook'] = $facebook;
+                return true;    // Sign into a non-existing account
+            }
+        } elseif ($_SESSION['id'] && empty($fb_id)) {
+            if ($request == 'SignIn') {
+                $sql = "UPDATE StatsCoach.user SET user_facebook_id = ? WHERE user_id = ?";
+                $this->db->prepare($sql)->execute([$facebook['id'], $_SESSION['id']]);
+            } else {
+                $_SESSION['facebook'] = $facebook;              // were trying to signup when we need to signin
+                return true;
+            }
         }
+        return startApplication(true);
     }
 
     public function register()

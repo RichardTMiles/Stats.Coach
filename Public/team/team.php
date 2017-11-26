@@ -32,20 +32,20 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                         <div class="widget-user-header bg-green">
                             <div class="widget-user-image">
                                 <img class="img-circle"
-                                     src="<?= SITE . ((!empty( $myTeam->team_photo ) && ($myTeam->photo[$myTeam->team_photo] ?? false) && ($photo = $myTeam->photo[$myTeam->team_photo]->photo ?? false)) ? $photo : 'Data/Uploads/Pictures/Defaults/team-icon.png') ?>"
+                                     src="<?= SITE . ((!empty( $myTeam['team_photo'] ) && ($myTeam['photo'][$myTeam['team_photo']] ?? false) && ($photo = $myTeam['photo'][$myTeam['team_photo']]['photo'] ?? false)) ? $photo : "Data/Uploads/Pictures/Defaults/team-icon.png") ?>"
                                      alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username"><?= $myTeam->team_name ?></h3>
+                            <h3 class="widget-user-username"><?= $myTeam['team_name'] ?></h3>
                             <h5 class="widget-user-desc"><a style="color: #0c0c0c"
-                                                            href="<?= SITE . 'Profile/' . $this->user[$myTeam->team_coach]->user_profile_uri ?>/"><?= $this->user[$myTeam->team_coach]->user_full_name ?></a>
+                                                            href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
                             </h5>
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam->team_code ?></span></a></li>
-                                <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam->team_id ?>/Members/')">Members <span
-                                                class="pull-right badge bg-aqua"><?= count( $myTeam->members ) ?></span></a></li>
+                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam['team_code'] ?></span></a></li>
+                                <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
+                                                class="pull-right badge bg-aqua"><?= count( $myTeam['members'] ) ?></span></a></li>
                                 <li><a href="#">Rounds <span class="pull-right badge bg-green">12</span></a></li>
                                 <li><a href="#">Tournaments <span class="pull-right badge bg-red">842</span></a></li>
                                 <li><a href="#">Strokes <span class="pull-right badge bg-red">842</span></a></li>
@@ -57,13 +57,13 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                     <!-- /.widget-team -->
                 </div>
 
-                <?php if ($myTeam->team_coach == $_SESSION['id']) { ?>
+                <?php if ($myTeam['team_coach'] == $_SESSION['id']) { ?>
 
                     <div class="col-md-12">
                         <div class="box box-widget">
                             <div class="box-body">
 
-                                <form data-pjax class="form-horizontal" action="<?= SITE . 'Team/' . $myTeam->team_id ?>" method="post"
+                                <form data-pjax class="form-horizontal" action="<?= SITE . 'Team/' . $myTeam['team_id'] ?>" method="post"
                                       enctype="multipart/form-data">
                                     <div class="input-group input-group-sm">
                                         <input class="form-control" type="file" id="InputFile" name="FileToUpload">
@@ -81,17 +81,15 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
 
         </div>
         <div class="col-md-8">
-
             <!-- User team member -->
-            <?php foreach ($myTeam->members as $an => $id) {
-            $obj = $this->user[$id];
-            ?>
+            <?php foreach ($myTeam['members'] as $an => $id) {
+            $obj = $this->user[$id]; ?>
 
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <a href="<?=SITE. 'Profile/'.$obj->user_profile_uri ?>/">
-                            <?= $obj->user_first_name . ' ' . $obj->user_last_name ?>
+                        <a href="<?=SITE. 'Profile/'.$obj['user_profile_uri'] ?>/">
+                            <?= $obj['user_first_name'] . ' ' . $obj['user_last_name'] ?>
                         </a>
                     </h3>
 
@@ -125,7 +123,7 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                                     <h5 class="widget-user-desc"></h5>
                                 </div>
                                 <div class="widget-user-image">
-                                    <img class="img-circle" src="<?= SITE . $obj->user_profile_pic ?>" alt="User Avatar">
+                                    <img class="img-circle" src="<?= SITE . $obj['user_profile_pic'] ?>" alt="User Avatar">
                                 </div>
 
                                 <div class="box-footer">

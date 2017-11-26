@@ -1,3 +1,6 @@
+
+
+
 <header class="main-header">
     <!-- Logo -->
     <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
@@ -63,7 +66,7 @@
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
-                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $fullName ?>
+                        <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $my['user_full_name'] ?>
                         </a>
                     </li>
                     <?php if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
@@ -94,11 +97,12 @@
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php
 
+
                 if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
-                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i class="fa fa-circle-o"></i> <?= $team->team_name ?>
+                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i class="fa fa-circle-o"></i> <?= $team['team_name'] ?>
                                 <?php if (empty( $team['members'] ))
                                 echo '</a>';
                                 else { ?>
@@ -107,7 +111,7 @@
                             <ul class="treeview-menu" style="display: block;">
                                 <?php foreach ($team['members'] as $user_id) { ?>
                                     <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]['user_profile_uri'] ?>/"><i
-                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]['user_first_name'] . ' ' . $this->user[$user_id]->user_last_name ?>
+                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]['user_first_name'] . ' ' . $this->user[$user_id]['user_last_name'] ?>
                                         </a>
                                     </li>
                                 <?php } ?>

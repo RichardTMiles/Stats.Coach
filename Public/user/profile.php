@@ -7,7 +7,6 @@ global $user_id;
 
 $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user_id];
 
-
 ?>
 
 <!-- Content Header (Page header) -->

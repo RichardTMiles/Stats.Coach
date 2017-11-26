@@ -6,7 +6,7 @@ use Carbon\View;
 
 $route = new class extends Route
 {
-    public function defaultRoute(): void
+    public function defaultRoute()
     {
         if (!$_SESSION['id']):
             MVC('user', 'login');

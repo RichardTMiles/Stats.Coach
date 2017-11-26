@@ -12,8 +12,9 @@ $session_callback = function ($reset) {
 
         if (!is_array($user)) $user = [];
 
-        if (!is_array($user[$_SESSION['id']] ?? false))            // || $reset  /  but this shouldn't matter
+        if (!is_array($user[$_SESSION['id']] ?? false)) {           // || $reset  /  but this shouldn't matter
             Tables\Users::all($user[$_SESSION['id']], $_SESSION['id']);
+        }
     }
 };
 
@@ -51,7 +52,7 @@ return [
 
         'BOOTSTRAP' => 'Application/Route.php',
 
-        'HTTP' => (bool) true,
+        'HTTP' => (bool) false,
     ],
 
     'SERIALIZE' => [ 'user' , 'team' , 'course', 'tournament' ],
@@ -83,15 +84,15 @@ return [
     ],
 
     'DATABASE' => [
-        'DB_HOST' => 'localhost',
+        'DB_HOST' => '127.0.0.1',
 
-        'DB_NAME' => 'stats_coach',
+        'DB_NAME' => 'StatsCoach',
 
-        'DB_USER' => 'stats_coach',
+        'DB_USER' => 'root',
 
         'DB_PASS' => 'Huskies!99',
 
-        'INITIAL_SETUP' => true                       // no tables
+        'INITIAL_SETUP' => false                       // no tables
     ],
 
     'AUTOLOAD' => [                                     // 'Carbon' => '',

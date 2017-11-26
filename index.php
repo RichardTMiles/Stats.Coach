@@ -8,6 +8,7 @@
  *
  * */
 
+
 const DS = DIRECTORY_SEPARATOR;
 
 define('SERVER_ROOT', dirname(__FILE__) . DS);  // Set our root folder for the application

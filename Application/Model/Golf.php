@@ -33,27 +33,28 @@ class Golf extends GlobalMap implements iSport
     {
         if (!is_array($user)) throw new InvalidArgumentException('Bad User Passed To Golf Stats');
         $user['rounds'] = Rounds::get( $user['rounds'], $id );
+        if (!array_key_exists(0, $user['rounds'])) $user['rounds'] = [$user['rounds']];
         $user['stats'] = $this->fetch( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
         return $user;
     }
 
     public function course($id)
     {
-        $this->course[$id] = $this->fetch( 'SELECT * FROM StatsCoach.golf_course JOIN StatsCoach.entity_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
+        $this->course[$id] = $this->fetch( 'SELECT * FROM golf_course JOIN carbon_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
         if (!is_array( $course = &$this->course[$id] )) throw new \Exception( 'invalid course id' );
-        $course->course_par = unserialize( $course->course_par );
-        $course->course_handicap = unserialize( $course->course_handicap );
+        $course['course_par'] = unserialize( $course['course_par'] );
+        $course['course_handicap'] = unserialize( $course['course_handicap'] );
         return $course;
     }
 
     public function teeBox($id, $color)
     {
         if (!is_array( $this->course[$id] )) throw new \Exception( 'invalid distance lookup' );
-        $sql = "SELECT * FROM StatsCoach.golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1";
-        $teeBox = $this->course[$id]['teeBox'] = $this->fetch_object( $sql, $id, $color );
-        $teeBox->distance = unserialize( $teeBox->distance );
-        $this->course[$id]->teeBox->distance_color = $color;
-        return $teeBox;
+        $sql = "SELECT * FROM golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1";
+        $this->course[$id]['teeBox'] = self::fetch( $sql, $id, $color );
+        $this->course[$id]['teeBox']['distance'] = unserialize( $this->course[$id]['teeBox']['distance'] );
+        $this->course[$id]['teeBox']['distance_color'] = $color;
+        return $this->course[$id]['teeBox'];
     }
 
     public function postScore($state, $course_id, $boxColor)
@@ -74,6 +75,8 @@ class Golf extends GlobalMap implements iSport
             }
 
             $course = $this->course[$course_id]['course_id'] ?? $this->course( $course_id );
+
+            alert('Post new round');
 
             ################# Add Round ################
             Rounds::add( $this->user[$_SESSION['id']], $course_id, [
