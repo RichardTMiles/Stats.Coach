@@ -18,10 +18,9 @@ class Teams extends Entities implements iEntity
 {
     static function get(&$team, $id)   // team obj
     {
-        $team[$id] = self::fetch( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $id );
+        $team = self::fetch( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $id );
         if (!is_array($team))
             throw new \Exception('Fetch teams invalid');
-        Photos::get( $team, $id );
         Photos::all( $team, $id );
         self::members( $team, $id );
         return $team;
@@ -30,15 +29,19 @@ class Teams extends Entities implements iEntity
     static function all(&$user, $id)   // user obj, reset teams
     {
         global $team; // array, referenced for static function
-        $temp = self::fetch( 'SELECT * FROM StatsCoach.teams LEFT JOIN StatsCoach.team_members ON StatsCoach.teams.team_coach = ? or member_id = ?', $id ,$id );
+
+        $temp = self::fetch( 'SELECT teams.team_id, team_coach, parent_team, team_code, team_name, 
+          team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo FROM StatsCoach.teams LEFT JOIN StatsCoach.team_members ON StatsCoach.teams.team_coach = ? or member_id = ?', $id ,$id );
+
+        if (array_key_exists('team_id', $temp))
+            $temp = [$temp];
 
         foreach ($temp as $id => $array) {
             $team[$array['team_id']] = $array;
             $user['teams'][] = $array['team_id'];
-            self::members( $team[$array->team_id], $array->team_id );
-            Photos::all( $team[$array->team_id], $array->team_id);
+            self::members( $team[$array['team_id']], $array['team_id'] );
+            Photos::all( $team[$array['team_id']], $array['team_id']);
         }
-
         return $user;
     }
 
@@ -82,12 +85,10 @@ class Teams extends Entities implements iEntity
 
     }
 
-
     static function range(&$object, $id, $argv)
     {
 
     }
-
 
     static function team_exists($teamIdentifier)
     {

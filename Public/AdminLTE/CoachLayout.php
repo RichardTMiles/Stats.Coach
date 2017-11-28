@@ -1,6 +1,3 @@
-
-
-
 <header class="main-header">
     <!-- Logo -->
     <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
@@ -47,7 +44,7 @@
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                                <button onkeyup="$.fn.sendEvent('<?=SITE.'Search/'?>'+this.value)" name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>
                                 </button>
                               </span>

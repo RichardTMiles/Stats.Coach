@@ -10,7 +10,7 @@ return (function () {
 
     global $user_id, $user;
 
-    if (!(is_object( $account = $user[$user_id] ?? false )))
+    if (!(is_array( $account = $user[$user_id] ?? false )))
         throw new \Exception( 'User not loaded' );
 
     $json = [

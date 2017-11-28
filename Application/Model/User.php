@@ -22,7 +22,7 @@ class User extends GlobalMap
         parent::__construct();
 
         if (!is_array( $this->user ))
-            throw new InvalidArgumentException( 'Users is no longer an array' );
+            throw new \Exception( 'Users is no longer an array' );
 
         if ($_SESSION['id'] == $id)
             return; // We've already gotten current user data
@@ -73,23 +73,24 @@ class User extends GlobalMap
     {
         global $facebook;
 
-        if (empty($facebook)) startApplication(true);
+        if (empty($facebook))
+            startApplication(true);
 
         $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
         $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));
 
         $_SESSION['id'] = $sql['user_id'] ?? null;
-        $user_facebook_id = $sql['user_facebook_id'] ?? null;
+        $fb_id = $sql['user_facebook_id'] ?? null;
 
         if (empty($_SESSION['id']) && empty($fb_id)) { // create new account
-            if ($request == 'SignUp') {
+            if ($request === 'SignUp') {
 
                 Users::add($null, $null, [
-                    'username' => $user_facebook_id,
+                    'username' => $facebook['id'],
                     'password' => null,
-                    'facebook_id' => $user_facebook_id,
-                    'profile_picture' => $facebook["picture"]["url"],
-                    'profile_cover' => $facebook["cover"]["source"],
+                    'facebook_id' => $facebook['id'],
+                    'profile_pic' => $facebook["picture"]["url"],
+                    'cover_photo' => $facebook["cover"]["source"],
                     'email' => $facebook["email"],
                     'type' => "Athlete",
                     'first_name' => $facebook["first_name"],
@@ -101,7 +102,7 @@ class User extends GlobalMap
                 return $facebook = "SignUp";        // Sign into a non-existing account
             }
         } elseif ($_SESSION['id'] && empty($fb_id)) {
-            if ($request == 'SignIn') {
+            if ($request === 'SignIn') {
                 $sql = "UPDATE StatsCoach.user SET user_facebook_id = ? WHERE user_id = ?";
                 $this->db->prepare($sql)->execute([$facebook['id'], $_SESSION['id']]);
             } else {
@@ -109,6 +110,7 @@ class User extends GlobalMap
                 return $facebook = "SignIn";
             }
         }
+        $_SESSION['facebook'] = $facebook = null;
         return startApplication(true);
     }
 

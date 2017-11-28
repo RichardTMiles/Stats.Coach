@@ -17,7 +17,7 @@
 
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="<?= SITE ?>JoinTeam/" name="addCourse">
+    <form data-pjax class="form-horizontal" method="post" action="<?= SITE ?>CreateTeam/" name="addCourse">
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->

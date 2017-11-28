@@ -8,6 +8,21 @@
 
 $myTeam = $this->team[$this->team_id] or die( 1 );
 
+$rounds = $tournaments = $strokes = $FFS = $GIR = $putts = 0;
+
+foreach ($myTeam['members'] as $an => $id) {
+    $an = $this->user[$id]['stats'] ?? false;
+    if (!$an) continue;
+    $rounds += $an['stats_rounds'];
+    $tournaments += $an['stats_tournaments'];
+    $strokes += $an['stats_strokes'];
+    $FFS = $an['stats_ffs'];
+    $GIR = $an['stats_gnr'];
+    $putts = $an['stats_putts'];
+}
+
+
+
 ?>
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
@@ -37,8 +52,7 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                             </div>
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-username"><?= $myTeam['team_name'] ?></h3>
-                            <h5 class="widget-user-desc"><a style="color: #0c0c0c"
-                                                            href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
+                            <h5 class="widget-user-desc"><a style="color: #0c0c0c" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
                             </h5>
                         </div>
                         <div class="box-footer no-padding">
@@ -46,11 +60,12 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                                 <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam['team_code'] ?></span></a></li>
                                 <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
                                                 class="pull-right badge bg-aqua"><?= count( $myTeam['members'] ) ?></span></a></li>
-                                <li><a href="#">Rounds <span class="pull-right badge bg-green">12</span></a></li>
-                                <li><a href="#">Tournaments <span class="pull-right badge bg-red">842</span></a></li>
-                                <li><a href="#">Strokes <span class="pull-right badge bg-red">842</span></a></li>
-                                <li><a href="#">FFS <span class="pull-right badge bg-red">842</span></a></li>
-                                <li><a href="#">PNR <span class="pull-right badge bg-red">842</span></a></li>
+                                <li><a href="#">Rounds <span class="pull-right badge bg-green"></span><?=$rounds?></a></li>
+                                <li><a href="#">Tournaments <span class="pull-right badge bg-red"></span><?=$tournaments?></a></li>
+                                <li><a href="#">Strokes <span class="pull-right badge bg-red"></span><?=$strokes?></a></li>
+                                <li><a href="#">FFS <span class="pull-right badge bg-red"></span><?=$FFS?></a></li>
+                                <li><a href="#">PNR <span class="pull-right badge bg-red"></span><?=$GIR?></a></li>
+                                <li><a href="#">Putts <span class="pull-right badge bg-red"></span><?=$putts?></a></li>
                             </ul>
                         </div>
                     </div>
@@ -76,6 +91,8 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                         </div>
                     </div>
                 <?php } ?>
+
+
 
             </div>
 
@@ -118,12 +135,12 @@ $myTeam = $this->team[$this->team_id] or die( 1 );
                             <div class="box box-widget widget-user">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header bg-black"
-                                     style="background: url('/Application/Tables/vendor/almasaeed2010/adminlte/dist/img/photo1.png') center center;">
+                                     style="background: url('<?= $obj['user_cover_photo'] ?>') center center;">
                                     <h3 class="widget-user-username"></h3>
                                     <h5 class="widget-user-desc"></h5>
                                 </div>
                                 <div class="widget-user-image">
-                                    <img class="img-circle" src="<?= SITE . $obj['user_profile_pic'] ?>" alt="User Avatar">
+                                    <img class="img-circle" src="<?= $obj['user_profile_pic'] ?>" alt="User Avatar">
                                 </div>
 
                                 <div class="box-footer">

@@ -28,7 +28,8 @@ class Team extends Request
     {
         if (empty($_POST)) return false;
         list($teamName, $schoolName) = $this->post( 'teamName', 'schoolName' )->text();
-        return (empty($teamName) || empty($schoolName)) ? [$teamName, $schoolName] : false;
+        if (!$schoolName) $schoolName = null;
+        return (!empty($teamName) ? [$teamName, $schoolName] : false);
     }
 
     public function joinTeam()

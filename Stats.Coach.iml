@@ -15,14 +15,14 @@
       <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Public/AdminLTE" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Public/alert" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/error" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/golf" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Error" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Golf" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Public/img" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/policy" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/search" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Policy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Search" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Public/StatsCoach" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/team" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Public/user" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Team" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/User" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/_notes" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/Build" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/jobs" isTestSource="false" />
@@ -38,7 +38,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Data/Locales" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Data/Logs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Data/Sessions" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Data/temp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Data/Temp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Data/Uploads" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Data/Views" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/Websocket" isTestSource="false" />

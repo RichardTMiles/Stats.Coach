@@ -10,13 +10,15 @@ if (!session_id())
     session_start();
 
 $fb = new Facebook\Facebook( [
-    'app_id' => '1456106104433760', // Replace {app-id} with your app id
-    'app_secret' => 'c35d6779a1e5eebf7a4a3bd8f1e16026',
+    'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
+    'app_secret' => FACEBOOK_APP_SECRET,
     'default_graph_version' => 'v2.2',
 ] );
 
-if (isset( $_GET['state'] ))
-    $_SESSION['FBRLH_state'] = $_GET['state'];
+
+
+
+if (isset( $_GET['state'] )) $_SESSION['FBRLH_state'] = $_GET['state'];
 $helper = $fb->getRedirectLoginHelper();
 // $helper->getPersistentDataHandler()->set( 'state', $_GET['state'] );
 
@@ -27,6 +29,10 @@ try {
     // When Graph returns an error
     #startApplication(true);
     echo 'Graph returned an error: ' . $e->getMessage();
+    alert('hello');
+
+    sortDump($_SERVER);//$_SERVER
+
     exit;
 } catch (Facebook\Exceptions\FacebookSDKException $e) {
     // When validation fails or other local issues

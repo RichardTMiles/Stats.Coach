@@ -17,13 +17,16 @@
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <?php if (isset( $my['teams'] )) foreach ($my['teams'] as $team_id) {
-                                $myTeam = $this->team[$team_id];
-                                echo '<li><a href="' . SITE . 'Team/' . $myTeam['team_code'] . '/">' . $myTeam['team_name'] . '</a></li>';
+                            <?php if (!empty( $my['teams'] ?? false)) {
+                                foreach ($my['teams'] as $team_id) {
+                                    $myTeam = $this->team[$team_id];
+                                    print '<li><a href="' . SITE . 'Team/' . $myTeam['team_code'] . '/">' . $myTeam['team_name'] . '</a></li>';
+                                }
+                                print '<li class="divider"></li>';
                             }
                             ?>
-                            <li class="divider"></li>
                             <li><a href="<?= SITE ?>JoinTeam/">Join a Team</a></li>
+                            <li><a href="<?= site ?>CreateTeam/">Create Team</a></li>
                             <li class="divider"></li>
                             <li><a href="<?= SITE ?>AddCourse/">Add Course</a></li>
                         </ul>
@@ -32,7 +35,7 @@
 
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
+                        <input onkeyup="$.fn.sendEvent('<?=SITE.'Search/'?>'+this.value)" type="text" class="form-control" id="navbar-search-input" placeholder="Search">
                     </div>
                 </form>
 

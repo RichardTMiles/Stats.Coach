@@ -1,6 +1,7 @@
 <?php
 global $facebook;
 
+
 if ($facebook == "SignUp"){
     $alert = "It appears you do not already have an account with us.";
 } else {
@@ -16,7 +17,6 @@ if ($facebook == "SignUp"){
     </div><!-- /.login-logo -->
     <div class="login-box-body" style="background-color: #ECF0F1; color: #0c0c0c; border: medium">
         <p class="login-box-msg"><?=$alert?></p>
-
             <form data-pjax action="<?= SITE ?>login/" method="post">
                 <div class="box-body">
                     <a href="https://stats.coach/Facebook/<?=$facebook?>/">

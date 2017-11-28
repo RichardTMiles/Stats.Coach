@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Stats Coach" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Mac OS X Mounted" overwriteAll="false" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
     <serverData>
-      <paths name="Godaddy">
+      <paths name="Mac OS X Mounted">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="Stats Coach">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="/Library/Server/Web/Data/Sites/Stats.Coach" web="/" />
           </mappings>
         </serverdata>
       </paths>

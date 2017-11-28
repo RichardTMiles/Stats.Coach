@@ -2,16 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="d934cf23-1a19-468f-b06e-c94bf0d52f06" name="Stats Coach" url="http://stats.coach">
+      <webServer id="cf5799bb-805d-4b7f-a750-4456bb677acd" name="Mac OS X Mounted" url="http://stats.coach/">
         <fileTransfer port="0" mountedRoot="/Library/Server/Web/Data/Sites/Stats.Coach" accessType="MOUNT" />
-      </webServer>
-      <webServer id="ba06390c-ed94-40fa-9951-5227d9894880" name="Godaddy" url="http://ftp.stats.coach">
-        <fileTransfer host="ftp.stats.coach" port="21" rootFolder="/public_html">
-          <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
-          </advancedOptions>
-          <option name="port" value="21" />
-        </fileTransfer>
       </webServer>
     </option>
   </component>

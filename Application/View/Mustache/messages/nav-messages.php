@@ -25,6 +25,6 @@ return (function () {
 
     if ($unread) $json['newMessages'] = $unread;
 
-    return $json;
+    return $json ?? [];
 
 })();

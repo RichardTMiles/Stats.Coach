@@ -22,11 +22,12 @@ class Users extends Entities implements iEntity
     {
 
         $array = static::fetch('SELECT * FROM StatsCoach.user WHERE user_id = ?', $id);
-        $array['user_profile_picture'] = SITE . ($array['user_profile_pic'] ?? 'Public/img/defaults/photos' . rand(1, 3) . '.png');
+
+        $array['user_profile_picture'] = SITE . (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $array['user_cover_photo'] = SITE . ($array['user_profile_pic'] ?? 'Public/img/defaults/photo' . rand(1, 3) . '.png');
         $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
         $array['user_id'] = $id;
         Users::sport($array, $id);
-
 
         return $array;
     }
@@ -67,8 +68,7 @@ class Users extends Entities implements iEntity
         if (!self::database()->prepare('INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)')->execute([$key]))
             throw new PublicAlert ('Your account could not be created.', 'danger');;
 
-        if (self::commit())
-            $_SESSION['id'] = $key;
+        if (self::commit()) $_SESSION['id'] = $key;
 
         return $email_code;
     }
@@ -83,8 +83,8 @@ class Users extends Entities implements iEntity
         $user = static::fetch('SELECT * FROM StatsCoach.user LEFT JOIN StatsCoach.carbon_tag ON entity_id = StatsCoach.user.user_id WHERE StatsCoach.user.user_id = ?', $id);
         if (!is_array($user)) throw new PublicAlert('Could not find user  ' . $id, 'danger');
 
-        $user['user_profile_picture'] = SITE . (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
-        $user['user_cover_photo'] = SITE . ($user['user_cover_photo'] ?? 'Data/vendor/almasaeed2010/adminlte/dist/img/photo1.png');
+        $user['user_profile_picture'] =  (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : SITE . 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $user['user_cover_photo'] =  ($user['user_cover_photo'] ??  SITE . 'Public/img/defaults/photo' . rand(1, 3) . '.png');
         $user['user_first_last'] = $user['user_full_name'] = $user['user_first_name'] . ' ' . $user['user_last_name'];
         $user['user_id'] = $id;
 
@@ -110,7 +110,7 @@ class Users extends Entities implements iEntity
         if ($sport instanceof iSport)                   // load stats
             return $sport->stats($user, $id);
 
-        throw new PublicAlert('You ran into a big problem. Contact us for support..');
+        throw new PublicAlert('You ran into a big problem. Contact us for support.');
     }
 
 

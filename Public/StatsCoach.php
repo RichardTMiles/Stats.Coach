@@ -1,8 +1,9 @@
 <?php
+if (!defined('COMPOSER'))
+    define('COMPOSER', 'Data' . DS . 'vendor' . DS);
 
-const COMPOSER = 'Data' . DS . 'vendor' . DS;
-const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
-
+if (!defined('TEMPLATE'))
+    define('TEMPLATE', COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS);
 
 ?><!DOCTYPE html>
 <html>
@@ -17,44 +18,67 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
+    <link rel="stylesheet"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "dist/css/AdminLTE.min.css") ?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- DataTables.Bootstrap -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
     <!-- iCheck -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/square/blue.css"); ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/square/blue.css"); ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- Ionicons -->
     <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/Ionicons/css/ionicons.min.css") ?>"
           as="style" onload="this.rel='stylesheet'">
     <!-- Back color -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- Multiple input dynamic form -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- Check Ratio Box -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- I dont know but keep it -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
     <!-- fun ajax refresh -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- Jquery -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
     <!-- datepicker -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
 
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
-
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
     <!-- Wysihtml -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
     <!-- Font Awesome -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
 
     <!-- Font Awesome -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
+          as="style" onload="this.rel='stylesheet'">
 
     <script>
         /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
@@ -140,6 +164,27 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
             }
         }(typeof global !== "undefined" ? global : this));// Hierarchical PJAX Request
 
+        // Facebook Analytics
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: <?=FACEBOOK_APP_ID?>,
+                xfbml: true,
+                version: 'v2.11'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -166,7 +211,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
     <?php
 
-    if (($_SESSION['id'] ?? false) && is_array($this->user[$_SESSION['id']])):
+    if (($_SESSION['id'] ?? false) && is_array($this->user[$_SESSION['id']] ?? false)):
         $my = $this->user[$_SESSION['id']];
 
         if ($userType == 'Coach'):
@@ -180,9 +225,10 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             <div class="container">
                 <div id="alert"></div>
                 <!-- content -->
-                <div id="pjax-content"></div>
+                <div id="pjax-content">
+                    <?=$this->bufferedContent?>
+                </div>
                 <!-- /.content -->
-                <div class="clearfix"></div>
             </div>
             <div class="clearfix"></div>
             <!-- /.container -->
@@ -200,7 +246,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
         </footer>
 
     <?php else:
-        include SERVER_ROOT . 'Public/User/login.php';
+        print $this->bufferedContent;
     endif; ?>
 </div>
 <script>
@@ -262,10 +308,11 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", function () {
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", function () {
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", function () {
-                        Carbon('#pjax-content', '');
-                        $.fn.sendEvent('Messages/');
-                        $.fn.sendEvent('Notifications/');
-                        $.fn.sendEvent('tasks/');
+                        Carbon('#pjax-content', 'wss://stats.coach:8080/');
+                        // Messages in Navigation, faster to initially load over http
+                        $.fn.sendEvent('<?= SITE . 'Messages/' ?>');
+                        $.fn.sendEvent('<?= SITE . 'Notifications/' ?>');
+                        $.fn.sendEvent('<?= SITE . 'Tasks/' ?>');
                     });
                 });
             });

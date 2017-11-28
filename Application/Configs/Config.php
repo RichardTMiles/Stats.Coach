@@ -12,9 +12,9 @@ $session_callback = function ($reset) {
 
         if (!is_array($user)) $user = [];
 
-        if (!is_array($user[$_SESSION['id']] ?? false)) {           // || $reset  /  but this shouldn't matter
+        if (!is_array($user[$_SESSION['id']] ?? false))           // || $reset  /  but this shouldn't matter
             Tables\Users::all($user[$_SESSION['id']], $_SESSION['id']);
-        }
+
     }
 };
 
@@ -44,7 +44,7 @@ return [
 
         'TITLE' => 'Stats.Coach',
 
-        'VERSION' => '1.1.5',
+        'VERSION' => '1.1.6',
 
         'SEND_EMAIL' => 'Support@Stats.Coach',
 
@@ -64,6 +64,15 @@ return [
 
         'CALLBACK' => $session_callback,
     ],
+
+    /*
+    'SOCKET' => [
+        'WEBSOCKETD' => true,
+        'SSL' => [
+            'KEY' => '/Users/richardmiles/desktop/ssl/stats/account-key-2.key',
+            'CERT' => '/Users/richardmiles/desktop/ssl/stats/domain.crt'
+        ]
+    ],*/
 
     'ERROR' => [
         'LEVEL' => (int)E_ALL | E_STRICT,

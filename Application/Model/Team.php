@@ -30,8 +30,7 @@ class Team extends GlobalMap
         // if (!is_object($this->team[$team_id] ?? false))
         $team = Teams::get($this->team[$team_id], $team_id);
 
-        if ($team_photo ?? false && $team->team_coach == $_SESSION['id']) {
-            alert( 'change photo' );
+        if ($team_photo ?? false && $team['team_coach'] == $_SESSION['id']) {
             // unlink( $team->photo_path ); TODO - Delete photo from db
             Photos::add( $team, $team_id, [
                 'photo_path' => "$team_photo",
@@ -39,13 +38,13 @@ class Team extends GlobalMap
         }
 
 
-        if (isset( $this->user[$this->team[$team_id]->team_coach] ))
+        if (isset( $this->user[$this->team[$team_id]['team_coach']] ))
             return true;
 
-        if ($team->team_coach === null)
-            throw new InvalidArgumentException( 'Why is there no coach?' );
+        if ($team['team_coach'] === null)
+            throw new \Exception( 'Why is there no coach?' );
 
-        Users::get( $this->user[$team->team_coach], $team->team_coach );
+        Users::get( $this->user[$team['team_coach']], $team['team_coach'] );
 
         return true;
     }
@@ -57,6 +56,10 @@ class Team extends GlobalMap
         $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
         if (!self::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
+
+        $sql = "UPDATE StatsCoach.user SET user_type = 'Coach' WHERE user_id = ?";
+        if (!self::database()->prepare($sql)->execute([$_SESSION['id']]))
+            throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         self::commit();
         PublicAlert::success( "We successfully created `$teamName`!" );
     }

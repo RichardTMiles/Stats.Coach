@@ -15,15 +15,6 @@ shebang php-cli
 
 [1]+ websocketd --port=8080 --devconsole --ssl --sslkey=/etc/ssl/private/miles.secureserver.net.key --sslcert=/etc/ssl/certs/miles.secureserver.net.crt /home/stats/public_html/Application/Modules/Socket.php &
 
+websocketd --port=8080 --devconsole --ssl --sslkey=/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt --sslcert=/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt /library/server/web/data/sites/stats.coach/data/scripts/Websocketd.php
 
 
-
-
-
-
-/home/stats/ssl/keys/baf84_e805f_a32ab9e2cb5a36f29cd59a144f8c3e7d.key
-/home/stats/ssl/certs/stats_coach_baf84_e805f_1534438503_1480827edcca59c26fad2bf54084612e.crt
-
-websocketd --port=8080 --ssl --sslkey=/home/stats/ssl/keys/baf84_e805f_a32ab9e2cb5a36f29cd59a144f8c3e7d.key --sslcert=/home/stats/ssl/certs/stats_coach_baf84_e805f_1534438503_1480827edcca59c26fad2bf54084612e.crt /home/stats/public_html/Socket.php
-
-[1]+ websocketd --port=8080 --ssl --sslkey=/home/stats/ssl/keys/baf84_e805f_a32ab9e2cb5a36f29cd59a144f8c3e7d.key --sslcert=/home/stats/ssl/certs/stats_coach_baf84_e805f_1534438503_1480827edcca59c26fad2bf54084612e.crt /home/stats/public_html/Socket.php &

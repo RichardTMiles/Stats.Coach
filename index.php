@@ -8,7 +8,6 @@
  *
  * */
 
-
 const DS = DIRECTORY_SEPARATOR;
 
 define('SERVER_ROOT', dirname(__FILE__) . DS);  // Set our root folder for the application
@@ -20,5 +19,8 @@ if (false == (include SERVER_ROOT . 'Data/vendor/autoload.php')) {       // Load
     exit(3);
 }
 
-Carbon\Carbon::Application(include_once("Application/Configs/Config.php"))();
+Carbon\Carbon::Application(include_once("Application/Configs/Config.php"));
+
+
+if (!SOCKET) startApplication();
 

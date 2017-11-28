@@ -175,7 +175,3 @@
 
 
 </section>
-
-<script>
-    $.fn.widgetRefresh();
-</script>

@@ -17,26 +17,25 @@ class Photos extends Entities implements iEntity
 {
     static function get(&$array, $id)
     {
-        if (!($array instanceof \stdClass))
+        if (!is_array($array))
             throw new \Exception( 'Invalid Object Passed' );
-        $array->photo = [];
+        $array['photo'] = [];
 
-        $sql = 'SELECT * FROM StatsCoach.carbon_photos WHERE parent_id = ? OR photo_id = ?LIMIT 1';
+        $sql = 'SELECT photo_id, parent_id, user_id, photo_path, photo_description FROM StatsCoach.carbon_photos WHERE parent_id = ? OR photo_id = ? LIMIT 1';
         $stmt = self::fetch( $sql, $id, $id );
 
-        //sortDump($object);
+        if (array_key_exists('photo_id', $stmt)) $stmt = [$stmt];
 
         foreach ($stmt as $item => $value)
-            if (is_object( $value ))
-                $array->photo[$value->photo_id] = $value;
+             $array['photo'][$value['photo_id']] = $value;
 
         return $array;
     }
 
     static function all(&$object, $id)
     {
-        $sql = 'SELECT * FROM StatsCoach.carbon_photos WHERE parent_id = ?';
-        $object['photos'] = static::fetch( $sql, $id );
+        $sql = 'SELECT photo_id, parent_id, user_id, photo_path, photo_description FROM StatsCoach.carbon_photos WHERE parent_id = ?';
+        $object['photo'] = static::fetch( $sql, $id );
     }
 
     static function range(&$object, $id, $argv)

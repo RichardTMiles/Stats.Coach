@@ -1,4 +1,3 @@
-
 <div class="login-box">
     <div class="login-logo">
         <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
@@ -7,12 +6,13 @@
         <p class="login-box-msg">Sign in to start your session</p>
 
         <div id="alert"></div>
-        
+
         <?php if ($this->UserName == false): ?>
             <form data-pjax action="<?= SITE ?>login/" method="post" onsubmit="return false;">
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="username"
-                           placeholder="Username" value="<?= (isset($_POST['username']) ? htmlentities( $_POST['username'] ) : null); ?>">
+                           placeholder="Username"
+                           value="<?= (isset($_POST['username']) ? htmlentities($_POST['username']) : null); ?>">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
 
@@ -35,16 +35,18 @@
             </form>
 
             <div class="social-auth-links text-center">
-                <p>- OR -</p><a href="<?= (new Facebook\Facebook( [
+                <p>- OR -</p>
+                <div class="btn btn-block btn-social btn-facebook btn-flat" onclick="window.location.replace('<?=(new Facebook\Facebook([
                     'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
                     'app_secret' => FACEBOOK_APP_SECRET,
                     'default_graph_version' => 'v2.2',
-                ] ))->getRedirectLoginHelper()->getLoginUrl( 'https://stats.coach/Facebook/SignIn/', [
+                ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/Facebook/', [
                     'public_profile', 'user_friends', 'email',
                     'user_about_me', 'user_birthday',
                     'user_education_history', 'user_hometown',
-                    'user_location', 'user_photos', 'user_friends'] ); ?>" class="btn btn-block btn-social btn-facebook btn-flat">
-                    <i class="fa fa-facebook"></i> Sign in using Facebook</a>
+                    'user_location', 'user_photos', 'user_friends']); ?>')">
+                    <i class="fa fa-facebook"></i> Sign in using Facebook</div>
+
                 <a href="#" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
             </div><!-- /.social-auth-links -->
@@ -60,7 +62,8 @@
             <!-- Automatic element centering -->
             <div class="lockscreen-wrapper">
                 <!-- User name -->
-                <div class="lockscreen-name" style="text-align: center; font-size: 200%"><b><?= $this->FullName ?></b></div>
+                <div class="lockscreen-name" style="text-align: center; font-size: 200%"><b><?= $this->FullName ?></b>
+                </div>
 
                 <!-- START LOCK SCREEN ITEM -->
                 <div class="lockscreen-item">
@@ -74,7 +77,8 @@
                     <form data-pjax class="lockscreen-credentials" action="<?= SITE ?>login/" method="post">
                         <div class="input-group">
                             <input style="display: none" type="text" value="1" name="RememberMe">
-                            <input style="display: none" type="text" class="form-control" name="username" placeholder="Username" value="<?= $this->UserName ?>">
+                            <input style="display: none" type="text" class="form-control" name="username"
+                                   placeholder="Username" value="<?= $this->UserName ?>">
                             <input type="password" name="password" class="form-control" placeholder="Password">
 
                             <div class="input-group-btn">
@@ -93,7 +97,8 @@
                     <a href="<?= SITE . 'login/clear/' ?>">Or sign in as a different user</a>
                 </div>
                 <div class="lockscreen-footer text-center">
-                    Copyright &copy; 2014-2017 <b><a href="http://lilRichard.com" class="text-black">Richard Miles</a></b><br>
+                    Copyright &copy; 2014-2017 <b><a href="http://lilRichard.com" class="text-black">Richard
+                            Miles</a></b><br>
                     All rights reserved
                 </div>
             </div>

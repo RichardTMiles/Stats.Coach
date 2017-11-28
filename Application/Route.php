@@ -3,10 +3,6 @@
 use Carbon\Route;
 use Carbon\View;
 
-
-
-
-
 $route = new class extends Route
 {
     public function defaultRoute()
@@ -20,7 +16,7 @@ $route = new class extends Route
     }
 };
 
-$json = function ($path, $options) {
+$json = function ($path, $options = []) {
     Mustache($path, $options);
     exit(1);
 };
@@ -34,7 +30,7 @@ if (!$_SESSION['id']):
 
     $route->match('Login/*', 'User', 'login');
 
-    $route->match('Facebook/{request}/*', 'User', 'facebook');
+    $route->match('Facebook/{request?}/*', 'User', 'facebook');
 
     $route->match('Register/*', 'User', 'Register');            // Register
 
@@ -46,6 +42,13 @@ else:   // logged in
 
     if (SOCKET || AJAX):
         $route->structure($json);               // Event closure
+
+
+        $route->match('Search/{search}/', function ($search) {
+            $search = (new \Carbon\Request())->set($search)->alnum();
+            new \Model\Search($search);
+            Mustache('search/search', ['widget' => '#pjax']);
+        });
 
         $route->match('Messages/', 'messages/nav-messages', ['widget' => '#NavMessages']);
 
@@ -93,7 +96,7 @@ else:   // logged in
         Controller\User::logout();
     });          // Logout
 endif;
-
+ 
 $route->match('Activate/{email?}/{email_code?}/', 'User', 'activate');   // Activate $email $email_code
 
 $route->match('404/*', function () {

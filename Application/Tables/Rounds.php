@@ -32,13 +32,10 @@ class Rounds extends Entities implements iEntity
     static function add(&$object, $id, $argv)
     {
         ################# Add Round ################
-        alert('add now');
 
         $roundId = self::beginTransaction( GOLF_ROUNDS, $_SESSION['id']);
         $sql = "INSERT INTO StatsCoach.golf_rounds (round_id, round_public, score_date, user_id, course_id, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts) VALUES (:round_id, :round_public, :score_date, :user_id, :course_id, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts)";
         $stmt = self::database()->prepare( $sql );
-
-        alert('inside transation');
 
         $stmt->bindValue( ':round_id',      $roundId );
         $stmt->bindValue( ':user_id',       $_SESSION['id'] );
