@@ -2,6 +2,11 @@
 <?php declare(ticks=1);
 const SOCKET = true;
 
+print "here\n\n" . PHP_EOL;
+
+
+die(1);
+
 if (!file_exists('../../index.php') || !include_once '../../index.php')
     print "We could not locate the index" and die(1);
 

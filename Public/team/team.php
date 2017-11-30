@@ -60,12 +60,12 @@ foreach ($myTeam['members'] as $an => $id) {
                                 <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam['team_code'] ?></span></a></li>
                                 <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
                                                 class="pull-right badge bg-aqua"><?= count( $myTeam['members'] ) ?></span></a></li>
-                                <li><a href="#">Rounds <span class="pull-right badge bg-green"></span><?=$rounds?></a></li>
-                                <li><a href="#">Tournaments <span class="pull-right badge bg-red"></span><?=$tournaments?></a></li>
-                                <li><a href="#">Strokes <span class="pull-right badge bg-red"></span><?=$strokes?></a></li>
-                                <li><a href="#">FFS <span class="pull-right badge bg-red"></span><?=$FFS?></a></li>
-                                <li><a href="#">PNR <span class="pull-right badge bg-red"></span><?=$GIR?></a></li>
-                                <li><a href="#">Putts <span class="pull-right badge bg-red"></span><?=$putts?></a></li>
+                                <li><a href="#">Rounds <span class="pull-right badge bg-green"><?=$rounds?></span></a></li>
+                                <li><a href="#">Tournaments <span class="pull-right badge bg-red"><?=$tournaments?></span></a></li>
+                                <li><a href="#">Strokes <span class="pull-right badge bg-red"><?=$strokes?></span></a></li>
+                                <li><a href="#">FFS <span class="pull-right badge bg-red"><?=$FFS?></span></a></li>
+                                <li><a href="#">PNR <span class="pull-right badge bg-red"><?=$GIR?></span></a></li>
+                                <li><a href="#">Putts <span class="pull-right badge bg-red"><?=$putts?></span></a></li>
                             </ul>
                         </div>
                     </div>

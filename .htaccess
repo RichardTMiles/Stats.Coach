@@ -78,7 +78,7 @@ RewriteRule ^(.*)\.[\d]{10}\.(css|js|html)$ $1.$2 [L]
 # Redirect anyhting thats not of the following file types to the index
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.icon|\.js|\.css|\.woff|.\woff2|\.map|\.mst)$
+RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.icon|\.js|\.css|\.woff|.\woff2|\.map|\.hbs)$
 RewriteRule (.*) index.php [QSA]
 </IfModule>
 
@@ -101,7 +101,7 @@ Header set Cache-Control "max-age=29030400, public"
 Header set Cache-Control "max-age=604800, public"
 </FilesMatch>
 
-<FilesMatch "\.(xml|txt|css|js|mst)$">
+<FilesMatch "\.(xml|txt|css|js|hbs)$">
 Header set Cache-Control "max-age=604800, proxy-revalidate"
 </FilesMatch>
 

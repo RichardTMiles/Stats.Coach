@@ -40,11 +40,12 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+        <form action="<?=SITE?>Search/" method="get" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <input type="text" class="form-control" placeholder="Search..."
+                onkeyup="$.fn.sendEvent('<?=SITE?>Search/'+this.value)">
                 <span class="input-group-btn">
-                                <button onkeyup="$.fn.sendEvent('<?=SITE.'Search/'?>'+this.value)" name="search" id="search-btn" class="btn btn-flat">
+                                <button name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>
                                 </button>
                               </span>

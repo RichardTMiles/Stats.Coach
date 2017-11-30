@@ -76,7 +76,7 @@
                     <!-- lockscreen credentials (contains the form) -->
                     <form data-pjax class="lockscreen-credentials" action="<?= SITE ?>login/" method="post">
                         <div class="input-group">
-                            <input style="display: none" type="text" value="1" name="RememberMe">
+                            <input style="display: none" type="text" value="1" name="RememberMe" id="RememberMe">
                             <input style="display: none" type="text" class="form-control" name="username"
                                    placeholder="Username" value="<?= $this->UserName ?>">
                             <input type="password" name="password" class="form-control" placeholder="Password">
@@ -107,3 +107,16 @@
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
+<script>
+    document.addEventListener("Carbon", function(e) {
+        // e.target is the clicked element!
+        // If it was an item with class 'foo'
+        if(e.target && e.target.className == "foo") {
+            console.log("foo "+e.target.innerText+" was clicked!");
+        }
+
+        $.fn.load_iCheck('input');
+
+    });
+
+</script>

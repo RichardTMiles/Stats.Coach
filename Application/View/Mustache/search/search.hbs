@@ -1,0 +1,68 @@
+<section class="content-header" style="color: ghostwhite">
+    <h1>
+        Search
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Profile</a></li>
+    </ol>
+    <p>
+    </p>
+</section>
+
+<div class="col-xs-12">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Hover Data Table</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr role="row">
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                                <th>Rendering engine</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>
+                            <tr role="row" class="odd">
+                                <td>Presto</td>
+                                <td>Nintendo DS browser</td>
+                                <td>Nintendo DS</td>
+                                <td>8.5</td>
+                                <td>C/A<sup>1</sup></td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#example2').DataTable();
+    });
+</script>

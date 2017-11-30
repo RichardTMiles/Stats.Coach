@@ -31,8 +31,16 @@ const GOLF_ROUNDS = 9;
 const GOLF_COURSE = 10;
 const ENTITY_COMMENTS = 11;
 const ENTITY_PHOTOS = 12;
+
+
+// Template
+const COMPOSER ='Data' . DS . 'vendor' . DS;
+const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
+
+// Facebook
 const FACEBOOK_APP_ID = '1456106104433760';
 const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
+
 
 return [
     'SITE' => [
@@ -52,38 +60,41 @@ return [
 
         'BOOTSTRAP' => 'Application/Route.php',
 
-        'HTTP' => (bool) false,
+        'HTTP' => (bool)false,
     ],
 
-    'SERIALIZE' => [ 'user' , 'team' , 'course', 'tournament' ],
+    'SERIALIZE' => ['user', 'team', 'course', 'tournament'],
 
     'SESSION' => [
-        'REMOTE' => (bool) true,
+        'REMOTE' => (bool)true,
 
-        'PATH' => (string) SERVER_ROOT . 'Data/Sessions/',
+        'PATH' => (string)SERVER_ROOT . 'Data/Sessions/',
 
         'CALLBACK' => $session_callback,
     ],
 
-    /*
+
+        /*
     'SOCKET' => [
         'WEBSOCKETD' => true,
+        'DEV' => true,
         'SSL' => [
-            'KEY' => '/Users/richardmiles/desktop/ssl/stats/account-key-2.key',
-            'CERT' => '/Users/richardmiles/desktop/ssl/stats/domain.crt'
+            'KEY' => '/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt',
+            'CERT' => '/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt'
         ]
-    ],*/
+    ],
+    */
 
     'ERROR' => [
         'LEVEL' => (int)E_ALL | E_STRICT,
 
-        'LOCATION' => (string) SERVER_ROOT . 'Data/Logs/',
+        'LOCATION' => (string)SERVER_ROOT . 'Data/Logs/',
 
-        'STORE' => (bool) true,
+        'STORE' => (bool)true,
 
-        'SHOW' => (bool) true,
+        'SHOW' => (bool)true,
 
-        'FULL' => (bool) true
+        'FULL' => (bool)true
     ],
 
     'VIEW' => [

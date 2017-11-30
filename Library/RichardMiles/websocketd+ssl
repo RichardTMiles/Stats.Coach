@@ -15,6 +15,6 @@ shebang php-cli
 
 [1]+ websocketd --port=8080 --devconsole --ssl --sslkey=/etc/ssl/private/miles.secureserver.net.key --sslcert=/etc/ssl/certs/miles.secureserver.net.crt /home/stats/public_html/Application/Modules/Socket.php &
 
-websocketd --port=8080 --devconsole --ssl --sslkey=/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt --sslcert=/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt /library/server/web/data/sites/stats.coach/data/scripts/Websocketd.php
+websocketd --port=8080 --devconsole --ssl --sslkey=/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt --sslcert=/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt php /library/server/web/data/sites/stats.coach/data/vendor/richardtmiles/carbonphp/Extras/Websocketd.php
 
 

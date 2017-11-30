@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Mac OS X Mounted" overwriteAll="false" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" promptOnRemoteOverwrite="CHECK_CONTENT" serverName="Mac OS X Mounted" overwriteAll="false" deleteMissingItems="true" createEmptyFolders="true" filePermissions="420" folderPermissions="493" autoUploadExternalChanges="true" notifyRemoteChanges="true">
     <serverData>
       <paths name="Mac OS X Mounted">
         <serverdata>

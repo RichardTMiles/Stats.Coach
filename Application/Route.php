@@ -22,9 +22,8 @@ $json = function ($path, $options = []) {
 };
 
 $route->structure($mvc = function (string $class, string $method, array &$argv = []) {
-    MVC($class,$method,$argv) and exit(1);
+    MVC($class, $method, $argv) and exit(1);
 });  // Event for empty closure & lambdas
-
 
 if (!$_SESSION['id']):
 
@@ -43,11 +42,13 @@ else:   // logged in
     if (SOCKET || AJAX):
         $route->structure($json);               // Event closure
 
-
         $route->match('Search/{search}/', function ($search) {
             $search = (new \Carbon\Request())->set($search)->alnum();
+
+            if (!$search) return [];
+
             new \Model\Search($search);
-            Mustache('search/search', ['widget' => '#pjax']);
+            Mustache('search/search', ['widget' => '#pjax-content']);
         });
 
         $route->match('Messages/', 'messages/nav-messages', ['widget' => '#NavMessages']);
@@ -96,7 +97,7 @@ else:   // logged in
         Controller\User::logout();
     });          // Logout
 endif;
- 
+
 $route->match('Activate/{email?}/{email_code?}/', 'User', 'activate');   // Activate $email $email_code
 
 $route->match('404/*', function () {
@@ -113,9 +114,7 @@ $route->match('Privacy/*', function () {
 
 $route->match('Tests/*',                                // This is how the view works
     function () {
-        if (AJAX) {
-            require_once SERVER_ROOT . 'Tests/index.php';;
-        }
+        require_once SERVER_ROOT . 'Tests/index.php';
         exit(1);
     }
 );

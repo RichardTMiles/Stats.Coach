@@ -1,11 +1,4 @@
-<?php
-if (!defined('COMPOSER'))
-    define('COMPOSER', 'Data' . DS . 'vendor' . DS);
-
-if (!defined('TEMPLATE'))
-    define('TEMPLATE', COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS);
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -60,7 +53,7 @@ if (!defined('TEMPLATE'))
     <link rel="preload"
           href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>"
           as="style" onload="this.rel='stylesheet'">
-
+    <!-- date-range-picker -->
     <link rel="preload"
           href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>"
           as="style" onload="this.rel='stylesheet'">
@@ -74,7 +67,6 @@ if (!defined('TEMPLATE'))
     <link rel="preload"
           href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
           as="style" onload="this.rel='stylesheet'">
-
     <!-- Font Awesome -->
     <link rel="preload"
           href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
@@ -143,25 +135,21 @@ if (!defined('TEMPLATE'))
 
         /*! loadJS: load a JS file asynchronously. [c]2014 @scottjehl, Filament Group, Inc. (Based on http://goo.gl/REQGQ by Paul Irish). Licensed MIT */
         (function (w) {
-            var loadJS = function (src, cb) {
+            var loadJS;
+            loadJS = function (src, cb) {
                 "use strict";
                 var ref = w.document.getElementsByTagName("script")[0];
                 var script = w.document.createElement("script");
                 script.src = src;
                 script.async = true;
                 ref.parentNode.insertBefore(script, ref);
-                if (cb && typeof(cb) === "function") {
+                if (cb && typeof(cb) === "function")
                     script.onload = cb;
-                }
+
                 return script;
-            };
-            // commonjs
-            if (typeof module !== "undefined") {
-                module.exports = loadJS;
-            }
-            else {
-                w.loadJS = loadJS;
-            }
+            }; // commonjs
+            if (typeof module !== "undefined") module.exports = loadJS;
+            else w.loadJS = loadJS;
         }(typeof global !== "undefined" ? global : this));// Hierarchical PJAX Request
 
         // Facebook Analytics
@@ -184,7 +172,6 @@ if (!defined('TEMPLATE'))
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -213,20 +200,15 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
     if (($_SESSION['id'] ?? false) && is_array($this->user[$_SESSION['id']] ?? false)):
         $my = $this->user[$_SESSION['id']];
-
-        if ($userType == 'Coach'):
-            require_once SERVER_ROOT . 'Public/AdminLTE/CoachLayout.php';
-        else:
-            require_once SERVER_ROOT . 'Public/AdminLTE/AthleteLayout.php';
-        endif;
-        ?>
+        ($userType == 'Coach' ?  require_once SERVER_ROOT . 'Public/AdminLTE/CoachLayout.php' :
+            require_once SERVER_ROOT . 'Public/AdminLTE/AthleteLayout.php'); ?>
 
         <div class="content-wrapper" style="background: transparent">
             <div class="container">
                 <div id="alert"></div>
                 <!-- content -->
                 <div id="pjax-content">
-                    <?=$this->bufferedContent?>
+                    <?= $this->bufferedContent ?>
                 </div>
                 <!-- /.content -->
             </div>
@@ -251,13 +233,13 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 </div>
 <script>
     //-- JQuery -->
-    loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery/dist/jquery.min.js') ?>", function () {
+    loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery/dist/jquery.min.js') ?>", () => {
 
         //-- Jquery Form -->
         loadJS('<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-form/src/jquery.form.js')?>');
 
         //-- Background Stretch -->
-        loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-backstretch/jquery.backstretch.min.js') ?>", function () {
+        loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-backstretch/jquery.backstretch.min.js') ?>", () => {
             $.backstretch('<?=SITE?>Public/img/final.jpg');
         });
 
@@ -265,57 +247,132 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
         loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>");
 
         //-- Fastclick -->
-        loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/fastclick/lib/fastclick.js') ?>", function () {
+        loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/fastclick/lib/fastclick.js') ?>", () => {
             //-- Admin LTE -->
             loadJS("<?= $this->versionControl(TEMPLATE . 'dist/js/adminlte.min.js') ?>");
         });
 
         //-- Bootstrap -->
-        loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap/dist/js/bootstrap.min.js') ?>", function () {
+        loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap/dist/js/bootstrap.min.js') ?>", () => {
 
             //-- AJAX Pace -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/PACE/pace.js') ?>", function () {
-                $(document).ajaxStart(function () {
-                    Pace.restart();
-                });
-            });
+            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/PACE/pace.js') ?>", () => $(document).ajaxStart(() => Pace.restart()));
+
+            var JSLoaded = new Set();
+
+            $.fn.CarbonJS = (sc, cb) => (!JSLoaded.has(sc) ? loadJS(sc, cb) : cb());
 
             //-- Select 2 -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/select2/dist/js/select2.full.min.js') ?>");
+            $.fn.load_select2 = (select2) =>
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/select2/dist/js/select2.full.min.js') ?>", () =>
+                    $(select2).select2());
 
-            //-- iCheck -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/iCheck/icheck.min.js')?>");
+            //-- Data tables -->
+            $.fn.load_datatables = (table) =>
+                $.fn.CarbonJS("<?= $this->versionControl('bower_components/datatables.net-bs/js/dataTables.bootstrap.js') ?>", () =>
+                    $(table).DataTable());
+
+
+            //-- iCheak -->
+            $.fn.load_iCheck = (input) => {
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'plugins/iCheck/icheck.min.js')?>", () => {
+                    $(input).iCheck({
+                        checkboxClass: 'icheckbox_square-blue', radioClass: 'iradio_square-blue', increaseArea: '20%' // optional
+                    });
+                });
+            };
 
             //-- Input Mask -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.js') ?>", function () {
-                loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.date.extensions.js') ?>");
-                loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.extensions.js') ?>");
-            });
+            $.fn.load_inputmask = (mask) =>
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.js') ?>", () => {
+                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.date.extensions.js') ?>");
+                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.extensions.js') ?>");
+                }, () => $(mask).inputmask());
 
             //-- jQuery Knob -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery-knob/js/jquery.knob.js') ?>");
+            $.fn.load_knob = (knob) => {
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery-knob/js/jquery.knob.js') ?>", () => {
+                    $(knob).knob({
+                        draw: function () {
+                            // "tron" case
+                            if (this.$.data('skin') === 'tron') {
+
+                                var a = this.angle(this.cv)  // Angle
+                                    , sa = this.startAngle          // Previous start angle
+                                    , sat = this.startAngle         // Start angle
+                                    , ea                            // Previous end angle
+                                    , eat = sat + a                 // End angle
+                                    , r = true;
+
+                                this.g.lineWidth = this.lineWidth;
+
+                                this.o.cursor
+                                && (sat = eat - 0.3)
+                                && (eat = eat + 0.3);
+
+                                if (this.o.displayPrevious) {
+                                    ea = this.startAngle + this.angle(this.value);
+                                    this.o.cursor
+                                    && (sa = ea - 0.3)
+                                    && (ea = ea + 0.3);
+                                    this.g.beginPath();
+                                    this.g.strokeStyle = this.previousColor;
+                                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                                    this.g.stroke();
+                                }
+
+                                this.g.beginPath();
+                                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                                this.g.stroke();
+
+                                this.g.lineWidth = 2;
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.o.fgColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                                this.g.stroke();
+
+                                return false;
+                            }
+                        }
+                    });
+                });
+            };
 
             //-- Bootstrap Time Picker -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/timepicker/bootstrap-timepicker.min.js') ?>");
+            $.fn.load_timepicker = (timepicker) => {
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'plugins/timepicker/bootstrap-timepicker.min.js') ?>", () => {
+                    $(timepicker).timepicker({showInputs: false});
+                });
+            }
 
             //--Bootstrap Datepicker -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js') ?>");
+            $.fn.load_datepicker = (datepicker) => {
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js') ?>", () => {
+                    $(datepicker).datepicker({autoclose: true});
+                });
+            };
 
             //--Bootstrap Color Picker -->
-            loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') ?>");
+            $.fn.load_colorpicker = (colorpicker) =>
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') ?>", () =>
+                    $(colorpicker).colorpicker());
 
             //-- PJAX-->
-            loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", function () {
-                loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", function () {
-                    loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", function () {
+            loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
+                loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
+                    loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () => {
                         Carbon('#pjax-content', 'wss://stats.coach:8080/');
                         // Messages in Navigation, faster to initially load over http
                         $.fn.sendEvent('<?= SITE . 'Messages/' ?>');
                         $.fn.sendEvent('<?= SITE . 'Notifications/' ?>');
                         $.fn.sendEvent('<?= SITE . 'Tasks/' ?>');
-                    });
-                });
-            });
+                    })));
+
+
+
+            //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl('dist/js/demo.js') ?>//");
+
         });
     });
 
