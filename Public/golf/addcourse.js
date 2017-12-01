@@ -1,4 +1,5 @@
-var tee_boxes,
+let Form = document.forms["addCourse"], fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
+    tee_boxes,
     Handicap_number,
     total_holes = 18,
     course_hc = [],
@@ -18,20 +19,17 @@ function HideMeShow(hide, show) {
 /* validate course data <int> */
 
 function validateGeneral() {
-    var Form = document.forms["addCourse"];
-    var fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
+    let Form = document.forms["addCourse"],
+        fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
         lengthF = fields.length, e = false;
 
-    for (var i = 0; i < lengthF; i++) {
+    for (let i = 0; i < lengthF; i++)
         if (Form[fields[i]].value === null || Form[fields[i]].value === "") {
             $("#" + fields[i]).removeClass("has-success").addClass("has-error");
             e = true;
         } else $("#" + fields[i]).removeClass("has-error").addClass("has-success");
-    }
-    if (e) {
-        return alert("Please Fill All Required Field");
-    }
 
+    if (e) return alert("Please Fill All Required Field");
     tee_boxes = Form[fields[6]].value;
     Handicap_number = Form[fields[7]].value;
     new_tee_box_color_input();                                  // Generate new tee boxes
@@ -39,7 +37,7 @@ function validateGeneral() {
 }
 
 function addColor(number, color) {
-    var input = 'tee_' + number + '_color'; // To ensure they at least search for it
+    let input = 'tee_' + number + '_color'; // To ensure they at least search for it
     tee_box_colors[number - 1] = color;
     document.getElementById(input).disabled = false;
     document.getElementById(input).setAttribute('value', color);
@@ -47,12 +45,12 @@ function addColor(number, color) {
 }
 
 function new_tee_box_color_input() {
-    var container = document.getElementById('teebox-color-selection'),
+    let container = document.getElementById('teebox-color-selection'),
         node = document.createElement("DIV"), current_hole = 1;
     container.innerHTML = null;
     do {
-        var html =
-            "<!-- Add Tee Box Selection --><div id='tee-box-color-" + current_hole + "' style='display:" + (current_hole === 1 ? 'block' : 'none') + ";'><div class='box box-success' id='Tee-Box-Color-Section'style='background-color: #2c3b41; color: ghostwhite !important;'><div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title' style='font-size: 200%; color: #ffffff;'>Tee Box Color Selection</h3> \<\
+        let html =
+            "<!-- Add Tee Box Selection --><div id='tee-box-color-" + current_hole + "' style='display:" + (current_hole === 1 ? 'block' : 'none') + ";'><div class='box box-success' id='Tee-Box-Color-Section' style='background-color: #2c3b41; color: ghostwhite !important;'><div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title' style='font-size: 200%; color: #ffffff;'>Tee Box Color Selection</h3> \<\
                             <div class=\"box-tools pull-right\"><button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button></div></div> \
                 <div class='box-body' style='background-color: #2c3b41; color: ghostwhite !important;'> <h3>Tee Box " + current_hole + " Color</h3> \
                 <div class='row col-lg-12 col-md-12'><div id='color-tee-box-selection' class='input-group input-group-lgsd'> \
@@ -61,8 +59,7 @@ function new_tee_box_color_input() {
                 <li><a onclick='addColor(" + current_hole + ", this.innerHTML)'>Green</a></li><li><a onclick='addColor(" + current_hole + ", this.innerHTML)'>Gold</a></li> \
                 <li><a onclick='addColor(" + current_hole + ", this.innerHTML)'>Red</a></li><li><a onclick='addColor(" + current_hole + ", this.innerHTML)'>White</a></li>";
 
-
-        var h2 =
+        let h2 =
             "</ul></div><input id='tee_" + current_hole + "_color' name='tee_" + current_hole + "_color' type='text' class='form-control' disabled></div></div><br><br><br><br><div class='row'><div class='col-md-6 col-sm-6'> \
                 <div class='col-xs-6 col-md-6 text-center'><input name='general_difficulty_" + current_hole + "' type='text' class='knob' value='0' data-step='0.1' data-min='0' data-max='90' data-anglearc='250' data-angleoffset='145' data-width='90' data-height='90' data-fgcolor='#3c8dbc' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'></div> \
                 <div class='col-xs-6 col-md-6 text-center'><input name='general_slope_" + current_hole + "' type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#f56954' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
@@ -71,11 +68,8 @@ function new_tee_box_color_input() {
                 <div class='col-xs-6 col-md-6 text-center'><input name='women_slope_" + current_hole + "'type='text' class='knob' value='0' data-min='0' data-max='200' data-anglearc='250' data-angleoffset='-35' data-width='90' data-height='90' data-fgcolor='#00c0ef' style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 192, 239); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'> \
                 </div><div class='col-xs-12 col-md-12'><div class='knob-label' style='color: #fff;;'>Women\'s<br>Difficulty / Slope</div></div></div></div><!-- ./col -->";
 
-        var back =
-            "<button type='button' class='btn btn-default' onclick=\"HideMeShow('tee-box-color-" + current_hole + "','" + (current_hole == 1 ? 'CourseInfo' : ('tee-box-color-' + (current_hole - 1))) + "')\"><< Back</button>";
-
-        var next =
-            "<button type='button' class='btn btn-info pull-right' onclick='" + (current_hole != 18 ? 'validate_tee_box_colors(\"' + current_hole + '\")' : null) + "'>Next >></button></div></div>";
+        let back = "<button type='button' class='btn btn-default' onclick=\"HideMeShow('tee-box-color-" + current_hole + "','" + (current_hole == 1 ? 'CourseInfo' : ('tee-box-color-' + (current_hole - 1))) + "')\"><< Back</button>";
+        let next = "<button type='button' class='btn btn-info pull-right' onclick='" + (current_hole != 18 ? 'validate_tee_box_colors(\"' + current_hole + '\")' : null) + "'>Next >></button></div></div>";
 
         node.innerHTML = html + h2 + back + next;
         container.innerHTML += node.innerHTML;
@@ -83,7 +77,7 @@ function new_tee_box_color_input() {
 
     $.fn.bootstrapAlert("Tee boxes difficulty and slope may be left at 0 if not set.", "info");
 
-    $.fn.widgetRefresh();
+    $.fn.load_knob('.knob');
 
 }
 
@@ -116,10 +110,10 @@ function validateDistance(current_hole) {
     }
     for (i = 0; i < Handicap_number; i++) {
         input = "hc_" + (i + 1) + "_" + current_hole;
-        course_hc[current_hole-1] = input = Form[input].value;
+        course_hc[current_hole - 1] = input = Form[input].value;
         if (input < 1 || input > 18)
             return alert("The handicap value(s) must be a valid integer between 1 and 18 inclusively.")
-        if(hasDuplicates(course_hc))
+        if (hasDuplicates(course_hc))
             return alert("You have entered the same Handicap twice.")
     }
     HideMeShow('hole-' + current_hole + '-distances', 'hole-' + (++current_hole) + '-distances');

@@ -58,7 +58,7 @@ foreach ($myTeam['members'] as $an => $id) {
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
                                 <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam['team_code'] ?></span></a></li>
-                                <li><a onclick="$.fn.sendEvent('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
+                                <li><a onclick="$.fn.startApplication('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
                                                 class="pull-right badge bg-aqua"><?= count( $myTeam['members'] ) ?></span></a></li>
                                 <li><a href="#">Rounds <span class="pull-right badge bg-green"><?=$rounds?></span></a></li>
                                 <li><a href="#">Tournaments <span class="pull-right badge bg-red"><?=$tournaments?></span></a></li>

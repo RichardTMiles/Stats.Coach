@@ -285,8 +285,10 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             //-- Input Mask -->
             $.fn.load_inputmask = (mask) =>
                 $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.js') ?>", () => {
-                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.date.extensions.js') ?>");
-                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.extensions.js') ?>");
+                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.date.extensions.js') ?>",
+                        () => $(mask).inputmask());
+                    loadJS("<?= $this->versionControl(TEMPLATE . 'plugins/input-mask/jquery.inputmask.extensions.js') ?>",
+                        () => $(mask).inputmask());
                 }, () => $(mask).inputmask());
 
             //-- jQuery Knob -->
@@ -347,11 +349,9 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             }
 
             //--Bootstrap Datepicker -->
-            $.fn.load_datepicker = (datepicker) => {
-                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js') ?>", () => {
-                    $(datepicker).datepicker({autoclose: true});
-                });
-            };
+            $.fn.load_datepicker = (datepicker) =>
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE . 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js') ?>", () =>
+                    $(datepicker).datepicker({autoclose: true}));
 
             //--Bootstrap Color Picker -->
             $.fn.load_colorpicker = (colorpicker) =>
@@ -362,11 +362,11 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () => {
-                        Carbon('#pjax-content', 'wss://stats.coach:8080/');
+                        Carbon('#pjax-content', 'ws://stats.coach:8888/');
                         // Messages in Navigation, faster to initially load over http
-                        $.fn.sendEvent('<?= SITE . 'Messages/' ?>');
-                        $.fn.sendEvent('<?= SITE . 'Notifications/' ?>');
-                        $.fn.sendEvent('<?= SITE . 'Tasks/' ?>');
+                        $.fn.startApplication('<?= SITE . 'Messages/' ?>');
+                        $.fn.startApplication('<?= SITE . 'Notifications/' ?>');
+                        $.fn.startApplication('<?= SITE . 'Tasks/' ?>');
                     })));
 
 

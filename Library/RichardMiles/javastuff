@@ -1,0 +1,19 @@
+ // Select 2 -->
+        $(".select2").select2();
+
+        // Data tables loadJS("<?= $this->versionControl( 'bower_components/datatables.net-bs/js/dataTables.bootstrap.js' ) ?>//");-->
+
+        // Input Mask -->
+        $("[data-mask]").inputmask();  //Money Euro
+
+        // Bootstrap Datepicker -->
+        $('#datepicker').datepicker({autoclose: true});
+
+        //-- Bootstrap Time Picker -->
+        $('.timepicker').timepicker({showInputs: false});
+
+        //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl( 'dist/js/demo.js' ) ?>//");
+
+        //-- jQuery Knob -->
+        $(".knob").knob({
+            /*change : function (value) {

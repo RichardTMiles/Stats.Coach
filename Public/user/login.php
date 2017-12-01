@@ -36,7 +36,7 @@
 
             <div class="social-auth-links text-center">
                 <p>- OR -</p>
-                <div class="btn btn-block btn-social btn-facebook btn-flat" onclick="window.location.replace('<?=(new Facebook\Facebook([
+                <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?=(new Facebook\Facebook([
                     'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
                     'app_secret' => FACEBOOK_APP_SECRET,
                     'default_graph_version' => 'v2.2',
@@ -44,8 +44,8 @@
                     'public_profile', 'user_friends', 'email',
                     'user_about_me', 'user_birthday',
                     'user_education_history', 'user_hometown',
-                    'user_location', 'user_photos', 'user_friends']); ?>')">
-                    <i class="fa fa-facebook"></i> Sign in using Facebook</div>
+                    'user_location', 'user_photos', 'user_friends']); ?>'>
+                    <i class="fa fa-facebook"></i> Sign in using Facebook</a>
 
                 <a href="#" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
@@ -107,16 +107,5 @@
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<script>
-    document.addEventListener("Carbon", function(e) {
-        // e.target is the clicked element!
-        // If it was an item with class 'foo'
-        if(e.target && e.target.className == "foo") {
-            console.log("foo "+e.target.innerText+" was clicked!");
-        }
 
-        $.fn.load_iCheck('input');
-
-    });
-
-</script>
+<script> document.addEventListener("Carbon", (e) => $.fn.load_iCheck('input')); </script>

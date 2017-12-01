@@ -113,6 +113,8 @@ if (!$state) { ?>
 
     </section><!-- /.content -->
 
+    <script> document.addEventListener("Carbon", (e) => $.fn.load_select2('.select2')); </script>
+
 
     <?php return 1;
 } elseif ($this->course_colors && $course_id) {
@@ -366,9 +368,10 @@ if (!$state) { ?>
         </form>
     </section>
     <script>
+        document.addEventListener("Carbon", (e) => $.fn.load_knob('input'));
         function next_score_input(current) {
-            var Form = document.forms["postScore"];
-            var input = ['putts-' + current, 'hole-' + current, 'par-' + current, 'gnr-' + current];
+            let Form = document.forms["postScore"];
+            let input = ['putts-' + current, 'hole-' + current, 'par-' + current, 'gnr-' + current];
 
             if (Form[input[0]].value > Form[input[1]].value) {
                 return $.fn.bootstrapAlert("You can't putt more than you shoot!");

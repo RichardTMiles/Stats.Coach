@@ -6,7 +6,6 @@
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-            <mapping deploy="/" local="/Library/Server/Web/Data/Sites/Stats.Coach" web="/" />
           </mappings>
         </serverdata>
       </paths>

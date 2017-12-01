@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="example2" class="table table-bordered table-hover">
+                        <table id="TeamSearch" class="table table-bordered table-hover">
                             <thead>
                             <tr role="row">
                                 <th>Team Name</th>
@@ -60,4 +60,116 @@
     <!-- /.box -->
 </div>
 
-<script> document.addEventListener("Carbon", (e) => $.fn.load_datatables('#example2')); </script>
+<div class="col-xs-12">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Teams</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="UserSearch" class="table table-bordered table-hover">
+                            <thead>
+                            <tr role="row">
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Account Type</th>
+                                <th>Active Sports</th>
+                                <th>About ME</th>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Account Type</th>
+                                <th>Active Sports</th>
+                                <th>About ME</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>{{#Users}}
+                                <tr role="row">
+                                    <th>{{FirstName}}</th>
+                                    <th>{{LastName}}</th>
+                                    <th>{{Type}}</th>
+                                    <th>{{Sport}}</th>
+                                    <th>{{About}}</th>
+                                </tr>{{/Users}}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</div>
+
+<div class="col-xs-12">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Teams</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="CourseSearch" class="table table-bordered table-hover">
+                            <thead>
+                            <tr role="row">
+                                <th> Course Name</th>
+                                <th> Par</th>
+                                <th> Holes</th>
+                                <th> Phone</th>
+                                <th> Web</th>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th> Course Name</th>
+                                <th> Par</th>
+                                <th> Holes</th>
+                                <th> Phone</th>
+                                <th> Web</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>{{#Courses}}
+                                <tr role="row">
+                                    <th>{{Name}}</th>
+                                    <th>{{Par}}</th>
+                                    <th>{{Holes}}</th>
+                                    <th>{{Phone}}</th>
+                                    <th>{{Web}}</th>
+                                </tr>{{/Courses}}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</div>
+
+
+
+<script> document.addEventListener("Carbon", (e) => {
+    $.fn.load_datatables('#TeamSearch');
+    $.fn.load_datatables('#UserSearch');
+    $.fn.load_datatables('#CourseSearch');
+}); </script>

@@ -1,4 +1,3 @@
-
 <?php // This page is dynamic for any user
 
 $my = $my ?? $this->user[$_SESSION['id']];
@@ -32,7 +31,8 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
             <!-- Profile Image -->
             <div class="box box-primary" data-widget="">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="<?= $profile['user_profile_picture'] ?>" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle"
+                         src="<?= $profile['user_profile_picture'] ?>" alt="User profile picture">
                     <h3 class="profile-username text-center">
                         <?= $profile['user_first_last'] ?>
                     </h3>
@@ -138,23 +138,28 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                             <div class="box-header with-border">
                                 <h3 class="box-title">Profile Settings</h3>
                                 <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i></button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-remove"></i></button>
                                 </div>
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
 
                             <!-- Form Start -->
-                            <form data-pjax class="form-horizontal" action="<?= SITE ?>Profile/" method="post" enctype="multipart/form-data">
+                            <form data-pjax class="form-horizontal" action="<?= SITE ?>Profile/" method="post"
+                                  enctype="multipart/form-data">
 
                                 <div class="box-body">
                                     <div class="form-group col-md-12">
 
                                         <div class="form-group">
-                                            <label for="exampleInputFile" class="col-sm-3 control-label">Profile Picture</label>
+                                            <label for="exampleInputFile" class="col-sm-3 control-label">Profile
+                                                Picture</label>
                                             <div class="col-sm-8">
-                                                <input class="form-control" type="file" id="InputFile" name="FileToUpload">
+                                                <input class="form-control" type="file" id="InputFile"
+                                                       name="FileToUpload">
                                             </div>
                                         </div>
 
@@ -162,7 +167,8 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                                             <label for="first" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="first"
-                                                       placeholder="<?= $profile['user_first_name'] ?>" name="first_name">
+                                                       placeholder="<?= $profile['user_first_name'] ?>"
+                                                       name="first_name">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -179,7 +185,8 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
-                                                    <input name="datepicker" type="text" class="form-control pull-right" id="datepicker"
+                                                    <input name="datepicker" type="text" class="form-control pull-right"
+                                                           id="datepicker"
                                                            value="<?= $profile['user_birthday'] ?>">
                                                 </div>
                                             </div>
@@ -200,7 +207,8 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                                         <div class="form-group">
                                             <label for="username" class="col-sm-3 control-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="username" disabled="disabled"
+                                                <input type="text" class="form-control" id="username"
+                                                       disabled="disabled"
                                                        placeholder="<?= $profile['user_username'] ?>">
                                             </div>
                                         </div>
@@ -257,16 +265,18 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                     <?php
                 }
 
-                if (!empty( $profile['rounds'] ) && is_array( $profile['rounds'] )
-                    && is_array($profile['rounds'][0] ?? false) && !empty($profile['rounds'][0] )) { ?>
+                if (!empty($profile['rounds']) && is_array($profile['rounds'])
+                    && is_array($profile['rounds'][0] ?? false) && !empty($profile['rounds'][0])) { ?>
                     <div class="col-md-auto">
                         <div class="box box-widget widget-user">
                             <div class="box box-info">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Latest Scores</h3>
                                     <div class="box-tools pull-right">
-                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i
+                                                    class="fa fa-minus"></i></button>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i
+                                                    class="fa fa-times"></i></button>
                                     </div>
                                 </div><!-- /.box-header -->
                                 <div class="box-body">
@@ -287,7 +297,7 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
 
                                             <?php foreach ($profile['rounds'] as $stats) {
                                                 echo '<tr>
-                                                    <td>' . date( 'm/d/Y', $stats['score_date'] ) . "</td>
+                                                    <td>' . date('m/d/Y', $stats['score_date']) . "</td>
                                                     <td> {$stats['course_name']} </td>
                                                     <td> {$stats['score_total_ffs']} </td>
                                                     <td> {$stats['score_total_gnr']} </td>
@@ -301,8 +311,10 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                                     </div><!-- /.table-responsive -->
                                 </div><!-- /.box-body -->
                                 <div class="box-footer clearfix">
-                                    <a href="<?= SITE ?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
-                                    <a href="<?= SITE . 'Rounds/' . $user_id ?>/" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
+                                    <a href="<?= SITE ?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post
+                                        New Round</a>
+                                    <a href="<?= SITE . 'Rounds/' . $user_id ?>/"
+                                       class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
                                 </div><!-- /.box-footer -->
                             </div>
                         </div>
@@ -314,6 +326,13 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
     </div><!-- /.row -->
 
 </section>
+
+<script>
+    document.addEventListener("Carbon", (e) => {
+        $.fn.load_datepicker('#datepicker');
+        // $.fn.load_timepicker('.timepicker');
+    });
+</script>
 
 <!-- /.content -->
 

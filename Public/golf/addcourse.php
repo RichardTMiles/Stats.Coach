@@ -6,7 +6,18 @@
  * Time: 1:53 AM
  */ ?>
 
-<script>loadJS('<?=$this->versionControl("Public/golf/addcourse.js")?>');</script>
+<script>
+    loadJS('<?=$this->versionControl("Public/golf/addcourse.js")?>');
+
+
+    document.addEventListener("Carbon", (e) => {
+        $.fn.load_datepicker('#datepicker');
+        $.fn.load_knob('.knob');                // were pre loading
+        $.fn.load_timepicker('.timepicker');
+        $.fn.load_inputmask("[data-mask]")
+    });
+</script>
+
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">

@@ -43,7 +43,7 @@
         <form action="<?=SITE?>Search/" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search..."
-                onkeyup="$.fn.sendEvent('<?=SITE?>Search/'+this.value)">
+                onkeyup="$.fn.startApplication('<?=SITE?>Search/'+this.value)">
                 <span class="input-group-btn">
                                 <button name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>

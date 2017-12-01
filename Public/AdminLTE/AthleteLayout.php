@@ -35,7 +35,7 @@
 
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input onkeyup="$.fn.sendEvent('<?=SITE.'Search/'?>'+this.value)" type="text" class="form-control" id="navbar-search-input" placeholder="Search">
+                        <input onkeyup="$.fn.startApplication('<?=SITE.'Search/'?>'+this.value)" type="text" class="form-control" id="navbar-search-input" placeholder="Search">
                     </div>
                 </form>
 
