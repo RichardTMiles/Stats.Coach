@@ -9,6 +9,7 @@
 namespace Tables;
 
 
+use Carbon\Database;
 use Carbon\Entities;
 use Carbon\Error\PublicAlert;
 use Carbon\Interfaces\iEntity;
@@ -41,7 +42,7 @@ class Comments extends Entities implements iEntity
     {
         $comment_id = static::beginTransaction( 'ENTITY_COMMENTS', $id );
         $sql = 'INSERT INTO StatsCoach.carbon_comments (parent_id, comment_id, user_id, comment) VALUES (:parent_id, :comment_id, :user_id, :comment)';
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':parent_id', $id );
         $stmt->bindValue( ':comment_id', $comment_id );
         $stmt->bindValue( ':user_id', $_SESSION['id'] );

@@ -9,6 +9,7 @@
 namespace Tables;
 
 
+use Carbon\Database;
 use Carbon\Entities;
 use Carbon\Error\PublicAlert;
 use Carbon\Interfaces\iEntity;
@@ -47,7 +48,7 @@ class Photos extends Entities implements iEntity
     {
         $photo_id = static::beginTransaction( ENTITY_PHOTOS, $id );
         $sql = 'REPLACE INTO StatsCoach.carbon_photos (parent_id, photo_id, user_id, photo_path, photo_description) VALUES (:parent_id, :photo_id, :user_id, :photo_path, :photo_description)';
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':parent_id', $id );
         $stmt->bindValue( ':photo_id', $photo_id );
         $stmt->bindValue( ':user_id', $_SESSION['id'] );
@@ -63,7 +64,7 @@ class Photos extends Entities implements iEntity
         $sql = 'DELETE * FROM StatsCoach.carbon_photos WHERE photo_id = ?';
         if (array_key_exists( $id, $object->photos ))
             unset( $object->photos[$id] );    // I may not need the array_key_exists
-        return self::database()->prepare( $sql )->execute( [$id] );
+        return Database::database()->prepare( $sql )->execute( [$id] );
     }
 
 }

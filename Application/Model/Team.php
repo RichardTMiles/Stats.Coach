@@ -8,6 +8,7 @@
 
 namespace Model;
 
+use Carbon\Database;
 use Model\Helpers\GlobalMap;
 use Carbon\Helpers\Bcrypt;
 use Psr\Log\InvalidArgumentException;
@@ -54,11 +55,11 @@ class Team extends GlobalMap
     {
         $key = self::beginTransaction( 5, $_SESSION['id'] );
         $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
-        if (!self::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
+        if (!Database::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
 
         $sql = "UPDATE StatsCoach.user SET user_type = 'Coach' WHERE user_id = ?";
-        if (!self::database()->prepare($sql)->execute([$_SESSION['id']]))
+        if (!Database::database()->prepare($sql)->execute([$_SESSION['id']]))
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         self::commit();
         PublicAlert::success( "We successfully created `$teamName`!" );

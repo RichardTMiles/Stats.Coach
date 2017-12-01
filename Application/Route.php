@@ -44,9 +44,7 @@ else:   // logged in
 
         $route->match('Search/{search}/', function ($search) {
             $search = (new \Carbon\Request())->set($search)->alnum();
-
             if (!$search) return [];
-
             new \Model\Search($search);
             Mustache('search/search', ['widget' => '#pjax-content']);
         });

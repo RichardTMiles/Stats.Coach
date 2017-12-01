@@ -8,7 +8,7 @@
  */
 
 try {
-    $db = \Carbon\Database::getConnection();
+    $db = \Carbon\Database::Database();
 
 
     echo '<h1>Creating Stats.Coach</h1>';

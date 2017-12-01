@@ -60,8 +60,9 @@ return [
 
         'BOOTSTRAP' => 'Application/Route.php',
 
-        'HTTP' => (bool)false,
+        'HTTP' => (bool)true,
     ],
+
 
     'SERIALIZE' => ['user', 'team', 'course', 'tournament'],
 
@@ -73,20 +74,19 @@ return [
         'CALLBACK' => $session_callback,
     ],
 
-
-        /*
     'SOCKET' => [
         'WEBSOCKETD' => true,
+        'PORT' => 8888,
         'DEV' => true,
         'SSL' => [
             'KEY' => '/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt',
             'CERT' => '/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt'
         ]
     ],
-    */
+
 
     'ERROR' => [
-        'LEVEL' => (int)E_ALL | E_STRICT,
+        'LEVEL' => (int)E_ALL,
 
         'LOCATION' => (string)SERVER_ROOT . 'Data/Logs/',
 

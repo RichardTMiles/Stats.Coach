@@ -8,6 +8,7 @@
 
 namespace Tables;
 
+use Carbon\Database;
 use Carbon\Entities;
 use Carbon\Interfaces\iEntity;
 
@@ -30,11 +31,11 @@ class Course extends Entities implements iEntity
 
     static function add(&$object, $id, $argv)
     {
-        $course_id = self::beginTransaction( GOLF_COURSE );
+        $course_id = Database::beginTransaction( GOLF_COURSE );
 
-        $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
+        $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, course_par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
                                 VALUES (:course_id, :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga, :site)";
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':course_id',     $course_id );
         $stmt->bindValue( ':course_name',   $argv['course']['name'] );
         $stmt->bindValue( ':pga',           $argv['pga_pro'] );
@@ -79,7 +80,7 @@ class Course extends Entities implements iEntity
 
             $dist_tot = $dist_out + $dist_in;
             $color = array_shift( $argv['teeBox'][$i] );
-            $stmt = self::database()->prepare( $sql );
+            $stmt = Database::database()->prepare( $sql );
             $stmt->bindValue( ':course_id', $course_id );
             $stmt->bindValue( ':tee_box', $i );
             $stmt->bindValue( ':distance', serialize( $argv['teeBox'][$i] ) );

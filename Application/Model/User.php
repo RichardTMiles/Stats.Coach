@@ -73,8 +73,7 @@ class User extends GlobalMap
     {
         global $facebook;
 
-        if (empty($facebook))
-            startApplication(true);
+        if (empty($facebook)) startApplication(true);
 
         $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
         $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));

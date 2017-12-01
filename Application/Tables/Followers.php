@@ -9,6 +9,7 @@
 namespace Tables;
 
 
+use Carbon\Database;
 use Carbon\Entities;
 use Carbon\Interfaces\iEntity;
 
@@ -17,10 +18,10 @@ class Followers extends Entities implements iEntity
 
     static function get(&$array, $id)
     {
-        $stmt = self::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
+        $stmt = Database::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE follows_user_id = ?' );
         $stmt->execute( [$id] );
         $array['stats']['followers'] = (int)$stmt->fetchColumn();
-        $stmt = self::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
+        $stmt = Database::database()->prepare( 'SELECT COUNT(*) FROM StatsCoach.user_followers WHERE user_id = ?' );
         $stmt->execute( [$id] );
         $array['stats']['following'] = (int)$stmt->fetchColumn();
         return $array;

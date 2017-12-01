@@ -8,6 +8,7 @@
 
 namespace Tables;
 
+use Carbon\Database;
 use Model\User;
 use Carbon\Error\PublicAlert;
 use Carbon\Helpers\Bcrypt;
@@ -50,7 +51,7 @@ class Teams extends Entities implements iEntity
         global $user;
 
         $sql = 'SELECT user_id FROM StatsCoach.team_members WHERE team_id = ?';
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->execute( [$id] );
         $team['members'] = is_array( $stmt = $stmt->fetchAll( \PDO::FETCH_COLUMN ) ) ? $stmt : [$stmt];
 
@@ -73,7 +74,7 @@ class Teams extends Entities implements iEntity
 
         $key = self::beginTransaction( 5, $_SESSION['id'] );
         $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
-        if (!self::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
+        if (!Database::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
         self::commit();
         PublicAlert::success( "We successfully created `$teamName`!" );
@@ -93,7 +94,7 @@ class Teams extends Entities implements iEntity
     static function team_exists($teamIdentifier)
     {
         $sql = 'SELECT team_id FROM StatsCoach.teams WHERE team_code = :id OR team_id = :id LIMIT 1';
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':id', $teamIdentifier );
         $stmt->execute();
         return $stmt->fetchColumn();
@@ -102,8 +103,8 @@ class Teams extends Entities implements iEntity
     static function newTeamMember($team_code) : bool
     {   // We can assume its the session id
         $member = self::beginTransaction( 6, $_SESSION['id'] );
-        if ($team_id = self::team_exists( $team_code ))
-            self::database()->prepare( 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)' )->execute( [$member, $_SESSION['id'], $team_id] );
+        if ($team_id = Database::team_exists( $team_code ))
+            Database::database()->prepare( 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)' )->execute( [$member, $_SESSION['id'], $team_id] );
         else PublicAlert::danger( "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again." );
         return self::commit();
     }

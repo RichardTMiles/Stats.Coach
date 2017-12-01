@@ -8,6 +8,7 @@
 
 namespace Tables;
 
+use Carbon\Database;
 use Model\User;
 use Carbon\Entities;
 use Carbon\Interfaces\iEntity;
@@ -28,7 +29,7 @@ class Messages extends Entities implements iEntity
 
     static function all(&$object, $id)   // signed in user
     {
-        $stmt = self::database()->prepare( 'SELECT user_id, to_user_id FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
+        $stmt = Database::database()->prepare( 'SELECT user_id, to_user_id FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
                     StatsCoach.user_messages.to_user_id = ? OR StatsCoach.carbon_tag.user_id = ?');
         $stmt->execute( [$id, $id] );
         $stmt = $stmt->fetchAll();
@@ -53,7 +54,7 @@ class Messages extends Entities implements iEntity
     {
         $message_id = self::beginTransaction( USER_MESSAGES, $_SESSION['id'] );
         $sql = 'INSERT INTO StatsCoach.user_messages (message_id, to_user_id, message) VALUES (:message_id, :user_id, :message)';
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':message_id', $message_id );
         $stmt->bindValue( ':user_id', $id );
         $stmt->bindValue( ':message', $argv );
@@ -71,7 +72,7 @@ class Messages extends Entities implements iEntity
     static function remove(&$object, $id)
     {
         $sql = 'DELETE * FROM StatsCoach.carbon_location WHERE entity_id = ?';
-        if (self::database()->prepare( $sql )->execute( [$id] )) {
+        if (Database::database()->prepare( $sql )->execute( [$id] )) {
             unset( $object->location );
             return true;
         }

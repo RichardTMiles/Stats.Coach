@@ -13,7 +13,7 @@
 <div class="col-xs-12">
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Hover Data Table</h3>
+            <h3 class="box-title">Teams</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -27,28 +27,27 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                             <tr role="row">
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
+                                <th>Team Name</th>
+                                <th>Team Coach</th>
+                                <th>Team School</th>
+                                <th>Team code</th>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
-                                <th>Rendering engine</th>
+                                <th>Team Name</th>
+                                <th>Team Coach</th>
+                                <th>Team School</th>
+                                <th>Team code</th>
                             </tr>
                             </tfoot>
 
-                            <tbody>
-                            <tr role="row" class="odd">
-                                <td>Presto</td>
-                                <td>Nintendo DS browser</td>
-                                <td>Nintendo DS</td>
-                                <td>8.5</td>
-                                <td>C/A<sup>1</sup></td>
-                            </tr>
+                            <tbody>{{#Teams}}
+                                <tr role="row">
+                                    <th>{{TeamName}}</th>
+                                    <th>{{TeamCoach}}</th>
+                                    <th>{{TeamSchool}}</th>
+                                    <th>{{TeamCode}}</th>
+                                </tr>{{/Teams}}
                             </tbody>
 
                         </table>
@@ -59,10 +58,6 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-</div> 
+</div>
 
-<script>
-    $(document).ready(function () {
-        $('#example2').DataTable();
-    });
-</script>
+<script> document.addEventListener("Carbon", (e) => $.fn.load_datatables('#example2')); </script>

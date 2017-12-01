@@ -8,6 +8,7 @@
 
 namespace Tables;
 
+use Carbon\Database;
 use Model\Helpers\Events;
 use Model\Helpers\iSport;
 use Carbon\Error\PublicAlert;
@@ -38,7 +39,7 @@ class Users extends Entities implements iEntity
 
         $sql = "INSERT INTO StatsCoach.user (user_id, user_type, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_password, user_email, user_email_code, user_generated_string, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES 
         (:user_id, :user_type, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_password, :user_email, :user_email_code, :user_generated_string, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)";
-        $stmt = self::database()->prepare( $sql );
+        $stmt = Database::database()->prepare( $sql );
 
         $stmt->bindValue( ':user_id', $key);
         $stmt->bindValue( ':user_type', $argv['type'] ?? "Athlete");
@@ -65,7 +66,7 @@ class Users extends Entities implements iEntity
 
         if (!$stmt->execute()) throw new PublicAlert ('Your account could not be created.', 'danger');
 
-        if (!self::database()->prepare('INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)')->execute([$key]))
+        if (!Database::database()->prepare('INSERT INTO StatsCoach.golf_stats (stats_id) VALUES (?)')->execute([$key]))
             throw new PublicAlert ('Your account could not be created.', 'danger');;
 
         if (self::commit()) $_SESSION['id'] = $key;
@@ -113,7 +114,6 @@ class Users extends Entities implements iEntity
         throw new PublicAlert('You ran into a big problem. Contact us for support.');
     }
 
-
     static function range(&$object, $id, $argv)
     {
         // TODO: Implement range() method.
@@ -121,7 +121,7 @@ class Users extends Entities implements iEntity
 
     static function user_id_from_uri(string $user_uri)
     {
-        $stmt = self::database()->prepare('SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ? OR user_id = ?');
+        $stmt = Database::database()->prepare('SELECT user_id FROM StatsCoach.user WHERE user_profile_uri = ? OR user_id = ?');
         $stmt->execute([$user_uri, $user_uri]);
         return $stmt->fetch(\PDO::FETCH_COLUMN);
     }
@@ -130,7 +130,7 @@ class Users extends Entities implements iEntity
     {
         global $user;
         $sql = 'UPDATE StatsCoach.carbon_session SET user_online_status = ? WHERE user_id = ?';
-        $stmt = self::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
         $stmt->execute([$status, $_SESSION['id']]);
         return $user[$_SESSION['id']]['online'] = (bool)$stmt->fetchColumn();
     }
@@ -138,7 +138,7 @@ class Users extends Entities implements iEntity
     private static function change_password($user_id, $password)
     {   /* Two create a Hash you do */
         $password = Bcrypt::genHash($password);
-        return self::database()->prepare("UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?")->execute([$password, $user_id]);
+        return Database::database()->prepare("UPDATE StatsCoach.user SET user_password = ? WHERE user_id = ?")->execute([$password, $user_id]);
     }
 
     static function onlineStatus($id): bool
@@ -152,7 +152,7 @@ class Users extends Entities implements iEntity
     static function user_exists($username): bool
     {
         $sql = 'SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_username = ? LIMIT 1';
-        $stmt = self::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
         $stmt->execute([$username]);
         return $stmt->fetchColumn();
     }
@@ -160,7 +160,7 @@ class Users extends Entities implements iEntity
     static function email_exists($email): bool
     {
         $sql = "SELECT COUNT(user_id) FROM StatsCoach.user WHERE `user_email`= ? LIMIT 1";
-        $stmt = self::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
         $stmt->execute(array($email));
         return $stmt->fetchColumn();
     }
@@ -168,7 +168,7 @@ class Users extends Entities implements iEntity
     static function email_confirmed($username): bool
     {
         $sql = "SELECT user_email_confirmed FROM StatsCoach.user WHERE user_username = ? LIMIT 1";
-        $stmt = self::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
         $stmt->execute([$username]);
         return $stmt->fetchColumn();
     }
