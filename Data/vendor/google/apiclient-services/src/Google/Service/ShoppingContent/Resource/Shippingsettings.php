@@ -44,9 +44,9 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
   /**
    * Retrieves the shipping settings of the account. (shippingsettings.get)
    *
-   * @param string $merchantId The ID of the managing account. If this account is
-   * not a multi-client account, then this parameter must be the same as
-   * accountId.
+   * @param string $merchantId The ID of the managing account. If this parameter
+   * is not the same as accountId, then this account must be a multi-client
+   * account and accountId must be the ID of a sub-account of this account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param array $optParams Optional parameters.
@@ -96,9 +96,9 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
    * Updates the shipping settings of the account. This method supports patch
    * semantics. (shippingsettings.patch)
    *
-   * @param string $merchantId The ID of the managing account. If this account is
-   * not a multi-client account, then this parameter must be the same as
-   * accountId.
+   * @param string $merchantId The ID of the managing account. If this parameter
+   * is not the same as accountId, then this account must be a multi-client
+   * account and accountId must be the ID of a sub-account of this account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param Google_Service_ShoppingContent_ShippingSettings $postBody
@@ -116,9 +116,9 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
   /**
    * Updates the shipping settings of the account. (shippingsettings.update)
    *
-   * @param string $merchantId The ID of the managing account. If this account is
-   * not a multi-client account, then this parameter must be the same as
-   * accountId.
+   * @param string $merchantId The ID of the managing account. If this parameter
+   * is not the same as accountId, then this account must be a multi-client
+   * account and accountId must be the ID of a sub-account of this account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param Google_Service_ShoppingContent_ShippingSettings $postBody

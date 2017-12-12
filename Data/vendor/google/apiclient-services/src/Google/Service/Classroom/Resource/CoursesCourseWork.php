@@ -177,7 +177,7 @@ class Google_Service_Classroom_Resource_CoursesCourseWork extends Google_Service
   /**
    * Updates one or more fields of a course work.
    *
-   * See google.classroom.v1.CourseWork for details of which fields may be updated
+   * See google.php.classroom.v1.CourseWork for details of which fields may be updated
    * and who may change them.
    *
    * This request must be made by the Developer Console project of the [OAuth

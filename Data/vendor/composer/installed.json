@@ -1,112 +1,186 @@
 [
     {
-        "name": "psr/log",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "name": "bower-asset/mustache.js",
+        "version": "v2.3.0",
+        "version_normalized": "2.3.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/php-fig/log.git",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            "url": "https://github.com/janl/mustache.js.git",
+            "reference": "23beb3a8805c9a857e3ea777431481599fab503e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "url": "https://api.github.com/repos/janl/mustache.js/zipball/23beb3a8805c9a857e3ea777431481599fab503e",
+            "reference": "23beb3a8805c9a857e3ea777431481599fab503e",
             "shasum": ""
         },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-10-10T12:19:37+00:00",
-        "type": "library",
+        "time": "2016-11-08T16:24:16+00:00",
+        "type": "bower-asset-library",
         "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
+            "bower-asset-main": "mustache.js",
+            "bower-asset-ignore": [
+                "**/.*",
+                "test"
+            ]
         },
         "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Log\\": "Psr/Log/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for logging libraries",
-        "homepage": "https://github.com/php-fig/log",
+        "description": "Logic-less {{mustache}} templates with JavaScript",
         "keywords": [
-            "log",
-            "psr",
-            "psr-3"
+            "ejs",
+            "mustache",
+            "template",
+            "templates"
         ]
     },
     {
-        "name": "monolog/monolog",
-        "version": "1.23.0",
-        "version_normalized": "1.23.0.0",
+        "name": "bower-asset/jquery",
+        "version": "3.2.1",
+        "version_normalized": "3.2.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
+            "url": "https://github.com/jquery/jquery-dist.git",
+            "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+            "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/77d2a51d0520d2ee44173afdf4e40a9201f5964e",
+            "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e",
+            "shasum": ""
+        },
+        "time": "2017-03-20T19:02:00+00:00",
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": "dist/jquery.js",
+            "bower-asset-ignore": [
+                "package.json"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "keywords": [
+            "browser",
+            "javascript",
+            "jquery",
+            "library"
+        ]
+    },
+    {
+        "name": "bower-asset/jquery-pjax",
+        "version": "v2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/defunkt/jquery-pjax.git",
+            "reference": "0f63686a4be744c948c2dd7bd64d257d3fe80c20"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/defunkt/jquery-pjax/zipball/0f63686a4be744c948c2dd7bd64d257d3fe80c20",
+            "reference": "0f63686a4be744c948c2dd7bd64d257d3fe80c20",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0",
-            "psr/log": "~1.0"
+            "bower-asset/jquery": ">=1.8"
         },
-        "provide": {
-            "psr/log-implementation": "1.0.0"
-        },
-        "require-dev": {
-            "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-            "doctrine/couchdb": "~1.0@dev",
-            "graylog2/gelf-php": "~1.0",
-            "jakub-onderka/php-parallel-lint": "0.9",
-            "php-amqplib/php-amqplib": "~2.4",
-            "php-console/php-console": "^3.1.3",
-            "phpunit/phpunit": "~4.5",
-            "phpunit/phpunit-mock-objects": "2.3.0",
-            "ruflin/elastica": ">=0.90 <3.0",
-            "sentry/sentry": "^0.13",
-            "swiftmailer/swiftmailer": "^5.3|^6.0"
-        },
-        "suggest": {
-            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
-            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-            "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-            "php-console/php-console": "Allow sending log messages to Google Chrome",
-            "rollbar/rollbar": "Allow sending log messages to Rollbar",
-            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-            "sentry/sentry": "Allow sending log messages to a Sentry server"
-        },
-        "time": "2017-06-19T01:22:40+00:00",
-        "type": "library",
+        "time": "2017-05-20T18:38:49+00:00",
+        "type": "bower-asset-library",
         "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
+            "bower-asset-main": "./jquery.pjax.js",
+            "bower-asset-ignore": [
+                ".travis.yml",
+                "Gemfile",
+                "Gemfile.lock",
+                "CONTRIBUTING.md",
+                "vendor/",
+                "script/",
+                "test/"
+            ]
+        },
+        "installation-source": "dist"
+    },
+    {
+        "name": "bower-asset/jquery-form",
+        "version": "v4.2.2",
+        "version_normalized": "4.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jquery-form/form.git",
+            "reference": "4beae57bc92402e2d03ca66b5ae2942d0c94c695"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/jquery-form/form/zipball/4beae57bc92402e2d03ca66b5ae2942d0c94c695",
+            "reference": "4beae57bc92402e2d03ca66b5ae2942d0c94c695",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.7.2"
+        },
+        "time": "2017-08-09T20:56:53+00:00",
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": "src/jquery.form.js",
+            "bower-asset-ignore": [
+                "README.md",
+                "composer.json",
+                "package.json"
+            ]
         },
         "installation-source": "dist",
+        "license": [
+            "(LGPL-2.1+ OR MIT)"
+        ],
+        "description": "The jQuery Form Plugin allows you to easily and unobtrusively upgrade HTML forms to use AJAX.",
+        "keywords": [
+            "ajax",
+            "form",
+            "html-form",
+            "jquery",
+            "jquery-form",
+            "jquery-plugin",
+            "json",
+            "json-form"
+        ]
+    },
+    {
+        "name": "richardtmiles/carbonphp",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/RichardTMiles/CarbonPHP.git",
+            "reference": "94d9232c035120dd8c2cf898e17168b277ab81f2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/94d9232c035120dd8c2cf898e17168b277ab81f2",
+            "reference": "94d9232c035120dd8c2cf898e17168b277ab81f2",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery-form": "^4.2.2",
+            "bower-asset/jquery-pjax": "^2.0.1",
+            "bower-asset/mustache.js": "^2.3.0",
+            "php": "^7.0"
+        },
+        "suggest": {
+            "almasaeed2010/adminlte": ">=2.4",
+            "bower-asset/jquery-backstretch": "^2.1.16"
+        },
+        "time": "2017-12-04T19:45:10+00:00",
+        "type": "library",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
-                "Monolog\\": "src/Monolog"
+                "Carbon\\": "Structure/",
+                "Carbon\\Error\\": "Error/",
+                "Carbon\\Helpers\\": "Helpers/",
+                "Carbon\\Interfaces\\": "Interfaces/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -115,18 +189,146 @@
         ],
         "authors": [
             {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be"
+                "name": "Richard Miles",
+                "email": "Richard@Miles.systems",
+                "homepage": "http://www.CarbonPHP.com",
+                "role": "Developer"
             }
         ],
-        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "homepage": "http://github.com/Seldaek/monolog",
+        "description": "Edit the DOM in PHP. A PHP 7+ tool kit designed for SEO optimization.",
+        "homepage": "https://github.com/richardtmiles/carbonphp",
         "keywords": [
-            "log",
-            "logging",
-            "psr-3"
+            "carbon",
+            "io",
+            "pipes",
+            "sockets"
         ]
+    },
+    {
+        "name": "mustache/mustache",
+        "version": "v2.12.0",
+        "version_normalized": "2.12.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bobthecow/mustache.php.git",
+            "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/fe8fe72e9d580591854de404cc59a1b83ca4d19e",
+            "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "~1.11",
+            "phpunit/phpunit": "~3.7|~4.0|~5.0"
+        },
+        "time": "2017-07-11T12:54:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Mustache": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Justin Hileman",
+                "email": "justin@justinhileman.info",
+                "homepage": "http://justinhileman.com"
+            }
+        ],
+        "description": "A Mustache implementation in PHP.",
+        "homepage": "https://github.com/bobthecow/mustache.php",
+        "keywords": [
+            "mustache",
+            "templating"
+        ]
+    },
+    {
+        "name": "almasaeed2010/adminlte",
+        "version": "v2.4.2",
+        "version_normalized": "2.4.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/almasaeed2010/AdminLTE.git",
+            "reference": "156f56c3c183a3b8486c47b122c7fa8819510a90"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/almasaeed2010/AdminLTE/zipball/156f56c3c183a3b8486c47b122c7fa8819510a90",
+            "reference": "156f56c3c183a3b8486c47b122c7fa8819510a90",
+            "shasum": ""
+        },
+        "time": "2017-10-09T16:32:18+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Abdullah Almsaeed",
+                "email": "abdullah@almsaeedstudio.com"
+            }
+        ],
+        "description": "AdminLTE - admin control panel and dashboard that's based on Bootstrap 3",
+        "homepage": "https://adminlte.io/",
+        "keywords": [
+            "JS",
+            "admin",
+            "back-end",
+            "css",
+            "less",
+            "responsive",
+            "template",
+            "theme",
+            "web"
+        ]
+    },
+    {
+        "name": "bower-asset/jquery-backstretch",
+        "version": "2.1.16",
+        "version_normalized": "2.1.16.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jquery-backstretch/jquery-backstretch.git",
+            "reference": "392632201151feb1325c8807e7ee987af6aab6a1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/jquery-backstretch/jquery-backstretch/zipball/392632201151feb1325c8807e7ee987af6aab6a1",
+            "reference": "392632201151feb1325c8807e7ee987af6aab6a1",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.9.0"
+        },
+        "time": "2017-06-22T16:27:38+00:00",
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "jquery.backstretch.js"
+            ],
+            "bower-asset-ignore": [
+                "Gruntfile.js",
+                "examples",
+                "libs",
+                "test",
+                ".gitignore",
+                "src"
+            ]
+        },
+        "installation-source": "dist",
+        "description": "A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element."
     },
     {
         "name": "psr/http-message",
@@ -368,221 +570,18 @@
         ]
     },
     {
-        "name": "psr/cache",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig/cache.git",
-            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
-            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-08-06T20:24:11+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Cache\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for caching libraries",
-        "keywords": [
-            "cache",
-            "psr",
-            "psr-6"
-        ]
-    },
-    {
-        "name": "firebase/php-jwt",
-        "version": "v5.0.0",
-        "version_normalized": "5.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/firebase/php-jwt.git",
-            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
-            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": " 4.8.35"
-        },
-        "time": "2017-06-27T22:17:23+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Firebase\\JWT\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Neuman Vong",
-                "email": "neuman+pear@twilio.com",
-                "role": "Developer"
-            },
-            {
-                "name": "Anant Narayanan",
-                "email": "anant@php.net",
-                "role": "Developer"
-            }
-        ],
-        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
-        "homepage": "https://github.com/firebase/php-jwt"
-    },
-    {
-        "name": "facebook/graph-sdk",
-        "version": "5.6.1",
-        "version_normalized": "5.6.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/facebook/php-graph-sdk.git",
-            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
-            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.4|^7.0"
-        },
-        "require-dev": {
-            "guzzlehttp/guzzle": "~5.0",
-            "mockery/mockery": "~0.8",
-            "phpunit/phpunit": "~4.0"
-        },
-        "suggest": {
-            "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
-            "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
-        },
-        "time": "2017-08-16T17:28:07+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "5.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Facebook\\": "src/Facebook/"
-            },
-            "files": [
-                "src/Facebook/polyfills.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Facebook Platform"
-        ],
-        "authors": [
-            {
-                "name": "Facebook",
-                "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
-            }
-        ],
-        "description": "Facebook SDK for PHP",
-        "homepage": "https://github.com/facebook/php-graph-sdk",
-        "keywords": [
-            "facebook",
-            "sdk"
-        ]
-    },
-    {
-        "name": "google/auth",
-        "version": "v1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/google/google-auth-library-php.git",
-            "reference": "548d27d670f0236dc5258fa4cdde6e7b63464cfd"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/548d27d670f0236dc5258fa4cdde6e7b63464cfd",
-            "reference": "548d27d670f0236dc5258fa4cdde6e7b63464cfd",
-            "shasum": ""
-        },
-        "require": {
-            "firebase/php-jwt": "~2.0|~3.0|~4.0|~5.0",
-            "guzzlehttp/guzzle": "~5.3.1|~6.0",
-            "guzzlehttp/psr7": "~1.2",
-            "php": ">=5.4",
-            "psr/cache": "^1.0",
-            "psr/http-message": "^1.0"
-        },
-        "require-dev": {
-            "friendsofphp/php-cs-fixer": "^1.11",
-            "phpunit/phpunit": "3.7.*"
-        },
-        "time": "2017-10-10T17:01:45+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Google\\Auth\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "description": "Google Auth Library for PHP",
-        "homepage": "http://github.com/google/google-auth-library-php",
-        "keywords": [
-            "Authentication",
-            "google",
-            "oauth2"
-        ]
-    },
-    {
         "name": "phpseclib/phpseclib",
-        "version": "2.0.7",
-        "version_normalized": "2.0.7.0",
+        "version": "2.0.9",
+        "version_normalized": "2.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpseclib/phpseclib.git",
-            "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b"
+            "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
-            "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
+            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
+            "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
             "shasum": ""
         },
         "require": {
@@ -600,7 +599,7 @@
             "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
             "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
         },
-        "time": "2017-10-23T05:04:54+00:00",
+        "time": "2017-11-29T06:38:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -665,230 +664,315 @@
         ]
     },
     {
-        "name": "bower-asset/mustache.js",
-        "version": "v2.3.0",
-        "version_normalized": "2.3.0.0",
+        "name": "psr/log",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/janl/mustache.js.git",
-            "reference": "23beb3a8805c9a857e3ea777431481599fab503e"
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/janl/mustache.js/zipball/23beb3a8805c9a857e3ea777431481599fab503e",
-            "reference": "23beb3a8805c9a857e3ea777431481599fab503e",
-            "shasum": ""
-        },
-        "time": "2016-11-08T16:24:16+00:00",
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "mustache.js",
-            "bower-asset-ignore": [
-                "**/.*",
-                "test"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "Logic-less {{mustache}} templates with JavaScript",
-        "keywords": [
-            "ejs",
-            "mustache",
-            "template",
-            "templates"
-        ]
-    },
-    {
-        "name": "bower-asset/jquery",
-        "version": "3.2.1",
-        "version_normalized": "3.2.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jquery/jquery-dist.git",
-            "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/77d2a51d0520d2ee44173afdf4e40a9201f5964e",
-            "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e",
-            "shasum": ""
-        },
-        "time": "2017-03-20T19:02:00+00:00",
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "dist/jquery.js",
-            "bower-asset-ignore": [
-                "package.json"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "keywords": [
-            "browser",
-            "javascript",
-            "jquery",
-            "library"
-        ]
-    },
-    {
-        "name": "bower-asset/jquery-pjax",
-        "version": "v2.0.1",
-        "version_normalized": "2.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/defunkt/jquery-pjax.git",
-            "reference": "0f63686a4be744c948c2dd7bd64d257d3fe80c20"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/defunkt/jquery-pjax/zipball/0f63686a4be744c948c2dd7bd64d257d3fe80c20",
-            "reference": "0f63686a4be744c948c2dd7bd64d257d3fe80c20",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
             "shasum": ""
         },
         "require": {
-            "bower-asset/jquery": ">=1.8"
+            "php": ">=5.3.0"
         },
-        "time": "2017-05-20T18:38:49+00:00",
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "./jquery.pjax.js",
-            "bower-asset-ignore": [
-                ".travis.yml",
-                "Gemfile",
-                "Gemfile.lock",
-                "CONTRIBUTING.md",
-                "vendor/",
-                "script/",
-                "test/"
-            ]
-        },
-        "installation-source": "dist"
-    },
-    {
-        "name": "bower-asset/jquery-form",
-        "version": "v4.2.2",
-        "version_normalized": "4.2.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jquery-form/form.git",
-            "reference": "4beae57bc92402e2d03ca66b5ae2942d0c94c695"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jquery-form/form/zipball/4beae57bc92402e2d03ca66b5ae2942d0c94c695",
-            "reference": "4beae57bc92402e2d03ca66b5ae2942d0c94c695",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery": ">=1.7.2"
-        },
-        "time": "2017-08-09T20:56:53+00:00",
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "src/jquery.form.js",
-            "bower-asset-ignore": [
-                "README.md",
-                "composer.json",
-                "package.json"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "(LGPL-2.1+ OR MIT)"
-        ],
-        "description": "The jQuery Form Plugin allows you to easily and unobtrusively upgrade HTML forms to use AJAX.",
-        "keywords": [
-            "ajax",
-            "form",
-            "html-form",
-            "jquery",
-            "jquery-form",
-            "jquery-plugin",
-            "json",
-            "json-form"
-        ]
-    },
-    {
-        "name": "almasaeed2010/adminlte",
-        "version": "v2.4.2",
-        "version_normalized": "2.4.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/almasaeed2010/AdminLTE.git",
-            "reference": "156f56c3c183a3b8486c47b122c7fa8819510a90"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/almasaeed2010/AdminLTE/zipball/156f56c3c183a3b8486c47b122c7fa8819510a90",
-            "reference": "156f56c3c183a3b8486c47b122c7fa8819510a90",
-            "shasum": ""
-        },
-        "time": "2017-10-09T16:32:18+00:00",
+        "time": "2016-10-10T12:19:37+00:00",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
         "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Log\\": "Psr/Log/"
+            }
+        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
         "authors": [
             {
-                "name": "Abdullah Almsaeed",
-                "email": "abdullah@almsaeedstudio.com"
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
             }
         ],
-        "description": "AdminLTE - admin control panel and dashboard that's based on Bootstrap 3",
-        "homepage": "https://adminlte.io/",
+        "description": "Common interface for logging libraries",
+        "homepage": "https://github.com/php-fig/log",
         "keywords": [
-            "JS",
-            "admin",
-            "back-end",
-            "css",
-            "less",
-            "responsive",
-            "template",
-            "theme",
-            "web"
+            "log",
+            "psr",
+            "psr-3"
         ]
     },
     {
-        "name": "bower-asset/jquery-backstretch",
-        "version": "2.1.16",
-        "version_normalized": "2.1.16.0",
+        "name": "monolog/monolog",
+        "version": "1.23.0",
+        "version_normalized": "1.23.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/jquery-backstretch/jquery-backstretch.git",
-            "reference": "392632201151feb1325c8807e7ee987af6aab6a1"
+            "url": "https://github.com/Seldaek/monolog.git",
+            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/jquery-backstretch/jquery-backstretch/zipball/392632201151feb1325c8807e7ee987af6aab6a1",
-            "reference": "392632201151feb1325c8807e7ee987af6aab6a1",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
             "shasum": ""
         },
         "require": {
-            "bower-asset/jquery": ">=1.9.0"
+            "php": ">=5.3.0",
+            "psr/log": "~1.0"
         },
-        "time": "2017-06-22T16:27:38+00:00",
-        "type": "bower-asset-library",
+        "provide": {
+            "psr/log-implementation": "1.0.0"
+        },
+        "require-dev": {
+            "aws/aws-sdk-php": "^2.4.9 || ^3.0",
+            "doctrine/couchdb": "~1.0@dev",
+            "graylog2/gelf-php": "~1.0",
+            "jakub-onderka/php-parallel-lint": "0.9",
+            "php-amqplib/php-amqplib": "~2.4",
+            "php-console/php-console": "^3.1.3",
+            "phpunit/phpunit": "~4.5",
+            "phpunit/phpunit-mock-objects": "2.3.0",
+            "ruflin/elastica": ">=0.90 <3.0",
+            "sentry/sentry": "^0.13",
+            "swiftmailer/swiftmailer": "^5.3|^6.0"
+        },
+        "suggest": {
+            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+            "ext-mongo": "Allow sending log messages to a MongoDB server",
+            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+            "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+            "php-console/php-console": "Allow sending log messages to Google Chrome",
+            "rollbar/rollbar": "Allow sending log messages to Rollbar",
+            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+            "sentry/sentry": "Allow sending log messages to a Sentry server"
+        },
+        "time": "2017-06-19T01:22:40+00:00",
+        "type": "library",
         "extra": {
-            "bower-asset-main": [
-                "jquery.backstretch.js"
-            ],
-            "bower-asset-ignore": [
-                "Gruntfile.js",
-                "examples",
-                "libs",
-                "test",
-                ".gitignore",
-                "src"
-            ]
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
         },
         "installation-source": "dist",
-        "description": "A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element."
+        "autoload": {
+            "psr-4": {
+                "Monolog\\": "src/Monolog"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be"
+            }
+        ],
+        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+        "homepage": "http://github.com/Seldaek/monolog",
+        "keywords": [
+            "log",
+            "logging",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "firebase/php-jwt",
+        "version": "v5.0.0",
+        "version_normalized": "5.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/firebase/php-jwt.git",
+            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": " 4.8.35"
+        },
+        "time": "2017-06-27T22:17:23+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Firebase\\JWT\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Neuman Vong",
+                "email": "neuman+pear@twilio.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anant Narayanan",
+                "email": "anant@php.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+        "homepage": "https://github.com/firebase/php-jwt"
+    },
+    {
+        "name": "google/apiclient-services",
+        "version": "v0.37",
+        "version_normalized": "0.37.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/google/google-api-php-client-services.git",
+            "reference": "75fb5412eec7cfc9f78ac0f8d23e907ce07c2330"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/75fb5412eec7cfc9f78ac0f8d23e907ce07c2330",
+            "reference": "75fb5412eec7cfc9f78ac0f8d23e907ce07c2330",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8"
+        },
+        "time": "2017-12-02T00:23:18+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Google_Service_": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Client library for Google APIs",
+        "homepage": "http://developers.google.com/api-client-library/php",
+        "keywords": [
+            "google"
+        ]
+    },
+    {
+        "name": "psr/cache",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/cache.git",
+            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-08-06T20:24:11+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Cache\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for caching libraries",
+        "keywords": [
+            "cache",
+            "psr",
+            "psr-6"
+        ]
+    },
+    {
+        "name": "google/auth",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/google/google-auth-library-php.git",
+            "reference": "548d27d670f0236dc5258fa4cdde6e7b63464cfd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/548d27d670f0236dc5258fa4cdde6e7b63464cfd",
+            "reference": "548d27d670f0236dc5258fa4cdde6e7b63464cfd",
+            "shasum": ""
+        },
+        "require": {
+            "firebase/php-jwt": "~2.0|~3.0|~4.0|~5.0",
+            "guzzlehttp/guzzle": "~5.3.1|~6.0",
+            "guzzlehttp/psr7": "~1.2",
+            "php": ">=5.4",
+            "psr/cache": "^1.0",
+            "psr/http-message": "^1.0"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "^1.11",
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2017-10-10T17:01:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Google\\Auth\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Google Auth Library for PHP",
+        "homepage": "http://github.com/google/google-auth-library-php",
+        "keywords": [
+            "Authentication",
+            "google",
+            "oauth2"
+        ]
     },
     {
         "name": "google/apiclient",
@@ -952,99 +1036,63 @@
         ]
     },
     {
-        "name": "google/apiclient-services",
-        "version": "v0.35",
-        "version_normalized": "0.35.0.0",
+        "name": "facebook/graph-sdk",
+        "version": "5.6.1",
+        "version_normalized": "5.6.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/google/google-api-php-client-services.git",
-            "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c"
+            "url": "https://github.com/facebook/php-graph-sdk.git",
+            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
-            "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
+            "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
+            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.4"
+            "php": "^5.4|^7.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4.8"
-        },
-        "time": "2017-11-18T00:23:16+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Google_Service_": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "description": "Client library for Google APIs",
-        "homepage": "http://developers.google.com/api-client-library/php",
-        "keywords": [
-            "google"
-        ]
-    },
-    {
-        "name": "richardtmiles/carbonphp",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/RichardTMiles/CarbonPHP.git",
-            "reference": "163c016ba0309f9850662e13ca0313e2378fa72d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/163c016ba0309f9850662e13ca0313e2378fa72d",
-            "reference": "163c016ba0309f9850662e13ca0313e2378fa72d",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery-form": "^4.2.2",
-            "bower-asset/jquery-pjax": "^2.0.1",
-            "bower-asset/mustache.js": "^2.3.0",
-            "php": "^7.0"
+            "guzzlehttp/guzzle": "~5.0",
+            "mockery/mockery": "~0.8",
+            "phpunit/phpunit": "~4.0"
         },
         "suggest": {
-            "almasaeed2010/adminlte": ">=2.4",
-            "bower-asset/jquery-backstretch": "^2.1.16"
+            "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
+            "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
         },
-        "time": "2017-11-21T15:40:00+00:00",
+        "time": "2017-08-16T17:28:07+00:00",
         "type": "library",
-        "installation-source": "source",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.x-dev"
+            }
+        },
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Carbon\\": "Structure/",
-                "Carbon\\Error\\": "Error/",
-                "Carbon\\Helpers\\": "Helpers/",
-                "Carbon\\Interfaces\\": "Interfaces/"
-            }
+                "Facebook\\": "src/Facebook/"
+            },
+            "files": [
+                "src/Facebook/polyfills.php"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "MIT"
+            "Facebook Platform"
         ],
         "authors": [
             {
-                "name": "Richard Miles",
-                "email": "Richard@Miles.systems",
-                "homepage": "http://www.CarbonPHP.com",
-                "role": "Developer"
+                "name": "Facebook",
+                "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
             }
         ],
-        "description": "Edit the DOM in PHP. A PHP 7+ tool kit designed for SEO optimization.",
-        "homepage": "https://github.com/richardtmiles/carbonphp",
+        "description": "Facebook SDK for PHP",
+        "homepage": "https://github.com/facebook/php-graph-sdk",
         "keywords": [
-            "carbon",
-            "io",
-            "pipes",
-            "sockets"
+            "facebook",
+            "sdk"
         ]
     }
 ]

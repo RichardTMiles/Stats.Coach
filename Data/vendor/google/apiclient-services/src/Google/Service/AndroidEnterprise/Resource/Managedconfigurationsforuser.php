@@ -32,7 +32,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsforuser ext
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $managedConfigurationForUserId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    */
   public function delete($enterpriseId, $userId, $managedConfigurationForUserId, $optParams = array())
@@ -48,7 +48,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsforuser ext
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $managedConfigurationForUserId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration
    */
@@ -86,7 +86,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsforuser ext
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $managedConfigurationForUserId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_ManagedConfiguration $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration
@@ -108,7 +108,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsforuser ext
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $managedConfigurationForUserId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_ManagedConfiguration $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration

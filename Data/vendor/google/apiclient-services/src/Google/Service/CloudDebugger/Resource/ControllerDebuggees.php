@@ -30,7 +30,7 @@ class Google_Service_CloudDebugger_Resource_ControllerDebuggees extends Google_S
    *
    * All agents attached to the same application must call this method with
    * exactly the same request content to get back the same stable `debuggee_id`.
-   * Agents should call this method again whenever `google.rpc.Code.NOT_FOUND` is
+   * Agents should call this method again whenever `google.php.rpc.Code.NOT_FOUND` is
    * returned from any controller method.
    *
    * This protocol allows the controller service to disable debuggees, recover

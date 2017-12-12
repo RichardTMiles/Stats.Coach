@@ -3,6 +3,7 @@
 use Carbon\Route;
 use Carbon\View;
 
+
 $route = new class extends Route
 {
     public function defaultRoute()
@@ -25,9 +26,14 @@ $route->structure($mvc = function (string $class, string $method, array &$argv =
     MVC($class, $method, $argv) and exit(1);
 });  // Event for empty closure & lambdas
 
-if (!$_SESSION['id']):
+
+################################### MVC
+
+if (!$_SESSION['id']):  // Signed out
 
     $route->match('Login/*', 'User', 'login');
+
+    $route->match('Google/{request?}/*', 'User', 'google');
 
     $route->match('Facebook/{request?}/*', 'User', 'facebook');
 
@@ -39,7 +45,8 @@ if (!$_SESSION['id']):
 
 else:   // logged in
 
-    if (SOCKET || AJAX):
+    ################################### Dynamically load content with Mustache
+    if (SOCKET || (AJAX && !PJAX)):
         $route->structure($json);               // Event closure
 
         $route->match('Search/{search}/', function ($search) {
@@ -53,7 +60,8 @@ else:   // logged in
 
         $route->match('Messages/{user_uri?}/',
             function ($user_uri = false) use ($json) {
-                global $user_id;                                                        // for later..
+                global $user_id;
+
                 $user_id = \Tables\Users::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
 
                 if (!empty($_POST) && !empty(($string = (new \Carbon\Request)->post('message')->noHTML()->value())))
@@ -61,7 +69,11 @@ else:   // logged in
 
                 Tables\Messages::get($this->user[$user_id], $user_id);
 
-                return $json('messages/messages');
+                if (SOCKET) {
+
+
+                    return $json('messages/messages', ['widget' => '#hierarchical', 'scroll' => '#messages']);
+                }
             });
 
         $route->match('Notifications/*', 'notifications/notifications', ['widget' => '#NavNotifications']);
@@ -72,6 +84,8 @@ else:   // logged in
 
         $route->structure($mvc);                // Load the mvc lambda
     endif;
+
+    ################################### MVC
 
     $route->match('Home/*', 'Golf', 'golf');
 
@@ -86,6 +100,8 @@ else:   // logged in
     $route->match('JoinTeam/', 'Team', 'joinTeam');
 
     $route->match('Team/{team_id}/*', 'Team', 'team');
+
+    $route->match('Messages/*', 'Messages', 'messages');
 
     $route->match('Rounds/{user_uri?}/', 'Golf', 'rounds');
 

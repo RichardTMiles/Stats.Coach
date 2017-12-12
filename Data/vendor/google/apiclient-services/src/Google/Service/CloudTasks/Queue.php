@@ -27,11 +27,11 @@ class Google_Service_CloudTasks_Queue extends Google_Model
   protected $pullTargetType = 'Google_Service_CloudTasks_PullTarget';
   protected $pullTargetDataType = '';
   public $purgeTime;
-  public $queueState;
   protected $rateLimitsType = 'Google_Service_CloudTasks_RateLimits';
   protected $rateLimitsDataType = '';
   protected $retryConfigType = 'Google_Service_CloudTasks_RetryConfig';
   protected $retryConfigDataType = '';
+  public $state;
 
   /**
    * @param Google_Service_CloudTasks_AppEngineHttpTarget
@@ -105,14 +105,6 @@ class Google_Service_CloudTasks_Queue extends Google_Model
   {
     return $this->purgeTime;
   }
-  public function setQueueState($queueState)
-  {
-    $this->queueState = $queueState;
-  }
-  public function getQueueState()
-  {
-    return $this->queueState;
-  }
   /**
    * @param Google_Service_CloudTasks_RateLimits
    */
@@ -140,5 +132,13 @@ class Google_Service_CloudTasks_Queue extends Google_Model
   public function getRetryConfig()
   {
     return $this->retryConfig;
+  }
+  public function setState($state)
+  {
+    $this->state = $state;
+  }
+  public function getState()
+  {
+    return $this->state;
   }
 }

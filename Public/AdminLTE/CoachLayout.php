@@ -1,3 +1,5 @@
+<?php $my = $my ?? $this->user[$_SESSION['id']]; ?>
+
 <header class="main-header">
     <!-- Logo -->
     <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
@@ -40,10 +42,10 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="<?=SITE?>Search/" method="get" class="sidebar-form">
+        <form action="<?= SITE ?>Search/" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search..."
-                onkeyup="$.fn.startApplication('<?=SITE?>Search/'+this.value)">
+                       onkeyup="$.fn.startApplication('<?= SITE ?>Search/'+this.value)">
                 <span class="input-group-btn">
                                 <button name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>
@@ -67,7 +69,7 @@
                         <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $my['user_full_name'] ?>
                         </a>
                     </li>
-                    <?php if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
+                    <?php if (!empty($my['teams'])) foreach ($my['teams'] as $team_id) {
                         $team = $this->team[$team_id];
                         echo '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team['team_name'] . '</a></li>';
                     } ?>
@@ -96,19 +98,21 @@
                 <?php
 
 
-                if (!empty( $my['teams'] )) foreach ($my['teams'] as $team_id) {
+                if (!empty($my['teams'])) foreach ($my['teams'] as $team_id) {
                     $team = $this->team[$team_id]; ?>
                     <ul class="treeview-menu">
                         <li class="treeview menu-open">
-                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i class="fa fa-circle-o"></i> <?= $team['team_name'] ?>
-                                <?php if (empty( $team['members'] ))
+                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i
+                                        class="fa fa-circle-o"></i> <?= $team['team_name'] ?>
+                                <?php if (empty($team['members']))
                                 echo '</a>';
                                 else { ?>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
                                 <?php foreach ($team['members'] as $user_id) { ?>
-                                    <li><a href="<?= SITE ?>Profile/<?= $this->user[$user_id]['user_profile_uri'] ?>/"><i
+                                    <li>
+                                        <a href="<?= SITE ?>Profile/<?= $this->user[$user_id]['user_profile_uri'] ?>/"><i
                                                     class="fa fa-circle-o"></i><?= $this->user[$user_id]['user_first_name'] . ' ' . $this->user[$user_id]['user_last_name'] ?>
                                         </a>
                                     </li>
@@ -120,7 +124,6 @@
                 <?php } ?>
             </li>
 
-            <!--
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-table"></i> <span>Tournaments</span>
@@ -130,19 +133,19 @@
                     <li><a href="#"><i class="fa fa-circle-o"></i> Coming Soon </a></li>
                 </ul>
             </li>
-            -->
+
 
             <!-- Messages -->
 
             <li>
-                <a href="#">
+                <a href="<?=SITE?>Messages/">
                     <i class="fa fa-envelope"></i> <span>Messages</span>
                     <small class="label pull-right bg-yellow">1</small>
                 </a>
             </li>
 
             <!-- Drills -->
-            <!--
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-folder"></i> <span>Drills</span>
@@ -155,7 +158,6 @@
                     <li><a href="#"><i class="fa fa-circle-o"></i> Distance</a></li>
                 </ul>
             </li>
-            -->
 
 
             <li class="treeview">
@@ -176,10 +178,9 @@
             </li>
 
 
-            <!--
-            <li class="treeview">
+            <li class="treeview">w
                 <a href="#">
-                    <i class="fa fa-share"></i> <span>MultiSport</span>
+                    <i class="fa fa-share"></i> <span>Sports <small>(coming soon)</small></span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
@@ -191,16 +192,13 @@
                 </ul>
             </li>
 
-
-
             <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-
 
             <li class="header">2016 Overall Leaderboard</li>
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Individual</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Team Standings</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Division</span></a></li>
-            -->
+
         </ul>
     </section>
     <!-- /.sidebar -->

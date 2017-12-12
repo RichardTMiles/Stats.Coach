@@ -23,7 +23,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://firebase.google.com/docs/test-lab/" target="_blank">Documentation</a>
+ * <a href="https://firebase.google.php.com/docs/test-lab/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

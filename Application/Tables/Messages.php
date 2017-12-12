@@ -9,6 +9,7 @@
 namespace Tables;
 
 use Carbon\Database;
+use Model\Helpers\GlobalMap;
 use Model\User;
 use Carbon\Entities;
 use Carbon\Interfaces\iEntity;
@@ -18,14 +19,13 @@ class Messages extends Entities implements iEntity
 {
     static function get(&$array, $id)
     {
-        $to_user = $array->user_id ?? false;
+        $to_user = $array['user_id'] ?? false;
         if (!$to_user) throw new \Exception( 'Cannot get messages from a non-user.' );
-        $array->messages = self::fetch( 'SELECT * FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
+        $array['messages'] = self::fetch( 'SELECT * FROM StatsCoach.user_messages INNER JOIN StatsCoach.carbon_tag ON entity_id = message_id WHERE 
                     StatsCoach.user_messages.to_user_id = ? AND StatsCoach.carbon_tag.user_id = ? OR 
                     StatsCoach.user_messages.to_user_id = ? AND StatsCoach.carbon_tag.user_id = ?', $id, $_SESSION['id'], $_SESSION['id'], $id );
         return $array;
     }
-
 
     static function all(&$object, $id)   // signed in user
     {
@@ -60,12 +60,11 @@ class Messages extends Entities implements iEntity
         $stmt->bindValue( ':message', $argv );
         return $stmt->execute() ? self::commit( function () use ($id) {
             // Update there browser
-            Pipe::send( 'Messages/', $id );
-            Pipe::send( 'Messages/' . $_SESSION['id'] . '/', $id );
-
+            //GlobalMap::sendUpdate($id, 'Messages/' );
+            GlobalMap::sendUpdate($id, "Messages/{$_SESSION['id']}/" );
             // Update My View
-            Pipe::send( 'Messages/', $_SESSION['id'] );
-            Pipe::send( 'Messages/' . $id . '/', $_SESSION['id'] );
+            //GlobalMap::sendUpdate( $_SESSION['id'], 'Messages/' );
+            GlobalMap::sendUpdate( $_SESSION['id'],"Messages/$id/");
         } ) : self::verify( 'Failed to send your message.' );
     }
 

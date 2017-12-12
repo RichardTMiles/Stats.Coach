@@ -28,7 +28,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgentEntityTypes extends Google
   /**
    * Deletes entity types in the specified agent.
    *
-   * Operation (entityTypes.batchDelete)
+   * Operation  (entityTypes.batchDelete)
    *
    * @param string $parent Required. The name of the agent to delete all entities
    * types for. Format: `projects//agent`.
@@ -45,7 +45,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgentEntityTypes extends Google
   /**
    * Updates/Creates multiple entity types in the specified agent.
    *
-   * Operation (entityTypes.batchUpdate)
+   * Operation  (entityTypes.batchUpdate)
    *
    * @param string $parent Required. The name of the agent to update or create
    * entity types in. Format: `projects//agent`.
@@ -122,6 +122,8 @@ class Google_Service_Dialogflow_Resource_ProjectsAgentEntityTypes extends Google
    * Format: `projects//agent`.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string pageToken Optional. The next_page_token value returned from
+   * a previous list request.
    * @opt_param int pageSize Optional. The maximum number of items to return in a
    * single page. By default 100 and at most 1000.
    * @opt_param string languageCode Optional. The language to list entity synonyms
@@ -129,8 +131,6 @@ class Google_Service_Dialogflow_Resource_ProjectsAgentEntityTypes extends Google
    * dozen languages](https://dialogflow.com/docs/reference/language) are
    * supported. Note: languages must be enabled in the agent, before they can be
    * used.
-   * @opt_param string pageToken Optional. The next_page_token value returned from
-   * a previous list request.
    * @return Google_Service_Dialogflow_ListEntityTypesResponse
    */
   public function listProjectsAgentEntityTypes($parent, $optParams = array())

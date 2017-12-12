@@ -40,10 +40,10 @@ use Monolog\Handler\SyslogHandler as MonologSyslogHandler;
 class Google_Client
 {
   const LIBVER = "2.2.1";
-  const USER_AGENT_SUFFIX = "google-api-php-client/";
-  const OAUTH2_REVOKE_URI = 'https://accounts.google.com/o/oauth2/revoke';
+  const USER_AGENT_SUFFIX = "google.php-api-php-client/";
+  const OAUTH2_REVOKE_URI = 'https://accounts.google.php.com/o/oauth2/revoke';
   const OAUTH2_TOKEN_URI = 'https://www.googleapis.com/oauth2/v4/token';
-  const OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
+  const OAUTH2_AUTH_URL = 'https://accounts.google.php.com/o/oauth2/auth';
   const API_BASE_PATH = 'https://www.googleapis.com';
 
   /**
@@ -161,7 +161,7 @@ class Google_Client
    * For backwards compatibility
    * alias for fetchAccessTokenWithAuthCode
    *
-   * @param $code string code from accounts.google.com
+   * @param $code string code from accounts.google.php.com
    * @return array access token
    * @deprecated
    */
@@ -174,7 +174,7 @@ class Google_Client
    * Attempt to exchange a code for an valid authentication token.
    * Helper wrapped around the OAuth 2.0 implementation.
    *
-   * @param $code string code from accounts.google.com
+   * @param $code string code from accounts.google.php.com
    * @return array access token
    */
   public function fetchAccessTokenWithAuthCode($code)
@@ -926,7 +926,7 @@ class Google_Client
   }
 
   /**
-   * create a default google auth object
+   * create a default google.php auth object
    */
   protected function createOAuth2Service()
   {
@@ -998,7 +998,7 @@ class Google_Client
 
   protected function createDefaultLogger()
   {
-    $logger = new Logger('google-api-php-client');
+    $logger = new Logger('google.php-api-php-client');
     if ($this->isAppEngine()) {
       $handler = new MonologSyslogHandler('app', LOG_USER, Logger::NOTICE);
     } else {

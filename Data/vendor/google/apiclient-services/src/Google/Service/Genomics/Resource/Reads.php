@@ -30,7 +30,7 @@ class Google_Service_Genomics_Resource_Reads extends Google_Service_Resource
    *
    * For the definitions of read group sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * Reads search operates over a genomic coordinate space of reference sequence &
    * position defined over the reference sequences to which the requested read

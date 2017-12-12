@@ -57,7 +57,7 @@ class Search extends GlobalMap
         }
 
         ######################## Course Search
-        $sql = "SELECT course_id, course_name, course_par, course_phone, course_holes, course_par FROM StatsCoach.golf_course WHERE course_name LIKE :search";
+        $sql = "SELECT course_id, course_name, course_par, course_phone, course_holes, course_par, website FROM StatsCoach.golf_course WHERE course_name LIKE :search";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':search', "%$search%");
         if (!$stmt->execute()) throw new PublicAlert('Search Failed');
@@ -69,10 +69,10 @@ class Search extends GlobalMap
             $json['Courses'][] = [
                 'id' => $value['course_id'],
                 'Name' => $value['course_name'],
-                'Par' => $value['course_par'],
+                'Par' => $value['course_par_tot'],
                 'Phone' => $value['course_phone'],
                 'Holes' => $value['course_holes'],
-                'Web' => $value['course_par'],
+                'Web' => $value['website'],
             ];
         }
     }

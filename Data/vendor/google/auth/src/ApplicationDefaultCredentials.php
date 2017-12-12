@@ -164,7 +164,7 @@ class ApplicationDefaultCredentials
     private static function notFound()
     {
         $msg = 'Could not load the default credentials. Browse to ';
-        $msg .= 'https://developers.google.com';
+        $msg .= 'https://developers.google.php.com';
         $msg .= '/accounts/docs/application-default-credentials';
         $msg .= ' for more information';
 

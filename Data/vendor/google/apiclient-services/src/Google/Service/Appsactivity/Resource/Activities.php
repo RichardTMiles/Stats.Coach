@@ -45,7 +45,7 @@ class Google_Service_Appsactivity_Resource_Activities extends Google_Service_Res
    * response includes a continuation token if there are more events.
    * @opt_param string pageToken A token to retrieve a specific page of results.
    * @opt_param string source The Google service from which to return activities.
-   * Possible values of source are: - drive.google.com
+   * Possible values of source are: - drive.google.php.com
    * @opt_param string userId Indicates the user to return activity for. Use the
    * special value me to indicate the currently authenticated user.
    * @return Google_Service_Appsactivity_ListActivitiesResponse

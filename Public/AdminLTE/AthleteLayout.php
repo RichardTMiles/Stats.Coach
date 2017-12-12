@@ -1,3 +1,4 @@
+<?php $my = $my ?? $this->user[$_SESSION['id']]; ?>
 <header class="main-header">
     <nav class="navbar navbar-static-top">
         <div class="container">
@@ -23,10 +24,11 @@
                                     print '<li><a href="' . SITE . 'Team/' . $myTeam['team_code'] . '/">' . $myTeam['team_name'] . '</a></li>';
                                 }
                                 print '<li class="divider"></li>';
-                            }
-                            ?>
+                            } ?>
                             <li><a href="<?= SITE ?>JoinTeam/">Join a Team</a></li>
                             <li><a href="<?= site ?>CreateTeam/">Create Team</a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=SITE?>Messages/">Messages</a></li>
                             <li class="divider"></li>
                             <li><a href="<?= SITE ?>AddCourse/">Add Course</a></li>
                         </ul>

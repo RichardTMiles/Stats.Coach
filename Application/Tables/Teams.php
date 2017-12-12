@@ -67,12 +67,12 @@ class Teams extends Entities implements iEntity
         $lambda = function (...$require) use ($argv) {
             foreach ($require as $key => $value)
                 $array = $argv[$key] ?? false;
-            return $array;
+            return $array ?? [];
         };
 
         list( $teamName, $schoolName ) = $lambda( 'teamName', 'schoolName' );
 
-        $key = self::beginTransaction( 5, $_SESSION['id'] );
+        $key = self::beginTransaction( TEAMS, $_SESSION['id'] );
         $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
         if (!Database::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );

@@ -66,7 +66,7 @@ class Google_Service_PeopleService_Resource_People extends Google_Service_Resour
    * information about.
    *
    * - To get information about the authenticated user, specify `people/me`. - To
-   * get information about a google account, specify  `people/`account_id. - To
+   * get information about a google.php account, specify  `people/`account_id. - To
    * get information about a contact, specify the resource name that   identifies
    * the contact as returned by
    * [`people.connections.list`](/people/api/rest/v1/people.connections/list).
@@ -115,7 +115,7 @@ class Google_Service_PeopleService_Resource_People extends Google_Service_Resour
    * information about.
    *
    * - To get information about the authenticated user, specify `people/me`. - To
-   * get information about a google account, specify   `people/`account_id. - To
+   * get information about a google.php account, specify   `people/`account_id. - To
    * get information about a contact, specify the resource name that   identifies
    * the contact as returned by
    * [`people.connections.list`](/people/api/rest/v1/people.connections/list).

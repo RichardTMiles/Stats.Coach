@@ -7,7 +7,7 @@
  * Time: 10:00 PM
  */
 
-$fifoPath = __DIR__ . '/Temp/1.fifo';
+$fifoPath = dirname(__DIR__) . '/Data/Temp/333eafb18a4.fifo';
 
 print $fifoPath . PHP_EOL;
 
@@ -15,10 +15,12 @@ if (!file_exists($fifoPath)) {
     print "User not active \n\n";
     exit(0);
 }
+posix_mkfifo( $fifoPath, 0644 );
 
-$fifo = fopen( $fifoPath, 'w' );
+$fifo = fopen( $fifoPath, 'r+' );
 
 $data = "Richard Miles \n";
+
 fwrite($fifo, $data, 1024);
 
 echo "Done \n\n";

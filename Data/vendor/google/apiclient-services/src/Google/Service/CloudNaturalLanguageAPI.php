@@ -25,7 +25,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://cloud.google.com/natural-language/" target="_blank">Documentation</a>
+ * <a href="https://cloud.google.php.com/natural-language/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

@@ -80,9 +80,9 @@ class Google_Service_ServiceManagement_Resource_ServicesRollouts extends Google_
    * list.
    * @opt_param string filter Use `filter` to return subset of rollouts. The
    * following filters are supported:   -- To limit the results to only those in
-   * [status](google.api.servicemanagement.v1.RolloutStatus) 'SUCCESS',      use
+   * [status](google.php.api.servicemanagement.v1.RolloutStatus) 'SUCCESS',      use
    * filter='status=SUCCESS'   -- To limit the results to those in
-   * [status](google.api.servicemanagement.v1.RolloutStatus) 'CANCELLED'      or
+   * [status](google.php.api.servicemanagement.v1.RolloutStatus) 'CANCELLED'      or
    * 'FAILED', use filter='status=CANCELLED OR status=FAILED'
    * @return Google_Service_ServiceManagement_ListServiceRolloutsResponse
    */

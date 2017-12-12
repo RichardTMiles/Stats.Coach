@@ -15,6 +15,7 @@
         $.fn.load_knob('.knob');                // were pre loading
         $.fn.load_timepicker('.timepicker');
         $.fn.load_inputmask("[data-mask]")
+        $.fn.load_select2(".select2");
     });
 </script>
 

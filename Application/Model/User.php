@@ -56,9 +56,9 @@ class User extends GlobalMap
 
         // using the verify method to compare the password with the stored hashed password.
         if (Bcrypt::verify( $password, $data['user_password'] ) === true) {
-
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
         } else throw new PublicAlert ( 'Sorry, the username and password combination you have entered is invalid.', 'warning' );
+
 
         if ($rememberMe) {
             Request::setCookie( "UserName", $username );
@@ -78,12 +78,11 @@ class User extends GlobalMap
         $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
         $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));
 
-        $_SESSION['id'] = $sql['user_id'] ?? null;
-        $fb_id = $sql['user_facebook_id'] ?? null;
+        $C6_id = $sql['user_id'] ?? false;
+        $fb_id = $sql['user_facebook_id'] ?? false;
 
-        if (empty($_SESSION['id']) && empty($fb_id)) { // create new account
-            if ($request === 'SignUp') {
-
+        if (!$C6_id && !$fb_id): // create new account
+            if ($request === 'SignUp'):                         // This will set the session id
                 Users::add($null, $null, [
                     'username' => $facebook['id'],
                     'password' => null,
@@ -96,21 +95,28 @@ class User extends GlobalMap
                     'last_name' => $facebook["last_name"],
                     'gender' => $facebook["gender"]
                 ]);
-            } else {                                            // were trying to signin when signup
+            else:                                           // were trying to signin when signup
                 $_SESSION['facebook'] = $facebook;
                 return $facebook = "SignUp";        // Sign into a non-existing account
-            }
-        } elseif ($_SESSION['id'] && empty($fb_id)) {
-            if ($request === 'SignIn') {
+            endif;
+        elseif ($C6_id && !$fb_id):
+            if ($request === 'SignIn'):
                 $sql = "UPDATE StatsCoach.user SET user_facebook_id = ? WHERE user_id = ?";
                 $this->db->prepare($sql)->execute([$facebook['id'], $_SESSION['id']]);
-            } else {
+                $_SESSION['id'] = $C6_id;
+            else:
                 $_SESSION['facebook'] = $facebook;  // were trying to signup when we need to signin
                 return $facebook = "SignIn";
-            }
-        }
+            endif;
+        else:
+            $_SESSION['id'] = $C6_id;
+        endif;
         $_SESSION['facebook'] = $facebook = null;
-        return startApplication(true);
+        startApplication(true);
+    }
+
+    public function google($request){
+
     }
 
     public function register()
@@ -126,7 +132,7 @@ class User extends GlobalMap
         $null = null;
 
         // Tables self validate and throw public errors
-        $email_code = Users::add( $null, $null, [
+        Users::add( $null, $null, [
             'username' => $username,
             'password' => $password,
             'email' => $email,
@@ -136,7 +142,6 @@ class User extends GlobalMap
             'gender' => $gender
         ] );
 
-
         if ($userType == 'Coach') {
             global $teamName, $schoolName;
             Teams::add( $null, $null, [
@@ -145,23 +150,6 @@ class User extends GlobalMap
             ] );
         } elseif ($teamCode ?? false)
             Teams::newTeamMember( $teamCode );
-
-
-        $subject = 'Your ' . SITE_TITLE . ' Password';
-        $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
-            'Reply-To: ' . REPLY_EMAIL . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
-
-        $message = "Hello $firstName ,
-            \r\nThank you for registering with us. 
-            \r\n Username :  $username 
-            \r\n Password :  $password 
-            \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             https://www.Stats.Coach/Activate/" . base64_encode( $email ) . "/" . base64_encode( $email_code ) . "/ \r\n\r\n Have a good day! \r\n--" . SITE;
-
-
-        mail( $email, $subject, $message, $headers );
-
 
         PublicAlert::success( "Welcome to Stats Coach. Please check your email to finish your registration." );
         startApplication( 'home/' );

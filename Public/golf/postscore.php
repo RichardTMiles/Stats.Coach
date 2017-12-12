@@ -27,7 +27,7 @@ if (!$state) { ?>
 
         function course_given_states(select) {
             state = select.value;
-            var courses = $("#course"); // container to be placed in
+            let courses = $("#course"); // container to be placed in
 
             courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
 
@@ -39,21 +39,14 @@ if (!$state) { ?>
         }
 
         function box_colors_given_id(select) {
-            var courseId = select.value;
+            let courseId = select.value;
+            // Jump to a new page using Pjax
+            if (courseId === "Add")
+                return $.pjax({url: (window.location.protocol + '//' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
+                    container: '#pjax-content'});
 
-            // Jump to a new page using Pjax TODO - Change to absolute
-            if (courseId === "Add") {
-                return $.pjax({
-                    url: ('https://' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
-                    container: '#pjax-content'
-                });
-            }
-
-            $.pjax({
-                url: ('https://' + window.location.hostname + '/PostScore/' + state + '/' + courseId + '/'),         // Redirect
-                container: '#pjax-content'
-            });
-
+            $.pjax({url: (window.location.protocol + '//' + window.location.hostname + '/PostScore/' + state + '/' + courseId + '/'),         // Redirect
+                container: '#pjax-content'});
         }
     </script>
 
@@ -114,7 +107,6 @@ if (!$state) { ?>
     </section><!-- /.content -->
 
     <script> document.addEventListener("Carbon", (e) => $.fn.load_select2('.select2')); </script>
-
 
     <?php return 1;
 } elseif ($this->course_colors && $course_id) {
@@ -368,7 +360,11 @@ if (!$state) { ?>
         </form>
     </section>
     <script>
-        document.addEventListener("Carbon", (e) => $.fn.load_knob('input'));
+        document.addEventListener("Carbon", (e) => {
+            $.fn.load_knob('.knob')
+            $.fn.load_timepicker('.timepicker')
+        });
+
         function next_score_input(current) {
             let Form = document.forms["postScore"];
             let input = ['putts-' + current, 'hole-' + current, 'par-' + current, 'gnr-' + current];

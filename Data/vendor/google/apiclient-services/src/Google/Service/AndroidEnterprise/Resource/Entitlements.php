@@ -31,7 +31,7 @@ class Google_Service_AndroidEnterprise_Resource_Entitlements extends Google_Serv
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $entitlementId The ID of the entitlement (a product ID), e.g.
-   * "app:com.google.android.gm".
+   * "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    */
   public function delete($enterpriseId, $userId, $entitlementId, $optParams = array())
@@ -46,7 +46,7 @@ class Google_Service_AndroidEnterprise_Resource_Entitlements extends Google_Serv
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $entitlementId The ID of the entitlement (a product ID), e.g.
-   * "app:com.google.android.gm".
+   * "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_Entitlement
    */
@@ -78,7 +78,7 @@ class Google_Service_AndroidEnterprise_Resource_Entitlements extends Google_Serv
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $entitlementId The ID of the entitlement (a product ID), e.g.
-   * "app:com.google.android.gm".
+   * "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_Entitlement $postBody
    * @param array $optParams Optional parameters.
    *
@@ -100,7 +100,7 @@ class Google_Service_AndroidEnterprise_Resource_Entitlements extends Google_Serv
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $userId The ID of the user.
    * @param string $entitlementId The ID of the entitlement (a product ID), e.g.
-   * "app:com.google.android.gm".
+   * "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_Entitlement $postBody
    * @param array $optParams Optional parameters.
    *

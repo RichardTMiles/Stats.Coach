@@ -41,7 +41,7 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName Name of the service as specified in the service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See google.api.Service for the definition of a service name.
+   * See google.php.api.Service for the definition of a service name.
    * @param Google_Service_ServiceControl_AllocateQuotaRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_ServiceControl_AllocateQuotaResponse
@@ -70,8 +70,8 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName The service name as specified in its service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See [google.api.Service](https://cloud.google.com/service-
-   * management/reference/rpc/google.api#google.api.Service) for the definition of
+   * See [google.php.api.Service](https://cloud.google.com/service-
+   * management/reference/rpc/google.php.api#google.php.api.Service) for the definition of
    * a service name.
    * @param Google_Service_ServiceControl_CheckRequest $postBody
    * @param array $optParams Optional parameters.
@@ -94,7 +94,7 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName Name of the service as specified in the service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See google.api.Service for the definition of a service name.
+   * See google.php.api.Service for the definition of a service name.
    * @param Google_Service_ServiceControl_EndReconciliationRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_ServiceControl_EndReconciliationResponse
@@ -120,7 +120,7 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName Name of the service as specified in the service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See google.api.Service for the definition of a service name.
+   * See google.php.api.Service for the definition of a service name.
    * @param Google_Service_ServiceControl_ReleaseQuotaRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_ServiceControl_ReleaseQuotaResponse
@@ -150,8 +150,8 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName The service name as specified in its service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See [google.api.Service](https://cloud.google.com/service-
-   * management/reference/rpc/google.api#google.api.Service) for the definition of
+   * See [google.php.api.Service](https://cloud.google.com/service-
+   * management/reference/rpc/google.php.api#google.php.api.Service) for the definition of
    * a service name.
    * @param Google_Service_ServiceControl_ReportRequest $postBody
    * @param array $optParams Optional parameters.
@@ -191,7 +191,7 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * @param string $serviceName Name of the service as specified in the service
    * configuration. For example, `"pubsub.googleapis.com"`.
    *
-   * See google.api.Service for the definition of a service name.
+   * See google.php.api.Service for the definition of a service name.
    * @param Google_Service_ServiceControl_StartReconciliationRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_ServiceControl_StartReconciliationResponse

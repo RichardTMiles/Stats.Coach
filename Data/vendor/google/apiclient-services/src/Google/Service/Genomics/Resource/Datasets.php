@@ -30,7 +30,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.create)
+   * /fundamentals-of-google.php-genomics) (datasets.create)
    *
    * @param Google_Service_Genomics_Dataset $postBody
    * @param array $optParams Optional parameters.
@@ -49,7 +49,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.delete)
+   * /fundamentals-of-google.php-genomics) (datasets.delete)
    *
    * @param string $datasetId The ID of the dataset to be deleted.
    * @param array $optParams Optional parameters.
@@ -66,7 +66,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.get)
+   * /fundamentals-of-google.php-genomics) (datasets.get)
    *
    * @param string $datasetId The ID of the dataset.
    * @param array $optParams Optional parameters.
@@ -86,7 +86,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.getIamPolicy)
+   * /fundamentals-of-google.php-genomics) (datasets.getIamPolicy)
    *
    * @param string $resource REQUIRED: The resource for which policy is being
    * specified. Format is `datasets/`.
@@ -105,7 +105,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.listDatasets)
+   * /fundamentals-of-google.php-genomics) (datasets.listDatasets)
    *
    * @param array $optParams Optional parameters.
    *
@@ -129,7 +129,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * This method supports patch semantics. (datasets.patch)
    *
@@ -154,7 +154,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * See Setting a Policy for more information. (datasets.setIamPolicy)
    *
@@ -176,7 +176,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (datasets.testIamPermissions)
+   * /fundamentals-of-google.php-genomics) (datasets.testIamPermissions)
    *
    * @param string $resource REQUIRED: The resource for which policy is being
    * specified. Format is `datasets/`.
@@ -195,7 +195,7 @@ class Google_Service_Genomics_Resource_Datasets extends Google_Service_Resource
    *
    * For the definitions of datasets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * This operation is only possible for a week after the deletion occurred.
    * (datasets.undelete)

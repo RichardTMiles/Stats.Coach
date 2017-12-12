@@ -43,6 +43,8 @@
       <sourceFolder url="file://$MODULE_DIR$/Data/Views" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/Websocket" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Data/vendor" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Data/Scripts" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/Public/Messages" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/META-INF" />
       <excludeFolder url="file://$MODULE_DIR$/Temp" />
@@ -75,5 +77,6 @@
     </orderEntry>
     <orderEntry type="library" name="html5shiv" level="application" />
     <orderEntry type="library" name="respond" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
   </component>
 </module>

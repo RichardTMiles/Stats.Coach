@@ -25,7 +25,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/fonts/docs/developer_api" target="_blank">Documentation</a>
+ * <a href="https://developers.google.php.com/fonts/docs/developer_api" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

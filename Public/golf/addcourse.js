@@ -1,4 +1,5 @@
-let Form = document.forms["addCourse"], fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
+let Form = document.forms["addCourse"],
+    fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
     tee_boxes,
     Handicap_number,
     total_holes = 18,
@@ -30,6 +31,7 @@ function validateGeneral() {
         } else $("#" + fields[i]).removeClass("has-error").addClass("has-success");
 
     if (e) return alert("Please Fill All Required Field");
+    total_holes = Form[fields[2]].value;
     tee_boxes = Form[fields[6]].value;
     Handicap_number = Form[fields[7]].value;
     new_tee_box_color_input();                                  // Generate new tee boxes
@@ -196,7 +198,9 @@ function distance_box_generate() {
         container.innerHTML += node.innerHTML;
     } while (current_hole++ < total_holes);
 
-    $.fn.widgetRefresh();
+    $.fn.load_datepicker('#datepicker');
+    $.fn.load_knob('.knob');                // were pre loading
+    $.fn.load_timepicker('.timepicker');
 
 }
 

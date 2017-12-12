@@ -37,9 +37,9 @@ class Google_Service_StreetViewPublish_Resource_Photo extends Google_Service_Res
    *
    * This method returns the following error codes:
    *
-   * * google.rpc.Code.INVALID_ARGUMENT if the request is malformed or if the
-   * uploaded photo is not a 360 photo. * google.rpc.Code.NOT_FOUND if the upload
-   * reference does not exist. * google.rpc.Code.RESOURCE_EXHAUSTED if the account
+   * * google.php.rpc.Code.INVALID_ARGUMENT if the request is malformed or if the
+   * uploaded photo is not a 360 photo. * google.php.rpc.Code.NOT_FOUND if the upload
+   * reference does not exist. * google.php.rpc.Code.RESOURCE_EXHAUSTED if the account
    * has reached the storage limit. (photo.create)
    *
    * @param Google_Service_StreetViewPublish_Photo $postBody
@@ -57,8 +57,8 @@ class Google_Service_StreetViewPublish_Resource_Photo extends Google_Service_Res
    *
    * This method returns the following error codes:
    *
-   * * google.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
-   * requested photo. * google.rpc.Code.NOT_FOUND if the photo ID does not exist.
+   * * google.php.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
+   * requested photo. * google.php.rpc.Code.NOT_FOUND if the photo ID does not exist.
    * (photo.delete)
    *
    * @param string $photoId Required. ID of the Photo.
@@ -76,8 +76,8 @@ class Google_Service_StreetViewPublish_Resource_Photo extends Google_Service_Res
    *
    * This method returns the following error codes:
    *
-   * * google.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
-   * requested Photo. * google.rpc.Code.NOT_FOUND if the requested Photo does not
+   * * google.php.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
+   * requested Photo. * google.php.rpc.Code.NOT_FOUND if the requested Photo does not
    * exist. (photo.get)
    *
    * @param string $photoId Required. ID of the Photo.
@@ -132,9 +132,9 @@ class Google_Service_StreetViewPublish_Resource_Photo extends Google_Service_Res
    *
    * This method returns the following error codes:
    *
-   * * google.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
-   * requested photo. * google.rpc.Code.INVALID_ARGUMENT if the request is
-   * malformed. * google.rpc.Code.NOT_FOUND if the requested photo does not exist.
+   * * google.php.rpc.Code.PERMISSION_DENIED if the requesting user did not create the
+   * requested photo. * google.php.rpc.Code.INVALID_ARGUMENT if the request is
+   * malformed. * google.php.rpc.Code.NOT_FOUND if the requested photo does not exist.
    * (photo.update)
    *
    * @param string $id Required. A unique identifier for a photo.

@@ -105,7 +105,7 @@ class ScopedAccessTokenSubscriber implements SubscriberInterface
      *   E.g this could be used to authenticate using the AppEngine
      *   AppIdentityService.
      *
-     *   use google\appengine\api\app_identity\AppIdentityService;
+     *   use google.php\appengine\api\app_identity\AppIdentityService;
      *   use Google\Auth\Subscriber\ScopedAccessTokenSubscriber;
      *   use GuzzleHttp\Client;
      *

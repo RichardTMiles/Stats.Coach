@@ -30,7 +30,7 @@ class Google_Service_Fitness_Resource_UsersDataSourcesDatasets extends Google_Se
    * have any overlap with the time range specified by the dataset ID. For most
    * data types, the entire data point will be deleted. For data types where the
    * time span represents a consistent value (such as
-   * com.google.activity.segment), and a data point straddles either end point of
+   * com.google.php.activity.segment), and a data point straddles either end point of
    * the dataset, only the overlapping portion of the data point will be deleted.
    * (datasets.delete)
    *

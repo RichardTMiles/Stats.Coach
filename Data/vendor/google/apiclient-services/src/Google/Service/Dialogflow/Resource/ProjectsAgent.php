@@ -28,7 +28,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgent extends Google_Service_Re
   /**
    * Exports the specified agent to a ZIP file.
    *
-   * Operation (agent.export)
+   * Operation  (agent.export)
    *
    * @param string $parent Required. The project that the agent to export is
    * associated with. Format: `projects/`.
@@ -49,7 +49,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgent extends Google_Service_Re
    * Intents and entity types with the same name are replaced with the new
    * versions from ImportAgentRequest.
    *
-   * Operation (agent.import)
+   * Operation  (agent.import)
    *
    * @param string $parent Required. The project that the agent to import is
    * associated with. Format: `projects/`.
@@ -69,7 +69,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgent extends Google_Service_Re
    * Replaces the current agent version with a new one. All the intents and entity
    * types in the older version are deleted.
    *
-   * Operation (agent.restore)
+   * Operation  (agent.restore)
    *
    * @param string $parent Required. The project that the agent to restore is
    * associated with. Format: `projects/`.
@@ -111,7 +111,7 @@ class Google_Service_Dialogflow_Resource_ProjectsAgent extends Google_Service_Re
   /**
    * Trains the specified agent.
    *
-   * Operation (agent.train)
+   * Operation  (agent.train)
    *
    * @param string $parent Required. The project that the agent to train is
    * associated with. Format: `projects/`.

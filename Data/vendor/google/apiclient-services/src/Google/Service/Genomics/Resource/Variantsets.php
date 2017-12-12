@@ -30,7 +30,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * The provided variant set must have a valid `datasetId` set - all other fields
    * are optional. Note that the `id` field will be ignored, as this is assigned
@@ -52,7 +52,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (variantsets.delete)
+   * /fundamentals-of-google.php-genomics) (variantsets.delete)
    *
    * @param string $variantSetId The ID of the variant set to be deleted.
    * @param array $optParams Optional parameters.
@@ -69,7 +69,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (variantsets.export)
+   * /fundamentals-of-google.php-genomics) (variantsets.export)
    *
    * @param string $variantSetId Required. The ID of the variant set that contains
    * variant data which should be exported. The caller must have READ access to
@@ -89,7 +89,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (variantsets.get)
+   * /fundamentals-of-google.php-genomics) (variantsets.get)
    *
    * @param string $variantSetId Required. The ID of the variant set.
    * @param array $optParams Optional parameters.
@@ -106,7 +106,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics) (variantsets.patch)
+   * /fundamentals-of-google.php-genomics) (variantsets.patch)
    *
    * @param string $variantSetId The ID of the variant to be updated (must already
    * exist).
@@ -132,7 +132,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * For the definitions of variant sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * Implements [GlobalAllianceApi.searchVariantSets](https://github.com/ga4gh/sch
    * emas/blob/v0.5.1/src/main/resources/avro/variantmethods.avdl#L49).

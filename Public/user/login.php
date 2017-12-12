@@ -8,7 +8,7 @@
         <div id="alert"></div>
 
         <?php if ($this->UserName == false): ?>
-            <form data-pjax action="<?= SITE ?>login/" method="post" onsubmit="return false;">
+            <form data-pjax action="<?= SITE ?>login/" method="post"> <!-- return false; -->
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="username"
                            placeholder="Username"
@@ -47,7 +47,23 @@
                     'user_location', 'user_photos', 'user_friends']); ?>'>
                     <i class="fa fa-facebook"></i> Sign in using Facebook</a>
 
-                <a href="#" class="btn btn-block btn-social btn-google btn-flat">
+                <a href="<?php
+                //Call Google API
+                $client = new Google_Client();
+                $client->setAuthConfig(SERVER_ROOT.'Data/Indexes/tsconfig.json');
+                $client->setAccessType("offline");        // offline access
+                $client->setIncludeGrantedScopes(true);   // incremental auth
+                $client->addScope('email');
+                //$gClient = new Google_Client();
+                //$gClient->setApplicationName('Stats Coach');
+                //$gClient->setClientId(GOOGLE_APP_ID);
+                //$gClient->setClientSecret(GOOGLE_APP_SECRET);
+                //$gClient->setRedirectUri('https://stats.coach/Google/');
+                //$google_oauthV2 = new Google_Service_Oauth2($gClient);
+                //$gClient->setIncludeGrantedScopes(true);   // incremental auth
+                //$gClient->addScope('login');
+                print $client->createAuthUrl();
+                ?>" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
             </div><!-- /.social-auth-links -->
 
@@ -108,4 +124,6 @@
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
-<script> document.addEventListener("Carbon", (e) => $.fn.load_iCheck('input')); </script>
+<script>
+    document.addEventListener("Carbon", (e) => $.fn.load_iCheck('input'));
+</script>

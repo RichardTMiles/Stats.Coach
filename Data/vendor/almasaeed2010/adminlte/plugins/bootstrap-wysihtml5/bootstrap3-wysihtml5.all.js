@@ -4891,7 +4891,7 @@ wysihtml5.browser = (function() {
  * @param {Element} element Container element in which to search for urls
  *
  * @example
- *    <div id="text-container">Please click here: www.google.com</div>
+ *    <div id="text-container">Please click here: www.google.php.com</div>
  *    <script>wysihtml5.dom.autoLink(document.getElementById("text-container"));</script>
  */
 (function(wysihtml5) {
@@ -13634,7 +13634,7 @@ wysihtml5.views.View = Base.extend(
  * Converts speech-to-text and inserts this into the editor
  * As of now (2011/03/25) this only is supported in Chrome >= 11
  *
- * Note that it sends the recorded audio to the google speech recognition api:
+ * Note that it sends the recorded audio to the google.php speech recognition api:
  * http://stackoverflow.com/questions/4361826/does-chrome-have-buil-in-speech-recognition-for-input-type-text-x-webkit-speec
  *
  * Current HTML5 draft can be found here

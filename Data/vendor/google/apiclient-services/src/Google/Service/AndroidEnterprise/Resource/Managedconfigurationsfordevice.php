@@ -33,7 +33,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsfordevice e
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $managedConfigurationForDeviceId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    */
   public function delete($enterpriseId, $userId, $deviceId, $managedConfigurationForDeviceId, $optParams = array())
@@ -50,7 +50,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsfordevice e
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $managedConfigurationForDeviceId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration
    */
@@ -86,7 +86,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsfordevice e
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $managedConfigurationForDeviceId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_ManagedConfiguration $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration
@@ -105,7 +105,7 @@ class Google_Service_AndroidEnterprise_Resource_Managedconfigurationsfordevice e
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $managedConfigurationForDeviceId The ID of the managed
-   * configuration (a product ID), e.g. "app:com.google.android.gm".
+   * configuration (a product ID), e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_ManagedConfiguration $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_ManagedConfiguration

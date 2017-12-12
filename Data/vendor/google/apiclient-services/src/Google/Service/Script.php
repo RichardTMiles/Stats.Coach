@@ -23,7 +23,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/apps-script/execution/rest/v1/scripts/run" target="_blank">Documentation</a>
+ * <a href="https://developers.google.php.com/apps-script/execution/rest/v1/scripts/run" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -32,13 +32,13 @@ class Google_Service_Script extends Google_Service
 {
   /** Read, send, delete, and manage your email. */
   const MAIL_GOOGLE_COM =
-      "https://mail.google.com/";
+      "https://mail.google.php.com/";
   /** Manage your calendars. */
   const WWW_GOOGLE_COM_CALENDAR_FEEDS =
-      "https://www.google.com/calendar/feeds";
+      "https://www.google.php.com/calendar/feeds";
   /** Manage your contacts. */
   const WWW_GOOGLE_COM_M8_FEEDS =
-      "https://www.google.com/m8/feeds";
+      "https://www.google.php.com/m8/feeds";
   /** View and manage the provisioning of groups on your domain. */
   const ADMIN_DIRECTORY_GROUP =
       "https://www.googleapis.com/auth/admin.directory.group";

@@ -27,7 +27,7 @@ class Google_Service_CloudSpeechAPI_Resource_Speech extends Google_Service_Resou
 {
   /**
    * Perform asynchronous speech-recognition: receive results via the
-   * google.longrunning.Operations interface. Returns either an `Operation.error`
+   * google.php.longrunning.Operations interface. Returns either an `Operation.error`
    * or an `Operation.response` which contains an `AsyncRecognizeResponse`
    * message. (speech.asyncrecognize)
    *

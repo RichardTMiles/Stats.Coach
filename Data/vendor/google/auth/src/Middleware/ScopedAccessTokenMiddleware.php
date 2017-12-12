@@ -95,7 +95,7 @@ class ScopedAccessTokenMiddleware
      *   E.g this could be used to authenticate using the AppEngine
      *   AppIdentityService.
      *
-     *   use google\appengine\api\app_identity\AppIdentityService;
+     *   use google.php\appengine\api\app_identity\AppIdentityService;
      *   use Google\Auth\Middleware\ScopedAccessTokenMiddleware;
      *   use GuzzleHttp\Client;
      *   use GuzzleHttp\HandlerStack;

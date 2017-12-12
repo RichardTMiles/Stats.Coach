@@ -4,34 +4,20 @@ namespace Controller;
 
 use Carbon\Error\PublicAlert;
 use Carbon\Request;
+use Carbon\Session;
 use Carbon\View;
 
 class User extends Request
 {
     static function logout()
     {
-        $_SESSION = [];
-        $GLOBALS['user'] = null;        // if the destructor is called we want to make sure any sterilized data is then removed
-        session_unset();                // This wont clear the user session row, just data in row
-        session_destroy();
-        #session_regenerate_id( TRUE ); // headers sent .
-        $_SESSION['id'] = false;
+        Session::clear();
         startApplication( true );
     }
 
-    public function login($client = null)
+    public function login()
     {
         global $UserName, $FullName, $UserImage;    // validate cookies
-
-        switch ($this->set( $client )->alnum()) {
-            case "clear":
-                $this->cookie( 'UserName', 'FullName', 'UserImage' )->clearCookies();
-                return false;
-            case 'FaceBook':
-                $this->facebook();
-                //sortDump($GLOBALS);
-            default:
-        }
 
         list($UserName, $FullName) = $this->cookie( 'UserName', 'FullName' )->alnum();
 
@@ -43,7 +29,6 @@ class User extends Request
 
         if (!$rememberMe)
             $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
-
 
         if (empty($_POST)) return false;  // If forum already submitted
 
@@ -66,6 +51,14 @@ class User extends Request
         } elseif ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') == false)
             throw new PublicAlert( 'Sorry, we could not connect to Facebook. Please try again later.' );
         return (new Request())->set($request)->alnum() ?: true;
+    }
+
+    public function google($request) {
+
+    }
+
+    public function messages(){
+
     }
 
     public function register()

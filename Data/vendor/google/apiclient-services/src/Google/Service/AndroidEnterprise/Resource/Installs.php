@@ -34,7 +34,7 @@ class Google_Service_AndroidEnterprise_Resource_Installs extends Google_Service_
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $installId The ID of the product represented by the install,
-   * e.g. "app:com.google.android.gm".
+   * e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    */
   public function delete($enterpriseId, $userId, $deviceId, $installId, $optParams = array())
@@ -50,7 +50,7 @@ class Google_Service_AndroidEnterprise_Resource_Installs extends Google_Service_
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $installId The ID of the product represented by the install,
-   * e.g. "app:com.google.android.gm".
+   * e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_Install
    */
@@ -85,7 +85,7 @@ class Google_Service_AndroidEnterprise_Resource_Installs extends Google_Service_
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $installId The ID of the product represented by the install,
-   * e.g. "app:com.google.android.gm".
+   * e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_Install $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_Install
@@ -105,7 +105,7 @@ class Google_Service_AndroidEnterprise_Resource_Installs extends Google_Service_
    * @param string $userId The ID of the user.
    * @param string $deviceId The Android ID of the device.
    * @param string $installId The ID of the product represented by the install,
-   * e.g. "app:com.google.android.gm".
+   * e.g. "app:com.google.php.android.gm".
    * @param Google_Service_AndroidEnterprise_Install $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_Install

@@ -9,68 +9,7 @@
 
     <!-- PJAX Content Control -->
     <meta http-equiv="x-pjax-version" content="<?= $_SESSION['X_PJAX_Version'] ?>">
-    <!-- REQUIRED STYLE SHEETS -->
-    <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="<?= $this->versionControl(TEMPLATE . "dist/css/AdminLTE.min.css") ?>">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-        folder instead of downloading all of them to reduce the load. -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- DataTables.Bootstrap -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- iCheck -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/square/blue.css"); ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- Ionicons -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/Ionicons/css/ionicons.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- Back color -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- Multiple input dynamic form -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- Check Ratio Box -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- I dont know but keep it -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- fun ajax refresh -->
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- Jquery -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>" as="style"
-          onload="this.rel='stylesheet'">
-    <!-- datepicker -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- date-range-picker -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <link rel="preload" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- Wysihtml -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- Font Awesome -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
-    <!-- Font Awesome -->
-    <link rel="preload"
-          href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>"
-          as="style" onload="this.rel='stylesheet'">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-100885582-1"></script>
 
     <script>
         /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
@@ -190,7 +129,6 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
     (($userType == 'Coach') ? 'skin-green fixed sidebar-mini sidebar-collapse' :
         'stats-wrap');
 ?>
-
 <!-- Full Width Column -->
 <body class="<?= $layout ?>" style="background: transparent">
 <div <?= (($userType == 'Athlete' || $userType == 'Coach') ? 'class="wrapper"' : 'class="container" id="pjax-content"') ?>
@@ -231,7 +169,64 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
         print $this->bufferedContent;
     endif; ?>
 </div>
+
+<noscript id="deferred-styles">
+    <!-- REQUIRED STYLE SHEETS -->
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap/dist/css/bootstrap.min.css") ?>">
+    <!-- Theme style -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "dist/css/AdminLTE.min.css") ?>">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/_all-skins.min.css") ?>">
+    <!-- DataTables.Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") ?>">
+    <!-- iCheck -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/all.css"); ?>">
+    <!-- Ionicons -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/Ionicons/css/ionicons.min.css") ?>">
+    <!-- Back color -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "dist/css/skins/skin-green.css") ?>">
+    <!-- Multiple input dynamic form -->
+    <link rel="stylesheet" type="text/css"
+          href="<?= $this->versionControl(TEMPLATE . "bower_components/select2/dist/css/select2.min.css") ?>" as="style"
+          onload="this.rel='stylesheet'">
+    <!-- Check Ratio Box -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "plugins/iCheck/flat/blue.css") ?>">
+    <!-- I dont know but keep it -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/morris.js/morris.css") ?>">
+    <!-- fun ajax refresh -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "plugins/pace/pace.css") ?>">
+    <!-- Jquery -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/jvectormap/jquery-jvectormap.css") ?>">
+    <!-- datepicker -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css") ?>">
+    <!-- date-range-picker -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/bootstrap-daterangepicker/daterangepicker.css") ?>">
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "plugins/timepicker/bootstrap-timepicker.css") ?>">
+    <!-- Wysihtml -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css") ?>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->versionControl(TEMPLATE . "bower_components/font-awesome/css/font-awesome.min.css") ?>">
+</noscript>
 <script>
+    // Google
+    let loadDeferredStyles = function() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement)
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    let raf = requestAnimationFrame || mozRequestAnimationFrame ||
+        webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+    else window.addEventListener('load', loadDeferredStyles);
+
+    var JSLoaded = new Set();
+
     //-- JQuery -->
     loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery/dist/jquery.min.js') ?>", () => {
 
@@ -257,8 +252,6 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
             //-- AJAX Pace -->
             loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/PACE/pace.js') ?>", () => $(document).ajaxStart(() => Pace.restart()));
-
-            var JSLoaded = new Set();
 
             $.fn.CarbonJS = (sc, cb) => (!JSLoaded.has(sc) ? loadJS(sc, cb) : cb());
 
@@ -362,7 +355,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () => {
-                        Carbon('#pjax-content', 'ws://stats.coach:8888/');
+                        Carbon('#pjax-content', 'wss://stats.coach:8888/');
                         // Messages in Navigation, faster to initially load over http
                         $.fn.startApplication('<?= SITE . 'Messages/' ?>');
                         $.fn.startApplication('<?= SITE . 'Notifications/' ?>');
@@ -376,6 +369,12 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
         });
     });
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-100885582-1');
 </script>
 
 </body>

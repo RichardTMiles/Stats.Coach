@@ -134,7 +134,7 @@ class Google_Service_Classroom_Resource_CoursesCourseWorkStudentSubmissions exte
   /**
    * Updates one or more fields of a student submission.
    *
-   * See google.classroom.v1.StudentSubmission for details of which fields may be
+   * See google.php.classroom.v1.StudentSubmission for details of which fields may be
    * updated and who may change them.
    *
    * This request must be made by the Developer Console project of the [OAuth

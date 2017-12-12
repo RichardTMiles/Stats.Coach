@@ -23,7 +23,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://sites.google.com/a/google.com/cih/engineering/eng-documents" target="_blank">Documentation</a>
+ * <a href="https://sites.google.php.com/a/google.php.com/cih/engineering/eng-documents" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

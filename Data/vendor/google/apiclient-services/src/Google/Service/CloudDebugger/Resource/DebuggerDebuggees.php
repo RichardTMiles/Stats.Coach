@@ -36,7 +36,7 @@ class Google_Service_CloudDebugger_Resource_DebuggerDebuggees extends Google_Ser
    * @opt_param string project Project number of a Google Cloud project whose
    * debuggees to list.
    * @opt_param string clientVersion The client version making the call. Schema:
-   * `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * `domain/type/version` (e.g., `google.php.com/intellij/v1`).
    * @return Google_Service_CloudDebugger_ListDebuggeesResponse
    */
   public function listDebuggerDebuggees($optParams = array())

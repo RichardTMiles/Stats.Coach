@@ -3165,11 +3165,11 @@ if ( notPhantom && document.readyState === "complete" ) {
 }
 
 /*
- * This file is a modified version of google-diff-match-patch's JavaScript implementation
+ * This file is a modified version of google.php-diff-match-patch's JavaScript implementation
  * (https://code.google.com/p/google-diff-match-patch/source/browse/trunk/javascript/diff_match_patch_uncompressed.js),
  * modifications are licensed as more fully set forth in LICENSE.txt.
  *
- * The original source of google-diff-match-patch is attributable and licensed as follows:
+ * The original source of google.php-diff-match-patch is attributable and licensed as follows:
  *
  * Copyright 2006 Google Inc.
  * https://code.google.com/p/google-diff-match-patch/

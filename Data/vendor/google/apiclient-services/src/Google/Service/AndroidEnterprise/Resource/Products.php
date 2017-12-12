@@ -76,7 +76,7 @@ class Google_Service_AndroidEnterprise_Resource_Products extends Google_Service_
    *
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $productId The ID of the product, e.g.
-   * "app:com.google.android.gm".
+   * "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    *
    * @opt_param string language The BCP47 tag for the user's preferred language

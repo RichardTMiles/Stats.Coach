@@ -63,6 +63,7 @@ class Team extends GlobalMap
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         self::commit();
         PublicAlert::success( "We successfully created `$teamName`!" );
+        startApplication(true);
     }
 
     public function joinTeam($teamCode)
@@ -72,7 +73,7 @@ class Team extends GlobalMap
 
         Teams::all( $this->user[$_SESSION['id']], $_SESSION['id'] );
 
-        if (array_key_exists( $teamCode, $this->user[$_SESSION['id']]->teams ))
+        if (array_key_exists( $teamCode, $this->user[$_SESSION['id']]['teams'] ))
             throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
 
         $member = $this->beginTransaction( 6, $_SESSION['id'] );

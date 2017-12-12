@@ -9,6 +9,7 @@
 namespace Tables;
 
 use Carbon\Database;
+use Carbon\Error\ErrorCatcher;
 use Model\Helpers\Events;
 use Model\Helpers\iSport;
 use Carbon\Error\PublicAlert;
@@ -21,12 +22,11 @@ class Users extends Entities implements iEntity
 
     static function get(&$array, $id)
     {
-
         $array = static::fetch('SELECT * FROM StatsCoach.user WHERE user_id = ?', $id);
-
         $array['user_profile_picture'] = SITE . (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $array['user_profile_uri'] =    $array['user_profile_uri'] ?: $id;
         $array['user_cover_photo'] = SITE . ($array['user_profile_pic'] ?? 'Public/img/defaults/photo' . rand(1, 3) . '.png');
-        $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
+        $array['user_first_last'] = $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
         $array['user_id'] = $id;
         Users::sport($array, $id);
 
@@ -71,7 +71,24 @@ class Users extends Entities implements iEntity
 
         if (self::commit()) $_SESSION['id'] = $key;
 
-        return $email_code;
+
+        $subject = 'Your ' . SITE_TITLE . ' Password';
+        $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .
+            'Reply-To: ' . REPLY_EMAIL . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        $message = "Hello {$argv['first_name']},
+            \r\nThank you for registering with " . SITE_TITLE .
+            "\r\n Username :  {$argv['username']} 
+            \r\n Password :  {$argv['password']}
+            \r\n Please visit the link below so we can activate your account:\r\n\r\n
+             https://www.Stats.Coach/Activate/" . base64_encode( $argv['email'] ) . "/" . base64_encode( $email_code ) . "/ \r\n\r\n Have a good day! \r\n--" . SITE;
+
+        if (!mail( $argv['email'], $subject, $message, $headers )) {
+            ErrorCatcher::generateErrorLog([$argv['email'], $subject, $message, $headers]);
+            PublicAlert::danger('We failed to send your activation email, this is hella bad. Leave me a messages at 817-7893-294');
+        }
+        return true;
     }
 
     static function remove(&$user, $id)
@@ -85,6 +102,7 @@ class Users extends Entities implements iEntity
         if (!is_array($user)) throw new PublicAlert('Could not find user  ' . $id, 'danger');
 
         $user['user_profile_picture'] =  (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : SITE . 'Data/Uploads/Pictures/Defaults/default_avatar.png');
+        $user['user_profile_uri'] = $user['user_profile_uri'] ?: $id;
         $user['user_cover_photo'] =  ($user['user_cover_photo'] ??  SITE . 'Public/img/defaults/photo' . rand(1, 3) . '.png');
         $user['user_first_last'] = $user['user_full_name'] = $user['user_first_name'] . ' ' . $user['user_last_name'];
         $user['user_id'] = $id;

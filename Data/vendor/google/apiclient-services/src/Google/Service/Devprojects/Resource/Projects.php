@@ -209,7 +209,7 @@ class Google_Service_Devprojects_Resource_Projects extends Google_Service_Resour
   /**
    * Looks-up a project specified via a string ID in app-engine app ID form and if
    * found returns its numeric ID. Note: in the case of Dasher-based projects the
-   * string ID is in the form "domain:appId" (e.g., "google.com:cohesive-
+   * string ID is in the form "domain:appId" (e.g., "google.php.com:cohesive-
    * bonbon-301") If the lookup fails a PROJECT_NOT_FOUND error is returned.
    * (projects.stringidtonumericid)
    *

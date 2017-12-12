@@ -370,7 +370,7 @@ class OAuth2JwtTest extends \PHPUnit_Framework_TestCase
         'signingAlgorithm' => 'HS256',
         'scope' => 'https://www.googleapis.com/auth/userinfo.profile',
         'issuer' => 'app@example.com',
-        'audience' => 'accounts.google.com',
+        'audience' => 'accounts.google.php.com',
         'clientId' => 'aClientID',
     ];
 
@@ -487,7 +487,7 @@ class OAuth2GenerateAccessTokenRequestTest extends \PHPUnit_Framework_TestCase
         'tokenCredentialUri' => 'https://tokens_r_us/test',
         'scope' => 'https://www.googleapis.com/auth/userinfo.profile',
         'issuer' => 'app@example.com',
-        'audience' => 'accounts.google.com',
+        'audience' => 'accounts.google.php.com',
         'clientId' => 'aClientID',
     ];
 
@@ -637,7 +637,7 @@ class OAuth2FetchAuthTokenTest extends \PHPUnit_Framework_TestCase
         'signingKey' => 'example_key',
         'signingAlgorithm' => 'HS256',
         'issuer' => 'app@example.com',
-        'audience' => 'accounts.google.com',
+        'audience' => 'accounts.google.php.com',
         'clientId' => 'aClientID',
     ];
 

@@ -16,16 +16,17 @@ return (function () {
     $json = [
         'widget' => '#hierarchical',
         'scroll' => '#messages',
+        'to_User' => $user_id,
         'scrollTo' => 'bottom'
     ];
 
-    foreach ($account->messages as $key => $message) {
+    foreach ($account['messages'] as $key => $message) {
         $json['Messages'][] = [
-            'me' => $message->user_id == $_SESSION['id'],
-            'first_name' => $user[$message->user_id]->user_first_name,
-            'user_profile_picture' => $user[$message->user_id]->user_profile_picture,
-            'creation_date' => date( "F j, Y, g:i a", $message->creation_date ),
-            'message' => $message->message
+            'me' => $message['user_id'] == $_SESSION['id'],
+            'first_name' => $user[$message['user_id']]['user_first_name'],
+            'user_profile_picture' => $user[$message['user_id']]['user_profile_picture'],
+            'creation_date' => date( "F j, Y, g:i a", $message['creation_date'] ),
+            'message' => $message['message']
         ];
     }
 

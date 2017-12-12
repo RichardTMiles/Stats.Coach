@@ -22,7 +22,7 @@ function run_example(example_index) {
       page.render("output/" + example.name + snapshot_index + ".png");
       snapshot_index += 1;
     } else if (e.fn == "mousemove") {
-      page.startApplication("mousemove", e.x, e.y);
+      page.sendEvent("mousemove", e.x, e.y);
     }
   };
 

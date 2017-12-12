@@ -30,7 +30,7 @@ class Google_Service_Genomics_Resource_ReferencesBases extends Google_Service_Re
    *
    * For the definitions of references and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * Implements [GlobalAllianceApi.getReferenceBases](https://github.com/ga4gh/sch
    * emas/blob/v0.5.1/src/main/resources/avro/referencemethods.avdl#L221).

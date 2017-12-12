@@ -23,7 +23,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/gmail/api/" target="_blank">Documentation</a>
+ * <a href="https://developers.google.php.com/gmail/api/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -32,7 +32,7 @@ class Google_Service_Gmail extends Google_Service
 {
   /** Read, send, delete, and manage your email. */
   const MAIL_GOOGLE_COM =
-      "https://mail.google.com/";
+      "https://mail.google.php.com/";
   /** Manage drafts and send emails. */
   const GMAIL_COMPOSE =
       "https://www.googleapis.com/auth/gmail.compose";

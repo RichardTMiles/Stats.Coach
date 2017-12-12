@@ -59,7 +59,7 @@ class Logger implements LoggerInterface
     /**
      * Critical conditions
      *
-     * Example: Application.php component unavailable, unexpected exception.
+     * Example: Application component unavailable, unexpected exception.
      */
     const CRITICAL = 500;
 

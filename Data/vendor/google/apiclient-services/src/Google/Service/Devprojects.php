@@ -25,7 +25,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="http://goto.google.com/devconsoleapi/" target="_blank">Documentation</a>
+ * <a href="http://goto.google.php.com/devconsoleapi/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

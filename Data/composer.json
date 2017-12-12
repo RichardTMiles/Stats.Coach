@@ -14,6 +14,7 @@
     "almasaeed2010/adminlte": "^2.4",
     "bower-asset/jquery-backstretch": "^2.1",
     "google/apiclient": "^2.0",
-    "facebook/graph-sdk": "^5.5"
+    "facebook/graph-sdk": "^5.5",
+    "mustache/mustache": "^2.12"
   }
 }

@@ -89,9 +89,9 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    *
    * Tasks cannot be updated after creation; there is no UpdateTask command.
    *
-   * * For [App Engine queues](google.cloud.tasks.v2beta2.AppEngineHttpTarget),
+   * * For [App Engine queues](google.php.cloud.tasks.v2beta2.AppEngineHttpTarget),
    * the maximum task size is 100KB. * For [pull
-   * queues](google.cloud.tasks.v2beta2.PullTarget), this   the maximum task size
+   * queues](google.php.cloud.tasks.v2beta2.PullTarget), this   the maximum task size
    * is 1MB. (tasks.create)
    *
    * @param string $parent Required.
@@ -222,8 +222,8 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * PullTasksResponse, set PullTasksRequest.response_view to Task.View.FULL.
    *
    * A maximum of 10 qps of CloudTasks.PullTasks requests are allowed per queue.
-   * google.rpc.Code.RESOURCE_EXHAUSTED is returned when this limit is exceeded.
-   * google.rpc.Code.RESOURCE_EXHAUSTED is also returned when
+   * google.php.rpc.Code.RESOURCE_EXHAUSTED is returned when this limit is exceeded.
+   * google.php.rpc.Code.RESOURCE_EXHAUSTED is also returned when
    * RateLimits.max_tasks_dispatched_per_second is exceeded. (tasks.pull)
    *
    * @param string $name Required.
@@ -269,7 +269,7 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * made or to manually force a task to be dispatched now.
    *
    * When this method is called, Cloud Tasks will dispatch the task to its target,
-   * even if the queue is Queue.QueueState.PAUSED.
+   * even if the queue is Queue.State.PAUSED.
    *
    * The dispatched task is returned. That is, the task that is returned contains
    * the Task.task_status after the task is dispatched but before the task is
@@ -280,10 +280,12 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * reset to the time that CloudTasks.RunTask was called plus the retry delay
    * specified in the queue and task's RetryConfig.
    *
-   * CloudTasks.RunTask returns google.rpc.Code.NOT_FOUND when it is called on a
+   * CloudTasks.RunTask returns google.php.rpc.Code.NOT_FOUND when it is called on a
    * task that has already succeeded or permanently failed.
-   * google.rpc.Code.FAILED_PRECONDITION is returned when CloudTasks.RunTask is
-   * called on task that is dispatched or already running. (tasks.run)
+   * google.php.rpc.Code.FAILED_PRECONDITION is returned when CloudTasks.RunTask is
+   * called on task that is dispatched or already running.
+   *
+   * CloudTasks.RunTask cannot be called on pull tasks. (tasks.run)
    *
    * @param string $name Required.
    *

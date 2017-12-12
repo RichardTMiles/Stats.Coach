@@ -143,8 +143,8 @@ class Google_Service_Compute_Resource_Images extends Google_Service_Resource
     return $this->call('insert', array($params), "Google_Service_Compute_Operation");
   }
   /**
-   * Retrieves the list of private images available to the specified project.
-   * Private images are images you create that belong to your project. This method
+   * Retrieves the list of custom images available to the specified project.
+   * Custom images are images you create that belong to your project. This method
    * does not get any images that belong to other projects, including publicly-
    * available images, like Debian 8. If you want to get a list of publicly-
    * available images, use this method to make a request to the respective image

@@ -23,7 +23,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/fusiontables" target="_blank">Documentation</a>
+ * <a href="https://developers.google.php.com/fusiontables" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -416,6 +416,16 @@ class Google_Service_Fusiontables extends Google_Service
                 'replaceViewDefinition' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+              ),
+            ),'refetchSheet' => array(
+              'path' => 'tables/{tableId}/refetch',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'tableId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ),
               ),
             ),'replaceRows' => array(

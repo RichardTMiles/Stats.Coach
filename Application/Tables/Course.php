@@ -31,7 +31,7 @@ class Course extends Entities implements iEntity
 
     static function add(&$object, $id, $argv)
     {
-        $course_id = Database::beginTransaction( GOLF_COURSE );
+        $course_id = self::beginTransaction( GOLF_COURSE );
 
         $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, course_par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
                                 VALUES (:course_id, :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga, :site)";

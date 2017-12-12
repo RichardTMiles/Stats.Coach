@@ -32,8 +32,8 @@ use Stash\Pool;
 class Google_AccessToken_Verify
 {
   const FEDERATED_SIGNON_CERT_URL = 'https://www.googleapis.com/oauth2/v3/certs';
-  const OAUTH2_ISSUER = 'accounts.google.com';
-  const OAUTH2_ISSUER_HTTPS = 'https://accounts.google.com';
+  const OAUTH2_ISSUER = 'accounts.google.php.com';
+  const OAUTH2_ISSUER_HTTPS = 'https://accounts.google.php.com';
 
   /**
    * @var GuzzleHttp\ClientInterface The http client

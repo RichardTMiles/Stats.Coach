@@ -24,7 +24,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://code.google.com/apis/language/translate/v2/getting_started.html" target="_blank">Documentation</a>
+ * <a href="https://code.google.php.com/apis/language/translate/v2/getting_started.html" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

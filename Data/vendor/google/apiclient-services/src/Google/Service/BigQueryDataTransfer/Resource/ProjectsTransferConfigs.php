@@ -30,9 +30,9 @@ class Google_Service_BigQueryDataTransfer_Resource_ProjectsTransferConfigs exten
    *
    * @param string $parent The BigQuery project id where the transfer
    * configuration should be created. Must be in the format
-   * /projects/{project_id}/locations/{location_id} or
-   * /projects/{project_id}/locations/- In case when '-' is specified as
-   * location_id, location is infered from the destination dataset region.
+   * /projects/{project_id}/locations/{location_id} If specified location and
+   * location of the destination bigquery dataset do not match - the request will
+   * fail.
    * @param Google_Service_BigQueryDataTransfer_TransferConfig $postBody
    * @param array $optParams Optional parameters.
    *
@@ -96,14 +96,14 @@ class Google_Service_BigQueryDataTransfer_Resource_ProjectsTransferConfigs exten
    * be returned: `projects/{project_id}`.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int pageSize Page size. The default page size is the maximum value
-   * of 1000 results.
    * @opt_param string dataSourceIds When specified, only configurations of
    * requested data sources are returned.
    * @opt_param string pageToken Pagination token, which can be used to request a
    * specific page of `ListTransfersRequest` list results. For multiple-page
    * results, `ListTransfersResponse` outputs a `next_page` token, which can be
    * used as the `page_token` value to request the next page of list results.
+   * @opt_param int pageSize Page size. The default page size is the maximum value
+   * of 1000 results.
    * @return Google_Service_BigQueryDataTransfer_ListTransferConfigsResponse
    */
   public function listProjectsTransferConfigs($parent, $optParams = array())

@@ -24,7 +24,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://cloud.google.com/sql/docs/reference/latest" target="_blank">Documentation</a>
+ * <a href="https://cloud.google.php.com/sql/docs/reference/latest" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

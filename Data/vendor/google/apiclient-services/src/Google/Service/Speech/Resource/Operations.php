@@ -29,11 +29,11 @@ class Google_Service_Speech_Resource_Operations extends Google_Service_Resource
    * Starts asynchronous cancellation on a long-running operation.  The server
    * makes a best effort to cancel the operation, but success is not guaranteed.
    * If the server doesn't support this method, it returns
-   * `google.rpc.Code.UNIMPLEMENTED`.  Clients can use Operations.GetOperation or
+   * `google.php.rpc.Code.UNIMPLEMENTED`.  Clients can use Operations.GetOperation or
    * other methods to check whether the cancellation succeeded or whether the
    * operation completed despite cancellation. On successful cancellation, the
    * operation is not deleted; instead, it becomes an operation with an
-   * Operation.error value with a google.rpc.Status.code of 1, corresponding to
+   * Operation.error value with a google.php.rpc.Status.code of 1, corresponding to
    * `Code.CANCELLED`. (operations.cancel)
    *
    * @param string $name The name of the operation resource to be cancelled.
@@ -51,7 +51,7 @@ class Google_Service_Speech_Resource_Operations extends Google_Service_Resource
    * Deletes a long-running operation. This method indicates that the client is no
    * longer interested in the operation result. It does not cancel the operation.
    * If the server doesn't support this method, it returns
-   * `google.rpc.Code.UNIMPLEMENTED`. (operations.delete)
+   * `google.php.rpc.Code.UNIMPLEMENTED`. (operations.delete)
    *
    * @param string $name The name of the operation resource to be deleted.
    * @param array $optParams Optional parameters.
@@ -92,10 +92,10 @@ class Google_Service_Speech_Resource_Operations extends Google_Service_Resource
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string filter The standard list filter.
-   * @opt_param string pageToken The standard list page token.
-   * @opt_param string name The name of the operation's parent resource.
    * @opt_param int pageSize The standard list page size.
+   * @opt_param string filter The standard list filter.
+   * @opt_param string name The name of the operation's parent resource.
+   * @opt_param string pageToken The standard list page token.
    * @return Google_Service_Speech_ListOperationsResponse
    */
   public function listOperations($optParams = array())

@@ -20,6 +20,7 @@ class Google_Service_YouTube_LiveBroadcastContentDetails extends Google_Model
   public $boundStreamId;
   public $boundStreamLastUpdateTimeMs;
   public $closedCaptionsType;
+  public $enableAutoStart;
   public $enableClosedCaptions;
   public $enableContentEncryption;
   public $enableDvr;
@@ -56,6 +57,14 @@ class Google_Service_YouTube_LiveBroadcastContentDetails extends Google_Model
   public function getClosedCaptionsType()
   {
     return $this->closedCaptionsType;
+  }
+  public function setEnableAutoStart($enableAutoStart)
+  {
+    $this->enableAutoStart = $enableAutoStart;
+  }
+  public function getEnableAutoStart()
+  {
+    return $this->enableAutoStart;
   }
   public function setEnableClosedCaptions($enableClosedCaptions)
   {

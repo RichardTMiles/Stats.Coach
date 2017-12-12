@@ -32,7 +32,7 @@ class Google_Service_Genomics_Resource_ReadgroupsetsCoveragebuckets extends Goog
    *
    * For the definitions of read group sets and other genomics resources, see
    * [Fundamentals of Google Genomics](https://cloud.google.com/genomics
-   * /fundamentals-of-google-genomics)
+   * /fundamentals-of-google.php-genomics)
    *
    * Coverage is defined as the number of reads which are aligned to a given base
    * in the reference sequence. Coverage buckets are available at several

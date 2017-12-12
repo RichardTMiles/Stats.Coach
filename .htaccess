@@ -41,7 +41,7 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 #prevent hotlinking
 RewriteEngine on
 RewriteCond %{HTTP_REFERER} !^$
-RewriteCond %{HTTP_REFERER} !^http://Stats.Coach/.*$ [NC]
+RewriteCond %{HTTP_REFERER} !^https://Stats.Coach/.*$ [NC]
 RewriteRule \.(gif|jpg)$ - [F]
 
 # protect against DOS attacks by limiting file upload size [bytes]
@@ -90,7 +90,6 @@ RewriteRule ^(.*)$ /index.php [NC,L,QSA]
 # God forbit an uncaught error - Display contact method
 #ServerSignature EMail
 #SetEnv SERVER_ADMIN RicardMiles@stats.coach
-
 # 1 YEAR - 29030400; 1 WEEK - 604800; 2 DAYS - 172800; 1 MIN  - 60
 
 <FilesMatch "\.(ico|pdf|flv)$">
@@ -101,13 +100,13 @@ Header set Cache-Control "max-age=29030400, public"
 Header set Cache-Control "max-age=604800, public"
 </FilesMatch>
 
-<FilesMatch "\.(xml|txt|css|js|hbs)$">
+<FilesMatch "\.(xml|txt|css|js)$">
 Header set Cache-Control "max-age=604800, proxy-revalidate"
 </FilesMatch>
 
 # TODO - Eventually we should cache mustache files
 # normally 60
-<FilesMatch "\.(html|htm|php)$">
+<FilesMatch "\.(html|htm|php|hbs)$">
 Header set Cache-Control "max-age=0, private, proxy-revalidate"
 </FilesMatch>
 

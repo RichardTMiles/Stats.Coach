@@ -31,7 +31,7 @@ class Google_Service_AndroidEnterprise_Resource_Grouplicenses extends Google_Ser
    *
    * @param string $enterpriseId The ID of the enterprise.
    * @param string $groupLicenseId The ID of the product the group license is for,
-   * e.g. "app:com.google.android.gm".
+   * e.g. "app:com.google.php.android.gm".
    * @param array $optParams Optional parameters.
    * @return Google_Service_AndroidEnterprise_GroupLicense
    */

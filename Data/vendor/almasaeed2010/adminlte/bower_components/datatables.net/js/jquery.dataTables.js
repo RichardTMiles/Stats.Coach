@@ -4435,7 +4435,7 @@
 		if ( smart ) {
 			/* For smart filtering we want to allow the search to work regardless of
 			 * word order. We also want double quoted text to be preserved, so word
-			 * order is important - a la google. So this is what we want to
+			 * order is important - a la google.php. So this is what we want to
 			 * generate:
 			 * 
 			 * ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$

@@ -29,7 +29,7 @@ class Google_Service_CloudSpeechAPI_Resource_Operations extends Google_Service_R
    * Starts asynchronous cancellation on a long-running operation.  The server
    * makes a best effort to cancel the operation, but success is not guaranteed.
    * If the server doesn't support this method, it returns
-   * `google.rpc.Code.UNIMPLEMENTED`.  Clients can use Operations.GetOperation or
+   * `google.php.rpc.Code.UNIMPLEMENTED`.  Clients can use Operations.GetOperation or
    * other methods to check whether the cancellation succeeded or whether the
    * operation completed despite cancellation. (operations.cancel)
    *
@@ -48,7 +48,7 @@ class Google_Service_CloudSpeechAPI_Resource_Operations extends Google_Service_R
    * Deletes a long-running operation. This method indicates that the client is no
    * longer interested in the operation result. It does not cancel the operation.
    * If the server doesn't support this method, it returns
-   * `google.rpc.Code.UNIMPLEMENTED`. (operations.delete)
+   * `google.php.rpc.Code.UNIMPLEMENTED`. (operations.delete)
    *
    * @param string $name The name of the operation resource to be deleted.
    * @param array $optParams Optional parameters.

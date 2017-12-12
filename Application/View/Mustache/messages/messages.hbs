@@ -1,76 +1,79 @@
 <!-- DIRECT CHAT SUCCESS -->
-    <div class="box-header with-border">
-        <h3 class="box-title">Direct Chat</h3>
+<div class="box-header with-border">
+    <h3 class="box-title">Direct Chat</h3>
 
-        <div class="box-tools pull-right">
-            {{#NewMessages}}
-            <span data-toggle="tooltip" title="" class="badge bg-green refresh-btn" data-original-title="New Messages">{{NewMessages}}</span>
-            {{/NewMessages}}
+    <div class="box-tools pull-right">
+        {{#NewMessages}}
+            <span data-toggle="tooltip" title="" class="badge bg-green refresh-btn"
+                  data-original-title="New Messages">{{NewMessages}}</span>
+        {{/NewMessages}}
 
-            <button type="button" class="btn btn-box-tool">
-                <i id="refresh" class="fa fa-refresh"></i>
-            </button>
+        <button type="button" class="btn btn-box-tool">
+            <i id="refresh" class="fa fa-refresh"></i>
+        </button>
 
-            <!--button type="button" class="btn btn-box-tool collapse" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-            </button-->
-            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
-                    data-original-title="Contacts">
-                <i class="fa fa-comments"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
+        <!--button type="button" class="btn btn-box-tool collapse" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+        </button-->
+        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle"
+                data-original-title="Contacts">
+            <i class="fa fa-comments"></i></button>
+        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
     </div>
+</div>
 
-    <!-- /.box-header -->
-    <div class="box-body">
-        <!-- Conversations are loaded here -->
-        <div id="messages" class="direct-chat-messages">
-            {{^Messages}}
+<!-- /.box-header -->
+<div class="box-body">
+    <!-- Conversations are loaded here -->
+    <div id="messages" class="direct-chat-messages">
+        {{^Messages}}
             <p>Start a conversation!</p>
-            {{/Messages}}
-            {{#Messages}}
+        {{/Messages}}
+        {{#Messages}}
             {{^me}}
-            <!-- Message. Default to the left -->
-            <div class="direct-chat-msg">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">{{first_name}}</span>
-                    <span class="direct-chat-timestamp pull-right">{{creation_date}}</span>
+                <!-- Message. Default to the left -->
+                <div class="direct-chat-msg">
+                    <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-left">{{first_name}}</span>
+                        <span class="direct-chat-timestamp pull-right">{{creation_date}}</span>
+                    </div>
+                    <!-- /.direct-chat-info -->
+                    <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                        {{message}}
+                    </div>
+                    <!-- /.direct-chat-text -->
                 </div>
-                <!-- /.direct-chat-info -->
-                <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                    {{message}}
-                </div>
-                <!-- /.direct-chat-text -->
-            </div>
-            <!-- /.direct-chat-msg -->
+                <!-- /.direct-chat-msg -->
             {{/me}}
             {{#me}}
-            <!-- Message to the right -->
-            <div class="direct-chat-msg right">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-right">{{first_name}}</span>
-                    <span class="direct-chat-timestamp pull-left">{{creation_date}}</span>
+                <!-- Message to the right -->
+                <div class="direct-chat-msg right">
+                    <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-right">{{first_name}}</span>
+                        <span class="direct-chat-timestamp pull-left">{{creation_date}}</span>
+                    </div>
+                    <!-- /.direct-chat-info -->
+                    <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                        {{message}}
+                    </div>
+                    <!-- /.direct-chat-text -->
                 </div>
-                <!-- /.direct-chat-info -->
-                <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                    {{message}}
-                </div>
-                <!-- /.direct-chat-text -->
-            </div>
             {{/me}}
-            {{/Messages}}
+        {{/Messages}}
 
-            <!-- /.direct-chat-msg -->
-        </div>
-        <!--/.direct-chat-messages-->
+        <!-- /.direct-chat-msg -->
+    </div>
+    <!--/.direct-chat-messages-->
 
-        <!-- Contacts are loaded here -->
-        <div class="direct-chat-contacts">
-            <ul class="contacts-list">
-                <li>
-                    {{#user}}
+    <!-- Contacts are loaded here -->
+    <div class="direct-chat-contacts">
+        <ul class="contacts-list">
+            <li>
+                {{#user}}
                     <a href="{{user_profile_uri}}">
                         <img class="contacts-list-img" src="{{user_profile_picture}}" alt="User Image">
                         <div class="contacts-list-info">
@@ -78,28 +81,30 @@
                                 {{user full name}}
                                 <small class="contacts-list-date pull-right">{{lastMessageDate}}</small>
                             </span>
-                            <span class="contacts-list-msg">{{#lastMessage}}{{#You}}You: {{/You}}{{lastMessage}}{{/lastMessage}}</span>
+                            <span class="contacts-list-msg">{{#lastMessage}}{{#You}}
+                                You: {{/You}}{{lastMessage}}{{/lastMessage}}</span>
                         </div>
                         <!-- /.contacts-list-info -->
                     </a>
-                    {{/user}}
-                </li>
-                <!-- End Contact Item -->
-            </ul>
-            <!-- /.contatcts-list -->
-        </div>
-        <!-- /.direct-chat-pane -->
+                {{/user}}
+            </li>
+            <!-- End Contact Item -->
+        </ul>
+        <!-- /.contatcts-list -->
     </div>
-    <!-- /.box-body -->
-    <div class="box-footer">
-        <form id="data-hierarchical" name="hierarchical" method="post">
-            <div class="input-group">
-                <input name="message" placeholder="Type Message ..." class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success btn-flat">Send</button>
-                                </span>
-            </div>
-        </form>
-    </div>
+    <!-- /.direct-chat-pane -->
+</div>
+<!-- /.box-body -->
 
-    <!-- /.box-footer-->
+<div class="box-footer">
+    <form data-hbs method="post" action="https://Stats.Coach/Messages/{{to_User}}/">
+        <div class="input-group">
+            <input name="message" placeholder="Type Message ..." class="form-control">
+            <span class="input-group-btn">
+                <button class="btn btn-success btn-flat" type="submit">Send</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+<!-- /.box-footer-->

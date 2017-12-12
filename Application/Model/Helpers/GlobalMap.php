@@ -9,6 +9,7 @@
 namespace Model\Helpers;
 
 use Carbon\Entities;
+use Carbon\Helpers\Pipe;
 
 abstract class GlobalMap extends Entities
 {
@@ -25,6 +26,10 @@ abstract class GlobalMap extends Entities
         $this->team = &$team;
         $this->course = &$course;
         $this->tournament = &$tournament;
+    }
+
+    public static function sendUpdate(string $id, string $uri){
+        Pipe::send( $uri, SERVER_ROOT . 'Data/Temp/' . $id . '.fifo' );
     }
 
 }

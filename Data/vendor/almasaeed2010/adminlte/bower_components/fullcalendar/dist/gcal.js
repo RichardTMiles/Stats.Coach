@@ -248,7 +248,7 @@ function parseGoogleCalendarId(url) {
 	var match;
 
 	// detect if the ID was specified as a single string.
-	// will match calendars like "asdf1234@calendar.google.com" in addition to person email calendars.
+	// will match calendars like "asdf1234@calendar.google.php.com" in addition to person email calendars.
 	if (/^[^\/]+@([^\/\.]+\.)*(google|googlemail|gmail)\.com$/.test(url)) {
 		return url;
 	}
