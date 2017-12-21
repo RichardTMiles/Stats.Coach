@@ -34,20 +34,20 @@
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->
-        <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
+
+        <div class="box box-custom" id='CourseInfo'>
 
             <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">New Course</h3>
+                <h3 class="box-title" style="font-size: 200%">New Course</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="box-body" style="color: ghostwhite">
-
+            <div class="box-body">
                 <!-- text input -->
-                <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 ">
+                <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
                     <div class="form-group col-xs-12 col-md-12" id="c_name">
                         <label for="c_name">Course</label>
@@ -101,6 +101,7 @@
                     </div>
 
                     <!-- Street City Address input -->
+
                     <div class="form-group col-xs-12 col-md-12" id="c_street">
                         <label class="control-label" for="Street">Street</label>
                         <input value="<?= (isset($this->street) ? $this->street : "") ?>" name="c_street" type="text" class="form-control" id="inputSuccess"
@@ -165,7 +166,7 @@
                 </div>
             </div>
 
-            <div class="box-footer" style="background-color: #2c3b41; color: ghostwhite !important;">
+            <div class="box-footer">
                 <button type="reset" class="btn btn-default">Reset</button>
                 <!-- button -->
                 <button class="btn btn-info pull-right" type="button" onclick="validateGeneral()">Next >></button>

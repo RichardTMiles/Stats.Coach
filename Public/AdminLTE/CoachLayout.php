@@ -34,7 +34,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $my['user_profile_picture'] ?>" class="img-circle" alt="User Image">
+                <img src="<?= $my['user_profile_pic'] ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p><?= $my['user_first_last'] ?></p>
@@ -140,7 +140,7 @@
             <li>
                 <a href="<?=SITE?>Messages/">
                     <i class="fa fa-envelope"></i> <span>Messages</span>
-                    <small class="label pull-right bg-yellow">1</small>
+                    <!--small class="label pull-right bg-yellow">1</small-->
                 </a>
             </li>
 
@@ -178,9 +178,9 @@
             </li>
 
 
-            <li class="treeview">w
+            <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-share"></i> <span>Sports <small>(coming soon)</small></span>
+                    <i class="fa fa-share"></i><span>Sports <small>(coming soon)</small></span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
@@ -192,7 +192,7 @@
                 </ul>
             </li>
 
-            <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+            <li><a href="#"><i class="fa fa-book"></i><span>Documentation</span></a></li>
 
             <li class="header">2016 Overall Leaderboard</li>
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Individual</span></a></li>

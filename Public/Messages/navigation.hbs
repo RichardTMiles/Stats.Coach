@@ -1,15 +1,13 @@
-<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
     <i class="fa fa-envelope-o"></i>
     {{#newMessages}}
-    <span class="label label-success">{{newMessages}}</span>
+    <span id="NewMessagesSpan" class="label label-success">{{newMessages}}</span>
     {{/newMessages}}
 </a>
 <ul class="dropdown-menu">
     <li class="header">You have {{newMessages}}{{^newMessages}}0{{/newMessages}} new messages</li>
-
-    <li>
-        <!-- inner menu: contains the actual data -->
-        <ul class="menu">
+    <!-- inner menu: contains the actual data -->
+    <li><ul class="menu">
             {{#users}}
             <li><!-- start message -->
                 <a href="{{user_uri}}">
@@ -24,7 +22,6 @@
                 </a>
             </li><!-- end message -->
             {{/users}}
-        </ul>
-    </li>
-    <li class="footer"><a href="#">See All Messages</a></li>
+        </ul></li>
+    <li class="footer"><a href="https://Stats.Coach/Messages/">See All Messages</a></li>
 </ul>

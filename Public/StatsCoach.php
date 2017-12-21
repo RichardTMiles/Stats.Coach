@@ -225,7 +225,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
     if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
     else window.addEventListener('load', loadDeferredStyles);
 
-    var JSLoaded = new Set();
+    let JSLoaded = new Set();
 
     //-- JQuery -->
     loadJS("<?= $this->versionControl(TEMPLATE . 'bower_components/jquery/dist/jquery.min.js') ?>", () => {
@@ -262,7 +262,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
             //-- Data tables -->
             $.fn.load_datatables = (table) =>
-                $.fn.CarbonJS("<?= $this->versionControl('bower_components/datatables.net-bs/js/dataTables.bootstrap.js') ?>", () =>
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE .'bower_components/datatables.net-bs/js/dataTables.bootstrap.js') ?>", () =>
                     $(table).DataTable());
 
 
@@ -354,15 +354,8 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             //-- PJAX-->
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
-                    loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () => {
-                        Carbon('#pjax-content', 'wss://stats.coach:8888/');
-                        // Messages in Navigation, faster to initially load over http
-                        $.fn.startApplication('<?= SITE . 'Messages/' ?>');
-                        $.fn.startApplication('<?= SITE . 'Notifications/' ?>');
-                        $.fn.startApplication('<?= SITE . 'Tasks/' ?>');
-                    })));
-
-
+                    loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () =>
+                        Carbon('#pjax-content', '<?=($_SESSION['id']??false)?'wss://stats.coach:8888/':null?>'))));
 
             //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl('dist/js/demo.js') ?>//");
 

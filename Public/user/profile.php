@@ -1,10 +1,12 @@
 <?php // This page is dynamic for any user
 
-$my = $my ?? $this->user[$_SESSION['id']];
-
 global $user_id;
 
-$profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user_id];
+$my = $my ?? $this->user[$_SESSION['id']];
+
+$myAccountBool = empty($user_id) || $user_id === $_SESSION['id'];
+
+$profile = (!$myAccountBool ? $this->user[$user_id] : $my);
 
 ?>
 
@@ -18,91 +20,68 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
         <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
         <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Profile</a></li>
     </ol>
-    <p>
-    </p>
+    <p></p>
 </section>
 <!-- Main content -->
 
 <section class="content">
     <div id="alert"></div>
-
     <div class="row">
         <div class="col-md-3">
             <!-- Profile Image -->
             <div class="box box-primary" data-widget="">
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle"
-                         src="<?= $profile['user_profile_picture'] ?>" alt="User profile picture">
+                         src="<?= $profile['user_profile_pic'] ?>" alt="User profile picture">
                     <h3 class="profile-username text-center">
                         <?= $profile['user_first_last'] ?>
                     </h3>
-                    <p class="text-muted text-center">Software Engineer</p>
+                    <p class="text-muted text-center">Golfer</p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right"><?= $profile['stats']['followers'] ?></a>
+                            <b>Followers</b>
+                            <a class="pull-right"><?= count($profile['followers']) ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right"><?= $profile['stats']['following'] ?></a>
+                            <b>Following</b>
+                            <a class="pull-right"><?= count($profile['following']) ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Rounds</b> <a class="pull-right"><?= $profile['stats']['stats_rounds'] ?></a>
+                            <b>Rounds</b><a class="pull-right"><?= $profile['stats']['stats_rounds'] ?></a>
                         </li>
                     </ul>
-                    <?php if (!$me) {
-                        print '<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>';
-                    } else { ?>
-                        <a href="" class="btn btn-success btn-block">
-                            Messages
-                        </a>
+                    <?php if (!$myAccountBool) {
+                        $following = in_array($user_id, $my['following']); ?>
+                        <a style="display: <?= ($following) ? 'none' : 'block' ?>"
+                           onclick="follow()"
+                           class="btn btn-primary btn-block" id="FollowUser"><b>Follow :)</b></a>
+                        <a style="display: <?= ($following) ? 'block' : 'none' ?>"
+                           onclick="unfollow()"
+                           class="btn btn-success btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
+                        <script>
+                            function follow () {
+                                $.fn.startApplication('<?= SITE ?>Follow/<?= $user_id ?>/');
+                                document.getElementById('FollowUser').style.display = 'none';
+                                document.getElementById('UnfollowUser').style.display = 'block';
+                            }
+                            function unfollow () {
+                                $.fn.startApplication('<?= SITE ?>Unfollow/<?= $user_id ?>/');
+                                document.getElementById('FollowUser').style.display = 'block';
+                                document.getElementById('UnfollowUser').style.display = 'none';
+                            }
+                        </script>
+                    <?php } else { ?>
+                        <a href="<?= SITE ?>Messages/" class="btn btn-success btn-block">Messages</a>
                     <?php } ?>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
-            <?php if (!$me): ?>
-                <!-- DIRECT CHAT SUCCESS -->
-                <div id="hierarchical" class="box box-success direct-chat direct-chat-success"></div>
-
-                <!--/.direct-chat -->
-                <script>
-                    function Messages() {
-                        $.get('<?= SITE . 'Messages/' . $profile['user_profile_uri'] ?>/', function (data) {
-                            MustacheWidgets(data, {
-                                widget: '#hierarchical',
-                                scroll: '#messages'
-                            })
-                        });
-
-                        $(document).on('submit', 'form#data-hierarchical', function (event) {
-                            $("#data-hierarchical").ajaxSubmit({
-                                url: '<?= SITE . 'Messages/' . $profile['user_profile_uri'] ?>/',
-                                type: 'post',
-                                dataType: 'json',
-                                success: function (data) {
-                                    console.log(data);
-                                    MustacheWidgets(data, {
-                                        widget: '#hierarchical',
-                                        scroll: '#messages'
-                                    });
-                                    return false;
-                                }
-                            });
-                            event.preventDefault();
-                        });
-                    }
-
-                    Messages();
-
-
-                </script>
-
-
-            <?php endif; ?>
+            <?php if (!$myAccountBool) print '<div class="box box-success direct-chat direct-chat-success"></div>'; ?><!-- DIRECT CHAT SUCCESS -->
 
         </div>
 
         <div class="col-md-9">
             <div class="row">
-
                 <!-- Display User Info -->
                 <div class="col-md-auto">
                     <div class="box box-solid">
@@ -131,7 +110,7 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
                     <!-- /.box -->
                 </div>
                 <!-- /.user info -->
-                <?php if ($me) { ?>
+                <?php if ($myAccountBool) { ?>
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
                         <div class="box box-info" id="ProfileSettings">
@@ -324,13 +303,14 @@ $profile = ($me = ($my['user_id'] == $_SESSION['id'])) ? $my : $this->user[$user
         </div>
 
     </div><!-- /.row -->
-
 </section>
 
 <script>
     document.addEventListener("Carbon", (e) => {
         $.fn.load_datepicker('#datepicker');
-        // $.fn.load_timepicker('.timepicker');
+        <?php if (!$myAccountBool):?>
+        $.fn.startApplication('<?= SITE . 'Messages/' . $user_id ?>/');
+        <?php endif; ?>
     });
 </script>
 

@@ -52,7 +52,7 @@ foreach ($myTeam['members'] as $an => $id) {
                             </div>
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-username"><?= $myTeam['team_name'] ?></h3>
-                            <h5 class="widget-user-desc"><a style="color: #0c0c0c" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
+                            <h5 class="widget-user-desc"><a style="color: #ffffff" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
                             </h5>
                         </div>
                         <div class="box-footer no-padding">
@@ -100,12 +100,13 @@ foreach ($myTeam['members'] as $an => $id) {
         <div class="col-md-8">
             <!-- User team member -->
             <?php foreach ($myTeam['members'] as $an => $id) {
-            $obj = $this->user[$id]; ?>
+            $obj = $this->user[$id];
 
+            ?>
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <a href="<?=SITE. 'Profile/'.$obj['user_profile_uri'] ?>/">
+                        <a href="<?=SITE. 'Profile/'. ($obj['user_profile_uri'] ?: $id) ?>/">
                             <?= $obj['user_first_name'] . ' ' . $obj['user_last_name'] ?>
                         </a>
                     </h3>

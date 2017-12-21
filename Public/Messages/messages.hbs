@@ -22,7 +22,7 @@
 
             <div class="box-tools pull-right">
                 {{#Users}}
-                <span class="label label-danger">New Members</span>
+                    <span class="label label-danger">New Members</span>
                 {{/Users}}
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
@@ -33,13 +33,15 @@
         <!-- /.box-header -->
         <div class="box-body no-padding">
             <ul class="users-list clearfix">
-                {{#Users}}
-                <li>
-                    <img src="{{picture}}" alt="User Image">
-                    <a class="users-list-name" href="#">{{Name}}</a>
-                    <span class="users-list-date">{{Date}}</span>
-                </li>
-                {{/Users}}
+                {{#users}}
+                    <li>
+                        <a class="users-list-name" onclick="$.fn.startApplication('https://stats.coach/Messages/{{user_id}}/')">
+                            <img src="{{user_profile_pic}}" alt="User Image" width="60em" height="60em"><br>
+                            {{user_full_name}}
+                            <span class="users-list-date">{{user_last_login}}</span>
+                        </a>
+                    </li>
+                {{/users}}
             </ul>
             <!-- /.users-list -->
         </div>
@@ -58,10 +60,10 @@
             <h3 class="box-title">Direct Chat</h3>
 
             <div class="box-tools pull-right">
-                <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">
+                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title=""
+                        data-widget="chat-pane-toggle" data-original-title="Contacts">
                     <i class="fa fa-comments"></i></button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>

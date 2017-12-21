@@ -53,13 +53,13 @@ if (!$state) { ?>
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1 style="color:#fff;">
+        <h1 style="color: ghostwhite">
             Post Score
-            <small style="color: ghostwhite;">Course Select</small>
+            <small style="color: ghostwhite">Course Select</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active" style="color: ghostwhite;">Post Score</li>
+            <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active" style="color: ghostwhite">Post Score</li>
         </ol>
     </section>
 
@@ -69,11 +69,10 @@ if (!$state) { ?>
     <!-- Main content -->
     <section class="content">
         <!-- SELECT COURSE -->
-        <div class="box box-custom"
-             style="background-color: #2c3b41; border-top-color: #2c3b41; color: ghostwhite !important;">
+        <div class="box box-custom">
 
             <div class="box-header">
-                <h3 class="box-title" style="color: ghostwhite;">Where Was Your Round?</h3>
+                <h3 class="box-title">Where Was Your Round?</h3>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 </div>

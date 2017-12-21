@@ -3,24 +3,19 @@
 use Carbon\Route;
 use Carbon\View;
 
-
 $route = new class extends Route
 {
     public function defaultRoute()
     {
-        if (!$_SESSION['id']):
-            MVC('user', 'login');
-        else:
-            MVC('golf', 'golf');
+        if (SOCKET) print "Fuck we shouldn't be here!\n" and die(1);
+
+        if (!$_SESSION['id']): MVC('user', 'login');
+        else: MVC('golf', 'golf');
         endif;
         exit(1);
     }
 };
 
-$json = function ($path, $options = []) {
-    Mustache($path, $options);
-    exit(1);
-};
 
 $route->structure($mvc = function (string $class, string $method, array &$argv = []) {
     MVC($class, $method, $argv) and exit(1);
@@ -47,38 +42,20 @@ else:   // logged in
 
     ################################### Dynamically load content with Mustache
     if (SOCKET || (AJAX && !PJAX)):
-        $route->structure($json);               // Event closure
 
-        $route->match('Search/{search}/', function ($search) {
-            $search = (new \Carbon\Request())->set($search)->alnum();
-            if (!$search) return [];
-            new \Model\Search($search);
-            Mustache('search/search', ['widget' => '#pjax-content']);
-        });
+        $route->match('Search/{search}/', 'Search', 'all');
 
-        $route->match('Messages/', 'messages/nav-messages', ['widget' => '#NavMessages']);
+        $route->match('Messages/', 'Messages', 'navigation');
 
-        $route->match('Messages/{user_uri?}/',
-            function ($user_uri = false) use ($json) {
-                global $user_id;
+        $route->match('Messages/{user_uri}/', 'Messages' , 'chat' );    // chat box widget
 
-                $user_id = \Tables\Users::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
+        $route->match('Follow/{user_id}/', 'User', 'follow');           // Event
 
-                if (!empty($_POST) && !empty(($string = (new \Carbon\Request)->post('message')->noHTML()->value())))
-                    Tables\Messages::add($this->user[$user_id], $user_id, $string);     // else were grabbing content (json, html, etc)
+        $route->match('Unfollow/{user_id}/', 'User', 'unfollow');         // Event
 
-                Tables\Messages::get($this->user[$user_id], $user_id);
+        // $route->match('Notifications/*', 'notifications/notifications', ['widget' => '#NavNotifications']);
 
-                if (SOCKET) {
-
-
-                    return $json('messages/messages', ['widget' => '#hierarchical', 'scroll' => '#messages']);
-                }
-            });
-
-        $route->match('Notifications/*', 'notifications/notifications', ['widget' => '#NavNotifications']);
-
-        $route->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
+        // $route->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
 
         if (SOCKET) return null;                // Sockets only get json
 
@@ -86,6 +63,7 @@ else:   // logged in
     endif;
 
     ################################### MVC
+
 
     $route->match('Home/*', 'Golf', 'golf');
 

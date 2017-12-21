@@ -12,8 +12,12 @@ $session_callback = function ($reset) {
 
         if (!is_array($user)) $user = [];
 
-        if (!is_array($user[$_SESSION['id']] ?? false))           // || $reset  /  but this shouldn't matter
-            Tables\Users::all($user[$_SESSION['id']], $_SESSION['id']);
+        if (!is_array($me = &$user[$_SESSION['id']] ?? false)) {          // || $reset  /  but this shouldn't matter
+            Tables\Users::all($me, $_SESSION['id']);
+            Tables\Users::sport($me,  $_SESSION['id']);
+            Tables\Followers::get($me,  $_SESSION['id']);
+            Tables\Messages::all($me,  $_SESSION['id']);
+        }
     }
 };
 
@@ -66,8 +70,7 @@ return [
         'HTTP' => (bool)true,
     ],
 
-
-    'SERIALIZE' => ['user', 'team', 'course', 'tournament'],
+    //'SERIALIZE' => [ 'user', 'team', 'course', 'tournament'],
 
     'SESSION' => [
         'REMOTE' => (bool)true,

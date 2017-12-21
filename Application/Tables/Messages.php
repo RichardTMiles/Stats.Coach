@@ -59,12 +59,8 @@ class Messages extends Entities implements iEntity
         $stmt->bindValue( ':user_id', $id );
         $stmt->bindValue( ':message', $argv );
         return $stmt->execute() ? self::commit( function () use ($id) {
-            // Update there browser
-            //GlobalMap::sendUpdate($id, 'Messages/' );
-            GlobalMap::sendUpdate($id, "Messages/{$_SESSION['id']}/" );
-            // Update My View
-            //GlobalMap::sendUpdate( $_SESSION['id'], 'Messages/' );
-            GlobalMap::sendUpdate( $_SESSION['id'],"Messages/$id/");
+            GlobalMap::sendUpdate( $_SESSION['id'], "Messages/\nMessages/$id/\n" );   // Update My View
+            GlobalMap::sendUpdate($id, "Messages/\nMessages/{$_SESSION['id']}/\n" );  // Update there browser
         } ) : self::verify( 'Failed to send your message.' );
     }
 

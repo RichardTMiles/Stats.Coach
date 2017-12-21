@@ -57,6 +57,14 @@ class User extends Request
 
     }
 
+    public function follow($user_id){
+        return $this->set($user_id)->alnum();
+    }
+
+    public function unfollow($user_id){
+        return $this->set($user_id)->alnum();
+    }
+
     public function messages(){
 
     }

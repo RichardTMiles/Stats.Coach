@@ -8,13 +8,10 @@
 
 namespace Psr\Cache;
 
-use Psr\Singleton;
 
 
 class Cache implements CacheItemInterface
 {
-    use Singleton;
-
     public function getKey()
     {
 

@@ -1,21 +1,29 @@
+<?php $m = new Mustache_Engine() ?>
+
 <ul class="nav navbar-nav">
     <!-- Messages: style can be found in dropdown.less-->
-    <li id="NavMessages" class="dropdown messages-menu"></li>
+    <li id="NavMessages" class="dropdown messages-menu">
+        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Messages/navigation.hbs'), (new \Model\Messages())->navigation()) ?>
+    </li>
     <!-- Notifications: style can be found in dropdown.less -->
-    <li id="NavNotifications" class="dropdown notifications-menu"></li>
+    <li id="NavNotifications" class="dropdown notifications-menu">
+        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Notifications/notifications.hbs'), []) ?>
+    </li>
     <!-- Tasks: style can be found in dropdown.less -->
-    <li id="NavTasks" class="dropdown tasks-menu"></li>
+    <li id="NavTasks" class="dropdown tasks-menu">
+        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Tasks/tasks.hbs'), []) ?>
+    </li>
     <!-- User Account: style can be found in dropdown.less -->
 
     <li class="dropdown user user-menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="<?= $my['user_profile_picture'] ?>" class="user-image" alt="User Image"/>
+            <img src="<?= $my['user_profile_pic'] ?>" class="user-image" alt="User Image"/>
             <span class="hidden-xs"><?= $my['user_first_last']  ?></span>
         </a>
         <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-                <img src="<?= $my['user_profile_picture'] ?>" class="img-circle" alt="User Image"/>
+                <img src="<?= $my['user_profile_pic'] ?>" class="img-circle" alt="User Image"/>
                 <p>
                     <?= $my['user_first_last']  ?> - <?= $my['user_sport'] ?>
                     <small>Member since <?= date( 'm/d/Y', $my['user_creation_date'] ) ?></small>
@@ -48,5 +56,4 @@
     <!--li>
         <a href="" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
     </li-->
-
 </ul>

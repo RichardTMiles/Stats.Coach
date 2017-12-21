@@ -8,10 +8,11 @@ use Model\Helpers\GlobalMap;
 
 class Search extends GlobalMap
 {
-    public function __construct($search)
+    public function all($search)
     {
         global $result, $json;
-        parent::__construct();
+
+        $json = ['widget' => '#pjax-content'];
 
         ######################### Team Search
         $sql = "SELECT team_id, team_code, team_school, team_coach, team_name FROM StatsCoach.teams WHERE team_name LIKE :search OR team_coach LIKE :search OR team_school LIKE :search OR team_code LIKE :search";
@@ -28,7 +29,7 @@ class Search extends GlobalMap
             $json['Teams'][] = [
                 'id' => $array['team_id'],
                 'TeamName' => $array['team_name'],
-                'TeamCoach' => $array['team_coach'],
+                'TeamCoach' => $this->user[$array['team_coach']]['user_first_last'],
                 'TeamSchool' => $array['team_school'],
                 'TeamCode' => $array['team_code'],
             ];

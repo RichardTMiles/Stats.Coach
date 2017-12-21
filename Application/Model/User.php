@@ -13,7 +13,6 @@ use Carbon\Error\PublicAlert;
 use Carbon\Helpers\Bcrypt;
 use Carbon\Request;
 
-
 class User extends GlobalMap
 {
     public function __construct(string $id = null)
@@ -111,8 +110,22 @@ class User extends GlobalMap
         else:
             $_SESSION['id'] = $C6_id;
         endif;
-        $_SESSION['facebook'] = $facebook = null;
+        $_SESSION['facebook'] = $facebook = null; 
         startApplication(true);
+    }
+
+    public function follow($user_id){
+        $null = null;
+        if (!$out = Users::user_exists($user_id))
+            throw new PublicAlert("That user does not exist $user_id >> $out");
+        return Followers::add($null, $_SESSION['id'], $user_id);
+    }
+
+    public function unfollow($user_id){
+        if (!Users::user_exists($user_id))
+            throw new PublicAlert("That user does not exist");
+        return Followers::remove($this->user[$_SESSION['id']], $user_id);
+
     }
 
     public function google($request){
