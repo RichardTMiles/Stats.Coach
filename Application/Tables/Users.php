@@ -25,7 +25,7 @@ class Users extends Entities implements iEntity
         $array = static::fetch('SELECT * FROM StatsCoach.user WHERE user_id = ?', $id);
         $array['user_profile_pic'] = SITE . (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $array['user_profile_uri'] =    $array['user_profile_uri'] ?: $id;
-        $array['user_cover_photo'] = SITE . ($array['user_cover_photo'] ?? 'Public/img/defaults/photo' . rand(1, 3) . '.png');
+        $array['user_cover_photo'] = SITE . ($array['user_cover_photo'] ?? PUBLIC_FOLDER . 'img/defaults/photo' . rand(1, 3) . '.png');
         $array['user_first_last'] = $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
         $array['user_id'] = $id;
         Users::sport($array, $id);
@@ -69,7 +69,6 @@ class Users extends Entities implements iEntity
             throw new PublicAlert ('Your account could not be created.', 'danger');;
 
         if (self::commit()) $_SESSION['id'] = $key;
-
 
         $subject = 'Your ' . SITE_TITLE . ' Password';
         $headers = 'From: ' . SYSTEM_EMAIL . "\r\n" .

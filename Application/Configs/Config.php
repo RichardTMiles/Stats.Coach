@@ -70,7 +70,7 @@ return [
         'HTTP' => (bool)true,
     ],
 
-    //'SERIALIZE' => [ 'user', 'team', 'course', 'tournament'],
+    'SERIALIZE' => [ 'user', 'team', 'course', 'tournament'],
 
     'SESSION' => [
         'REMOTE' => (bool)true,
@@ -91,8 +91,6 @@ return [
         ]
     ],
 
-
-
     'ERROR' => [
         'LEVEL' => (int)E_ALL,
 
@@ -106,9 +104,9 @@ return [
     ],
 
     'VIEW' => [
-        'WRAPPER' => 'Public/StatsCoach.php',
+        'VIEW' => 'Application/View/',
 
-        'MUSTACHE' => 'Application/View/Mustache/',
+        'WRAPPER' => 'StatsCoach.php',
     ],
 
     'DATABASE' => [

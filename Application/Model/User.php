@@ -74,6 +74,8 @@ class User extends GlobalMap
 
         if (empty($facebook)) startApplication(true);
 
+        sortDump($facebook);
+
         $sql = "SELECT user_id, user_facebook_id FROM StatsCoach.user WHERE user_email = ? OR user_facebook_id =?";
         $sql = (self::fetch($sql, $facebook['email'], $facebook['id']));
 
@@ -115,16 +117,17 @@ class User extends GlobalMap
     }
 
     public function follow($user_id){
-        $null = null;
+        global $user;
         if (!$out = Users::user_exists($user_id))
             throw new PublicAlert("That user does not exist $user_id >> $out");
-        return Followers::add($null, $_SESSION['id'], $user_id);
+        return Followers::add($user[$_SESSION['id']], $_SESSION['id'], $user_id);
     }
 
     public function unfollow($user_id){
+        global $user;
         if (!Users::user_exists($user_id))
             throw new PublicAlert("That user does not exist");
-        return Followers::remove($this->user[$_SESSION['id']], $user_id);
+        return Followers::remove($user[$_SESSION['id']], $user_id);
 
     }
 

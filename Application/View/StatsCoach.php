@@ -111,6 +111,14 @@
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
+        // Document ready => jQuery => PJAX => CarbonPHP = loaded
+        function Carbon(cb) {
+            document.addEventListener("Carbon", function fn(event) {
+                document.removeEventListener("Carbon", fn);
+                cb(event);
+            });
+        }
     </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -138,8 +146,8 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
     if (($_SESSION['id'] ?? false) && is_array($this->user[$_SESSION['id']] ?? false)):
         $my = $this->user[$_SESSION['id']];
-        ($userType == 'Coach' ?  require_once SERVER_ROOT . 'Public/AdminLTE/CoachLayout.php' :
-            require_once SERVER_ROOT . 'Public/AdminLTE/AthleteLayout.php'); ?>
+        ($userType == 'Coach' ?  require_once PUBLIC_FOLDER . 'AdminLTE/CoachLayout.php' :
+            require_once PUBLIC_FOLDER . 'AdminLTE/AthleteLayout.php'); ?>
 
         <div class="content-wrapper" style="background: transparent">
             <div class="container">
@@ -235,7 +243,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
         //-- Background Stretch -->
         loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-backstretch/jquery.backstretch.min.js') ?>", () => {
-            $.backstretch('<?=SITE?>Public/img/final.jpg');
+            $.backstretch('<?=SITE?>Application/View/img/final.jpg');
         });
 
         //-- Slim Scroll -->
@@ -262,9 +270,8 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 
             //-- Data tables -->
             $.fn.load_datatables = (table) =>
-                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE .'bower_components/datatables.net-bs/js/dataTables.bootstrap.js') ?>", () =>
-                    $(table).DataTable());
-
+                $.fn.CarbonJS("<?= $this->versionControl(TEMPLATE .'bower_components/datatables.net-bs/js/dataTables.bootstrap.js') ?>", () => {
+                    try { return $(table).DataTable() } catch (err) { return false }});
 
             //-- iCheak -->
             $.fn.load_iCheck = (input) => {
@@ -355,7 +362,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () =>
-                        Carbon('#pjax-content', '<?=($_SESSION['id']??false)?'wss://stats.coach:8888/':null?>'))));
+                        CarbonJS('#pjax-content', '<?=($_SESSION['id']??false)?'wss://stats.coach:8888/':null?>', false))));
 
             //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl('dist/js/demo.js') ?>//");
 

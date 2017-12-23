@@ -34,6 +34,7 @@ class Team extends Request
 
     public function joinTeam()
     {
+
         if (empty($_POST)) return false;
 
         if (!$teamCode = $this->post( 'teamCode' )->alnum())

@@ -5,7 +5,6 @@ namespace Controller;
 use Carbon\Error\PublicAlert;
 use Carbon\Request;
 use Carbon\Session;
-use Carbon\View;
 
 class User extends Request
 {

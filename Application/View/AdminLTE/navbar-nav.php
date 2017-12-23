@@ -3,15 +3,15 @@
 <ul class="nav navbar-nav">
     <!-- Messages: style can be found in dropdown.less-->
     <li id="NavMessages" class="dropdown messages-menu">
-        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Messages/navigation.hbs'), (new \Model\Messages())->navigation()) ?>
+        <?=$m->render(file_get_contents(PUBLIC_FOLDER . 'Messages/navigation.hbs'), (new \Model\Messages())->navigation()) ?>
     </li>
     <!-- Notifications: style can be found in dropdown.less -->
     <li id="NavNotifications" class="dropdown notifications-menu">
-        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Notifications/notifications.hbs'), []) ?>
+        <?=$m->render(file_get_contents(PUBLIC_FOLDER . 'Notifications/notifications.hbs'), []) ?>
     </li>
     <!-- Tasks: style can be found in dropdown.less -->
     <li id="NavTasks" class="dropdown tasks-menu">
-        <?=$m->render(file_get_contents(SERVER_ROOT . 'Public/Tasks/tasks.hbs'), []) ?>
+        <?=$m->render(file_get_contents(PUBLIC_FOLDER . 'Tasks/tasks.hbs'), []) ?>
     </li>
     <!-- User Account: style can be found in dropdown.less -->
 
