@@ -222,8 +222,8 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
 <script>
     // Google
     let loadDeferredStyles = function() {
-        var addStylesNode = document.getElementById("deferred-styles");
-        var replacement = document.createElement("div");
+        let addStylesNode = document.getElementById("deferred-styles");
+        let replacement = document.createElement("div");
         replacement.innerHTML = addStylesNode.textContent;
         document.body.appendChild(replacement)
         addStylesNode.parentElement.removeChild(addStylesNode);
@@ -362,7 +362,7 @@ $layout = ($userType == 'Athlete') ? 'hold-transition skin-green layout-top-nav'
             loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/jquery-pjax/jquery.pjax.js') ?>", () =>
                 loadJS("<?= $this->versionControl(COMPOSER . 'bower-asset/mustache.js/mustache.js') ?>", () =>
                     loadJS("<?= $this->versionControl(COMPOSER . 'richardtmiles/carbonphp/Helpers/Carbon.js')?>", () =>
-                        CarbonJS('#pjax-content', '<?=($_SESSION['id']??false)?'wss://stats.coach:8888/':null?>', false))));
+                        CarbonJS('#pjax-content', '<?=($_SESSION['id']??false)?'wss://stats.coach:8888/':null?>', true))));
 
             //<!-- AdminLTE for demo purposes loadJS("<?= $this->versionControl('dist/js/demo.js') ?>//");
 

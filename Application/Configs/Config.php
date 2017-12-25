@@ -55,6 +55,8 @@ return [
 
         'ROOT' => SERVER_ROOT,
 
+        'CONFIG' => __FILE__,
+
         'TIMEZONE' => 'America/Phoenix',
 
         'TITLE' => 'Stats.Coach',

@@ -76,11 +76,6 @@ $profile = (!$myAccountBool ? $this->user[$user_id] : $my);
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <?php if (!$myAccountBool) print '<div class="box box-success direct-chat direct-chat-success"></div>'; ?><!-- DIRECT CHAT SUCCESS -->
-
-            <?php
-            dump($my);
-            ?>
-
         </div>
 
         <div class="col-md-9">

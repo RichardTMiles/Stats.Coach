@@ -19,7 +19,6 @@ $facebook_errors = function ($e) {
     \Carbon\Error\ErrorCatcher::generateErrorLog($e);
     \Carbon\Error\PublicAlert::danger('Facebook sent an invalid response.');
     startApplication(true);
-    exit(1);
 };
 
 
@@ -64,12 +63,12 @@ if (!$accessToken->isLongLived()) {
         $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
     } catch (Facebook\Exceptions\FacebookSDKException $e) {
         $facebook_errors($e);
-        exit;
     }
 }
 
-$_SESSION['fb_access_token'] = (string)$accessToken;
+$_SESSION['fb_access_token'] = (string) $accessToken;
 
+$response = [];
 try {
     // Returns a `Facebook\FacebookResponse` object
     $response = $fb->get('/me?fields=id,email,cover,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified', "$accessToken");
@@ -78,17 +77,13 @@ try {
 
 } catch (Facebook\Exceptions\FacebookSDKException $e) {
     $facebook_errors($e);
-
 }
 
 $user = $response->getGraphUser();
 
 $GLOBALS['facebook'] = $user->all();
 
+\Carbon\Request::changeURI(SITE. 'Facebook/');  // clear GET data.
 
+return true;
 // sortDump( $GLOBALS['facebook'] );
-
-
-// User is logged in with a long-lived access token.
-// You can redirect them to a members-only page.
-//header('Location: https://example.com/members.php');

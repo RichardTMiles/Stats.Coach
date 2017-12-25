@@ -41,8 +41,7 @@ class Followers extends Entities implements iEntity
             $sql = "INSERT INTO StatsCoach.user_followers (StatsCoach.user_followers.user_id, StatsCoach.user_followers.follows_user_id) VALUES (?, ?)";
             if (!(Database::database())->prepare($sql)->execute([$id, $argv]))
                 throw new PublicAlert('Failed to follow user');
-            return self::get($array, $id);
-            // print_r($array);
+            self::get($array, $id);
             return true;                //TODO - return bool
         } else throw new PublicAlert('You already follow this user');
     }
