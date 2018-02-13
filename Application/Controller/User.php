@@ -8,168 +8,278 @@ use Carbon\Session;
 
 class User extends Request
 {
-    static function logout()
+    public static function logout(): bool
     {
         Session::clear();
-        startApplication( true );
+        startApplication(true);
+        return false;
     }
 
+    /**
+     * @return array|bool
+     * @throws PublicAlert
+     */
     public function login()
     {
         global $UserName, $FullName, $UserImage;    // validate cookies
 
-        list($UserName, $FullName) = $this->cookie( 'UserName', 'FullName' )->alnum();
+        [$UserName, $FullName] = $this->cookie('UserName', 'FullName')->alnum();
 
-        $UserImage = $this->cookie( 'UserImage' )->value();
+        $UserImage = $this->cookie('UserImage')->value();
 
-        $UserImage = file_exists( SERVER_ROOT . $UserImage ) ? SITE . $UserImage : false;
+        $UserImage = file_exists(SERVER_ROOT . $UserImage) ? SITE . $UserImage : false;
 
-        $rememberMe = $this->post( 'RememberMe' )->int();
+        $rememberMe = $this->post('RememberMe')->int();
 
-        if (!$rememberMe)
-            $this->cookie( 'username', 'password', 'RememberMe' )->clearCookies();
+        if (!$rememberMe) {
+            $this->cookie('username', 'password', 'RememberMe')->clearCookies();
+        }
 
-        if (empty($_POST)) return false;  // If forum already submitted
+        if (empty($_POST)) {
+            return null;                    // returning null will show the view but not execute the model
+        }  // If forum already submitted
 
-        $username = $this->post( 'username' )->alnum();
+        $username = $this->post('username')->alnum();
 
-        $password = $this->post( 'password' )->value();
+        $password = $this->post('password')->value();
 
-        if (!$username || !$password)
-            throw new PublicAlert( 'Sorry, but we need your username and password.' );
+        if (!$username || !$password) {
+            throw new PublicAlert('Sorry, but we need your username and password.');
+        }
 
         return [$username, $password, $rememberMe];
     }
 
-    public function facebook($request = null)
+    /**
+     * @param null $request
+     * @return bool
+     * @throws PublicAlert
+     */
+    public function facebook($request = null): bool
     {
         global $facebook;
-        if ($request && array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook'])) {
-            $facebook = $_SESSION['facebook'];
-            $_SESSION['facebook'] = null;
-        } elseif ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') == false)
-            throw new PublicAlert( 'Sorry, we could not connect to Facebook. Please try again later.' );
+
+        if ($request === 'SignUp' || (array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook']))) {
+
+            $facebook = $_SESSION['facebook'] ?? $facebook;  // Pull this from the session
+
+            [$username, $first_name, $last_name, $gender]
+                = $this->post('username', 'firstname', 'lastname', 'gender')->alnum();
+
+            [$password, $verifyPass]
+                = $this->post('password', 'password2')->value();
+
+            $email = $this->post('email')->email();
+
+            $terms = $this->post('Terms')->int();
+
+            if (!$username) {
+                throw new PublicAlert('Please enter a username with only numbers & letters!');
+            }
+
+            if (!$gender) {
+                throw new PublicAlert('Sorry, please enter your gender.');
+            }
+
+            if (!$password || \strlen($password) < 6) {
+                throw new PublicAlert('Sorry, your password must be more than 6 characters!');
+            }
+
+            if ($password !== $verifyPass) {
+                throw new PublicAlert('The passwords entered must match!');
+            }
+
+            if (!$email) {
+                throw new PublicAlert('Please enter a valid email address!');
+            }
+
+            if (!$first_name) {
+                throw new PublicAlert('Please enter your first name!');
+            }
+
+            if (!$last_name) {
+                throw new PublicAlert('Please enter your last name!');
+            }
+
+            if (!$terms) {
+                throw new PublicAlert('You must agree to the terms and conditions.');
+            }
+
+            $facebook['first_name'] = $first_name;
+            $facebook['last_name'] = $last_name;
+            $facebook['gender'] = $gender;
+            $facebook['email'] = $email;
+            $facebook['username'] = $username;
+            $facebook['password'] = $password;
+            return (new Request())->set($request)->alnum() ?: true;
+
+        }
+        if ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') === false) {
+            throw new PublicAlert('Sorry, we could not connect to Facebook. Please try again later.');
+        }
+
         return (new Request())->set($request)->alnum() ?: true;
     }
 
-    public function google($request) {
-
-    }
-
-    public function follow($user_id){
-        return $this->set($user_id)->alnum();
-    }
-
-    public function unfollow($user_id){
-        return $this->set($user_id)->alnum();
-    }
-
-    public function messages(){
-
-    }
-
-    public function register()
+    /**
+     * @param $request
+     */
+    public function google($request)
     {
-        if (empty($_POST)) return false;
 
-        list($this->username, $this->firstName, $this->lastName, $this->gender, $this->userType, $this->teamCode)
-            = $this->post( 'username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode' )->alnum();
+    }
 
-        list($this->teamName, $this->schoolName)
-            = $this->post( 'teamName', 'schoolName' )->text();
+    public function follow($user_id)
+    {
+        return $this->set($user_id)->alnum();
+    }
 
-        list($this->password, $verifyPass)
-            = $this->post( 'password', 'password2' )->value();  // unsanitized
+    public function unfollow($user_id)
+    {
+        return $this->set($user_id)->alnum();
+    }
 
-        $this->email = $this->post( 'email' )->email();
+    public function messages()
+    {
 
-        $terms = $this->post( 'Terms' )->int();
+    }
 
-        if (!$this->username)
-            $this->alert['warning'] = 'Please enter a username with only numbers & letters!';
+    /**
+     * @return bool|null
+     * @throws PublicAlert
+     */
+    public function register(): ?bool
+    {
+        if (empty($_POST)) {
+            return null;
+        }
 
-        elseif (!$this->gender)
-            $this->alert['warning'] = 'Sorry, please enter your gender.';
+        global $username, $password, $firstName, $lastName, $gender, $userType, $teamCode, $teamName, $schoolName, $email;
 
-        elseif (!$this->userType || !($this->userType == 'Coach' || $this->userType == 'Athlete'))
-            $this->alert['warning'] = 'Sorry, please choose an account type. This can be changed later in the web application.';
+        [$username, $firstName, $lastName, $gender, $userType, $teamCode]
+            = $this->post('username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode')->alnum();
 
-        elseif ($this->userType == "Coach" && !$this->teamName)
-            $this->alert['warning'] = "Sorry, the team name you have entered appears invalid.";
+        [$teamName, $schoolName]
+            = $this->post('teamName', 'schoolName')->text();
 
-        elseif (!$this->password || ($len = strlen( $this->password )) < 6)
-            $this->alert['warning'] = 'Sorry, your password must be more than 6 characters!';
+        [$password, $verifyPass]
+            = $this->post('password', 'password2')->value();
 
-        elseif ($this->password != $verifyPass)
-            $this->alert['warning'] = 'The passwords entered must match!';
+        $email = $this->post('email')->email();
 
-        elseif (!$this->email)
-            $this->alert['warning'] = 'Please enter a valid email address!';
+        $terms = $this->post('Terms')->int();
 
-        elseif (!$this->firstName)
-            $this->alert['warning'] = 'Please enter your first name!';
+        if (!$username) {
+            throw new PublicAlert('Please enter a username with only numbers & letters!');
+        }
 
-        elseif (!$this->lastName)
-            $this->alert['warning'] = 'Please enter your last name!';
+        if (!$gender) {
+            throw new PublicAlert('Sorry, please enter your gender.');
+        }
 
-        elseif (!$terms)
-            $this->alert['warning'] = 'You must agree to the terms and conditions.';
-        else return true;
-        return false;
+        if (!$password || \strlen($password) < 6) {
+            throw new PublicAlert('Sorry, your password must be more than 6 characters!');
+        }
+
+        if ($password !== $verifyPass) {
+            throw new PublicAlert('The passwords entered must match!');
+        }
+
+        if (!$email) {
+            throw new PublicAlert('Please enter a valid email address!');
+        }
+
+        if (!$firstName) {
+            throw new PublicAlert('Please enter your first name!');
+        }
+
+        if (!$lastName) {
+            throw new PublicAlert('Please enter your last name!');
+        }
+        if (!$terms) {
+            throw new PublicAlert('You must agree to the terms and conditions.');
+        }
+        return true;
     }
 
     public function activate($email, $email_code = null)
     {
-        $email = $this->set( $email )->base64_decode()->email();
-        $email_code = $this->set( $email_code )->base64_decode()->value();
+        $email = $this->set($email)->base64_decode()->email();
+        $email_code = $this->set($email_code)->base64_decode()->value();
 
         if (!$email) {
-            PublicAlert::warning( 'Sorry the url submitted is invalid.' );
-            return startApplication( true ); // who knows what state we're in, best just restart.
+            PublicAlert::warning('Sorry the url submitted is invalid.');
+            return startApplication(true); // who knows what state we're in, best just restart.
         }
         return [$email, $email_code];
     }
 
-    public function recover($user_email = null, $user_generated_string = null)
+    /**
+     * @param null $user_email
+     * @param null $user_generated_string
+     * @return array|null
+     * @throws PublicAlert
+     */
+    public function recover($user_email = null, $user_generated_string = null): ?array
     {
         if (!empty($user_email) && !empty($user_generated_string)) {
 
-            list($user_email, $user_generated_string) = $this->set( $user_email, $user_generated_string )->base64_decode()->value();
+            [$user_email, $user_generated_string] = $this->set($user_email, $user_generated_string)->base64_decode()->value();
 
-            if (!$this->set( $user_email )->email()) throw new PublicAlert( 'The code provided appears to be invalid.' );
+            if (!$this->set($user_email)->email()) {
+                throw new PublicAlert('The code provided appears to be invalid.');
+            }
 
             return [$user_email, $user_generated_string];
         }
 
-        if (empty($_POST)) return false;
+        if (empty($_POST)) {
+            return null;
+        }
 
-        if (!$this->user_email = $this->post( 'user_email' )->email())
-            throw new PublicAlert( 'You have entered an invalid email address.' );
-        else return [$this->user_email, false];
+        global $user_email;
+
+        if (!$user_email = $this->post('user_email')->email()) {
+            throw new PublicAlert('You have entered an invalid email address.');
+        }
+
+        return [$user_email, false];
     }
 
+    /**
+     * @param  $user_id
+     * @return array|bool|mixed
+     * @throws PublicAlert
+     */
     public function profile($user_id = false)
     {
-        if ($user_id) return $this->set( $user_id )->alnum();
+        $user_id = $this->set($user_id)->alnum();
 
-        if (empty($_POST)) return false;                // dont go onto the model
+        if (false !== $user_id) {
+            return $user_id;
+        }
 
-        if (!$this->post( 'Terms' )->int())
-            throw new PublicAlert( 'Sorry, you must accept the terms and conditions.', 'warning' );
+        if (empty($_POST)) {
+            return null;        // don't go onto the model, but run the view
+        }
+
+        if (!$this->post('Terms')->int()) {
+            throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
+        }
 
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
 
-        list($first, $last, $gender) = $this->post( 'first_name', 'last_name', 'gender' )->word();
+        [$first, $last, $gender] = $this->post('first_name', 'last_name', 'gender')->word();
 
-        $dob = $this->post( 'datepicker' )->date();
+        $dob = $this->post('datepicker')->date();
 
-        $email = $this->post( 'email' )->email();
+        $email = $this->post('email')->email();
 
-        $password = $this->post( 'password' )->value();
+        $password = $this->post('password')->value();
 
-        $about_me = $this->post( 'about_me' )->text();
+        $about_me = $this->post('about_me')->text();
 
-        $profile_pic = $this->files( 'FileToUpload' )->storeFiles( 'Data/Uploads/Pictures/Profile/' );
+        $profile_pic = $this->files('FileToUpload')->storeFiles('Data/Uploads/Pictures/Profile/');
 
         return true;
     }

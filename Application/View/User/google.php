@@ -1,7 +1,6 @@
 <?php
 global $google;
 
-
 if ($google == "SignUp"){
     $alert = "It appears you do not already have an account with us.";
 } else {

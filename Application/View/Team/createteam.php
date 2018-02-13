@@ -8,7 +8,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
-    <h1>Team</h1>
+    <h1>Create a Team</h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Create your team</a></li>
     </ol>

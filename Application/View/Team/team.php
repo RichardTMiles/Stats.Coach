@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * Created by IntelliJ IDEA.
  * User: Miles
@@ -21,7 +23,7 @@ foreach ($myTeam['members'] as $an => $id) {
     $putts = $an['stats_putts'];
 }
 
-
+$imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
 
 ?>
 <!-- Content Header (Page header) -->
@@ -52,8 +54,12 @@ foreach ($myTeam['members'] as $an => $id) {
                             </div>
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-username"><?= $myTeam['team_name'] ?></h3>
-                            <h5 class="widget-user-desc"><a style="color: #ffffff" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a>
-                            </h5>
+                            <h5 class="widget-user-desc">
+                                <i class="fa fa-fw fa-coffee"></i>
+                                <a style="color: #ffffff" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a></h5>
+                            <?php if($imTheCoach): ?>
+                            <h6 class="widget-user-desc" onclick="Carbon($.fn.startApplication('Team/'))"><i class="fa fa-fw fa-cog"></i>Team Settings</h6>
+                            <?php endif; ?>
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
@@ -72,7 +78,7 @@ foreach ($myTeam['members'] as $an => $id) {
                     <!-- /.widget-team -->
                 </div>
 
-                <?php if ($myTeam['team_coach'] == $_SESSION['id']) { ?>
+                <?php if ($imTheCoach) { ?>
 
                     <div class="col-md-12">
                         <div class="box box-widget">
@@ -83,7 +89,7 @@ foreach ($myTeam['members'] as $an => $id) {
                                     <div class="input-group input-group-sm">
                                         <input class="form-control" type="file" id="InputFile" name="FileToUpload">
                                         <span class="input-group-btn">
-                                <button type="submit" class="btn btn-info btn-flat">upload</button>
+                                <button type="submit" class="btn btn-info btn-flat">Upload team photo</button>
                             </span>
                                     </div>
                                 </form>

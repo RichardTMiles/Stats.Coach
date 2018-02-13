@@ -7,14 +7,16 @@ let Form = document.forms["addCourse"],
     tee_box_colors = [];
 
 
+// TODO - add event listeners to see if general form is altered
+
 function hasDuplicates(array) {
     return (new Set(array)).size !== array.length;
 }
 
 function HideMeShow(hide, show) {
-    if (hide !== '') $('#' + hide).boxWidget('collapse');
-    if (show !== '') document.getElementById(show).style.display = "block";
-    if (show !== '') $('#' + show).boxWidget('expand');
+    if ($.fn.isset(hide)) $('#' + hide).boxWidget('collapse');
+    if ($.fn.isset(show)) document.getElementById(show).style.display = "block";
+    if ($.fn.isset(show)) $('#' + show).boxWidget('expand');
 }
 
 /* validate course data <int> */
@@ -50,6 +52,7 @@ function new_tee_box_color_input() {
     let container = document.getElementById('teebox-color-selection'),
         node = document.createElement("DIV"), current_hole = 1;
     container.innerHTML = null;
+
     do {
         let html =
             "<!-- Add Tee Box Selection --><div id='tee-box-color-" + current_hole + "' style='display:" + (current_hole === 1 ? 'block' : 'none') + ";'><div class='box box-success' id='Tee-Box-Color-Section' style='background-color: #2c3b41; color: ghostwhite !important;'><div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title' style='font-size: 200%; color: #ffffff;'>Tee Box Color Selection</h3> \<\
@@ -97,24 +100,24 @@ function validate_tee_box_colors(current) {
 }
 
 function validateDistance(current_hole) {
-    var Form = document.forms["addCourse"], input;
+    let Form = document.forms["addCourse"], input;
 
     input = "par_" + current_hole;
     input = Form[input].value;
     if (input < 1 || input > 12)
         return alert("Sorry, your par should be between 1 and 12 inclusively.");
 
-    for (var i = 0; i < tee_boxes; i++) {
+    for (let i = 0; i < tee_boxes; i++) {
         input = "tee_" + (i + 1) + "_" + current_hole;
         input = Form[input].value;
         if (input < 1 || input > 3000)
             return alert("Sorry, your input for tee box " + (i + 1) + " should be between 1 and 3,000 inclusively.");
     }
-    for (i = 0; i < Handicap_number; i++) {
+    for (let i = 0; i < Handicap_number; i++) {
         input = "hc_" + (i + 1) + "_" + current_hole;
         course_hc[current_hole - 1] = input = Form[input].value;
         if (input < 1 || input > 18)
-            return alert("The handicap value(s) must be a valid integer between 1 and 18 inclusively.")
+            return alert("The handicap value(s) must be a valid integer between 1 and 18 inclusively.");
         if (hasDuplicates(course_hc))
             return alert("You have entered the same Handicap twice.")
     }
@@ -122,7 +125,7 @@ function validateDistance(current_hole) {
 }
 
 function distance_box_generate() {
-    var container = document.getElementById('Tee_box_distances'),
+    let container = document.getElementById('Tee_box_distances'),
         node = document.createElement("DIV"),
         current_hole = 1, box_color_input;
     container.innerHTML = null;
@@ -130,7 +133,7 @@ function distance_box_generate() {
         box_color_input = document.createElement("DIV");
 
         // Tee box 1 , 2?
-        for (i = 0; i < (tee_boxes < 2 ? tee_boxes : 2); i++)
+        for (let i = 0; i < tee_boxes; i++)
             box_color_input.innerHTML +=
                 '<div class="col-xs-12 col-sm-6 col-md-3 text-center"><div style="display:inline;width:180px;height:180px;">' +
                 '<input name="tee_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="1000" data-width="180" data-height="180" data-fgcolor="' + tee_box_colors[i] + '" ' +
@@ -140,16 +143,6 @@ function distance_box_generate() {
 
         //'<input class="form-control input-lg" name="tee_' + (i + 1) + '_' + current_hole + '" min="1" max="3000" type="number" placeholder="' + tee_box_colors[i] + '\'s Hole #' + current_hole + ' Distance" style="text-align: center; border-color: ' + tee_box_colors[i] + '; display: inherit"><br>';
 
-        // handicap 1 ?
-        for (var i = 0; i < (Handicap_number < 1 ? Handicap_number : 1 ); i++)
-            box_color_input.innerHTML +=
-                '<div class="col-xs-12 col-sm-6 col-md-3 text-center centered"><div style="display:inline;width:180px;height:180px;">' +
-                '<input name="hc_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="18" data-width="180" data-height="180" data-fgcolor="teal" ' +
-                'style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;"> ' +
-                '</div><div class="knob-label" style="color: white;">Handicap</div></div>';
-
-
-        //'<input class="form-control input-lg" name="hc_' + (i + 1) + '_' + current_hole + '" min="1" max="18" type="number" placeholder="Handicap ' + (i + 1) + '" style="text-align: center; display: inherit"><br>';
 
         // PAR
         box_color_input.innerHTML +=
@@ -159,24 +152,13 @@ function distance_box_generate() {
             '</div><div class="knob-label" style="color: white;">Par ' + current_hole + '</div></div>';
 
 
-        //'<input class="form-control input-lg" name="par_' + current_hole + '" min="1" max="12" type="number" placeholder="Hole #' + current_hole + ' Par" style="text-align: center; display: inherit"><br>';
-
-        // Tee box 3 - 4 - 5 ?
-        for (i = 2; i < tee_boxes; i++)
+        // handicap 1 ?
+        for (let i = 0; i < Handicap_number; i++)
             box_color_input.innerHTML +=
                 '<div class="col-xs-12 col-sm-6 col-md-3 text-center centered"><div style="display:inline;width:180px;height:180px;">' +
-                '<input name="tee_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="1000" data-width="180" data-height="180" data-fgcolor="' + tee_box_colors[i] + '" ' +
+                '<input name="hc_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="18" data-width="180" data-height="180" data-fgcolor="teal" ' +
                 'style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;"> ' +
-                '</div><div class="knob-label" style="color: white;">' + tee_box_colors[i] + '\'s Distance</div></div>';
-
-
-        // handicap 2 ?
-        for (i = 1; i < Handicap_number; i++)
-            box_color_input.innerHTML +=
-                '<div class="col-xs-12 col-sm-6 col-md-3 text-center centered"><div style="display:inline;width:180px;height:180px;">' +
-                '<input name="hc_' + (i + 1) + '_' + current_hole + '" type="text" class="knob" value="1" data-min="1" data-max="18" data-width="180" data-height="180" data-fgcolor="orange" ' +
-                'style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;"> ' +
-                '</div><div class="knob-label" style="color: white;">Women\'s Handicap</div></div>';
+                '</div><div class="knob-label" style="color: white;">Handicap '+(i+1)+'</div></div>';
 
 
         node.innerHTML = '<div id="hole-' + current_hole + '-distances" class="box box-success" style="background-color: #2c3b41; border-top-color: #2c3b41; display: none">'

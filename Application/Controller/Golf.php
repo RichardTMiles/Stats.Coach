@@ -7,7 +7,7 @@ use Carbon\Request;
 class Golf extends Request  // Validation
 {
     
-    public function golf()
+    public function golf() : bool
     {
         return true;
     }
@@ -18,42 +18,61 @@ class Golf extends Request  // Validation
         return $this->set( $user_uri )->alnum() ?: $user_id = $_SESSION['id'];  // session id must be set (route)
     }
 
+    /**
+     * @param $state
+     * @param $course_id
+     * @param $boxColor
+     * @return array|bool
+     * @throws PublicAlert
+     */
     public function PostScore(&$state, &$course_id, &$boxColor)
     {
-        $state = ucfirst( parent::set( $state )->alnum() );
-        $courseId = parent::set( $course_id )->int();
-        $boxColor = parent::set( $boxColor )->alnum();
+        $state = ucfirst( $this->set( $state )->alnum() );
+        $courseId = $this->set( $course_id )->int();
+        $boxColor = $this->set( $boxColor )->alnum();
 
         if (!$state) {
-            if (!$states = fopen( SERVER_ROOT . "Data/Indexes/UnitedStates.txt", "r" ))
-                throw new \Exception( "Unable to open states file!" );
-
-            while (!feof( $states )) $this->states[] = fgets( $states );
+            if (!$states = fopen( SERVER_ROOT . 'Data/Indexes/UnitedStates.txt', 'rb' )) {
+                throw new PublicAlert('Unable to open states file!');
+            }
+            global $states;
+            while (!feof( $states )) {
+                $states[] = fgets( $states );
+            }
             fclose( $states );
-
-            return false;
+            return true;
         }
 
-        if (empty($_POST)) return [$state, $course_id, $boxColor];
+        if (empty($_POST)) {
+            return [$state, $course_id, $boxColor];
+        }
+
         global $roundDate, $newScore, $ffs, $gnr, $putts;
         
         $datePicker = $this->post( 'datepicker' )->regex( '#^\d{1,2}\/\d{1,2}\/\d{4}$#' );
         $timePicker = $this->post( 'timepicker' )->regex( '#^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s(A|P)M$#' );
 
-        if (!$datePicker || !$timePicker) throw new PublicAlert('Sorry, invalid tee time provided');
+        if (!$datePicker || !$timePicker) {
+            throw new PublicAlert('Sorry, invalid tee time provided');
+        }
 
-        list($timePicker, $midday) = explode( ' ', $timePicker ); // trim the last to chars
-        list($hour, $minute) = explode( ':', $timePicker );
-        list($day, $month, $year) = explode( '/', $datePicker );
-        if ($midday = 'PM') $hour += 12;
+        [$timePicker, $midday] = explode( ' ', $timePicker ); // trim the last to chars
+        [$hour, $minute] = explode( ':', $timePicker );
+        [$day, $month, $year] = explode( '/', $datePicker );
+
+        if ($midday = 'PM') {
+            $hour += 12;
+        }
 
         $roundDate = mktime( $hour, $minute, 0, $month, $day, $year ) ?: time(); 
 
         $newScore = $this->post( 'hole-1', 'hole-2', 'hole-3', 'hole-4', 'hole-5', 'hole-6', 'hole-7', 'hole-8', 'hole-9', 'hole-10', 'hole-11', 'hole-12', 'hole-13', 'hole-14', 'hole-15', 'hole-16', 'hole-17', 'hole-18' )->int();
 
-        foreach ($newScore as $key => $value) if (!$value) {
-            $newScore = false;
-            break;
+        foreach ($newScore as $key => $value) {
+            if (!$value) {
+                $newScore = false;
+                break;
+            }
         }
 
         if ($newScore) {
@@ -65,40 +84,54 @@ class Golf extends Request  // Validation
         return [$state, $course_id, $boxColor];
     }
 
+    /**
+     * @param $state
+     * @return array
+     * @throws PublicAlert
+     */
     public function AddCourse(&$state)
     {
         global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
 
         if ($state) $state = ucfirst( parent::set( $state )->alnum() );  // uri
 
-        if (empty($_POST)) return false;
+        if (empty($_POST)) {
+            return false;
+        }
 
         $phone = $this->post( 'c_phone' )->phone();
         $pga_pro = $this->post( 'pga_pro' )->text();
         $course_website = $this->post( 'course_website' )->website();
 
         $validate = function ($array) {
-            if (!is_array( $array ) && !empty($array)) $array[] = $array;
-            if (count( $array )) foreach ($array as $key => $value) {
-                if ($value === false) throw new PublicAlert( "Sorry, $key appears to be invalid", 'warning' );
+            if (!\is_array( $array ) && !empty($array)){
+                $array[] = $array;
+            }
+            if (\count( $array )) {
+                foreach ($array as $key => $value) {
+                    if ($value === false) {
+                        throw new PublicAlert( "Sorry, $key appears to be invalid", 'warning' );
+                    }
+                }
             }
         };
 
-        list($course['name'], $course['access'], $course['style'], $course['street'], $course['city'], $course['state'])
+        [$course['name'], $course['access'], $course['style'], $course['street'], $course['city'], $course['state']]
             = $this->post( 'c_name', 'c_access', 'c_style', 'c_street', 'c_city', 'c_state' )->regex( '#( *[\w])*\w+#' );
 
         $validate( $course );
 
-        if (($tee_boxes = $this->post( 'tee_boxes' )->int(1,5)) === false)
+        if (($tee_boxes = $this->post( 'tee_boxes' )->int(1,5)) === false) {
             throw new PublicAlert( 'Invalid Tee Box Count' );
+        }
 
         switch ($course['style']) {
-            case "9-hole":
+            case '9-hole':
                 $holes = 9;
                 break;
-            case "Approach":
-            case "Executive":
-            case "18-hole":
+            case 'Approach':
+            case 'Executive':
+            case '18-hole':
             default:
                 $holes = 18;
         }
@@ -108,12 +141,14 @@ class Golf extends Request  // Validation
 
         $validate( $par );
 
+
         for ($i = 1; $i <= $tee_boxes; $i++) {
-            if (isset($_POST["tee_$i" . "_color"])) {
+            $tee = 'tee_'. $i . '_color';
+            if (isset($_POST[$tee])) {
                 $slope[$i] = $this->post( "general_slope_$i", "women_slope_$i" )->int();
                 $difficulty[$i] = $this->post( "general_difficulty_$i", "women_difficulty_$i" )->int();
-                $teeBox[$i] = $this->post( "tee_$i" . "_1", "tee_$i" . "_2", "tee_$i" . "_3", "tee_$i" . "_4", "tee_$i" . "_5", "tee_$i" . "_6", "tee_$i" . "_7", "tee_$i" . "_8", "tee_$i" . "_9", "tee_$i" . "_10", "tee_$i" . "_11", "tee_$i" . "_12", "tee_$i" . "_13", "tee_$i" . "_14", "tee_$i" . "_15", "tee_$i" . "_16", "tee_$i" . "_17", "tee_$i" . "_18" )->int();
-                array_unshift( $this->teeBox[$i], $this->post( "tee_$i" . "_color" )->alnum() );
+                $teeBox[$i] = $this->post( 'tee_'.$i. '_1', 'tee_'.$i. '_2', 'tee_'.$i.'_3', "tee_$i" . "_4", "tee_$i" . "_5", "tee_$i" . "_6", "tee_$i" . "_7", "tee_$i" . "_8", "tee_$i" . "_9", "tee_$i" . "_10", "tee_$i" . "_11", "tee_$i" . "_12", "tee_$i" . "_13", "tee_$i" . "_14", "tee_$i" . "_15", "tee_$i" . "_16", "tee_$i" . "_17", "tee_$i" . "_18" )->int();
+                array_unshift( $teeBox[$i], $this->post( $tee )->alnum() );
             }
         }
 

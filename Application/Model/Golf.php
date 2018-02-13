@@ -162,8 +162,8 @@ class Golf extends GlobalMap implements iSport
         ]);
        
         PublicAlert::success( 'The course has been added!' );
-        startApplication( 'Home/' );
 
+        return true;
     }
 
 }
