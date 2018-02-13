@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Google:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Google_war_exploded</output-path>
+    <root id="root" />
+  </artifact>
+</component>
