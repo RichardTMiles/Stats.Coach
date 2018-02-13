@@ -1,0 +1,38 @@
+{
+  "name": "richardtmiles/c6",
+  "description": "The best MVC framework",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "config": {
+    "vendor-dir": "Data/Vendors"
+  },
+  "autoload": {
+    "psr-4": {
+      "View\\": "Application/View/",
+      "Controller\\": "Application/Controller/",
+      "Model\\": "Application/Model/",
+      "Table\\": "Application/Table/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Richard Miles",
+      "email": "RichardMiles@Stats.Coach"
+    }
+  ],
+
+  "require-dev": {
+    "richardtmiles/carbonphp" : "dev-master",
+    "google/cloud-tools": "^0.6"
+  },
+
+  "require": {
+    "php": ">=7.1",
+    "google/cloud": ">=0.21",
+    "facebook/graph-sdk": "^5.6.1",
+    "google/apiclient": "dev-master",
+    "mustache/mustache": "dev-master",
+    "almasaeed2010/adminlte":"v2.4.0"
+  }
+}

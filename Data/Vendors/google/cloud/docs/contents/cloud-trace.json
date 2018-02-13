@@ -1,0 +1,24 @@
+{
+    "title": "Trace",
+    "pattern": "trace\/\\w{1,}",
+    "services": [{
+        "title": "TraceClient",
+        "type": "trace/traceclient"
+    }, {
+        "title": "Trace",
+        "type": "trace/trace"
+    }, {
+        "title": "TraceSpan",
+        "type": "trace/tracespan"
+    }, {
+        "title": "v2",
+        "type": "trace\/v2\/readme",
+        "nav": [{
+            "title": "TraceServiceClient",
+            "type": "trace\/v2\/traceserviceclient"
+        }],
+        "patterns": [
+            "trace\/v2\/\\w{1,}"
+        ]
+    }]
+}

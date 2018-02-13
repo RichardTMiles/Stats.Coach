@@ -1,1 +1,0 @@
-INSERT INTO StatsCoach.teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership) VALUES ('32f9159b913', '1', null, '2639ab', 'BHHS GOLF', 0, 'Golf', null, 'Barber Hill High School', null, null);
