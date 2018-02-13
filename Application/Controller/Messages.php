@@ -29,9 +29,9 @@ class Messages extends Request
         $user_id = U::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
 
         if (!empty($_POST) && !empty(($string = (new \Carbon\Request)->post('message')->noHTML()->value())))
-            Table::add($this->user[$user_id], $user_id, $string);     // else were grabbing content (json, html, etc)
+            Table::Post($this->user[$user_id], $user_id, $string);     // else were grabbing content (json, html, etc)
 
-        Table::get($this->user[$user_id], $user_id);
+        Table::Get($this->user[$user_id], $user_id);
 
         return true;
     }

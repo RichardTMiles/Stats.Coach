@@ -1,9 +1,10 @@
 <?php
 
+global $course;
+
 $my = $this->user[$_SESSION['id']];
 
 ?>
-
 <section class="content-header" style="color: #d9edf7">
     <h1>
         <?= $my['user_first_name'] ?>
@@ -86,15 +87,15 @@ $my = $this->user[$_SESSION['id']];
                             </tr>
                             </thead>
                             <tbody>
-
-                            <?php foreach ($my['rounds'] as $key => $round) { ?>
+                            <?php
+                            foreach ($my['rounds'] as $key => $round) { ?>
                                 <tr>
                                     <td><?= date( 'm/d/Y', $round['score_date'] ) ?></td>
                                     <td><?= $round['course_name'] ?></td>
                                     <td><?= $round['score_total_ffs'] ?></td>
                                     <td><?= $round['score_total_gnr'] ?></td>
                                     <td><?= $round['score_total_putts'] ?></td>
-                                    <td><?= $round['par_tot'] ?></td>
+                                    <td><?= $course[$round['course_id']]['course_par_tot'] ?></td>
                                     <td><?= $round['score_total'] ?></td>
                                 </tr>
                             <?php } ?>

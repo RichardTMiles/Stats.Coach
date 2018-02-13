@@ -7,7 +7,7 @@
  */ ?>
 
 <script>
-    loadJS('<?=$this->versionControl("Public/golf/addcourse.js")?>');
+    loadJS('<?=$this->versionControl(PUBLIC_FOLDER . "Golf/addcourse.js")?>');
 
 
     document.addEventListener("Carbon", (e) => {
@@ -69,17 +69,14 @@
                         </div>
                         <!-- Number of Holes -->
                         <div class="col-md-6">
-                            <label for="" id="c_style">Style</label>
+                            <label for="" id="c_style">Holes</label>
                             <select name="c_style" id="course_play" class="form-control select2" style="width: 100%;" onchange="">
-                                <option value="18-hole" <?= (isset($this->style) && $this->style == "18 Hole Standard" ? "selected" : "") ?>>18 Hole
+                                <option value="18" <?= (isset($this->style) && $this->style == "18 Hole Standard" ? "selected" : "") ?>>18 Hole
                                     Standard
                                 </option>
-                                <option value="9-hole" <?= (isset($this->style) && $this->style == "9 Hole Standard" ? "selected" : "") ?>>9 Hole
+                                <option value="9" <?= (isset($this->style) && $this->style == "9 Hole Standard" ? "selected" : "") ?>>9 Hole
                                     Standard
                                 </option>
-                                <option value="Executive" <?= (isset($this->style) && $this->style == "Executive" ? "selected" : "") ?>>Executive
-                                </option>
-                                <option value="Approach" <?= (isset($this->style) && $this->style == "Approach" ? "selected" : "") ?>>Approach</option>
                             </select>
                         </div>
                     </div><!-- /.form-group -->
@@ -175,14 +172,9 @@
         </div>
 
         <!-- Add Tee Box Selection -->
-        <div id="teebox-color-selection" class="col-xs-12">
-
-        </div>
+        <div id="teebox-color-selection" class="col-xs-12"></div>
         <!-- Tee box distances will be here -->
-        <div id="Tee_box_distances" class="col-sm-12">
-
-
-        </div>
+        <div id="Tee_box_distances" class="col-sm-12"></div>
 
     </form>
 

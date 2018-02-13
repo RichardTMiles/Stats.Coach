@@ -330,7 +330,7 @@ if (!$state) { ?>
                                         </div>
                                         <br><br>
                                     </div>
-                                    <!-- ./col --> d
+                                    <!-- ./col -->
                                 </div>
                                 <!-- /.row -->
 
@@ -359,8 +359,9 @@ if (!$state) { ?>
         </form>
     </section>
     <script>
-        document.addEventListener("Carbon", (e) => {
-            $.fn.load_knob('.knob')
+        Carbon((e) => {
+            $.fn.load_iCheck('input');
+            $.fn.load_knob('.knob');
             $.fn.load_timepicker('.timepicker')
         });
 

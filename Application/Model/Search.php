@@ -58,7 +58,7 @@ class Search extends GlobalMap
         }
 
         ######################## Course Search
-        $sql = "SELECT course_id, course_name, course_par, course_phone, course_holes, course_par, website FROM StatsCoach.golf_course WHERE course_name LIKE :search";
+        $sql = "SELECT course_id, course_name, course_par_tot, course_par, course_phone, course_holes, course_par, website FROM StatsCoach.golf_course WHERE course_name LIKE :search";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':search', "%$search%");
         if (!$stmt->execute()) throw new PublicAlert('Search Failed');

@@ -1,7 +1,7 @@
 
 <div class="login-box">
     <div class="register-logo">
-        <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
+        <a href="<?= SITE ?>" style="color: #ffffff; font-size: 150%"><b>Asset</b>Scheduler</a>
     </div><!-- /.login-logo -->
 
 

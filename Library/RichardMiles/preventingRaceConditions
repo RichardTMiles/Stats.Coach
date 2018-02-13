@@ -1,6 +1,0 @@
-To prevent race conditions using an entity model you may
-
-add edititng table
-
-time stamp
-user given table.row lock and application page lock (on edit page)

@@ -8,12 +8,11 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
-    <h1>Stats</h1>
+    <h1>Join a Team</h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Coach</a></li>
     </ol>
 </section>
-
 
 <!-- Main content -->
 <section class="content" id="content-pane">
