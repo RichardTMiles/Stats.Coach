@@ -37,22 +37,6 @@
 
             <div class="social-auth-links text-center">
                 <p>- OR -</p>
-                <div class="row">
-                    <a href="<?= SITE ?>Cooks">
-                        <div class="col-md-6">
-                            <a href="<?=SITE?>Kitchen" class="btn btn-success btn-block btn-flat">Kitchen Staff</a>
-                        </div>
-                    </a>
-                    <a href="<?= SITE ?>Cooks">
-                        <div class="col-md-6">
-                            <a href="<?=SITE?>Tables" class="btn btn-success btn-block btn-flat">Table Selection</a>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="social-auth-links text-center">
-                <p>- OR -</p>
                 <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?php
                 if (defined('FACEBOOK_APP_ID') && !empty(FACEBOOK_APP_ID)) {
                     print (new Facebook\Facebook([
@@ -139,17 +123,22 @@
             </div>
             <!-- /.center -->
         <?php endif; ?>
-
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
 <script>
     Carbon(() => {
         $.fn.load_iCheck('input');
+
+        $('.wrapper').css('background-color', 'transparent');
+        let remove = () => $('.wrapper').css('background-color', 'rgba(0, 0, 0, 0.7)');
+        $(document).off("pjax:beforeSend", remove).on("pjax:beforeSend", remove);
+
         /*
         $.fn.load_backStreach("/Application/View/img/augusta-master.jpg");
         let remove=()=>{$.fn.load_backStreach()};
         $(document).off("pjax:beforeSend", remove).on("pjax:beforeSend", remove)
         */
     });
+
 </script>

@@ -27,22 +27,21 @@ const COMPOSER = 'Data' . DS . 'Vendors' . DS;
 const TEMPLATE =  COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
 
 // Facebook
-const FACEBOOK_APP_ID = '';
-const FACEBOOK_APP_SECRET = '';
+const FACEBOOK_APP_ID = '1456106104433760';
+const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
 // Google
 const GOOGLE_APP_ID = '';
 const GOOGLE_APP_SECRET = '';
 
-
 return [
     'DATABASE' => [
 
-        'DB_DSN' =>  APP_LOCAL ? 'mysql:host=127.0.0.1;dbname=C6;' : 'mysql:host=35.224.229.250;dbname=C6;',      // Host and Database get put here
+        'DB_DSN' =>  APP_LOCAL ? 'mysql:host=127.0.0.1;dbname=StatsCoach;' : 'mysql:host=35.224.229.250;dbname=StatsCoach;',      // Host and Database get put here
 
         'DB_USER' => 'root',                 // User
 
-        'DB_PASS' => APP_LOCAL ? 'Huskies!99' : 'goldteamrules',          // Password goldteamrules
+        'DB_PASS' =>  APP_LOCAL ? 'Huskies!99' : 'goldteamrules',          // Password goldteamrules
 
         'DB_BUILD' => SERVER_ROOT . 'Application/Config/buildDatabase.php',
 
@@ -82,15 +81,31 @@ return [
 
             if ($_SESSION['id'] ?? ($_SESSION['id'] = false)) {
 
+                #return $_SESSION['id'] = false;
+
                 global $user;
 
                 if (!is_array($user)) {
                     $user = [];
                 }
+
                 if (!is_array($me = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
+
                     $me = [];
+
                     Table\Users::All($me, $_SESSION['id']);
+
+                    $stats = 'Model\\' . $me['user_sport'] ?? '';
+
+                    if (class_exists($stats)) {
+                        $interfaces = class_implements($stats);
+                        if (\in_array('Model\Helpers\iSport', $interfaces, true)) {
+                            $me = (new $stats)->stats($me, $_SESSION['id']);
+                        }
+                    }
+
                     Table\Followers::All($me,  $_SESSION['id']);
+
                     Table\Messages::All($me,  $_SESSION['id']);
                 }
             }

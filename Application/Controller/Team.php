@@ -14,31 +14,58 @@ use Carbon\Request;
 
 class Team extends Request
 {
+    /**
+     * @param bool $team_id
+     * @return array|bool|mixed
+     * @throws \Carbon\Error\PublicAlert
+     */
     public function team($team_id = false)
     {
         if (!empty($_POST)) {
             global $team_photo;
             $team_photo = $this->files( 'FileToUpload' )->storeFiles('Data/Uploads/Pictures/Team/');
-            return !!$team_photo;
-        } elseif (!$team_id) startApplication( 'Home/' );
+            return (bool) $team_photo;
+        }
+
+        if (!$team_id) {
+            startApplication( 'Home/' );
+            return false;
+        }
+
         return $this->set( $team_id )->alnum();
     }
 
-    public function createTeam()
+    /**
+     * @return array|null
+     */
+    public function createTeam() : ?array
     {
-        if (empty($_POST)) return false;
-        list($teamName, $schoolName) = $this->post( 'teamName', 'schoolName' )->text();
-        if (!$schoolName) $schoolName = null;
-        return (!empty($teamName) ? [$teamName, $schoolName] : false);
+        if (empty($_POST)) {
+            return null;
+        }
+        [$teamName, $schoolName]
+            = $this->post( 'teamName', 'schoolName' )->text();
+
+        if (!$schoolName) {
+            $schoolName = null;
+        }
+        return (!empty($teamName) ? [$teamName, $schoolName] : null);
     }
 
+    /**
+     * @return array|bool|mixed|null
+     * @throws \Carbon\Error\PublicAlert
+     */
     public function joinTeam()
     {
 
-        if (empty($_POST)) return false;
+        if (empty($_POST)) {
+            return null;
+        }
 
-        if (!$teamCode = $this->post( 'teamCode' )->alnum())
-            PublicAlert::warning( "Sorry, your team code appears to be invalid" );
+        if (!$teamCode = $this->post( 'teamCode' )->alnum()) {
+            throw new PublicAlert( 'Sorry, your team code appears to be invalid' );
+        }
 
         return $teamCode;
     }

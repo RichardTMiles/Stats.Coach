@@ -1,23 +1,23 @@
 <?php
 
-// URI vars
-$state = $this->state;
-$course_id = $this->course_id;
-$boxColor = $this->boxColor;
+global $course, $state, $states, $course_id, $boxColor, $courses, $course_colors, $states;
+
 
 ##########  Step 1.5, return list of courses from given state
-if (!empty($this->courses)) {
-    if (!AJAX) throw new \Exception();
+if (!empty($courses)) {
+    if (!AJAX) {
+        throw new \RuntimeException('Course selection should only be invoked in ajax');
+    }
 
-    echo "<option value='' selected disabled>Course Select</option>";
-    echo "<option value='Add'>Add Course</option>";
+    print '<option value="" selected disabled>Course Select</option>';
+    print '<option value="Add">Add Course</option>';
 
-    if (is_array($this->courses) && $this->courses !== true) {
-        foreach ($this->courses as $key) {
-            echo "<option value='" . $key['course_id'] . "'>{$key['course_name']}</option>";
+    if (is_array($courses) && $courses !== true) {
+        foreach ($courses as $key) {
+            print "<option value='{$key['course_id']}'>{$key['course_name']}</option>";
         }
     }
-    exit (1);  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
+    return true;  // This will stop the run and just return the list, note if you used return. the values would be caught by the output buffer.
 }
 ##########  STEP 1 Choose a US State
 if (!$state) { ?>
@@ -32,7 +32,7 @@ if (!$state) { ?>
             courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
 
             $.ajax({  // Get a reduced list of all courses within a state
-                url: (document.location + state + "/"), success: function (result) {
+                url: ("/Postscore/" + state + "/"), success: function (result) {
                     courses.html(result);
                 }
             });
@@ -42,10 +42,10 @@ if (!$state) { ?>
             let courseId = select.value;
             // Jump to a new page using Pjax
             if (courseId === "Add")
-                return $.pjax({url: (window.location.protocol + '//' + window.location.hostname + '/AddCourse/' + state + '/'),         // Redirect
+                return $.pjax({url: ('/AddCourse/' + state + '/'),         // Redirect
                     container: '#pjax-content'});
 
-            $.pjax({url: (window.location.protocol + '//' + window.location.hostname + '/PostScore/' + state + '/' + courseId + '/'),         // Redirect
+            $.pjax({url: ('/PostScore/' + state + '/' + courseId + '/'),         // Redirect
                 container: '#pjax-content'});
         }
     </script>
@@ -87,7 +87,9 @@ if (!$state) { ?>
                             <select class="form-control select2" style="width: 100%;"
                                     onchange="course_given_states(this)" required>
                                 <option selected="selected" disabled value="">State</option>
-                                <?php foreach ($this->states as $state) echo "<option value='$state'>$state</option>"; ?>
+                                <?php foreach ($states as $S) {
+                                    print "<option value='$S'>$S</option>";
+                                } ?>
                             </select>
                         </div><!-- /.form-group -->
 
@@ -108,8 +110,10 @@ if (!$state) { ?>
     <script> document.addEventListener("Carbon", (e) => $.fn.load_select2('.select2')); </script>
 
     <?php return 1;
-} elseif ($this->course_colors && $course_id) {
-    $course = $this->course[$course_id];
+}
+
+if ($course_colors && $course_id) {
+    $course = $course[$course_id];
 
 #######################  STEP 2 , Course Tee Box #####################################?>
     <script>
@@ -136,14 +140,16 @@ if (!$state) { ?>
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <?php foreach ($this->course_colors as $key => $value) {
-                if (empty($value)) break;
+            <?php foreach ($course_colors as $key => $value) {
+                if (empty($value)) {
+                    break;
+                }
                 switch ($value = strtolower($value)) {
-                    case "white":
-                        $color = "aqua";
+                    case 'white':
+                        $color = 'aqua';
                         break;
                     case 'gold':
-                        $color = "yellow";
+                        $color = 'yellow';
                         break;
                     default:
                         $color = $value;
@@ -168,7 +174,7 @@ if (!$state) { ?>
     </section>
 
     <?php return 1;
-} elseif (is_array($course = $this->course[$course_id]) && is_array($course['teeBox'])) {
+} elseif (is_array($course = $course[$course_id]) && is_array($course['teeBox'])) {
 
 #######################  STEP 3 , input  #####################################{ ?>
 
@@ -214,7 +220,7 @@ if (!$state) { ?>
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
                                                 <input name="datepicker" type="text" class="form-control pull-right"
-                                                       id="datepicker" value="<?= date('m/d/Y', time()) ?>">
+                                                       id="datepicker" value="<?= date('m/d/Y') ?>">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -243,7 +249,7 @@ if (!$state) { ?>
             </div>
             <?php for ($i = 1; $i <= 18; $i++) { ?>
                 <!-- row -->
-                <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i == 1 ? "block" : "none") ?>">
+                <div class="row" id="input-score-hole-<?= $i ?>" style="display: <?= ($i === 1 ? 'block' : 'none') ?>">
                     <div class="col-xs-12">
                         <!-- jQuery Knob -->
                         <div class="box box-solid">
@@ -337,14 +343,14 @@ if (!$state) { ?>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <?php if ($i != 1) { ?>
+                                <?php if ($i !== 1) { ?>
                                     <button type="button" class="btn btn-default"
                                             onclick="last_score_input('<?= $i ?>')"><< Back
                                     </button>
                                 <?php } ?>
                                 <!-- button -->
-                                <button class="btn btn-info pull-right" type="<?= ($i != 18 ? "button" : "submit") ?>"
-                                        onclick="<?= ($i != 18 ? "next_score_input('$i')" : null) ?>">
+                                <button class="btn btn-info pull-right" type="<?= ($i !== 18 ? 'button' : 'submit') ?>"
+                                        onclick="<?= ($i !== 18 ? "next_score_input('$i')" : null) ?>">
                                     Next &gt;&gt;
                                 </button>
                             </div>

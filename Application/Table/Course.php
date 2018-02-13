@@ -6,13 +6,12 @@
  * Time: 9:21 AM
  */
 
-namespace Tables;
+namespace Table;
 
 use Carbon\Database;
 use Carbon\Entities;
-use Carbon\Interfaces\iEntity;
 
-class Course extends Entities implements iEntity
+class Course extends Entities
 {
     static function get(&$array, $id)
     {

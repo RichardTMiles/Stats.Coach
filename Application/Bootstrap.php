@@ -3,6 +3,7 @@
 use Carbon\Route;
 use Carbon\View;
 
+
 $url = new class extends Route
 {
     public function defaultRoute()  // Sockets will not execute this

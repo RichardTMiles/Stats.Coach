@@ -4,7 +4,10 @@
  * User: Miles
  * Date: 6/10/17
  * Time: 1:53 AM
- */ ?>
+ */
+global $teamCode;
+
+?>
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
@@ -34,7 +37,7 @@
                     <div class="form-group col-xs-12 col-md-12" id="teamCode">
                         <label for="teamCode">Please enter the team's code</label>
                         <input type="text" class="form-control " placeholder="Team Code" name="teamCode"
-                               value="<?= $this->teamCode ?>">
+                               value="<?= $teamCode ?>">
                     </div>
 
                 </div>
@@ -50,6 +53,5 @@
 
 
     </form>
-
 
 </section>

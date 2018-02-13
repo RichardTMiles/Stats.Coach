@@ -4,17 +4,19 @@
  * User: Miles
  * Date: 6/10/17
  * Time: 1:53 AM
- */ ?>
+ */
+
+global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro, $style, $name;
+
+?>
 
 <script>
-    loadJS('<?=$this->versionControl(PUBLIC_FOLDER . "Golf/addcourse.js")?>');
-
-
-    document.addEventListener("Carbon", (e) => {
+    Carbon(() => {
+        $.fn.CarbonJS('<?=$this->versionControl(APP_ROOT . APP_VIEW . 'Golf/addcourse.js')?>');
         $.fn.load_datepicker('#datepicker');
         $.fn.load_knob('.knob');                // were pre loading
         $.fn.load_timepicker('.timepicker');
-        $.fn.load_inputmask("[data-mask]")
+        $.fn.load_inputmask("[data-mask]");
         $.fn.load_select2(".select2");
     });
 </script>
@@ -52,30 +54,38 @@
                     <div class="form-group col-xs-12 col-md-12" id="c_name">
                         <label for="c_name">Course</label>
                         <input type="text" class="form-control " placeholder="Course Name" name="c_name"
-                               value="<?= (isset($this->name) ? $this->name : "") ?>">
+                               value="<?= $name ?? '' ?>">
                     </div>
                     <!-- Type of Course -->
                     <div class="form-group col-xs-12 col-md-12" id="c_access">
                         <div class="col-md-6">
                             <label for="course_type">Access</label>
-                            <select id="course_type" name="c_access" class="form-control select2" style="width: 100%;" onchange="">
-                                <option value="Public" <?= (isset($this->access) && $this->access == "Public" ? "selected" : "") ?>>Public</option>
-                                <option value="Resort" <?= (isset($this->access) && $this->access == "Resort" ? "selected" : "") ?>>Resort</option>
-                                <option value="Semi-private" <?= (isset($this->access) && $this->access == "Semi-private" ? "selected" : "") ?>>
+                            <select id="course_type" name="c_access" class="form-control select2" style="width: 100%;"
+                                    onchange="">
+                                <option value="Public" <?= $access === 'Public' ? 'selected' : ''?>>
+                                    Public
+                                </option>
+                                <option value="Resort" <?= $access === 'Resort' ? 'selected' : '' ?>>
+                                    Resort
+                                </option>
+                                <option value="Semi-private" <?= $access === 'Semi-private' ? 'selected' : '' ?>>
                                     Semi-private
                                 </option>
-                                <option value="Private" <?= (isset($this->access) && $this->access == "Private" ? "selected" : "") ?>>Private</option>
+                                <option value="Private" <?= $access === 'Private' ? 'selected' : '' ?>>
+                                    Private
+                                </option>
                             </select>
                         </div>
                         <!-- Number of Holes -->
                         <div class="col-md-6">
                             <label for="" id="c_style">Holes</label>
-                            <select name="c_style" id="course_play" class="form-control select2" style="width: 100%;" onchange="">
-                                <option value="18" <?= (isset($this->style) && $this->style == "18 Hole Standard" ? "selected" : "") ?>>18 Hole
-                                    Standard
+                            <select name="c_style" id="course_play" class="form-control select2" style="width: 100%;"
+                                    onchange="">
+                                <option value="18" <?=  $style === '18 Hole Standard' ? 'selected' : '' ?>>
+                                    18 Hole Standard
                                 </option>
-                                <option value="9" <?= (isset($this->style) && $this->style == "9 Hole Standard" ? "selected" : "") ?>>9 Hole
-                                    Standard
+                                <option value="9" <?= $style === '9 Hole Standard' ? 'selected' : '' ?>>
+                                    9 Hole Standard
                                 </option>
                             </select>
                         </div>
@@ -91,7 +101,8 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-phone"></i>
                             </div>
-                            <input value="<?= (isset($this->phone) ? $this->phone : "") ?>" type="text" name="c_phone" id="phone" class="form-control"
+                            <input value="<?= $phone ?? '' ?>" type="text" name="c_phone"
+                                   id="phone" class="form-control"
                                    data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
                         <!-- /.input group -->
@@ -101,21 +112,23 @@
 
                     <div class="form-group col-xs-12 col-md-12" id="c_street">
                         <label class="control-label" for="Street">Street</label>
-                        <input value="<?= (isset($this->street) ? $this->street : "") ?>" name="c_street" type="text" class="form-control" id="inputSuccess"
+                        <input value="<?= $street ?? '' ?>" name="c_street" type="text"
+                               class="form-control" id="inputSuccess"
                                placeholder="Street Address">
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12" id="c_city">
                         <label class="control-label" for="City">City</label>
-                        <input value="<?= (isset($this->city) ? $this->city : "") ?>" type="text" class="form-control" id="City" placeholder="City"
+                        <input value="<?= $city ?? '' ?>" type="text" class="form-control"
+                               id="City" placeholder="City"
                                name="c_city">
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12" id="c_state">
                         <label for="state">State</label>
                         <select id="state" name="c_state" class="form-control select2" style="width: 100%;">
-                            <option selected="selected" value="<?= (isset($this->state) ? $this->state : "") ?>">
-                                <?= (isset($this->state) ? $this->state : "State Selection") ?>
+                            <option selected="selected" value="<?= $state ?? ''?>">
+                                <?= $state ?? 'State Selection' ?>
                             </option>
                             <option value="Alabama">Alabama</option>
                             <option value="Alaska">Alaska</option>
@@ -148,7 +161,7 @@
                         <label class="control-label" for="pga_professional">Course PGA Professional
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="<?= $this->pga_pro ?>" type="text" class="form-control" placeholder="Course PRO"
+                        <input value="<?= $pga_pro ?>" type="text" class="form-control" placeholder="Course PRO"
                                name="pga_professional">
 
                     </div>
@@ -156,7 +169,8 @@
                         <label class="control-label" for="course_website">Course Website
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="<?= $this->course_website ?>" type="text" class="form-control" placeholder="Course Website"
+                        <input value="<?= $course_website ?>" type="text" class="form-control"
+                               placeholder="Course Website"
                                name="course_website">
 
                     </div>

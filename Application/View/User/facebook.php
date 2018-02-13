@@ -23,7 +23,7 @@ endif;
                     <p>Take me to Stats.Coach</p>
                 </div>
             </a>
-            <a href="https://stats.coach/login/">
+            <a href="<?=SITE?>/login/">
                 <div class="callout callout-danger">
                     <h4>Don't link my Facebook</h4>
 
@@ -43,7 +43,7 @@ endif;
 
             <div id="alert"></div>
 
-            <form data-pjax action="https://Stats.Coach/Facebook/SignUp/" method="post">
+            <form data-pjax action="<?=SITE?>Facebook/SignUp/" method="post">
 
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="First Name" name="firstname"
@@ -75,9 +75,9 @@ endif;
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="gender" required>
-                        <option disabled <?= (($facebook["gender"]??false) ? null : 'selected') ?>>Gender</option>
-                        <option value="male" <?= (($facebook["gender"]??false) == 'male' ? 'selected' : null) ?>>Male</option>
-                        <option value="female" <?= (($facebook["gender"]??false) == 'female' ? 'selected' : null) ?>>Female
+                        <option disabled <?= (($facebook['gender']??false) ? null : 'selected') ?>>Gender</option>
+                        <option value="male" <?= (($facebook['gender']??false) === 'male' ? 'selected' : null) ?>>Male</option>
+                        <option value="female" <?= (($facebook['gender']??false) === 'female' ? 'selected' : null) ?>>Female
                         </option>
                     </select>
                 </div>

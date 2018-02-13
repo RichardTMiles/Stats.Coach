@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
+
 global $user;
 
 include_once APP_ROOT . APP_VIEW . 'Layout/Head.php';
@@ -20,9 +21,8 @@ switch ($userType) {
 
 ?>
 <!-- Full Width Column -->
-<body class="<?= $layout ?>" style="background: rgba(0, 0, 0, 0.7)">
-<div <?= (($userType === 'Athlete' || $userType === 'Coach') ? 'class="wrapper"' : 'class="container" id="pjax-content"') ?>
-        style="background-color: transparent">
+<body class="<?= $layout ?>" style="background-color: transparent">
+<div <?= (($userType === 'Athlete' || $userType === 'Coach') ? 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"' : 'class="container" id="pjax-content"') ?>>
 
     <?php
 

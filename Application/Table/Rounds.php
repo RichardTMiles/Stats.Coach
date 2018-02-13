@@ -6,23 +6,22 @@
  * Time: 11:15 PM
  */
 
-namespace Tables;
+namespace Table;
 
 
 use Carbon\Database;
 use Carbon\Entities;
-use Carbon\Interfaces\iEntity;
 
-class Rounds extends Entities implements iEntity
+class Rounds extends Entities
 {
     static function get(&$array, $id)
     {
-        return self::fetch( 'SELECT round_id,course_par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 5', $id);
+        return self::fetch( 'SELECT round_id,course_par,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ? LIMIT 5', $id);
     }
 
     static function all(&$object, $id)
     {
-        return self::fetch( 'SELECT round_id,course_par_tot,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ?', $id );
+        return self::fetch( 'SELECT round_id,course_par,StatsCoach.golf_rounds.course_id,course_name,round_public,score_date,score_total,score_total_ffs,score_total_gnr,score_total_putts FROM StatsCoach.golf_rounds LEFT JOIN StatsCoach.golf_course ON StatsCoach.golf_rounds.course_id = StatsCoach.golf_course.course_id WHERE StatsCoach.golf_rounds.user_id = ?', $id );
     }
 
     static function range(&$object, $id, $argv)

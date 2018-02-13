@@ -23,7 +23,7 @@ class Users extends Entities implements iTable
         $array = static::fetch('SELECT * FROM carbon_users WHERE user_id = ?', $id);
         $array['user_profile_pic'] = SITE . (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : 'Data/Uploads/Pictures/Defaults/default_avatar.png');
         $array['user_profile_uri'] = $array['user_profile_uri'] ?: $id;
-        $array['user_cover_photo'] = SITE . ($array['user_cover_photo'] ?? APP_VIEW . 'Img/defaults/photo' . rand(1, 3) . '.png');
+        $array['user_cover_photo'] = SITE . ($array['user_cover_photo'] ?? DS . APP_VIEW . 'Img/defaults/photo' . random_int(1, 3) . '.png');
         $array['user_first_last'] = $array['user_full_name'] = $array['user_first_name'] . ' ' . $array['user_last_name'];
         $array['user_id'] = $id;
         return true;
@@ -38,12 +38,13 @@ class Users extends Entities implements iTable
     {
         $key = self::beginTransaction(USER);         // Begin transaction
 
-        $sql = 'INSERT INTO carbon_users (user_id, user_type, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_password, user_email, user_email_code, user_generated_string, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES 
-        (:user_id, :user_type, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_password, :user_email, :user_email_code, :user_generated_string, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)';
+        $sql = 'INSERT INTO carbon_users (user_id, user_sport, user_type, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_password, user_email, user_email_code, user_generated_string, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES 
+        (:user_id, :user_sport, :user_type, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_password, :user_email, :user_email_code, :user_generated_string, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)';
         $stmt = Database::database()->prepare($sql);
 
         $stmt->bindValue(':user_id', $key);
-        $stmt->bindValue(':user_type', $array['type'] ?? "Athlete");
+        $stmt->bindValue(':user_type', $array['type'] ?? 'Athlete');
+        $stmt->bindValue(':user_sport', $array['sport'] ?? 'Golf');
         $stmt->bindValue(':user_session_id', session_id());
         $stmt->bindValue(':user_facebook_id', $array['facebook_id'] ?? null);
         $stmt->bindValue(':user_username', $array['username']);
@@ -105,16 +106,23 @@ class Users extends Entities implements iTable
         return true;
     }
 
+    /**
+     * @param array $user
+     * @param string $id
+     * @return bool
+     * @throws PublicAlert
+     */
     public static function All(array &$user, string $id): bool
     {
-        $user = static::fetch('SELECT * FROM carbon_users LEFT JOIN carbon_tag ON entity_id = user.user_id WHERE user.user_id = ?', $id);
-        if (!\is_array($user)) {
+        $user = static::fetch('SELECT * FROM carbon_users LEFT JOIN carbon_tag ON entity_id = carbon_users.user_id WHERE carbon_users.user_id = ?', $id);
+
+        if (empty($user)) {
             throw new PublicAlert('Could not find user  ' . $id, 'danger');
         }
 
         $user['user_profile_pic'] = (!empty($user['user_profile_pic']) ? $user['user_profile_pic'] : SITE . 'Data/Uploads/Pictures/Defaults/default_avatar.png');
-        $user['user_profile_uri'] = $user['user_profile_uri'] ?: $id;
-        $user['user_cover_photo'] = ($user['user_cover_photo'] ?? SITE . 'Public/Img/defaults/photo' . rand(1, 3) . '.png');
+        $user['user_profile_uri'] = $user['user_profile_uri'] ?? $id;
+        $user['user_cover_photo'] = ($user['user_cover_photo'] ??  DS . APP_VIEW . 'Img/defaults/photo' . random_int(1, 3) . '.png');
         $user['user_first_last'] = $user['user_full_name'] = $user['user_first_name'] . ' ' . $user['user_last_name'];
         $user['user_id'] = $id;
 

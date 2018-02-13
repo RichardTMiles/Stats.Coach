@@ -28,19 +28,16 @@ class Golf extends Request  // Validation
     public function PostScore(&$state, &$course_id, &$boxColor)
     {
         $state = ucfirst( $this->set( $state )->alnum() );
-        $courseId = $this->set( $course_id )->int();
+        $course_id = $this->set( $course_id )->int();
         $boxColor = $this->set( $boxColor )->alnum();
 
         if (!$state) {
-            if (!$states = fopen( SERVER_ROOT . 'Data/Indexes/UnitedStates.txt', 'rb' )) {
+            if (!$USStates = file_get_contents( SERVER_ROOT . 'Data/Indexes/UnitedStates.txt')) {
                 throw new PublicAlert('Unable to open states file!');
             }
             global $states;
-            while (!feof( $states )) {
-                $states[] = fgets( $states );
-            }
-            fclose( $states );
-            return true;
+            $states = explode(PHP_EOL, $USStates);
+            return null;        // goto view
         }
 
         if (empty($_POST)) {
@@ -60,7 +57,7 @@ class Golf extends Request  // Validation
         [$hour, $minute] = explode( ':', $timePicker );
         [$day, $month, $year] = explode( '/', $datePicker );
 
-        if ($midday = 'PM') {
+        if ($midday === 'PM') {
             $hour += 12;
         }
 
@@ -86,17 +83,19 @@ class Golf extends Request  // Validation
 
     /**
      * @param $state
-     * @return array
+     * @return mixed
      * @throws PublicAlert
      */
     public function AddCourse(&$state)
     {
         global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
 
-        if ($state) $state = ucfirst( parent::set( $state )->alnum() );  // uri
+        if ($state) {
+            $state = ucfirst( parent::set( $state )->alnum() );
+        }  // uri
 
         if (empty($_POST)) {
-            return false;
+            return null;
         }
 
         $phone = $this->post( 'c_phone' )->phone();
@@ -147,22 +146,25 @@ class Golf extends Request  // Validation
             if (isset($_POST[$tee])) {
                 $slope[$i] = $this->post( "general_slope_$i", "women_slope_$i" )->int();
                 $difficulty[$i] = $this->post( "general_difficulty_$i", "women_difficulty_$i" )->int();
-                $teeBox[$i] = $this->post( 'tee_'.$i. '_1', 'tee_'.$i. '_2', 'tee_'.$i.'_3', "tee_$i" . "_4", "tee_$i" . "_5", "tee_$i" . "_6", "tee_$i" . "_7", "tee_$i" . "_8", "tee_$i" . "_9", "tee_$i" . "_10", "tee_$i" . "_11", "tee_$i" . "_12", "tee_$i" . "_13", "tee_$i" . "_14", "tee_$i" . "_15", "tee_$i" . "_16", "tee_$i" . "_17", "tee_$i" . "_18" )->int();
+                $teeBox[$i] = $this->post( 'tee_'.$i.'_1', 'tee_'.$i. '_2', 'tee_'.$i.'_3', 'tee_'.$i.'_4', 'tee_' .$i. '_5', 'tee_'.$i. '_6', 'tee_'.$i.'_7', 'tee_'.$i.'_8', 'tee_'.$i.'_9', 'tee_'.$i .'_10', 'tee_'.$i .'_11', 'tee_'.$i .'_12', 'tee_'.$i .'_13', 'tee_'.$i . '_14', 'tee_'.$i .'_15', 'tee_'.$i . '_16', 'tee_'.$i .'_17', 'tee_'.$i .'_18' )->int();
                 array_unshift( $teeBox[$i], $this->post( $tee )->alnum() );
             }
         }
 
         $validate( $teeBox );
 
-        if (false === ($handicap_number = $this->post( 'Handicap_number' )->int(0,2)))
+        if (false === ($handicap_number = $this->post( 'Handicap_number' )->int(0,2))) {
             throw new PublicAlert( 'Sorry, handicap number appears invalid' );
+        }
+
+        $handicap = [];
 
         switch ($handicap_number) {
             case 2:     // No break
-                $handicap[2] = $this->post( "hc_2_1", "hc_2_2", "hc_2_3", "hc_2_4", "hc_2_5", "hc_2_6", "hc_2_7", "hc_2_8", "hc_2_9", "hc_2_10", "hc_2_11", "hc_2_12", "hc_2_13", "hc_2_14", "hc_2_15", "hc_2_16", "hc_2_17", "hc_2_18" )->int();
+                $handicap[2] = $this->post( 'hc_2_1', 'hc_2_2', 'hc_2_3', 'hc_2_4', 'hc_2_5', 'hc_2_6','hc_2_7', 'hc_2_8', 'hc_2_9', 'hc_2_10', 'hc_2_11', 'hc_2_12', 'hc_2_13', 'hc_2_14', 'hc_2_15', 'hc_2_16', 'hc_2_17', 'hc_2_18' )->int();
                 $validate( $handicap[2] );
             case 1:
-                $handicap[1] = $this->post( "hc_1_1", "hc_1_2", "hc_1_3", "hc_1_4", "hc_1_5", "hc_1_6", "hc_1_7", "hc_1_8", "hc_1_9", "hc_1_10", "hc_1_11", "hc_1_12", "hc_1_13", "hc_1_14", "hc_1_15", "hc_1_16", "hc_1_17", "hc_1_18" )->int();
+                $handicap[1] = $this->post( 'hc_1_1', 'hc_1_2', 'hc_1_3', 'hc_1_4', 'hc_1_5', 'hc_1_6', 'hc_1_7', 'hc_1_8', 'hc_1_9', 'hc_1_10', 'hc_1_11', 'hc_1_12', 'hc_1_13', 'hc_1_14', 'hc_1_15', 'hc_1_16', 'hc_1_17', 'hc_1_18' )->int();
                 $validate( $handicap[1] );
                 break;
             default:

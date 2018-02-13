@@ -4,6 +4,7 @@ namespace Model;
 
 use Carbon\Helpers\Serialized;
 use Model\Helpers\GlobalMap;
+use Table\Stats;
 use Table\Users;
 use Table\Followers;
 use Table\Messages;
@@ -87,19 +88,17 @@ class User extends GlobalMap
     }
 
     /**
-     * @param $request
-     * @return string
+     * @param string|bool $request will map the the global scope
+     * @return bool|mixed
      * @throws \Carbon\Error\PublicAlert
      */
-    public function facebook($request): ?string
+    public function facebook(&$request)
     {
         global $facebook;
 
-        Request::changeURI('Facebook/');
-
         if (empty($facebook)) {
             startApplication('login/');
-            exit(1);
+            return false;
         }
 
         $sql = 'SELECT user_id, user_facebook_id FROM carbon_users WHERE user_email = ? OR user_facebook_id =?';
@@ -108,8 +107,14 @@ class User extends GlobalMap
         $C6_id = $sql['user_id'] ?? false;
         $fb_id = $sql['user_facebook_id'] ?? false;
 
+
         if (!$C6_id && !$fb_id): // create new account
+
+            #sortDump($request);
+
             if ($request === 'SignUp'):                         // This will set the session id
+
+
                 Users::Post([
                     'username' => $facebook['username'],
                     'password' => $facebook['password'],
@@ -122,6 +127,8 @@ class User extends GlobalMap
                     'last_name' => $facebook['last_name'],
                     'gender' => $facebook['gender']
                 ]);
+
+
             else:
                 if (($_SESSION['facebook'] ?? false) && \is_array($_SESSION['facebook'])) {
                     $facebook = $_SESSION['facebook'];
@@ -141,7 +148,6 @@ class User extends GlobalMap
                     $facebook = $_SESSION['facebook'];
                 } else {
                     $_SESSION['facebook'] = $facebook;  // were trying to signup when we need to signin
-
                 }
                 $request = 'SignIn';
                 return true;
@@ -161,7 +167,6 @@ class User extends GlobalMap
      */
     public function follow($user_id): bool
     {
-        global $user;
         if (!$out = Users::user_exists($user_id)) {
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
@@ -173,7 +178,7 @@ class User extends GlobalMap
      * @return bool
      * @throws PublicAlert
      */
-    public function unfollow($user_id) : bool
+    public function unfollow($user_id): bool
     {
         if (!Users::user_exists($user_id)) {
             throw new PublicAlert('That user does not exist?!');
@@ -193,9 +198,10 @@ class User extends GlobalMap
     }
 
     /**
+     * @return bool
      * @throws PublicAlert
      */
-    public function register()
+    public function register() : bool
     {
         global $username, $password, $email, $firstName, $lastName, $gender;
 
@@ -217,11 +223,14 @@ class User extends GlobalMap
             'gender' => $gender
         ]);
 
+
+        Stats::Post([]);    // this works
+
         PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-        sortDump('herer');
-
         startApplication('home/');
+
+        return false;
     }
 
     /**
@@ -230,10 +239,11 @@ class User extends GlobalMap
      * @return bool
      * @throws PublicAlert
      */
-    public function activate($email, $email_code) : bool
+    public function activate($email, $email_code): bool
     {
-        if (!Users::email_exists($email))
+        if (!Users::email_exists($email)) {
             throw new PublicAlert('Please make sure the Url you have entered is correct.', 'danger');
+        }
 
         $stmt = $this->db->prepare('SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ?');
         $stmt->execute([$email, $email_code]);
@@ -331,7 +341,7 @@ class User extends GlobalMap
      */
     public function profile($user_uri = false)
     {
-        if ($user_uri === 'DeleteAccount'){
+        if ($user_uri === 'DeleteAccount') {
             Users::Delete($this->user[$_SESSION['id']], $_SESSION['id']);
             Serialized::clear();
             return startApplication(true);

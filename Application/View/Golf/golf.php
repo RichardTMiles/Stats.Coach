@@ -1,8 +1,8 @@
 <?php
 
-global $course;
+global $user, $course;
 
-$my = $this->user[$_SESSION['id']];
+$my = $user[$_SESSION['id']];
 
 ?>
 <section class="content-header" style="color: #d9edf7">

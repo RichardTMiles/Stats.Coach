@@ -41,7 +41,7 @@
 
 
                         $.fn.CarbonJS("<?=  SITE . APP_VIEW . 'bower-asset/jquery-backstretch/jquery.backstretch.min.js' ?>", () => {
-                            $.backstretch('<?=SITE . APP_VIEW?>Img/final.jpg');
+                            $.backstretch('<?=SITE . APP_VIEW?>Img/final.png');
                         });
 
 

@@ -52,14 +52,17 @@ class User extends Request
 
     /**
      * @param null $request
-     * @return bool
+     * @return mixed
      * @throws PublicAlert
      */
-    public function facebook($request = null): bool
+    public function facebook(&$request = null)
     {
         global $facebook;
 
-        if ($request === 'SignUp' || (array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook']))) {
+        $request = (new Request())->set($request)->alnum() ?: true;
+
+        if ($request === 'SignUp' && (array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook']))) {
+
 
             $facebook = $_SESSION['facebook'] ?? $facebook;  // Pull this from the session
 
@@ -111,14 +114,15 @@ class User extends Request
             $facebook['email'] = $email;
             $facebook['username'] = $username;
             $facebook['password'] = $password;
-            return (new Request())->set($request)->alnum() ?: true;
+
+            return $request;
 
         }
         if ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') === false) {
             throw new PublicAlert('Sorry, we could not connect to Facebook. Please try again later.');
         }
 
-        return (new Request())->set($request)->alnum() ?: true;
+        return $request;
     }
 
     /**

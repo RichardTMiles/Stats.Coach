@@ -1,9 +1,10 @@
-<?php $my = $my ?? $this->user[$_SESSION['id']]; ?>
+<?php
+$my = $my ?? $this->user[$_SESSION['id']]; ?>
 <header class="main-header">
     <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="<?= SITE ?>Home/" class="navbar-brand"><b>Stats</b>.Coach</a>
+                <a href="<?= SITE ?>" class="navbar-brand"><b>Stats</b>.Coach</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <i class="fa fa-bars"></i>
                 </button>

@@ -6,16 +6,16 @@
  * Time: 12:45 AM
  */
 
-namespace Tables;
+namespace Table;
 
 use Carbon\Database;
 use Model\User;
 use Carbon\Error\PublicAlert;
 use Carbon\Helpers\Bcrypt;
 use \Carbon\Entities;
-use Carbon\Interfaces\iEntity;
 
-class Teams extends Entities implements iEntity
+
+class Teams extends Entities
 {
     static function get(&$team, $id)   // team obj
     {

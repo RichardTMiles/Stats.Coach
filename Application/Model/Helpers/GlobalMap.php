@@ -58,12 +58,18 @@ use Carbon\Helpers\Pipe;
 abstract class GlobalMap extends Entities
 {
     protected $user = array();
+    protected $team = array();
+    protected $course = array();
+    protected $tournament = array();
     
     public function __construct()
     {
         parent::__construct();
-        global $user;
+        global $user, $team, $course, $tournament;
         $this->user = &$user;
+        $this->team = &$team;
+        $this->course = &$course;
+        $this->tournament = &$tournament;
     }
 
     public static function sendUpdate(string $id, string $uri){

@@ -1,8 +1,11 @@
-<?php $my = $my ?? $this->user[$_SESSION['id']]; ?>
+<?php
+
+global $user;
+$my = $my ?? $user[$_SESSION['id']]; ?>
 
 <header class="main-header">
     <!-- Logo -->
-    <a href="<?= SITE ?>Home/" class="logo hidden-md-down">
+    <a href="<?= SITE ?>" class="logo hidden-md-down">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>S</b>C</span>
         <!-- logo for regular state and mobile devices -->
