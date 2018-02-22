@@ -4,7 +4,8 @@
  * User: Miles
  * Date: 6/10/17
  * Time: 1:53 AM
- */ ?>
+ */
+?>
 
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">

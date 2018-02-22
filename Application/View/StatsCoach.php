@@ -2,7 +2,7 @@
 <html>
 <?php
 
-global $user;
+global $user, $team;
 
 include_once APP_ROOT . APP_VIEW . 'Layout/Head.php';
 

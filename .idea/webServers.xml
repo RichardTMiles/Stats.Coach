@@ -2,8 +2,13 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="cf5799bb-805d-4b7f-a750-4456bb677acd" name="Mac OS X Mounted" url="https://stats.coach/">
-        <fileTransfer port="0" mountedRoot="$USER_HOME$/Library/Group Containers/G69SCX94XU.duck/Library/Application Support/duck/Volumes/miles.systems – SFTP/Sites/Stats.Coach" accessType="MOUNT" />
+      <webServer id="93d743d4-2bc1-4d55-9e30-7fcfd5b630f5" name="Google" url="https://35.231.27.151/">
+        <fileTransfer explicitFtps="false" host="35.231.27.151" port="22" privateKey="$USER_HOME$/.ssh/google_compute_engine" rootFolder="/var/www/stats.coach/html" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
       </webServer>
     </option>
   </component>

@@ -37,36 +37,10 @@
 
             <div class="social-auth-links text-center">
                 <p>- OR -</p>
-                <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?php
-                if (defined('FACEBOOK_APP_ID') && !empty(FACEBOOK_APP_ID)) {
-                    print (new Facebook\Facebook([
-                        'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
-                        'app_secret' => FACEBOOK_APP_SECRET,
-                        'default_graph_version' => 'v2.2',
-                    ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/Facebook/', [
-                        'public_profile', 'user_friends', 'email',
-                        'user_about_me', 'user_birthday',
-                        'user_education_history', 'user_hometown',
-                        'user_location', 'user_photos', 'user_friends']); } ?>'>
+                <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?=urlFacebook()?>'>
                     <i class="fa fa-facebook"></i> Sign in using Facebook</a>
 
-                <a href="<?php
-                //Call Google API
-                #$client = new Google_Client();
-                #$client->setAuthConfig(SERVER_ROOT.'Data/Indexes/tsconfig.json');
-                #$client->setAccessType("offline");        // offline access
-                #$client->setIncludeGrantedScopes(true);   // incremental auth
-                #$client->addScope('email');
-                //$gClient = new Google_Client();
-                //$gClient->setApplicationName('Stats Coach');
-                //$gClient->setClientId(GOOGLE_APP_ID);
-                //$gClient->setClientSecret(GOOGLE_APP_SECRET);
-                //$gClient->setRedirectUri('https://stats.coach/Google/');
-                //$google_oauthV2 = new Google_Service_Oauth2($gClient);
-                //$gClient->setIncludeGrantedScopes(true);   // incremental auth
-                //$gClient->addScope('login');
-                //print $client->createAuthUrl();
-                ?>" class="btn btn-block btn-social btn-google btn-flat">
+                <a href="<?=urlGoogle() ?>" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
             </div><!-- /.social-auth-links -->
 

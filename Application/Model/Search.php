@@ -15,7 +15,7 @@ class Search extends GlobalMap
         $json = ['widget' => '#pjax-content'];
 
         ######################### Team Search
-        $sql = "SELECT team_id, team_code, team_school, team_coach, team_name FROM StatsCoach.teams WHERE team_name LIKE :search OR team_coach LIKE :search OR team_school LIKE :search OR team_code LIKE :search";
+        $sql = "SELECT team_id, team_code, team_school, team_coach, team_name FROM StatsCoach.carbon_teams WHERE team_name LIKE :search OR team_coach LIKE :search OR team_school LIKE :search OR team_code LIKE :search";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':search', "%$search%");
         if (!$stmt->execute()) throw new PublicAlert('Search Failed');

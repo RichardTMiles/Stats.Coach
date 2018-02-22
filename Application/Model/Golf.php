@@ -18,7 +18,7 @@ class Golf extends GlobalMap implements iSport
     /**
      * @return bool
      */
-    public function golf()  // This is the home page for the user
+    public function golf() : bool  // This is the home page for the user
     {
         return true;
     }
@@ -54,7 +54,7 @@ class Golf extends GlobalMap implements iSport
             $user['rounds'] = [$user['rounds']];
         }
 
-        $user['stats'] = self::fetch( 'SELECT * FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
+        $user['stats'] = self::fetch( 'SELECT stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_putts, stats_gnr, stats_ffs FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
 
         return $user;
     }
@@ -66,7 +66,6 @@ class Golf extends GlobalMap implements iSport
      */
     public function course($id)
     {
-
         $this->course[$id] = self::fetch( 'SELECT * FROM golf_course JOIN carbon_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
         if (!\is_array( $course = &$this->course[$id] )) {
             throw new \RuntimeException( 'invalid course id' );

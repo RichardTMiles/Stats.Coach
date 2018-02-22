@@ -128,6 +128,7 @@ class User extends GlobalMap
                     'gender' => $facebook['gender']
                 ]);
 
+                Stats::Post([]);
 
             else:
                 if (($_SESSION['facebook'] ?? false) && \is_array($_SESSION['facebook'])) {
@@ -245,7 +246,7 @@ class User extends GlobalMap
             throw new PublicAlert('Please make sure the Url you have entered is correct.', 'danger');
         }
 
-        $stmt = $this->db->prepare('SELECT COUNT(user_id) FROM StatsCoach.user WHERE user_email = ? AND user_email_code = ?');
+        $stmt = $this->db->prepare('SELECT COUNT(user_id) FROM carbon_users WHERE user_email = ? AND user_email_code = ?');
         $stmt->execute([$email, $email_code]);
 
         if ($stmt->fetch() === 0) {
@@ -253,11 +254,11 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-        if (!$this->db->prepare('UPDATE user SET user_email_confirmed = 1 WHERE user_email = ?')->execute(array($email)))
+        if (!$this->db->prepare('UPDATE carbon_users SET user_email_confirmed = 1 WHERE user_email = ?')->execute(array($email)))
             throw new PublicAlert('The code provided appears to be invalid.', 'danger');
 
 
-        $stmt = $this->db->prepare('SELECT user_id FROM StatsCoach.user WHERE user_email = ?');
+        $stmt = $this->db->prepare('SELECT user_id FROM carbon_users WHERE user_email = ?');
         $stmt->execute([$email]);
         $_SESSION['id'] = $stmt->fetchColumn();
         PublicAlert::success('We successfully activated your account.');
@@ -283,12 +284,12 @@ class User extends GlobalMap
         $generated = Bcrypt::genRandomHex(20);
 
         if (empty($generated_string)) {
-            $sql = 'SELECT user_first_name  FROM user WHERE user_email = ?';
+            $sql = 'SELECT user_first_name  FROM carbon_users WHERE user_email = ?';
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$email]);
             $user_first_name = $stmt->fetchColumn();
 
-            $stmt = $this->db->prepare('UPDATE user SET user_generated_string = ? WHERE user_email = ?');
+            $stmt = $this->db->prepare('UPDATE carbon_users SET user_generated_string = ? WHERE user_email = ?');
             if (!$stmt->execute([$generated, $email])) {
                 throw new PublicAlert('Sorry, we failed to recover your account.', 'danger');
             }
@@ -306,7 +307,7 @@ class User extends GlobalMap
             PublicAlert::info("If an account is found, an email will be sent to the account provided.");
 
         } else {
-            $sql = 'SELECT user_id, user_first_name FROM user WHERE user_email = ? AND user_generated_string = ?';
+            $sql = 'SELECT user_id, user_first_name FROM carbon_users WHERE user_email = ? AND user_generated_string = ?';
             $stmt = $this->db->prepare($sql);
             if (!$stmt->execute([$email, $generated_string])) {
                 $alert();
@@ -316,7 +317,7 @@ class User extends GlobalMap
             }
 
             $this->change_password($user['user_id'], $generated);
-            $stmt = $this->db->prepare('UPDATE user SET user_generated_string = 0 AND user_email_code = 0 AND user_email_confirmed = 1 WHERE user_id = ?');
+            $stmt = $this->db->prepare('UPDATE carbon_users SET user_generated_string = 0 AND user_email_code = 0 AND user_email_confirmed = 1 WHERE user_id = ?');
             $stmt->execute([$user['user_id']]);
 
             $subject = 'Your' . SITE_TITLE . ' password';
@@ -344,14 +345,16 @@ class User extends GlobalMap
         if ($user_uri === 'DeleteAccount') {
             Users::Delete($this->user[$_SESSION['id']], $_SESSION['id']);
             Serialized::clear();
-            return startApplication(true);
+            startApplication(true);
+            return false;
         }
 
         if ($user_uri) {
             global $user_id;
             $user_id = Users::user_id_from_uri($user_uri);
             if (!empty($user_id) && $user_id !== $_SESSION['id']) {
-                return new User($user_id);
+                new User($user_id);
+                return true;
             }
         }
 
@@ -367,7 +370,7 @@ class User extends GlobalMap
         // $this->user === global $user
         $my = $this->user[$_SESSION['id']];
 
-        $sql = 'UPDATE user SET user_profile_pic = :user_profile_pic, user_first_name = :user_first_name, user_last_name = :user_last_name, user_birthday = :user_birthday, user_email = :user_email, user_email_confirmed = :user_email_confirmed,  user_gender = :user_gender, user_about_me = :user_about_me WHERE user_id = :user_id';
+        $sql = 'UPDATE carbon_users SET user_profile_pic = :user_profile_pic, user_first_name = :user_first_name, user_last_name = :user_last_name, user_birthday = :user_birthday, user_email = :user_email, user_email_confirmed = :user_email_confirmed,  user_gender = :user_gender, user_about_me = :user_about_me WHERE user_id = :user_id';
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':user_profile_pic', $profile_pic ?: $my['user_profile_pic']);
         $stmt->bindValue(':user_first_name', $first ?: $my['user_first_name']);
@@ -396,9 +399,8 @@ class User extends GlobalMap
                 'X-Mailer: PHP/' . PHP_VERSION;
 
             $message = 'Hello ' . ($first ?: $my['user_first_name']) . ",
-            \r\n Please visit the link below so we can activate your account:\r\n\r\n
-             https://www.Stats.Coach/Activate/" . base64_encode($email) . "/" . base64_encode($my['user_email_code']) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
-
+            \r\n Please visit the link below so we can activate your account:\r\n\r\n"
+            . SITE .  'Activate/' . base64_encode($email) . '/' . base64_encode($my['user_email_code']) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
 
             if (!mail($email ?: $my['user_email'], $subject, $message, $headers)) {
                 throw new PublicAlert('Our email system failed.');

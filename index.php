@@ -1,6 +1,8 @@
 <?php
 #phpinfo() and exit;
 
+
+
 const DS = DIRECTORY_SEPARATOR; // All folder constants end in a trailing slash /
 
 define('SERVER_ROOT', __DIR__ . DS);  // Set our root folder for the application
@@ -12,6 +14,7 @@ if (false === (include SERVER_ROOT . 'Data/Vendors/autoload.php')) {     // Load
 }
 
 $app = new Carbon\Carbon('Application/Config/Config.php');
+
 
 /** At one point I returned the invocation of $app to show that
  * the application will not exit on completion, but rather return

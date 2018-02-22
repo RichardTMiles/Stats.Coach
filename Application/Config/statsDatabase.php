@@ -17,7 +17,7 @@ try {
     try {
         $stmt = $db->prepare("SELECT 1 FROM golf_course LIMIT 1;");
         $stmt->execute();
-        print "<br>Table `golf_course` already exists";
+        print '<br>Table `golf_course` already exists';
     } catch (PDOException $e) {
         $sql = <<<END
     CREATE TABLE golf_course
@@ -308,12 +308,12 @@ END;
 
 
     try {
-        $stmt = $db->prepare("SELECT 1 FROM teams LIMIT 1;");
+        $stmt = $db->prepare("SELECT 1 FROM carbon_teams LIMIT 1;");
         $stmt->execute();
-        print "<br>Table `teams` already exists";
+        print "<br>Table `carbon_teams` already exists";
     } catch (PDOException $e) {
         $sql = <<<END
-CREATE TABLE teams
+CREATE TABLE carbon_teams
 (
 	team_id VARCHAR(225) NOT NULL
 		PRIMARY KEY,
@@ -337,7 +337,7 @@ CREATE TABLE teams
 		FOREIGN KEY (team_coach) REFERENCES carbon (entity_pk)
 			ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT teams_teams_team_id_fk
-		FOREIGN KEY (parent_team) REFERENCES teams (team_id)
+		FOREIGN KEY (parent_team) REFERENCES carbon_teams (team_id)
 			ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT teams_entity_photos_photo_id_fk
 		FOREIGN KEY (team_photo) REFERENCES carbon_photos (photo_id)
@@ -346,15 +346,15 @@ CREATE TABLE teams
 ;
 
 CREATE INDEX teams_entity_coach_pk_fk
-	ON teams (team_coach)
+	ON carbon_teams (team_coach)
 ;
 
 CREATE INDEX teams_entity_photos_photo_id_fk
-	ON teams (team_photo)
+	ON carbon_teams (team_photo)
 ;
 
 CREATE INDEX teams_teams_team_id_fk
-	ON teams (parent_team)
+	ON carbon_teams (parent_team)
 ;
 
 

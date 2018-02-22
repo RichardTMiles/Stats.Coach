@@ -9,103 +9,143 @@
 namespace Table;
 
 use Carbon\Database;
+use Carbon\Interfaces\iTable;
 use Model\User;
 use Carbon\Error\PublicAlert;
 use Carbon\Helpers\Bcrypt;
 use \Carbon\Entities;
 
 
-class Teams extends Entities
+class Teams extends Entities implements iTable
 {
-    static function get(&$team, $id)   // team obj
-    {
-        $team = self::fetch( 'SELECT * FROM StatsCoach.teams WHERE StatsCoach.teams.team_id = ?', $id );
-        if (!is_array($team))
-            throw new \Exception('Fetch teams invalid');
-        Photos::all( $team, $id );
-        self::members( $team, $id );
-        return $team;
-    }
 
-    static function all(&$user, $id)   // user obj, reset teams
+
+    /**
+     * @param $array - values received will be placed in this array
+     * @param $id - the rows primary key
+     * @return bool
+     */
+    public static function All(array &$array, string $id): bool
     {
         global $team; // array, referenced for static function
 
-        $temp = self::fetch( 'SELECT teams.team_id, team_coach, parent_team, team_code, team_name, 
-          team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo FROM StatsCoach.teams LEFT JOIN StatsCoach.team_members ON StatsCoach.teams.team_coach = ? or member_id = ?', $id ,$id );
+        $temp = self::fetch('SELECT carbon_teams.team_id, team_coach, parent_team, team_code, team_name, 
+          team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo FROM StatsCoach.carbon_teams LEFT JOIN StatsCoach.team_members ON StatsCoach.carbon_teams.team_coach = ? OR member_id = ?', $id, $id);
 
-        if (array_key_exists('team_id', $temp))
+        if (array_key_exists('team_id', $temp)) {
             $temp = [$temp];
-
-        foreach ($temp as $id => $array) {
-            $team[$array['team_id']] = $array;
-            $user['teams'][] = $array['team_id'];
-            self::members( $team[$array['team_id']], $array['team_id'] );
-            Photos::all( $team[$array['team_id']], $array['team_id']);
         }
-        return $user;
+
+        foreach ($temp as $key => $value) {
+            $team[$value['team_id']] = $value;
+            $array['teams'][] = $value['team_id'];
+            self::members($team[$value['team_id']], $value['team_id']);
+            Photos::All($team[$value['team_id']], $value['team_id']);
+        }
+
+        return true;
+    }        // Get all data from a table given its primary key
+
+    /**
+     * @param $array - should be set to null on success
+     * @param $id - the rows primary key
+     * @return bool
+     */
+    public static function Delete(array &$array, string $id): bool
+    {
+        return true;
+    }    // Delete all data from a table given its primary key
+
+    /**
+     * @param $array - values received will be placed in this array
+     * @param $id - the rows primary key
+     * @param $argv - column names desired to be in our array
+     * @return bool
+     */
+
+    public static function Get(array &$array, string $id, array $argv): bool
+    {
+        $team = self::fetch('SELECT * FROM StatsCoach.carbon_teams WHERE StatsCoach.carbon_teams.team_id = ?', $id);
+
+        Photos::All($team, $id);
+
+        self::members($team, $id);
+
+        return true;
+
+    }   // Get table columns given in argv (usually an array) and place them into our array
+
+    /**
+     * @param $array - The array we are trying to insert
+     * @return bool
+     * @throws \Carbon\Error\PublicAlert
+     */
+    public static function Post(array $array): bool
+    {
+        $key = self::beginTransaction(TEAMS, $_SESSION['id']);
+
+        $sql = 'INSERT INTO StatsCoach.carbon_teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)';
+
+
+        if (!static::execute($sql, $key, $array['teamName'], $array['schoolName'], $_SESSION['id'], Bcrypt::genRandomHex(20))) {
+            throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
+        }
+        self::commit();
+
+        PublicAlert::success("We successfully created `$teamName`!");
+
+        return true;
     }
 
-    static function members(&$team, $id)  // Team obj
+    /**
+     * @param $array - on success, fields updated will be
+     * @param $id - the rows primary key
+     * @param $argv - an associative array of Column => Value pairs
+     * @return bool  - true on success false on failure
+     */
+    public static function Put(array &$array, string $id, array $argv): bool
+    {
+
+        return true;
+    }
+
+
+    public static function members(&$team, $id)  // Team obj
     {
         global $user;
 
         $sql = 'SELECT user_id FROM StatsCoach.team_members WHERE team_id = ?';
-        $stmt = Database::database()->prepare( $sql );
-        $stmt->execute( [$id] );
-        $team['members'] = is_array( $stmt = $stmt->fetchAll( \PDO::FETCH_COLUMN ) ) ? $stmt : [$stmt];
+        $stmt = Database::database()->prepare($sql);
+        $stmt->execute([$id]);
+        $team['members'] = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
-        if (!empty( $team['members'] )) foreach ($team['members'] as $user_id)
-            if (!is_array($user) || !array_key_exists($user_id, $user))     // cache
-                new User( $user_id );
-
+        if (!empty($team['members'])) {
+            foreach ($team['members'] as $user_id) {
+                if (!\is_array($user) || !array_key_exists($user_id, $user)) {    // cache
+                    new User($user_id);
+                }
+            }
+        }
         return $team;
     }
 
-    static function add(&$object, $id, $argv)
+    public static function team_exists($teamIdentifier)
     {
-        $lambda = function (...$require) use ($argv) {
-            foreach ($require as $key => $value)
-                $array = $argv[$key] ?? false;
-            return $array ?? [];
-        };
-
-        list( $teamName, $schoolName ) = $lambda( 'teamName', 'schoolName' );
-
-        $key = self::beginTransaction( TEAMS, $_SESSION['id'] );
-        $sql = "INSERT INTO StatsCoach.teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)";
-        if (!Database::database()->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] ))
-            throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
-        self::commit();
-        PublicAlert::success( "We successfully created `$teamName`!" );
-        return true;
-    }
-
-    static function remove(&$object, $id)
-    {
-
-    }
-
-    static function range(&$object, $id, $argv)
-    {
-
-    }
-
-    static function team_exists($teamIdentifier)
-    {
-        $sql = 'SELECT team_id FROM StatsCoach.teams WHERE team_code = :id OR team_id = :id LIMIT 1';
-        $stmt = Database::database()->prepare( $sql );
-        $stmt->bindValue( ':id', $teamIdentifier );
+        $sql = 'SELECT team_id FROM StatsCoach.carbon_teams WHERE team_code = :id OR team_id = :id LIMIT 1';
+        $stmt = Database::database()->prepare($sql);
+        $stmt->bindValue(':id', $teamIdentifier);
         $stmt->execute();
         return $stmt->fetchColumn();
     }
 
-    static function newTeamMember($team_code) : bool
+    public static function newTeamMember($team_code): bool
     {   // We can assume its the session id
-        $member = self::beginTransaction( 6, $_SESSION['id'] );
-        if ($team_id = Database::team_exists( $team_code ))
-            Database::database()->prepare( 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)' )->execute( [$member, $_SESSION['id'], $team_id] );
-        else PublicAlert::danger( "The team code you provided appears to be invalid. Select `Join Team` from the menu to try again." );
+        $member = self::beginTransaction(6, $_SESSION['id']);
+        if ($team_id = Database::team_exists($team_code)) {
+            Database::database()->prepare('INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)')->execute([$member, $_SESSION['id'], $team_id]);
+        } else {
+            PublicAlert::danger('The team code you provided appears to be invalid. Select `Join Team` from the menu to try again.');
+        }
         return self::commit();
     }
 

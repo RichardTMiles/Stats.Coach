@@ -1,7 +1,10 @@
 <?php
 
 global $user;
-$my = $my ?? $user[$_SESSION['id']]; ?>
+$my = $my ?? $user[$_SESSION['id']];
+
+
+?>
 
 <header class="main-header">
     <!-- Logo -->
@@ -72,10 +75,14 @@ $my = $my ?? $user[$_SESSION['id']]; ?>
                         <a href="<?= SITE ?>" onclick=""><i class="fa fa-circle-o"></i><?= $my['user_full_name'] ?>
                         </a>
                     </li>
-                    <?php if (!empty($my['teams'])) foreach ($my['teams'] as $team_id) {
-                        $team = $this->team[$team_id];
-                        echo '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team['team_name'] . '</a></li>';
-                    } ?>
+                    <?php
+                    if (!empty($my['teams'])) {
+                        foreach ($my['teams'] as $team_id) {
+                            $team = $team[$team_id];
+                            print '<li><a href="' . SITE . 'Team/' . $team_id . '/"><i class="fa fa-circle-o"></i>' . $team['team_name'] . '</a></li>';
+                        }
+                    }
+                    ?>
 
 
                 </ul>
@@ -100,31 +107,34 @@ $my = $my ?? $user[$_SESSION['id']]; ?>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <?php
 
-
-                if (!empty($my['teams'])) foreach ($my['teams'] as $team_id) {
-                    $team = $this->team[$team_id]; ?>
-                    <ul class="treeview-menu">
-                        <li class="treeview menu-open">
-                            <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i
-                                        class="fa fa-circle-o"></i> <?= $team['team_name'] ?>
-                                <?php if (empty($team['members']))
-                                echo '</a>';
-                                else { ?>
-                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                            </a>
-                            <ul class="treeview-menu" style="display: block;">
-                                <?php foreach ($team['members'] as $user_id) { ?>
-                                    <li>
-                                        <a href="<?= SITE ?>Profile/<?= $this->user[$user_id]['user_profile_uri'] ?>/"><i
-                                                    class="fa fa-circle-o"></i><?= $this->user[$user_id]['user_first_name'] . ' ' . $this->user[$user_id]['user_last_name'] ?>
-                                        </a>
-                                    </li>
+                if (!is_array($my['teams'])) {
+                    foreach ($my['teams'] as $team_id) {
+                        $myTeam = $team[$team_id];
+                        ?>
+                        <ul class="treeview-menu">
+                            <li class="treeview menu-open">
+                                <a href="<?= SITE . 'Team/' . $team_id . '/' ?>"><i
+                                            class="fa fa-circle-o"></i> <?= $myTeam['team_name'] ?>
+                                    <?php if (empty($myTeam['members'])) {
+                                        echo '</a>';
+                                    } else { ?>
+                                    <span class="pull-right-container"><i
+                                                class="fa fa-angle-left pull-right"></i></span>
+                                </a>
+                                <ul class="treeview-menu" style="display: block;">
+                                    <?php foreach ($myTeam['members'] as $user_id) { ?>
+                                        <li>
+                                            <a href="<?= SITE ?>Profile/<?= $user[$user_id]['user_profile_uri'] ?>/"><i
+                                                        class="fa fa-circle-o"></i><?= $user[$user_id]['user_first_name'] . ' ' . $user[$user_id]['user_last_name'] ?>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
                                 <?php } ?>
-                            </ul>
-                            <?php } ?>
-                        </li>
-                    </ul>
-                <?php } ?>
+                            </li>
+                        </ul>
+                    <?php }
+                } ?>
             </li>
 
             <li class="treeview">
@@ -141,7 +151,7 @@ $my = $my ?? $user[$_SESSION['id']]; ?>
             <!-- Messages -->
 
             <li>
-                <a href="<?=SITE?>Messages/">
+                <a href="<?= SITE ?>Messages/">
                     <i class="fa fa-envelope"></i> <span>Messages</span>
                     <!--small class="label pull-right bg-yellow">1</small-->
                 </a>

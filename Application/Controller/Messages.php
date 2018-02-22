@@ -9,8 +9,8 @@
 namespace Controller;
 
 use Carbon\Request;
-use Tables\Messages as Table;
-use Tables\Users as U;
+use Table\Messages as Table;
+use Table\Users as U;
 
 class Messages extends Request
 {
@@ -28,10 +28,11 @@ class Messages extends Request
 
         $user_id = U::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
 
-        if (!empty($_POST) && !empty(($string = (new \Carbon\Request)->post('message')->noHTML()->value())))
-            Table::Post($this->user[$user_id], $user_id, $string);     // else were grabbing content (json, html, etc)
+        if (!empty($_POST) && !empty($string = $this->post('message')->noHTML()->value())) {
+            Table::Post($this->user[$user_id], $user_id, $string);
+        }     // else were grabbing content (json, html, etc)
 
-        Table::Get($this->user[$user_id], $user_id);
+        Table::All($this->user[$user_id], $user_id);
 
         return true;
     }

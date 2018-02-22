@@ -130,7 +130,7 @@ class User extends Request
      */
     public function google($request)
     {
-
+        urlGoogle();
     }
 
     public function follow($user_id)

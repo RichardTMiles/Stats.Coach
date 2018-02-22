@@ -13,7 +13,7 @@ $url = new class extends Route
         if (!$_SESSION['id']):
             return $this->wrap()('User/login.php');  // don't change how wrap works, I know it looks funny
         else:
-            return MVC('User', 'profile');
+            return MVC('Golf', 'golf');
         endif;
     }
 
@@ -38,7 +38,7 @@ $url = new class extends Route
         };
     }
 
-    public function events()
+    public function events($selector = '')
     {
         return function ($class, $method, $argv) {
             global $alert, $json;

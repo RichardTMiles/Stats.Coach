@@ -6,10 +6,9 @@ use Carbon\Request;
 
 class Golf extends Request  // Validation
 {
-    
     public function golf() : bool
     {
-        return true;
+        return null;    // This will skip the model and just run the view
     }
 
     public function Rounds($user_uri)
