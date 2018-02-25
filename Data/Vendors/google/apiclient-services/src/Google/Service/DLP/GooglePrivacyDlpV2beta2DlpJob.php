@@ -24,6 +24,7 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2DlpJob extends Google_Collection
   protected $errorResultsDataType = 'array';
   protected $inspectDetailsType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2InspectDataSourceDetails';
   protected $inspectDetailsDataType = '';
+  public $jobTriggerName;
   public $name;
   protected $riskDetailsType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2AnalyzeDataSourceRiskDetails';
   protected $riskDetailsDataType = '';
@@ -74,6 +75,14 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2DlpJob extends Google_Collection
   public function getInspectDetails()
   {
     return $this->inspectDetails;
+  }
+  public function setJobTriggerName($jobTriggerName)
+  {
+    $this->jobTriggerName = $jobTriggerName;
+  }
+  public function getJobTriggerName()
+  {
+    return $this->jobTriggerName;
   }
   public function setName($name)
   {

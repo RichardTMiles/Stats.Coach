@@ -6,7 +6,7 @@ use Carbon\Request;
 
 class Golf extends Request  // Validation
 {
-    public function golf() : bool
+    public function golf() : ?bool
     {
         return null;    // This will skip the model and just run the view
     }

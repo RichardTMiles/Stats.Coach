@@ -93,21 +93,20 @@ class User extends GlobalMap
      * @return bool|mixed
      * @throws \Carbon\Error\PublicAlert
      */
-    public function &oAuth($service, &$request)
+    public function oAuth($service, &$request)
     {
         global $UserInfo, $json;
 
-        if (empty($UserInfo)) {
-            startApplication('login/');
-            return false;
-        }
+        $UserInfo['service'] = ucfirst($service);
 
         $service = "user_{$service}_id";
 
-        $sql = "SELECT user_id, $service FROM carbon_users WHERE user_email = ? OR user_facebook_id = ?";
+        $sql = "SELECT user_id, $service FROM carbon_users WHERE user_email = ? OR $service = ?";
+
         $sql = self::fetch($sql, $UserInfo['email'], $UserInfo['id']);
 
         $user_id = $sql['user_id'] ?? false;
+
         $service_id = $sql[$service] ?? false;
 
         if (!$user_id && !$service_id) { // create new account
@@ -128,11 +127,9 @@ class User extends GlobalMap
                 Stats::Post([]);
 
             } else {
-                if (($_SESSION['UserInfo'] ?? false) && \is_array($_SESSION['UserInfo'])) {
-                    $UserInfo = $_SESSION['UserInfo'];
-                } else {   // were trying to signin when signup
-                    $_SESSION['UserInfo'] = $UserInfo;
-                }
+
+                $_SESSION['UserInfo'] = $UserInfo;
+
                 $UserInfo['alert'] = 'It appears you do not already have an account with us.'; // Sign into a non-existing account
 
                 $json = $UserInfo;
@@ -145,13 +142,14 @@ class User extends GlobalMap
                 $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
                 $_SESSION['id'] = $user_id;
             } else {
-                if ($_SESSION['UserInfo'] ?? false) {
-                    $UserInfo = $_SESSION['UserInfo'];
-                } else {
-                    $_SESSION['UserInfo'] = $UserInfo;  // were trying to signup when we need to signin
-                }
-                $UserInfo['alert'] = "You're Facebook email address matches an account that has not previously been linked to ";
+                $_SESSION['UserInfo'] = $UserInfo;  // were trying to sign up when we need to sign in
+
+                $UserInfo['alert'] = "You're {$UserInfo['service']} email address matches an account that has not previously been linked to this service.";
+
+                $UserInfo['member'] = true;
+
                 $json = $UserInfo;
+
                 return true;
             }
         } else {

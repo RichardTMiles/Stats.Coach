@@ -50,4 +50,5 @@ return array(
     'Carbon\\Helpers\\' => array($vendorDir . '/richardtmiles/carbonphp/Helpers'),
     'Carbon\\Error\\' => array($vendorDir . '/richardtmiles/carbonphp/Error'),
     'Carbon\\' => array($vendorDir . '/richardtmiles/carbonphp/Structure'),
+    'App\\' => array($baseDir . '/Application'),
 );

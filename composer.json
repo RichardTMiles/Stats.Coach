@@ -12,7 +12,8 @@
       "View\\": "Application/View/",
       "Controller\\": "Application/Controller/",
       "Model\\": "Application/Model/",
-      "Table\\": "Application/Table/"
+      "Table\\": "Application/Table/",
+      "App\\" : "Application/"
     }
   },
   "authors": [
@@ -30,7 +31,7 @@
   "require": {
     "php": ">=7.1",
     "google/cloud": ">=0.21",
-    "facebook/graph-sdk": "^5.6.1",
+    "facebook/graph-sdk": "^5.0",
     "google/apiclient": "dev-master",
     "mustache/mustache": "dev-master",
     "almasaeed2010/adminlte":"v2.4.0"

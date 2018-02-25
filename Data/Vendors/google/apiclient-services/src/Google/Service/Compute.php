@@ -6878,7 +6878,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -6897,7 +6897,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -6926,7 +6926,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -6971,7 +6971,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -6990,7 +6990,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -7009,7 +7009,7 @@ class Google_Service_Compute extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'urlMap' => array(
+                'App' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,

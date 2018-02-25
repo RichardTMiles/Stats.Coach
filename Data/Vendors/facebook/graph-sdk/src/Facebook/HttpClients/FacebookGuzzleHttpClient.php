@@ -58,7 +58,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
             'connect_timeout' => 10,
             'verify' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
         ];
-        $request = $this->guzzleClient->createRequest($method, $url, $options);
+        $request = $this->guzzleClient->request($method, $url, $options);
 
         try {
             $rawResponse = $this->guzzleClient->send($request);

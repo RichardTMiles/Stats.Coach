@@ -64,28 +64,29 @@ class User extends Request
         [$service, $request] = $this->set($service, $request)->word();
 
         $service = strtolower($service);
-        $request = strtolower($request);
 
+        if (array_key_exists('UserInfo', $_SESSION) && \is_array($_SESSION['UserInfo'])) {
+            $UserInfo = $_SESSION['UserInfo'];  // Pull this from the session
+        }
 
-        if ($service === false) {
-            startApplication(true);
-            return false;
+        if (!\is_array($UserInfo)) {
+            if ($service === 'google'){
+                $UserInfo = urlGoogle();
+            } elseif ($service === 'facebook') {
+                $UserInfo = urlFacebook();
+            }
+            if (!\is_array($UserInfo)) {
+
+                sortDump($UserInfo);
+
+                #startApplication('login/');
+                return false;                   // don't return this view
+            }
+
+            return [$service, &$request];    // return the view
         }
 
         if ($request === 'SignUp') {
-            if (array_key_exists('UserInfo', $_SESSION) && !empty($_SESSION['UserInfo'])) {
-                $UserInfo = $_SESSION['UserInfo'];  // Pull this from the session
-            } else {
-                if ($service !== 'google'){
-                    $UserInfo = urlFacebook();
-                } elseif ($service !== 'facebook') {
-                    $UserInfo = urlGoogle();
-                } else {
-                    startApplication(true);
-                    return false;                   // don't return this view
-                }
-                return null;    // return the view
-            }
             [$username, $first_name, $last_name, $gender]
                 = $this->post('username', 'firstname', 'lastname', 'gender')->alnum();
 
@@ -139,18 +140,6 @@ class User extends Request
             return [$service, &$request];
         }
 
-        if ($service === 'facebook') {
-            $UserInfo = urlFacebook();
-        } elseif ($service === 'google') {
-            $UserInfo = urlGoogle();
-        } else {
-            startApplication(true);
-            return false;
-        }
-
-        if (empty($UserInfo)) {
-            throw new PublicAlert('Failed to get user info');
-        }
 
         return [$service, &$request];
     }

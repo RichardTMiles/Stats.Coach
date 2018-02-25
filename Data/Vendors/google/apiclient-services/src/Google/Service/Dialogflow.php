@@ -375,14 +375,6 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'intentView' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'languageCode' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -390,6 +382,14 @@ class Google_Service_Dialogflow extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'intentView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'languageCode' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'patch' => array(

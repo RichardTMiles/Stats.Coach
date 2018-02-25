@@ -19,6 +19,7 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2AnalyzeDataSourceRiskRequest ext
 {
   protected $jobConfigType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2RiskAnalysisJobConfig';
   protected $jobConfigDataType = '';
+  public $jobId;
 
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2RiskAnalysisJobConfig
@@ -33,5 +34,13 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2AnalyzeDataSourceRiskRequest ext
   public function getJobConfig()
   {
     return $this->jobConfig;
+  }
+  public function setJobId($jobId)
+  {
+    $this->jobId = $jobId;
+  }
+  public function getJobId()
+  {
+    return $this->jobId;
   }
 }

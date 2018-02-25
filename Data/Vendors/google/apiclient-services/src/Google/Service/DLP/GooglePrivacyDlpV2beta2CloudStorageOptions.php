@@ -17,9 +17,18 @@
 
 class Google_Service_DLP_GooglePrivacyDlpV2beta2CloudStorageOptions extends Google_Model
 {
+  public $bytesLimitPerFile;
   protected $fileSetType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2FileSet';
   protected $fileSetDataType = '';
 
+  public function setBytesLimitPerFile($bytesLimitPerFile)
+  {
+    $this->bytesLimitPerFile = $bytesLimitPerFile;
+  }
+  public function getBytesLimitPerFile()
+  {
+    return $this->bytesLimitPerFile;
+  }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2FileSet
    */

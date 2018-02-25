@@ -3,18 +3,19 @@
         <a href="{{site}}" style="color: #ffffff; font-size: 150%"><b>Stats</b>.Coach</a>
     </div><!-- /.login-logo -->
     <div class="login-box-body" style="background-color: #ECF0F1; color: #0c0c0c; border: medium">
-        <p class="login-box-msg"><?= $alert ?></p>
+        <p class="login-box-msg">{{alert}}</p>
         <div class="box-body">
-            <a id="linkfacebook">
+            {{^member}}<a id="linkfacebook">{{/member}}
+            {{#member}}<a href="{{site}}{{service}}/">{{/member}}
                 <div class="callout callout-success">
-                    <h4>Link My Facebook Account</h4>
+                    <h4>Link My {{service}} Account</h4>
 
                     <p>Take me to Stats.Coach</p>
                 </div>
             </a>
             <a href="{{site}}login/">
                 <div class="callout callout-danger">
-                    <h4>Don't link my Facebook</h4>
+                    <h4>Don't link my {{service}} Account</h4>
 
                     <p>Return to login page!</p>
                 </div>
@@ -32,7 +33,7 @@
 
             <div id="alert"></div>
 
-            <form data-pjax action="{{site}}Facebook/SignUp/" method="post">
+            <form data-pjax action="{{site}}{{service}}/SignUp/" method="post">
 
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="First Name" name="firstname"
@@ -87,14 +88,14 @@
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
-
+{{^member}}
 <script>
     Carbon((e) => {
         $('#linkfacebook').click(() => {
             $('#facebook').hide();
             $('#RegisterCB').show();
         });
-
         $.fn.load_iCheck('input');
     });
 </script>
+{{/member}}

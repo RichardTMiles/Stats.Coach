@@ -15,15 +15,35 @@
  * the License.
  */
 
-class Google_Service_DLP_GooglePrivacyDlpV2beta2CustomInfoType extends Google_Model
+class Google_Service_DLP_GooglePrivacyDlpV2beta2CustomInfoType extends Google_Collection
 {
+  protected $collection_key = 'detectionRules';
+  protected $detectionRulesType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2DetectionRule';
+  protected $detectionRulesDataType = 'array';
   protected $dictionaryType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2Dictionary';
   protected $dictionaryDataType = '';
   protected $infoTypeType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2InfoType';
   protected $infoTypeDataType = '';
+  public $likelihood;
+  protected $regexType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2Regex';
+  protected $regexDataType = '';
   protected $surrogateTypeType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2SurrogateType';
   protected $surrogateTypeDataType = '';
 
+  /**
+   * @param Google_Service_DLP_GooglePrivacyDlpV2beta2DetectionRule
+   */
+  public function setDetectionRules($detectionRules)
+  {
+    $this->detectionRules = $detectionRules;
+  }
+  /**
+   * @return Google_Service_DLP_GooglePrivacyDlpV2beta2DetectionRule
+   */
+  public function getDetectionRules()
+  {
+    return $this->detectionRules;
+  }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2Dictionary
    */
@@ -51,6 +71,28 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2CustomInfoType extends Google_Mo
   public function getInfoType()
   {
     return $this->infoType;
+  }
+  public function setLikelihood($likelihood)
+  {
+    $this->likelihood = $likelihood;
+  }
+  public function getLikelihood()
+  {
+    return $this->likelihood;
+  }
+  /**
+   * @param Google_Service_DLP_GooglePrivacyDlpV2beta2Regex
+   */
+  public function setRegex(Google_Service_DLP_GooglePrivacyDlpV2beta2Regex $regex)
+  {
+    $this->regex = $regex;
+  }
+  /**
+   * @return Google_Service_DLP_GooglePrivacyDlpV2beta2Regex
+   */
+  public function getRegex()
+  {
+    return $this->regex;
   }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2SurrogateType

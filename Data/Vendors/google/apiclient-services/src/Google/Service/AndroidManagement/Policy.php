@@ -23,6 +23,7 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   public $adjustVolumeDisabled;
   protected $alwaysOnVpnPackageType = 'Google_Service_AndroidManagement_AlwaysOnVpnPackage';
   protected $alwaysOnVpnPackageDataType = '';
+  public $androidDevicePolicyTracks;
   protected $applicationsType = 'Google_Service_AndroidManagement_ApplicationPolicy';
   protected $applicationsDataType = 'array';
   public $autoTimeRequired;
@@ -128,6 +129,14 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   public function getAlwaysOnVpnPackage()
   {
     return $this->alwaysOnVpnPackage;
+  }
+  public function setAndroidDevicePolicyTracks($androidDevicePolicyTracks)
+  {
+    $this->androidDevicePolicyTracks = $androidDevicePolicyTracks;
+  }
+  public function getAndroidDevicePolicyTracks()
+  {
+    return $this->androidDevicePolicyTracks;
   }
   /**
    * @param Google_Service_AndroidManagement_ApplicationPolicy

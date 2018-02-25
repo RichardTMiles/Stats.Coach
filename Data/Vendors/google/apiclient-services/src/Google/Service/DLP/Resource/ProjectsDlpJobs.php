@@ -86,7 +86,8 @@ class Google_Service_DLP_Resource_ProjectsDlpJobs extends Google_Service_Resourc
    * restrictions implicitly uses `AND`. * A restriction has the form of `  `. *
    * Supported fields/values for inspect jobs:     - `state` -
    * PENDING|RUNNING|CANCELED|FINISHED|FAILED     - `inspected_storage` -
-   * DATASTORE|CLOUD_STORAGE|BIGQUERY * Supported fields for risk analysis jobs:
+   * DATASTORE|CLOUD_STORAGE|BIGQUERY     - `trigger_name` - The resource name of
+   * the trigger that created job. * Supported fields for risk analysis jobs:
    * - `state` - RUNNING|CANCELED|FINISHED|FAILED * The operator must be `=` or
    * `!=`.
    *

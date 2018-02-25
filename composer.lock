@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "03438f3dbe6c300ff5cff233dbaaf5e3",
+    "content-hash": "bb3338d051e9affd6e1f1f270de3d259",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -48,16 +48,16 @@
         },
         {
             "name": "facebook/graph-sdk",
-            "version": "5.6.1",
+            "version": "5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-graph-sdk.git",
-                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
+                "reference": "030f8c5b9b1a6c09e71719fd638b66ea4daa2f10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
-                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/030f8c5b9b1a6c09e71719fd638b66ea4daa2f10",
+                "reference": "030f8c5b9b1a6c09e71719fd638b66ea4daa2f10",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
                 "facebook",
                 "sdk"
             ],
-            "time": "2017-08-16T17:28:07+00:00"
+            "time": "2018-02-14T23:24:51+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -211,16 +211,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.46",
+            "version": "v0.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "a4d2cd5f7289bbfa1ab4c60a1a5601faf4572b20"
+                "reference": "f4ab0ea8aff4659cf67e3f733b3ab441c30baf5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a4d2cd5f7289bbfa1ab4c60a1a5601faf4572b20",
-                "reference": "a4d2cd5f7289bbfa1ab4c60a1a5601faf4572b20",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/f4ab0ea8aff4659cf67e3f733b3ab441c30baf5d",
+                "reference": "f4ab0ea8aff4659cf67e3f733b3ab441c30baf5d",
                 "shasum": ""
             },
             "require": {
@@ -244,7 +244,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-02-10T00:22:58+00:00"
+            "time": "2018-02-17T00:23:05+00:00"
         },
         {
             "name": "google/auth",
@@ -295,16 +295,16 @@
         },
         {
             "name": "google/cloud",
-            "version": "v0.53.0",
+            "version": "v0.55.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php.git",
-                "reference": "01f63120b40bcc43c87806d478d0b92af2f5b29b"
+                "reference": "49ef0a16ce1b6cd869f51ff8db2bec2b7bddf8f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/01f63120b40bcc43c87806d478d0b92af2f5b29b",
-                "reference": "01f63120b40bcc43c87806d478d0b92af2f5b29b",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/49ef0a16ce1b6cd869f51ff8db2bec2b7bddf8f3",
+                "reference": "49ef0a16ce1b6cd869f51ff8db2bec2b7bddf8f3",
                 "shasum": ""
             },
             "require": {
@@ -322,30 +322,31 @@
                 "google/cloud-bigquery": "1.0.3",
                 "google/cloud-bigtable": "0.2.1",
                 "google/cloud-container": "0.2.1",
-                "google/cloud-core": "1.16.0",
+                "google/cloud-core": "1.17.0",
                 "google/cloud-dataproc": "0.2.1",
-                "google/cloud-datastore": "1.3.0",
-                "google/cloud-debugger": "0.4.0",
+                "google/cloud-datastore": "1.3.1",
+                "google/cloud-debugger": "0.5.0",
                 "google/cloud-dlp": "0.5.2",
-                "google/cloud-error-reporting": "0.8.1",
-                "google/cloud-firestore": "0.4.1",
+                "google/cloud-error-reporting": "0.8.2",
+                "google/cloud-firestore": "0.5.0",
                 "google/cloud-language": "0.12.1",
-                "google/cloud-logging": "1.9.1",
+                "google/cloud-logging": "1.9.2",
                 "google/cloud-monitoring": "0.8.1",
                 "google/cloud-oslogin": "0.2.1",
-                "google/cloud-pubsub": "0.12.1",
+                "google/cloud-pubsub": "1.0.0",
                 "google/cloud-spanner": "1.1.2",
                 "google/cloud-speech": "0.11.1",
                 "google/cloud-storage": "1.3.4",
                 "google/cloud-trace": "0.6.1",
                 "google/cloud-translate": "1.1.2",
                 "google/cloud-videointelligence": "0.9.1",
-                "google/cloud-vision": "0.9.1"
+                "google/cloud-vision": "0.10.0"
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
                 "google/cloud-tools": "^0.6",
                 "league/json-guard": "^0.3",
+                "opis/closure": "^3.0",
                 "phpdocumentor/reflection": "^3.0",
                 "phpseclib/phpseclib": "^2",
                 "phpunit/phpunit": "^4.8|^5.0",
@@ -356,6 +357,7 @@
             },
             "suggest": {
                 "google/cloud-bigquerydatatransfer": "Client library for the BigQuery Data Transfer API.",
+                "opis/closure": "May be used to serialize closures to process jobs in the batch daemon. Please require version ^3.",
                 "phpseclib/phpseclib": "May be used in place of OpenSSL for creating signed Cloud Storage URLs. Please require version ^2."
             },
             "bin": [
@@ -421,7 +423,7 @@
                 "translation",
                 "vision"
             ],
-            "time": "2018-02-01T16:15:59+00:00"
+            "time": "2018-02-24T00:05:49+00:00"
         },
         {
             "name": "google/gax",
@@ -951,16 +953,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.9",
+            "version": "2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558"
+                "reference": "d305b780829ea4252ed9400b3f5937c2c99b51d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
-                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/d305b780829ea4252ed9400b3f5937c2c99b51d4",
+                "reference": "d305b780829ea4252ed9400b3f5937c2c99b51d4",
                 "shasum": ""
             },
             "require": {
@@ -968,7 +970,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
                 "sami/sami": "~2.0",
                 "squizlabs/php_codesniffer": "~2.0"
             },
@@ -1039,7 +1041,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2017-11-29T06:38:08+00:00"
+            "time": "2018-02-19T04:29:13+00:00"
         },
         {
             "name": "psr/cache",
@@ -1369,12 +1371,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/RichardTMiles/CarbonPHP.git",
-                "reference": "9189ae5e73c80399728b8a345d07f9a55532b1d1"
+                "reference": "73c4416638d67a22413927a3567a70ad2abeb171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/9189ae5e73c80399728b8a345d07f9a55532b1d1",
-                "reference": "9189ae5e73c80399728b8a345d07f9a55532b1d1",
+                "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/73c4416638d67a22413927a3567a70ad2abeb171",
+                "reference": "73c4416638d67a22413927a3567a70ad2abeb171",
                 "shasum": ""
             },
             "require": {
@@ -1418,7 +1420,7 @@
                 "pipes",
                 "sockets"
             ],
-            "time": "2018-02-08T18:19:03+00:00"
+            "time": "2018-02-25T06:32:19+00:00"
         },
         {
             "name": "symfony/browser-kit",

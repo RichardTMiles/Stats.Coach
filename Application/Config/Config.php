@@ -33,112 +33,89 @@ const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
 function urlFacebook($request = null)
 {
-    if (empty(FACEBOOK_APP_ID)) {
-        return '';
+    $fb = new Facebook\Facebook([
+        'app_id' => FACEBOOK_APP_ID,            // Replace {app-id} with your app id
+        'app_secret' => FACEBOOK_APP_SECRET,
+        'default_graph_version' => 'v2.12',
+        'http_client_handler' => 'stream',      // better compatibility
+    ]);
+
+
+    if (isset($_GET['state'])) {
+      $_SESSION['FBRLH_state'] = $_GET['state'];
     }
 
-    if ($request !== null) {
-        $request .= DS;
+    $helper = $fb->getRedirectLoginHelper();
 
-        return (new Facebook\Facebook([
-            'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
-            'app_secret' => FACEBOOK_APP_SECRET,
-            'default_graph_version' => 'v2.2',
-        ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/oAuth/Facebook/' . $request, [
+    try {
+        #if (isset($_SESSION['facebook_access_token'])) {
+        #    $accessToken = $_SESSION['facebook_access_token'];
+        #} else {
+            $accessToken = $helper->getAccessToken();
+        #}
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+        // When Graph returns an error
+        echo 'Graph returned an error: ' . $e->getMessage();
+        exit;
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+        // When validation fails or other local issues
+        echo 'Facebook SDK returned an error: ' . $e->getMessage();
+        exit;
+    }
+
+    if (null !== $accessToken) {
+        if (isset($_SESSION['facebook_access_token'])) {
+            $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
+        } else {
+            // getting short-lived access token
+            $_SESSION['facebook_access_token'] = (string) $accessToken;
+            // OAuth 2.0 client handler
+            $oAuth2Client = $fb->getOAuth2Client();
+            // Exchanges a short-lived access token for a long-lived one
+            $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
+            $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
+            // setting default access token to be used in script
+            $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
+        }
+        // redirect the user back to the same page if it has "code" GET variable
+        #if (isset($_GET['code'])) {
+         ##   header('Location: ./');
+        #}
+        // getting basic info about user
+
+        try {
+            $profile_request = $fb->get('/me?fields=name,first_name,last_name,email,gender,cover,picture', $_SESSION['facebook_access_token']);
+            $profile = $profile_request->getGraphNode()->asArray();
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            // redirecting user back to app login page
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+        // Now you can redirect to another page and use the access token from $_SESSION['facebook_access_token']
+    } else {
+        // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
+        return $helper->getLoginUrl(SITE . 'oAuth/Facebook/' . $request . DS, [
             'public_profile', 'user_friends', 'email',
             'user_about_me', 'user_birthday',
             'user_education_history', 'user_hometown',
             'user_location', 'user_photos', 'user_friends']);
     }
 
-    $fb = new Facebook\Facebook([
-        'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
-        'app_secret' => FACEBOOK_APP_SECRET,
-        'default_graph_version' => 'v2.2',
-    ]);
-
-    $facebook_errors = function ($e) {
-        \Carbon\Error\ErrorCatcher::generateLog();
-        \Carbon\Error\PublicAlert::danger('Facebook sent an invalid response.');
-        startApplication(true);
-    };
-
-
-    if (isset($_GET['state'])) {
-        $_SESSION['FBRLH_state'] = $_GET['state'];
-    }
-    $helper = $fb->getRedirectLoginHelper();
-    // $helper->getPersistentDataHandler()->set( 'state', $_GET['state'] );
-
-    try {
-        $accessToken = $helper->getAccessToken();
-    } catch (Facebook\Exceptions\FacebookResponseException $e) {
-        // When Graph returns an error
-        $facebook_errors($e);
-        exit;
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-        // When validation fails or other local issues
-        $facebook_errors($e);
-        exit;
-    }
-
-    if (null === $accessToken) {
-        $facebook_errors($helper);
-    }
-
-    // Logged in
-
-    // The OAuth 2.0 client handler helps us manage access tokens
-    $oAuth2Client = $fb->getOAuth2Client();
-
-    // Get the access token metadata from /debug_token
-    $tokenMetadata = $oAuth2Client->debugToken($accessToken);
-
-    // Validation (these will throw FacebookSDKException's when they fail)
-    $tokenMetadata->validateAppId('1456106104433760'); // Replace {app-id} with your app id
-    // If you know the user ID this access token belongs to, you can validate it here
-    //$tokenMetadata->validateUserId('123');
-
-    $tokenMetadata->validateExpiration();
-
-    if (!$accessToken->isLongLived()) {
-        // Exchanges a short-lived access token for a long-lived one
-        try {
-            $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            $facebook_errors($e);
-        }
-    }
-
-    $_SESSION['fb_access_token'] = (string)$accessToken;
-
-    $response = [];
-    try {
-        // Returns a `Facebook\FacebookResponse` object
-        $response = $fb->get('/me?fields=id,email,cover,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified', "$accessToken");
-    } catch (Facebook\Exceptions\FacebookResponseException $e) {
-        $facebook_errors($e);
-
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-        $facebook_errors($e);
-    }
-
-    $fbUserProfile = $response->getGraphUser()->all();
-
-    if (empty($fbUserProfile['id'])) {
-        throw new RuntimeException('No id returned');
-    }
-
     \Carbon\Request::changeURI(SITE . 'oAuth/Facebook/');  // clear GET data.
 
     return array(
-        'id' => $fbUserProfile['id'],
-        'first_name' => $fbUserProfile['first_name'] ?? '',
-        'last_name' => $fbUserProfile['last_name'] ?? '',
-        'email' => $fbUserProfile['email'] ?? '',
-        'gender' => $fbUserProfile['gender'] ?? '',
-        'picture' => $fbUserProfile['picture']['url'] ?? '',
-        'cover' => $fbUserProfile['cover']['source'] ?? '',
+        'id' => $profile['id'],
+        'first_name' => $profile['first_name'] ?? '',
+        'last_name' => $profile['last_name'] ?? '',
+        'email' => $profile['email'] ?? '',
+        'gender' => $profile['gender'] ?? '',
+        'picture' => $profile['picture']['url'] ?? '',
+        'cover' => $profile['cover']['source'] ?? '',
     );
 
 }

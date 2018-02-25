@@ -19,6 +19,7 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2InspectDataSourceRequest extends
 {
   protected $jobConfigType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2InspectJobConfig';
   protected $jobConfigDataType = '';
+  public $jobId;
 
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2InspectJobConfig
@@ -33,5 +34,13 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2InspectDataSourceRequest extends
   public function getJobConfig()
   {
     return $this->jobConfig;
+  }
+  public function setJobId($jobId)
+  {
+    $this->jobId = $jobId;
+  }
+  public function getJobId()
+  {
+    return $this->jobId;
   }
 }

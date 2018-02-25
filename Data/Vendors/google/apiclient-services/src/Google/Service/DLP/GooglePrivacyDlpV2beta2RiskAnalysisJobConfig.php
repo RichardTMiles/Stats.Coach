@@ -15,13 +15,30 @@
  * the License.
  */
 
-class Google_Service_DLP_GooglePrivacyDlpV2beta2RiskAnalysisJobConfig extends Google_Model
+class Google_Service_DLP_GooglePrivacyDlpV2beta2RiskAnalysisJobConfig extends Google_Collection
 {
+  protected $collection_key = 'actions';
+  protected $actionsType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2Action';
+  protected $actionsDataType = 'array';
   protected $privacyMetricType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2PrivacyMetric';
   protected $privacyMetricDataType = '';
   protected $sourceTableType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2BigQueryTable';
   protected $sourceTableDataType = '';
 
+  /**
+   * @param Google_Service_DLP_GooglePrivacyDlpV2beta2Action
+   */
+  public function setActions($actions)
+  {
+    $this->actions = $actions;
+  }
+  /**
+   * @return Google_Service_DLP_GooglePrivacyDlpV2beta2Action
+   */
+  public function getActions()
+  {
+    return $this->actions;
+  }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2PrivacyMetric
    */

@@ -48,7 +48,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function delete($project, $urlMap, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap);
+    $params = array('project' => $project, 'App' => $urlMap);
     $params = array_merge($params, $optParams);
     return $this->call('delete', array($params), "Google_Service_Compute_Operation");
   }
@@ -63,7 +63,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function get($project, $urlMap, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap);
+    $params = array('project' => $project, 'App' => $urlMap);
     $params = array_merge($params, $optParams);
     return $this->call('get', array($params), "Google_Service_Compute_UrlMap");
   }
@@ -120,7 +120,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function invalidateCache($project, $urlMap, Google_Service_Compute_CacheInvalidationRule $postBody, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap, 'postBody' => $postBody);
+    $params = array('project' => $project, 'App' => $urlMap, 'postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('invalidateCache', array($params), "Google_Service_Compute_Operation");
   }
@@ -207,7 +207,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function patch($project, $urlMap, Google_Service_Compute_UrlMap $postBody, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap, 'postBody' => $postBody);
+    $params = array('project' => $project, 'App' => $urlMap, 'postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('patch', array($params), "Google_Service_Compute_Operation");
   }
@@ -236,7 +236,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function update($project, $urlMap, Google_Service_Compute_UrlMap $postBody, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap, 'postBody' => $postBody);
+    $params = array('project' => $project, 'App' => $urlMap, 'postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('update', array($params), "Google_Service_Compute_Operation");
   }
@@ -253,7 +253,7 @@ class Google_Service_Compute_Resource_UrlMaps extends Google_Service_Resource
    */
   public function validate($project, $urlMap, Google_Service_Compute_UrlMapsValidateRequest $postBody, $optParams = array())
   {
-    $params = array('project' => $project, 'urlMap' => $urlMap, 'postBody' => $postBody);
+    $params = array('project' => $project, 'App' => $urlMap, 'postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('validate', array($params), "Google_Service_Compute_UrlMapsValidateResponse");
   }

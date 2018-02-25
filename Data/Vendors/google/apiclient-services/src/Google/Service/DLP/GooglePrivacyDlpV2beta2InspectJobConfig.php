@@ -15,8 +15,11 @@
  * the License.
  */
 
-class Google_Service_DLP_GooglePrivacyDlpV2beta2InspectJobConfig extends Google_Model
+class Google_Service_DLP_GooglePrivacyDlpV2beta2InspectJobConfig extends Google_Collection
 {
+  protected $collection_key = 'actions';
+  protected $actionsType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2Action';
+  protected $actionsDataType = 'array';
   protected $inspectConfigType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2InspectConfig';
   protected $inspectConfigDataType = '';
   public $inspectTemplateName;
@@ -25,6 +28,20 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2InspectJobConfig extends Google_
   protected $storageConfigType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2StorageConfig';
   protected $storageConfigDataType = '';
 
+  /**
+   * @param Google_Service_DLP_GooglePrivacyDlpV2beta2Action
+   */
+  public function setActions($actions)
+  {
+    $this->actions = $actions;
+  }
+  /**
+   * @return Google_Service_DLP_GooglePrivacyDlpV2beta2Action
+   */
+  public function getActions()
+  {
+    return $this->actions;
+  }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2InspectConfig
    */
