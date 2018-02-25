@@ -66,6 +66,7 @@ class User extends Request
         $service = strtolower($service);
         $request = strtolower($request);
 
+
         if ($service === false) {
             startApplication(true);
             return false;
@@ -145,6 +146,10 @@ class User extends Request
         } else {
             startApplication(true);
             return false;
+        }
+
+        if (empty($UserInfo)) {
+            throw new PublicAlert('Failed to get user info');
         }
 
         return [$service, &$request];

@@ -95,14 +95,12 @@ class User extends GlobalMap
      */
     public function &oAuth($service, &$request)
     {
-        global $UserInfo;
+        global $UserInfo, $json;
 
         if (empty($UserInfo)) {
             startApplication('login/');
             return false;
         }
-
-        sortDump($UserInfo);
 
         $service = "user_{$service}_id";
 
@@ -112,11 +110,8 @@ class User extends GlobalMap
         $user_id = $sql['user_id'] ?? false;
         $service_id = $sql[$service] ?? false;
 
-
-        if (!$user_id && !$service_id): // create new account
-
-            if ($request === 'SignUp'):                         // This will set the session id
-
+        if (!$user_id && !$service_id) { // create new account
+            if ($request === 'SignUp') {                         // This will set the session id
                 Users::Post([
                     'username' => $UserInfo['username'],
                     'password' => $UserInfo['password'],
@@ -132,32 +127,36 @@ class User extends GlobalMap
 
                 Stats::Post([]);
 
-            else:
+            } else {
                 if (($_SESSION['UserInfo'] ?? false) && \is_array($_SESSION['UserInfo'])) {
                     $UserInfo = $_SESSION['UserInfo'];
                 } else {   // were trying to signin when signup
                     $_SESSION['UserInfo'] = $UserInfo;
                 }
-                $request = 'SignUp';        // Sign into a non-existing account
+                $UserInfo['alert'] = 'It appears you do not already have an account with us.'; // Sign into a non-existing account
+
+                $json = $UserInfo;
+
                 return true;
-            endif;
-        elseif ($user_id && !$service_id):
-            if ($request === 'SignIn'):
+            }
+        } elseif ($user_id && !$service_id) {
+            if ($request === 'SignIn') {
                 $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
                 $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
                 $_SESSION['id'] = $user_id;
-            else:
+            } else {
                 if ($_SESSION['UserInfo'] ?? false) {
                     $UserInfo = $_SESSION['UserInfo'];
                 } else {
                     $_SESSION['UserInfo'] = $UserInfo;  // were trying to signup when we need to signin
                 }
-                $request = 'SignIn';
+                $UserInfo['alert'] = "You're Facebook email address matches an account that has not previously been linked to ";
+                $json = $UserInfo;
                 return true;
-            endif;
-        else:
+            }
+        } else {
             $_SESSION['id'] = $user_id;
-        endif;
+        }
         $_SESSION['UserInfo'] = $UserInfo = null;
         startApplication(true);
         return false;
@@ -193,18 +192,10 @@ class User extends GlobalMap
     }
 
     /**
-     * @param $request
-     */
-    public function google($request)
-    {
-
-    }
-
-    /**
      * @return bool
      * @throws PublicAlert
      */
-    public function register() : bool
+    public function register(): bool
     {
         global $username, $password, $email, $firstName, $lastName, $gender;
 
@@ -402,7 +393,7 @@ class User extends GlobalMap
 
             $message = 'Hello ' . ($first ?: $my['user_first_name']) . ",
             \r\n Please visit the link below so we can activate your account:\r\n\r\n"
-            . SITE .  'Activate/' . base64_encode($email) . '/' . base64_encode($my['user_email_code']) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
+                . SITE . 'Activate/' . base64_encode($email) . '/' . base64_encode($my['user_email_code']) . "/ \r\n\r\n Happy Golfing \r\n--" . SITE;
 
             if (!mail($email ?: $my['user_email'], $subject, $message, $headers)) {
                 throw new PublicAlert('Our email system failed.');

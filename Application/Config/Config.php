@@ -44,7 +44,7 @@ function urlFacebook($request = null)
             'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
             'app_secret' => FACEBOOK_APP_SECRET,
             'default_graph_version' => 'v2.2',
-        ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/oAuth/Facebook/'.$request, [
+        ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/oAuth/Facebook/' . $request, [
             'public_profile', 'user_friends', 'email',
             'user_about_me', 'user_birthday',
             'user_education_history', 'user_hometown',
@@ -147,43 +147,50 @@ function urlGoogle($request = null)
 {
     //Call Google API
     $client = new Google_Client();
-    $client->setApplicationName('Login to Stats.Coach');
+    $client->setApplicationName('Stats.Coach');
     $client->setAuthConfig(APP_ROOT . 'Application/Config/gAuth.json');
 
     if ($request !== null) {
         $request .= DS;
+        $client->setRedirectUri('https://stats.coach/oAuth/Google/' . $request);
     }
 
-    $client->setRedirectUri('https://stats.coach/oAuth/Google/' . $request);
     $client->setIncludeGrantedScopes(true);   // incremental auth
-    $client->addScope('profile', 'email');
+    $client->addScope('profile');
+    $client->addScope('email');
+
     $google = new Google_Service_Oauth2($client);
+
 
     if (!isset($_GET['code'])) {
         return $client->createAuthUrl();
     }
 
-    $client->fetchAccessTokenWithAuthCode($_GET['code']);
+    $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 
-    $_SESSION['token'] = $client->getAccessToken();
+    if ($accessToken) {
 
-    $client->setAccessToken($_SESSION['token']);
+        $client->setAccessToken($accessToken);
 
-    //Get user profile data from google
-    $gpUserProfile = $google->userinfo->get();
+        //Get user profile data from google
+        $gpUserProfile = $google->userinfo->get();
 
-    //Insert or update user data to the database
-    return array(
-        'id' => $gpUserProfile['id'],
-        'first_name' => $gpUserProfile['given_name'],
-        'last_name' => $gpUserProfile['family_name'],
-        'email' => $gpUserProfile['email'],
-        'gender' => $gpUserProfile['gender'],
-        'locale' => $gpUserProfile['locale'],
-        'picture' => $gpUserProfile['picture'],
-        'link' => $gpUserProfile['link']
-    );
+        //Insert or update user data to the database
+        return array(
+            'id' => $gpUserProfile['id'],
+            'first_name' => $gpUserProfile['given_name'],
+            'last_name' => $gpUserProfile['family_name'],
+            'email' => $gpUserProfile['email'],
+            'gender' => $gpUserProfile['gender'],
+            'locale' => $gpUserProfile['locale'],
+            'picture' => $gpUserProfile['picture'],
+            'link' => $gpUserProfile['link']
+        );
+    }
+    throw new \Carbon\Error\PublicAlert('failed to get access token');
 }
+
+//urlGoogle();
 
 return [
     'DATABASE' => [
