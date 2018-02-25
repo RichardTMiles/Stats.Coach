@@ -88,75 +88,77 @@ class User extends GlobalMap
     }
 
     /**
+     * @param string $service
      * @param string|bool $request will map the the global scope
      * @return bool|mixed
      * @throws \Carbon\Error\PublicAlert
      */
-    public function facebook(&$request)
+    public function &oAuth($service, &$request)
     {
-        global $facebook;
+        global $UserInfo;
 
-        if (empty($facebook)) {
+        if (empty($UserInfo)) {
             startApplication('login/');
             return false;
         }
 
-        $sql = 'SELECT user_id, user_facebook_id FROM carbon_users WHERE user_email = ? OR user_facebook_id =?';
-        $sql = self::fetch($sql, $facebook['email'], $facebook['id']);
+        sortDump($UserInfo);
 
-        $C6_id = $sql['user_id'] ?? false;
-        $fb_id = $sql['user_facebook_id'] ?? false;
+        $service = "user_{$service}_id";
+
+        $sql = "SELECT user_id, $service FROM carbon_users WHERE user_email = ? OR user_facebook_id = ?";
+        $sql = self::fetch($sql, $UserInfo['email'], $UserInfo['id']);
+
+        $user_id = $sql['user_id'] ?? false;
+        $service_id = $sql[$service] ?? false;
 
 
-        if (!$C6_id && !$fb_id): // create new account
-
-            #sortDump($request);
+        if (!$user_id && !$service_id): // create new account
 
             if ($request === 'SignUp'):                         // This will set the session id
 
-
                 Users::Post([
-                    'username' => $facebook['username'],
-                    'password' => $facebook['password'],
-                    'facebook_id' => $facebook['id'],
-                    'profile_pic' => $facebook['picture']['url'] ?? '',
-                    'cover_photo' => $facebook['cover']['source'] ?? '',
-                    'email' => $facebook['email'],
+                    'username' => $UserInfo['username'],
+                    'password' => $UserInfo['password'],
+                    $service => $UserInfo['oauth_uid'],
+                    'profile_pic' => $UserInfo['picture'] ?? '',
+                    'cover_photo' => $UserInfo['cover'] ?? '',
+                    'email' => $UserInfo['email'],
                     'type' => 'Athlete',
-                    'first_name' => $facebook['first_name'],
-                    'last_name' => $facebook['last_name'],
-                    'gender' => $facebook['gender']
+                    'first_name' => $UserInfo['first_name'],
+                    'last_name' => $UserInfo['last_name'],
+                    'gender' => $UserInfo['gender']
                 ]);
 
                 Stats::Post([]);
 
             else:
-                if (($_SESSION['facebook'] ?? false) && \is_array($_SESSION['facebook'])) {
-                    $facebook = $_SESSION['facebook'];
+                if (($_SESSION['UserInfo'] ?? false) && \is_array($_SESSION['UserInfo'])) {
+                    $UserInfo = $_SESSION['UserInfo'];
                 } else {   // were trying to signin when signup
-                    $_SESSION['facebook'] = $facebook;
+                    $_SESSION['UserInfo'] = $UserInfo;
                 }
                 $request = 'SignUp';        // Sign into a non-existing account
                 return true;
             endif;
-        elseif ($C6_id && !$fb_id):
+        elseif ($user_id && !$service_id):
             if ($request === 'SignIn'):
-                $sql = 'UPDATE carbon_users SET user_facebook_id = ? WHERE user_id = ?';     // UPDATE user
-                $this->db->prepare($sql)->execute([$facebook['id'], $_SESSION['id']]);
-                $_SESSION['id'] = $C6_id;
+                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
+                $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
+                $_SESSION['id'] = $user_id;
             else:
-                if ($_SESSION['facebook'] ?? false) {
-                    $facebook = $_SESSION['facebook'];
+                if ($_SESSION['UserInfo'] ?? false) {
+                    $UserInfo = $_SESSION['UserInfo'];
                 } else {
-                    $_SESSION['facebook'] = $facebook;  // were trying to signup when we need to signin
+                    $_SESSION['UserInfo'] = $UserInfo;  // were trying to signup when we need to signin
                 }
                 $request = 'SignIn';
                 return true;
             endif;
         else:
-            $_SESSION['id'] = $C6_id;
+            $_SESSION['id'] = $user_id;
         endif;
-        $_SESSION['facebook'] = $facebook = null;
+        $_SESSION['UserInfo'] = $UserInfo = null;
         startApplication(true);
         return false;
     }

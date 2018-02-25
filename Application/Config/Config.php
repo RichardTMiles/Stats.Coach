@@ -10,7 +10,6 @@
  * data table.
  */
 
-
 const USER = 1;
 const USER_FOLLOWERS = 2;
 const USER_NOTIFICATIONS = 3;
@@ -32,31 +31,132 @@ const TEMPLATE = COMPOSER . 'almasaeed2010' . DS . 'adminlte' . DS;
 const FACEBOOK_APP_ID = '1456106104433760';
 const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
-function urlFacebook()
+function urlFacebook($request = null)
 {
     if (empty(FACEBOOK_APP_ID)) {
         return '';
     }
-    return (new Facebook\Facebook([
+
+    if ($request !== null) {
+        $request .= DS;
+
+        return (new Facebook\Facebook([
+            'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
+            'app_secret' => FACEBOOK_APP_SECRET,
+            'default_graph_version' => 'v2.2',
+        ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/oAuth/Facebook/'.$request, [
+            'public_profile', 'user_friends', 'email',
+            'user_about_me', 'user_birthday',
+            'user_education_history', 'user_hometown',
+            'user_location', 'user_photos', 'user_friends']);
+    }
+
+    $fb = new Facebook\Facebook([
         'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id
         'app_secret' => FACEBOOK_APP_SECRET,
         'default_graph_version' => 'v2.2',
-    ]))->getRedirectLoginHelper()->getLoginUrl('https://stats.coach/Facebook/', [
-        'public_profile', 'user_friends', 'email',
-        'user_about_me', 'user_birthday',
-        'user_education_history', 'user_hometown',
-        'user_location', 'user_photos', 'user_friends']);
+    ]);
+
+    $facebook_errors = function ($e) {
+        \Carbon\Error\ErrorCatcher::generateLog();
+        \Carbon\Error\PublicAlert::danger('Facebook sent an invalid response.');
+        startApplication(true);
+    };
+
+
+    if (isset($_GET['state'])) {
+        $_SESSION['FBRLH_state'] = $_GET['state'];
+    }
+    $helper = $fb->getRedirectLoginHelper();
+    // $helper->getPersistentDataHandler()->set( 'state', $_GET['state'] );
+
+    try {
+        $accessToken = $helper->getAccessToken();
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+        // When Graph returns an error
+        $facebook_errors($e);
+        exit;
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+        // When validation fails or other local issues
+        $facebook_errors($e);
+        exit;
+    }
+
+    if (null === $accessToken) {
+        $facebook_errors($helper);
+    }
+
+    // Logged in
+
+    // The OAuth 2.0 client handler helps us manage access tokens
+    $oAuth2Client = $fb->getOAuth2Client();
+
+    // Get the access token metadata from /debug_token
+    $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+
+    // Validation (these will throw FacebookSDKException's when they fail)
+    $tokenMetadata->validateAppId('1456106104433760'); // Replace {app-id} with your app id
+    // If you know the user ID this access token belongs to, you can validate it here
+    //$tokenMetadata->validateUserId('123');
+
+    $tokenMetadata->validateExpiration();
+
+    if (!$accessToken->isLongLived()) {
+        // Exchanges a short-lived access token for a long-lived one
+        try {
+            $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            $facebook_errors($e);
+        }
+    }
+
+    $_SESSION['fb_access_token'] = (string)$accessToken;
+
+    $response = [];
+    try {
+        // Returns a `Facebook\FacebookResponse` object
+        $response = $fb->get('/me?fields=id,email,cover,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified', "$accessToken");
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+        $facebook_errors($e);
+
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+        $facebook_errors($e);
+    }
+
+    $fbUserProfile = $response->getGraphUser()->all();
+
+    if (empty($fbUserProfile['id'])) {
+        throw new RuntimeException('No id returned');
+    }
+
+    \Carbon\Request::changeURI(SITE . 'oAuth/Facebook/');  // clear GET data.
+
+    return array(
+        'id' => $fbUserProfile['id'],
+        'first_name' => $fbUserProfile['first_name'] ?? '',
+        'last_name' => $fbUserProfile['last_name'] ?? '',
+        'email' => $fbUserProfile['email'] ?? '',
+        'gender' => $fbUserProfile['gender'] ?? '',
+        'picture' => $fbUserProfile['picture']['url'] ?? '',
+        'cover' => $fbUserProfile['cover']['source'] ?? '',
+    );
+
 }
 
-function urlGoogle()
+function urlGoogle($request = null)
 {
     //Call Google API
     $client = new Google_Client();
     $client->setApplicationName('Login to Stats.Coach');
     $client->setAuthConfig(APP_ROOT . 'Application/Config/gAuth.json');
-    $client->setRedirectUri('https://stats.coach/google/');
+
+    if ($request !== null) {
+        $request .= DS;
+    }
+
+    $client->setRedirectUri('https://stats.coach/oAuth/Google/' . $request);
     $client->setIncludeGrantedScopes(true);   // incremental auth
-    $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+    $client->addScope('profile', 'email');
     $google = new Google_Service_Oauth2($client);
 
     if (!isset($_GET['code'])) {
@@ -73,9 +173,8 @@ function urlGoogle()
     $gpUserProfile = $google->userinfo->get();
 
     //Insert or update user data to the database
-    $gpUserData = array(
-        'oauth_provider' => 'google',
-        'oauth_uid' => $gpUserProfile['id'],
+    return array(
+        'id' => $gpUserProfile['id'],
         'first_name' => $gpUserProfile['given_name'],
         'last_name' => $gpUserProfile['family_name'],
         'email' => $gpUserProfile['email'],
@@ -84,13 +183,7 @@ function urlGoogle()
         'picture' => $gpUserProfile['picture'],
         'link' => $gpUserProfile['link']
     );
-
-
-    sortDump($gpUserData);
-
-
 }
-
 
 return [
     'DATABASE' => [
@@ -117,7 +210,7 @@ return [
 
         'TIMEZONE' => 'America/Phoenix',    //  Current timezone TODO - look up php
 
-        'TITLE' => 'Root • Prerogative',      // Website title
+        'TITLE' => 'Stats • Coach',     // Website title
 
         'VERSION' => '0.0.0',       // Add link to semantic versioning
 
@@ -139,7 +232,7 @@ return [
 
             if ($_SESSION['id'] ?? ($_SESSION['id'] = false)) {
 
-#return $_SESSION['id'] = false;
+                #return $_SESSION['id'] = false;
 
                 global $user;
 
@@ -147,7 +240,7 @@ return [
                     $user = [];
                 }
 
-#sortDump($user);
+                #sortDump($user);
 
                 if (!is_array($me = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
 
@@ -186,7 +279,7 @@ return [
     ],  */
 
 
-// ERRORS on point
+    // ERRORS on point
     'ERROR' => [
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 

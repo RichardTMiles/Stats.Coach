@@ -6,8 +6,6 @@
  * Time: 9:00 PM
  */
 
-if (!session_id())
-    session_start();
 
 $fb = new Facebook\Facebook([
     'app_id' => FACEBOOK_APP_ID, // Replace {app-id} with your app id

@@ -50,6 +50,107 @@ class User extends Request
         return [$username, $password, $rememberMe];
     }
 
+
+    /**
+     * @param $service
+     * @param null $request
+     * @return array|bool|null|string
+     * @throws PublicAlert
+     */
+    public function oAuth($service, &$request = null)
+    {
+        global $UserInfo;
+
+        [$service, $request] = $this->set($service, $request)->word();
+
+        $service = strtolower($service);
+        $request = strtolower($request);
+
+        if ($service === false) {
+            startApplication(true);
+            return false;
+        }
+
+        if ($request === 'SignUp') {
+            if (array_key_exists('UserInfo', $_SESSION) && !empty($_SESSION['UserInfo'])) {
+                $UserInfo = $_SESSION['UserInfo'];  // Pull this from the session
+            } else {
+                if ($service !== 'google'){
+                    $UserInfo = urlFacebook();
+                } elseif ($service !== 'facebook') {
+                    $UserInfo = urlGoogle();
+                } else {
+                    startApplication(true);
+                    return false;                   // don't return this view
+                }
+                return null;    // return the view
+            }
+            [$username, $first_name, $last_name, $gender]
+                = $this->post('username', 'firstname', 'lastname', 'gender')->alnum();
+
+            [$password, $verifyPass]
+                = $this->post('password', 'password2')->value();
+
+            $email = $this->post('email')->email();
+
+            $terms = $this->post('Terms')->int();
+
+            if (!$username) {
+                throw new PublicAlert('Please enter a username with only numbers & letters!');
+            }
+
+            if (!$gender) {
+                throw new PublicAlert('Sorry, please enter your gender.');
+            }
+
+            if (!$password || \strlen($password) < 6) {
+                throw new PublicAlert('Sorry, your password must be more than 6 characters!');
+            }
+
+            if ($password !== $verifyPass) {
+                throw new PublicAlert('The passwords entered must match!');
+            }
+
+            if (!$email) {
+                throw new PublicAlert('Please enter a valid email address!');
+            }
+
+            if (!$first_name) {
+                throw new PublicAlert('Please enter your first name!');
+            }
+
+            if (!$last_name) {
+                throw new PublicAlert('Please enter your last name!');
+            }
+
+            if (!$terms) {
+                throw new PublicAlert('You must agree to the terms and conditions.');
+            }
+
+            $UserInfo['first_name'] = $first_name;
+            $UserInfo['last_name'] = $last_name;
+            $UserInfo['gender'] = $gender;
+            $UserInfo['email'] = $email;
+            $UserInfo['username'] = $username;
+            $UserInfo['password'] = $password;
+            $_SESSION['UserInfo'] = $UserInfo;
+
+            return [$service, &$request];
+        }
+
+        if ($service === 'facebook') {
+            $UserInfo = urlFacebook();
+        } elseif ($service === 'google') {
+            $UserInfo = urlGoogle();
+        } else {
+            startApplication(true);
+            return false;
+        }
+
+        return [$service, &$request];
+    }
+
+
     /**
      * @param null $request
      * @return mixed
@@ -123,14 +224,6 @@ class User extends Request
         }
 
         return $request;
-    }
-
-    /**
-     * @param $request
-     */
-    public function google($request)
-    {
-        urlGoogle();
     }
 
     public function follow($user_id)

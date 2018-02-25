@@ -32,8 +32,8 @@ use Stash\Pool;
 class Google_AccessToken_Verify
 {
   const FEDERATED_SIGNON_CERT_URL = 'https://www.googleapis.com/oauth2/v3/certs';
-  const OAUTH2_ISSUER = 'accounts.google.php.com';
-  const OAUTH2_ISSUER_HTTPS = 'https://accounts.google.php.com';
+  const OAUTH2_ISSUER = 'accounts.google.com';
+  const OAUTH2_ISSUER_HTTPS = 'https://accounts.google.com';
 
   /**
    * @var GuzzleHttp\ClientInterface The http client
@@ -178,7 +178,7 @@ class Google_AccessToken_Verify
   {
     $certs = null;
     if ($cache = $this->getCache()) {
-      $cacheItem = $cache->getItem('federated_signon_certs_v3', 3600);
+      $cacheItem = $cache->getItem('federated_signon_certs_v3');
       $certs = $cacheItem->get();
     }
 
@@ -189,6 +189,7 @@ class Google_AccessToken_Verify
       );
 
       if ($cache) {
+        $cacheItem->expiresAt(new DateTime('+1 hour'));
         $cacheItem->set($certs);
         $cache->save($cacheItem);
       }

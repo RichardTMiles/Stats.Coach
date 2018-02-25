@@ -150,7 +150,7 @@ class Google_Http_MediaFileUpload
   }
 
   /**
-  * Sends a PUT-Request to google.php drive and parses the response,
+  * Sends a PUT-Request to google drive and parses the response,
   * setting the appropiate variables from the response()
   *
   * @param Google_Http_Request $httpRequest the Reuqest which will be send

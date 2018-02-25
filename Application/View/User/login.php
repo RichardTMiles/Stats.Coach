@@ -11,9 +11,7 @@
         <?php if (empty($UserName)): ?>
             <form data-pjax action="<?= SITE ?>login/" method="post"> <!-- return false; -->
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" name="username"
-                           placeholder="Username"
-                           value="<?= (isset($_POST['username']) ? htmlentities($_POST['username']) : null); ?>">
+                    <input type="text" class="form-control" name="username" placeholder="Username" value="">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
 
@@ -37,10 +35,10 @@
 
             <div class="social-auth-links text-center">
                 <p>- OR -</p>
-                <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?=urlFacebook()?>'>
+                <a class="btn btn-block btn-social btn-facebook btn-flat" href='<?=urlFacebook('SignIn')?>'>
                     <i class="fa fa-facebook"></i> Sign in using Facebook</a>
 
-                <a href="<?=urlGoogle() ?>" class="btn btn-block btn-social btn-google btn-flat">
+                <a href="<?=urlGoogle('SignIn') ?>" class="btn btn-block btn-social btn-google btn-flat">
                     <i class="fa fa-google-plus"></i> Sign in using Google+</a>
             </div><!-- /.social-auth-links -->
 

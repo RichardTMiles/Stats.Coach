@@ -80,8 +80,7 @@ if ((string)$url->match('Contact', 'Messages', 'Mail')) {
 if (!$_SESSION['id']) {  // Signed out
 
     if ((string)$url->match('Login/*', 'User', 'login') ||
-        (string)$url->match('Google/{request?}/*', 'User', 'google') ||
-        (string)$url->match('Facebook/{request?}/*', 'User', 'facebook') ||
+        (string)$url->match('oAuth/{service}/{request?}/*', 'User', 'oAuth') ||
         (string)$url->match('Register/*', 'User', 'Register') ||           // Register
         (string)$url->match('Recover/{user_email?}/{user_generated_string?}/', 'User', 'recover')) {     // Recover $userId
         return true;
