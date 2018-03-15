@@ -32,7 +32,7 @@ class Course extends Entities
     {
         $course_id = self::beginTransaction( GOLF_COURSE );
 
-        $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, course_par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
+        $sql = "INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website)
                                 VALUES (:course_id, :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga, :site)";
         $stmt = Database::database()->prepare( $sql );
         $stmt->bindValue( ':course_id',     $course_id );
@@ -56,15 +56,16 @@ class Course extends Entities
         $stmt->bindValue( ':course_type',   $argv['course']['style'] );
         $stmt->bindValue( ':course_access', $argv['course']['access'] );
         $stmt->bindValue( ':course_handicap', serialize( $argv['handicap'] ) );
-        if (!$stmt->execute()) throw new \Exception( "Failed inserting courses" );
+        if (!$stmt->execute()) throw new \Exception( 'Failed inserting courses' );
 
         $null = null;
 
-        if (!Location::add( $null, $course_id, [
+        if (!Locations::Post([
+            'id' => $course_id,
             'street' => $argv['course']['street'],
             'city' => $argv['course']['city'],
             'state' => $argv['course']['state']
-        ])) throw new \Exception( "Failed inserting courses" );
+        ])) throw new \Exception( 'Failed inserting courses' );
 
 
         $sql = "INSERT INTO StatsCoach.golf_tee_box (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES (:course_id, :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)";

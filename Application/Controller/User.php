@@ -21,7 +21,7 @@ class User extends Request
      */
     public function login()
     {
-        global $UserName, $FullName, $UserImage;    // validate cookies
+        global $json, $UserName, $FullName, $UserImage;    // validate cookies
 
         [$UserName, $FullName] = $this->cookie('UserName', 'FullName')->alnum();
 
@@ -34,6 +34,10 @@ class User extends Request
         if (!$rememberMe) {
             $this->cookie('username', 'password', 'RememberMe')->clearCookies();
         }
+
+        $json['google_url'] = urlGoogle('SignIn');
+
+        $json['facebook_url'] = urlFacebook('SignIn');
 
         if (empty($_POST)) {
             return null;                    // returning null will show the view but not execute the model
@@ -49,7 +53,6 @@ class User extends Request
 
         return [$username, $password, $rememberMe];
     }
-
 
     /**
      * @param $service
@@ -144,81 +147,6 @@ class User extends Request
         return [$service, &$request];
     }
 
-
-    /**
-     * @param null $request
-     * @return mixed
-     * @throws PublicAlert
-     */
-    public function facebook(&$request = null)
-    {
-        global $facebook;
-
-        $request = (new Request())->set($request)->alnum() ?: true;
-
-        if ($request === 'SignUp' && (array_key_exists('facebook', $_SESSION) && !empty($_SESSION['facebook']))) {
-
-
-            $facebook = $_SESSION['facebook'] ?? $facebook;  // Pull this from the session
-
-            [$username, $first_name, $last_name, $gender]
-                = $this->post('username', 'firstname', 'lastname', 'gender')->alnum();
-
-            [$password, $verifyPass]
-                = $this->post('password', 'password2')->value();
-
-            $email = $this->post('email')->email();
-
-            $terms = $this->post('Terms')->int();
-
-            if (!$username) {
-                throw new PublicAlert('Please enter a username with only numbers & letters!');
-            }
-
-            if (!$gender) {
-                throw new PublicAlert('Sorry, please enter your gender.');
-            }
-
-            if (!$password || \strlen($password) < 6) {
-                throw new PublicAlert('Sorry, your password must be more than 6 characters!');
-            }
-
-            if ($password !== $verifyPass) {
-                throw new PublicAlert('The passwords entered must match!');
-            }
-
-            if (!$email) {
-                throw new PublicAlert('Please enter a valid email address!');
-            }
-
-            if (!$first_name) {
-                throw new PublicAlert('Please enter your first name!');
-            }
-
-            if (!$last_name) {
-                throw new PublicAlert('Please enter your last name!');
-            }
-
-            if (!$terms) {
-                throw new PublicAlert('You must agree to the terms and conditions.');
-            }
-
-            $facebook['first_name'] = $first_name;
-            $facebook['last_name'] = $last_name;
-            $facebook['gender'] = $gender;
-            $facebook['email'] = $email;
-            $facebook['username'] = $username;
-            $facebook['password'] = $password;
-
-            return $request;
-
-        }
-        if ((include SERVER_ROOT . 'Application/Model/Helpers/fb-callback.php') === false) {
-            throw new PublicAlert('Sorry, we could not connect to Facebook. Please try again later.');
-        }
-
-        return $request;
-    }
 
     public function follow($user_id)
     {
@@ -338,17 +266,20 @@ class User extends Request
     }
 
     /**
-     * @param  $user_id
+     * @param  string|array|mixed $user_id - validating for string
      * @return array|bool|mixed
      * @throws PublicAlert
      */
     public function profile($user_id = false)
     {
+        global $json;
         $user_id = $this->set($user_id)->alnum();
 
         if (false !== $user_id) {
             return $user_id;
         }
+
+        $json['myAccountBool'] = true;
 
         if (empty($_POST)) {
             return null;        // don't go onto the model, but run the view
@@ -358,6 +289,7 @@ class User extends Request
             throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
         }
 
+        // Our forum variables get put in the public scope
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
 
         [$first, $last, $gender] = $this->post('first_name', 'last_name', 'gender')->word();

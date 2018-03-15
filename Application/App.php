@@ -11,46 +11,48 @@ namespace App;
 use Carbon\Route;
 use Carbon\View;
 
-class App extends Route
+abstract class App extends Route
 {
-    public function defaultRoute()  // Sockets will not execute this
-    {
-        View::$forceWrapper = true; // this will hard refresh the wrapper
+    /**
+     * App constructor. If no uri is set than
+     * the Route constructor will execute the
+     * defaultRoute method defined below.
+     * @param null $structure
+     * @throws \Mustache_Exception_InvalidArgumentException
+     * @throws \Carbon\Error\PublicAlert
+     */
 
-        if (!$_SESSION['id']):
-            return $this->wrap()('User/login.php');  // don't change how wrap works, I know it looks funny
-        else:
-            return MVC('Golf', 'golf');
-        endif;
-    }
-
-    public function fullPage()
+    public
+    function fullPage()
     {
         return catchErrors(function (string $file) {
             return include APP_VIEW . $file;
         });
     }
 
-    public function wrap()
+    public
+    function wrap()
     {
-        return function (string $file) : bool {
+        return function (string $file): bool {
             return View::content(APP_VIEW . $file);
         };
     }
 
-    public function MVC()
+    public
+    function MVC()
     {
         return function (string $class, string $method, array &$argv = []) {
             return MVC($class, $method, $argv);         // So I can throw in ->structure($route->MVC())-> anywhere
         };
     }
 
-    public function events($selector = '')
+    public
+    function events($selector = '')
     {
-        return function ($class, $method, $argv) {
+        return function ($class, $method, $argv) use ($selector) {
             global $alert, $json;
 
-            if (false === $argv = CM($class, $method, $argv)){
+            if (false === $argv = CM($class, $method, $argv)) {
                 return false;
             }
 
@@ -58,7 +60,7 @@ class App extends Route
                 $alert = 'Mustache Template Not Found ' . $file;
             }
 
-            if (!is_array($alert)) {
+            if (!\is_array($alert)) {
                 $alert = array();
             }
 
@@ -66,7 +68,8 @@ class App extends Route
                 'Errors' => $alert,
                 'Event' => 'Controller->Model',   // This doesn't do anything.. Its just a mental note when I look at the json's in console (controller->model only)
                 'Model' => $argv,
-                'Mustache' => DS . $file
+                'Mustache' => DS . $file,
+                'Widget' => $selector
             ]);
 
             print PHP_EOL . json_encode($json) . PHP_EOL; // new line ensures it sends through the socket

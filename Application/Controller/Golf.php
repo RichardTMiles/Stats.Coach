@@ -17,6 +17,12 @@ class Golf extends Request  // Validation
         return $this->set( $user_uri )->alnum() ?: $user_id = $_SESSION['id'];  // session id must be set (route)
     }
 
+
+
+    public function coursesByState($state) {
+        return $this->set($state)->word();
+    }
+
     /**
      * @param $state
      * @param $course_id
@@ -26,21 +32,19 @@ class Golf extends Request  // Validation
      */
     public function PostScore(&$state, &$course_id, &$boxColor)
     {
+        global $json;
+
         $state = ucfirst( $this->set( $state )->alnum() );
-        $course_id = $this->set( $course_id )->int();
+        $course_id = $this->set( $course_id )->alnum();         // hex id
         $boxColor = $this->set( $boxColor )->alnum();
 
         if (!$state) {
-            if (!$USStates = file_get_contents( SERVER_ROOT . 'Data/Indexes/UnitedStates.txt')) {
-                throw new PublicAlert('Unable to open states file!');
-            }
-            global $states;
-            $states = explode(PHP_EOL, $USStates);
-            return null;        // goto view
+            $json['step1'] = true;
+            return null;                                // goto view
         }
 
         if (empty($_POST)) {
-            return [$state, $course_id, $boxColor];
+            return [$state, $course_id, $boxColor];     // goto the model
         }
 
         global $roundDate, $newScore, $ffs, $gnr, $putts;
@@ -134,11 +138,9 @@ class Golf extends Request  // Validation
                 $holes = 18;
         }
 
-
         $par = $this->post( 'par_1', 'par_2', 'par_3', 'par_4', 'par_5', 'par_6', 'par_7', 'par_8', 'par_9', 'par_10', 'par_11', 'par_12', 'par_13', 'par_14', 'par_15', 'par_16', 'par_17', 'par_18' )->int();
 
         $validate( $par );
-
 
         for ($i = 1; $i <= $tee_boxes; $i++) {
             $tee = 'tee_'. $i . '_color';

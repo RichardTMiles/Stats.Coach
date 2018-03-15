@@ -18,7 +18,7 @@ class Golf extends GlobalMap implements iSport
     /**
      * @return bool
      */
-    public function golf() : bool  // This is the home page for the user
+    public function golf(): bool  // This is the home page for the user
     {
         return true;
     }
@@ -31,7 +31,7 @@ class Golf extends GlobalMap implements iSport
         global $user_id;
 
         if ($user_uri !== $_SESSION['id']) {
-            $user_id = Users::user_id_from_uri( $user_uri );
+            $user_id = Users::user_id_from_uri($user_uri);
         }
 
         Rounds::all($this->user[$user_id], $user_id);
@@ -43,18 +43,18 @@ class Golf extends GlobalMap implements iSport
      * @return array
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public function stats(&$user, $id) : array
+    public function stats(&$user, $id): array
     {
         if (!\is_array($user)) {
             throw new InvalidArgumentException('Bad User Passed To Golf Stats');
         }
-        $user['rounds'] = Rounds::get( $user['rounds'], $id );
+        $user['rounds'] = Rounds::get($user['rounds'], $id);
 
         if (!array_key_exists(0, $user['rounds'])) {
             $user['rounds'] = [$user['rounds']];
         }
 
-        $user['stats'] = self::fetch( 'SELECT stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_putts, stats_gnr, stats_ffs FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id );
+        $user['stats'] = self::fetch('SELECT stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_putts, stats_gnr, stats_ffs FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id);
 
         return $user;
     }
@@ -64,15 +64,18 @@ class Golf extends GlobalMap implements iSport
      * @return mixed
      * @throws \RuntimeException
      */
-    public function course($id)
+    public function course($id): bool
     {
-        $this->course[$id] = self::fetch( 'SELECT * FROM golf_course JOIN carbon_location ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id );
-        if (!\is_array( $course = &$this->course[$id] )) {
-            throw new \RuntimeException( 'invalid course id' );
+        $this->course[$id] = self::fetch('SELECT * FROM golf_course JOIN carbon_locations ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id);
+
+        if (!\is_array($this->course[$id])) {
+            return false;
         }
-        $course['course_par'] = unserialize( $course['course_par'], false );
-        $course['course_handicap'] = unserialize( $course['course_handicap'], false );
-        return $course;
+
+        $this->course['course_par'] = unserialize($this->course['course_par'], []);
+        $this->course['course_handicap'] = unserialize($this->course['course_handicap'], []);
+
+        return true;
     }
 
     /**
@@ -83,13 +86,17 @@ class Golf extends GlobalMap implements iSport
      */
     public function teeBox($id, $color)
     {
-        if (!\is_array( $this->course[$id] )) {
-            throw new \RuntimeException( 'invalid distance lookup' );
+        if (!\is_array($this->course[$id])) {
+            throw new \RuntimeException('invalid distance lookup');
         }
         $sql = 'SELECT * FROM golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1';
-        $this->course[$id]['teeBox'] = self::fetch( $sql, $id, $color );
-        $this->course[$id]['teeBox']['distance'] = unserialize( $this->course[$id]['teeBox']['distance'], false );
+
+        $this->course[$id]['teeBox'] = self::fetch($sql, $id, $color);
+
+        $this->course[$id]['teeBox']['distance'] = unserialize($this->course[$id]['teeBox']['distance'], []);
+
         $this->course[$id]['teeBox']['distance_color'] = $color;
+
         return $this->course[$id]['teeBox'];
     }
 
@@ -102,10 +109,96 @@ class Golf extends GlobalMap implements iSport
      */
     public function postScore($state, $course_id, $boxColor)
     {
-        global $course_colors, $course, $courses, $gnr, $ffs, $putts, $newScore, $roundDate;
+        // forum variables are stored in globals
+        global $gnr, $ffs, $putts, $newScore, $roundDate;
 
+        //json
+        global $json;   // This will fill our template
+
+        $json['state'] = $state;    // was validated in controller
+
+        // low key got to high one day camping and moved the state selection to
+        // an even tin the bootstrap.. it loads the mustache in a seperate div using startApplication in js...
+        // I felt like it should be a thing
+
+        // Get Course so we can display the tee box colors
+        if (!empty($course_id) &&
+            (!$this->course[$course_id] ?? false)
+            && !$this->course($course_id)) {
+            throw new PublicAlert('The course could not be found');
+        }
+
+        if (empty($boxColor)) {
+            $json['step2'] = true;
+            $json['course'] = $this->course[$course_id];
+
+            // TODO - make this happen
+            /*
+            foreach ($course_colors as $key => $value) {
+                if (empty($value)) {
+                    break;
+                }
+                switch ($value = strtolower($value)) {
+                    case 'white':
+                        $color = 'aqua';
+                        break;
+                    case 'gold':
+                        $color = 'yellow';
+                        break;
+                    default:
+                        $color = $value;
+                }
+            }
+            */
+        }
+
+        // Get each color and make it readable in mustache bc im
+        // dumb and made it this way back in the the day TODO - this engouth validation???
+        if (empty($boxColor) && !empty($course_id) && \is_array($this->course)) {      // TODO - to high =-- see tif this is okay
+            for ($i = 1; $i < 6; $i++) {
+                if (empty($c = $this->course[$course_id]["box_color_$i"])) {
+                    break;
+                }
+                $json['colors'][] = [
+                    'color' => $c,
+                    'lower' => strtolower($c)
+                ];
+            }
+            return true;
+        }
+
+
+        // A tee box color is set, get the distances.
+        // I don't like that the tee box color is stored twice
+        if (!empty($boxColor)) {
+            if (!isset($this->course[$course_id]['teeBox']) || !\is_array($this->course[$course_id]['teeBox'])) {
+                $this->teeBox($course_id, $boxColor);
+            }
+
+            $json['step3'] = true;
+            $json['course'] = &$this->course[$course_id];
+
+
+            #sortDump($json);
+
+            for ($i = 0; $i < $json['course']['course_holes'];) {
+                $json['holes'][] = [
+                    'par' => $this->course[$course_id]['course_par'][$i],
+                    'distance' => $this->course[$course_id]['teeBox']['distance'][$i],
+                    'distance_color' => $this->course[$course_id]['teeBox']['distance_color'],
+                    'number' => ++$i,
+                    'first' => $i === 1,
+                    'last' => $i === $json['course']['course_holes']
+                ];
+            }
+
+
+            return true;
+        }
+
+        // ahh shit
         // Insert into database
-        if (!empty($newScore) && \is_array( $newScore )) {
+        if (!empty($newScore) && \is_array($newScore)) {
             alert('news');
 
             $score_out = $score_in = $score_tot = $gnr_tot = $ffs_tot = $putts_tot = 0;
@@ -124,13 +217,13 @@ class Golf extends GlobalMap implements iSport
                 $putts_tot += $putts[$i];
             }
 
-            if (!$this->course[$course_id]['course_id'] ?? false){
-                $this->course( $course_id );
+            if (!$this->course[$course_id]['course_id'] ?? false) {
+                $this->course($course_id);
             }
             alert('Post new round');
 
             ################# Add Round ################
-            Rounds::add( $this->user[$_SESSION['id']], $course_id, [
+            Rounds::add($this->user[$_SESSION['id']], $course_id, [
                 'roundDate' => $roundDate,
                 'newScore' => $newScore,
                 'gnr' => $gnr,
@@ -142,52 +235,35 @@ class Golf extends GlobalMap implements iSport
                 'gnr_tot' => $gnr_tot,
                 'ffs_tot' => $ffs_tot,
                 'putts_tot' => $putts_tot
-            ] );
+            ]);
 
             $sql = 'UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE stats_id = ?';
 
-            if (!$this->db->prepare( $sql )->execute( [$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']] )) {
-                throw new \RuntimeException( 'stats update failed' );
+            if (!$this->db->prepare($sql)->execute([$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']])) {
+                throw new \RuntimeException('stats update failed');
             }
 
-            PublicAlert::success( 'Score successfully added!' );
-            startApplication( true );
+            PublicAlert::success('Score successfully added!');
+            startApplication(true);
             return false;
         }
 
-
-        // Get Course so we can display the tee box colors
-        if (!empty($course_id) && (!\is_array( $this->course ) || !array_key_exists( $course_id, $this->course ) || !\is_array( $course = &$this->course[$course_id] ))) {
-            $course = $this->course($course_id);
-        }
-
-        // A tee box color is set, get the distances.
-        // I don't like that the tee box color is stored twice
-        if (!empty($boxColor)) {
-            if (!isset($course['teeBox']) || !\is_array( $this->course['teeBox'] )) {
-                $this->teeBox( $course_id, $boxColor );
-            }
-            return true;
-        }
+        return true;
+    }
 
 
-        if (!empty($course_id) && \is_array( $course )) {
-            $course_colors = [
-                $course['box_color_1'], $course['box_color_2'], $course['box_color_3'],
-                $course['box_color_4'], $course['box_color_5']
-            ];
-            return true;
-        }
+    public function coursesByState($state)
+    {
+        global $json;
 
-        if (!empty($state)) {
-            $sql = 'SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
-            $stmt = $this->db->prepare( $sql );
-            $stmt->execute( [$state] );
-            $courses = $stmt->fetchAll();                 // setting to global
-            if (empty($courses)) {
-                $courses = true;
-            }
-        }
+        $json['step15'] = true;
+
+        $sql = 'SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$state]);
+
+        $json['courses'] = $stmt->fetchAll();                 // setting to global
+
         return true;
     }
 
@@ -197,7 +273,7 @@ class Golf extends GlobalMap implements iSport
      * @return bool
      * @throws \Carbon\Error\PublicAlert
      */
-    public function addCourse($course, $handicap) : bool
+    public function addCourse($course, $handicap): bool
     {
         global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
 
@@ -212,7 +288,7 @@ class Golf extends GlobalMap implements iSport
         $par_tot = $par_out + $par_in;
 
         $null = null;
-        if (!Course::add( $null, $null, $argv = [
+        if (!Course::add($null, $null, $argv = [
             'course' => $course,
             'handicap' => $handicap,
             'holes' => $holes,
@@ -230,8 +306,8 @@ class Golf extends GlobalMap implements iSport
         ])) {
             throw new PublicAlert('Sorry, we failed to add that course.');
         };
-       
-        PublicAlert::success( 'The course has been added!' );
+
+        PublicAlert::success('The course has been added!');
 
         return true;
     }

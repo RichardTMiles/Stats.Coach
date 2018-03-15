@@ -167,8 +167,6 @@ function urlGoogle($request = null)
     throw new \Carbon\Error\PublicAlert('failed to get access token');
 }
 
-//urlGoogle();
-
 return [
     'DATABASE' => [
 
@@ -208,9 +206,10 @@ return [
     ],
 
     'SESSION' => [
+
         'REMOTE' => true,             // Store the session in the SQL database
 
-        'SERIALIZE' => ['user'],           // These global variables will be stored between session
+        'SERIALIZE' => ['user', 'team', 'course'],           // These global variables will be stored between session
 
         'CALLBACK' => function () {         // optional variable $reset which would be true if a url is passed to startApplication()
 
@@ -223,8 +222,6 @@ return [
                 if (!is_array($user)) {
                     $user = [];
                 }
-
-                #sortDump($user);
 
                 if (!is_array($me = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
 
@@ -262,7 +259,6 @@ return [
     ]
     ],  */
 
-
     // ERRORS on point
     'ERROR' => [
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
@@ -277,7 +273,7 @@ return [
     'VIEW' => [
         'VIEW' => 'Application/View/',  // This is where the MVC() function will map the HTML.PHP and HTML.HBS . See Carbonphp.com/mvc
 
-        'WRAPPER' => 'StatsCoach.php',     // View::content() will produce this
+        'WRAPPER' => 'StatsCoach/Wrapper.hbs',     // View::content() will produce this
     ],
 
 ];

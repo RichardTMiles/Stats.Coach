@@ -32,7 +32,9 @@ switch ($userType) {
             require_once APP_ROOT . APP_VIEW . 'Layout/CoachLayout.php';
         } else {
             require_once APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.php';
-        } ?>
+        }
+
+        ?>
 
         <script>
             Carbon(() => {
