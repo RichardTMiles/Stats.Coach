@@ -211,7 +211,7 @@
                 <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
                 <li><a href="#" style="color: ghostwhite;">{{course.state}}</a></li>
                 <li style="color: ghostwhite;">{{course.course_name}}</li>
-                <li style="color: ghostwhite;">{{teeBox.distance_color}}</li>
+                <li style="color: ghostwhite;">{{holes.0.distance_color}}</li>
                 <li style="color: ghostwhite;"> Score Input</li>
             </ol>
         </section>
@@ -370,7 +370,7 @@
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    {{#first}}
+                                    {{^first}}
                                         <button type="button" class="btn btn-default"
                                                 onclick="last_score_input('{{number}}')"><< Back
                                         </button>
@@ -397,6 +397,14 @@
                 $.fn.load_iCheck('input');
                 $.fn.load_knob('.knob');
                 $.fn.load_timepicker('.timepicker')
+
+                //Date picker
+                $.fn.CarbonJS('/Data/Vendors/almasaeed2010/adminlte/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', () =>
+                        $('#datepicker').datepicker({
+                            autoclose: true
+                        }));
+
+
             });
 
             function next_score_input(current) {
