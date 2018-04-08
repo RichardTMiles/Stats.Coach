@@ -15,15 +15,26 @@ $body = $logged_in || $customer ? 'skin-red sidebar-mini' : 'hold-transition ski
 <div class="wrapper" style="background-color: rgba(0, 0, 0, 0.7)">
 
     <?php
+
+    /***
     if ($logged_in || $customer) {
         if ($customer) {
             include APP_ROOT . APP_VIEW . 'Layout' . DS . 'Customer.php';
         } else {
             include APP_ROOT . APP_VIEW . 'Layout' . DS . 'logged-in-layout.php';
-        }
+        } //else {
+            //include APP_ROOT . APP_VIEW . 'Layout' . DS . '';
+        //}
+
+
+
     } else {
         include APP_ROOT . APP_VIEW . 'Layout' . DS . 'logged-out-layout.php';
     }
+     *
+     */
+
+    include APP_ROOT . APP_VIEW . 'Layout' . DS . 'logged-in-layout.php';
     ?>
 
     <!-- Content Wrapper. Contains page content -->
@@ -33,36 +44,6 @@ $body = $logged_in || $customer ? 'skin-red sidebar-mini' : 'hold-transition ski
         <!-- content -->
         <div class="col-md-offset-1 col-md-10">
 
-            <?php if ($logged_in && APP_LOCAL) {
-                ?>
-
-                <div class="alert alert-info alert-dismissible" style="margin-top: 20px">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-check"></i> APP_LOCAL</h4>
-
-                    <div class="text-center">
-
-                        <p>You are using a local testing environment! Use this button to quickly switch between user
-                            layouts.</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-flat">Switch Account Type</button>
-                            <button type="button" class="btn btn-default btn-flat dropdown-toggle"
-                                    data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Administrator</a></li>
-                                <li><a href="#">Kitchen Staff</a></li>
-                                <li><a href="#">Waiter View</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Costumers View</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            <?php } ?>
 
             <div id="pjax-content">
                 <?= \Carbon\View::$bufferedContent ?? '' ?>

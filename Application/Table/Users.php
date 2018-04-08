@@ -32,7 +32,7 @@ class Users extends Entities implements iTable
     /**
      * @param array $array
      * @return bool
-     * @throws PublicAlert
+     * @throws PublicAlert d
      */
     public static function Post(array $array): bool      // object and id will be null
     {

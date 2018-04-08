@@ -114,7 +114,7 @@ class User extends GlobalMap
                 Users::Post([
                     'username' => $UserInfo['username'],
                     'password' => $UserInfo['password'],
-                    $service => $UserInfo['oauth_uid'],
+                    $service => $UserInfo['id'],
                     'profile_pic' => $UserInfo['picture'] ?? '',
                     'cover_photo' => $UserInfo['cover'] ?? '',
                     'email' => $UserInfo['email'],

@@ -72,8 +72,8 @@ class Golf extends GlobalMap implements iSport
             return false;
         }
 
-        $this->course['course_par'] = unserialize($this->course['course_par'], []);
-        $this->course['course_handicap'] = unserialize($this->course['course_handicap'], []);
+        $this->course[$id]['course_par'] = unserialize($this->course[$id]['course_par'], []);
+        $this->course[$id]['course_handicap'] = unserialize($this->course[$id]['course_handicap'], []);
 
         return true;
     }
@@ -132,7 +132,7 @@ class Golf extends GlobalMap implements iSport
             $json['step2'] = true;
             $json['course'] = $this->course[$course_id];
 
-            // TODO - make this happen
+            // TODO - make this color palate happen
             /*
             foreach ($course_colors as $key => $value) {
                 if (empty($value)) {
@@ -159,6 +159,7 @@ class Golf extends GlobalMap implements iSport
                 if (empty($c = $this->course[$course_id]["box_color_$i"])) {
                     break;
                 }
+
                 $json['colors'][] = [
                     'color' => $c,
                     'lower' => strtolower($c)
@@ -177,9 +178,7 @@ class Golf extends GlobalMap implements iSport
 
             $json['step3'] = true;
             $json['course'] = &$this->course[$course_id];
-
-
-            #sortDump($json);
+            $json['date'] = date('m/d/Y');
 
             for ($i = 0; $i < $json['course']['course_holes'];) {
                 $json['holes'][] = [
@@ -188,10 +187,9 @@ class Golf extends GlobalMap implements iSport
                     'distance_color' => $this->course[$course_id]['teeBox']['distance_color'],
                     'number' => ++$i,
                     'first' => $i === 1,
-                    'last' => $i === $json['course']['course_holes']
+                    'last' => $i === (int) $json['course']['course_holes']
                 ];
             }
-
 
             return true;
         }
@@ -255,8 +253,6 @@ class Golf extends GlobalMap implements iSport
     public function coursesByState($state)
     {
         global $json;
-
-        $json['step15'] = true;
 
         $sql = 'SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
         $stmt = $this->db->prepare($sql);

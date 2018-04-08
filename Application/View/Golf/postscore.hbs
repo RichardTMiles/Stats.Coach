@@ -217,8 +217,8 @@
         </section>
 
         <section class="content">
-            <form data-pjax class="form-horizontal" method="post"
-                  action="{{SITE}}PostScore/{{course.state}}/{{course.course_id}}/{{teeBox.distance_color}}/"
+            <form data-hbs class="form-horizontal" method="post"
+                  action="{{SITE}}PostScore/{{course.state}}/{{course.course_id}}/{{holes.0.distance_color}}/"
                   name="postScore">
                 <div class="row" id="dateTime">
                     <div class="col-xs-12">
@@ -392,6 +392,7 @@
                 {{/holes}}
             </form>
         </section>
+
         <script>
             Carbon((e) => {
                 $.fn.load_iCheck('input');

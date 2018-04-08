@@ -5,6 +5,7 @@ namespace Controller;
 use Carbon\Error\PublicAlert;
 use Carbon\Request;
 use Carbon\Session;
+use Table\Users;
 
 class User extends Request
 {
@@ -22,6 +23,7 @@ class User extends Request
     public function login()
     {
         global $json, $UserName, $FullName, $UserImage;    // validate cookies
+
 
         [$UserName, $FullName] = $this->cookie('UserName', 'FullName')->alnum();
 
@@ -147,7 +149,6 @@ class User extends Request
         return [$service, &$request];
     }
 
-
     public function follow($user_id)
     {
         return $this->set($user_id)->alnum();
@@ -167,8 +168,29 @@ class User extends Request
      * @return bool|null
      * @throws PublicAlert
      */
-    public function register(): ?bool
+    public function register() : ?bool
     {
+
+
+        /*
+
+        Users::Post([
+            'username' => 'Admin',
+            'password' => 'goldteamrules',
+            'email' => 'Tmiles199@gmail.com',
+            'first_name' => 'Dick',
+            'last_name' => 'Miles',
+            'gender' => 'Male'
+        ]);
+
+
+        return null;
+
+
+        */
+
+
+
         if (empty($_POST)) {
             return null;
         }
