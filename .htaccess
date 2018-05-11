@@ -10,7 +10,8 @@ Options +FollowSymLinks
 # LoadModule http2_module modules/mod_http2.so
 # ProtocolsHonorOrder On
 # Protocols h2 http/1.1
- 
+
+RewriteRule ^data/vendors/(.*)$ ../../vendors/$1 [R=301,NC,L]
 
 # increase performance by disabling AllowOverride
 # this htacces will be the default across the server

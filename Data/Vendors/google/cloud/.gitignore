@@ -1,9 +1,0 @@
-.DS_Store
-build/
-composer.phar
-composer.lock
-docs/json/**/*
-vendor/
-
-# do not delete
-keys/

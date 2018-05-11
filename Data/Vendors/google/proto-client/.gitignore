@@ -1,9 +1,0 @@
-.DS_Store
-composer.phar
-composer.lock
-composer-test.lock
-vendor/
-build/artifacts/
-artifacts/
-.idea
-.metadata
