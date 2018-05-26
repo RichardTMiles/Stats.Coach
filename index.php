@@ -9,11 +9,16 @@ const SERVER_ROOT = APP_ROOT;        // I would like to change to only using app
 
 if (false === (include '../vendor/autoload.php')) {
     // Load the autoload() for composer dependencies located in the Services folder
-    print '<h1>Loading Composer Failed. See Carbonphp.com for documentation.</h1>' and die;
+    print '<h1>Loading Composer Failed. My b</h1>' and die;
     // Composer autoload
 }
 
-$app = new Carbon\Carbon(APP_ROOT . 'config/config.php');
+try {
+    $app = new CarbonPHP\CarbonPHP(APP_ROOT . 'config/config.php');
+} catch (Exception $e) {
+    print 'Loading Carbon Failed. My b';
+}
+
 
 /** At one point I returned the invocation of $app to show that
  * the application will not exit on completion, but rather return
