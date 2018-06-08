@@ -1,0 +1,28 @@
+{
+  "name": "stats.coach",
+  "version": "1.0.0",
+  "description": "A stats website for coaches",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "jquery-backstretch": "2.1.16",
+    "jquery-form": "^4.2.2",
+    "mustache": "^2.3.0",
+    "pjax": "^0.2.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichardTMiles/Stats.Coach.git"
+  },
+  "keywords": [
+    "golf"
+  ],
+  "author": "Richard Miles",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RichardTMiles/Stats.Coach/issues"
+  },
+  "homepage": "https://github.com/RichardTMiles/Stats.Coach#readme"
+}

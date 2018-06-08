@@ -24,7 +24,7 @@ const GOLF_ROUNDS = 11;
 const GOLF_COURSE = 12;
 
 // Template
-const COMPOSER = '';
+const COMPOSER = 'vendor/';
 const TEMPLATE = COMPOSER . 'almasaeed2010/adminlte/';   // I learned That URLS need `/` not `DS`
 
 // Facebook

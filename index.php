@@ -7,7 +7,7 @@ define('APP_ROOT', __DIR__ . DS);  // Set our root folder for the application
 
 const SERVER_ROOT = APP_ROOT;        // I would like to change to only using app_root soon
 
-if (false === include '../vendor/autoload.php') {
+if (false === include './vendor/autoload.php') {
     // Load the autoload() for composer dependencies located in the Services folder
     print '<h1>Loading Composer Failed. My b</h1>' and die;
     // Composer autoload

@@ -6,3 +6,10 @@
 /mysqldump.cnf
 /mysqldump.sql
 /Cloud_SQL_Export.sql
+/Stats.Coach.iml
+Tables/
+composer.phar
+node_modules/
+/vendor/
+/security/*
+
