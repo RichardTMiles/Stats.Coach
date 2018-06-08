@@ -3,3 +3,6 @@
 
 /.idea/
 /data/vendors/
+/mysqldump.cnf
+/mysqldump.sql
+/Cloud_SQL_Export.sql

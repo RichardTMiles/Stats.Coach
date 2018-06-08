@@ -28,7 +28,7 @@
   },
 
   "require-dev": {
-    "richardtmiles/carbonphp" : "@dev",
+    "richardtmiles/carbonphp" : "dev-master",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit": "^7"
   },

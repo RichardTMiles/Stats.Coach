@@ -33,33 +33,30 @@ const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
 
 function urlFacebook($request = null)
 {
-    $fb = new Facebook\Facebook([
-        'app_id' => FACEBOOK_APP_ID,            // Replace {app-id} with your app id
-        'app_secret' => FACEBOOK_APP_SECRET,
-        'default_graph_version' => 'v2.12',
-        'http_client_handler' => 'stream',      // better compatibility
-    ]);
-
-
-    if (isset($_GET['state'])) {
-      $_SESSION['FBRLH_state'] = $_GET['state'];
-    }
-
-    $helper = $fb->getRedirectLoginHelper();
-
     try {
+        $fb = new Facebook\Facebook([
+            'app_id' => FACEBOOK_APP_ID,            // Replace {app-id} with your app id
+            'app_secret' => FACEBOOK_APP_SECRET,
+            'default_graph_version' => 'v2.12',
+            'http_client_handler' => 'stream',      // better compatibility
+        ]);
+
+
+        if (isset($_GET['state'])) {
+            $_SESSION['FBRLH_state'] = $_GET['state'];
+        }
+
+        $helper = $fb->getRedirectLoginHelper();
+
+
         #if (isset($_SESSION['facebook_access_token'])) {
         #    $accessToken = $_SESSION['facebook_access_token'];
         #} else {
-            $accessToken = $helper->getAccessToken();
+        $accessToken = $helper->getAccessToken();
         #}
-    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
-        exit;
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-        // When validation fails or other local issues
-        echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
 
@@ -68,45 +65,51 @@ function urlFacebook($request = null)
             $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
         } else {
             // getting short-lived access token
-            $_SESSION['facebook_access_token'] = (string) $accessToken;
+            $_SESSION['facebook_access_token'] = (string)$accessToken;
             // OAuth 2.0 client handler
             $oAuth2Client = $fb->getOAuth2Client();
             // Exchanges a short-lived access token for a long-lived one
             $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
-            $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
+            $_SESSION['facebook_access_token'] = (string)$longLivedAccessToken;
             // setting default access token to be used in script
             $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
         }
         // redirect the user back to the same page if it has "code" GET variable
         #if (isset($_GET['code'])) {
-         ##   header('Location: ./');
+        ##   header('Location: ./');
         #}
         // getting basic info about user
 
         try {
             $profile_request = $fb->get('/me?fields=name,first_name,last_name,email,gender,cover,picture', $_SESSION['facebook_access_token']);
             $profile = $profile_request->getGraphNode()->asArray();
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
             // redirecting user back to app login page
             exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
         // Now you can redirect to another page and use the access token from $_SESSION['facebook_access_token']
     } else {
-        // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
-        return $helper->getLoginUrl(SITE . 'oAuth/Facebook/' . $request . DS, [
-            'public_profile', 'user_friends', 'email',
-            'user_birthday',
-            'user_hometown',
-            'user_location', 'user_photos', 'user_friends']);
+        try {
+            // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
+            return $helper->getLoginUrl(SITE . 'oAuth/Facebook/' . $request . DS, [
+                'public_profile', 'user_friends', 'email',
+                'user_birthday',
+                'user_hometown',
+                'user_location', 'user_photos', 'user_friends']);
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
     }
 
-    \Carbon\Request::changeURI(SITE . 'oAuth/Facebook/');  // clear GET data.
+    \CarbonPHP\Request::changeURI(SITE . 'oAuth/Facebook/?much=love');  // clear GET data.
 
     return array(
         'id' => $profile['id'],
@@ -120,6 +123,12 @@ function urlFacebook($request = null)
 
 }
 
+/**
+ * @param null $request
+ * @return array|string
+ * @throws Google_Exception
+ * @throws \CarbonPHP\Error\PublicAlert
+ */
 function urlGoogle($request = null)
 {
     //Call Google API
@@ -164,7 +173,7 @@ function urlGoogle($request = null)
             'link' => $gpUserProfile['link']
         );
     }
-    throw new \Carbon\Error\PublicAlert('failed to get access token');
+    throw new \CarbonPHP\Error\PublicAlert('failed to get access token');
 }
 
 
@@ -187,7 +196,11 @@ return [
 
         'ROOT' => SERVER_ROOT,     // This was defined in our ../index.php
 
-        'ALLOWED_EXTENSIONS' => 'png|jpg|gif|jpeg|bmp|icon|js|css|woff|woff2|map|hbs|eotv',     // File ending in these extensions will be served
+        'CACHE_CONTROL' => [
+            'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
+            'jpg|jpeg|png|gif|swf|xml|txt|css|js|woff2|tff' => 'Cache-Control: max-age=604800, public',
+            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
+        ],
 
         'CONFIG' => __FILE__,      // Send to sockets
 
@@ -251,12 +264,12 @@ return [
 
     /*          TODO - finish building php websockets
     'SOCKET' => [
-    'WEBSOCKETD' => false,  // if you'd like to use web
-    'PORT' => 8888,
-    'DEV' => true,
-    'SSL' => [
-    'KEY' => '',
-    'CERT' => ''
+        'WEBSOCKETD' => false,  // if you'd like to use web
+        'PORT' => 8888,
+        'DEV' => true,
+        'SSL' => [
+        'KEY' => '',
+        'CERT' => ''
     ]
     ],  */
 
