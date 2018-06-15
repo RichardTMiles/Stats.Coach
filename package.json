@@ -7,10 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "admin-lte": "^3.0.0-alpha.2",
     "jquery-backstretch": "2.1.16",
     "jquery-form": "^4.2.2",
-    "mustache": "^2.3.0",
-    "pjax": "^0.2.6"
+    "jquery-pjax": "^2.0.1",
+    "mustache": "^2.3.0"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -198,9 +197,9 @@
 </div>
 
 
-<script src="/{{TEMPLATE}}bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/bower-asset/jquery-pjax/jquery.pjax.js"></script>
-<script src="/bower-asset/mustache.js/mustache.js"></script>
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/jquery-pjax/jquery.pjax.js"></script>
+<script src="/node_modules/mustache/mustache.js"></script>
 <script src="/{{COMPOSER}}richardtmiles/carbonphp/Helpers/Carbon.js"></script>
 
 <script>
@@ -208,10 +207,10 @@
 
     const carbon = new $.carbon;
 
-    carbon.start('#pjax-content', 'ws://rootprerogative.com:8888/', false);
+    carbon.start('#pjax-content'); // , 'ws://rootprerogative.com:8888/', false
 
     //-- Jquery Form -->
-    carbon.js('bower-asset/jquery-form/src/jquery.form.js');
+    carbon.js('node_modules/jquery-form/src/jquery.form.js');
 
     //-- Bootstrap -->
     carbon.js(TEMPLATE + 'bower_components/bootstrap/dist/js/bootstrap.min.js', () => {

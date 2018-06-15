@@ -5,7 +5,8 @@ namespace Controller;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
 use CarbonPHP\Session;
-use Table\Users;
+
+//use Table\Users;
 
 class User extends Request
 {
@@ -19,11 +20,11 @@ class User extends Request
     /**
      * @return array|bool
      * @throws PublicAlert
+     * @throws \Google_Exception
      */
     public function login()
     {
         global $json, $UserName, $FullName, $UserImage;    // validate cookies
-
 
         [$UserName, $FullName] = $this->cookie('UserName', 'FullName')->alnum();
 

@@ -5,7 +5,7 @@
   "prefer-stable": true,
   "license": "MIT",
   "config": {
-    "vendor-dir": "vendor"
+    "vendor-dir": "../vendor"
   },
   "autoload": {
     "psr-4": {

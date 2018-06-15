@@ -1,0 +1,19 @@
+# Google credentials and configuration
+google_client_id:      764086051850-6qr4p6gpi6hn506pt8ejuq83di341hur.apps.googleusercontent.com
+google_client_secret:  d-FL95Q19q7MQmFpd7hHD0Ty
+google_project_id:     147935174231
+
+# options are "mysql", "postgres", "mongodb", or "datastore"
+bookshelf_backend: mysql
+
+# configure CloudSQL for MySQL or PostgreSQL backend
+cloudsql_connection_name: carbonphp-191421:us-central1:carbonphpmaster
+cloudsql_database_name: statscoach
+cloudsql_user: root
+cloudsql_password: goldteamrules
+cloudsql_port: 3306
+
+# configure Mongo backend
+# mongo_url: YOUR_MONGODB_URL
+# mongo_database: YOUR_MONGO_DATABASE
+# mongo_collection: YOUR_MONGO_COLLECTION
