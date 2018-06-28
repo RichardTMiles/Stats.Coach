@@ -171,27 +171,6 @@ class User extends Request
      */
     public function register() : ?bool
     {
-
-
-        /*
-
-        Users::Post([
-            'username' => 'Admin',
-            'password' => 'goldteamrules',
-            'email' => 'Tmiles199@gmail.com',
-            'first_name' => 'Dick',
-            'last_name' => 'Miles',
-            'gender' => 'Male'
-        ]);
-
-
-        return null;
-
-
-        */
-
-
-
         if (empty($_POST)) {
             return null;
         }

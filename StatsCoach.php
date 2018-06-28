@@ -44,7 +44,6 @@ class StatsCoach extends Application
 
     public function defaultRoute()
     {
-
         // Sockets will not execute this
         View::$forceWrapper = true; // this will hard refresh the wrapper
 

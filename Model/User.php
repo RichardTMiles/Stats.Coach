@@ -4,10 +4,10 @@ namespace Model;
 
 use CarbonPHP\Helpers\Serialized;
 use Model\Helpers\GlobalMap;
-use Table\Stats;
-use Table\Users;
-use Table\Followers;
-use Table\Messages;
+use Table\Golf_Stats as Stats;
+use Table\Carbon_Users as Users;
+use Table\User_Followers as Followers;
+use Table\User_Messages as Messages;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
@@ -36,9 +36,9 @@ class User extends GlobalMap
             return; // We've already gotten current user data
         }
         if ($_SESSION['id'] && $id !== null) {
-            Users::All($this->user[$id], $id);
-            Followers::All($this->user[$id], $id);
-            Messages::All($this->user[$id], $id);
+            Users::get($this->user[$id], $id, []);
+            Followers::get($this->user[$id], $id, []);
+            Messages::get($this->user[$id], $id, []);
         }
     }
 
@@ -51,15 +51,20 @@ class User extends GlobalMap
      */
     public function login($username, $password, $rememberMe): bool
     {
-        if (!Users::user_exists($username)) {
+        $data =[];
+
+        Users::Get($data, null, [
+            'user_username' => $username,
+            'user_first_name',
+            'user_last_name',
+            'user_profile_pic',
+            'user_id',
+            'user_password',
+        ]);
+
+        if (!empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
         }
-
-        // We get this for the cookies
-        $sql = 'SELECT user_password, user_first_name, user_last_name, user_profile_pic, user_id FROM carbon_users WHERE user_username = ?';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$username]);
-        $data = $stmt->fetch();
 
         // using the verify method to compare the password with the stored hashed password.
         if (Bcrypt::verify($password, $data['user_password']) === true) {
@@ -70,9 +75,8 @@ class User extends GlobalMap
             */
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
         } else {
-            throw new PublicAlert ('Sorry, the username and password combination you have entered is invalid.', 'warning');
+            throw new PublicAlert('Sorry, the username and password combination you have entered is invalid.', 'warning');
         }
-
 
         if ($rememberMe) {
             Request::setCookie('UserName', $username);
@@ -91,7 +95,7 @@ class User extends GlobalMap
      * @param string $service
      * @param string|bool $request will map the the global scope
      * @return bool|mixed
-     * @throws \Carbon\Error\PublicAlert
+     * @throws \CarbonPHP\Error\PublicAlert
      */
     public function oAuth($service, &$request)
     {
@@ -138,7 +142,7 @@ class User extends GlobalMap
             }
         } elseif ($user_id && !$service_id) {
             if ($request === 'SignIn') {
-                $sql = 'UPDATE carbon_users SET $service = ? WHERE user_id = ?';     // UPDATE user
+                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
                 $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
                 $_SESSION['id'] = $user_id;
             } else {
@@ -197,26 +201,41 @@ class User extends GlobalMap
     {
         global $username, $password, $email, $firstName, $lastName, $gender;
 
-        if (Users::user_exists($username)) {
+        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_username = ? LIMIT 1', $username)['COUNT(*)']) {
             throw new PublicAlert ('That username already exists', 'warning');
         }
 
-        if (Users::email_exists($email)) {
+        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_email = ? LIMIT 1', $email)['COUNT(*)']) {
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
+
         // Tables self validate and throw public errors
-        Users::Post([
-            'username' => $username,
-            'password' => $password,
-            'email' => $email,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'gender' => $gender
-        ]);
 
+        $id = self::new_entity(USER);
 
-        Stats::Post([]);    // this works
+        try {
+            Users::Post([
+                'user_id' => $id,
+                'user_type' => 'Athlete',
+                'user_ip' => IP,
+                'user_last_login' => date("Y-m-d H:i:s"),
+                'user_sport' => 'GOLF',
+                'user_email_confirmed' => 1,
+                'user_username' => $username,
+                'user_password' => $password,
+                'user_email' => $email,
+                'user_first_name' => $firstName,
+                'user_last_name' => $lastName,
+                'user_gender' => $gender
+            ]);
+        } catch (\PDOException $e) {
+            var_dump($e);
+        }
+
+        Stats::Post([
+            'stats_id' => $id
+        ]);    // this works
 
         PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
