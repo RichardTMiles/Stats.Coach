@@ -83,26 +83,30 @@ final class UserTest extends TestCase
             $this->testUserCanBeDeleted();
         }
 
-//        $this->assertTrue(Users::Post(['user_id' => '123456',
-//            'user_type' => 'Athlete',
-//            'user_ip' => '127.0.0.1',
-//            'user_last_login' => date("Y-m-d H:i:s"),
-//            'user_sport' => 'GOLF',
-//            'user_email_confirmed' => 1,
-//            'user_username' => 'admin',
-//            'user_password' => 'goldteam',
-//            'user_email' => 'richard@miles.systems',
-//            'user_first_name' => 'Richard',
-//            'user_last_name' => 'Miles',
-//            'user_gender' => 'Male'
-//        ]));
 
-        $method = 'register';
+        $this->assertTrue(Users::Post([
+            'user_type' => 'Athlete',
+            'user_ip' => '127.0.0.1',
+            'user_sport' => 'GOLF',
+            'user_email_confirmed' => 1,
+            'user_username' => 'admin',
+            'user_password' => 'goldteam',
+            'user_email' => 'richard@miles.systems',
+            'user_first_name' => 'Richard',
+            'user_last_name' => 'Miles',
+            'user_gender' => 'Male'
+        ]));
 
-        $this->assertFalse(CM('User', $method)());        // This route redirects to home, thus ending in false
 
-        $this->assertEquals('Welcome to Stats Coach. Please check your email to finish your registration.',
-            $GLOBALS['json']['alert']['success']);
+
+        $this->assertTrue(false);
+
+        //$method = 'register';
+
+        //$this->assertFalse(CM('User', $method)());        // This route redirects to home, thus ending in false
+
+//        $this->assertEquals('Welcome to Stats Coach. Please check your email to finish your registration.',
+//            $GLOBALS['json']['alert']['success']);
 
     }
 
@@ -119,6 +123,8 @@ final class UserTest extends TestCase
             ));
 
         $this->assertInternalType('array', $this->user);
+
+        var_dump($this->user);
 
         $this->assertArrayHasKey('user_email', $this->user);
 

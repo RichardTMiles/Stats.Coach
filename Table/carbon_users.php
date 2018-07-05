@@ -4,43 +4,19 @@ namespace Table;
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
-use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 
 class carbon_users extends Entities implements iRest
 {
+    const PRIMARY = "user_id";
+
     const COLUMNS = [
-            'user_id',
-            'user_type',
-            'user_sport',
-            'user_session_id',
-            'user_facebook_id',
-            'user_google_id',
-            'user_username',
-            'user_first_name',
-            'user_last_name',
-            'user_profile_pic',
-            'user_profile_uri',
-            'user_cover_photo',
-            'user_birthday',
-            'user_gender',
-            'user_about_me',
-            'user_rank',
-            'user_password',
-            'user_email',
-            'user_email_code',
-            'user_email_confirmed',
-            'user_generated_string',
-            'user_membership',
-            'user_deactivated',
-            'user_last_login',
-            'user_ip',
-            'user_education_history',
-            'user_location',
-            'user_creation_date',
+    'user_id','user_type','user_sport','user_session_id','user_facebook_id','user_username','user_first_name','user_last_name','user_profile_pic','user_profile_uri','user_cover_photo','user_birthday','user_gender','user_about_me','user_rank','user_password','user_email','user_email_code','user_email_confirmed','user_generated_string','user_membership','user_deactivated','user_ip','user_education_history','user_location','user_creation_date',
     ];
 
-    const PRIMARY = "user_id";
+    const BINARY = [
+    'user_id',
+    ];
 
     /**
      * @param array $return
@@ -64,31 +40,46 @@ class carbon_users extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = $where = [];
-        foreach ($argv as $column => $value) {
-            if (!is_int($column) && in_array($column, self::COLUMNS)) {
-                if ($value !== '') {
-                    $where[$column] = $value;
-                } else {
-                    $get[] = $column;
-                }
-            } elseif (in_array($value, self::COLUMNS)) {
-                $get[] = $value;
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $sql = '';
+        foreach($get as $key => $column){
+            if (!empty($sql)) {
+                $sql .= ', ';
+            }
+            if (in_array($column, self::BINARY)) {
+                $sql .= "HEX($column) as $column";
+            } else {
+                $sql .= $column;
             }
         }
 
-        $get =  !empty($get) ? implode(", ", $get) : ' * ';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_users';
 
-        $sql = 'SELECT ' .  $get . ' FROM statscoach.carbon_users';
+        $pdo = Database::database();
 
         if ($primary === null) {
-            $sql .= ' WHERE ';
-            foreach ($where as $column => $value) {
-                $sql .= "($column = " . Database::database()->quote($value) . ') AND ';
+            if (!empty($where)) {
+                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                    $sql = '(';
+                    foreach ($set as $column => $value) {
+                        if (is_array($value)) {
+                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                        } else {
+                            if (in_array($column, self::BINARY)) {
+                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                            } else {
+                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                            }
+                        }
+                    }
+                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                };
+                $sql .= ' WHERE ' . $build_where($where);
             }
-            $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
         }
 
         $sql .= $limit;
@@ -104,37 +95,85 @@ class carbon_users extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_google_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES (:user_id, :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_google_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)';
+        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location, user_creation_date) VALUES ( :user_id, :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location, :user_creation_date)';
         $stmt = Database::database()->prepare($sql);
-            $stmt->bindValue(':user_id', isset($argv['user_id']) ? $argv['user_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_type', isset($argv['user_type']) ? $argv['user_type'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_sport', isset($argv['user_sport']) ? $argv['user_sport'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_session_id', isset($argv['user_session_id']) ? $argv['user_session_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_facebook_id', isset($argv['user_facebook_id']) ? $argv['user_facebook_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_google_id', isset($argv['user_google_id']) ? $argv['user_google_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_username', isset($argv['user_username']) ? $argv['user_username'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_first_name', isset($argv['user_first_name']) ? $argv['user_first_name'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_last_name', isset($argv['user_last_name']) ? $argv['user_last_name'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_profile_pic', isset($argv['user_profile_pic']) ? $argv['user_profile_pic'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_profile_uri', isset($argv['user_profile_uri']) ? $argv['user_profile_uri'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_cover_photo', isset($argv['user_cover_photo']) ? $argv['user_cover_photo'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_birthday', isset($argv['user_birthday']) ? $argv['user_birthday'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_gender', isset($argv['user_gender']) ? $argv['user_gender'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_about_me', isset($argv['user_about_me']) ? $argv['user_about_me'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_rank', isset($argv['user_rank']) ? $argv['user_rank'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_password', isset($argv['user_password']) ? $argv['user_password'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_email', isset($argv['user_email']) ? $argv['user_email'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_email_code', isset($argv['user_email_code']) ? $argv['user_email_code'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_email_confirmed', isset($argv['user_email_confirmed']) ? $argv['user_email_confirmed'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_generated_string', isset($argv['user_generated_string']) ? $argv['user_generated_string'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_membership', isset($argv['user_membership']) ? $argv['user_membership'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_deactivated', isset($argv['user_deactivated']) ? $argv['user_deactivated'] : null, \PDO::PARAM_NULL);
-            $stmt->bindValue(':user_last_login', isset($argv['user_last_login']) ? $argv['user_last_login'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_ip', isset($argv['user_ip']) ? $argv['user_ip'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_education_history', isset($argv['user_education_history']) ? $argv['user_education_history'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_location', isset($argv['user_location']) ? $argv['user_location'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_creation_date', isset($argv['user_creation_date']) ? $argv['user_creation_date'] : null, \PDO::PARAM_STR);
-        return $stmt->execute();
+            $user_id = $id = self::new_entity('carbon_users');
+
+            var_dump($id);
+            exit(1);
+
+
+            $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
+            
+                $user_type = isset($argv['user_type']) ? $argv['user_type'] : null;
+                $stmt->bindParam(':user_type',$user_type, \PDO::PARAM_STR, 20);
+                    
+                $user_sport = isset($argv['user_sport']) ? $argv['user_sport'] : null;
+                $stmt->bindParam(':user_sport',$user_sport, \PDO::PARAM_STR, 20);
+                    
+                $user_session_id = isset($argv['user_session_id']) ? $argv['user_session_id'] : null;
+                $stmt->bindParam(':user_session_id',$user_session_id, \PDO::PARAM_STR, 225);
+                    
+                $user_facebook_id = isset($argv['user_facebook_id']) ? $argv['user_facebook_id'] : null;
+                $stmt->bindParam(':user_facebook_id',$user_facebook_id, \PDO::PARAM_STR, 225);
+                    
+                $user_username = isset($argv['user_username']) ? $argv['user_username'] : null;
+                $stmt->bindParam(':user_username',$user_username, \PDO::PARAM_STR, 25);
+                    
+                $user_first_name = isset($argv['user_first_name']) ? $argv['user_first_name'] : null;
+                $stmt->bindParam(':user_first_name',$user_first_name, \PDO::PARAM_STR, 25);
+                    
+                $user_last_name = isset($argv['user_last_name']) ? $argv['user_last_name'] : null;
+                $stmt->bindParam(':user_last_name',$user_last_name, \PDO::PARAM_STR, 25);
+                    
+                $user_profile_pic = isset($argv['user_profile_pic']) ? $argv['user_profile_pic'] : null;
+                $stmt->bindParam(':user_profile_pic',$user_profile_pic, \PDO::PARAM_STR, 225);
+                    
+                $user_profile_uri = isset($argv['user_profile_uri']) ? $argv['user_profile_uri'] : null;
+                $stmt->bindParam(':user_profile_uri',$user_profile_uri, \PDO::PARAM_STR, 225);
+                    
+                $user_cover_photo = isset($argv['user_cover_photo']) ? $argv['user_cover_photo'] : null;
+                $stmt->bindParam(':user_cover_photo',$user_cover_photo, \PDO::PARAM_STR, 225);
+                    $stmt->bindValue(':user_birthday',isset($argv['user_birthday']) ? $argv['user_birthday'] : null, \PDO::PARAM_STR);
+                    
+                $user_gender = isset($argv['user_gender']) ? $argv['user_gender'] : null;
+                $stmt->bindParam(':user_gender',$user_gender, \PDO::PARAM_STR, 25);
+                    $stmt->bindValue(':user_about_me',isset($argv['user_about_me']) ? $argv['user_about_me'] : null, \PDO::PARAM_STR);
+                    
+                $user_rank = isset($argv['user_rank']) ? $argv['user_rank'] : '0';
+                $stmt->bindParam(':user_rank',$user_rank, \PDO::PARAM_STR, 8);
+                    
+                $user_password = isset($argv['user_password']) ? $argv['user_password'] : null;
+                $stmt->bindParam(':user_password',$user_password, \PDO::PARAM_STR, 225);
+                    
+                $user_email = isset($argv['user_email']) ? $argv['user_email'] : null;
+                $stmt->bindParam(':user_email',$user_email, \PDO::PARAM_STR, 50);
+                    
+                $user_email_code = isset($argv['user_email_code']) ? $argv['user_email_code'] : null;
+                $stmt->bindParam(':user_email_code',$user_email_code, \PDO::PARAM_STR, 225);
+                    
+                $user_email_confirmed = isset($argv['user_email_confirmed']) ? $argv['user_email_confirmed'] : '0';
+                $stmt->bindParam(':user_email_confirmed',$user_email_confirmed, \PDO::PARAM_STR, 20);
+                    
+                $user_generated_string = isset($argv['user_generated_string']) ? $argv['user_generated_string'] : null;
+                $stmt->bindParam(':user_generated_string',$user_generated_string, \PDO::PARAM_STR, 200);
+                    
+                $user_membership = isset($argv['user_membership']) ? $argv['user_membership'] : '0';
+                $stmt->bindParam(':user_membership',$user_membership, \PDO::PARAM_STR, 10);
+                    
+                $user_deactivated = isset($argv['user_deactivated']) ? $argv['user_deactivated'] : '0';
+                $stmt->bindParam(':user_deactivated',$user_deactivated, \PDO::PARAM_NULL, 1);
+                    
+                $user_ip = isset($argv['user_ip']) ? $argv['user_ip'] : '0';
+                $stmt->bindParam(':user_ip',$user_ip, \PDO::PARAM_STR, 20);
+                    $stmt->bindValue(':user_education_history',isset($argv['user_education_history']) ? $argv['user_education_history'] : '0', \PDO::PARAM_STR);
+                    $stmt->bindValue(':user_location',isset($argv['user_location']) ? $argv['user_location'] : '0', \PDO::PARAM_STR);
+                    
+                $user_creation_date = isset($argv['user_creation_date']) ? $argv['user_creation_date'] : null;
+                $stmt->bindParam(':user_creation_date',$user_creation_date, \PDO::PARAM_STR, 14);
+        
+        return $stmt->execute() ? $id : false;
+
     }
 
     /**
@@ -156,8 +195,9 @@ class carbon_users extends Entities implements iRest
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
+
         if (isset($argv['user_id'])) {
-            $set .= 'user_id=:user_id,';
+            $set .= 'user_id=UNHEX(:user_id),';
         }
         if (isset($argv['user_type'])) {
             $set .= 'user_type=:user_type,';
@@ -170,9 +210,6 @@ class carbon_users extends Entities implements iRest
         }
         if (isset($argv['user_facebook_id'])) {
             $set .= 'user_facebook_id=:user_facebook_id,';
-        }
-        if (isset($argv['user_google_id'])) {
-            $set .= 'user_google_id=:user_google_id,';
         }
         if (isset($argv['user_username'])) {
             $set .= 'user_username=:user_username,';
@@ -225,9 +262,6 @@ class carbon_users extends Entities implements iRest
         if (isset($argv['user_deactivated'])) {
             $set .= 'user_deactivated=:user_deactivated,';
         }
-        if (isset($argv['user_last_login'])) {
-            $set .= 'user_last_login=:user_last_login,';
-        }
         if (isset($argv['user_ip'])) {
             $set .= 'user_ip=:user_ip,';
         }
@@ -252,90 +286,105 @@ class carbon_users extends Entities implements iRest
         $stmt = Database::database()->prepare($sql);
 
         if (isset($argv['user_id'])) {
-            $stmt->bindValue(':user_id', $argv['user_id'], \PDO::PARAM_STR);
+            $user_id = 'UNHEX('.$argv['user_id'].')';
+            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['user_type'])) {
-            $stmt->bindValue(':user_type', $argv['user_type'], \PDO::PARAM_STR);
+            $user_type = $argv['user_type'];
+            $stmt->bindParam(':user_type',$user_type, \PDO::PARAM_STR, 20 );
         }
         if (isset($argv['user_sport'])) {
-            $stmt->bindValue(':user_sport', $argv['user_sport'], \PDO::PARAM_STR);
+            $user_sport = $argv['user_sport'];
+            $stmt->bindParam(':user_sport',$user_sport, \PDO::PARAM_STR, 20 );
         }
         if (isset($argv['user_session_id'])) {
-            $stmt->bindValue(':user_session_id', $argv['user_session_id'], \PDO::PARAM_STR);
+            $user_session_id = $argv['user_session_id'];
+            $stmt->bindParam(':user_session_id',$user_session_id, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_facebook_id'])) {
-            $stmt->bindValue(':user_facebook_id', $argv['user_facebook_id'], \PDO::PARAM_STR);
-        }
-        if (isset($argv['user_google_id'])) {
-            $stmt->bindValue(':user_google_id', $argv['user_google_id'], \PDO::PARAM_STR);
+            $user_facebook_id = $argv['user_facebook_id'];
+            $stmt->bindParam(':user_facebook_id',$user_facebook_id, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_username'])) {
-            $stmt->bindValue(':user_username', $argv['user_username'], \PDO::PARAM_STR);
+            $user_username = $argv['user_username'];
+            $stmt->bindParam(':user_username',$user_username, \PDO::PARAM_STR, 25 );
         }
         if (isset($argv['user_first_name'])) {
-            $stmt->bindValue(':user_first_name', $argv['user_first_name'], \PDO::PARAM_STR);
+            $user_first_name = $argv['user_first_name'];
+            $stmt->bindParam(':user_first_name',$user_first_name, \PDO::PARAM_STR, 25 );
         }
         if (isset($argv['user_last_name'])) {
-            $stmt->bindValue(':user_last_name', $argv['user_last_name'], \PDO::PARAM_STR);
+            $user_last_name = $argv['user_last_name'];
+            $stmt->bindParam(':user_last_name',$user_last_name, \PDO::PARAM_STR, 25 );
         }
         if (isset($argv['user_profile_pic'])) {
-            $stmt->bindValue(':user_profile_pic', $argv['user_profile_pic'], \PDO::PARAM_STR);
+            $user_profile_pic = $argv['user_profile_pic'];
+            $stmt->bindParam(':user_profile_pic',$user_profile_pic, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_profile_uri'])) {
-            $stmt->bindValue(':user_profile_uri', $argv['user_profile_uri'], \PDO::PARAM_STR);
+            $user_profile_uri = $argv['user_profile_uri'];
+            $stmt->bindParam(':user_profile_uri',$user_profile_uri, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_cover_photo'])) {
-            $stmt->bindValue(':user_cover_photo', $argv['user_cover_photo'], \PDO::PARAM_STR);
+            $user_cover_photo = $argv['user_cover_photo'];
+            $stmt->bindParam(':user_cover_photo',$user_cover_photo, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_birthday'])) {
-            $stmt->bindValue(':user_birthday', $argv['user_birthday'], \PDO::PARAM_STR);
+            $stmt->bindValue(':user_birthday',$argv['user_birthday'], \PDO::PARAM_STR );
         }
         if (isset($argv['user_gender'])) {
-            $stmt->bindValue(':user_gender', $argv['user_gender'], \PDO::PARAM_STR);
+            $user_gender = $argv['user_gender'];
+            $stmt->bindParam(':user_gender',$user_gender, \PDO::PARAM_STR, 25 );
         }
         if (isset($argv['user_about_me'])) {
-            $stmt->bindValue(':user_about_me', $argv['user_about_me'], \PDO::PARAM_STR);
+            $stmt->bindValue(':user_about_me',$argv['user_about_me'], \PDO::PARAM_STR );
         }
         if (isset($argv['user_rank'])) {
-            $stmt->bindValue(':user_rank', $argv['user_rank'], \PDO::PARAM_STR);
+            $user_rank = $argv['user_rank'];
+            $stmt->bindParam(':user_rank',$user_rank, \PDO::PARAM_STR, 8 );
         }
         if (isset($argv['user_password'])) {
-            $stmt->bindValue(':user_password', $argv['user_password'], \PDO::PARAM_STR);
+            $user_password = $argv['user_password'];
+            $stmt->bindParam(':user_password',$user_password, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_email'])) {
-            $stmt->bindValue(':user_email', $argv['user_email'], \PDO::PARAM_STR);
+            $user_email = $argv['user_email'];
+            $stmt->bindParam(':user_email',$user_email, \PDO::PARAM_STR, 50 );
         }
         if (isset($argv['user_email_code'])) {
-            $stmt->bindValue(':user_email_code', $argv['user_email_code'], \PDO::PARAM_STR);
+            $user_email_code = $argv['user_email_code'];
+            $stmt->bindParam(':user_email_code',$user_email_code, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['user_email_confirmed'])) {
-            $stmt->bindValue(':user_email_confirmed', $argv['user_email_confirmed'], \PDO::PARAM_STR);
+            $user_email_confirmed = $argv['user_email_confirmed'];
+            $stmt->bindParam(':user_email_confirmed',$user_email_confirmed, \PDO::PARAM_STR, 20 );
         }
         if (isset($argv['user_generated_string'])) {
-            $stmt->bindValue(':user_generated_string', $argv['user_generated_string'], \PDO::PARAM_STR);
+            $user_generated_string = $argv['user_generated_string'];
+            $stmt->bindParam(':user_generated_string',$user_generated_string, \PDO::PARAM_STR, 200 );
         }
         if (isset($argv['user_membership'])) {
-            $stmt->bindValue(':user_membership', $argv['user_membership'], \PDO::PARAM_STR);
+            $user_membership = $argv['user_membership'];
+            $stmt->bindParam(':user_membership',$user_membership, \PDO::PARAM_STR, 10 );
         }
         if (isset($argv['user_deactivated'])) {
-            $stmt->bindValue(':user_deactivated', $argv['user_deactivated'], \PDO::PARAM_NULL);
-        }
-        if (isset($argv['user_last_login'])) {
-            $stmt->bindValue(':user_last_login', $argv['user_last_login'], \PDO::PARAM_STR);
+            $user_deactivated = $argv['user_deactivated'];
+            $stmt->bindParam(':user_deactivated',$user_deactivated, \PDO::PARAM_NULL, 1 );
         }
         if (isset($argv['user_ip'])) {
-            $stmt->bindValue(':user_ip', $argv['user_ip'], \PDO::PARAM_STR);
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, \PDO::PARAM_STR, 20 );
         }
         if (isset($argv['user_education_history'])) {
-            $stmt->bindValue(':user_education_history', $argv['user_education_history'], \PDO::PARAM_STR);
+            $stmt->bindValue(':user_education_history',$argv['user_education_history'], \PDO::PARAM_STR );
         }
         if (isset($argv['user_location'])) {
-            $stmt->bindValue(':user_location', $argv['user_location'], \PDO::PARAM_STR);
+            $stmt->bindValue(':user_location',$argv['user_location'], \PDO::PARAM_STR );
         }
         if (isset($argv['user_creation_date'])) {
-            $stmt->bindValue(':user_creation_date', $argv['user_creation_date'], \PDO::PARAM_STR);
+            $user_creation_date = $argv['user_creation_date'];
+            $stmt->bindParam(':user_creation_date',$user_creation_date, \PDO::PARAM_STR, 14 );
         }
-
 
         if (!$stmt->execute()){
             return false;
@@ -348,7 +397,7 @@ class carbon_users extends Entities implements iRest
     }
 
     /**
-    * @param array $return
+    * @param array $remove
     * @param string|null $primary
     * @param array $argv
     * @return bool
@@ -374,16 +423,19 @@ class carbon_users extends Entities implements iRest
             }
             $sql .= ' WHERE ';
             foreach ($argv as $column => $value) {
-                $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
         }
 
         $remove = null;
 
         return self::execute($sql);
     }
-
 }

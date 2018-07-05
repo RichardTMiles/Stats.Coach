@@ -4,17 +4,19 @@ namespace Table;
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
-use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 
 class user_followers extends Entities implements iRest
 {
+    const PRIMARY = "follows_user_id";
+
     const COLUMNS = [
-            'follows_user_id',
-            'user_id',
+    'follows_user_id','user_id',
     ];
 
-    const PRIMARY = "follows_user_id";
+    const BINARY = [
+    'follows_user_id','user_id',
+    ];
 
     /**
      * @param array $return
@@ -38,31 +40,46 @@ class user_followers extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = $where = [];
-        foreach ($argv as $column => $value) {
-            if (!is_int($column) && in_array($column, self::COLUMNS)) {
-                if ($value !== '') {
-                    $where[$column] = $value;
-                } else {
-                    $get[] = $column;
-                }
-            } elseif (in_array($value, self::COLUMNS)) {
-                $get[] = $value;
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $sql = '';
+        foreach($get as $key => $column){
+            if (!empty($sql)) {
+                $sql .= ', ';
+            }
+            if (in_array($column, self::BINARY)) {
+                $sql .= "HEX($column) as $column";
+            } else {
+                $sql .= $column;
             }
         }
 
-        $get =  !empty($get) ? implode(", ", $get) : ' * ';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.user_followers';
 
-        $sql = 'SELECT ' .  $get . ' FROM statscoach.user_followers';
+        $pdo = Database::database();
 
         if ($primary === null) {
-            $sql .= ' WHERE ';
-            foreach ($where as $column => $value) {
-                $sql .= "($column = " . Database::database()->quote($value) . ') AND ';
+            if (!empty($where)) {
+                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                    $sql = '(';
+                    foreach ($set as $column => $value) {
+                        if (is_array($value)) {
+                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                        } else {
+                            if (in_array($column, self::BINARY)) {
+                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                            } else {
+                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                            }
+                        }
+                    }
+                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                };
+                $sql .= ' WHERE ' . $build_where($where);
             }
-            $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
         }
 
         $sql .= $limit;
@@ -78,11 +95,16 @@ class user_followers extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES (:follows_user_id, :user_id)';
+        $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES ( :follows_user_id, :user_id)';
         $stmt = Database::database()->prepare($sql);
-            $stmt->bindValue(':follows_user_id', isset($argv['follows_user_id']) ? $argv['follows_user_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':user_id', isset($argv['user_id']) ? $argv['user_id'] : null, \PDO::PARAM_STR);
-        return $stmt->execute();
+            $follows_user_id = $id = self::new_entity('user_followers');
+            $stmt->bindParam(':follows_user_id',$follows_user_id, \PDO::PARAM_STR, 16);
+            
+                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
+                $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
+        
+        return $stmt->execute() ? $id : false;
+
     }
 
     /**
@@ -104,11 +126,12 @@ class user_followers extends Entities implements iRest
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
+
         if (isset($argv['follows_user_id'])) {
-            $set .= 'follows_user_id=:follows_user_id,';
+            $set .= 'follows_user_id=UNHEX(:follows_user_id),';
         }
         if (isset($argv['user_id'])) {
-            $set .= 'user_id=:user_id,';
+            $set .= 'user_id=UNHEX(:user_id),';
         }
 
         if (empty($set)){
@@ -122,12 +145,13 @@ class user_followers extends Entities implements iRest
         $stmt = Database::database()->prepare($sql);
 
         if (isset($argv['follows_user_id'])) {
-            $stmt->bindValue(':follows_user_id', $argv['follows_user_id'], \PDO::PARAM_STR);
+            $follows_user_id = 'UNHEX('.$argv['follows_user_id'].')';
+            $stmt->bindParam(':follows_user_id', $follows_user_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['user_id'])) {
-            $stmt->bindValue(':user_id', $argv['user_id'], \PDO::PARAM_STR);
+            $user_id = 'UNHEX('.$argv['user_id'].')';
+            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
         }
-
 
         if (!$stmt->execute()){
             return false;
@@ -140,7 +164,7 @@ class user_followers extends Entities implements iRest
     }
 
     /**
-    * @param array $return
+    * @param array $remove
     * @param string|null $primary
     * @param array $argv
     * @return bool
@@ -166,16 +190,19 @@ class user_followers extends Entities implements iRest
             }
             $sql .= ' WHERE ';
             foreach ($argv as $column => $value) {
-                $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
         }
 
         $remove = null;
 
         return self::execute($sql);
     }
-
 }

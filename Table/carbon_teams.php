@@ -4,27 +4,19 @@ namespace Table;
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
-use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 
 class carbon_teams extends Entities implements iRest
 {
+    const PRIMARY = "team_id";
+
     const COLUMNS = [
-            'team_id',
-            'team_coach',
-            'parent_team',
-            'team_code',
-            'team_name',
-            'team_rank',
-            'team_sport',
-            'team_division',
-            'team_school',
-            'team_district',
-            'team_membership',
-            'team_photo',
+    'team_id','team_coach','parent_team','team_code','team_name','team_rank','team_sport','team_division','team_school','team_district','team_membership','team_photo',
     ];
 
-    const PRIMARY = "team_id";
+    const BINARY = [
+    'team_id','team_coach','parent_team','team_photo',
+    ];
 
     /**
      * @param array $return
@@ -48,31 +40,46 @@ class carbon_teams extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = $where = [];
-        foreach ($argv as $column => $value) {
-            if (!is_int($column) && in_array($column, self::COLUMNS)) {
-                if ($value !== '') {
-                    $where[$column] = $value;
-                } else {
-                    $get[] = $column;
-                }
-            } elseif (in_array($value, self::COLUMNS)) {
-                $get[] = $value;
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $sql = '';
+        foreach($get as $key => $column){
+            if (!empty($sql)) {
+                $sql .= ', ';
+            }
+            if (in_array($column, self::BINARY)) {
+                $sql .= "HEX($column) as $column";
+            } else {
+                $sql .= $column;
             }
         }
 
-        $get =  !empty($get) ? implode(", ", $get) : ' * ';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_teams';
 
-        $sql = 'SELECT ' .  $get . ' FROM statscoach.carbon_teams';
+        $pdo = Database::database();
 
         if ($primary === null) {
-            $sql .= ' WHERE ';
-            foreach ($where as $column => $value) {
-                $sql .= "($column = " . Database::database()->quote($value) . ') AND ';
+            if (!empty($where)) {
+                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                    $sql = '(';
+                    foreach ($set as $column => $value) {
+                        if (is_array($value)) {
+                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                        } else {
+                            if (in_array($column, self::BINARY)) {
+                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                            } else {
+                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                            }
+                        }
+                    }
+                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                };
+                $sql .= ' WHERE ' . $build_where($where);
             }
-            $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
         }
 
         $sql .= $limit;
@@ -88,21 +95,46 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo) VALUES (:team_id, :team_coach, :parent_team, :team_code, :team_name, :team_rank, :team_sport, :team_division, :team_school, :team_district, :team_membership, :team_photo)';
+        $sql = 'INSERT INTO statscoach.carbon_teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo) VALUES ( :team_id, :team_coach, :parent_team, :team_code, :team_name, :team_rank, :team_sport, :team_division, :team_school, :team_district, :team_membership, :team_photo)';
         $stmt = Database::database()->prepare($sql);
-            $stmt->bindValue(':team_id', isset($argv['team_id']) ? $argv['team_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_coach', isset($argv['team_coach']) ? $argv['team_coach'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':parent_team', isset($argv['parent_team']) ? $argv['parent_team'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_code', isset($argv['team_code']) ? $argv['team_code'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_name', isset($argv['team_name']) ? $argv['team_name'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_rank', isset($argv['team_rank']) ? $argv['team_rank'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_sport', isset($argv['team_sport']) ? $argv['team_sport'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_division', isset($argv['team_division']) ? $argv['team_division'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_school', isset($argv['team_school']) ? $argv['team_school'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_district', isset($argv['team_district']) ? $argv['team_district'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_membership', isset($argv['team_membership']) ? $argv['team_membership'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':team_photo', isset($argv['team_photo']) ? $argv['team_photo'] : null, \PDO::PARAM_STR);
-        return $stmt->execute();
+            $team_id = $id = self::new_entity('carbon_teams');
+            $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
+            
+                $team_coach = isset($argv['team_coach']) ? $argv['team_coach'] : null;
+                $stmt->bindParam(':team_coach',$team_coach, \PDO::PARAM_STR, 16);
+                    
+                $parent_team = isset($argv['parent_team']) ? $argv['parent_team'] : null;
+                $stmt->bindParam(':parent_team',$parent_team, \PDO::PARAM_STR, 16);
+                    
+                $team_code = isset($argv['team_code']) ? $argv['team_code'] : null;
+                $stmt->bindParam(':team_code',$team_code, \PDO::PARAM_STR, 225);
+                    
+                $team_name = isset($argv['team_name']) ? $argv['team_name'] : null;
+                $stmt->bindParam(':team_name',$team_name, \PDO::PARAM_STR, 225);
+                    
+                $team_rank = isset($argv['team_rank']) ? $argv['team_rank'] : '0';
+                $stmt->bindParam(':team_rank',$team_rank, \PDO::PARAM_STR, 11);
+                    
+                $team_sport = isset($argv['team_sport']) ? $argv['team_sport'] : 'Golf';
+                $stmt->bindParam(':team_sport',$team_sport, \PDO::PARAM_STR, 225);
+                    
+                $team_division = isset($argv['team_division']) ? $argv['team_division'] : null;
+                $stmt->bindParam(':team_division',$team_division, \PDO::PARAM_STR, 225);
+                    
+                $team_school = isset($argv['team_school']) ? $argv['team_school'] : null;
+                $stmt->bindParam(':team_school',$team_school, \PDO::PARAM_STR, 225);
+                    
+                $team_district = isset($argv['team_district']) ? $argv['team_district'] : null;
+                $stmt->bindParam(':team_district',$team_district, \PDO::PARAM_STR, 225);
+                    
+                $team_membership = isset($argv['team_membership']) ? $argv['team_membership'] : null;
+                $stmt->bindParam(':team_membership',$team_membership, \PDO::PARAM_STR, 225);
+                    
+                $team_photo = isset($argv['team_photo']) ? $argv['team_photo'] : null;
+                $stmt->bindParam(':team_photo',$team_photo, \PDO::PARAM_STR, 16);
+        
+        return $stmt->execute() ? $id : false;
+
     }
 
     /**
@@ -124,14 +156,15 @@ class carbon_teams extends Entities implements iRest
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
+
         if (isset($argv['team_id'])) {
-            $set .= 'team_id=:team_id,';
+            $set .= 'team_id=UNHEX(:team_id),';
         }
         if (isset($argv['team_coach'])) {
-            $set .= 'team_coach=:team_coach,';
+            $set .= 'team_coach=UNHEX(:team_coach),';
         }
         if (isset($argv['parent_team'])) {
-            $set .= 'parent_team=:parent_team,';
+            $set .= 'parent_team=UNHEX(:parent_team),';
         }
         if (isset($argv['team_code'])) {
             $set .= 'team_code=:team_code,';
@@ -158,7 +191,7 @@ class carbon_teams extends Entities implements iRest
             $set .= 'team_membership=:team_membership,';
         }
         if (isset($argv['team_photo'])) {
-            $set .= 'team_photo=:team_photo,';
+            $set .= 'team_photo=UNHEX(:team_photo),';
         }
 
         if (empty($set)){
@@ -172,42 +205,53 @@ class carbon_teams extends Entities implements iRest
         $stmt = Database::database()->prepare($sql);
 
         if (isset($argv['team_id'])) {
-            $stmt->bindValue(':team_id', $argv['team_id'], \PDO::PARAM_STR);
+            $team_id = 'UNHEX('.$argv['team_id'].')';
+            $stmt->bindParam(':team_id', $team_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['team_coach'])) {
-            $stmt->bindValue(':team_coach', $argv['team_coach'], \PDO::PARAM_STR);
+            $team_coach = 'UNHEX('.$argv['team_coach'].')';
+            $stmt->bindParam(':team_coach', $team_coach, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['parent_team'])) {
-            $stmt->bindValue(':parent_team', $argv['parent_team'], \PDO::PARAM_STR);
+            $parent_team = 'UNHEX('.$argv['parent_team'].')';
+            $stmt->bindParam(':parent_team', $parent_team, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['team_code'])) {
-            $stmt->bindValue(':team_code', $argv['team_code'], \PDO::PARAM_STR);
+            $team_code = $argv['team_code'];
+            $stmt->bindParam(':team_code',$team_code, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_name'])) {
-            $stmt->bindValue(':team_name', $argv['team_name'], \PDO::PARAM_STR);
+            $team_name = $argv['team_name'];
+            $stmt->bindParam(':team_name',$team_name, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_rank'])) {
-            $stmt->bindValue(':team_rank', $argv['team_rank'], \PDO::PARAM_STR);
+            $team_rank = $argv['team_rank'];
+            $stmt->bindParam(':team_rank',$team_rank, \PDO::PARAM_STR, 11 );
         }
         if (isset($argv['team_sport'])) {
-            $stmt->bindValue(':team_sport', $argv['team_sport'], \PDO::PARAM_STR);
+            $team_sport = $argv['team_sport'];
+            $stmt->bindParam(':team_sport',$team_sport, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_division'])) {
-            $stmt->bindValue(':team_division', $argv['team_division'], \PDO::PARAM_STR);
+            $team_division = $argv['team_division'];
+            $stmt->bindParam(':team_division',$team_division, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_school'])) {
-            $stmt->bindValue(':team_school', $argv['team_school'], \PDO::PARAM_STR);
+            $team_school = $argv['team_school'];
+            $stmt->bindParam(':team_school',$team_school, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_district'])) {
-            $stmt->bindValue(':team_district', $argv['team_district'], \PDO::PARAM_STR);
+            $team_district = $argv['team_district'];
+            $stmt->bindParam(':team_district',$team_district, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_membership'])) {
-            $stmt->bindValue(':team_membership', $argv['team_membership'], \PDO::PARAM_STR);
+            $team_membership = $argv['team_membership'];
+            $stmt->bindParam(':team_membership',$team_membership, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['team_photo'])) {
-            $stmt->bindValue(':team_photo', $argv['team_photo'], \PDO::PARAM_STR);
+            $team_photo = 'UNHEX('.$argv['team_photo'].')';
+            $stmt->bindParam(':team_photo', $team_photo, \PDO::PARAM_STR, 16);
         }
-
 
         if (!$stmt->execute()){
             return false;
@@ -220,7 +264,7 @@ class carbon_teams extends Entities implements iRest
     }
 
     /**
-    * @param array $return
+    * @param array $remove
     * @param string|null $primary
     * @param array $argv
     * @return bool
@@ -246,16 +290,19 @@ class carbon_teams extends Entities implements iRest
             }
             $sql .= ' WHERE ';
             foreach ($argv as $column => $value) {
-                $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
         }
 
         $remove = null;
 
         return self::execute($sql);
     }
-
 }

@@ -12,7 +12,7 @@ try {
     $sql = <<<END
 CREATE TABLE carbon_users
 (
-	user_id VARCHAR(225) NOT NULL 
+	user_id BINARY(16) NOT NULL 
 	PRIMARY KEY,
 	user_type VARCHAR(20) NOT NULL,
 	user_sport VARCHAR(20) NULL,
@@ -61,7 +61,7 @@ try {
     $sql = <<<END
 CREATE TABLE carbon_locations
 (
-	entity_id VARCHAR(225) NOT NULL
+	entity_id BINARY(16) NOT NULL
 		PRIMARY KEY,
 	latitude VARCHAR(225) NULL,
 	longitude VARCHAR(225) NULL,
@@ -92,10 +92,9 @@ try {
     $sql = <<<END
 CREATE TABLE carbon_comments
 (
-	parent_id VARCHAR(225) NOT NULL,
-	comment_id VARCHAR(225) NOT NULL
-		PRIMARY KEY,
-	user_id VARCHAR(225) NOT NULL,
+	parent_id BINARY(16) NOT NULL,
+	comment_id BINARY(16) NOT NULL PRIMARY KEY,
+	user_id BINARY(16) NOT NULL,
 	comment BLOB NOT NULL,
 	CONSTRAINT entity_comments_entity_parent_pk_fk
 		FOREIGN KEY (parent_id) REFERENCES carbon (entity_pk)
@@ -129,10 +128,10 @@ try {
     $sql = <<<END
 CREATE TABLE carbon_photos
 (
-	parent_id VARCHAR(225) NOT NULL
+	parent_id BINARY(16) NOT NULL
 		PRIMARY KEY,
-	photo_id VARCHAR(225) NOT NULL,
-	user_id VARCHAR(225) NOT NULL,
+	photo_id BINARY(16) NOT NULL,
+	user_id BINARY(16) NOT NULL,
 	photo_path VARCHAR(225) NOT NULL,
 	photo_description TEXT NULL,
 	CONSTRAINT entity_photos_photo_id_uindex
@@ -166,9 +165,9 @@ try {
     $sql = <<<END
 CREATE TABLE user_followers
 (
-	follows_user_id VARCHAR(225) NOT NULL
+	follows_user_id BINARY(16) NOT NULL
 		PRIMARY KEY,
-	user_id VARCHAR(225) NOT NULL,
+	user_id BINARY(16) NOT NULL,
 	CONSTRAINT followers_entity_entity_follows_pk_fk
 		FOREIGN KEY (follows_user_id) REFERENCES carbon (entity_pk)
 			ON UPDATE CASCADE ON DELETE CASCADE,
@@ -198,8 +197,8 @@ try {
     $sql = <<<END
 CREATE TABLE user_messages
 (
-	message_id VARCHAR(225) NULL,
-	to_user_id VARCHAR(225) NULL,
+	message_id BINARY(16) NULL,
+	to_user_id BINARY(16) NULL,
 	message TEXT NOT NULL,
 	message_read TINYINT(1) DEFAULT '0' NULL,
 	CONSTRAINT messages_entity_entity_pk_fk
@@ -235,10 +234,10 @@ try {
     $sql = <<<END
 CREATE TABLE user_tasks
 (
-	task_id VARCHAR(225) NOT NULL,
-	user_id VARCHAR(225) NOT NULL COMMENT 'This is the user the task is being assigned to'
+	task_id BINARY(16) NOT NULL,
+	user_id BINARY(16) NOT NULL COMMENT 'This is the user the task is being assigned to'
 		PRIMARY KEY,
-	from_id VARCHAR(225) NULL COMMENT 'Keeping this colum so forgen key will remove task if user deleted',
+	from_id BINARY(16) NULL COMMENT 'Keeping this colum so forgen key will remove task if user deleted',
 	task_name VARCHAR(40) NOT NULL,
 	task_description VARCHAR(225) NULL,
 	percent_complete INT DEFAULT '0' NULL,

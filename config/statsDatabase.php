@@ -7,7 +7,7 @@
  * Time: 5:38 PM
  */
 
-$db = \Carbon\Database::database();
+$db = \CarbonPHP\Database::database();
 
 try {
 
@@ -22,9 +22,9 @@ try {
         $sql = <<<END
     CREATE TABLE golf_course
 (
-	course_id VARCHAR(225) NOT NULL
+	course_id BINARY(16) NOT NULL
 		PRIMARY KEY,
-	course_name VARCHAR(225) NOT NULL,
+	course_name BINARY(16) NOT NULL,
 	course_holes INT(2) DEFAULT '18' NOT NULL,
 	course_phone TEXT NOT NULL,
 	course_difficulty INT(10) NULL,
@@ -69,9 +69,9 @@ END;
         $sql = <<<END
 CREATE TABLE golf_rounds
 (
-	user_id VARCHAR(225) NOT NULL,
-	round_id VARCHAR(225) NOT NULL,
-	course_id VARCHAR(225) NOT NULL COMMENT 'golf_courses(course_id)',
+	user_id BINARY(16) NOT NULL,
+	round_id BINARY(16) NOT NULL,
+	course_id BINARY(16) NOT NULL COMMENT 'golf_courses(course_id)',
 	round_public INT(1) DEFAULT '1' NOT NULL COMMENT 'true "1" or false "2"',
 	score TEXT NOT NULL,
 	score_gnr TEXT NOT NULL,
@@ -122,7 +122,7 @@ END;
         $sql = <<<END
 CREATE TABLE golf_stats
 (
-	stats_id VARCHAR(225) NOT NULL
+	stats_id BINARY(16) NOT NULL
 		PRIMARY KEY,
 	stats_tournaments INT DEFAULT '0' NULL,
 	stats_rounds INT DEFAULT '0' NULL,
@@ -154,7 +154,7 @@ END;
         $sql = <<<END
 CREATE TABLE golf_tee_box
 (
-	course_id VARCHAR(225) NOT NULL COMMENT 'Reference from golf_courses',
+	course_id BINARY(16) NOT NULL COMMENT 'Reference from golf_courses',
 	tee_box INT(1) NOT NULL COMMENT 'options ( 1 - 5 )',
 	distance BLOB NOT NULL,
 	distance_color VARCHAR(10) NOT NULL,
@@ -192,8 +192,8 @@ END;
         $sql = <<<END
 CREATE TABLE golf_tournament_teams
 (
-	team_id VARCHAR(225) NOT NULL COMMENT 'teams(team_id)',
-	tournament_id VARCHAR(255) NOT NULL COMMENT 'tournaments(tournament_id)',
+	team_id BINARY(16) NOT NULL COMMENT 'teams(team_id)',
+	tournament_id BINARY(16) NOT NULL COMMENT 'tournaments(tournament_id)',
 	tournament_paid INT(1) DEFAULT '0' NULL,
 	tournament_accepted INT(1) DEFAULT '0' NULL,
 	CONSTRAINT golf_tournament_teams_entity_team_pk_fk
@@ -229,14 +229,13 @@ END;
         $sql = <<<END
 CREATE TABLE golf_tournaments
 (
-	tournament_id VARCHAR(225) NOT NULL,
-	tournament_name VARCHAR(225) NOT NULL,
-	host_name VARCHAR(225) NOT NULL COMMENT 'This could be a school or org
-	',
+	tournament_id BINARY(16) NOT NULL,
+	tournament_name BINARY(16) NOT NULL,
+	course_id BINARY(16) NULL COMMENT 'course_id, in case double',
+	host_name VARCHAR(225) NOT NULL COMMENT 'This could be a school or org',
 	tournament_style INT NOT NULL,
 	tournament_team_price INT NULL,
 	tournament_paid INT(1) DEFAULT '1' NULL COMMENT 'True False',
-	course_id VARCHAR(225) NULL COMMENT 'course_id, incase double',
 	tournament_date DATE NULL,
 	CONSTRAINT golf_tournaments_entity_entity_pk_fk
 		FOREIGN KEY (tournament_id) REFERENCES carbon (entity_pk)
@@ -270,9 +269,9 @@ END;
         $sql = <<<END
 CREATE TABLE team_members
 (
-	member_id VARCHAR(225) NULL,
-	team_id VARCHAR(225) NOT NULL,
-	user_id VARCHAR(225) NOT NULL,
+	member_id BINARY(16) NULL,
+	team_id BINARY(16) NOT NULL,
+	user_id BINARY(16) NOT NULL,
 	accepted TINYINT(1) DEFAULT '0' NULL,
 	CONSTRAINT team_members_entity_entity_pk_fk
 		FOREIGN KEY (member_id) REFERENCES carbon (entity_pk)
@@ -315,10 +314,10 @@ END;
         $sql = <<<END
 CREATE TABLE carbon_teams
 (
-	team_id VARCHAR(225) NOT NULL
+	team_id BINARY(16) NOT NULL
 		PRIMARY KEY,
-	team_coach VARCHAR(225) NOT NULL COMMENT 'user_id',
-	parent_team VARCHAR(225) NULL,
+	team_coach BINARY(16) NOT NULL COMMENT 'user_id',
+	parent_team BINARY(16) NULL,
 	team_code VARCHAR(225) NOT NULL,
 	team_name VARCHAR(225) NOT NULL,
 	team_rank INT DEFAULT '0' NULL,
@@ -327,7 +326,7 @@ CREATE TABLE carbon_teams
 	team_school VARCHAR(225) NULL,
 	team_district VARCHAR(225) NULL,
 	team_membership VARCHAR(225) NULL,
-	team_photo VARCHAR(225) NULL,
+	team_photo BINARY(16) NULL,
 	CONSTRAINT teams_team_id_uindex
 		UNIQUE (team_id),
 	CONSTRAINT teams_entity_entity_pk_fk

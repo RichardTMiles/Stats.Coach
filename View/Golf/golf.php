@@ -35,7 +35,7 @@ $my = $user[$_SESSION['id']];
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $my['stats']['stats_ffs'] ?></h5>
+                        <h5 class="description-header"><?= $my['stats']['stats_ffs']  ?></h5>
                         <span class="description-text">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
@@ -43,7 +43,7 @@ $my = $user[$_SESSION['id']];
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header"><?= $my['stats']['stats_rounds'] ?></h5>
+                        <h5 class="description-header"><?= $my['stats']['stats_rounds'] ?: '0'?></h5>
                         <span class="description-text">Rounds</span>
                     </div><!-- /.description-block -->
 

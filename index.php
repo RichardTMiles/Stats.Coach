@@ -8,7 +8,7 @@ define('APP_ROOT', __DIR__ . DS);  // Set our root folder for the application
 
 const SERVER_ROOT = APP_ROOT;        // I would like to change to only using app_root soon
 
-if (false === include './vendor/autoload.php') {
+if (false === include APP_ROOT . 'vendor/autoload.php') {
     // Load the autoload() for composer dependencies located in the Services folder
     print '<h1>Fuck, Composer Failed.</h1>' and die;
     // Composer autoload
@@ -30,7 +30,24 @@ try {
  * This turns very bad quickly.
  */
 
-$app(\App\StatsCoach::class);
+
+print \Table\carbon_users::Post([
+    'user_type' => 'Athlete',
+    'user_ip' => '127.0.0.1',
+    'user_sport' => 'GOLF',
+    'user_email_confirmed' => 1,
+    'user_username' => 'admin',
+    'user_password' => 'goldteam',
+    'user_email' => 'richard@miles.systems',
+    'user_first_name' => 'Richard',
+    'user_last_name' => 'Miles',
+    'user_gender' => 'Male'
+]) ? 'TRUE' : 'False';
+
+
+
+//
+//$app(\App\StatsCoach::class);
 
 return true;
 

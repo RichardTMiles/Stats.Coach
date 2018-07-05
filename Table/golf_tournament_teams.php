@@ -4,19 +4,19 @@ namespace Table;
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
-use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 
 class golf_tournament_teams extends Entities implements iRest
 {
+    const PRIMARY = "";
+
     const COLUMNS = [
-            'team_id',
-            'tournament_id',
-            'tournament_paid',
-            'tournament_accepted',
+    'team_id','tournament_id','tournament_paid','tournament_accepted',
     ];
 
-    const PRIMARY = "";
+    const BINARY = [
+    'team_id','tournament_id',
+    ];
 
     /**
      * @param array $return
@@ -40,31 +40,46 @@ class golf_tournament_teams extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = $where = [];
-        foreach ($argv as $column => $value) {
-            if (!is_int($column) && in_array($column, self::COLUMNS)) {
-                if ($value !== '') {
-                    $where[$column] = $value;
-                } else {
-                    $get[] = $column;
-                }
-            } elseif (in_array($value, self::COLUMNS)) {
-                $get[] = $value;
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $sql = '';
+        foreach($get as $key => $column){
+            if (!empty($sql)) {
+                $sql .= ', ';
+            }
+            if (in_array($column, self::BINARY)) {
+                $sql .= "HEX($column) as $column";
+            } else {
+                $sql .= $column;
             }
         }
 
-        $get =  !empty($get) ? implode(", ", $get) : ' * ';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.golf_tournament_teams';
 
-        $sql = 'SELECT ' .  $get . ' FROM statscoach.golf_tournament_teams';
+        $pdo = Database::database();
 
         if ($primary === null) {
-            $sql .= ' WHERE ';
-            foreach ($where as $column => $value) {
-                $sql .= "($column = " . Database::database()->quote($value) . ') AND ';
+            if (!empty($where)) {
+                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                    $sql = '(';
+                    foreach ($set as $column => $value) {
+                        if (is_array($value)) {
+                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                        } else {
+                            if (in_array($column, self::BINARY)) {
+                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                            } else {
+                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                            }
+                        }
+                    }
+                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                };
+                $sql .= ' WHERE ' . $build_where($where);
             }
-            $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=' . $pdo->quote($primary);
         }
 
         $sql .= $limit;
@@ -80,12 +95,22 @@ class golf_tournament_teams extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES (:team_id, :tournament_id, :tournament_paid, :tournament_accepted)';
+        $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES ( :team_id, :tournament_id, :tournament_paid, :tournament_accepted)';
         $stmt = Database::database()->prepare($sql);
-            $stmt->bindValue(':team_id', isset($argv['team_id']) ? $argv['team_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':tournament_id', isset($argv['tournament_id']) ? $argv['tournament_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':tournament_paid', isset($argv['tournament_paid']) ? $argv['tournament_paid'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':tournament_accepted', isset($argv['tournament_accepted']) ? $argv['tournament_accepted'] : null, \PDO::PARAM_STR);
+            
+                $team_id = isset($argv['team_id']) ? $argv['team_id'] : null;
+                $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
+                    
+                $tournament_id = isset($argv['tournament_id']) ? $argv['tournament_id'] : null;
+                $stmt->bindParam(':tournament_id',$tournament_id, \PDO::PARAM_STR, 16);
+                    
+                $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : '0';
+                $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
+                    
+                $tournament_accepted = isset($argv['tournament_accepted']) ? $argv['tournament_accepted'] : '0';
+                $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1);
+        
+
         return $stmt->execute();
     }
 
@@ -108,11 +133,12 @@ class golf_tournament_teams extends Entities implements iRest
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
+
         if (isset($argv['team_id'])) {
-            $set .= 'team_id=:team_id,';
+            $set .= 'team_id=UNHEX(:team_id),';
         }
         if (isset($argv['tournament_id'])) {
-            $set .= 'tournament_id=:tournament_id,';
+            $set .= 'tournament_id=UNHEX(:tournament_id),';
         }
         if (isset($argv['tournament_paid'])) {
             $set .= 'tournament_paid=:tournament_paid,';
@@ -132,18 +158,21 @@ class golf_tournament_teams extends Entities implements iRest
         $stmt = Database::database()->prepare($sql);
 
         if (isset($argv['team_id'])) {
-            $stmt->bindValue(':team_id', $argv['team_id'], \PDO::PARAM_STR);
+            $team_id = 'UNHEX('.$argv['team_id'].')';
+            $stmt->bindParam(':team_id', $team_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['tournament_id'])) {
-            $stmt->bindValue(':tournament_id', $argv['tournament_id'], \PDO::PARAM_STR);
+            $tournament_id = 'UNHEX('.$argv['tournament_id'].')';
+            $stmt->bindParam(':tournament_id', $tournament_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['tournament_paid'])) {
-            $stmt->bindValue(':tournament_paid', $argv['tournament_paid'], \PDO::PARAM_STR);
+            $tournament_paid = $argv['tournament_paid'];
+            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1 );
         }
         if (isset($argv['tournament_accepted'])) {
-            $stmt->bindValue(':tournament_accepted', $argv['tournament_accepted'], \PDO::PARAM_STR);
+            $tournament_accepted = $argv['tournament_accepted'];
+            $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1 );
         }
-
 
         if (!$stmt->execute()){
             return false;
@@ -156,7 +185,7 @@ class golf_tournament_teams extends Entities implements iRest
     }
 
     /**
-    * @param array $return
+    * @param array $remove
     * @param string|null $primary
     * @param array $argv
     * @return bool
@@ -182,7 +211,11 @@ class golf_tournament_teams extends Entities implements iRest
             }
             $sql .= ' WHERE ';
             foreach ($argv as $column => $value) {
-                $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
@@ -193,5 +226,4 @@ class golf_tournament_teams extends Entities implements iRest
 
         return self::execute($sql);
     }
-
 }

@@ -62,7 +62,7 @@ class User extends GlobalMap
             'user_password',
         ]);
 
-        if (!empty($data)) {
+        if (empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
         }
 
@@ -219,7 +219,6 @@ class User extends GlobalMap
                 'user_id' => $id,
                 'user_type' => 'Athlete',
                 'user_ip' => IP,
-                'user_last_login' => date("Y-m-d H:i:s"),
                 'user_sport' => 'GOLF',
                 'user_email_confirmed' => 1,
                 'user_username' => $username,

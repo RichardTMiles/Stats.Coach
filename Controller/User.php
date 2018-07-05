@@ -3,6 +3,7 @@
 namespace Controller;
 
 use CarbonPHP\Error\PublicAlert;
+use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
 use CarbonPHP\Session;
 
@@ -205,6 +206,8 @@ class User extends Request
         if ($password !== $verifyPass) {
             throw new PublicAlert('The passwords entered must match!');
         }
+
+        $password = Bcrypt::genHash($password);
 
         if (!$email) {
             throw new PublicAlert('Please enter a valid email address!');

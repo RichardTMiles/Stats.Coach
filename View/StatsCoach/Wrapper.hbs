@@ -200,7 +200,7 @@
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/jquery-pjax/jquery.pjax.js"></script>
 <script src="/node_modules/mustache/mustache.js"></script>
-<script src="/{{COMPOSER}}richardtmiles/carbonphp/Helpers/Carbon.js"></script>
+<script src="/{{COMPOSER}}richardtmiles/carbonphp/helpers/Carbon.js"></script>
 
 <script>
     const TEMPLATE = "/{{TEMPLATE}}", APP_VIEW = "/{{APP_VIEW}}", COMPOSER = "/{{COMPOSER}}";
@@ -222,7 +222,7 @@
                 //-- Admin LTE -->
                 carbon.js(TEMPLATE + 'dist/js/adminlte.min.js', () => {
 
-                    carbon.js(COMPOSER + 'richardtmiles/carbonphp/Helpers/asynchronous.js', () => {
+                    carbon.js(COMPOSER + 'richardtmiles/carbonphp/helpers/asynchronous.js', () => {
                         carbon.event("Carbon");
 
                         $(document).on('pjax:complete', function () {

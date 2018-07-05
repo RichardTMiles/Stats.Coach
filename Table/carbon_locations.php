@@ -4,22 +4,19 @@ namespace Table;
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
-use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 
 class carbon_locations extends Entities implements iRest
 {
+    const PRIMARY = "entity_id";
+
     const COLUMNS = [
-            'entity_id',
-            'latitude',
-            'longitude',
-            'street',
-            'city',
-            'state',
-            'elevation',
+    'entity_id','latitude','longitude','street','city','state','elevation',
     ];
 
-    const PRIMARY = "entity_id";
+    const BINARY = [
+    'entity_id',
+    ];
 
     /**
      * @param array $return
@@ -43,31 +40,46 @@ class carbon_locations extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = $where = [];
-        foreach ($argv as $column => $value) {
-            if (!is_int($column) && in_array($column, self::COLUMNS)) {
-                if ($value !== '') {
-                    $where[$column] = $value;
-                } else {
-                    $get[] = $column;
-                }
-            } elseif (in_array($value, self::COLUMNS)) {
-                $get[] = $value;
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $sql = '';
+        foreach($get as $key => $column){
+            if (!empty($sql)) {
+                $sql .= ', ';
+            }
+            if (in_array($column, self::BINARY)) {
+                $sql .= "HEX($column) as $column";
+            } else {
+                $sql .= $column;
             }
         }
 
-        $get =  !empty($get) ? implode(", ", $get) : ' * ';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_locations';
 
-        $sql = 'SELECT ' .  $get . ' FROM statscoach.carbon_locations';
+        $pdo = Database::database();
 
         if ($primary === null) {
-            $sql .= ' WHERE ';
-            foreach ($where as $column => $value) {
-                $sql .= "($column = " . Database::database()->quote($value) . ') AND ';
+            if (!empty($where)) {
+                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                    $sql = '(';
+                    foreach ($set as $column => $value) {
+                        if (is_array($value)) {
+                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                        } else {
+                            if (in_array($column, self::BINARY)) {
+                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                            } else {
+                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                            }
+                        }
+                    }
+                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                };
+                $sql .= ' WHERE ' . $build_where($where);
             }
-            $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
         }
 
         $sql .= $limit;
@@ -83,16 +95,29 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES (:entity_id, :latitude, :longitude, :street, :city, :state, :elevation)';
+        $sql = 'INSERT INTO statscoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( :entity_id, :latitude, :longitude, :street, :city, :state, :elevation)';
         $stmt = Database::database()->prepare($sql);
-            $stmt->bindValue(':entity_id', isset($argv['entity_id']) ? $argv['entity_id'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':latitude', isset($argv['latitude']) ? $argv['latitude'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':longitude', isset($argv['longitude']) ? $argv['longitude'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':street', isset($argv['street']) ? $argv['street'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':city', isset($argv['city']) ? $argv['city'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':state', isset($argv['state']) ? $argv['state'] : null, \PDO::PARAM_STR);
-            $stmt->bindValue(':elevation', isset($argv['elevation']) ? $argv['elevation'] : null, \PDO::PARAM_STR);
-        return $stmt->execute();
+            $entity_id = $id = self::new_entity('carbon_locations');
+            $stmt->bindParam(':entity_id',$entity_id, \PDO::PARAM_STR, 16);
+            
+                $latitude = isset($argv['latitude']) ? $argv['latitude'] : null;
+                $stmt->bindParam(':latitude',$latitude, \PDO::PARAM_STR, 225);
+                    
+                $longitude = isset($argv['longitude']) ? $argv['longitude'] : null;
+                $stmt->bindParam(':longitude',$longitude, \PDO::PARAM_STR, 225);
+                    $stmt->bindValue(':street',isset($argv['street']) ? $argv['street'] : null, \PDO::PARAM_STR);
+                    
+                $city = isset($argv['city']) ? $argv['city'] : null;
+                $stmt->bindParam(':city',$city, \PDO::PARAM_STR, 40);
+                    
+                $state = isset($argv['state']) ? $argv['state'] : null;
+                $stmt->bindParam(':state',$state, \PDO::PARAM_STR, 10);
+                    
+                $elevation = isset($argv['elevation']) ? $argv['elevation'] : null;
+                $stmt->bindParam(':elevation',$elevation, \PDO::PARAM_STR, 40);
+        
+        return $stmt->execute() ? $id : false;
+
     }
 
     /**
@@ -114,8 +139,9 @@ class carbon_locations extends Entities implements iRest
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
+
         if (isset($argv['entity_id'])) {
-            $set .= 'entity_id=:entity_id,';
+            $set .= 'entity_id=UNHEX(:entity_id),';
         }
         if (isset($argv['latitude'])) {
             $set .= 'latitude=:latitude,';
@@ -147,27 +173,32 @@ class carbon_locations extends Entities implements iRest
         $stmt = Database::database()->prepare($sql);
 
         if (isset($argv['entity_id'])) {
-            $stmt->bindValue(':entity_id', $argv['entity_id'], \PDO::PARAM_STR);
+            $entity_id = 'UNHEX('.$argv['entity_id'].')';
+            $stmt->bindParam(':entity_id', $entity_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['latitude'])) {
-            $stmt->bindValue(':latitude', $argv['latitude'], \PDO::PARAM_STR);
+            $latitude = $argv['latitude'];
+            $stmt->bindParam(':latitude',$latitude, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['longitude'])) {
-            $stmt->bindValue(':longitude', $argv['longitude'], \PDO::PARAM_STR);
+            $longitude = $argv['longitude'];
+            $stmt->bindParam(':longitude',$longitude, \PDO::PARAM_STR, 225 );
         }
         if (isset($argv['street'])) {
-            $stmt->bindValue(':street', $argv['street'], \PDO::PARAM_STR);
+            $stmt->bindValue(':street',$argv['street'], \PDO::PARAM_STR );
         }
         if (isset($argv['city'])) {
-            $stmt->bindValue(':city', $argv['city'], \PDO::PARAM_STR);
+            $city = $argv['city'];
+            $stmt->bindParam(':city',$city, \PDO::PARAM_STR, 40 );
         }
         if (isset($argv['state'])) {
-            $stmt->bindValue(':state', $argv['state'], \PDO::PARAM_STR);
+            $state = $argv['state'];
+            $stmt->bindParam(':state',$state, \PDO::PARAM_STR, 10 );
         }
         if (isset($argv['elevation'])) {
-            $stmt->bindValue(':elevation', $argv['elevation'], \PDO::PARAM_STR);
+            $elevation = $argv['elevation'];
+            $stmt->bindParam(':elevation',$elevation, \PDO::PARAM_STR, 40 );
         }
-
 
         if (!$stmt->execute()){
             return false;
@@ -180,7 +211,7 @@ class carbon_locations extends Entities implements iRest
     }
 
     /**
-    * @param array $return
+    * @param array $remove
     * @param string|null $primary
     * @param array $argv
     * @return bool
@@ -206,16 +237,19 @@ class carbon_locations extends Entities implements iRest
             }
             $sql .= ' WHERE ';
             foreach ($argv as $column => $value) {
-                $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
         }
 
         $remove = null;
 
         return self::execute($sql);
     }
-
 }

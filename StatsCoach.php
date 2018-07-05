@@ -12,6 +12,10 @@ use CarbonPHP\Application;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\View;
 use Controller\User;
+use Symfony\Component\Console\Helper\Table;
+use Table\carbon_users;
+use Table\golf_stats;
+use Table\carbon;
 
 class StatsCoach extends Application
 {
@@ -60,15 +64,16 @@ class StatsCoach extends Application
      * @throws \Mustache_Exception_InvalidArgumentException
      * @throws \CarbonPHP\Error\PublicAlert
      */
-    public function startApplication($uri = null) : bool
+    public function startApplication($uri = null): bool
     {
+
         static $count;
 
         if (empty($count)) {
             $count = 0;
+        } else {
+            $count++;
         }
-
-         $count++;
 
         $this->userSettings();          // Update the current user
 
@@ -104,11 +109,11 @@ class StatsCoach extends Application
         } else {
             // Event
             if (((AJAX && !PJAX) || SOCKET) && (
-                     $this->match('Search/{search}/', 'Search', 'all')() ||
-                     $this->match('Messages/', 'Messages', 'navigation')() ||
-                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||    // chat box widget
-                     $this->structure($this->events())->match('Follow/{user_id}/', 'User', 'follow')() ||
-                     $this->match('Unfollow/{user_id}/', 'User', 'unfollow')())) {
+                    $this->match('Search/{search}/', 'Search', 'all')() ||
+                    $this->match('Messages/', 'Messages', 'navigation')() ||
+                    $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||    // chat box widget
+                    $this->structure($this->events())->match('Follow/{user_id}/', 'User', 'follow')() ||
+                    $this->match('Unfollow/{user_id}/', 'User', 'unfollow')())) {
                 return true;         // Event
             }
 
@@ -128,26 +133,26 @@ class StatsCoach extends Application
 
             ################################### Golf Stuff + User
 
-            if ( $this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
-                 $this->match('Messages/*', 'Messages', 'messages')() ||
-                 $this->match('Home/*', 'Golf', 'golf')() ||
-                 $this->match('Golf/*', 'Golf', 'golf')() ||
-                 $this->match('Team/{team_id}/*', 'Team', 'team')() ||
-                 $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
-                 $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
-                 $this->match('CreateTeam/', 'Team', 'createTeam')() ||
-                 $this->match('AddCourse/{state?}/*', 'Golf', 'AddCourse')() ||
-                 $this->match('PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore')() ||
-                 $this->match('Logout/*', function () {
+            if ($this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
+                $this->match('Messages/*', 'Messages', 'messages')() ||
+                $this->match('Home/*', 'Golf', 'golf')() ||
+                $this->match('Golf/*', 'Golf', 'golf')() ||
+                $this->match('Team/{team_id}/*', 'Team', 'team')() ||
+                $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
+                $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
+                $this->match('CreateTeam/', 'Team', 'createTeam')() ||
+                $this->match('AddCourse/{state?}/*', 'Golf', 'AddCourse')() ||
+                $this->match('PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore')() ||
+                $this->match('Logout/*', function () {
                     User::logout();
                 })) {
                 return true;          // Logout
             }
         }
 
-        return  $this->structure($this->MVC())->match('Activate/{email?}/{email_code?}/', 'User', 'activate')() ||  // Activate $email $email_code
-             $this->structure($this->wrap())->match('404/*', 'Error/404error.php')() ||
-             $this->match('500/*', 'Error/500error.php')();
+        return $this->structure($this->MVC())->match('Activate/{email?}/{email_code?}/', 'User', 'activate')() ||  // Activate $email $email_code
+            $this->structure($this->wrap())->match('404/*', 'Error/404error.php')() ||
+            $this->match('500/*', 'Error/500error.php')();
 
 
     }
@@ -162,17 +167,35 @@ class StatsCoach extends Application
      * @throws \CarbonPHP\Error\PublicAlert
      */
 
-    public function userSettings() {
+    public function userSettings()
+    {
         global $user, $json;
 
 
         // If the user is signed in we need to get the
         if ($_SESSION['id'] ?? false) {
-            $json['me'] = $GLOBALS['user'][$_SESSION['id']];
+
+            if (!carbon_users::Get($GLOBALS['user'][$_SESSION['id']], $_SESSION['id'],[])) {
+                print 'failed to fetch user';
+                exit(1);
+            }
+
+            if ($GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] === null) {
+                $GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] = '/view/img/Carbon-red.png';
+            }
+
+            $GLOBALS['user'][$_SESSION['id']]['stats'] = [];
+            if (!golf_stats::Get($GLOBALS['user'][$_SESSION['id']]['stats'], $_SESSION['id'], [])){
+                print 'Could not get stats!';
+                exit(1);
+            }
+
+            $json['me'] = &$GLOBALS['user'][$_SESSION['id']];
             $json['signedIn'] = true;
             $json['nav-bar'] = '';
             $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
+            // sortDump($json);
             //
             $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
                 global $json;
@@ -181,7 +204,7 @@ class StatsCoach extends Application
                     $mustache = new \Mustache_Engine();
                 }
                 if (!file_exists($path)) {
-                    print "<script>Carbon(() => $.carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
+                    print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
                 }
                 return $mustache->render(file_get_contents($path), $json);
             };
