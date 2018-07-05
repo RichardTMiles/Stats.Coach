@@ -31,23 +31,7 @@ try {
  */
 
 
-print \Table\carbon_users::Post([
-    'user_type' => 'Athlete',
-    'user_ip' => '127.0.0.1',
-    'user_sport' => 'GOLF',
-    'user_email_confirmed' => 1,
-    'user_username' => 'admin',
-    'user_password' => 'goldteam',
-    'user_email' => 'richard@miles.systems',
-    'user_first_name' => 'Richard',
-    'user_last_name' => 'Miles',
-    'user_gender' => 'Male'
-]) ? 'TRUE' : 'False';
-
-
-
-//
-//$app(\App\StatsCoach::class);
+$app(\App\StatsCoach::class);
 
 return true;
 

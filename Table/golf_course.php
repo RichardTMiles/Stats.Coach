@@ -1,6 +1,6 @@
 <?php
-
 namespace Table;
+
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
@@ -95,9 +95,9 @@ class golf_course extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website) VALUES ( :course_id, :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website)';
+        $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website) VALUES ( UNHEX(:course_id), :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website)';
         $stmt = Database::database()->prepare($sql);
-            $course_id = $id = self::new_entity('golf_course');
+            $course_id = $id = isset($argv['course_id']) ? $argv['course_id'] : self::new_entity('golf_course');
             $stmt->bindParam(':course_id',$course_id, \PDO::PARAM_STR, 16);
             
                 $course_name = isset($argv['course_name']) ? $argv['course_name'] : null;
@@ -346,38 +346,6 @@ class golf_course extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.golf_course ';
-
-        foreach($argv as $column => $constraint){
-            if (!in_array($column, self::COLUMNS)){
-                unset($argv[$column]);
-            }
-        }
-
-        if ($primary === null) {
-            /**
-            *   While useful, we've decided to disallow full
-            *   table deletions through the rest api. For the
-            *   n00bs and future self, "I got chu."
-            */
-            if (empty($argv)) {
-                return false;
-            }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
-                }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
-        }
-
-        $remove = null;
-
-        return self::execute($sql);
+        return \Table\carbon::Delete($remove, $primary, $argv);
     }
 }

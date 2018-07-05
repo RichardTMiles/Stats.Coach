@@ -1,6 +1,6 @@
 <?php
-
 namespace Table;
+
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
@@ -95,14 +95,9 @@ class carbon_users extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location, user_creation_date) VALUES ( :user_id, :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location, :user_creation_date)';
+        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location, user_creation_date) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location, :user_creation_date)';
         $stmt = Database::database()->prepare($sql);
-            $user_id = $id = self::new_entity('carbon_users');
-
-            var_dump($id);
-            exit(1);
-
-
+            $user_id = $id = isset($argv['user_id']) ? $argv['user_id'] : self::new_entity('carbon_users');
             $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
             
                 $user_type = isset($argv['user_type']) ? $argv['user_type'] : null;
@@ -404,38 +399,6 @@ class carbon_users extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.carbon_users ';
-
-        foreach($argv as $column => $constraint){
-            if (!in_array($column, self::COLUMNS)){
-                unset($argv[$column]);
-            }
-        }
-
-        if ($primary === null) {
-            /**
-            *   While useful, we've decided to disallow full
-            *   table deletions through the rest api. For the
-            *   n00bs and future self, "I got chu."
-            */
-            if (empty($argv)) {
-                return false;
-            }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
-                }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
-        }
-
-        $remove = null;
-
-        return self::execute($sql);
+        return \Table\carbon::Delete($remove, $primary, $argv);
     }
 }

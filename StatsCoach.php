@@ -95,7 +95,6 @@ class StatsCoach extends Application
             return true;
         }
 
-
         ################################### MVC
         if (!$_SESSION['id']) {  // Signed out
             if ($this->match('Login/*', 'User', 'login')() ||
@@ -153,7 +152,6 @@ class StatsCoach extends Application
         return $this->structure($this->MVC())->match('Activate/{email?}/{email_code?}/', 'User', 'activate')() ||  // Activate $email $email_code
             $this->structure($this->wrap())->match('404/*', 'Error/404error.php')() ||
             $this->match('500/*', 'Error/500error.php')();
-
 
     }
 

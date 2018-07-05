@@ -1,6 +1,6 @@
 <?php
-
 namespace Table;
+
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
@@ -95,14 +95,16 @@ class carbon extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon (entity_pk, entity_fk) VALUES ( (UNHEX(REPLACE(UUID(),"-",""))), :entity_fk)';
+        $sql = 'INSERT INTO statscoach.carbon (entity_pk, entity_fk) VALUES ( UNHEX(:entity_pk), :entity_fk)';
         $stmt = Database::database()->prepare($sql);
+            $entity_pk = $id = isset($argv['entity_pk']) ? $argv['entity_pk'] : self::fetchColumn('SELECT (REPLACE(UUID(),"-",""))')[0];
+            $stmt->bindParam(':entity_pk',$entity_pk, \PDO::PARAM_STR, 16);
             
                 $entity_fk = isset($argv['entity_fk']) ? $argv['entity_fk'] : null;
                 $stmt->bindParam(':entity_fk',$entity_fk, \PDO::PARAM_STR, 16);
         
+        return $stmt->execute() ? $id : false;
 
-        return $stmt->execute();
     }
 
     /**
@@ -196,7 +198,8 @@ class carbon extends Entities implements iRest
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
+
+    $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
         }
 
         $remove = null;

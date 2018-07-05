@@ -79,12 +79,12 @@ final class UserTest extends TestCase
             'user_username' => 'Admin'
         ]);
 
-        if (!empty($this->user)){
+        if (!empty($this->user)) {
             $this->testUserCanBeDeleted();
         }
 
 
-        $this->assertTrue(Users::Post([
+        $this->assertTrue(is_string($id = Users::Post([
             'user_type' => 'Athlete',
             'user_ip' => '127.0.0.1',
             'user_sport' => 'GOLF',
@@ -95,11 +95,8 @@ final class UserTest extends TestCase
             'user_first_name' => 'Richard',
             'user_last_name' => 'Miles',
             'user_gender' => 'Male'
-        ]));
+        ])));
 
-
-
-        $this->assertTrue(false);
 
         //$method = 'register';
 
@@ -123,8 +120,6 @@ final class UserTest extends TestCase
             ));
 
         $this->assertInternalType('array', $this->user);
-
-        var_dump($this->user);
 
         $this->assertArrayHasKey('user_email', $this->user);
 
@@ -152,15 +147,19 @@ final class UserTest extends TestCase
      */
     public function testUserCanBeDeleted(): void
     {
+
         $this->assertTrue(
-            Users::Delete(
-                $this->user, $this->user['user_id'], [
-                    'email' => 'Tmiles199@gmail.com'
-                ]
-            )
+            Users::Delete($this->user, $this->user['user_id'], [])
         );
 
         $this->assertNull($this->user);
+
+        $this->user = [];
+
+        Users::Get($this->user, null, ['user_username' => 'Admin']);
+
+        $this->assertTrue(empty($this->user));
+
     }
 
 

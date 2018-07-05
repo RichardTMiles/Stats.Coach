@@ -1,6 +1,6 @@
 <?php
-
 namespace Table;
+
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
@@ -95,9 +95,9 @@ class user_followers extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES ( :follows_user_id, :user_id)';
+        $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES ( UNHEX(:follows_user_id), :user_id)';
         $stmt = Database::database()->prepare($sql);
-            $follows_user_id = $id = self::new_entity('user_followers');
+            $follows_user_id = $id = isset($argv['follows_user_id']) ? $argv['follows_user_id'] : self::new_entity('user_followers');
             $stmt->bindParam(':follows_user_id',$follows_user_id, \PDO::PARAM_STR, 16);
             
                 $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
@@ -171,38 +171,6 @@ class user_followers extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.user_followers ';
-
-        foreach($argv as $column => $constraint){
-            if (!in_array($column, self::COLUMNS)){
-                unset($argv[$column]);
-            }
-        }
-
-        if ($primary === null) {
-            /**
-            *   While useful, we've decided to disallow full
-            *   table deletions through the rest api. For the
-            *   n00bs and future self, "I got chu."
-            */
-            if (empty($argv)) {
-                return false;
-            }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
-                }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . Database::database()->quote($primary) . ')';
-        }
-
-        $remove = null;
-
-        return self::execute($sql);
+        return \Table\carbon::Delete($remove, $primary, $argv);
     }
 }

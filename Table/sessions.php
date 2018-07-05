@@ -1,6 +1,6 @@
 <?php
-
 namespace Table;
+
 
 use CarbonPHP\Database;
 use CarbonPHP\Entities;
@@ -233,7 +233,8 @@ class sessions extends Entities implements iRest
             }
             $sql = substr($sql, 0, strlen($sql)-4);
         } else if (!empty(self::PRIMARY)) {
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+
+    $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
         }
 
         $remove = null;
