@@ -66,7 +66,6 @@ class StatsCoach extends Application
      */
     public function startApplication($uri = null): bool
     {
-
         static $count;
 
         if (empty($count)) {
@@ -173,9 +172,10 @@ class StatsCoach extends Application
         // If the user is signed in we need to get the
         if ($_SESSION['id'] ?? false) {
 
-            if (!carbon_users::Get($GLOBALS['user'][$_SESSION['id']], $_SESSION['id'],[])) {
-                print 'failed to fetch user';
-                exit(1);
+            if (!carbon_users::Get($GLOBALS['user'][$_SESSION['id']], $_SESSION['id'],[]) ||
+                empty($GLOBALS['user'][$_SESSION['id']])) {
+                $_SESSION['id'] = false;
+                throw new PublicAlert('Failed to fetch user. This usually happens when a users id becomes invalid.');
             }
 
             if ($GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] === null) {
@@ -188,13 +188,12 @@ class StatsCoach extends Application
                 exit(1);
             }
 
-            $json['me'] = &$GLOBALS['user'][$_SESSION['id']];
+            $json['my'] = &$GLOBALS['user'][$_SESSION['id']];
             $json['signedIn'] = true;
             $json['nav-bar'] = '';
             $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
-            // sortDump($json);
-            //
+
             $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
                 global $json;
                 static $mustache;

@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_photos extends Entities implements iRest
 {
-    const PRIMARY = "parent_id";
+    const PRIMARY = [
+    'parent_id',
+    ];
 
     const COLUMNS = [
     'parent_id','photo_id','user_id','photo_path','photo_description',
@@ -78,13 +80,27 @@ class carbon_photos extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  parent_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -100,15 +116,15 @@ class carbon_photos extends Entities implements iRest
             $parent_id = $id = isset($argv['parent_id']) ? $argv['parent_id'] : self::new_entity('carbon_photos');
             $stmt->bindParam(':parent_id',$parent_id, \PDO::PARAM_STR, 16);
             
-                $photo_id = isset($argv['photo_id']) ? $argv['photo_id'] : null;
+                $photo_id = $argv['photo_id'];
                 $stmt->bindParam(':photo_id',$photo_id, \PDO::PARAM_STR, 16);
                     
-                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
+                $user_id = $argv['user_id'];
                 $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
                     
-                $photo_path = isset($argv['photo_path']) ? $argv['photo_path'] : null;
+                $photo_path = $argv['photo_path'];
                 $stmt->bindParam(':photo_path',$photo_path, \PDO::PARAM_STR, 225);
-                    $stmt->bindValue(':photo_description',isset($argv['photo_description']) ? $argv['photo_description'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':photo_description',$argv['photo_description'], \PDO::PARAM_STR);
         
         return $stmt->execute() ? $id : false;
 
@@ -116,11 +132,11 @@ class carbon_photos extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -154,11 +170,15 @@ class carbon_photos extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  parent_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['parent_id'])) {
             $parent_id = 'UNHEX('.$argv['parent_id'].')';
@@ -174,10 +194,10 @@ class carbon_photos extends Entities implements iRest
         }
         if (isset($argv['photo_path'])) {
             $photo_path = $argv['photo_path'];
-            $stmt->bindParam(':photo_path',$photo_path, \PDO::PARAM_STR, 225 );
+            $stmt->bindParam(':photo_path',$photo_path, \PDO::PARAM_STR, 225);
         }
         if (isset($argv['photo_description'])) {
-            $stmt->bindValue(':photo_description',$argv['photo_description'], \PDO::PARAM_STR );
+            $stmt->bindValue(':photo_description',$argv['photo_description'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){

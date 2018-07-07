@@ -116,8 +116,10 @@ final class UserTest extends TestCase
     {
         $this->user = [];
         $this->assertTrue(
-            Users::Get($this->user, null, ['user_username' => 'Admin']
+            Users::Get($this->user, null, ['user_username' => 'admin']
             ));
+
+        $this->user = $this->user[0];
 
         $this->assertInternalType('array', $this->user);
 
@@ -133,9 +135,17 @@ final class UserTest extends TestCase
     public function testUserCanBeUpdated(): void
     {
         $this->assertTrue(
+            Users::Get($this->user, null, ['user_username' => 'admin']
+            ));
+
+        $this->user = $this->user[0];
+
+        $this->assertTrue(
             Users::Put($this->user, $this->user['user_id'], [
                 'user_first_name' => 'lil\'Rich'
             ]));
+
+        $this->testUserCanBeRetrieved();
 
         $this->assertEquals('lil\'Rich', $this->user['user_first_name']);
     }
@@ -148,8 +158,17 @@ final class UserTest extends TestCase
     public function testUserCanBeDeleted(): void
     {
 
+        //$this->assertEquals('lil\'Rich', $this->user['user_first_name']);
+
+        $user = [];
+        Users::Get($user, null, [
+            'user_username' => 'Admin'
+        ]);
+
+        $user = $user[0];
+
         $this->assertTrue(
-            Users::Delete($this->user, $this->user['user_id'], [])
+            Users::Delete($this->user, $user['user_id'], [])
         );
 
         $this->assertNull($this->user);

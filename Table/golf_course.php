@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class golf_course extends Entities implements iRest
 {
-    const PRIMARY = "course_id";
+    const PRIMARY = [
+    'course_id',
+    ];
 
     const COLUMNS = [
     'course_id','course_name','course_holes','course_phone','course_difficulty','course_rank','box_color_1','box_color_2','box_color_3','box_color_4','box_color_5','course_par','course_par_out','course_par_in','par_tot','course_par_hcp','course_type','course_access','course_handicap','pga_professional','website',
@@ -78,13 +80,27 @@ class golf_course extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  course_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -100,12 +116,12 @@ class golf_course extends Entities implements iRest
             $course_id = $id = isset($argv['course_id']) ? $argv['course_id'] : self::new_entity('golf_course');
             $stmt->bindParam(':course_id',$course_id, \PDO::PARAM_STR, 16);
             
-                $course_name = isset($argv['course_name']) ? $argv['course_name'] : null;
+                $course_name = $argv['course_name'];
                 $stmt->bindParam(':course_name',$course_name, \PDO::PARAM_STR, 16);
                     
                 $course_holes = isset($argv['course_holes']) ? $argv['course_holes'] : '18';
                 $stmt->bindParam(':course_holes',$course_holes, \PDO::PARAM_STR, 2);
-                    $stmt->bindValue(':course_phone',isset($argv['course_phone']) ? $argv['course_phone'] : '18', \PDO::PARAM_STR);
+                    $stmt->bindValue(':course_phone',$argv['course_phone'], \PDO::PARAM_STR);
                     
                 $course_difficulty = isset($argv['course_difficulty']) ? $argv['course_difficulty'] : null;
                 $stmt->bindParam(':course_difficulty',$course_difficulty, \PDO::PARAM_STR, 10);
@@ -127,15 +143,15 @@ class golf_course extends Entities implements iRest
                     
                 $box_color_5 = isset($argv['box_color_5']) ? $argv['box_color_5'] : null;
                 $stmt->bindParam(':box_color_5',$box_color_5, \PDO::PARAM_STR, 10);
-                    $stmt->bindValue(':course_par',isset($argv['course_par']) ? $argv['course_par'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':course_par',$argv['course_par'], \PDO::PARAM_STR);
                     
-                $course_par_out = isset($argv['course_par_out']) ? $argv['course_par_out'] : null;
+                $course_par_out = $argv['course_par_out'];
                 $stmt->bindParam(':course_par_out',$course_par_out, \PDO::PARAM_STR, 2);
                     
-                $course_par_in = isset($argv['course_par_in']) ? $argv['course_par_in'] : null;
+                $course_par_in = $argv['course_par_in'];
                 $stmt->bindParam(':course_par_in',$course_par_in, \PDO::PARAM_STR, 2);
                     
-                $par_tot = isset($argv['par_tot']) ? $argv['par_tot'] : null;
+                $par_tot = $argv['par_tot'];
                 $stmt->bindParam(':par_tot',$par_tot, \PDO::PARAM_STR, 2);
                     
                 $course_par_hcp = isset($argv['course_par_hcp']) ? $argv['course_par_hcp'] : null;
@@ -146,9 +162,9 @@ class golf_course extends Entities implements iRest
                     
                 $course_access = isset($argv['course_access']) ? $argv['course_access'] : null;
                 $stmt->bindParam(':course_access',$course_access, \PDO::PARAM_STR, 120);
-                    $stmt->bindValue(':course_handicap',isset($argv['course_handicap']) ? $argv['course_handicap'] : null, \PDO::PARAM_STR);
-                    $stmt->bindValue(':pga_professional',isset($argv['pga_professional']) ? $argv['pga_professional'] : null, \PDO::PARAM_STR);
-                    $stmt->bindValue(':website',isset($argv['website']) ? $argv['website'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':course_handicap',$argv['course_handicap'], \PDO::PARAM_STR);
+                    $stmt->bindValue(':pga_professional',$argv['pga_professional'], \PDO::PARAM_STR);
+                    $stmt->bindValue(':website',$argv['website'], \PDO::PARAM_STR);
         
         return $stmt->execute() ? $id : false;
 
@@ -156,11 +172,11 @@ class golf_course extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -242,11 +258,15 @@ class golf_course extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  course_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['course_id'])) {
             $course_id = 'UNHEX('.$argv['course_id'].')';
@@ -258,74 +278,74 @@ class golf_course extends Entities implements iRest
         }
         if (isset($argv['course_holes'])) {
             $course_holes = $argv['course_holes'];
-            $stmt->bindParam(':course_holes',$course_holes, \PDO::PARAM_STR, 2 );
+            $stmt->bindParam(':course_holes',$course_holes, \PDO::PARAM_STR, 2);
         }
         if (isset($argv['course_phone'])) {
-            $stmt->bindValue(':course_phone',$argv['course_phone'], \PDO::PARAM_STR );
+            $stmt->bindValue(':course_phone',$argv['course_phone'], \PDO::PARAM_STR);
         }
         if (isset($argv['course_difficulty'])) {
             $course_difficulty = $argv['course_difficulty'];
-            $stmt->bindParam(':course_difficulty',$course_difficulty, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':course_difficulty',$course_difficulty, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['course_rank'])) {
             $course_rank = $argv['course_rank'];
-            $stmt->bindParam(':course_rank',$course_rank, \PDO::PARAM_STR, 5 );
+            $stmt->bindParam(':course_rank',$course_rank, \PDO::PARAM_STR, 5);
         }
         if (isset($argv['box_color_1'])) {
             $box_color_1 = $argv['box_color_1'];
-            $stmt->bindParam(':box_color_1',$box_color_1, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':box_color_1',$box_color_1, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['box_color_2'])) {
             $box_color_2 = $argv['box_color_2'];
-            $stmt->bindParam(':box_color_2',$box_color_2, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':box_color_2',$box_color_2, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['box_color_3'])) {
             $box_color_3 = $argv['box_color_3'];
-            $stmt->bindParam(':box_color_3',$box_color_3, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':box_color_3',$box_color_3, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['box_color_4'])) {
             $box_color_4 = $argv['box_color_4'];
-            $stmt->bindParam(':box_color_4',$box_color_4, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':box_color_4',$box_color_4, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['box_color_5'])) {
             $box_color_5 = $argv['box_color_5'];
-            $stmt->bindParam(':box_color_5',$box_color_5, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':box_color_5',$box_color_5, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['course_par'])) {
-            $stmt->bindValue(':course_par',$argv['course_par'], \PDO::PARAM_STR );
+            $stmt->bindValue(':course_par',$argv['course_par'], \PDO::PARAM_STR);
         }
         if (isset($argv['course_par_out'])) {
             $course_par_out = $argv['course_par_out'];
-            $stmt->bindParam(':course_par_out',$course_par_out, \PDO::PARAM_STR, 2 );
+            $stmt->bindParam(':course_par_out',$course_par_out, \PDO::PARAM_STR, 2);
         }
         if (isset($argv['course_par_in'])) {
             $course_par_in = $argv['course_par_in'];
-            $stmt->bindParam(':course_par_in',$course_par_in, \PDO::PARAM_STR, 2 );
+            $stmt->bindParam(':course_par_in',$course_par_in, \PDO::PARAM_STR, 2);
         }
         if (isset($argv['par_tot'])) {
             $par_tot = $argv['par_tot'];
-            $stmt->bindParam(':par_tot',$par_tot, \PDO::PARAM_STR, 2 );
+            $stmt->bindParam(':par_tot',$par_tot, \PDO::PARAM_STR, 2);
         }
         if (isset($argv['course_par_hcp'])) {
             $course_par_hcp = $argv['course_par_hcp'];
-            $stmt->bindParam(':course_par_hcp',$course_par_hcp, \PDO::PARAM_STR, 4 );
+            $stmt->bindParam(':course_par_hcp',$course_par_hcp, \PDO::PARAM_STR, 4);
         }
         if (isset($argv['course_type'])) {
             $course_type = $argv['course_type'];
-            $stmt->bindParam(':course_type',$course_type, \PDO::PARAM_STR, 30 );
+            $stmt->bindParam(':course_type',$course_type, \PDO::PARAM_STR, 30);
         }
         if (isset($argv['course_access'])) {
             $course_access = $argv['course_access'];
-            $stmt->bindParam(':course_access',$course_access, \PDO::PARAM_STR, 120 );
+            $stmt->bindParam(':course_access',$course_access, \PDO::PARAM_STR, 120);
         }
         if (isset($argv['course_handicap'])) {
-            $stmt->bindValue(':course_handicap',$argv['course_handicap'], \PDO::PARAM_STR );
+            $stmt->bindValue(':course_handicap',$argv['course_handicap'], \PDO::PARAM_STR);
         }
         if (isset($argv['pga_professional'])) {
-            $stmt->bindValue(':pga_professional',$argv['pga_professional'], \PDO::PARAM_STR );
+            $stmt->bindValue(':pga_professional',$argv['pga_professional'], \PDO::PARAM_STR);
         }
         if (isset($argv['website'])) {
-            $stmt->bindValue(':website',$argv['website'], \PDO::PARAM_STR );
+            $stmt->bindValue(':website',$argv['website'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){

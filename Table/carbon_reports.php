@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_reports extends Entities implements iRest
 {
-    const PRIMARY = "";
+    const PRIMARY = [
+    
+    ];
 
     const COLUMNS = [
     'log_level','report','date','call_trace',
@@ -78,13 +80,20 @@ class carbon_reports extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . $pdo->quote($primary);
-        }
+        } 
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+
 
         return true;
     }
@@ -100,11 +109,11 @@ class carbon_reports extends Entities implements iRest
             
                 $log_level = isset($argv['log_level']) ? $argv['log_level'] : null;
                 $stmt->bindParam(':log_level',$log_level, \PDO::PARAM_STR, 20);
-                    $stmt->bindValue(':report',isset($argv['report']) ? $argv['report'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':report',$argv['report'], \PDO::PARAM_STR);
                     
-                $date = isset($argv['date']) ? $argv['date'] : null;
+                $date = $argv['date'];
                 $stmt->bindParam(':date',$date, \PDO::PARAM_STR, 22);
-                    $stmt->bindValue(':call_trace',isset($argv['call_trace']) ? $argv['call_trace'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':call_trace',$argv['call_trace'], \PDO::PARAM_STR);
         
 
         return $stmt->execute();
@@ -112,11 +121,11 @@ class carbon_reports extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -147,25 +156,27 @@ class carbon_reports extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['log_level'])) {
             $log_level = $argv['log_level'];
-            $stmt->bindParam(':log_level',$log_level, \PDO::PARAM_STR, 20 );
+            $stmt->bindParam(':log_level',$log_level, \PDO::PARAM_STR, 20);
         }
         if (isset($argv['report'])) {
-            $stmt->bindValue(':report',$argv['report'], \PDO::PARAM_STR );
+            $stmt->bindValue(':report',$argv['report'], \PDO::PARAM_STR);
         }
         if (isset($argv['date'])) {
             $date = $argv['date'];
-            $stmt->bindParam(':date',$date, \PDO::PARAM_STR, 22 );
+            $stmt->bindParam(':date',$date, \PDO::PARAM_STR, 22);
         }
         if (isset($argv['call_trace'])) {
-            $stmt->bindValue(':call_trace',$argv['call_trace'], \PDO::PARAM_STR );
+            $stmt->bindValue(':call_trace',$argv['call_trace'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){
@@ -212,10 +223,7 @@ class carbon_reports extends Entities implements iRest
                 }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-
-    $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
-        }
+        } 
 
         $remove = null;
 

@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class user_tasks extends Entities implements iRest
 {
-    const PRIMARY = "user_id";
+    const PRIMARY = [
+    'user_id',
+    ];
 
     const COLUMNS = [
     'task_id','user_id','from_id','task_name','task_description','percent_complete','start_date','end_date',
@@ -78,13 +80,27 @@ class user_tasks extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  user_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -98,7 +114,7 @@ class user_tasks extends Entities implements iRest
         $sql = 'INSERT INTO statscoach.user_tasks (task_id, user_id, from_id, task_name, task_description, percent_complete, start_date, end_date) VALUES ( :task_id, UNHEX(:user_id), :from_id, :task_name, :task_description, :percent_complete, :start_date, :end_date)';
         $stmt = Database::database()->prepare($sql);
             
-                $task_id = isset($argv['task_id']) ? $argv['task_id'] : null;
+                $task_id = $argv['task_id'];
                 $stmt->bindParam(':task_id',$task_id, \PDO::PARAM_STR, 16);
                     $user_id = $id = isset($argv['user_id']) ? $argv['user_id'] : self::new_entity('user_tasks');
             $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
@@ -106,7 +122,7 @@ class user_tasks extends Entities implements iRest
                 $from_id = isset($argv['from_id']) ? $argv['from_id'] : null;
                 $stmt->bindParam(':from_id',$from_id, \PDO::PARAM_STR, 16);
                     
-                $task_name = isset($argv['task_name']) ? $argv['task_name'] : '0';
+                $task_name = $argv['task_name'];
                 $stmt->bindParam(':task_name',$task_name, \PDO::PARAM_STR, 40);
                     
                 $task_description = isset($argv['task_description']) ? $argv['task_description'] : null;
@@ -123,11 +139,11 @@ class user_tasks extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -170,11 +186,15 @@ class user_tasks extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  user_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['task_id'])) {
             $task_id = 'UNHEX('.$argv['task_id'].')';
@@ -190,21 +210,21 @@ class user_tasks extends Entities implements iRest
         }
         if (isset($argv['task_name'])) {
             $task_name = $argv['task_name'];
-            $stmt->bindParam(':task_name',$task_name, \PDO::PARAM_STR, 40 );
+            $stmt->bindParam(':task_name',$task_name, \PDO::PARAM_STR, 40);
         }
         if (isset($argv['task_description'])) {
             $task_description = $argv['task_description'];
-            $stmt->bindParam(':task_description',$task_description, \PDO::PARAM_STR, 225 );
+            $stmt->bindParam(':task_description',$task_description, \PDO::PARAM_STR, 225);
         }
         if (isset($argv['percent_complete'])) {
             $percent_complete = $argv['percent_complete'];
-            $stmt->bindParam(':percent_complete',$percent_complete, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':percent_complete',$percent_complete, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['start_date'])) {
-            $stmt->bindValue(':start_date',$argv['start_date'], \PDO::PARAM_STR );
+            $stmt->bindValue(':start_date',$argv['start_date'], \PDO::PARAM_STR);
         }
         if (isset($argv['end_date'])) {
-            $stmt->bindValue(':end_date',$argv['end_date'], \PDO::PARAM_STR );
+            $stmt->bindValue(':end_date',$argv['end_date'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){

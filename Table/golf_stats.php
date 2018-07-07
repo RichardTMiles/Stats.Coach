@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class golf_stats extends Entities implements iRest
 {
-    const PRIMARY = "stats_id";
+    const PRIMARY = [
+    'stats_id',
+    ];
 
     const COLUMNS = [
     'stats_id','stats_tournaments','stats_rounds','stats_handicap','stats_strokes','stats_ffs','stats_gnr','stats_putts',
@@ -78,13 +80,27 @@ class golf_stats extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  stats_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -127,11 +143,11 @@ class golf_stats extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -174,11 +190,15 @@ class golf_stats extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  stats_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['stats_id'])) {
             $stats_id = 'UNHEX('.$argv['stats_id'].')';
@@ -186,31 +206,31 @@ class golf_stats extends Entities implements iRest
         }
         if (isset($argv['stats_tournaments'])) {
             $stats_tournaments = $argv['stats_tournaments'];
-            $stmt->bindParam(':stats_tournaments',$stats_tournaments, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_tournaments',$stats_tournaments, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_rounds'])) {
             $stats_rounds = $argv['stats_rounds'];
-            $stmt->bindParam(':stats_rounds',$stats_rounds, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_rounds',$stats_rounds, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_handicap'])) {
             $stats_handicap = $argv['stats_handicap'];
-            $stmt->bindParam(':stats_handicap',$stats_handicap, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_handicap',$stats_handicap, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_strokes'])) {
             $stats_strokes = $argv['stats_strokes'];
-            $stmt->bindParam(':stats_strokes',$stats_strokes, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_strokes',$stats_strokes, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_ffs'])) {
             $stats_ffs = $argv['stats_ffs'];
-            $stmt->bindParam(':stats_ffs',$stats_ffs, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_ffs',$stats_ffs, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_gnr'])) {
             $stats_gnr = $argv['stats_gnr'];
-            $stmt->bindParam(':stats_gnr',$stats_gnr, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_gnr',$stats_gnr, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['stats_putts'])) {
             $stats_putts = $argv['stats_putts'];
-            $stmt->bindParam(':stats_putts',$stats_putts, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':stats_putts',$stats_putts, \PDO::PARAM_STR, 11);
         }
 
         if (!$stmt->execute()){

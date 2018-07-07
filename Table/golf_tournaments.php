@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class golf_tournaments extends Entities implements iRest
 {
-    const PRIMARY = "tournament_id";
+    const PRIMARY = [
+    'tournament_id',
+    ];
 
     const COLUMNS = [
     'tournament_id','tournament_name','course_id','host_name','tournament_style','tournament_team_price','tournament_paid','tournament_date',
@@ -78,13 +80,27 @@ class golf_tournaments extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  tournament_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -100,22 +116,22 @@ class golf_tournaments extends Entities implements iRest
             $tournament_id = $id = isset($argv['tournament_id']) ? $argv['tournament_id'] : self::new_entity('golf_tournaments');
             $stmt->bindParam(':tournament_id',$tournament_id, \PDO::PARAM_STR, 16);
             
-                $tournament_name = isset($argv['tournament_name']) ? $argv['tournament_name'] : null;
+                $tournament_name = $argv['tournament_name'];
                 $stmt->bindParam(':tournament_name',$tournament_name, \PDO::PARAM_STR, 16);
                     
                 $course_id = isset($argv['course_id']) ? $argv['course_id'] : null;
                 $stmt->bindParam(':course_id',$course_id, \PDO::PARAM_STR, 16);
                     
-                $host_name = isset($argv['host_name']) ? $argv['host_name'] : '0';
+                $host_name = $argv['host_name'];
                 $stmt->bindParam(':host_name',$host_name, \PDO::PARAM_STR, 225);
                     
-                $tournament_style = isset($argv['tournament_style']) ? $argv['tournament_style'] : '0';
+                $tournament_style = $argv['tournament_style'];
                 $stmt->bindParam(':tournament_style',$tournament_style, \PDO::PARAM_STR, 11);
                     
                 $tournament_team_price = isset($argv['tournament_team_price']) ? $argv['tournament_team_price'] : null;
                 $stmt->bindParam(':tournament_team_price',$tournament_team_price, \PDO::PARAM_STR, 11);
                     
-                $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : null;
+                $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : '1';
                 $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
                     $stmt->bindValue(':tournament_date',isset($argv['tournament_date']) ? $argv['tournament_date'] : null, \PDO::PARAM_STR);
         
@@ -125,11 +141,11 @@ class golf_tournaments extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -172,11 +188,15 @@ class golf_tournaments extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  tournament_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['tournament_id'])) {
             $tournament_id = 'UNHEX('.$argv['tournament_id'].')';
@@ -192,22 +212,22 @@ class golf_tournaments extends Entities implements iRest
         }
         if (isset($argv['host_name'])) {
             $host_name = $argv['host_name'];
-            $stmt->bindParam(':host_name',$host_name, \PDO::PARAM_STR, 225 );
+            $stmt->bindParam(':host_name',$host_name, \PDO::PARAM_STR, 225);
         }
         if (isset($argv['tournament_style'])) {
             $tournament_style = $argv['tournament_style'];
-            $stmt->bindParam(':tournament_style',$tournament_style, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':tournament_style',$tournament_style, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['tournament_team_price'])) {
             $tournament_team_price = $argv['tournament_team_price'];
-            $stmt->bindParam(':tournament_team_price',$tournament_team_price, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':tournament_team_price',$tournament_team_price, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['tournament_paid'])) {
             $tournament_paid = $argv['tournament_paid'];
-            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1 );
+            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
         }
         if (isset($argv['tournament_date'])) {
-            $stmt->bindValue(':tournament_date',$argv['tournament_date'], \PDO::PARAM_STR );
+            $stmt->bindValue(':tournament_date',$argv['tournament_date'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){

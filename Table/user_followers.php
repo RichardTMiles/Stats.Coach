@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class user_followers extends Entities implements iRest
 {
-    const PRIMARY = "follows_user_id";
+    const PRIMARY = [
+    'follows_user_id',
+    ];
 
     const COLUMNS = [
     'follows_user_id','user_id',
@@ -78,13 +80,27 @@ class user_followers extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  follows_user_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -100,7 +116,7 @@ class user_followers extends Entities implements iRest
             $follows_user_id = $id = isset($argv['follows_user_id']) ? $argv['follows_user_id'] : self::new_entity('user_followers');
             $stmt->bindParam(':follows_user_id',$follows_user_id, \PDO::PARAM_STR, 16);
             
-                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
+                $user_id = $argv['user_id'];
                 $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
         
         return $stmt->execute() ? $id : false;
@@ -109,11 +125,11 @@ class user_followers extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -138,11 +154,15 @@ class user_followers extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  follows_user_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['follows_user_id'])) {
             $follows_user_id = 'UNHEX('.$argv['follows_user_id'].')';

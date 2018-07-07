@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_locations extends Entities implements iRest
 {
-    const PRIMARY = "entity_id";
+    const PRIMARY = [
+    'entity_id',
+    ];
 
     const COLUMNS = [
     'entity_id','latitude','longitude','street','city','state','elevation',
@@ -78,13 +80,27 @@ class carbon_locations extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -105,7 +121,7 @@ class carbon_locations extends Entities implements iRest
                     
                 $longitude = isset($argv['longitude']) ? $argv['longitude'] : null;
                 $stmt->bindParam(':longitude',$longitude, \PDO::PARAM_STR, 225);
-                    $stmt->bindValue(':street',isset($argv['street']) ? $argv['street'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':street',$argv['street'], \PDO::PARAM_STR);
                     
                 $city = isset($argv['city']) ? $argv['city'] : null;
                 $stmt->bindParam(':city',$city, \PDO::PARAM_STR, 40);
@@ -122,11 +138,11 @@ class carbon_locations extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -166,11 +182,15 @@ class carbon_locations extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['entity_id'])) {
             $entity_id = 'UNHEX('.$argv['entity_id'].')';
@@ -178,26 +198,26 @@ class carbon_locations extends Entities implements iRest
         }
         if (isset($argv['latitude'])) {
             $latitude = $argv['latitude'];
-            $stmt->bindParam(':latitude',$latitude, \PDO::PARAM_STR, 225 );
+            $stmt->bindParam(':latitude',$latitude, \PDO::PARAM_STR, 225);
         }
         if (isset($argv['longitude'])) {
             $longitude = $argv['longitude'];
-            $stmt->bindParam(':longitude',$longitude, \PDO::PARAM_STR, 225 );
+            $stmt->bindParam(':longitude',$longitude, \PDO::PARAM_STR, 225);
         }
         if (isset($argv['street'])) {
-            $stmt->bindValue(':street',$argv['street'], \PDO::PARAM_STR );
+            $stmt->bindValue(':street',$argv['street'], \PDO::PARAM_STR);
         }
         if (isset($argv['city'])) {
             $city = $argv['city'];
-            $stmt->bindParam(':city',$city, \PDO::PARAM_STR, 40 );
+            $stmt->bindParam(':city',$city, \PDO::PARAM_STR, 40);
         }
         if (isset($argv['state'])) {
             $state = $argv['state'];
-            $stmt->bindParam(':state',$state, \PDO::PARAM_STR, 10 );
+            $stmt->bindParam(':state',$state, \PDO::PARAM_STR, 10);
         }
         if (isset($argv['elevation'])) {
             $elevation = $argv['elevation'];
-            $stmt->bindParam(':elevation',$elevation, \PDO::PARAM_STR, 40 );
+            $stmt->bindParam(':elevation',$elevation, \PDO::PARAM_STR, 40);
         }
 
         if (!$stmt->execute()){

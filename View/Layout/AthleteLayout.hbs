@@ -13,18 +13,16 @@
                 <ul class="nav navbar-nav">
                     <!-- class="active" -->
                     <li>
-                        <a href="{{SITE}}PostScore/">Post Score</a></li>
+                        <a href="{{ SITE }}PostScore/">Post Score</a></li>
                     <li class="dropdown">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-
                             {{#my}}
                                 {{#teams}}
                                 <li><a href="{{SITE}}Team/{{team_code}}/">{{team_name}}</a></li>
                                 {{/teams}}
                                 <li class="divider"></li>
                             {{/my}}
-
                             <li><a href="/JoinTeam/">Join a Team</a></li>
                             <li><a href="/CreateTeam/">Create Team</a></li>
                             <li class="divider"></li>
@@ -37,7 +35,7 @@
 
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input onkeyup="$.fn.startApplication('/Search/'+this.value)" type="text" class="form-control" id="navbar-search-input" placeholder="Search">
+                        <input onkeyup="carbon.start('/Search/'+this.value)" type="text" class="form-control" id="navbar-search-input" placeholder="Search">
                     </div>
                 </form>
 
@@ -147,16 +145,16 @@
 
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{me.user_profile_pic}}" class="user-image" alt="User Image"/>
-                            <span class="hidden-xs">{{me.user_first_last}}</span>
+                            <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
+                            <span class="hidden-xs">{{my.user_first_last}}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="{{me.user_profile_pic}}" class="img-circle" alt="User Image"/>
+                                <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image"/>
                                 <p>
-                                    {{me.user_first_last}} - {{me.user_sport}}
-                                    <small>Member since {{me.user_creation_date}}</small>
+                                    {{my.user_first_name}} {{my.user_last_name}} - {{my.user_sport}}
+                                    <small>Member since {{my.user_creation_date}}</small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -165,7 +163,7 @@
                                     <a href="#">Followers</a>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <a href="<?=SITE?>Rounds/">Rounds</a>
+                                    <a href="/Rounds/">Rounds</a>
                                 </div>
                                 <div class="col-xs-4 text-center">
                                     <a href="#">Following</a>
@@ -174,10 +172,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="{{SITE}}Profile/" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="/Profile/" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{SITE}}Logout/" class="btn btn-default btn-flat">Sign out</a>
+                                    <a href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>

@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class golf_tournament_teams extends Entities implements iRest
 {
-    const PRIMARY = "";
+    const PRIMARY = [
+    
+    ];
 
     const COLUMNS = [
     'team_id','tournament_id','tournament_paid','tournament_accepted',
@@ -78,13 +80,20 @@ class golf_tournament_teams extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . $pdo->quote($primary);
-        }
+        } 
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+
 
         return true;
     }
@@ -98,10 +107,10 @@ class golf_tournament_teams extends Entities implements iRest
         $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES ( :team_id, :tournament_id, :tournament_paid, :tournament_accepted)';
         $stmt = Database::database()->prepare($sql);
             
-                $team_id = isset($argv['team_id']) ? $argv['team_id'] : null;
+                $team_id = $argv['team_id'];
                 $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
                     
-                $tournament_id = isset($argv['tournament_id']) ? $argv['tournament_id'] : null;
+                $tournament_id = $argv['tournament_id'];
                 $stmt->bindParam(':tournament_id',$tournament_id, \PDO::PARAM_STR, 16);
                     
                 $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : '0';
@@ -116,11 +125,11 @@ class golf_tournament_teams extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -151,11 +160,13 @@ class golf_tournament_teams extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['team_id'])) {
             $team_id = 'UNHEX('.$argv['team_id'].')';
@@ -167,11 +178,11 @@ class golf_tournament_teams extends Entities implements iRest
         }
         if (isset($argv['tournament_paid'])) {
             $tournament_paid = $argv['tournament_paid'];
-            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1 );
+            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
         }
         if (isset($argv['tournament_accepted'])) {
             $tournament_accepted = $argv['tournament_accepted'];
-            $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1 );
+            $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1);
         }
 
         if (!$stmt->execute()){
@@ -218,10 +229,7 @@ class golf_tournament_teams extends Entities implements iRest
                 }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-
-    $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
-        }
+        } 
 
         $remove = null;
 

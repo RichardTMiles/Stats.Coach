@@ -4,6 +4,7 @@ namespace Model;
 
 use CarbonPHP\Helpers\Serialized;
 use Model\Helpers\GlobalMap;
+use Table\carbon_users;
 use Table\Golf_Stats as Stats;
 use Table\Carbon_Users as Users;
 use Table\User_Followers as Followers;
@@ -51,16 +52,17 @@ class User extends GlobalMap
      */
     public function login($username, $password, $rememberMe): bool
     {
-        $data =[];
+        $data = [];
 
         Users::Get($data, null, [
-            'user_username' => $username,
-            'user_first_name',
-            'user_last_name',
-            'user_profile_pic',
-            'user_id',
-            'user_password',
+            'where' => ['user_username' => $username],
+            'select' => ['user_first_name',
+                'user_last_name',
+                'user_profile_pic',
+                'user_id',
+                'user_password']
         ]);
+
 
         if (empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
@@ -142,6 +144,8 @@ class User extends GlobalMap
             }
         } elseif ($user_id && !$service_id) {
             if ($request === 'SignIn') {
+                //Users::Put()
+
                 $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
                 $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
                 $_SESSION['id'] = $user_id;
@@ -209,32 +213,31 @@ class User extends GlobalMap
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
-
         // Tables self validate and throw public errors
+        if (!$id = Users::Post([
+            'user_type' => 'Athlete',
+            'user_ip' => IP,
+            'user_sport' => 'GOLF',
+            'user_email_confirmed' => 1,
+            'user_education_history' => '',
+            'user_location' => '',
+            'user_username' => $username,
+            'user_password' => $password,
+            'user_email' => $email,
+            'user_first_name' => $firstName,
+            'user_last_name' => $lastName,
+            'user_gender' => $gender
+        ])) {
+            throw new PublicAlert('Failed to create your account!');
+        };
 
-        $id = self::new_entity(USER);
-
-        try {
-            Users::Post([
-                'user_id' => $id,
-                'user_type' => 'Athlete',
-                'user_ip' => IP,
-                'user_sport' => 'GOLF',
-                'user_email_confirmed' => 1,
-                'user_username' => $username,
-                'user_password' => $password,
-                'user_email' => $email,
-                'user_first_name' => $firstName,
-                'user_last_name' => $lastName,
-                'user_gender' => $gender
-            ]);
-        } catch (\PDOException $e) {
-            var_dump($e);
-        }
-
-        Stats::Post([
+        if (!Stats::Post([
             'stats_id' => $id
-        ]);    // this works
+        ])) {
+            throw new PublicAlert('Failed to create your account!');
+        };    // this works
+
+        $_SESSION['id'] = $id;
 
         PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
@@ -278,6 +281,7 @@ class User extends GlobalMap
     /**
      * @param $email
      * @param $generated_string
+     * @return bool
      * @throws PublicAlert
      */
     public function recover($email, $generated_string)
@@ -340,16 +344,18 @@ class User extends GlobalMap
             mail($email, $subject, $message, $headers);
             PublicAlert::success("Your password has been successfully reset.");
         }
+
         startApplication('login/');
 
+        return false;
     }
 
     /**
      * @param bool $user_uri
-     * @return User|null
+     * @return User|null|bool
      * @throws PublicAlert
      */
-    public function profile($user_uri = false)
+    public function profile($user_uri)
     {
         if ($user_uri === 'DeleteAccount') {
             Users::Delete($this->user[$_SESSION['id']], $_SESSION['id']);
@@ -358,7 +364,7 @@ class User extends GlobalMap
             return false;
         }
 
-        if ($user_uri) {
+        if (true !== $user_uri) {   // an actual user id
             global $user_id;
             $user_id = Users::user_id_from_uri($user_uri);
             if (!empty($user_id) && $user_id !== $_SESSION['id']) {
@@ -367,35 +373,35 @@ class User extends GlobalMap
             }
         }
 
-        Users::All($this->user[$_SESSION['id']], $_SESSION['id']);
+        carbon_users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
 
         if (empty($_POST)) {
             return null;
         }
 
         // we can assume post is active then
-        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
+        global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me, $user_education_history;
 
         // $this->user === global $user
         $my = $this->user[$_SESSION['id']];
 
-        $sql = 'UPDATE carbon_users SET user_profile_pic = :user_profile_pic, user_first_name = :user_first_name, user_last_name = :user_last_name, user_birthday = :user_birthday, user_email = :user_email, user_email_confirmed = :user_email_confirmed,  user_gender = :user_gender, user_about_me = :user_about_me WHERE user_id = :user_id';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':user_profile_pic', $profile_pic ?: $my['user_profile_pic']);
-        $stmt->bindValue(':user_first_name', $first ?: $my['user_first_name']);
-        $stmt->bindValue(':user_last_name', $last ?: $my['user_last_name']);
-        $stmt->bindValue(':user_birthday', $dob ?: $my['user_birthday']);
-        $stmt->bindValue(':user_gender', $gender ?: $my['user_gender']);
-        $stmt->bindValue(':user_email', $email ?: $my['user_email']);
-        $stmt->bindValue(':user_email_confirmed', $email ? 0 : $my['user_email_confirmed']);
-        $stmt->bindValue(':user_about_me', $about_me ?: $my['user_about_me']);
-        $stmt->bindValue(':user_id', $_SESSION['id']);
-        if (!$stmt->execute()) {
+        #throw new PublicAlert($first);
+
+        if (false === carbon_users::Put($my, $_SESSION['id'], [
+            'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
+            'user_first_name' => $first ?: $my['user_first_name'],
+            'user_birthday' => $dob ?: $my['user_birthday'],
+            'user_last_name' => $last ?: $my['user_last_name'],
+            'user_gender' => $gender ?: $my['user_gender'],
+            'user_email' => $email ?: $my['user_email'],
+            'user_password' =>  $password ? Bcrypt::genHash($password) : $my['user_password'],
+            'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
+            'user_education_history' => $user_education_history ?: $my['user_education_history'],
+            'user_about_me' => $about_me ?: $my['user_about_me'],
+            'user_id' => $_SESSION['id']])) {
             throw new PublicAlert('Sorry, we could not process your information at this time.', 'warning');
         }
-        if (!empty($password)) {
-            Users::change_password($password);
-        }
+
         // Remove old picture
         if (!empty($profile_pic) && !empty($my['user_profile_pic']) && $profile_pic !== $my['user_profile_pic']) {
             unlink(SERVER_ROOT . $my['user_profile_pic']);
@@ -419,6 +425,8 @@ class User extends GlobalMap
             PublicAlert::success('Your account has been updated!');
         }
         startApplication(true);
+
+        return false;
     }
 
 }

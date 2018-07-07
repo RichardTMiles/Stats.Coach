@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_tag extends Entities implements iRest
 {
-    const PRIMARY = "entity_id";
+    const PRIMARY = [
+    'entity_id',
+    ];
 
     const COLUMNS = [
     'entity_id','user_id','table_name','creation_date',
@@ -78,13 +80,27 @@ class carbon_tag extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -103,10 +119,10 @@ class carbon_tag extends Entities implements iRest
                 $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
                 $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
                     
-                $table_name = isset($argv['table_name']) ? $argv['table_name'] : null;
+                $table_name = $argv['table_name'];
                 $stmt->bindParam(':table_name',$table_name, \PDO::PARAM_STR, 50);
                     
-                $creation_date = isset($argv['creation_date']) ? $argv['creation_date'] : null;
+                $creation_date = $argv['creation_date'];
                 $stmt->bindParam(':creation_date',$creation_date, \PDO::PARAM_STR, 20);
         
         return $stmt->execute() ? $id : false;
@@ -115,11 +131,11 @@ class carbon_tag extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -150,11 +166,15 @@ class carbon_tag extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['entity_id'])) {
             $entity_id = 'UNHEX('.$argv['entity_id'].')';
@@ -166,11 +186,11 @@ class carbon_tag extends Entities implements iRest
         }
         if (isset($argv['table_name'])) {
             $table_name = $argv['table_name'];
-            $stmt->bindParam(':table_name',$table_name, \PDO::PARAM_STR, 50 );
+            $stmt->bindParam(':table_name',$table_name, \PDO::PARAM_STR, 50);
         }
         if (isset($argv['creation_date'])) {
             $creation_date = $argv['creation_date'];
-            $stmt->bindParam(':creation_date',$creation_date, \PDO::PARAM_STR, 20 );
+            $stmt->bindParam(':creation_date',$creation_date, \PDO::PARAM_STR, 20);
         }
 
         if (!$stmt->execute()){

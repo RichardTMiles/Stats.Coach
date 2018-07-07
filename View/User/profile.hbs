@@ -1,8 +1,8 @@
-{{#me}}
+{{#my}}
     <!-- Content Header (Page header) -->
     <section class="content-header" style="color: ghostwhite">
         <h1>
-            {{user_first_last}}
+            {{user_first_name}} {{user_last_name}}
         </h1>
         <ol class="breadcrumb">
             <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
@@ -22,7 +22,7 @@
                         <img class="profile-user-img img-responsive img-circle"
                              src="{{user_profile_pic}}" alt="User profile picture">
                         <h3 class="profile-username text-center">
-                            {{user_first_last}}
+                            {{user_first_name}} {{user_last_name}}
                         </h3>
                         <p class="text-muted text-center">Golfer</p>
                         <ul class="list-group list-group-unbordered">
@@ -44,13 +44,13 @@
                                class="btn btn-success btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
                             <script>
                                 function follow() {
-                                    $.fn.startApplication('{{ SITE }}Follow/{{ user_id }}');
+                                    carbon.start('{{ SITE }}Follow/{{ user_id }}');
                                     document.getElementById('FollowUser').style.display = 'none';
                                     document.getElementById('UnfollowUser').style.display = 'block';
                                 }
 
                                 function unfollow() {
-                                    $.fn.startApplication('{{ SITE }}Unfollow/{{ user_id }}/');
+                                    carbon.start('{{ SITE }}Unfollow/{{ user_id }}/');
                                     document.getElementById('FollowUser').style.display = 'block';
                                     document.getElementById('UnfollowUser').style.display = 'none';
                                 }
@@ -265,7 +265,7 @@
         </div><!-- /.row -->
     </section>
 
-    <script>Carbon((e) => {
+    <script>Carbon(() => {
         $.fn.load_datepicker('#datepicker');
         {{#myAccountBool}}
             $.fn.startApplication('/Messages/{{user_id}}/');
@@ -274,4 +274,4 @@
 
     <!-- /.content -->
 
-{{/me}}
+{{/my}}

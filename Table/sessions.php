@@ -8,14 +8,16 @@ use CarbonPHP\Interfaces\iRest;
 
 class sessions extends Entities implements iRest
 {
-    const PRIMARY = "session_id";
+    const PRIMARY = [
+    'session_id',
+    ];
 
     const COLUMNS = [
     'user_id','user_ip','session_id','session_expires','session_data','user_online_status',
     ];
 
     const BINARY = [
-    'user_id','user_ip',
+    'user_id',
     ];
 
     /**
@@ -78,13 +80,27 @@ class sessions extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . $pdo->quote($primary);
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  session_id=' . $primary .'';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -98,16 +114,16 @@ class sessions extends Entities implements iRest
         $sql = 'INSERT INTO statscoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( :user_id, :user_ip, :session_id, :session_expires, :session_data, :user_online_status)';
         $stmt = Database::database()->prepare($sql);
             
-                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
+                $user_id = $argv['user_id'];
                 $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
                     
                 $user_ip = isset($argv['user_ip']) ? $argv['user_ip'] : null;
                 $stmt->bindParam(':user_ip',$user_ip, \PDO::PARAM_STR, 16);
                     
-                $session_id = isset($argv['session_id']) ? $argv['session_id'] : null;
+                $session_id = $argv['session_id'];
                 $stmt->bindParam(':session_id',$session_id, \PDO::PARAM_STR, 255);
-                    $stmt->bindValue(':session_expires',isset($argv['session_expires']) ? $argv['session_expires'] : null, \PDO::PARAM_STR);
-                    $stmt->bindValue(':session_data',isset($argv['session_data']) ? $argv['session_data'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':session_expires',$argv['session_expires'], \PDO::PARAM_STR);
+                    $stmt->bindValue(':session_data',$argv['session_data'], \PDO::PARAM_STR);
                     
                 $user_online_status = isset($argv['user_online_status']) ? $argv['user_online_status'] : '1';
                 $stmt->bindParam(':user_online_status',$user_online_status, \PDO::PARAM_NULL, 1);
@@ -118,11 +134,11 @@ class sessions extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -140,7 +156,7 @@ class sessions extends Entities implements iRest
             $set .= 'user_id=UNHEX(:user_id),';
         }
         if (isset($argv['user_ip'])) {
-            $set .= 'user_ip=UNHEX(:user_ip),';
+            $set .= 'user_ip=:user_ip,';
         }
         if (isset($argv['session_id'])) {
             $set .= 'session_id=:session_id,';
@@ -159,33 +175,37 @@ class sessions extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  session_id=' . $primary .'';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['user_id'])) {
             $user_id = 'UNHEX('.$argv['user_id'].')';
             $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['user_ip'])) {
-            $user_ip = 'UNHEX('.$argv['user_ip'].')';
-            $stmt->bindParam(':user_ip', $user_ip, \PDO::PARAM_STR, 16);
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['session_id'])) {
             $session_id = $argv['session_id'];
-            $stmt->bindParam(':session_id',$session_id, \PDO::PARAM_STR, 255 );
+            $stmt->bindParam(':session_id',$session_id, \PDO::PARAM_STR, 255);
         }
         if (isset($argv['session_expires'])) {
-            $stmt->bindValue(':session_expires',$argv['session_expires'], \PDO::PARAM_STR );
+            $stmt->bindValue(':session_expires',$argv['session_expires'], \PDO::PARAM_STR);
         }
         if (isset($argv['session_data'])) {
-            $stmt->bindValue(':session_data',$argv['session_data'], \PDO::PARAM_STR );
+            $stmt->bindValue(':session_data',$argv['session_data'], \PDO::PARAM_STR);
         }
         if (isset($argv['user_online_status'])) {
             $user_online_status = $argv['user_online_status'];
-            $stmt->bindParam(':user_online_status',$user_online_status, \PDO::PARAM_NULL, 1 );
+            $stmt->bindParam(':user_online_status',$user_online_status, \PDO::PARAM_NULL, 1);
         }
 
         if (!$stmt->execute()){
@@ -232,9 +252,9 @@ class sessions extends Entities implements iRest
                 }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-
-    $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+        } else {
+            $primary = Database::database()->quote($primary);
+            $sql .= ' WHERE  session_id=' . $primary .'';
         }
 
         $remove = null;

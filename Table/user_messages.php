@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class user_messages extends Entities implements iRest
 {
-    const PRIMARY = "message_id";
+    const PRIMARY = [
+    'message_id',
+    ];
 
     const COLUMNS = [
     'message_id','to_user_id','message','message_read',
@@ -78,13 +80,27 @@ class user_messages extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=UNHEX(' . $pdo->quote($primary) . ')';
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -102,7 +118,7 @@ class user_messages extends Entities implements iRest
             
                 $to_user_id = isset($argv['to_user_id']) ? $argv['to_user_id'] : null;
                 $stmt->bindParam(':to_user_id',$to_user_id, \PDO::PARAM_STR, 16);
-                    $stmt->bindValue(':message',isset($argv['message']) ? $argv['message'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':message',$argv['message'], \PDO::PARAM_STR);
                     
                 $message_read = isset($argv['message_read']) ? $argv['message_read'] : '0';
                 $stmt->bindParam(':message_read',$message_read, \PDO::PARAM_NULL, 1);
@@ -113,11 +129,11 @@ class user_messages extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -148,11 +164,15 @@ class user_messages extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['message_id'])) {
             $message_id = 'UNHEX('.$argv['message_id'].')';
@@ -163,11 +183,11 @@ class user_messages extends Entities implements iRest
             $stmt->bindParam(':to_user_id', $to_user_id, \PDO::PARAM_STR, 16);
         }
         if (isset($argv['message'])) {
-            $stmt->bindValue(':message',$argv['message'], \PDO::PARAM_STR );
+            $stmt->bindValue(':message',$argv['message'], \PDO::PARAM_STR);
         }
         if (isset($argv['message_read'])) {
             $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, \PDO::PARAM_NULL, 1 );
+            $stmt->bindParam(':message_read',$message_read, \PDO::PARAM_NULL, 1);
         }
 
         if (!$stmt->execute()){

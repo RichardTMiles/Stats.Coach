@@ -237,26 +237,26 @@ return [
                     $user = [];
                 }
 
-                if (!is_array($me = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
-
-                    $me = [];
-
-                    Table\Users::All($me, $_SESSION['id']);
-
-                    $stats = 'Model\\' . $me['user_sport'] ?? '';
-
-                    if (class_exists($stats)) {
-                        $interfaces = class_implements($stats);
-                        if (\in_array(Model\Helpers\iSport::class, $interfaces, true)) {
-                            $me = (new $stats)->stats($me, $_SESSION['id']);
-                        }
+                if (!is_array($my = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
+                    $my = [];
+                    if (false === Table\carbon_users::Get($my, $_SESSION['id'], []) ||
+                        empty($my)) {
+                        $_SESSION['id'] = false;
+                        \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
                     }
 
-                    Table\Teams::All($me, $_SESSION['id']);
+                    $my['stats'] = [];
+                    Table\golf_stats::Get($my['stats'], $_SESSION['id'], []);
 
-                    Table\Followers::All($me, $_SESSION['id']);
+                    $my['teams'] = [];
+                    Table\carbon_teams::Get($my['teams'], $_SESSION['id'], []);
 
-                    Table\Messages::All($me, $_SESSION['id']);
+                    $my['followers'] = [];
+                    Table\user_followers::Get($my['followers'], $_SESSION['id'], []);
+
+                    $my['messages'] = [];
+                    Table\user_messages::Get($my['messages'], $_SESSION['id'], []);
+
                 }
             }
         },

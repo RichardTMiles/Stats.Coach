@@ -8,7 +8,9 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_tags extends Entities implements iRest
 {
-    const PRIMARY = "tag_id";
+    const PRIMARY = [
+    'tag_id',
+    ];
 
     const COLUMNS = [
     'tag_id','tag_description','tag_name',
@@ -78,13 +80,27 @@ class carbon_tags extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else if (!empty(self::PRIMARY)){
-            $sql .= ' WHERE ' . self::PRIMARY . '=' . $pdo->quote($primary);
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  tag_id=' . $primary .'';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        /**
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
+
+        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -95,13 +111,10 @@ class carbon_tags extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_tags (tag_id, tag_description, tag_name) VALUES ( :tag_id, :tag_description, :tag_name)';
+        $sql = 'INSERT INTO statscoach.carbon_tags (tag_description, tag_name) VALUES ( :tag_description, :tag_name)';
         $stmt = Database::database()->prepare($sql);
-            
-                $tag_id = isset($argv['tag_id']) ? $argv['tag_id'] : null;
-                $stmt->bindParam(':tag_id',$tag_id, \PDO::PARAM_STR, 11);
-                    $stmt->bindValue(':tag_description',isset($argv['tag_description']) ? $argv['tag_description'] : null, \PDO::PARAM_STR);
-                    $stmt->bindValue(':tag_name',isset($argv['tag_name']) ? $argv['tag_name'] : null, \PDO::PARAM_STR);
+                    $stmt->bindValue(':tag_description',$argv['tag_description'], \PDO::PARAM_STR);
+                    $stmt->bindValue(':tag_name',$argv['tag_name'], \PDO::PARAM_STR);
         
 
         return $stmt->execute();
@@ -109,11 +122,11 @@ class carbon_tags extends Entities implements iRest
 
     /**
     * @param array $return
-    * @param string $id
+    * @param string $primary
     * @param array $argv
     * @return bool
     */
-    public static function Put(array &$return, string $id, array $argv) : bool
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
@@ -141,21 +154,25 @@ class carbon_tags extends Entities implements iRest
             return false;
         }
 
-        $set = substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, strlen($set)-1);
 
-        $sql .= $set . ' WHERE ' . self::PRIMARY . "='$id'";
+        $db = Database::database();
 
-        $stmt = Database::database()->prepare($sql);
+        
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  tag_id=' . $primary .'';
+
+        $stmt = $db->prepare($sql);
 
         if (isset($argv['tag_id'])) {
             $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, \PDO::PARAM_STR, 11 );
+            $stmt->bindParam(':tag_id',$tag_id, \PDO::PARAM_STR, 11);
         }
         if (isset($argv['tag_description'])) {
-            $stmt->bindValue(':tag_description',$argv['tag_description'], \PDO::PARAM_STR );
+            $stmt->bindValue(':tag_description',$argv['tag_description'], \PDO::PARAM_STR);
         }
         if (isset($argv['tag_name'])) {
-            $stmt->bindValue(':tag_name',$argv['tag_name'], \PDO::PARAM_STR );
+            $stmt->bindValue(':tag_name',$argv['tag_name'], \PDO::PARAM_STR);
         }
 
         if (!$stmt->execute()){
@@ -202,9 +219,9 @@ class carbon_tags extends Entities implements iRest
                 }
             }
             $sql = substr($sql, 0, strlen($sql)-4);
-        } else if (!empty(self::PRIMARY)) {
-
-    $sql .= ' WHERE ' . self::PRIMARY . '=' . Database::database()->quote($primary);
+        } else {
+            $primary = Database::database()->quote($primary);
+            $sql .= ' WHERE  tag_id=' . $primary .'';
         }
 
         $remove = null;
