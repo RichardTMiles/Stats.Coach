@@ -63,6 +63,7 @@ class User extends Request
      * @param null $request
      * @return array|bool|null|string
      * @throws PublicAlert
+     * @throws \Google_Exception
      */
     public function oAuth($service, &$request = null)
     {

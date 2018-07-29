@@ -1,20 +1,19 @@
-<?php
+<!--
 /**
  * Created by IntelliJ IDEA.
  * User: Miles
  * Date: 6/10/17
  * Time: 1:53 AM
  */
-
-global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro, $style, $name; ?>
+-->
 
 <script>
     Carbon(() => {
-        $.fn.load_datepicker('#datepicker');
-        $.fn.load_knob('.knob');                // were pre loading
-        $.fn.load_timepicker('.timepicker');
-        $.fn.load_inputmask("[data-mask]");
-        $.fn.load_select2(".select2");
+        carbon.load_datepicker('#datepicker');
+        carbon.load_knob('.knob');                // were pre loading
+        carbon.load_timepicker('.timepicker');
+        carbon.load_inputmask("[data-mask]");
+        carbon.load_select2(".select2");
 
         var Form = document.forms["addCourse"],
             fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
@@ -27,11 +26,11 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
 
         // TODO - add event listeners to see if general form is altered
 
-        $.fn.hasDuplicates = (array)=>{
+        carbon.hasDuplicates = (array)=>{
             return (new Set(array)).size !== array.length;
         };
 
-        $.fn.hideMeShow = (hide, show) =>{
+        carbon.hideMeShow = (hide, show) =>{
             if ($.fn.isset(hide)) $('#' + hide).boxWidget('collapse');
             if ($.fn.isset(show)) document.getElementById(show).style.display = "block";
             if ($.fn.isset(show)) $('#' + show).boxWidget('expand');
@@ -39,7 +38,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
 
         /* validate course data <int> */
 
-        $.fn.validateGeneral = ()=>{
+        carbon.validateGeneral = ()=>{
             let Form = document.forms["addCourse"],
                 fields = ["c_name", "c_access", "c_style", "c_street", "c_city", "c_state", 'tee_boxes', 'Handicap_number'],
                 lengthF = fields.length, e = false;
@@ -58,7 +57,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
             return $.fn.hideMeShow('CourseInfo', 'Tee-Box-Color-Section');   // on success
         };
 
-        $.fn.addColor = (number, color)=> {
+        carbon.addColor = (number, color)=> {
             let input = 'tee_' + number + '_color'; // To ensure they at least search for it
             tee_box_colors[number - 1] = color;
             document.getElementById(input).disabled = false;
@@ -66,7 +65,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
             document.getElementById(input).setAttribute("style", "background-color: " + color + ";")
         };
 
-        $.fn.new_tee_box_color_input = ()=>{
+        carbon.new_tee_box_color_input = ()=>{
             let container = document.getElementById('teebox-color-selection'),
                 node = document.createElement("DIV"), current_hole = 1;
             container.innerHTML = null;
@@ -98,13 +97,13 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                 container.innerHTML += node.innerHTML;
             } while (current_hole++ < tee_boxes);
 
-            $.fn.bootstrapAlert("Tee boxes difficulty and slope may be left at 0 if not set.", "info");
+            carbon.alert("Tee boxes difficulty and slope may be left at 0 if not set.", "info");
 
-            $.fn.load_knob('.knob');
+            carbon.load_knob('.knob');
 
         };
 
-        $.fn.validate_tee_box_colors = (current) => {
+        carbon.validate_tee_box_colors = (current) => {
             if ($.fn.hasDuplicates(tee_box_colors) || tee_box_colors.length === 0) {
                 return alert("Sorry, you must enter all colors with no duplicates.");
             }
@@ -113,11 +112,11 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                 return $.fn.HideMeShow("tee-box-color-" + current, "tee-box-color-" + (++current));
             }
 
-            $.fn.distance_box_generate();
-            $.fn.hideMeShow("tee-box-color-" + current, 'hole-1-distances');
+            carbon.distance_box_generate();
+            carbon.hideMeShow("tee-box-color-" + current, 'hole-1-distances');
         };
 
-        $.fn.validateDistance = (current_hole)=>{
+        carbon.validateDistance = (current_hole)=>{
             let Form = document.forms["addCourse"], input;
 
             input = "par_" + current_hole;
@@ -139,7 +138,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                 if ($.fn.hasDuplicates(course_hc))
                     return alert("You have entered the same Handicap twice.")
             }
-            $.fn.hideMeShow('hole-' + current_hole + '-distances', 'hole-' + (++current_hole) + '-distances');
+            carbon.hideMeShow('hole-' + current_hole + '-distances', 'hole-' + (++current_hole) + '-distances');
         };
 
         $.fn.distance_box_generate =()=>{
@@ -215,7 +214,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
 
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="<?= SITE ?>AddCourse/" name="addCourse">
+    <form data-pjax class="form-horizontal" method="post" action="/AddCourse/" name="addCourse">
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->
@@ -237,7 +236,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                     <div class="form-group col-xs-12 col-md-12" id="c_name">
                         <label for="c_name">Course</label>
                         <input type="text" class="form-control " placeholder="Course Name" name="c_name"
-                               value="<?= $name ?? '' ?>">
+                               value="{{name}}">
                     </div>
                     <!-- Type of Course -->
                     <div class="form-group col-xs-12 col-md-12" id="c_access">
@@ -245,16 +244,16 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                             <label for="course_type">Access</label>
                             <select id="course_type" name="c_access" class="form-control select2" style="width: 100%;"
                                     onchange="">
-                                <option value="Public" <?= $access === 'Public' ? 'selected' : '' ?>>
+                                <option value="Public" {{#Public}}selected{{/Public}}>
                                     Public
                                 </option>
-                                <option value="Resort" <?= $access === 'Resort' ? 'selected' : '' ?>>
+                                <option value="Resort" {{#Resort}}selected{{/Resort}}>
                                     Resort
                                 </option>
-                                <option value="Semi-private" <?= $access === 'Semi-private' ? 'selected' : '' ?>>
+                                <option value="Semi-private" {{#Semi-private}}selected{{/Semi-private}}>
                                     Semi-private
                                 </option>
-                                <option value="Private" <?= $access === 'Private' ? 'selected' : '' ?>>
+                                <option value="Private" {{#Private}}selected{{/Private}}>
                                     Private
                                 </option>
                             </select>
@@ -264,10 +263,10 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                             <label for="" id="c_style">Holes</label>
                             <select name="c_style" id="course_play" class="form-control select2" style="width: 100%;"
                                     onchange="">
-                                <option value="18" <?= $style === '18 Hole Standard' ? 'selected' : '' ?>>
+                                <option value="18" {{#Hole_18_Standard}}selected{{/Hole_18_Standard}}>
                                     18 Hole Standard
                                 </option>
-                                <option value="9" <?= $style === '9 Hole Standard' ? 'selected' : '' ?>>
+                                <option value="9" {{#Hole_9_Standard}}selected{{/Hole_9_Standard}}>
                                     9 Hole Standard
                                 </option>
                             </select>
@@ -284,7 +283,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                             <div class="input-group-addon">
                                 <i class="fa fa-phone"></i>
                             </div>
-                            <input value="<?= $phone ?? '' ?>" type="text" name="c_phone"
+                            <input value="{{phone}}" type="text" name="c_phone"
                                    id="phone" class="form-control"
                                    data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
@@ -295,14 +294,14 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
 
                     <div class="form-group col-xs-12 col-md-12" id="c_street">
                         <label class="control-label" for="Street">Street</label>
-                        <input value="<?= $street ?? '' ?>" name="c_street" type="text"
+                        <input value="{{street}}" name="c_street" type="text"
                                class="form-control" id="inputSuccess"
                                placeholder="Street Address">
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12" id="c_city">
                         <label class="control-label" for="City">City</label>
-                        <input value="<?= $city ?? '' ?>" type="text" class="form-control"
+                        <input value="{{city}}" type="text" class="form-control"
                                id="City" placeholder="City"
                                name="c_city">
                     </div>
@@ -310,8 +309,8 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                     <div class="form-group col-xs-12 col-md-12" id="c_state">
                         <label for="state">State</label>
                         <select id="state" name="c_state" class="form-control select2" style="width: 100%;">
-                            <option selected="selected" value="<?= $state ?? '' ?>">
-                                <?= $state ?? 'State Selection' ?>
+                            <option selected="selected" value="{{state}}">
+                                {{state}} State Selection
                             </option>
                             <option value="Alabama">Alabama</option>
                             <option value="Alaska">Alaska</option>
@@ -344,7 +343,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                         <label class="control-label" for="pga_professional">Course PGA Professional
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="<?= $pga_pro ?>" type="text" class="form-control" placeholder="Course PRO"
+                        <input value="{{pga_pro}}" type="text" class="form-control" placeholder="Course PRO"
                                name="pga_professional">
 
                     </div>
@@ -352,7 +351,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
                         <label class="control-label" for="course_website">Course Website
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="<?= $course_website ?>" type="text" class="form-control"
+                        <input value="{{course_website}}" type="text" class="form-control"
                                placeholder="Course Website"
                                name="course_website">
                     </div>
@@ -362,7 +361,7 @@ global $access, $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $co
             <div class="box-footer">
                 <button type="reset" class="btn btn-default">Reset</button>
                 <!-- button -->
-                <button class="btn btn-info pull-right" type="button" onclick="$.fn.validateGeneral()">Next >></button>
+                <button class="btn btn-info pull-right" type="button" onclick="validateGeneral()">Next >></button>
             </div>
 
         </div>

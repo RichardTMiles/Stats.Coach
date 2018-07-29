@@ -17,8 +17,6 @@ class Golf extends Request  // Validation
         return $this->set( $user_uri )->alnum() ?: $user_id = $_SESSION['id'];  // session id must be set (route)
     }
 
-
-
     public function coursesByState($state) {
         return $this->set($state)->word();
     }

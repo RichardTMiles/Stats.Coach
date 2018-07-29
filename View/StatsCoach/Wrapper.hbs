@@ -205,9 +205,11 @@
 <script>
     const TEMPLATE = "/{{TEMPLATE}}", APP_VIEW = "/{{APP_VIEW}}", COMPOSER = "/{{COMPOSER}}";
 
-    const carbon = new $.carbon;
+    const carbon = new CarbonPHP();
 
-    carbon.start('#pjax-content'); // , 'ws://rootprerogative.com:8888/', false
+    carbon.invoke('#pjax-content');
+
+    // carbon.start('#pjax-content'); // , 'ws://rootprerogative.com:8888/', false
 
     //-- Jquery Form -->
     carbon.js('/node_modules/jquery-form/src/jquery.form.js');
@@ -243,11 +245,11 @@
                             $('#my-box-widget').boxRefresh('load');
                         });
 
-                        $.load_backStretch(APP_VIEW + 'img/unsplash.png');
+                        carbon.load_backStretch(APP_VIEW + 'img/unsplash.png');
                         $('.sidebar-menu').tree();
                     });
 
-                    carbon.js(APP_VIEW + 'AdminLTE/Demo/demo.js');
+                    //carbon.js(APP_VIEW + 'AdminLTE/Demo/demo.js');
                     //-- AJAX Pace -->
                     carbon.js(TEMPLATE + 'bower_components/PACE/pace.js', () => $(document).ajaxStart(() => Pace.restart()));
 

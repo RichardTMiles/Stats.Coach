@@ -3,14 +3,24 @@
 
         var state = null;
 
+
         function course_given_states(select) {
+
             state = select.value;
+
+            console.log(state);
+
+
             let courses = $("#course"); // container to be placed in
+
+            console.log(courses);
+
 
             courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
 
-            $.fn.startApplication("/Postscore/" + state + "/");
 
+
+            carbon.app("/Postscore/" + state + "/");
 
             /*
             $.ajax({  // Get a reduced list of all courses within a state
@@ -39,7 +49,7 @@
             });
         }
 
-        Carbon((e) => $.fn.load_select2('.select2'));
+        Carbon(() => carbon.load_select2('.select2'));
     </script>
 
     <!-- Content Header (Page header) -->
@@ -394,13 +404,13 @@
         </section>
 
         <script>
-            Carbon((e) => {
-                $.fn.load_iCheck('input');
-                $.fn.load_knob('.knob');
-                $.fn.load_timepicker('.timepicker')
+            Carbon(() => {
+                carbon.load_iCheck('input');
+                carbon.load_knob('.knob');
+                carbon.load_timepicker('.timepicker')
 
                 //Date picker
-                $.fn.CarbonJS('/Data/Vendors/almasaeed2010/adminlte/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', () =>
+                carbon.js('/Data/Vendors/almasaeed2010/adminlte/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', () =>
                         $('#datepicker').datepicker({
                             autoclose: true
                         }));
@@ -413,11 +423,11 @@
                 let input = ['putts-' + current, 'hole-' + current, 'par-' + current, 'gnr-' + current];
 
                 if (Form[input[0]].value > Form[input[1]].value) {
-                    return $.fn.bootstrapAlert("You can't putt more than you shoot!");
+                    return carbon.alert("You can't putt more than you shoot!");
                 } else if (Form[input[0]].value === Form[input[1]].value) {
-                    return $.fn.bootstrapAlert("This isn't put-put. Please change your input.");
+                    return carbon.alert("This isn't put-put. Please change your input.");
                 } else if (Form[input[3]].checked && ((Form[input[2]].value - Form[input[0]].value) < 2)) {
-                    return $.fn.bootstrapAlert("Green in regulation (GIR) A green is considered hit \"in regulation\" if any part of the ball is touching the putting surface while the number of strokes taken is at least two fewer than par (i.e., by the first stroke on a par 3, the second stroke on a par 4, or the third stroke on a par 5).");
+                    return carbon.alert("Green in regulation (GIR) A green is considered hit \"in regulation\" if any part of the ball is touching the putting surface while the number of strokes taken is at least two fewer than par (i.e., by the first stroke on a par 3, the second stroke on a par 4, or the third stroke on a par 5).");
                 }
 
                 document.getElementById("input-score-hole-" + current++).style.display = "none";

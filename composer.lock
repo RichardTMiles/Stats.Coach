@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88fbc7d7e520cdfc7bf5c11b7dc2b5d2",
+    "content-hash": "3939ce4402b5b39b5dd0789765dd601f",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -2091,7 +2091,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/RichardTMiles/CarbonPHP",
-                "reference": "934fff8670e7719cb271137f88304a8e5b1c3db7"
+                "reference": "a5debe4e877293ee21dbc20d44db1134732d482e"
             },
             "require": {
                 "mustache/mustache": "2.9.*",
@@ -2130,7 +2130,7 @@
                 "Pipes",
                 "Sockets"
             ],
-            "time": "2018-07-07T08:11:35+00:00"
+            "time": "2018-07-07T16:57:15+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

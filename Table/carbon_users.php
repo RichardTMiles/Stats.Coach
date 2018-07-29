@@ -301,6 +301,9 @@ class carbon_users extends Entities implements iRest
         $primary = $db->quote($primary);
         $sql .= ' WHERE  user_id=UNHEX(' . $primary .')';
 
+
+        #var_dump($sql);
+
         $stmt = $db->prepare($sql);
 
         if (isset($argv['user_id'])) {

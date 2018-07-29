@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "admin-lte": "^3.0.0-alpha.2",
+    "admin-lte": "2.4",
     "jquery-backstretch": "2.1.16",
     "jquery-form": "^4.2.2",
     "jquery-pjax": "^2.0.1",

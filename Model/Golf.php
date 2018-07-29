@@ -3,13 +3,13 @@
 namespace Model;
 
 use Psr\Log\InvalidArgumentException;
-use Table\Course;
-use Table\Rounds;
+use Table\golf_course as Course;
+use Table\golf_rounds as Rounds;
 use CarbonPHP\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Error\PublicAlert;
-use Table\Users;
+use Table\carbon_users as Users;
 
 class Golf extends GlobalMap implements iSport
 {
@@ -34,7 +34,7 @@ class Golf extends GlobalMap implements iSport
             $user_id = Users::user_id_from_uri($user_uri);
         }
 
-        Rounds::all($this->user[$user_id], $user_id);
+        Rounds::get($this->user[$user_id], $user_id, []);
     }
 
     /**
@@ -48,7 +48,8 @@ class Golf extends GlobalMap implements iSport
         if (!\is_array($user)) {
             throw new InvalidArgumentException('Bad User Passed To Golf Stats');
         }
-        $user['rounds'] = Rounds::get($user['rounds'], $id);
+
+        Rounds::get($user['rounds'], $id, []);
 
         if (!array_key_exists(0, $user['rounds'])) {
             $user['rounds'] = [$user['rounds']];

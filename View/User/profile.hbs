@@ -266,9 +266,9 @@
     </section>
 
     <script>Carbon(() => {
-        $.fn.load_datepicker('#datepicker');
+        carbon.load_datepicker('#datepicker');
         {{#myAccountBool}}
-            $.fn.startApplication('/Messages/{{user_id}}/');
+            carbon.startApplication('/Messages/{{user_id}}/');
         {{/myAccountBool}}
     })</script>
 

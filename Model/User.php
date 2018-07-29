@@ -55,8 +55,11 @@ class User extends GlobalMap
         $data = [];
 
         Users::Get($data, null, [
-            'where' => ['user_username' => $username],
-            'select' => ['user_first_name',
+            'where' => [
+                'user_username' => $username
+            ],
+            'select' => [
+                'user_first_name',
                 'user_last_name',
                 'user_profile_pic',
                 'user_id',
@@ -66,6 +69,8 @@ class User extends GlobalMap
 
         if (empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
+        } else {
+            $data = $data[0];
         }
 
         // using the verify method to compare the password with the stored hashed password.
@@ -297,7 +302,7 @@ class User extends GlobalMap
         $generated = Bcrypt::genRandomHex(20);
 
         if (empty($generated_string)) {
-            $sql = 'SELECT user_first_name  FROM carbon_users WHERE user_email = ?';
+            $sql = 'SELECT user_first_name FROM carbon_users WHERE user_email = ?';
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$email]);
             $user_first_name = $stmt->fetchColumn();
@@ -385,7 +390,7 @@ class User extends GlobalMap
         // $this->user === global $user
         $my = $this->user[$_SESSION['id']];
 
-        #throw new PublicAlert($first);
+        //throw new PublicAlert($first);
 
         if (false === carbon_users::Put($my, $_SESSION['id'], [
             'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
@@ -397,8 +402,7 @@ class User extends GlobalMap
             'user_password' =>  $password ? Bcrypt::genHash($password) : $my['user_password'],
             'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
             'user_education_history' => $user_education_history ?: $my['user_education_history'],
-            'user_about_me' => $about_me ?: $my['user_about_me'],
-            'user_id' => $_SESSION['id']])) {
+            'user_about_me' => $about_me ?: $my['user_about_me']])) {
             throw new PublicAlert('Sorry, we could not process your information at this time.', 'warning');
         }
 
@@ -406,6 +410,7 @@ class User extends GlobalMap
         if (!empty($profile_pic) && !empty($my['user_profile_pic']) && $profile_pic !== $my['user_profile_pic']) {
             unlink(SERVER_ROOT . $my['user_profile_pic']);
         }
+
         // Send new activation code
         if (!empty($email) && $email !== $my['user_email']) {
             $subject = 'Please confirm your email';
@@ -424,9 +429,9 @@ class User extends GlobalMap
         } else {
             PublicAlert::success('Your account has been updated!');
         }
-        startApplication(true);
+        startApplication('home/');
 
-        return false;
+        return true;
     }
 
 }

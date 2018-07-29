@@ -83,7 +83,6 @@ final class UserTest extends TestCase
             $this->testUserCanBeDeleted();
         }
 
-
         $this->assertTrue(is_string($id = Users::Post([
             'user_type' => 'Athlete',
             'user_ip' => '127.0.0.1',
@@ -145,7 +144,11 @@ final class UserTest extends TestCase
                 'user_first_name' => 'lil\'Rich'
             ]));
 
-        $this->testUserCanBeRetrieved();
+        $this->assertTrue(
+            Users::Get($this->user, null, ['user_username' => 'admin']
+            ));
+
+        $this->user = $this->user[0];
 
         $this->assertEquals('lil\'Rich', $this->user['user_first_name']);
     }
@@ -157,9 +160,6 @@ final class UserTest extends TestCase
      */
     public function testUserCanBeDeleted(): void
     {
-
-        //$this->assertEquals('lil\'Rich', $this->user['user_first_name']);
-
         $user = [];
         Users::Get($user, null, [
             'user_username' => 'Admin'
