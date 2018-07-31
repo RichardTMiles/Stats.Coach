@@ -16,6 +16,8 @@ class golf_tournament_teams extends Entities implements iRest
     'team_id','tournament_id','tournament_paid','tournament_accepted',
     ];
 
+    const VALIDATION = [];
+
     const BINARY = [
     'team_id','tournament_id',
     ];
@@ -28,13 +30,21 @@ class golf_tournament_teams extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class golf_tournament_teams extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class golf_tournament_teams extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -82,9 +122,20 @@ class golf_tournament_teams extends Entities implements iRest
             }
         } 
 
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
+        }
+
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -93,7 +144,7 @@ class golf_tournament_teams extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-
+        
 
         return true;
     }
@@ -104,20 +155,28 @@ class golf_tournament_teams extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES ( :team_id, :tournament_id, :tournament_paid, :tournament_accepted)';
-        $stmt = Database::database()->prepare($sql);
+        $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES ( UNHEX(:team_id), UNHEX(:tournament_id), :tournament_paid, :tournament_accepted)';
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             
                 $team_id = $argv['team_id'];
-                $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':team_id',$team_id, 2, 16);
                     
                 $tournament_id = $argv['tournament_id'];
-                $stmt->bindParam(':tournament_id',$tournament_id, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
                     
                 $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : '0';
-                $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
+                $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
                     
                 $tournament_accepted = isset($argv['tournament_accepted']) ? $argv['tournament_accepted'] : '0';
-                $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1);
+                $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
         
 
         return $stmt->execute();
@@ -168,21 +227,29 @@ class golf_tournament_teams extends Entities implements iRest
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['team_id'])) {
             $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_id', $team_id, 2, 16);
         }
         if (isset($argv['tournament_id'])) {
             $tournament_id = 'UNHEX('.$argv['tournament_id'].')';
-            $stmt->bindParam(':tournament_id', $tournament_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':tournament_id', $tournament_id, 2, 16);
         }
         if (isset($argv['tournament_paid'])) {
             $tournament_paid = $argv['tournament_paid'];
-            $stmt->bindParam(':tournament_paid',$tournament_paid, \PDO::PARAM_STR, 1);
+            $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
         }
         if (isset($argv['tournament_accepted'])) {
             $tournament_accepted = $argv['tournament_accepted'];
-            $stmt->bindParam(':tournament_accepted',$tournament_accepted, \PDO::PARAM_STR, 1);
+            $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
         }
 
         if (!$stmt->execute()){
@@ -211,7 +278,7 @@ class golf_tournament_teams extends Entities implements iRest
             }
         }
 
-        if ($primary === null) {
+        if (empty($primary)) {
             /**
             *   While useful, we've decided to disallow full
             *   table deletions through the rest api. For the
@@ -232,6 +299,13 @@ class golf_tournament_teams extends Entities implements iRest
         } 
 
         $remove = null;
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         return self::execute($sql);
     }

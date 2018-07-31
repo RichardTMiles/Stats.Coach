@@ -16,6 +16,8 @@ class carbon_teams extends Entities implements iRest
     'team_id','team_coach','parent_team','team_code','team_name','team_rank','team_sport','team_division','team_school','team_district','team_membership','team_photo',
     ];
 
+    const VALIDATION = [];
+
     const BINARY = [
     'team_id','team_coach','parent_team','team_photo',
     ];
@@ -28,13 +30,21 @@ class carbon_teams extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class carbon_teams extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class carbon_teams extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -85,9 +125,20 @@ class carbon_teams extends Entities implements iRest
             $sql .= ' WHERE  team_id=UNHEX(' . $primary .')';
         }
 
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
+        }
+
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -96,9 +147,8 @@ class carbon_teams extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        
+        if (empty($primary) && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -111,43 +161,51 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo) VALUES ( UNHEX(:team_id), :team_coach, :parent_team, :team_code, :team_name, :team_rank, :team_sport, :team_division, :team_school, :team_district, :team_membership, :team_photo)';
-        $stmt = Database::database()->prepare($sql);
+        $sql = 'INSERT INTO statscoach.carbon_teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo) VALUES ( UNHEX(:team_id), UNHEX(:team_coach), UNHEX(:parent_team), :team_code, :team_name, :team_rank, :team_sport, :team_division, :team_school, :team_district, :team_membership, UNHEX(:team_photo))';
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             $team_id = $id = isset($argv['team_id']) ? $argv['team_id'] : self::new_entity('carbon_teams');
-            $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
             
                 $team_coach = $argv['team_coach'];
-                $stmt->bindParam(':team_coach',$team_coach, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':team_coach',$team_coach, 2, 16);
                     
                 $parent_team = isset($argv['parent_team']) ? $argv['parent_team'] : null;
-                $stmt->bindParam(':parent_team',$parent_team, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':parent_team',$parent_team, 2, 16);
                     
                 $team_code = $argv['team_code'];
-                $stmt->bindParam(':team_code',$team_code, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_code',$team_code, 2, 225);
                     
                 $team_name = $argv['team_name'];
-                $stmt->bindParam(':team_name',$team_name, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_name',$team_name, 2, 225);
                     
                 $team_rank = isset($argv['team_rank']) ? $argv['team_rank'] : '0';
-                $stmt->bindParam(':team_rank',$team_rank, \PDO::PARAM_STR, 11);
+                $stmt->bindParam(':team_rank',$team_rank, 2, 11);
                     
                 $team_sport = isset($argv['team_sport']) ? $argv['team_sport'] : 'Golf';
-                $stmt->bindParam(':team_sport',$team_sport, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_sport',$team_sport, 2, 225);
                     
                 $team_division = isset($argv['team_division']) ? $argv['team_division'] : null;
-                $stmt->bindParam(':team_division',$team_division, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_division',$team_division, 2, 225);
                     
                 $team_school = isset($argv['team_school']) ? $argv['team_school'] : null;
-                $stmt->bindParam(':team_school',$team_school, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_school',$team_school, 2, 225);
                     
                 $team_district = isset($argv['team_district']) ? $argv['team_district'] : null;
-                $stmt->bindParam(':team_district',$team_district, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_district',$team_district, 2, 225);
                     
                 $team_membership = isset($argv['team_membership']) ? $argv['team_membership'] : null;
-                $stmt->bindParam(':team_membership',$team_membership, \PDO::PARAM_STR, 225);
+                $stmt->bindParam(':team_membership',$team_membership, 2, 225);
                     
                 $team_photo = isset($argv['team_photo']) ? $argv['team_photo'] : null;
-                $stmt->bindParam(':team_photo',$team_photo, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':team_photo',$team_photo, 2, 16);
         
         return $stmt->execute() ? $id : false;
 
@@ -224,53 +282,61 @@ class carbon_teams extends Entities implements iRest
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['team_id'])) {
             $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_id', $team_id, 2, 16);
         }
         if (isset($argv['team_coach'])) {
             $team_coach = 'UNHEX('.$argv['team_coach'].')';
-            $stmt->bindParam(':team_coach', $team_coach, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_coach', $team_coach, 2, 16);
         }
         if (isset($argv['parent_team'])) {
             $parent_team = 'UNHEX('.$argv['parent_team'].')';
-            $stmt->bindParam(':parent_team', $parent_team, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':parent_team', $parent_team, 2, 16);
         }
         if (isset($argv['team_code'])) {
             $team_code = $argv['team_code'];
-            $stmt->bindParam(':team_code',$team_code, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_code',$team_code, 2, 225);
         }
         if (isset($argv['team_name'])) {
             $team_name = $argv['team_name'];
-            $stmt->bindParam(':team_name',$team_name, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_name',$team_name, 2, 225);
         }
         if (isset($argv['team_rank'])) {
             $team_rank = $argv['team_rank'];
-            $stmt->bindParam(':team_rank',$team_rank, \PDO::PARAM_STR, 11);
+            $stmt->bindParam(':team_rank',$team_rank, 2, 11);
         }
         if (isset($argv['team_sport'])) {
             $team_sport = $argv['team_sport'];
-            $stmt->bindParam(':team_sport',$team_sport, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_sport',$team_sport, 2, 225);
         }
         if (isset($argv['team_division'])) {
             $team_division = $argv['team_division'];
-            $stmt->bindParam(':team_division',$team_division, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_division',$team_division, 2, 225);
         }
         if (isset($argv['team_school'])) {
             $team_school = $argv['team_school'];
-            $stmt->bindParam(':team_school',$team_school, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_school',$team_school, 2, 225);
         }
         if (isset($argv['team_district'])) {
             $team_district = $argv['team_district'];
-            $stmt->bindParam(':team_district',$team_district, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_district',$team_district, 2, 225);
         }
         if (isset($argv['team_membership'])) {
             $team_membership = $argv['team_membership'];
-            $stmt->bindParam(':team_membership',$team_membership, \PDO::PARAM_STR, 225);
+            $stmt->bindParam(':team_membership',$team_membership, 2, 225);
         }
         if (isset($argv['team_photo'])) {
             $team_photo = 'UNHEX('.$argv['team_photo'].')';
-            $stmt->bindParam(':team_photo', $team_photo, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_photo', $team_photo, 2, 16);
         }
 
         if (!$stmt->execute()){

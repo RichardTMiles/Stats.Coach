@@ -9,12 +9,14 @@ use CarbonPHP\Interfaces\iRest;
 class golf_rounds extends Entities implements iRest
 {
     const PRIMARY = [
-    'user_id',
+    
     ];
 
     const COLUMNS = [
     'user_id','round_id','course_id','round_public','score','score_gnr','score_ffs','score_putts','score_out','score_in','score_total','score_total_gnr','score_total_ffs','score_total_putts','score_date',
     ];
+
+    const VALIDATION = [];
 
     const BINARY = [
     'user_id','round_id','course_id',
@@ -28,13 +30,21 @@ class golf_rounds extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class golf_rounds extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class golf_rounds extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -80,14 +120,22 @@ class golf_rounds extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else {
-            $primary = $pdo->quote($primary);
-            $sql .= ' WHERE  user_id=UNHEX(' . $primary .')';
+        } 
+
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -96,11 +144,7 @@ class golf_rounds extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }
+        
 
         return true;
     }
@@ -111,45 +155,54 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_rounds (user_id, round_id, course_id, round_public, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts, score_date) VALUES ( UNHEX(:user_id), :round_id, :course_id, :round_public, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts, :score_date)';
-        $stmt = Database::database()->prepare($sql);
-            $user_id = $id = isset($argv['user_id']) ? $argv['user_id'] : self::new_entity('golf_rounds');
-            $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
+        $sql = 'INSERT INTO statscoach.golf_rounds (user_id, round_id, course_id, round_public, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts, score_date) VALUES ( UNHEX(:user_id), UNHEX(:round_id), UNHEX(:course_id), :round_public, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts, :score_date)';
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             
+                $user_id = $argv['user_id'];
+                $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    
                 $round_id = $argv['round_id'];
-                $stmt->bindParam(':round_id',$round_id, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':round_id',$round_id, 2, 16);
                     
                 $course_id = $argv['course_id'];
-                $stmt->bindParam(':course_id',$course_id, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':course_id',$course_id, 2, 16);
                     
                 $round_public = isset($argv['round_public']) ? $argv['round_public'] : '1';
-                $stmt->bindParam(':round_public',$round_public, \PDO::PARAM_STR, 1);
-                    $stmt->bindValue(':score',$argv['score'], \PDO::PARAM_STR);
-                    $stmt->bindValue(':score_gnr',$argv['score_gnr'], \PDO::PARAM_STR);
-                    $stmt->bindValue(':score_ffs',$argv['score_ffs'], \PDO::PARAM_STR);
-                    $stmt->bindValue(':score_putts',$argv['score_putts'], \PDO::PARAM_STR);
+                $stmt->bindParam(':round_public',$round_public, 2, 1);
+                    $stmt->bindValue(':score',$argv['score'], \2);
+                    $stmt->bindValue(':score_gnr',$argv['score_gnr'], \2);
+                    $stmt->bindValue(':score_ffs',$argv['score_ffs'], \2);
+                    $stmt->bindValue(':score_putts',$argv['score_putts'], \2);
                     
                 $score_out = $argv['score_out'];
-                $stmt->bindParam(':score_out',$score_out, \PDO::PARAM_STR, 2);
+                $stmt->bindParam(':score_out',$score_out, 2, 2);
                     
                 $score_in = $argv['score_in'];
-                $stmt->bindParam(':score_in',$score_in, \PDO::PARAM_STR, 3);
+                $stmt->bindParam(':score_in',$score_in, 2, 3);
                     
                 $score_total = $argv['score_total'];
-                $stmt->bindParam(':score_total',$score_total, \PDO::PARAM_STR, 3);
+                $stmt->bindParam(':score_total',$score_total, 2, 3);
                     
                 $score_total_gnr = isset($argv['score_total_gnr']) ? $argv['score_total_gnr'] : '0';
-                $stmt->bindParam(':score_total_gnr',$score_total_gnr, \PDO::PARAM_STR, 11);
+                $stmt->bindParam(':score_total_gnr',$score_total_gnr, 2, 11);
                     
                 $score_total_ffs = isset($argv['score_total_ffs']) ? $argv['score_total_ffs'] : '0';
-                $stmt->bindParam(':score_total_ffs',$score_total_ffs, \PDO::PARAM_STR, 3);
+                $stmt->bindParam(':score_total_ffs',$score_total_ffs, 2, 3);
                     
                 $score_total_putts = isset($argv['score_total_putts']) ? $argv['score_total_putts'] : null;
-                $stmt->bindParam(':score_total_putts',$score_total_putts, \PDO::PARAM_STR, 11);
-                    $stmt->bindValue(':score_date',$argv['score_date'], \PDO::PARAM_STR);
+                $stmt->bindParam(':score_total_putts',$score_total_putts, 2, 11);
+                    $stmt->bindValue(':score_date',$argv['score_date'], \2);
         
-        return $stmt->execute() ? $id : false;
 
+        return $stmt->execute();
     }
 
     /**
@@ -227,65 +280,71 @@ class golf_rounds extends Entities implements iRest
         $db = Database::database();
 
         
-        $primary = $db->quote($primary);
-        $sql .= ' WHERE  user_id=UNHEX(' . $primary .')';
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['user_id'])) {
             $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':user_id', $user_id, 2, 16);
         }
         if (isset($argv['round_id'])) {
             $round_id = 'UNHEX('.$argv['round_id'].')';
-            $stmt->bindParam(':round_id', $round_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':round_id', $round_id, 2, 16);
         }
         if (isset($argv['course_id'])) {
             $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':course_id', $course_id, 2, 16);
         }
         if (isset($argv['round_public'])) {
             $round_public = $argv['round_public'];
-            $stmt->bindParam(':round_public',$round_public, \PDO::PARAM_STR, 1);
+            $stmt->bindParam(':round_public',$round_public, 2, 1);
         }
         if (isset($argv['score'])) {
-            $stmt->bindValue(':score',$argv['score'], \PDO::PARAM_STR);
+            $stmt->bindValue(':score',$argv['score'], 2);
         }
         if (isset($argv['score_gnr'])) {
-            $stmt->bindValue(':score_gnr',$argv['score_gnr'], \PDO::PARAM_STR);
+            $stmt->bindValue(':score_gnr',$argv['score_gnr'], 2);
         }
         if (isset($argv['score_ffs'])) {
-            $stmt->bindValue(':score_ffs',$argv['score_ffs'], \PDO::PARAM_STR);
+            $stmt->bindValue(':score_ffs',$argv['score_ffs'], 2);
         }
         if (isset($argv['score_putts'])) {
-            $stmt->bindValue(':score_putts',$argv['score_putts'], \PDO::PARAM_STR);
+            $stmt->bindValue(':score_putts',$argv['score_putts'], 2);
         }
         if (isset($argv['score_out'])) {
             $score_out = $argv['score_out'];
-            $stmt->bindParam(':score_out',$score_out, \PDO::PARAM_STR, 2);
+            $stmt->bindParam(':score_out',$score_out, 2, 2);
         }
         if (isset($argv['score_in'])) {
             $score_in = $argv['score_in'];
-            $stmt->bindParam(':score_in',$score_in, \PDO::PARAM_STR, 3);
+            $stmt->bindParam(':score_in',$score_in, 2, 3);
         }
         if (isset($argv['score_total'])) {
             $score_total = $argv['score_total'];
-            $stmt->bindParam(':score_total',$score_total, \PDO::PARAM_STR, 3);
+            $stmt->bindParam(':score_total',$score_total, 2, 3);
         }
         if (isset($argv['score_total_gnr'])) {
             $score_total_gnr = $argv['score_total_gnr'];
-            $stmt->bindParam(':score_total_gnr',$score_total_gnr, \PDO::PARAM_STR, 11);
+            $stmt->bindParam(':score_total_gnr',$score_total_gnr, 2, 11);
         }
         if (isset($argv['score_total_ffs'])) {
             $score_total_ffs = $argv['score_total_ffs'];
-            $stmt->bindParam(':score_total_ffs',$score_total_ffs, \PDO::PARAM_STR, 3);
+            $stmt->bindParam(':score_total_ffs',$score_total_ffs, 2, 3);
         }
         if (isset($argv['score_total_putts'])) {
             $score_total_putts = $argv['score_total_putts'];
-            $stmt->bindParam(':score_total_putts',$score_total_putts, \PDO::PARAM_STR, 11);
+            $stmt->bindParam(':score_total_putts',$score_total_putts, 2, 11);
         }
         if (isset($argv['score_date'])) {
-            $stmt->bindValue(':score_date',$argv['score_date'], \PDO::PARAM_STR);
+            $stmt->bindValue(':score_date',$argv['score_date'], 2);
         }
 
         if (!$stmt->execute()){
@@ -306,6 +365,43 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        $sql = 'DELETE FROM statscoach.golf_rounds ';
+
+        foreach($argv as $column => $constraint){
+            if (!in_array($column, self::COLUMNS)){
+                unset($argv[$column]);
+            }
+        }
+
+        if (empty($primary)) {
+            /**
+            *   While useful, we've decided to disallow full
+            *   table deletions through the rest api. For the
+            *   n00bs and future self, "I got chu."
+            */
+            if (empty($argv)) {
+                return false;
+            }
+            $sql .= ' WHERE ';
+            foreach ($argv as $column => $value) {
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
+            }
+            $sql = substr($sql, 0, strlen($sql)-4);
+        } 
+
+        $remove = null;
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+        return self::execute($sql);
     }
 }

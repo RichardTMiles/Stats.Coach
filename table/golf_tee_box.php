@@ -9,12 +9,14 @@ use CarbonPHP\Interfaces\iRest;
 class golf_tee_box extends Entities implements iRest
 {
     const PRIMARY = [
-    'course_id',
+    
     ];
 
     const COLUMNS = [
     'course_id','tee_box','distance','distance_color','distance_general_slope','distance_general_difficulty','distance_womens_slope','distance_womens_difficulty','distance_out','distance_in','distance_tot',
     ];
+
+    const VALIDATION = [];
 
     const BINARY = [
     'course_id',
@@ -28,13 +30,21 @@ class golf_tee_box extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class golf_tee_box extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class golf_tee_box extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -80,14 +120,22 @@ class golf_tee_box extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else {
-            $primary = $pdo->quote($primary);
-            $sql .= ' WHERE  course_id=UNHEX(' . $primary .')';
+        } 
+
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -96,11 +144,7 @@ class golf_tee_box extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }
+        
 
         return true;
     }
@@ -112,36 +156,45 @@ class golf_tee_box extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_tee_box (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES ( UNHEX(:course_id), :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)';
-        $stmt = Database::database()->prepare($sql);
-            $course_id = $id = isset($argv['course_id']) ? $argv['course_id'] : self::new_entity('golf_tee_box');
-            $stmt->bindParam(':course_id',$course_id, \PDO::PARAM_STR, 16);
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             
+                $course_id = $argv['course_id'];
+                $stmt->bindParam(':course_id',$course_id, 2, 16);
+                    
                 $tee_box = $argv['tee_box'];
-                $stmt->bindParam(':tee_box',$tee_box, \PDO::PARAM_STR, 1);
-                    $stmt->bindValue(':distance',$argv['distance'], \PDO::PARAM_STR);
+                $stmt->bindParam(':tee_box',$tee_box, 2, 1);
+                    $stmt->bindValue(':distance',$argv['distance'], \2);
                     
                 $distance_color = $argv['distance_color'];
-                $stmt->bindParam(':distance_color',$distance_color, \PDO::PARAM_STR, 10);
+                $stmt->bindParam(':distance_color',$distance_color, 2, 10);
                     
                 $distance_general_slope = isset($argv['distance_general_slope']) ? $argv['distance_general_slope'] : null;
-                $stmt->bindParam(':distance_general_slope',$distance_general_slope, \PDO::PARAM_STR, 4);
-                    $stmt->bindValue(':distance_general_difficulty',isset($argv['distance_general_difficulty']) ? $argv['distance_general_difficulty'] : null, \PDO::PARAM_STR);
+                $stmt->bindParam(':distance_general_slope',$distance_general_slope, 2, 4);
+                    $stmt->bindValue(':distance_general_difficulty',isset($argv['distance_general_difficulty']) ? $argv['distance_general_difficulty'] : null, \2);
                     
                 $distance_womens_slope = isset($argv['distance_womens_slope']) ? $argv['distance_womens_slope'] : null;
-                $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, \PDO::PARAM_STR, 4);
-                    $stmt->bindValue(':distance_womens_difficulty',isset($argv['distance_womens_difficulty']) ? $argv['distance_womens_difficulty'] : null, \PDO::PARAM_STR);
+                $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, 2, 4);
+                    $stmt->bindValue(':distance_womens_difficulty',isset($argv['distance_womens_difficulty']) ? $argv['distance_womens_difficulty'] : null, \2);
                     
                 $distance_out = isset($argv['distance_out']) ? $argv['distance_out'] : null;
-                $stmt->bindParam(':distance_out',$distance_out, \PDO::PARAM_STR, 7);
+                $stmt->bindParam(':distance_out',$distance_out, 2, 7);
                     
                 $distance_in = isset($argv['distance_in']) ? $argv['distance_in'] : null;
-                $stmt->bindParam(':distance_in',$distance_in, \PDO::PARAM_STR, 7);
+                $stmt->bindParam(':distance_in',$distance_in, 2, 7);
                     
                 $distance_tot = isset($argv['distance_tot']) ? $argv['distance_tot'] : null;
-                $stmt->bindParam(':distance_tot',$distance_tot, \PDO::PARAM_STR, 10);
+                $stmt->bindParam(':distance_tot',$distance_tot, 2, 10);
         
-        return $stmt->execute() ? $id : false;
 
+        return $stmt->execute();
     }
 
     /**
@@ -207,51 +260,57 @@ class golf_tee_box extends Entities implements iRest
         $db = Database::database();
 
         
-        $primary = $db->quote($primary);
-        $sql .= ' WHERE  course_id=UNHEX(' . $primary .')';
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['course_id'])) {
             $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':course_id', $course_id, 2, 16);
         }
         if (isset($argv['tee_box'])) {
             $tee_box = $argv['tee_box'];
-            $stmt->bindParam(':tee_box',$tee_box, \PDO::PARAM_STR, 1);
+            $stmt->bindParam(':tee_box',$tee_box, 2, 1);
         }
         if (isset($argv['distance'])) {
-            $stmt->bindValue(':distance',$argv['distance'], \PDO::PARAM_STR);
+            $stmt->bindValue(':distance',$argv['distance'], 2);
         }
         if (isset($argv['distance_color'])) {
             $distance_color = $argv['distance_color'];
-            $stmt->bindParam(':distance_color',$distance_color, \PDO::PARAM_STR, 10);
+            $stmt->bindParam(':distance_color',$distance_color, 2, 10);
         }
         if (isset($argv['distance_general_slope'])) {
             $distance_general_slope = $argv['distance_general_slope'];
-            $stmt->bindParam(':distance_general_slope',$distance_general_slope, \PDO::PARAM_STR, 4);
+            $stmt->bindParam(':distance_general_slope',$distance_general_slope, 2, 4);
         }
         if (isset($argv['distance_general_difficulty'])) {
-            $stmt->bindValue(':distance_general_difficulty',$argv['distance_general_difficulty'], \PDO::PARAM_STR);
+            $stmt->bindValue(':distance_general_difficulty',$argv['distance_general_difficulty'], 2);
         }
         if (isset($argv['distance_womens_slope'])) {
             $distance_womens_slope = $argv['distance_womens_slope'];
-            $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, \PDO::PARAM_STR, 4);
+            $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, 2, 4);
         }
         if (isset($argv['distance_womens_difficulty'])) {
-            $stmt->bindValue(':distance_womens_difficulty',$argv['distance_womens_difficulty'], \PDO::PARAM_STR);
+            $stmt->bindValue(':distance_womens_difficulty',$argv['distance_womens_difficulty'], 2);
         }
         if (isset($argv['distance_out'])) {
             $distance_out = $argv['distance_out'];
-            $stmt->bindParam(':distance_out',$distance_out, \PDO::PARAM_STR, 7);
+            $stmt->bindParam(':distance_out',$distance_out, 2, 7);
         }
         if (isset($argv['distance_in'])) {
             $distance_in = $argv['distance_in'];
-            $stmt->bindParam(':distance_in',$distance_in, \PDO::PARAM_STR, 7);
+            $stmt->bindParam(':distance_in',$distance_in, 2, 7);
         }
         if (isset($argv['distance_tot'])) {
             $distance_tot = $argv['distance_tot'];
-            $stmt->bindParam(':distance_tot',$distance_tot, \PDO::PARAM_STR, 10);
+            $stmt->bindParam(':distance_tot',$distance_tot, 2, 10);
         }
 
         if (!$stmt->execute()){
@@ -272,6 +331,43 @@ class golf_tee_box extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        $sql = 'DELETE FROM statscoach.golf_tee_box ';
+
+        foreach($argv as $column => $constraint){
+            if (!in_array($column, self::COLUMNS)){
+                unset($argv[$column]);
+            }
+        }
+
+        if (empty($primary)) {
+            /**
+            *   While useful, we've decided to disallow full
+            *   table deletions through the rest api. For the
+            *   n00bs and future self, "I got chu."
+            */
+            if (empty($argv)) {
+                return false;
+            }
+            $sql .= ' WHERE ';
+            foreach ($argv as $column => $value) {
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
+            }
+            $sql = substr($sql, 0, strlen($sql)-4);
+        } 
+
+        $remove = null;
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+        return self::execute($sql);
     }
 }

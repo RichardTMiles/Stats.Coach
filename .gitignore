@@ -7,7 +7,7 @@
 /mysqldump.sql
 /Cloud_SQL_Export.sql
 /Stats.Coach.iml
-Tables/
+/Tables/
 composer.phar
 node_modules/
 /vendor/

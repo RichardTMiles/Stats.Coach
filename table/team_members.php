@@ -9,12 +9,14 @@ use CarbonPHP\Interfaces\iRest;
 class team_members extends Entities implements iRest
 {
     const PRIMARY = [
-    'team_id',
+    
     ];
 
     const COLUMNS = [
     'member_id','team_id','user_id','accepted',
     ];
+
+    const VALIDATION = [];
 
     const BINARY = [
     'member_id','team_id','user_id',
@@ -28,13 +30,21 @@ class team_members extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class team_members extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class team_members extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -80,14 +120,22 @@ class team_members extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else {
-            $primary = $pdo->quote($primary);
-            $sql .= ' WHERE  team_id=UNHEX(' . $primary .')';
+        } 
+
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -96,11 +144,7 @@ class team_members extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }
+        
 
         return true;
     }
@@ -111,22 +155,31 @@ class team_members extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.team_members (member_id, team_id, user_id, accepted) VALUES ( :member_id, UNHEX(:team_id), :user_id, :accepted)';
-        $stmt = Database::database()->prepare($sql);
+        $sql = 'INSERT INTO statscoach.team_members (member_id, team_id, user_id, accepted) VALUES ( UNHEX(:member_id), UNHEX(:team_id), UNHEX(:user_id), :accepted)';
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             
                 $member_id = isset($argv['member_id']) ? $argv['member_id'] : null;
-                $stmt->bindParam(':member_id',$member_id, \PDO::PARAM_STR, 16);
-                    $team_id = $id = isset($argv['team_id']) ? $argv['team_id'] : self::new_entity('team_members');
-            $stmt->bindParam(':team_id',$team_id, \PDO::PARAM_STR, 16);
-            
+                $stmt->bindParam(':member_id',$member_id, 2, 16);
+                    
+                $team_id = $argv['team_id'];
+                $stmt->bindParam(':team_id',$team_id, 2, 16);
+                    
                 $user_id = $argv['user_id'];
-                $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
+                $stmt->bindParam(':user_id',$user_id, 2, 16);
                     
                 $accepted = isset($argv['accepted']) ? $argv['accepted'] : '0';
-                $stmt->bindParam(':accepted',$accepted, \PDO::PARAM_NULL, 1);
+                $stmt->bindParam(':accepted',$accepted, 0, 1);
         
-        return $stmt->execute() ? $id : false;
 
+        return $stmt->execute();
     }
 
     /**
@@ -171,26 +224,32 @@ class team_members extends Entities implements iRest
         $db = Database::database();
 
         
-        $primary = $db->quote($primary);
-        $sql .= ' WHERE  team_id=UNHEX(' . $primary .')';
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['member_id'])) {
             $member_id = 'UNHEX('.$argv['member_id'].')';
-            $stmt->bindParam(':member_id', $member_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':member_id', $member_id, 2, 16);
         }
         if (isset($argv['team_id'])) {
             $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':team_id', $team_id, 2, 16);
         }
         if (isset($argv['user_id'])) {
             $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':user_id', $user_id, 2, 16);
         }
         if (isset($argv['accepted'])) {
             $accepted = $argv['accepted'];
-            $stmt->bindParam(':accepted',$accepted, \PDO::PARAM_NULL, 1);
+            $stmt->bindParam(':accepted',$accepted, 0, 1);
         }
 
         if (!$stmt->execute()){
@@ -211,6 +270,43 @@ class team_members extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        $sql = 'DELETE FROM statscoach.team_members ';
+
+        foreach($argv as $column => $constraint){
+            if (!in_array($column, self::COLUMNS)){
+                unset($argv[$column]);
+            }
+        }
+
+        if (empty($primary)) {
+            /**
+            *   While useful, we've decided to disallow full
+            *   table deletions through the rest api. For the
+            *   n00bs and future self, "I got chu."
+            */
+            if (empty($argv)) {
+                return false;
+            }
+            $sql .= ' WHERE ';
+            foreach ($argv as $column => $value) {
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
+            }
+            $sql = substr($sql, 0, strlen($sql)-4);
+        } 
+
+        $remove = null;
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+        return self::execute($sql);
     }
 }

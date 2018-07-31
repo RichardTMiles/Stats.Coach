@@ -9,12 +9,14 @@ use CarbonPHP\Interfaces\iRest;
 class carbon_tag extends Entities implements iRest
 {
     const PRIMARY = [
-    'entity_id',
+    
     ];
 
     const COLUMNS = [
-    'entity_id','user_id','table_name','creation_date',
+    'entity_id','user_id','tag_id','creation_date',
     ];
+
+    const VALIDATION = [];
 
     const BINARY = [
     'entity_id','user_id',
@@ -28,13 +30,21 @@ class carbon_tag extends Entities implements iRest
      */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        if (isset($argv['limit'])){
-            if ($argv['limit'] !== '') {
-                $pos = strrpos($argv['limit'], "><");
+        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
+        $where = isset($argv['where']) ? $argv['where'] : [];
+
+        $group = $sql = '';
+
+        if (isset($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+                $argv['pagination'] = json_decode($argv['pagination'], true);
+            }
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+                $pos = strrpos($argv['pagination']['limit'], "><");
                 if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['limit'],',',$pos, 2);
+                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
                 }
-                $limit = ' LIMIT ' . $argv['limit'];
+                $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
@@ -42,18 +52,48 @@ class carbon_tag extends Entities implements iRest
             $limit = ' LIMIT 100';
         }
 
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
-        $sql = '';
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
+                $group .= ', ';
             }
             if (in_array($column, self::BINARY)) {
                 $sql .= "HEX($column) as $column";
+                $group .= "$column";
             } else {
                 $sql .= $column;
+                $group .= $column;
+            }
+        }
+
+        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
+            foreach($argv['aggregate'] as $key => $value){
+                switch ($key){
+                    case 'count':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "COUNT($value) AS count ";
+                        break;
+                    case 'AVG':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "AVG($value) AS avg ";
+                        break;
+                    case 'MIN':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MIN($value) AS min ";
+                        break;
+                    case 'MAX':
+                        if (!empty($sql)) {
+                            $sql .= ', ';
+                        }
+                        $sql .= "MAX($value) AS max ";
+                        break;
+                }
             }
         }
 
@@ -61,13 +101,13 @@ class carbon_tag extends Entities implements iRest
 
         $pdo = Database::database();
 
-        if ($primary === null) {
+        if (empty($primary)) {
             if (!empty($where)) {
                 $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
                     $sql = '(';
                     foreach ($set as $column => $value) {
                         if (is_array($value)) {
-                            $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
                         } else {
                             if (in_array($column, self::BINARY)) {
                                 $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
@@ -80,14 +120,22 @@ class carbon_tag extends Entities implements iRest
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } else {
-            $primary = $pdo->quote($primary);
-            $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
+        } 
+
+        if (isset($argv['aggregate'])) {
+            $sql .= ' GROUP BY ' . $group . ' ';
         }
 
         $sql .= $limit;
 
         $return = self::fetch($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
 
         /**
         *   The next part is so every response from the rest api
@@ -96,11 +144,7 @@ class carbon_tag extends Entities implements iRest
         *   apparently in the self::COLUMNS
         */
 
-        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }        if ($primary === null && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }
+        
 
         return true;
     }
@@ -111,22 +155,31 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_tag (entity_id, user_id, table_name, creation_date) VALUES ( UNHEX(:entity_id), :user_id, :table_name, :creation_date)';
-        $stmt = Database::database()->prepare($sql);
-            $entity_id = $id = isset($argv['entity_id']) ? $argv['entity_id'] : self::new_entity('carbon_tag');
-            $stmt->bindParam(':entity_id',$entity_id, \PDO::PARAM_STR, 16);
+        $sql = 'INSERT INTO statscoach.carbon_tag (entity_id, user_id, tag_id, creation_date) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id, :creation_date)';
+        $stmt = sDatabaseelf::database()->prepare($sql);
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
             
-                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
-                $stmt->bindParam(':user_id',$user_id, \PDO::PARAM_STR, 16);
+                $entity_id = $argv['entity_id'];
+                $stmt->bindParam(':entity_id',$entity_id, 2, 16);
                     
-                $table_name = $argv['table_name'];
-                $stmt->bindParam(':table_name',$table_name, \PDO::PARAM_STR, 50);
+                $user_id = isset($argv['user_id']) ? $argv['user_id'] : null;
+                $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    
+                $tag_id = $argv['tag_id'];
+                $stmt->bindParam(':tag_id',$tag_id, 2, 11);
                     
                 $creation_date = $argv['creation_date'];
-                $stmt->bindParam(':creation_date',$creation_date, \PDO::PARAM_STR, 20);
+                $stmt->bindParam(':creation_date',$creation_date, 2, 20);
         
-        return $stmt->execute() ? $id : false;
 
+        return $stmt->execute();
     }
 
     /**
@@ -155,8 +208,8 @@ class carbon_tag extends Entities implements iRest
         if (isset($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['table_name'])) {
-            $set .= 'table_name=:table_name,';
+        if (isset($argv['tag_id'])) {
+            $set .= 'tag_id=:tag_id,';
         }
         if (isset($argv['creation_date'])) {
             $set .= 'creation_date=:creation_date,';
@@ -171,26 +224,32 @@ class carbon_tag extends Entities implements iRest
         $db = Database::database();
 
         
-        $primary = $db->quote($primary);
-        $sql .= ' WHERE  entity_id=UNHEX(' . $primary .')';
 
         $stmt = $db->prepare($sql);
 
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+
         if (isset($argv['entity_id'])) {
             $entity_id = 'UNHEX('.$argv['entity_id'].')';
-            $stmt->bindParam(':entity_id', $entity_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':entity_id', $entity_id, 2, 16);
         }
         if (isset($argv['user_id'])) {
             $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR, 16);
+            $stmt->bindParam(':user_id', $user_id, 2, 16);
         }
-        if (isset($argv['table_name'])) {
-            $table_name = $argv['table_name'];
-            $stmt->bindParam(':table_name',$table_name, \PDO::PARAM_STR, 50);
+        if (isset($argv['tag_id'])) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 11);
         }
         if (isset($argv['creation_date'])) {
             $creation_date = $argv['creation_date'];
-            $stmt->bindParam(':creation_date',$creation_date, \PDO::PARAM_STR, 20);
+            $stmt->bindParam(':creation_date',$creation_date, 2, 20);
         }
 
         if (!$stmt->execute()){
@@ -211,6 +270,43 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        $sql = 'DELETE FROM statscoach.carbon_tag ';
+
+        foreach($argv as $column => $constraint){
+            if (!in_array($column, self::COLUMNS)){
+                unset($argv[$column]);
+            }
+        }
+
+        if (empty($primary)) {
+            /**
+            *   While useful, we've decided to disallow full
+            *   table deletions through the rest api. For the
+            *   n00bs and future self, "I got chu."
+            */
+            if (empty($argv)) {
+                return false;
+            }
+            $sql .= ' WHERE ';
+            foreach ($argv as $column => $value) {
+                if (in_array($column, self::BINARY)) {
+                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
+                } else {
+                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+                }
+            }
+            $sql = substr($sql, 0, strlen($sql)-4);
+        } 
+
+        $remove = null;
+
+        global $json;
+
+        if (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = $sql;
+
+        return self::execute($sql);
     }
 }

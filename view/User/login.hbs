@@ -95,7 +95,8 @@
 
 <script>
     Carbon(() => {
-        carbon.load_iCheck('input');
+
+        $('input').load_iCheck();
         let wrapper = $('.wrapper');
         wrapper.css('background-color', 'transparent');
         let remove = () => wrapper.css('background-color', 'rgba(0, 0, 0, 0.7)');
