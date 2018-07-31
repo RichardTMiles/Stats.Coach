@@ -162,7 +162,7 @@ class carbon_photos extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_photos (parent_id, photo_id, user_id, photo_path, photo_description) VALUES ( UNHEX(:parent_id), UNHEX(:photo_id), UNHEX(:user_id), :photo_path, :photo_description)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -182,7 +182,7 @@ class carbon_photos extends Entities implements iRest
                     
                 $photo_path = $argv['photo_path'];
                 $stmt->bindParam(':photo_path',$photo_path, 2, 225);
-                    $stmt->bindValue(':photo_description',$argv['photo_description'], \2);
+                    $stmt->bindValue(':photo_description',$argv['photo_description'], 2);
         
         return $stmt->execute() ? $id : false;
 

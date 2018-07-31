@@ -156,7 +156,7 @@ class team_members extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.team_members (member_id, team_id, user_id, accepted) VALUES ( UNHEX(:member_id), UNHEX(:team_id), UNHEX(:user_id), :accepted)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 

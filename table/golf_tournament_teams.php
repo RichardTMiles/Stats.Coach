@@ -156,7 +156,7 @@ class golf_tournament_teams extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_tournament_teams (team_id, tournament_id, tournament_paid, tournament_accepted) VALUES ( UNHEX(:team_id), UNHEX(:tournament_id), :tournament_paid, :tournament_accepted)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 

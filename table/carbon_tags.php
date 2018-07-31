@@ -162,7 +162,7 @@ class carbon_tags extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_tags (tag_description, tag_name) VALUES ( :tag_description, :tag_name)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -171,8 +171,8 @@ class carbon_tags extends Entities implements iRest
         }
         $json['sql'][] = $sql;
 
-                    $stmt->bindValue(':tag_description',$argv['tag_description'], \2);
-                    $stmt->bindValue(':tag_name',$argv['tag_name'], \2);
+                    $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+                    $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         
 
         return $stmt->execute();

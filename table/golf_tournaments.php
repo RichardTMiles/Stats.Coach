@@ -156,7 +156,7 @@ class golf_tournaments extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_tournaments (tournament_id, tournament_name, course_id, host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), UNHEX(:tournament_name), UNHEX(:course_id), :host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -186,7 +186,7 @@ class golf_tournaments extends Entities implements iRest
                     
                 $tournament_paid = isset($argv['tournament_paid']) ? $argv['tournament_paid'] : '1';
                 $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
-                    $stmt->bindValue(':tournament_date',isset($argv['tournament_date']) ? $argv['tournament_date'] : null, \2);
+                    $stmt->bindValue(':tournament_date',isset($argv['tournament_date']) ? $argv['tournament_date'] : null, 2);
         
 
         return $stmt->execute();

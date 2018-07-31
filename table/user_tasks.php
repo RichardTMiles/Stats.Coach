@@ -162,7 +162,7 @@ class user_tasks extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.user_tasks (task_id, user_id, from_id, task_name, task_description, percent_complete, start_date, end_date) VALUES ( UNHEX(:task_id), UNHEX(:user_id), UNHEX(:from_id), :task_name, :task_description, :percent_complete, :start_date, :end_date)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -188,8 +188,8 @@ class user_tasks extends Entities implements iRest
                     
                 $percent_complete = isset($argv['percent_complete']) ? $argv['percent_complete'] : '0';
                 $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
-                    $stmt->bindValue(':start_date',isset($argv['start_date']) ? $argv['start_date'] : null, \2);
-                    $stmt->bindValue(':end_date',isset($argv['end_date']) ? $argv['end_date'] : null, \2);
+                    $stmt->bindValue(':start_date',isset($argv['start_date']) ? $argv['start_date'] : null, 2);
+                    $stmt->bindValue(':end_date',isset($argv['end_date']) ? $argv['end_date'] : null, 2);
         
         return $stmt->execute() ? $id : false;
 

@@ -156,7 +156,7 @@ class golf_rounds extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_rounds (user_id, round_id, course_id, round_public, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts, score_date) VALUES ( UNHEX(:user_id), UNHEX(:round_id), UNHEX(:course_id), :round_public, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts, :score_date)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -177,10 +177,10 @@ class golf_rounds extends Entities implements iRest
                     
                 $round_public = isset($argv['round_public']) ? $argv['round_public'] : '1';
                 $stmt->bindParam(':round_public',$round_public, 2, 1);
-                    $stmt->bindValue(':score',$argv['score'], \2);
-                    $stmt->bindValue(':score_gnr',$argv['score_gnr'], \2);
-                    $stmt->bindValue(':score_ffs',$argv['score_ffs'], \2);
-                    $stmt->bindValue(':score_putts',$argv['score_putts'], \2);
+                    $stmt->bindValue(':score',$argv['score'], 2);
+                    $stmt->bindValue(':score_gnr',$argv['score_gnr'], 2);
+                    $stmt->bindValue(':score_ffs',$argv['score_ffs'], 2);
+                    $stmt->bindValue(':score_putts',$argv['score_putts'], 2);
                     
                 $score_out = $argv['score_out'];
                 $stmt->bindParam(':score_out',$score_out, 2, 2);
@@ -199,7 +199,7 @@ class golf_rounds extends Entities implements iRest
                     
                 $score_total_putts = isset($argv['score_total_putts']) ? $argv['score_total_putts'] : null;
                 $stmt->bindParam(':score_total_putts',$score_total_putts, 2, 11);
-                    $stmt->bindValue(':score_date',$argv['score_date'], \2);
+                    $stmt->bindValue(':score_date',$argv['score_date'], 2);
         
 
         return $stmt->execute();

@@ -156,7 +156,7 @@ class carbon_reports extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_reports (log_level, report, date, call_trace) VALUES ( :log_level, :report, :date, :call_trace)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -168,11 +168,11 @@ class carbon_reports extends Entities implements iRest
             
                 $log_level = isset($argv['log_level']) ? $argv['log_level'] : null;
                 $stmt->bindParam(':log_level',$log_level, 2, 20);
-                    $stmt->bindValue(':report',$argv['report'], \2);
+                    $stmt->bindValue(':report',$argv['report'], 2);
                     
                 $date = $argv['date'];
                 $stmt->bindParam(':date',$date, 2, 22);
-                    $stmt->bindValue(':call_trace',$argv['call_trace'], \2);
+                    $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         
 
         return $stmt->execute();

@@ -156,7 +156,7 @@ class carbon_tag extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_tag (entity_id, user_id, tag_id, creation_date) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id, :creation_date)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 

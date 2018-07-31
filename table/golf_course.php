@@ -162,7 +162,7 @@ class golf_course extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -179,7 +179,7 @@ class golf_course extends Entities implements iRest
                     
                 $course_holes = isset($argv['course_holes']) ? $argv['course_holes'] : '18';
                 $stmt->bindParam(':course_holes',$course_holes, 2, 2);
-                    $stmt->bindValue(':course_phone',$argv['course_phone'], \2);
+                    $stmt->bindValue(':course_phone',$argv['course_phone'], 2);
                     
                 $course_difficulty = isset($argv['course_difficulty']) ? $argv['course_difficulty'] : null;
                 $stmt->bindParam(':course_difficulty',$course_difficulty, 2, 10);
@@ -201,7 +201,7 @@ class golf_course extends Entities implements iRest
                     
                 $box_color_5 = isset($argv['box_color_5']) ? $argv['box_color_5'] : null;
                 $stmt->bindParam(':box_color_5',$box_color_5, 2, 10);
-                    $stmt->bindValue(':course_par',$argv['course_par'], \2);
+                    $stmt->bindValue(':course_par',$argv['course_par'], 2);
                     
                 $course_par_out = $argv['course_par_out'];
                 $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
@@ -220,9 +220,9 @@ class golf_course extends Entities implements iRest
                     
                 $course_access = isset($argv['course_access']) ? $argv['course_access'] : null;
                 $stmt->bindParam(':course_access',$course_access, 2, 120);
-                    $stmt->bindValue(':course_handicap',$argv['course_handicap'], \2);
-                    $stmt->bindValue(':pga_professional',$argv['pga_professional'], \2);
-                    $stmt->bindValue(':website',$argv['website'], \2);
+                    $stmt->bindValue(':course_handicap',$argv['course_handicap'], 2);
+                    $stmt->bindValue(':pga_professional',$argv['pga_professional'], 2);
+                    $stmt->bindValue(':website',$argv['website'], 2);
         
         return $stmt->execute() ? $id : false;
 

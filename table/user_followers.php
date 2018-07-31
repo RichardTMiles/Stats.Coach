@@ -162,7 +162,7 @@ class user_followers extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES ( UNHEX(:follows_user_id), UNHEX(:user_id))';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 

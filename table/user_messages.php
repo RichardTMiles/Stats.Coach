@@ -156,7 +156,7 @@ class user_messages extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -171,7 +171,7 @@ class user_messages extends Entities implements iRest
                     
                 $to_user_id = isset($argv['to_user_id']) ? $argv['to_user_id'] : null;
                 $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                    $stmt->bindValue(':message',$argv['message'], \2);
+                    $stmt->bindValue(':message',$argv['message'], 2);
                     
                 $message_read = isset($argv['message_read']) ? $argv['message_read'] : '0';
                 $stmt->bindParam(':message_read',$message_read, 0, 1);

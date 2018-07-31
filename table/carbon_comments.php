@@ -162,7 +162,7 @@ class carbon_comments extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_comments (parent_id, comment_id, user_id, comment) VALUES ( UNHEX(:parent_id), UNHEX(:comment_id), UNHEX(:user_id), :comment)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -179,7 +179,7 @@ class carbon_comments extends Entities implements iRest
             
                 $user_id = $argv['user_id'];
                 $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    $stmt->bindValue(':comment',$argv['comment'], \2);
+                    $stmt->bindValue(':comment',$argv['comment'], 2);
         
         return $stmt->execute() ? $id : false;
 

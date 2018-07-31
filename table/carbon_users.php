@@ -13,7 +13,7 @@ class carbon_users extends Entities implements iRest
     ];
 
     const COLUMNS = [
-    'user_id','user_type','user_sport','user_session_id','user_facebook_id','user_username','user_first_name','user_last_name','user_profile_pic','user_profile_uri','user_cover_photo','user_birthday','user_gender','user_about_me','user_rank','user_password','user_email','user_email_code','user_email_confirmed','user_generated_string','user_membership','user_deactivated','user_last_login','user_ip','user_education_history','user_location','user_creation_date',
+    'user_id','user_type','user_sport','user_session_id','user_facebook_id','user_username','user_first_name','user_last_name','user_profile_pic','user_profile_uri','user_cover_photo','user_birthday','user_gender','user_about_me','user_rank','user_password','user_email','user_email_code','user_email_confirmed','user_generated_string','user_membership','user_deactivated','user_last_login','user_ip','user_education_history','user_creation_date',
     ];
 
     const VALIDATION = [];
@@ -161,8 +161,8 @@ class carbon_users extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history)';
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -174,10 +174,10 @@ class carbon_users extends Entities implements iRest
             $user_id = $id = isset($argv['user_id']) ? $argv['user_id'] : self::new_entity('carbon_users');
             $stmt->bindParam(':user_id',$user_id, 2, 16);
             
-                $user_type = $argv['user_type'];
+                $user_type = isset($argv['user_type']) ? $argv['user_type'] : 'ATHLETE';
                 $stmt->bindParam(':user_type',$user_type, 2, 20);
                     
-                $user_sport = isset($argv['user_sport']) ? $argv['user_sport'] : null;
+                $user_sport = isset($argv['user_sport']) ? $argv['user_sport'] : 'GOLF';
                 $stmt->bindParam(':user_sport',$user_sport, 2, 20);
                     
                 $user_session_id = isset($argv['user_session_id']) ? $argv['user_session_id'] : null;
@@ -203,11 +203,15 @@ class carbon_users extends Entities implements iRest
                     
                 $user_cover_photo = isset($argv['user_cover_photo']) ? $argv['user_cover_photo'] : null;
                 $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
-                    $stmt->bindValue(':user_birthday',$argv['user_birthday'], \2);
+                    
+                $user_birthday = isset($argv['user_birthday']) ? $argv['user_birthday'] : null;
+                $stmt->bindParam(':user_birthday',$user_birthday, 2, 12);
                     
                 $user_gender = isset($argv['user_gender']) ? $argv['user_gender'] : null;
                 $stmt->bindParam(':user_gender',$user_gender, 2, 25);
-                    $stmt->bindValue(':user_about_me',$argv['user_about_me'], \2);
+                    
+                $user_about_me = isset($argv['user_about_me']) ? $argv['user_about_me'] : null;
+                $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
                     
                 $user_rank = isset($argv['user_rank']) ? $argv['user_rank'] : '0';
                 $stmt->bindParam(':user_rank',$user_rank, 2, 8);
@@ -232,18 +236,13 @@ class carbon_users extends Entities implements iRest
                     
                 $user_deactivated = isset($argv['user_deactivated']) ? $argv['user_deactivated'] : '0';
                 $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
-                    
-                $user_last_login = $argv['user_last_login'];
-                $stmt->bindParam(':user_last_login',$user_last_login, 2, 14);
-                    
+                            
                 $user_ip = $argv['user_ip'];
                 $stmt->bindParam(':user_ip',$user_ip, 2, 20);
-                    $stmt->bindValue(':user_education_history',$argv['user_education_history'], \2);
-                    $stmt->bindValue(':user_location',$argv['user_location'], \2);
                     
-                $user_creation_date = isset($argv['user_creation_date']) ? $argv['user_creation_date'] : null;
-                $stmt->bindParam(':user_creation_date',$user_creation_date, 2, 14);
-        
+                $user_education_history = isset($argv['user_education_history']) ? $argv['user_education_history'] : null;
+                $stmt->bindParam(':user_education_history',$user_education_history, 2, 225);
+                
         return $stmt->execute() ? $id : false;
 
     }
@@ -343,9 +342,6 @@ class carbon_users extends Entities implements iRest
         if (isset($argv['user_education_history'])) {
             $set .= 'user_education_history=:user_education_history,';
         }
-        if (isset($argv['user_location'])) {
-            $set .= 'user_location=:user_location,';
-        }
         if (isset($argv['user_creation_date'])) {
             $set .= 'user_creation_date=:user_creation_date,';
         }
@@ -417,14 +413,16 @@ class carbon_users extends Entities implements iRest
             $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
         }
         if (isset($argv['user_birthday'])) {
-            $stmt->bindValue(':user_birthday',$argv['user_birthday'], 2);
+            $user_birthday = $argv['user_birthday'];
+            $stmt->bindParam(':user_birthday',$user_birthday, 2, 12);
         }
         if (isset($argv['user_gender'])) {
             $user_gender = $argv['user_gender'];
             $stmt->bindParam(':user_gender',$user_gender, 2, 25);
         }
         if (isset($argv['user_about_me'])) {
-            $stmt->bindValue(':user_about_me',$argv['user_about_me'], 2);
+            $user_about_me = $argv['user_about_me'];
+            $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
         }
         if (isset($argv['user_rank'])) {
             $user_rank = $argv['user_rank'];
@@ -459,22 +457,18 @@ class carbon_users extends Entities implements iRest
             $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
         }
         if (isset($argv['user_last_login'])) {
-            $user_last_login = $argv['user_last_login'];
-            $stmt->bindParam(':user_last_login',$user_last_login, 2, 14);
+            $stmt->bindValue(':user_last_login',$argv['user_last_login'], 2);
         }
         if (isset($argv['user_ip'])) {
             $user_ip = $argv['user_ip'];
             $stmt->bindParam(':user_ip',$user_ip, 2, 20);
         }
         if (isset($argv['user_education_history'])) {
-            $stmt->bindValue(':user_education_history',$argv['user_education_history'], 2);
-        }
-        if (isset($argv['user_location'])) {
-            $stmt->bindValue(':user_location',$argv['user_location'], 2);
+            $user_education_history = $argv['user_education_history'];
+            $stmt->bindParam(':user_education_history',$user_education_history, 2, 225);
         }
         if (isset($argv['user_creation_date'])) {
-            $user_creation_date = $argv['user_creation_date'];
-            $stmt->bindParam(':user_creation_date',$user_creation_date, 2, 14);
+            $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
         }
 
         if (!$stmt->execute()){

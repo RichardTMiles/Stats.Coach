@@ -156,7 +156,7 @@ class golf_tee_box extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.golf_tee_box (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES ( UNHEX(:course_id), :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -171,18 +171,18 @@ class golf_tee_box extends Entities implements iRest
                     
                 $tee_box = $argv['tee_box'];
                 $stmt->bindParam(':tee_box',$tee_box, 2, 1);
-                    $stmt->bindValue(':distance',$argv['distance'], \2);
+                    $stmt->bindValue(':distance',$argv['distance'], 2);
                     
                 $distance_color = $argv['distance_color'];
                 $stmt->bindParam(':distance_color',$distance_color, 2, 10);
                     
                 $distance_general_slope = isset($argv['distance_general_slope']) ? $argv['distance_general_slope'] : null;
                 $stmt->bindParam(':distance_general_slope',$distance_general_slope, 2, 4);
-                    $stmt->bindValue(':distance_general_difficulty',isset($argv['distance_general_difficulty']) ? $argv['distance_general_difficulty'] : null, \2);
+                    $stmt->bindValue(':distance_general_difficulty',isset($argv['distance_general_difficulty']) ? $argv['distance_general_difficulty'] : null, 2);
                     
                 $distance_womens_slope = isset($argv['distance_womens_slope']) ? $argv['distance_womens_slope'] : null;
                 $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, 2, 4);
-                    $stmt->bindValue(':distance_womens_difficulty',isset($argv['distance_womens_difficulty']) ? $argv['distance_womens_difficulty'] : null, \2);
+                    $stmt->bindValue(':distance_womens_difficulty',isset($argv['distance_womens_difficulty']) ? $argv['distance_womens_difficulty'] : null, 2);
                     
                 $distance_out = isset($argv['distance_out']) ? $argv['distance_out'] : null;
                 $stmt->bindParam(':distance_out',$distance_out, 2, 7);

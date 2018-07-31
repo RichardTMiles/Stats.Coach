@@ -162,7 +162,7 @@ class sessions extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -180,8 +180,8 @@ class sessions extends Entities implements iRest
                     
                 $session_id = $argv['session_id'];
                 $stmt->bindParam(':session_id',$session_id, 2, 255);
-                    $stmt->bindValue(':session_expires',$argv['session_expires'], \2);
-                    $stmt->bindValue(':session_data',$argv['session_data'], \2);
+                    $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+                    $stmt->bindValue(':session_data',$argv['session_data'], 2);
                     
                 $user_online_status = isset($argv['user_online_status']) ? $argv['user_online_status'] : '1';
                 $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);

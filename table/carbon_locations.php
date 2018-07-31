@@ -162,7 +162,7 @@ class carbon_locations extends Entities implements iRest
     public static function Post(array $argv)
     {
         $sql = 'INSERT INTO statscoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
-        $stmt = sDatabaseelf::database()->prepare($sql);
+        $stmt = Database::database()->prepare($sql);
 
         global $json;
 
@@ -179,7 +179,7 @@ class carbon_locations extends Entities implements iRest
                     
                 $longitude = isset($argv['longitude']) ? $argv['longitude'] : null;
                 $stmt->bindParam(':longitude',$longitude, 2, 225);
-                    $stmt->bindValue(':street',$argv['street'], \2);
+                    $stmt->bindValue(':street',$argv['street'], 2);
                     
                 $city = isset($argv['city']) ? $argv['city'] : null;
                 $stmt->bindParam(':city',$city, 2, 40);
