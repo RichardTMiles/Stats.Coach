@@ -10,28 +10,14 @@
 
             console.log(state);
 
-
             let courses = $("#course"); // container to be placed in
 
             console.log(courses);
 
-
             courses.removeAttr("disabled", "disabled");     // To ensure they at least search for it
-
-
 
             carbon.app("/Postscore/" + state + "/");
 
-            /*
-            $.ajax({  // Get a reduced list of all courses within a state
-                url: ("/Postscore/" + state + "/"), success: function (result) {
-
-                    console.log(result);
-
-                    courses.html(result);
-                }
-            });
-            */
         }
 
         function box_colors_given_id(select) {
@@ -39,7 +25,7 @@
             // Jump to a new page using Pjax
             if (courseId === "Add")
                 return $.pjax({
-                    url: ('/AddCourse/' + state + '/'),         // Redirect
+                    url: ('/AddCourse/Basic/' + state + '/'),         // Redirect
                     container: '#pjax-content'
                 });
 
@@ -49,7 +35,7 @@
             });
         }
 
-        Carbon(() => carbon.load_select2('.select2'));
+        Carbon(() => $('.select2').load_select2());
     </script>
 
     <!-- Content Header (Page header) -->
@@ -405,9 +391,9 @@
 
         <script>
             Carbon(() => {
-                carbon.load_iCheck('input');
-                carbon.load_knob('.knob');
-                carbon.load_timepicker('.timepicker')
+                $('input').load_iCheck();
+                $('.knob').load_knob();
+                $('.timepicker').load_timepicker()
 
                 //Date picker
                 carbon.js('/Data/Vendors/almasaeed2010/adminlte/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', () =>

@@ -188,7 +188,7 @@ class Golf extends GlobalMap implements iSport
                     'distance_color' => $this->course[$course_id]['teeBox']['distance_color'],
                     'number' => ++$i,
                     'first' => $i === 1,
-                    'last' => $i === (int) $json['course']['course_holes']
+                    'last' => $i === (int)$json['course']['course_holes']
                 ];
             }
 
@@ -268,9 +268,9 @@ class Golf extends GlobalMap implements iSport
      * @param $course
      * @param $handicap
      * @return bool
-     * @throws \Carbon\Error\PublicAlert
+     * @throws \CarbonPHP\Error\PublicAlert
      */
-    public function addCourse($course, $handicap): bool
+    public function AddCourseBasic($course, $handicap): bool
     {
         global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
 
@@ -285,11 +285,37 @@ class Golf extends GlobalMap implements iSport
         $par_tot = $par_out + $par_in;
 
         $null = null;
-        if (!Course::add($null, $null, $argv = [
-            'course' => $course,
-            'handicap' => $handicap,
-            'holes' => $holes,
-            'par' => $par,
+        if (!Course::Post([
+            'course_name' => $course['name'],
+            'pga' => $pga_pro,
+            ':site' => $course_website,
+            ':course_holes' => $holes,
+            ':course_phone' => $phone,
+            ':course_difficulty' => null,
+            ':course_rank' => null,
+            ':box_color_1' => $argv['teeBox'][1][0] ?? null,
+            ':box_color_2' => $argv['teeBox'][2][0] ?? null,
+            ':box_color_3' => $argv['teeBox'][3][0] ?? null,
+            ':box_color_4' => $argv['teeBox'][4][0] ?? null,
+            ':box_color_5' => $argv['teeBox'][5][0] ?? null,
+            ':course_par' => serialize($par),
+            ':course_par_out' => $par_out,
+            ':course_par_in' => $par_in,
+            ':par_tot' => $par_tot,
+            ':course_par_hcp' => null,
+            ':course_type' => $course['style'],
+            ':course_access' => $course['access'],
+            ':course_handicap' => serialize($handicap)])) {
+
+
+        }
+
+
+        if (!Course::Post([
+            'course_name' => $course,
+            'course_handicap' => $handicap,
+            'course_holes' => $holes,
+            'course_par' => serialize($par),
             'tee_boxes' => $tee_boxes,
             'teeBox' => $teeBox,
             'phone' => $phone,

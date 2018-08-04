@@ -102,8 +102,6 @@ class StatsCoach extends Application
                 $this->match('Recover/{user_email?}/{user_generated_string?}/', 'User', 'recover')()) {     // Recover $userId
                 return true;
             }
-
-
         } else {
             // Event
             if (((AJAX && !PJAX) || SOCKET) && (
@@ -119,7 +117,6 @@ class StatsCoach extends Application
 
             // $url->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
 
-
             $this->structure($this->events('#course'))->match('PostScore/{state}/', 'Golf', 'coursesByState');
 
             if (SOCKET) {
@@ -131,6 +128,12 @@ class StatsCoach extends Application
 
             ################################### Golf Stuff + User
 
+            // TODO - I want to separate this into three parts
+            if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')()||
+                $this->match('AddCourse/Distance/{id}/*', 'Golf', 'AddCourseDistance')()){
+                return true;
+            }
+
             if ($this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
                 $this->match('Messages/*', 'Messages', 'messages')() ||
                 $this->match('Home/*', 'Golf', 'golf')() ||
@@ -139,7 +142,6 @@ class StatsCoach extends Application
                 $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
                 $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
                 $this->match('CreateTeam/', 'Team', 'createTeam')() ||
-                $this->match('AddCourse/{state?}/*', 'Golf', 'AddCourse')() ||
                 $this->match('PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore')() ||
                 $this->match('Logout/*', function () {
                     User::logout();

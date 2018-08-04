@@ -87,7 +87,7 @@ class Golf extends Request  // Validation
      * @return mixed
      * @throws PublicAlert
      */
-    public function AddCourse(&$state)
+    public function AddCourseBasic(&$state)
     {
         global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
 
