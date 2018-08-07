@@ -40,16 +40,31 @@ class carbon_locations extends Entities implements iRest
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
             if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
-                $pos = strrpos($argv['pagination']['limit'], "><");
-                if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
-                }
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
+
+            $order = '';
+            if (!empty($limit)) {
+
+                 $order = ' ORDER BY ';
+
+                if (isset($argv['pagination']['order']) && $argv['pagination']['order'] != null) {
+                    if (is_array($argv['pagination']['order'])) {
+                        foreach ($argv['pagination']['order'] as $item => $sort) {
+                            $order .= $item .' '. $sort;
+                        }
+                    } else {
+                        $order .= $argv['pagination']['order'];
+                    }
+                } else {
+                    $order .= self::PRIMARY[0] . ' DESC';
+                }
+            }
+            $limit = $order .' '. $limit;
         } else {
-            $limit = ' LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -148,7 +163,7 @@ class carbon_locations extends Entities implements iRest
         */
 
         
-        if (empty($primary) && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -179,7 +194,9 @@ class carbon_locations extends Entities implements iRest
                     
                 $longitude = isset($argv['longitude']) ? $argv['longitude'] : null;
                 $stmt->bindParam(':longitude',$longitude, 2, 225);
-                    $stmt->bindValue(':street',$argv['street'], 2);
+                    
+                $street = isset($argv['street']) ? $argv['street'] : null;
+                $stmt->bindParam(':street',$street, 2, 40);
                     
                 $city = isset($argv['city']) ? $argv['city'] : null;
                 $stmt->bindParam(':city',$city, 2, 40);
@@ -271,7 +288,8 @@ class carbon_locations extends Entities implements iRest
             $stmt->bindParam(':longitude',$longitude, 2, 225);
         }
         if (isset($argv['street'])) {
-            $stmt->bindValue(':street',$argv['street'], 2);
+            $street = $argv['street'];
+            $stmt->bindParam(':street',$street, 2, 40);
         }
         if (isset($argv['city'])) {
             $city = $argv['city'];

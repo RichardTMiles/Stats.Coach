@@ -13,13 +13,13 @@ class golf_course extends Entities implements iRest
     ];
 
     const COLUMNS = [
-    'course_id','course_name','course_holes','course_phone','course_difficulty','course_rank','box_color_1','box_color_2','box_color_3','box_color_4','box_color_5','course_par','course_par_out','course_par_in','par_tot','course_par_hcp','course_type','course_access','course_handicap','pga_professional','website',
+    'course_id','course_name','course_holes','course_phone','course_difficulty','course_rank','course_par','course_par_out','course_par_in','par_tot','course_par_hcp','course_type','course_access','course_handicap','pga_professional','website','course_input_completed','tee_boxes','created_by','handicap_count',
     ];
 
     const VALIDATION = [];
 
     const BINARY = [
-    'course_id','course_name',
+    'course_id','created_by',
     ];
 
     /**
@@ -40,16 +40,31 @@ class golf_course extends Entities implements iRest
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
             if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
-                $pos = strrpos($argv['pagination']['limit'], "><");
-                if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
-                }
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
+
+            $order = '';
+            if (!empty($limit)) {
+
+                 $order = ' ORDER BY ';
+
+                if (isset($argv['pagination']['order']) && $argv['pagination']['order'] != null) {
+                    if (is_array($argv['pagination']['order'])) {
+                        foreach ($argv['pagination']['order'] as $item => $sort) {
+                            $order .= $item .' '. $sort;
+                        }
+                    } else {
+                        $order .= $argv['pagination']['order'];
+                    }
+                } else {
+                    $order .= self::PRIMARY[0] . ' DESC';
+                }
+            }
+            $limit = $order .' '. $limit;
         } else {
-            $limit = ' LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -148,7 +163,7 @@ class golf_course extends Entities implements iRest
         */
 
         
-        if (empty($primary) && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -161,7 +176,7 @@ class golf_course extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website)';
+        $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, course_input_completed, tee_boxes, created_by, handicap_count) VALUES ( UNHEX(:course_id), :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, :course_input_completed, :tee_boxes, UNHEX(:created_by), :handicap_count)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -179,50 +194,53 @@ class golf_course extends Entities implements iRest
                     
                 $course_holes = isset($argv['course_holes']) ? $argv['course_holes'] : '18';
                 $stmt->bindParam(':course_holes',$course_holes, 2, 2);
-                    $stmt->bindValue(':course_phone',$argv['course_phone'], 2);
+                    
+                $course_phone = isset($argv['course_phone']) ? $argv['course_phone'] : '';
+                $stmt->bindParam(':course_phone',$course_phone, 2, 20);
                     
                 $course_difficulty = isset($argv['course_difficulty']) ? $argv['course_difficulty'] : null;
                 $stmt->bindParam(':course_difficulty',$course_difficulty, 2, 10);
                     
-                $course_rank = isset($argv['course_rank']) ? $argv['course_rank'] : null;
+                $course_rank = isset($argv['course_rank']) ? $argv['course_rank'] : '0';
                 $stmt->bindParam(':course_rank',$course_rank, 2, 5);
-                    
-                $box_color_1 = isset($argv['box_color_1']) ? $argv['box_color_1'] : null;
-                $stmt->bindParam(':box_color_1',$box_color_1, 2, 10);
-                    
-                $box_color_2 = isset($argv['box_color_2']) ? $argv['box_color_2'] : null;
-                $stmt->bindParam(':box_color_2',$box_color_2, 2, 10);
-                    
-                $box_color_3 = isset($argv['box_color_3']) ? $argv['box_color_3'] : null;
-                $stmt->bindParam(':box_color_3',$box_color_3, 2, 10);
-                    
-                $box_color_4 = isset($argv['box_color_4']) ? $argv['box_color_4'] : null;
-                $stmt->bindParam(':box_color_4',$box_color_4, 2, 10);
-                    
-                $box_color_5 = isset($argv['box_color_5']) ? $argv['box_color_5'] : null;
-                $stmt->bindParam(':box_color_5',$box_color_5, 2, 10);
                     $stmt->bindValue(':course_par',$argv['course_par'], 2);
                     
-                $course_par_out = $argv['course_par_out'];
+                $course_par_out = isset($argv['course_par_out']) ? $argv['course_par_out'] : '0';
                 $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
                     
-                $course_par_in = $argv['course_par_in'];
+                $course_par_in = isset($argv['course_par_in']) ? $argv['course_par_in'] : '0';
                 $stmt->bindParam(':course_par_in',$course_par_in, 2, 2);
                     
-                $par_tot = $argv['par_tot'];
+                $par_tot = isset($argv['par_tot']) ? $argv['par_tot'] : '0';
                 $stmt->bindParam(':par_tot',$par_tot, 2, 2);
                     
-                $course_par_hcp = isset($argv['course_par_hcp']) ? $argv['course_par_hcp'] : null;
+                $course_par_hcp = isset($argv['course_par_hcp']) ? $argv['course_par_hcp'] : '0';
                 $stmt->bindParam(':course_par_hcp',$course_par_hcp, 2, 4);
                     
-                $course_type = isset($argv['course_type']) ? $argv['course_type'] : null;
+                $course_type = isset($argv['course_type']) ? $argv['course_type'] : '';
                 $stmt->bindParam(':course_type',$course_type, 2, 30);
                     
-                $course_access = isset($argv['course_access']) ? $argv['course_access'] : null;
-                $stmt->bindParam(':course_access',$course_access, 2, 120);
+                $course_access = isset($argv['course_access']) ? $argv['course_access'] : '';
+                $stmt->bindParam(':course_access',$course_access, 2, 10);
                     $stmt->bindValue(':course_handicap',$argv['course_handicap'], 2);
-                    $stmt->bindValue(':pga_professional',$argv['pga_professional'], 2);
-                    $stmt->bindValue(':website',$argv['website'], 2);
+                    
+                $pga_professional = isset($argv['pga_professional']) ? $argv['pga_professional'] : '';
+                $stmt->bindParam(':pga_professional',$pga_professional, 2, 25);
+                    
+                $website = isset($argv['website']) ? $argv['website'] : '';
+                $stmt->bindParam(':website',$website, 2, 30);
+                    
+                $course_input_completed = isset($argv['course_input_completed']) ? $argv['course_input_completed'] : '0';
+                $stmt->bindParam(':course_input_completed',$course_input_completed, 0, 1);
+                    
+                $tee_boxes = isset($argv['tee_boxes']) ? $argv['tee_boxes'] : null;
+                $stmt->bindParam(':tee_boxes',$tee_boxes, 2, 1);
+                    
+                $created_by = isset($argv['created_by']) ? $argv['created_by'] : null;
+                $stmt->bindParam(':created_by',$created_by, 2, 16);
+                    
+                $handicap_count = isset($argv['handicap_count']) ? $argv['handicap_count'] : null;
+                $stmt->bindParam(':handicap_count',$handicap_count, 2, 1);
         
         return $stmt->execute() ? $id : false;
 
@@ -252,7 +270,7 @@ class golf_course extends Entities implements iRest
             $set .= 'course_id=UNHEX(:course_id),';
         }
         if (isset($argv['course_name'])) {
-            $set .= 'course_name=UNHEX(:course_name),';
+            $set .= 'course_name=:course_name,';
         }
         if (isset($argv['course_holes'])) {
             $set .= 'course_holes=:course_holes,';
@@ -265,21 +283,6 @@ class golf_course extends Entities implements iRest
         }
         if (isset($argv['course_rank'])) {
             $set .= 'course_rank=:course_rank,';
-        }
-        if (isset($argv['box_color_1'])) {
-            $set .= 'box_color_1=:box_color_1,';
-        }
-        if (isset($argv['box_color_2'])) {
-            $set .= 'box_color_2=:box_color_2,';
-        }
-        if (isset($argv['box_color_3'])) {
-            $set .= 'box_color_3=:box_color_3,';
-        }
-        if (isset($argv['box_color_4'])) {
-            $set .= 'box_color_4=:box_color_4,';
-        }
-        if (isset($argv['box_color_5'])) {
-            $set .= 'box_color_5=:box_color_5,';
         }
         if (isset($argv['course_par'])) {
             $set .= 'course_par=:course_par,';
@@ -311,6 +314,18 @@ class golf_course extends Entities implements iRest
         if (isset($argv['website'])) {
             $set .= 'website=:website,';
         }
+        if (isset($argv['course_input_completed'])) {
+            $set .= 'course_input_completed=:course_input_completed,';
+        }
+        if (isset($argv['tee_boxes'])) {
+            $set .= 'tee_boxes=:tee_boxes,';
+        }
+        if (isset($argv['created_by'])) {
+            $set .= 'created_by=UNHEX(:created_by),';
+        }
+        if (isset($argv['handicap_count'])) {
+            $set .= 'handicap_count=:handicap_count,';
+        }
 
         if (empty($set)){
             return false;
@@ -339,15 +354,16 @@ class golf_course extends Entities implements iRest
             $stmt->bindParam(':course_id', $course_id, 2, 16);
         }
         if (isset($argv['course_name'])) {
-            $course_name = 'UNHEX('.$argv['course_name'].')';
-            $stmt->bindParam(':course_name', $course_name, 2, 16);
+            $course_name = $argv['course_name'];
+            $stmt->bindParam(':course_name',$course_name, 2, 16);
         }
         if (isset($argv['course_holes'])) {
             $course_holes = $argv['course_holes'];
             $stmt->bindParam(':course_holes',$course_holes, 2, 2);
         }
         if (isset($argv['course_phone'])) {
-            $stmt->bindValue(':course_phone',$argv['course_phone'], 2);
+            $course_phone = $argv['course_phone'];
+            $stmt->bindParam(':course_phone',$course_phone, 2, 20);
         }
         if (isset($argv['course_difficulty'])) {
             $course_difficulty = $argv['course_difficulty'];
@@ -356,26 +372,6 @@ class golf_course extends Entities implements iRest
         if (isset($argv['course_rank'])) {
             $course_rank = $argv['course_rank'];
             $stmt->bindParam(':course_rank',$course_rank, 2, 5);
-        }
-        if (isset($argv['box_color_1'])) {
-            $box_color_1 = $argv['box_color_1'];
-            $stmt->bindParam(':box_color_1',$box_color_1, 2, 10);
-        }
-        if (isset($argv['box_color_2'])) {
-            $box_color_2 = $argv['box_color_2'];
-            $stmt->bindParam(':box_color_2',$box_color_2, 2, 10);
-        }
-        if (isset($argv['box_color_3'])) {
-            $box_color_3 = $argv['box_color_3'];
-            $stmt->bindParam(':box_color_3',$box_color_3, 2, 10);
-        }
-        if (isset($argv['box_color_4'])) {
-            $box_color_4 = $argv['box_color_4'];
-            $stmt->bindParam(':box_color_4',$box_color_4, 2, 10);
-        }
-        if (isset($argv['box_color_5'])) {
-            $box_color_5 = $argv['box_color_5'];
-            $stmt->bindParam(':box_color_5',$box_color_5, 2, 10);
         }
         if (isset($argv['course_par'])) {
             $stmt->bindValue(':course_par',$argv['course_par'], 2);
@@ -402,16 +398,34 @@ class golf_course extends Entities implements iRest
         }
         if (isset($argv['course_access'])) {
             $course_access = $argv['course_access'];
-            $stmt->bindParam(':course_access',$course_access, 2, 120);
+            $stmt->bindParam(':course_access',$course_access, 2, 10);
         }
         if (isset($argv['course_handicap'])) {
             $stmt->bindValue(':course_handicap',$argv['course_handicap'], 2);
         }
         if (isset($argv['pga_professional'])) {
-            $stmt->bindValue(':pga_professional',$argv['pga_professional'], 2);
+            $pga_professional = $argv['pga_professional'];
+            $stmt->bindParam(':pga_professional',$pga_professional, 2, 25);
         }
         if (isset($argv['website'])) {
-            $stmt->bindValue(':website',$argv['website'], 2);
+            $website = $argv['website'];
+            $stmt->bindParam(':website',$website, 2, 30);
+        }
+        if (isset($argv['course_input_completed'])) {
+            $course_input_completed = $argv['course_input_completed'];
+            $stmt->bindParam(':course_input_completed',$course_input_completed, 0, 1);
+        }
+        if (isset($argv['tee_boxes'])) {
+            $tee_boxes = $argv['tee_boxes'];
+            $stmt->bindParam(':tee_boxes',$tee_boxes, 2, 1);
+        }
+        if (isset($argv['created_by'])) {
+            $created_by = 'UNHEX('.$argv['created_by'].')';
+            $stmt->bindParam(':created_by', $created_by, 2, 16);
+        }
+        if (isset($argv['handicap_count'])) {
+            $handicap_count = $argv['handicap_count'];
+            $stmt->bindParam(':handicap_count',$handicap_count, 2, 1);
         }
 
         if (!$stmt->execute()){

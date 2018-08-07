@@ -12,10 +12,8 @@ use CarbonPHP\Application;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\View;
 use Controller\User;
-use Symfony\Component\Console\Helper\Table;
 use Table\carbon_users;
 use Table\golf_stats;
-use Table\carbon;
 
 class StatsCoach extends Application
 {
@@ -128,9 +126,9 @@ class StatsCoach extends Application
 
             ################################### Golf Stuff + User
 
-            // TODO - I want to separate this into three parts
             if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')()||
-                $this->match('AddCourse/Distance/{id}/*', 'Golf', 'AddCourseDistance')()){
+                $this->match('AddCourse/Color/{id}/{box_number}/*', 'Golf', 'AddCourseColor')()||
+                $this->match('AddCourse/Distance/{id}/{box_number}/*', 'Golf', 'AddCourseDistance')()){
                 return true;
             }
 
@@ -142,7 +140,7 @@ class StatsCoach extends Application
                 $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
                 $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
                 $this->match('CreateTeam/', 'Team', 'createTeam')() ||
-                $this->match('PostScore/{state?}/{course_id?}/{boxColor?}/*', 'Golf', 'postScore')() ||
+                $this->match('PostScore/{state?}/{course_id?}/{box_color?}/*', 'Golf', 'postScore')() ||
                 $this->match('Logout/*', function () {
                     User::logout();
                 })) {

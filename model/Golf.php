@@ -3,6 +3,7 @@
 namespace Model;
 
 use Psr\Log\InvalidArgumentException;
+use Table\carbon_locations;
 use Table\golf_course as Course;
 use Table\golf_rounds as Rounds;
 use CarbonPHP\Singleton;
@@ -264,76 +265,72 @@ class Golf extends GlobalMap implements iSport
         return true;
     }
 
-    /**
-     * @param $course
-     * @param $handicap
-     * @return bool
-     * @throws \CarbonPHP\Error\PublicAlert
-     */
-    public function AddCourseBasic($course, $handicap): bool
+
+    public function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
     {
-        global $holes, $par, $tee_boxes, $teeBox, $handicap_number, $phone, $course_website, $pga_pro;
-
-        $par_out = 0;
-        $par_in = 0;
-        for ($i = 0; $i < 9; $i++) {
-            $par_out += $par[$i];
-        }
-        for ($i = 9; $i < 18; $i++) {
-            $par_in += $par[$i];
-        }
-        $par_tot = $par_out + $par_in;
-
-        $null = null;
-        if (!Course::Post([
-            'course_name' => $course['name'],
-            'pga' => $pga_pro,
-            ':site' => $course_website,
-            ':course_holes' => $holes,
-            ':course_phone' => $phone,
-            ':course_difficulty' => null,
-            ':course_rank' => null,
-            ':box_color_1' => $argv['teeBox'][1][0] ?? null,
-            ':box_color_2' => $argv['teeBox'][2][0] ?? null,
-            ':box_color_3' => $argv['teeBox'][3][0] ?? null,
-            ':box_color_4' => $argv['teeBox'][4][0] ?? null,
-            ':box_color_5' => $argv['teeBox'][5][0] ?? null,
-            ':course_par' => serialize($par),
-            ':course_par_out' => $par_out,
-            ':course_par_in' => $par_in,
-            ':par_tot' => $par_tot,
-            ':course_par_hcp' => null,
-            ':course_type' => $course['style'],
-            ':course_access' => $course['access'],
-            ':course_handicap' => serialize($handicap)])) {
-
-
+        if (false === (($id = Course::Post([
+                    'course_name' => $name,
+                    'created_by' => $_SESSION['id'],
+                    'course_input_completed' => 0,
+                    'tee_boxes' => $tee_boxes,
+                    'handicap_count' => $handicap_number,
+                    'pga' => $pga_pro,
+                    'site' => $course_website,
+                    'course_holes' => $holes,
+                    'course_phone' => $phone,
+                    'course_type' => $style,
+                    'course_access' => $access,
+                    'course_par' => '',
+                    'course_handicap' => ''])) &&
+                carbon_locations::Post([
+                    'entity_id' => $id,
+                    'city' => $city,
+                    'street' => $street,
+                    'state' => $state,
+                ]))
+        ) {
+            throw new PublicAlert('Sorry, we failed to add that course.');
         }
 
+        if (false === carbon_locations::Post([])) {
+            throw new PublicAlert('Sorry, we failed to add that course.');
+        }
 
-        if (!Course::Post([
-            'course_name' => $course,
-            'course_handicap' => $handicap,
-            'course_holes' => $holes,
-            'course_par' => serialize($par),
-            'tee_boxes' => $tee_boxes,
-            'teeBox' => $teeBox,
-            'phone' => $phone,
-            'course_website' => $course_website,
-            'pga_pro' => $pga_pro,
-            'par_out' => $par_out,
-            'par_in' => $par_in,
-            'par_tot' => $par_tot,
-            'handicap_number' => $handicap_number
+        PublicAlert::success('YAYAY WE DID IT!');
+        startApplication("AddCourse/Color/$id/1");
+        return false;
+    }
 
+
+    public function AddCourseColor($courseId, $box_number, $color, $slope, $difficulty)
+    {
+
+        global $json;
+
+        if (!is_array($json['course'])) {
+            Course::Get($json['course'], $courseId, []);
+        }
+
+        if (!Course::Put($json['course'], null, [
+            'course_id' => $courseId,
+            'number' => $box_number,
+            'color' => $color,
+            'slope' => json_encode($slope),
+            'difficulty' => json_encode($difficulty)
         ])) {
             throw new PublicAlert('Sorry, we failed to add that course.');
-        };
+        }
 
-        PublicAlert::success('The course has been added!');
-
-        return true;
     }
+
+
+    public function AddCourseDistance()
+    {
+
+        PublicAlert::success('The course has been added and is public to the world!');
+
+    }
+
 
 }
 

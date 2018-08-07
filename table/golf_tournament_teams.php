@@ -40,16 +40,31 @@ class golf_tournament_teams extends Entities implements iRest
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
             if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
-                $pos = strrpos($argv['pagination']['limit'], "><");
-                if ($pos !== false) { // note: three equal signs
-                    substr_replace($argv['pagination']['limit'],',',$pos, 2);
-                }
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
             }
+
+            $order = '';
+            if (!empty($limit)) {
+
+                 $order = ' ORDER BY ';
+
+                if (isset($argv['pagination']['order']) && $argv['pagination']['order'] != null) {
+                    if (is_array($argv['pagination']['order'])) {
+                        foreach ($argv['pagination']['order'] as $item => $sort) {
+                            $order .= $item .' '. $sort;
+                        }
+                    } else {
+                        $order .= $argv['pagination']['order'];
+                    }
+                } else {
+                    $order .= self::PRIMARY[0] . ' DESC';
+                }
+            }
+            $limit = $order .' '. $limit;
         } else {
-            $limit = ' LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
         }
 
         foreach($get as $key => $column){

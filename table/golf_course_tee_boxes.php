@@ -6,20 +6,20 @@ use CarbonPHP\Database;
 use CarbonPHP\Entities;
 use CarbonPHP\Interfaces\iRest;
 
-class user_messages extends Entities implements iRest
+class golf_course_tee_boxes extends Entities implements iRest
 {
     const PRIMARY = [
     
     ];
 
     const COLUMNS = [
-    'message_id','to_user_id','message','message_read',
+    'color','par','difficulty','slope','id','course_id',
     ];
 
     const VALIDATION = [];
 
     const BINARY = [
-    'message_id','to_user_id',
+    'id','course_id',
     ];
 
     /**
@@ -112,7 +112,7 @@ class user_messages extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.user_messages';
+        $sql = 'SELECT ' .  $sql . ' FROM statscoach.golf_course_tee_boxes';
 
         $pdo = Database::database();
 
@@ -170,7 +170,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
+        $sql = 'INSERT INTO statscoach.golf_course_tee_boxes (color, par, difficulty, slope, id, course_id) VALUES ( :color, :par, :difficulty, :slope, UNHEX(:id), UNHEX(:course_id))';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -181,15 +181,19 @@ class user_messages extends Entities implements iRest
         $json['sql'][] = $sql;
 
             
-                $message_id = isset($argv['message_id']) ? $argv['message_id'] : null;
-                $stmt->bindParam(':message_id',$message_id, 2, 16);
+                $color = isset($argv['color']) ? $argv['color'] : null;
+                $stmt->bindParam(':color',$color, 2, 20);
+                    $stmt->bindValue(':par',$argv['par'], 2);
+                    $stmt->bindValue(':difficulty',isset($argv['difficulty']) ? $argv['difficulty'] : null, 2);
                     
-                $to_user_id = isset($argv['to_user_id']) ? $argv['to_user_id'] : null;
-                $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                    $stmt->bindValue(':message',$argv['message'], 2);
+                $slope = isset($argv['slope']) ? $argv['slope'] : null;
+                $stmt->bindParam(':slope',$slope, 2, 3);
                     
-                $message_read = isset($argv['message_read']) ? $argv['message_read'] : '0';
-                $stmt->bindParam(':message_read',$message_read, 0, 1);
+                $id = isset($argv['id']) ? $argv['id'] : null;
+                $stmt->bindParam(':id',$id, 2, 16);
+                    
+                $course_id = isset($argv['course_id']) ? $argv['course_id'] : null;
+                $stmt->bindParam(':course_id',$course_id, 2, 16);
         
 
         return $stmt->execute();
@@ -209,23 +213,29 @@ class user_messages extends Entities implements iRest
             }
         }
 
-        $sql = 'UPDATE statscoach.user_messages ';
+        $sql = 'UPDATE statscoach.golf_course_tee_boxes ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['message_id'])) {
-            $set .= 'message_id=UNHEX(:message_id),';
+        if (isset($argv['color'])) {
+            $set .= 'color=:color,';
         }
-        if (isset($argv['to_user_id'])) {
-            $set .= 'to_user_id=UNHEX(:to_user_id),';
+        if (isset($argv['par'])) {
+            $set .= 'par=:par,';
         }
-        if (isset($argv['message'])) {
-            $set .= 'message=:message,';
+        if (isset($argv['difficulty'])) {
+            $set .= 'difficulty=:difficulty,';
         }
-        if (isset($argv['message_read'])) {
-            $set .= 'message_read=:message_read,';
+        if (isset($argv['slope'])) {
+            $set .= 'slope=:slope,';
+        }
+        if (isset($argv['id'])) {
+            $set .= 'id=UNHEX(:id),';
+        }
+        if (isset($argv['course_id'])) {
+            $set .= 'course_id=UNHEX(:course_id),';
         }
 
         if (empty($set)){
@@ -248,20 +258,27 @@ class user_messages extends Entities implements iRest
         $json['sql'][] = $sql;
 
 
-        if (isset($argv['message_id'])) {
-            $message_id = 'UNHEX('.$argv['message_id'].')';
-            $stmt->bindParam(':message_id', $message_id, 2, 16);
+        if (isset($argv['color'])) {
+            $color = $argv['color'];
+            $stmt->bindParam(':color',$color, 2, 20);
         }
-        if (isset($argv['to_user_id'])) {
-            $to_user_id = 'UNHEX('.$argv['to_user_id'].')';
-            $stmt->bindParam(':to_user_id', $to_user_id, 2, 16);
+        if (isset($argv['par'])) {
+            $stmt->bindValue(':par',$argv['par'], 2);
         }
-        if (isset($argv['message'])) {
-            $stmt->bindValue(':message',$argv['message'], 2);
+        if (isset($argv['difficulty'])) {
+            $stmt->bindValue(':difficulty',$argv['difficulty'], 2);
         }
-        if (isset($argv['message_read'])) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
+        if (isset($argv['slope'])) {
+            $slope = $argv['slope'];
+            $stmt->bindParam(':slope',$slope, 2, 3);
+        }
+        if (isset($argv['id'])) {
+            $id = 'UNHEX('.$argv['id'].')';
+            $stmt->bindParam(':id', $id, 2, 16);
+        }
+        if (isset($argv['course_id'])) {
+            $course_id = 'UNHEX('.$argv['course_id'].')';
+            $stmt->bindParam(':course_id', $course_id, 2, 16);
         }
 
         if (!$stmt->execute()){
@@ -282,7 +299,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.user_messages ';
+        $sql = 'DELETE FROM statscoach.golf_course_tee_boxes ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
