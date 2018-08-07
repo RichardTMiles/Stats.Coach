@@ -1,0 +1,12 @@
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'USER');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'USER_FOLLOWERS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'USER_NOTIFICATIONS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'USER_MESSAGES');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'USER_TASKS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'ENTITY_COMMENTS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'ENTITY_PHOTOS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'TEAMS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'TEAM_MEMBERS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'GOLF_TOURNAMENTS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'GOLF_ROUNDS');
+INSERT INTO StatsCoach.carbon_tags (tag_description, tag_name) VALUES ('', 'GOLF_COURSE');
