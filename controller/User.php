@@ -11,6 +11,158 @@ use CarbonPHP\Session;
 
 class User extends Request
 {
+
+    // Facebook
+    const FACEBOOK_APP_ID = '1456106104433760';
+    const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
+
+    private function urlFacebook($request = null)
+    {
+        try {
+            $fb = new \Facebook\Facebook([
+                'app_id' => self::FACEBOOK_APP_ID,            // Replace {app-id} with your app id
+                'app_secret' => self::FACEBOOK_APP_SECRET,
+                'default_graph_version' => 'v2.12',
+                'http_client_handler' => 'stream',      // better compatibility
+            ]);
+
+
+            if (isset($_GET['state'])) {
+                $_SESSION['FBRLH_state'] = $_GET['state'];
+            }
+
+            $helper = $fb->getRedirectLoginHelper();
+
+
+            #if (isset($_SESSION['facebook_access_token'])) {
+            #    $accessToken = $_SESSION['facebook_access_token'];
+            #} else {
+            $accessToken = $helper->getAccessToken();
+            #}
+        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        if (null !== $accessToken) {
+            if (isset($_SESSION['facebook_access_token'])) {
+                $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
+            } else {
+                // getting short-lived access token
+                $_SESSION['facebook_access_token'] = (string)$accessToken;
+                // OAuth 2.0 client handler
+                $oAuth2Client = $fb->getOAuth2Client();
+                // Exchanges a short-lived access token for a long-lived one
+                $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
+                $_SESSION['facebook_access_token'] = (string)$longLivedAccessToken;
+                // setting default access token to be used in script
+                $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
+            }
+            // redirect the user back to the same page if it has "code" GET variable
+            #if (isset($_GET['code'])) {
+            ##   header('Location: ./');
+            #}
+            // getting basic info about user
+
+            try {
+                $profile_request = $fb->get('/me?fields=name,first_name,last_name,email,gender,cover,picture', $_SESSION['facebook_access_token']);
+                $profile = $profile_request->getGraphNode()->asArray();
+            } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                // redirecting user back to app login page
+                exit;
+            } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+            // Now you can redirect to another page and use the access token from $_SESSION['facebook_access_token']
+        } else {
+            try {
+                // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
+                return $helper->getLoginUrl(SITE . 'oAuth/Facebook/' . $request . DS, [
+                    'public_profile', 'user_friends', 'email',
+                    'user_birthday',
+                    'user_hometown',
+                    'user_location', 'user_photos', 'user_friends']);
+            } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+        }
+
+        Request::changeURI(SITE . 'oAuth/Facebook/?much=love');  // clear GET data.
+
+        return array(
+            'id' => $profile['id'],
+            'first_name' => $profile['first_name'] ?? '',
+            'last_name' => $profile['last_name'] ?? '',
+            'email' => $profile['email'] ?? '',
+            'gender' => $profile['gender'] ?? '',
+            'picture' => $profile['picture']['url'] ?? '',
+            'cover' => $profile['cover']['source'] ?? '',
+        );
+
+    }
+
+    /**
+     * @param null $request
+     * @return array|string
+     * @throws \Google_Exception
+     * @throws \CarbonPHP\Error\PublicAlert
+     */
+    private function urlGoogle($request = null)
+    {
+        //Call Google API
+        $client = new \Google_Client();
+        $client->setApplicationName('Stats.Coach');
+        $client->setAuthConfig(APP_ROOT . 'config/gAuth.json');
+
+        if ($request !== null) {
+            $request .= DS;
+            $client->setRedirectUri('https://stats.coach/oAuth/Google/' . $request);
+        }
+
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $client->addScope('profile');
+        $client->addScope('email');
+
+        $google = new \Google_Service_Oauth2($client);
+
+
+        if (!isset($_GET['code'])) {
+            return $client->createAuthUrl();
+        }
+
+        $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+
+        if ($accessToken) {
+
+            $client->setAccessToken($accessToken);
+
+            //Get user profile data from google
+            $gpUserProfile = $google->userinfo->get();
+
+            //Insert or update user data to the database
+            return array(
+                'id' => $gpUserProfile['id'],
+                'first_name' => $gpUserProfile['given_name'],
+                'last_name' => $gpUserProfile['family_name'],
+                'email' => $gpUserProfile['email'],
+                'gender' => $gpUserProfile['gender'],
+                'locale' => $gpUserProfile['locale'],
+                'picture' => $gpUserProfile['picture'],
+                'link' => $gpUserProfile['link']
+            );
+        }
+        throw new PublicAlert('failed to get access token');
+    }
+
+
+
     public static function logout(): bool
     {
         Session::clear();
@@ -39,9 +191,9 @@ class User extends Request
             $this->cookie('username', 'password', 'RememberMe')->clearCookies();
         }
 
-        $json['google_url'] = urlGoogle('SignIn');
+        $json['google_url'] = $this->urlGoogle('SignIn');
 
-        $json['facebook_url'] = urlFacebook('SignIn');
+        $json['facebook_url'] = $this->urlFacebook('SignIn');
 
         if (empty($_POST)) {
             return null;                    // returning null will show the view but not execute the model
@@ -79,9 +231,9 @@ class User extends Request
 
         if (!\is_array($UserInfo)) {
             if ($service === 'google'){
-                $UserInfo = urlGoogle();
+                $UserInfo = $this->urlGoogle();
             } elseif ($service === 'facebook') {
-                $UserInfo = urlFacebook();
+                $UserInfo = $this->urlFacebook();
             }
             if (!\is_array($UserInfo)) {
 

@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/view/material-pro/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/view/material-pro/minisidebar/css/style.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="/view/material-pro/minisidebar/css/colors/default-dark.css" id="theme" rel="stylesheet">
+
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="/view/material-pro/assets/images/favicon.png">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -86,32 +94,7 @@
 
 
 <noscript id="deferred-styles">
-    <!-- Bootstrap Core CSS -->
 
-    <div class="social-auth-links text-center">
-        <p>- OR -</p>
-        <a class="btn btn-block btn-social btn-facebook btn-flat" href='{{facebook_url}}'>
-            <i class="fa fa-facebook"></i> Sign in using Facebook</a>
-
-        <a href="{{google_url}}" class="btn btn-block btn-social btn-google btn-flat">
-            <i class="fa fa-google-plus"></i> Sign in using Google+</a>
-    </div><!-- /.social-auth-links -->
-
-
-    <div class="social-auth-links text-center">
-        <p>- OR -</p>
-        <a class="btn btn-block btn-social btn-facebook btn-flat" href='{{facebook_url}}'>
-            <i class="fa fa-facebook"></i> Sign in using Facebook</a>
-
-        <a href="{{google_url}}" class="btn btn-block btn-social btn-google btn-flat">
-            <i class="fa fa-google-plus"></i> Sign in using Google+</a>
-    </div><!-- /.social-auth-links -->
-
-    <link href="/view/material-pro/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="/view/material-pro/minisidebar/css/style.css" rel="stylesheet">
-    <!-- You can change the theme colors from here -->
-    <link href="/view/material-pro/minisidebar/css/colors/default-dark.css" id="theme" rel="stylesheet">
 
 </noscript>
 
@@ -142,13 +125,11 @@
 <script src="/node_modules/jquery-form/src/jquery.form.js"></script>
 
 <script>
-    const TEMPLATE = "/{{TEMPLATE}}", APP_VIEW = "/{{APP_VIEW}}", COMPOSER = "/{{COMPOSER}}";
-
     const carbon = new CarbonPHP();
 
     carbon.invoke('#wrapper');
 
-    // carbon.start('#pjax-content'); // , 'ws://rootprerogative.com:8888/', false
+    //carbon.start('#pjax-content'); // , 'ws://rootprerogative.com:8888/', false
 
     carbon.event("Carbon");
 

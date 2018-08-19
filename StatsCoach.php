@@ -17,6 +17,10 @@ use Table\golf_stats;
 
 class StatsCoach extends Application
 {
+    // Facebook
+    const FACEBOOK_APP_ID = '1456106104433760';
+    const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
+
     /**
      * Bootstrap constructor. Places basic variables
      * in our json response that will be needed by many pages.
@@ -39,7 +43,7 @@ class StatsCoach extends Application
         $json['TEMPLATE'] = TEMPLATE;
         $json['COMPOSER'] = COMPOSER;
         $json['X_PJAX_Version'] = &$_SESSION['X_PJAX_Version'];
-        $json['FACEBOOK_APP_ID'] = FACEBOOK_APP_ID;
+        $json['FACEBOOK_APP_ID'] = self::FACEBOOK_APP_ID;
 
         parent::__construct($structure);
     }
