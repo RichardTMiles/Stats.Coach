@@ -219,22 +219,22 @@ class golf_course_tee_boxes extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['color'])) {
+        if (!empty($argv['color'])) {
             $set .= 'color=:color,';
         }
-        if (isset($argv['par'])) {
+        if (!empty($argv['par'])) {
             $set .= 'par=:par,';
         }
-        if (isset($argv['difficulty'])) {
+        if (!empty($argv['difficulty'])) {
             $set .= 'difficulty=:difficulty,';
         }
-        if (isset($argv['slope'])) {
+        if (!empty($argv['slope'])) {
             $set .= 'slope=:slope,';
         }
-        if (isset($argv['id'])) {
+        if (!empty($argv['id'])) {
             $set .= 'id=UNHEX(:id),';
         }
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
 
@@ -252,33 +252,32 @@ class golf_course_tee_boxes extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['color'])) {
+        if (!empty($argv['color'])) {
             $color = $argv['color'];
             $stmt->bindParam(':color',$color, 2, 20);
         }
-        if (isset($argv['par'])) {
+        if (!empty($argv['par'])) {
             $stmt->bindValue(':par',$argv['par'], 2);
         }
-        if (isset($argv['difficulty'])) {
+        if (!empty($argv['difficulty'])) {
             $stmt->bindValue(':difficulty',$argv['difficulty'], 2);
         }
-        if (isset($argv['slope'])) {
+        if (!empty($argv['slope'])) {
             $slope = $argv['slope'];
             $stmt->bindParam(':slope',$slope, 2, 3);
         }
-        if (isset($argv['id'])) {
-            $id = 'UNHEX('.$argv['id'].')';
-            $stmt->bindParam(':id', $id, 2, 16);
+        if (!empty($argv['id'])) {
+            $id = $argv['id'];
+            $stmt->bindParam(':id',$id, 2, 16);
         }
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
 
         if (!$stmt->execute()){

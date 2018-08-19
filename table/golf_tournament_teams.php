@@ -217,16 +217,16 @@ class golf_tournament_teams extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['team_id'])) {
+        if (!empty($argv['team_id'])) {
             $set .= 'team_id=UNHEX(:team_id),';
         }
-        if (isset($argv['tournament_id'])) {
+        if (!empty($argv['tournament_id'])) {
             $set .= 'tournament_id=UNHEX(:tournament_id),';
         }
-        if (isset($argv['tournament_paid'])) {
+        if (!empty($argv['tournament_paid'])) {
             $set .= 'tournament_paid=:tournament_paid,';
         }
-        if (isset($argv['tournament_accepted'])) {
+        if (!empty($argv['tournament_accepted'])) {
             $set .= 'tournament_accepted=:tournament_accepted,';
         }
 
@@ -244,25 +244,24 @@ class golf_tournament_teams extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['team_id'])) {
-            $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, 2, 16);
+        if (!empty($argv['team_id'])) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (isset($argv['tournament_id'])) {
-            $tournament_id = 'UNHEX('.$argv['tournament_id'].')';
-            $stmt->bindParam(':tournament_id', $tournament_id, 2, 16);
+        if (!empty($argv['tournament_id'])) {
+            $tournament_id = $argv['tournament_id'];
+            $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
         }
-        if (isset($argv['tournament_paid'])) {
+        if (!empty($argv['tournament_paid'])) {
             $tournament_paid = $argv['tournament_paid'];
             $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
         }
-        if (isset($argv['tournament_accepted'])) {
+        if (!empty($argv['tournament_accepted'])) {
             $tournament_accepted = $argv['tournament_accepted'];
             $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
         }

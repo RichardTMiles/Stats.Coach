@@ -232,37 +232,37 @@ class golf_tee_box extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
-        if (isset($argv['tee_box'])) {
+        if (!empty($argv['tee_box'])) {
             $set .= 'tee_box=:tee_box,';
         }
-        if (isset($argv['distance'])) {
+        if (!empty($argv['distance'])) {
             $set .= 'distance=:distance,';
         }
-        if (isset($argv['distance_color'])) {
+        if (!empty($argv['distance_color'])) {
             $set .= 'distance_color=:distance_color,';
         }
-        if (isset($argv['distance_general_slope'])) {
+        if (!empty($argv['distance_general_slope'])) {
             $set .= 'distance_general_slope=:distance_general_slope,';
         }
-        if (isset($argv['distance_general_difficulty'])) {
+        if (!empty($argv['distance_general_difficulty'])) {
             $set .= 'distance_general_difficulty=:distance_general_difficulty,';
         }
-        if (isset($argv['distance_womens_slope'])) {
+        if (!empty($argv['distance_womens_slope'])) {
             $set .= 'distance_womens_slope=:distance_womens_slope,';
         }
-        if (isset($argv['distance_womens_difficulty'])) {
+        if (!empty($argv['distance_womens_difficulty'])) {
             $set .= 'distance_womens_difficulty=:distance_womens_difficulty,';
         }
-        if (isset($argv['distance_out'])) {
+        if (!empty($argv['distance_out'])) {
             $set .= 'distance_out=:distance_out,';
         }
-        if (isset($argv['distance_in'])) {
+        if (!empty($argv['distance_in'])) {
             $set .= 'distance_in=:distance_in,';
         }
-        if (isset($argv['distance_tot'])) {
+        if (!empty($argv['distance_tot'])) {
             $set .= 'distance_tot=:distance_tot,';
         }
 
@@ -280,50 +280,49 @@ class golf_tee_box extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (isset($argv['tee_box'])) {
+        if (!empty($argv['tee_box'])) {
             $tee_box = $argv['tee_box'];
             $stmt->bindParam(':tee_box',$tee_box, 2, 1);
         }
-        if (isset($argv['distance'])) {
+        if (!empty($argv['distance'])) {
             $stmt->bindValue(':distance',$argv['distance'], 2);
         }
-        if (isset($argv['distance_color'])) {
+        if (!empty($argv['distance_color'])) {
             $distance_color = $argv['distance_color'];
             $stmt->bindParam(':distance_color',$distance_color, 2, 10);
         }
-        if (isset($argv['distance_general_slope'])) {
+        if (!empty($argv['distance_general_slope'])) {
             $distance_general_slope = $argv['distance_general_slope'];
             $stmt->bindParam(':distance_general_slope',$distance_general_slope, 2, 4);
         }
-        if (isset($argv['distance_general_difficulty'])) {
+        if (!empty($argv['distance_general_difficulty'])) {
             $stmt->bindValue(':distance_general_difficulty',$argv['distance_general_difficulty'], 2);
         }
-        if (isset($argv['distance_womens_slope'])) {
+        if (!empty($argv['distance_womens_slope'])) {
             $distance_womens_slope = $argv['distance_womens_slope'];
             $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, 2, 4);
         }
-        if (isset($argv['distance_womens_difficulty'])) {
+        if (!empty($argv['distance_womens_difficulty'])) {
             $stmt->bindValue(':distance_womens_difficulty',$argv['distance_womens_difficulty'], 2);
         }
-        if (isset($argv['distance_out'])) {
+        if (!empty($argv['distance_out'])) {
             $distance_out = $argv['distance_out'];
             $stmt->bindParam(':distance_out',$distance_out, 2, 7);
         }
-        if (isset($argv['distance_in'])) {
+        if (!empty($argv['distance_in'])) {
             $distance_in = $argv['distance_in'];
             $stmt->bindParam(':distance_in',$distance_in, 2, 7);
         }
-        if (isset($argv['distance_tot'])) {
+        if (!empty($argv['distance_tot'])) {
             $distance_tot = $argv['distance_tot'];
             $stmt->bindParam(':distance_tot',$distance_tot, 2, 10);
         }

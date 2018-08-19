@@ -163,7 +163,7 @@ class carbon_photos extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -223,19 +223,19 @@ class carbon_photos extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['parent_id'])) {
+        if (!empty($argv['parent_id'])) {
             $set .= 'parent_id=UNHEX(:parent_id),';
         }
-        if (isset($argv['photo_id'])) {
+        if (!empty($argv['photo_id'])) {
             $set .= 'photo_id=UNHEX(:photo_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['photo_path'])) {
+        if (!empty($argv['photo_path'])) {
             $set .= 'photo_path=:photo_path,';
         }
-        if (isset($argv['photo_description'])) {
+        if (!empty($argv['photo_description'])) {
             $set .= 'photo_description=:photo_description,';
         }
 
@@ -255,29 +255,28 @@ class carbon_photos extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['parent_id'])) {
-            $parent_id = 'UNHEX('.$argv['parent_id'].')';
-            $stmt->bindParam(':parent_id', $parent_id, 2, 16);
+        if (!empty($argv['parent_id'])) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
         }
-        if (isset($argv['photo_id'])) {
-            $photo_id = 'UNHEX('.$argv['photo_id'].')';
-            $stmt->bindParam(':photo_id', $photo_id, 2, 16);
+        if (!empty($argv['photo_id'])) {
+            $photo_id = $argv['photo_id'];
+            $stmt->bindParam(':photo_id',$photo_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['photo_path'])) {
+        if (!empty($argv['photo_path'])) {
             $photo_path = $argv['photo_path'];
             $stmt->bindParam(':photo_path',$photo_path, 2, 225);
         }
-        if (isset($argv['photo_description'])) {
+        if (!empty($argv['photo_description'])) {
             $stmt->bindValue(':photo_description',$argv['photo_description'], 2);
         }
 

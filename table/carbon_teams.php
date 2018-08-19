@@ -163,7 +163,7 @@ class carbon_teams extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -246,40 +246,40 @@ class carbon_teams extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['team_id'])) {
+        if (!empty($argv['team_id'])) {
             $set .= 'team_id=UNHEX(:team_id),';
         }
-        if (isset($argv['team_coach'])) {
+        if (!empty($argv['team_coach'])) {
             $set .= 'team_coach=UNHEX(:team_coach),';
         }
-        if (isset($argv['parent_team'])) {
+        if (!empty($argv['parent_team'])) {
             $set .= 'parent_team=UNHEX(:parent_team),';
         }
-        if (isset($argv['team_code'])) {
+        if (!empty($argv['team_code'])) {
             $set .= 'team_code=:team_code,';
         }
-        if (isset($argv['team_name'])) {
+        if (!empty($argv['team_name'])) {
             $set .= 'team_name=:team_name,';
         }
-        if (isset($argv['team_rank'])) {
+        if (!empty($argv['team_rank'])) {
             $set .= 'team_rank=:team_rank,';
         }
-        if (isset($argv['team_sport'])) {
+        if (!empty($argv['team_sport'])) {
             $set .= 'team_sport=:team_sport,';
         }
-        if (isset($argv['team_division'])) {
+        if (!empty($argv['team_division'])) {
             $set .= 'team_division=:team_division,';
         }
-        if (isset($argv['team_school'])) {
+        if (!empty($argv['team_school'])) {
             $set .= 'team_school=:team_school,';
         }
-        if (isset($argv['team_district'])) {
+        if (!empty($argv['team_district'])) {
             $set .= 'team_district=:team_district,';
         }
-        if (isset($argv['team_membership'])) {
+        if (!empty($argv['team_membership'])) {
             $set .= 'team_membership=:team_membership,';
         }
-        if (isset($argv['team_photo'])) {
+        if (!empty($argv['team_photo'])) {
             $set .= 'team_photo=UNHEX(:team_photo),';
         }
 
@@ -299,59 +299,58 @@ class carbon_teams extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['team_id'])) {
-            $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, 2, 16);
+        if (!empty($argv['team_id'])) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (isset($argv['team_coach'])) {
-            $team_coach = 'UNHEX('.$argv['team_coach'].')';
-            $stmt->bindParam(':team_coach', $team_coach, 2, 16);
+        if (!empty($argv['team_coach'])) {
+            $team_coach = $argv['team_coach'];
+            $stmt->bindParam(':team_coach',$team_coach, 2, 16);
         }
-        if (isset($argv['parent_team'])) {
-            $parent_team = 'UNHEX('.$argv['parent_team'].')';
-            $stmt->bindParam(':parent_team', $parent_team, 2, 16);
+        if (!empty($argv['parent_team'])) {
+            $parent_team = $argv['parent_team'];
+            $stmt->bindParam(':parent_team',$parent_team, 2, 16);
         }
-        if (isset($argv['team_code'])) {
+        if (!empty($argv['team_code'])) {
             $team_code = $argv['team_code'];
             $stmt->bindParam(':team_code',$team_code, 2, 225);
         }
-        if (isset($argv['team_name'])) {
+        if (!empty($argv['team_name'])) {
             $team_name = $argv['team_name'];
             $stmt->bindParam(':team_name',$team_name, 2, 225);
         }
-        if (isset($argv['team_rank'])) {
+        if (!empty($argv['team_rank'])) {
             $team_rank = $argv['team_rank'];
             $stmt->bindParam(':team_rank',$team_rank, 2, 11);
         }
-        if (isset($argv['team_sport'])) {
+        if (!empty($argv['team_sport'])) {
             $team_sport = $argv['team_sport'];
             $stmt->bindParam(':team_sport',$team_sport, 2, 225);
         }
-        if (isset($argv['team_division'])) {
+        if (!empty($argv['team_division'])) {
             $team_division = $argv['team_division'];
             $stmt->bindParam(':team_division',$team_division, 2, 225);
         }
-        if (isset($argv['team_school'])) {
+        if (!empty($argv['team_school'])) {
             $team_school = $argv['team_school'];
             $stmt->bindParam(':team_school',$team_school, 2, 225);
         }
-        if (isset($argv['team_district'])) {
+        if (!empty($argv['team_district'])) {
             $team_district = $argv['team_district'];
             $stmt->bindParam(':team_district',$team_district, 2, 225);
         }
-        if (isset($argv['team_membership'])) {
+        if (!empty($argv['team_membership'])) {
             $team_membership = $argv['team_membership'];
             $stmt->bindParam(':team_membership',$team_membership, 2, 225);
         }
-        if (isset($argv['team_photo'])) {
-            $team_photo = 'UNHEX('.$argv['team_photo'].')';
-            $stmt->bindParam(':team_photo', $team_photo, 2, 16);
+        if (!empty($argv['team_photo'])) {
+            $team_photo = $argv['team_photo'];
+            $stmt->bindParam(':team_photo',$team_photo, 2, 16);
         }
 
         if (!$stmt->execute()){

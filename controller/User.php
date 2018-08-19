@@ -47,9 +47,9 @@ class User extends Request
             return null;                    // returning null will show the view but not execute the model
         }  // If forum already submitted
 
-        $username = $this->post('username')->alnum();
+        $username = $this->post('user_username')->alnum();
 
-        $password = $this->post('password')->value();
+        $password = $this->post('user_password')->value();
 
         if (!$username || !$password) {
             throw new PublicAlert('Sorry, but we need your username and password.');
@@ -180,7 +180,7 @@ class User extends Request
         global $username, $password, $firstName, $lastName, $gender, $userType, $teamCode, $teamName, $schoolName, $email;
 
         [$username, $firstName, $lastName, $gender, $userType, $teamCode]
-            = $this->post('username', 'firstname', 'lastname', 'gender', 'UserType', 'teamCode')->alnum();
+            = $this->post('user_username', 'user_firstname', 'lastname', 'gender', 'UserType', 'teamCode')->alnum();
 
         [$teamName, $schoolName]
             = $this->post('teamName', 'schoolName')->text();

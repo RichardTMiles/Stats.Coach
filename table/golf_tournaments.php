@@ -227,28 +227,28 @@ class golf_tournaments extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['tournament_id'])) {
+        if (!empty($argv['tournament_id'])) {
             $set .= 'tournament_id=UNHEX(:tournament_id),';
         }
-        if (isset($argv['tournament_name'])) {
+        if (!empty($argv['tournament_name'])) {
             $set .= 'tournament_name=UNHEX(:tournament_name),';
         }
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
-        if (isset($argv['host_name'])) {
+        if (!empty($argv['host_name'])) {
             $set .= 'host_name=:host_name,';
         }
-        if (isset($argv['tournament_style'])) {
+        if (!empty($argv['tournament_style'])) {
             $set .= 'tournament_style=:tournament_style,';
         }
-        if (isset($argv['tournament_team_price'])) {
+        if (!empty($argv['tournament_team_price'])) {
             $set .= 'tournament_team_price=:tournament_team_price,';
         }
-        if (isset($argv['tournament_paid'])) {
+        if (!empty($argv['tournament_paid'])) {
             $set .= 'tournament_paid=:tournament_paid,';
         }
-        if (isset($argv['tournament_date'])) {
+        if (!empty($argv['tournament_date'])) {
             $set .= 'tournament_date=:tournament_date,';
         }
 
@@ -266,41 +266,40 @@ class golf_tournaments extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['tournament_id'])) {
-            $tournament_id = 'UNHEX('.$argv['tournament_id'].')';
-            $stmt->bindParam(':tournament_id', $tournament_id, 2, 16);
+        if (!empty($argv['tournament_id'])) {
+            $tournament_id = $argv['tournament_id'];
+            $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
         }
-        if (isset($argv['tournament_name'])) {
-            $tournament_name = 'UNHEX('.$argv['tournament_name'].')';
-            $stmt->bindParam(':tournament_name', $tournament_name, 2, 16);
+        if (!empty($argv['tournament_name'])) {
+            $tournament_name = $argv['tournament_name'];
+            $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
         }
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (isset($argv['host_name'])) {
+        if (!empty($argv['host_name'])) {
             $host_name = $argv['host_name'];
             $stmt->bindParam(':host_name',$host_name, 2, 225);
         }
-        if (isset($argv['tournament_style'])) {
+        if (!empty($argv['tournament_style'])) {
             $tournament_style = $argv['tournament_style'];
             $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
         }
-        if (isset($argv['tournament_team_price'])) {
+        if (!empty($argv['tournament_team_price'])) {
             $tournament_team_price = $argv['tournament_team_price'];
             $stmt->bindParam(':tournament_team_price',$tournament_team_price, 2, 11);
         }
-        if (isset($argv['tournament_paid'])) {
+        if (!empty($argv['tournament_paid'])) {
             $tournament_paid = $argv['tournament_paid'];
             $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
         }
-        if (isset($argv['tournament_date'])) {
+        if (!empty($argv['tournament_date'])) {
             $stmt->bindValue(':tournament_date',$argv['tournament_date'], 2);
         }
 

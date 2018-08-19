@@ -86,6 +86,7 @@ class Golf extends Request  // Validation
         return [$state, $course_id, $boxColor];
     }
 
+
     /**
      * @param $state
      * @return mixed
@@ -97,7 +98,9 @@ class Golf extends Request  // Validation
 
         $json['course'] = [];
 
-        golf_course::Get($json['course'], null, [
+        $course_id = $this->post('course_id')->hex();
+
+        golf_course::Get($json['course'], $course_id ?: null, [
             'where'=>[
                 'created_by'=>$_SESSION['id'],
                 'course_input_completed'=> 0
@@ -110,13 +113,10 @@ class Golf extends Request  // Validation
         if (!empty($json['course'])) {
             $json['course']['location'] = [];
             carbon_locations::Get($json['course']['location'], $json['course']['course_id'], []);
-            var_dump($json['course']);
-            return null;
         }
 
-
         if ($state) {
-            $state = ucfirst(parent::set($state)->alnum());
+            $state = ucfirst(strtolower(parent::set($state)->alnum()));
         }  // uri
 
         if (empty($_POST)) {
@@ -154,13 +154,30 @@ class Golf extends Request  // Validation
                 $holes = 18;
         }
 
-        return [$phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes,$handicap_number, $holes];
+        return [$course_id, $phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes,$handicap_number, $holes];
 
     }
 
 
     public function AddCourseColor($courseId, $box_number)
     {
+        global $json;
+
+        if (!is_array($json['course'] ?? false)) {
+            $json['course'] = [];
+            golf_course::Get($json['course'], $courseId, []);
+        }
+
+        var_dump($json['course']);
+
+        if (empty($json['course'])) {
+            //throw new PublicAlert('Danger!');
+            PublicAlert::danger('No course selected.');
+            startApplication(true);
+            return false;
+        }
+
+
         if (empty($_POST)) {
             return null;
         }
@@ -215,18 +232,6 @@ class Golf extends Request  // Validation
         }
 
         $handicap = [];
-
-        switch ($handicap_number) {
-            case 2:     // No break
-                $handicap[2] = $this->post('hc_2_1', 'hc_2_2', 'hc_2_3', 'hc_2_4', 'hc_2_5', 'hc_2_6', 'hc_2_7', 'hc_2_8', 'hc_2_9', 'hc_2_10', 'hc_2_11', 'hc_2_12', 'hc_2_13', 'hc_2_14', 'hc_2_15', 'hc_2_16', 'hc_2_17', 'hc_2_18')->int();
-                $validate($handicap[2]);
-            case 1:
-                $handicap[1] = $this->post('hc_1_1', 'hc_1_2', 'hc_1_3', 'hc_1_4', 'hc_1_5', 'hc_1_6', 'hc_1_7', 'hc_1_8', 'hc_1_9', 'hc_1_10', 'hc_1_11', 'hc_1_12', 'hc_1_13', 'hc_1_14', 'hc_1_15', 'hc_1_16', 'hc_1_17', 'hc_1_18')->int();
-                $validate($handicap[1]);
-                break;
-            default:
-                $handicap = null;
-        }
 
         $par_out = 0;
         $par_in = 0;

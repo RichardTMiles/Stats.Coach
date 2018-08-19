@@ -240,49 +240,49 @@ class golf_rounds extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['round_id'])) {
+        if (!empty($argv['round_id'])) {
             $set .= 'round_id=UNHEX(:round_id),';
         }
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
-        if (isset($argv['round_public'])) {
+        if (!empty($argv['round_public'])) {
             $set .= 'round_public=:round_public,';
         }
-        if (isset($argv['score'])) {
+        if (!empty($argv['score'])) {
             $set .= 'score=:score,';
         }
-        if (isset($argv['score_gnr'])) {
+        if (!empty($argv['score_gnr'])) {
             $set .= 'score_gnr=:score_gnr,';
         }
-        if (isset($argv['score_ffs'])) {
+        if (!empty($argv['score_ffs'])) {
             $set .= 'score_ffs=:score_ffs,';
         }
-        if (isset($argv['score_putts'])) {
+        if (!empty($argv['score_putts'])) {
             $set .= 'score_putts=:score_putts,';
         }
-        if (isset($argv['score_out'])) {
+        if (!empty($argv['score_out'])) {
             $set .= 'score_out=:score_out,';
         }
-        if (isset($argv['score_in'])) {
+        if (!empty($argv['score_in'])) {
             $set .= 'score_in=:score_in,';
         }
-        if (isset($argv['score_total'])) {
+        if (!empty($argv['score_total'])) {
             $set .= 'score_total=:score_total,';
         }
-        if (isset($argv['score_total_gnr'])) {
+        if (!empty($argv['score_total_gnr'])) {
             $set .= 'score_total_gnr=:score_total_gnr,';
         }
-        if (isset($argv['score_total_ffs'])) {
+        if (!empty($argv['score_total_ffs'])) {
             $set .= 'score_total_ffs=:score_total_ffs,';
         }
-        if (isset($argv['score_total_putts'])) {
+        if (!empty($argv['score_total_putts'])) {
             $set .= 'score_total_putts=:score_total_putts,';
         }
-        if (isset($argv['score_date'])) {
+        if (!empty($argv['score_date'])) {
             $set .= 'score_date=:score_date,';
         }
 
@@ -300,65 +300,64 @@ class golf_rounds extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['round_id'])) {
-            $round_id = 'UNHEX('.$argv['round_id'].')';
-            $stmt->bindParam(':round_id', $round_id, 2, 16);
+        if (!empty($argv['round_id'])) {
+            $round_id = $argv['round_id'];
+            $stmt->bindParam(':round_id',$round_id, 2, 16);
         }
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (isset($argv['round_public'])) {
+        if (!empty($argv['round_public'])) {
             $round_public = $argv['round_public'];
             $stmt->bindParam(':round_public',$round_public, 2, 1);
         }
-        if (isset($argv['score'])) {
+        if (!empty($argv['score'])) {
             $stmt->bindValue(':score',$argv['score'], 2);
         }
-        if (isset($argv['score_gnr'])) {
+        if (!empty($argv['score_gnr'])) {
             $stmt->bindValue(':score_gnr',$argv['score_gnr'], 2);
         }
-        if (isset($argv['score_ffs'])) {
+        if (!empty($argv['score_ffs'])) {
             $stmt->bindValue(':score_ffs',$argv['score_ffs'], 2);
         }
-        if (isset($argv['score_putts'])) {
+        if (!empty($argv['score_putts'])) {
             $stmt->bindValue(':score_putts',$argv['score_putts'], 2);
         }
-        if (isset($argv['score_out'])) {
+        if (!empty($argv['score_out'])) {
             $score_out = $argv['score_out'];
             $stmt->bindParam(':score_out',$score_out, 2, 2);
         }
-        if (isset($argv['score_in'])) {
+        if (!empty($argv['score_in'])) {
             $score_in = $argv['score_in'];
             $stmt->bindParam(':score_in',$score_in, 2, 3);
         }
-        if (isset($argv['score_total'])) {
+        if (!empty($argv['score_total'])) {
             $score_total = $argv['score_total'];
             $stmt->bindParam(':score_total',$score_total, 2, 3);
         }
-        if (isset($argv['score_total_gnr'])) {
+        if (!empty($argv['score_total_gnr'])) {
             $score_total_gnr = $argv['score_total_gnr'];
             $stmt->bindParam(':score_total_gnr',$score_total_gnr, 2, 11);
         }
-        if (isset($argv['score_total_ffs'])) {
+        if (!empty($argv['score_total_ffs'])) {
             $score_total_ffs = $argv['score_total_ffs'];
             $stmt->bindParam(':score_total_ffs',$score_total_ffs, 2, 3);
         }
-        if (isset($argv['score_total_putts'])) {
+        if (!empty($argv['score_total_putts'])) {
             $score_total_putts = $argv['score_total_putts'];
             $stmt->bindParam(':score_total_putts',$score_total_putts, 2, 11);
         }
-        if (isset($argv['score_date'])) {
+        if (!empty($argv['score_date'])) {
             $stmt->bindValue(':score_date',$argv['score_date'], 2);
         }
 

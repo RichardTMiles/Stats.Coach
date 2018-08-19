@@ -38,8 +38,8 @@ class User extends GlobalMap
         }
         if ($_SESSION['id'] && $id !== null) {
             Users::get($this->user[$id], $id, []);
-            Followers::get($this->user[$id], $id, []);
-            Messages::get($this->user[$id], $id, []);
+            //Followers::get($this->user[$id], $id, []);
+            //Messages::get($this->user[$id], $id, []);
         }
     }
 

@@ -266,38 +266,63 @@ class Golf extends GlobalMap implements iSport
     }
 
 
-    public function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
+    public function AddCourseBasic($course_id, $phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
     {
-        if (false === (($id = Course::Post([
-                    'course_name' => $name,
-                    'created_by' => $_SESSION['id'],
-                    'course_input_completed' => 0,
-                    'tee_boxes' => $tee_boxes,
-                    'handicap_count' => $handicap_number,
-                    'pga' => $pga_pro,
-                    'site' => $course_website,
-                    'course_holes' => $holes,
-                    'course_phone' => $phone,
-                    'course_type' => $style,
-                    'course_access' => $access,
-                    'course_par' => '',
-                    'course_handicap' => ''])) &&
-                carbon_locations::Post([
-                    'entity_id' => $id,
-                    'city' => $city,
-                    'street' => $street,
-                    'state' => $state,
-                ]))
-        ) {
-            throw new PublicAlert('Sorry, we failed to add that course.');
-        }
+        global $json;
 
-        if (false === carbon_locations::Post([])) {
-            throw new PublicAlert('Sorry, we failed to add that course.');
+        $json['course'] = $json['course'] ?? [];
+
+        if ($course_id) {
+            if (false === ((Course::Put($json['course'],$course_id, [
+                        'course_name' => $name,
+                        'created_by' => $_SESSION['id'],
+                        'course_input_completed' => 0,
+                        'tee_boxes' => $tee_boxes,
+                        'handicap_count' => $handicap_number,
+                        'pga' => $pga_pro,
+                        'site' => $course_website,
+                        'course_holes' => $holes,
+                        'course_phone' => $phone,
+                        'course_type' => $style,
+                        'course_access' => $access,
+                        'course_par' => '',
+                        'course_handicap' => ''])) &&
+                    carbon_locations::Put($json['course'], $course_id, [
+                        'city' => $city,
+                        'street' => $street,
+                        'state' => $state,
+                    ]))
+            ) {
+                throw new PublicAlert('Sorry, we failed to update the course.');
+            }
+        } else {
+            if (false === (($course_id = Course::Post([
+                        'course_name' => $name,
+                        'created_by' => $_SESSION['id'],
+                        'course_input_completed' => 0,
+                        'tee_boxes' => $tee_boxes,
+                        'handicap_count' => $handicap_number,
+                        'pga' => $pga_pro,
+                        'site' => $course_website,
+                        'course_holes' => $holes,
+                        'course_phone' => $phone,
+                        'course_type' => $style,
+                        'course_access' => $access,
+                        'course_par' => '',
+                        'course_handicap' => ''])) &&
+                    carbon_locations::Post([
+                        'entity_id' => $course_id,
+                        'city' => $city,
+                        'street' => $street,
+                        'state' => $state,
+                    ]))
+            ) {
+                throw new PublicAlert('Sorry, we failed to add that course.');
+            }
         }
 
         PublicAlert::success('YAYAY WE DID IT!');
-        startApplication("AddCourse/Color/$id/1");
+        startApplication("AddCourse/Color/$course_id/1");
         return false;
     }
 
@@ -310,6 +335,9 @@ class Golf extends GlobalMap implements iSport
         if (!is_array($json['course'])) {
             Course::Get($json['course'], $courseId, []);
         }
+
+        var_dump($json['course']);
+
 
         if (!Course::Put($json['course'], null, [
             'course_id' => $courseId,

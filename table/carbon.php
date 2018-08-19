@@ -163,7 +163,7 @@ class carbon extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -216,10 +216,10 @@ class carbon extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['entity_pk'])) {
+        if (!empty($argv['entity_pk'])) {
             $set .= 'entity_pk=UNHEX(:entity_pk),';
         }
-        if (isset($argv['entity_fk'])) {
+        if (!empty($argv['entity_fk'])) {
             $set .= 'entity_fk=UNHEX(:entity_fk),';
         }
 
@@ -239,19 +239,18 @@ class carbon extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['entity_pk'])) {
-            $entity_pk = 'UNHEX('.$argv['entity_pk'].')';
-            $stmt->bindParam(':entity_pk', $entity_pk, 2, 16);
+        if (!empty($argv['entity_pk'])) {
+            $entity_pk = $argv['entity_pk'];
+            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-        if (isset($argv['entity_fk'])) {
-            $entity_fk = 'UNHEX('.$argv['entity_fk'].')';
-            $stmt->bindParam(':entity_fk', $entity_fk, 2, 16);
+        if (!empty($argv['entity_fk'])) {
+            $entity_fk = $argv['entity_fk'];
+            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
 
         if (!$stmt->execute()){

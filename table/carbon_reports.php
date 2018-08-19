@@ -213,16 +213,16 @@ class carbon_reports extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['log_level'])) {
+        if (!empty($argv['log_level'])) {
             $set .= 'log_level=:log_level,';
         }
-        if (isset($argv['report'])) {
+        if (!empty($argv['report'])) {
             $set .= 'report=:report,';
         }
-        if (isset($argv['date'])) {
+        if (!empty($argv['date'])) {
             $set .= 'date=:date,';
         }
-        if (isset($argv['call_trace'])) {
+        if (!empty($argv['call_trace'])) {
             $set .= 'call_trace=:call_trace,';
         }
 
@@ -240,24 +240,23 @@ class carbon_reports extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['log_level'])) {
+        if (!empty($argv['log_level'])) {
             $log_level = $argv['log_level'];
             $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-        if (isset($argv['report'])) {
+        if (!empty($argv['report'])) {
             $stmt->bindValue(':report',$argv['report'], 2);
         }
-        if (isset($argv['date'])) {
+        if (!empty($argv['date'])) {
             $date = $argv['date'];
             $stmt->bindParam(':date',$date, 2, 22);
         }
-        if (isset($argv['call_trace'])) {
+        if (!empty($argv['call_trace'])) {
             $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
 

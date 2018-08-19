@@ -217,16 +217,16 @@ class carbon_tag extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['entity_id'])) {
+        if (!empty($argv['entity_id'])) {
             $set .= 'entity_id=UNHEX(:entity_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $set .= 'tag_id=:tag_id,';
         }
-        if (isset($argv['creation_date'])) {
+        if (!empty($argv['creation_date'])) {
             $set .= 'creation_date=:creation_date,';
         }
 
@@ -244,25 +244,24 @@ class carbon_tag extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['entity_id'])) {
-            $entity_id = 'UNHEX('.$argv['entity_id'].')';
-            $stmt->bindParam(':entity_id', $entity_id, 2, 16);
+        if (!empty($argv['entity_id'])) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $tag_id = $argv['tag_id'];
             $stmt->bindParam(':tag_id',$tag_id, 2, 11);
         }
-        if (isset($argv['creation_date'])) {
+        if (!empty($argv['creation_date'])) {
             $creation_date = $argv['creation_date'];
             $stmt->bindParam(':creation_date',$creation_date, 2, 20);
         }

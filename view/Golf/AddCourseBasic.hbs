@@ -65,7 +65,14 @@
 <section class="content" id="content-pane">
     <form data-pjax class="form-horizontal" method="post" action="/AddCourse/Basic" name="addCourse">
         <div id="alert"></div>
+    {{#course}}
+        <input type="hidden" name="course_id" value="{{course_id}}">
+        <div class="callout callout-success">
+            <h4>We saved your spot!</h4>
 
+            <p>Please finish entering the score card.</p>
+        </div>
+    {{/course}}
         <!-- Add Course Main Info -->
 
         <div class="box box-custom" id='CourseInfo'>
@@ -142,7 +149,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-phone"></i>
                             </div>
-                            <input value="{{#course}}{{course_phone}}{{/course}}" type="text" name="c_phone"
+                            <input value="{{course.course_phone}}" type="text" name="c_phone"
                                    id="phone" class="form-control"
                                    data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
@@ -153,14 +160,14 @@
 
                     <div class="form-group col-xs-12 col-md-12" id="c_street">
                         <label class="control-label" for="Street">Street</label>
-                        <input value="{{#course}}{{#location}}{{/location}}{{/course}}" name="c_street" type="text"
+                        <input value="{{course.location.street}}" name="c_street" type="text"
                                class="form-control" id="inputSuccess"
                                placeholder="Street Address">
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12" id="c_city">
                         <label class="control-label" for="City">City</label>
-                        <input value="{{#course}}{{course_phone}}{{/course}}" type="text" class="form-control"
+                        <input value="{{course.location.city}}" type="text" class="form-control"
                                id="City" placeholder="City"
                                name="c_city">
                     </div>
@@ -169,8 +176,8 @@
                         <label for="state">State</label>
                         <select id="state" name="c_state" class="form-control select2" style="width: 100%;">
 
-                            <option selected="selected" value="{{state}}">
-                                {{state}}{{^state}}State Selection{{/state}}
+                            <option selected="selected" value="{{course.location.state}}">
+                                {{course.location.state}}{{^course.location.state}}State Selection{{/course.location.state}}
                             </option>
                             <option value="Alabama">Alabama</option>
                             <option value="Alaska">Alaska</option>
@@ -184,6 +191,9 @@
                     <div class="form-group col-xs-12 col-md-12" id="tee_boxes">
                         <label>Number of Tee Boxes</label>
                         <select class="form-control" name="tee_boxes">
+                            {{#course.handicap_count}}
+                                <option value="{{course.handicap_count}}">{{course.handicap_count}}</option>
+                            {{/course.handicap_count}}
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>

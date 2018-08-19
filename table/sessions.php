@@ -163,7 +163,7 @@ class sessions extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -225,22 +225,22 @@ class sessions extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['user_ip'])) {
+        if (!empty($argv['user_ip'])) {
             $set .= 'user_ip=UNHEX(:user_ip),';
         }
-        if (isset($argv['session_id'])) {
+        if (!empty($argv['session_id'])) {
             $set .= 'session_id=:session_id,';
         }
-        if (isset($argv['session_expires'])) {
+        if (!empty($argv['session_expires'])) {
             $set .= 'session_expires=:session_expires,';
         }
-        if (isset($argv['session_data'])) {
+        if (!empty($argv['session_data'])) {
             $set .= 'session_data=:session_data,';
         }
-        if (isset($argv['user_online_status'])) {
+        if (!empty($argv['user_online_status'])) {
             $set .= 'user_online_status=:user_online_status,';
         }
 
@@ -260,31 +260,30 @@ class sessions extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['user_ip'])) {
-            $user_ip = 'UNHEX('.$argv['user_ip'].')';
-            $stmt->bindParam(':user_ip', $user_ip, 2, 16);
+        if (!empty($argv['user_ip'])) {
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
         }
-        if (isset($argv['session_id'])) {
+        if (!empty($argv['session_id'])) {
             $session_id = $argv['session_id'];
             $stmt->bindParam(':session_id',$session_id, 2, 255);
         }
-        if (isset($argv['session_expires'])) {
+        if (!empty($argv['session_expires'])) {
             $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
         }
-        if (isset($argv['session_data'])) {
+        if (!empty($argv['session_data'])) {
             $stmt->bindValue(':session_data',$argv['session_data'], 2);
         }
-        if (isset($argv['user_online_status'])) {
+        if (!empty($argv['user_online_status'])) {
             $user_online_status = $argv['user_online_status'];
             $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         }

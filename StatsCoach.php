@@ -65,8 +65,7 @@ class StatsCoach extends Application
     public function startApplication($uri = null): bool
     {
         static $count;
-
-        if (empty($count)) {
+        if (null === $count) {
             $count = 0;
         } else {
             $count++;
@@ -77,12 +76,14 @@ class StatsCoach extends Application
         if (null !== $uri) {
             $this->changeURI($uri);
         } else {
-            if (empty($this->uri[0])) {
+            // check our first request, then subsequent
+            if (empty($this->uri[0]) || $count) {
                 if (SOCKET) {
                     throw new PublicAlert('$_SERVER["REQUEST_URI"] MUST BE SET IN SOCKET REQUESTS');
                 }
                 $this->matched = true;
-                return $this->defaultRoute();
+                $this->defaultRoute();
+                return true;
             }
         }
 
@@ -159,7 +160,6 @@ class StatsCoach extends Application
      * App constructor. If no uri is set than
      * the Route constructor will execute the
      * defaultRoute method defined below.
-     * @return callable
      * @throws \Mustache_Exception_InvalidArgumentException
      * @throws \CarbonPHP\Error\PublicAlert
      */
@@ -171,12 +171,16 @@ class StatsCoach extends Application
 
         // If the user is signed in we need to get the
         if ($_SESSION['id'] ?? false) {
+            $_SESSION['id'] = false;
+            return;
 
             if (!carbon_users::Get($GLOBALS['user'][$_SESSION['id']], $_SESSION['id'],[]) ||
                 empty($GLOBALS['user'][$_SESSION['id']])) {
                 $_SESSION['id'] = false;
                 throw new PublicAlert('Failed to fetch user. This usually happens when a users id becomes invalid.');
             }
+
+
 
             if ($GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] === null) {
                 $GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] = '/view/img/Carbon-red.png';

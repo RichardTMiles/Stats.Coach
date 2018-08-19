@@ -163,7 +163,7 @@ class golf_stats extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -234,28 +234,28 @@ class golf_stats extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['stats_id'])) {
+        if (!empty($argv['stats_id'])) {
             $set .= 'stats_id=UNHEX(:stats_id),';
         }
-        if (isset($argv['stats_tournaments'])) {
+        if (!empty($argv['stats_tournaments'])) {
             $set .= 'stats_tournaments=:stats_tournaments,';
         }
-        if (isset($argv['stats_rounds'])) {
+        if (!empty($argv['stats_rounds'])) {
             $set .= 'stats_rounds=:stats_rounds,';
         }
-        if (isset($argv['stats_handicap'])) {
+        if (!empty($argv['stats_handicap'])) {
             $set .= 'stats_handicap=:stats_handicap,';
         }
-        if (isset($argv['stats_strokes'])) {
+        if (!empty($argv['stats_strokes'])) {
             $set .= 'stats_strokes=:stats_strokes,';
         }
-        if (isset($argv['stats_ffs'])) {
+        if (!empty($argv['stats_ffs'])) {
             $set .= 'stats_ffs=:stats_ffs,';
         }
-        if (isset($argv['stats_gnr'])) {
+        if (!empty($argv['stats_gnr'])) {
             $set .= 'stats_gnr=:stats_gnr,';
         }
-        if (isset($argv['stats_putts'])) {
+        if (!empty($argv['stats_putts'])) {
             $set .= 'stats_putts=:stats_putts,';
         }
 
@@ -275,41 +275,40 @@ class golf_stats extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['stats_id'])) {
-            $stats_id = 'UNHEX('.$argv['stats_id'].')';
-            $stmt->bindParam(':stats_id', $stats_id, 2, 16);
+        if (!empty($argv['stats_id'])) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
         }
-        if (isset($argv['stats_tournaments'])) {
+        if (!empty($argv['stats_tournaments'])) {
             $stats_tournaments = $argv['stats_tournaments'];
             $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
         }
-        if (isset($argv['stats_rounds'])) {
+        if (!empty($argv['stats_rounds'])) {
             $stats_rounds = $argv['stats_rounds'];
             $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
         }
-        if (isset($argv['stats_handicap'])) {
+        if (!empty($argv['stats_handicap'])) {
             $stats_handicap = $argv['stats_handicap'];
             $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
         }
-        if (isset($argv['stats_strokes'])) {
+        if (!empty($argv['stats_strokes'])) {
             $stats_strokes = $argv['stats_strokes'];
             $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
         }
-        if (isset($argv['stats_ffs'])) {
+        if (!empty($argv['stats_ffs'])) {
             $stats_ffs = $argv['stats_ffs'];
             $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
         }
-        if (isset($argv['stats_gnr'])) {
+        if (!empty($argv['stats_gnr'])) {
             $stats_gnr = $argv['stats_gnr'];
             $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
         }
-        if (isset($argv['stats_putts'])) {
+        if (!empty($argv['stats_putts'])) {
             $stats_putts = $argv['stats_putts'];
             $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         }

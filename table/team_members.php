@@ -217,16 +217,16 @@ class team_members extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['member_id'])) {
+        if (!empty($argv['member_id'])) {
             $set .= 'member_id=UNHEX(:member_id),';
         }
-        if (isset($argv['team_id'])) {
+        if (!empty($argv['team_id'])) {
             $set .= 'team_id=UNHEX(:team_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['accepted'])) {
+        if (!empty($argv['accepted'])) {
             $set .= 'accepted=:accepted,';
         }
 
@@ -244,25 +244,24 @@ class team_members extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['member_id'])) {
-            $member_id = 'UNHEX('.$argv['member_id'].')';
-            $stmt->bindParam(':member_id', $member_id, 2, 16);
+        if (!empty($argv['member_id'])) {
+            $member_id = $argv['member_id'];
+            $stmt->bindParam(':member_id',$member_id, 2, 16);
         }
-        if (isset($argv['team_id'])) {
-            $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, 2, 16);
+        if (!empty($argv['team_id'])) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['accepted'])) {
+        if (!empty($argv['accepted'])) {
             $accepted = $argv['accepted'];
             $stmt->bindParam(':accepted',$accepted, 0, 1);
         }

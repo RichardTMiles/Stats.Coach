@@ -163,7 +163,7 @@ class carbon_tags extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -213,13 +213,13 @@ class carbon_tags extends Entities implements iRest
 
         $set = '';
 
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $set .= 'tag_id=:tag_id,';
         }
-        if (isset($argv['tag_description'])) {
+        if (!empty($argv['tag_description'])) {
             $set .= 'tag_description=:tag_description,';
         }
-        if (isset($argv['tag_name'])) {
+        if (!empty($argv['tag_name'])) {
             $set .= 'tag_name=:tag_name,';
         }
 
@@ -239,20 +239,19 @@ class carbon_tags extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $tag_id = $argv['tag_id'];
             $stmt->bindParam(':tag_id',$tag_id, 2, 11);
         }
-        if (isset($argv['tag_description'])) {
+        if (!empty($argv['tag_description'])) {
             $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
         }
-        if (isset($argv['tag_name'])) {
+        if (!empty($argv['tag_name'])) {
             $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         }
 

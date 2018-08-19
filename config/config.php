@@ -198,7 +198,7 @@ return [
 
         'CACHE_CONTROL' => [
             'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
-            'jpg|jpeg|png|gif|swf|xml|txt|css|js|woff2|tff' => 'Cache-Control: max-age=604800, public',
+            'jpg|jpeg|png|gif|swf|xml|txt|css|js|woff2|tff|map' => 'Cache-Control: max-age=604800, public',
             'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
         ],
 
@@ -229,9 +229,9 @@ return [
 
             if ($_SESSION['id'] ?? ($_SESSION['id'] = false)) {
 
-                #return $_SESSION['id'] = false;
-
                 global $user;
+
+                #return $_SESSION['id'] = false;
 
                 if (!is_array($user)) {
                     $user = [];
@@ -245,7 +245,7 @@ return [
                         \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
                     }
 
-                    $my['stats'] = [];
+                    /*$my['stats'] = [];
                     Table\golf_stats::Get($my['stats'], $_SESSION['id'], []);
 
                     $my['teams'] = [];
@@ -255,7 +255,7 @@ return [
                     Table\user_followers::Get($my['followers'], $_SESSION['id'], []);
 
                     $my['messages'] = [];
-                    Table\user_messages::Get($my['messages'], $_SESSION['id'], []);
+                    Table\user_messages::Get($my['messages'], $_SESSION['id'], []);*/
 
                 }
             }
