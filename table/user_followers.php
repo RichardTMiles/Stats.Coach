@@ -59,12 +59,12 @@ class user_followers extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class user_followers extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.user_followers';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.user_followers';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class user_followers extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class user_followers extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class user_followers extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_followers (follows_user_id, user_id) VALUES ( UNHEX(:follows_user_id), UNHEX(:user_id))';
+        $sql = 'INSERT INTO StatsCoach.user_followers (follows_user_id, user_id) VALUES ( UNHEX(:follows_user_id), UNHEX(:user_id))';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -204,22 +204,26 @@ class user_followers extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.user_followers ';
+        $sql = 'UPDATE StatsCoach.user_followers ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['follows_user_id'])) {
+        if (!empty($argv['follows_user_id'])) {
             $set .= 'follows_user_id=UNHEX(:follows_user_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
 
@@ -239,19 +243,18 @@ class user_followers extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['follows_user_id'])) {
-            $follows_user_id = 'UNHEX('.$argv['follows_user_id'].')';
-            $stmt->bindParam(':follows_user_id', $follows_user_id, 2, 16);
+        if (!empty($argv['follows_user_id'])) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
 
         if (!$stmt->execute()){

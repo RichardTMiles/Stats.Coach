@@ -9,17 +9,17 @@ use CarbonPHP\Interfaces\iRest;
 class user_messages extends Entities implements iRest
 {
     const PRIMARY = [
-    
+    'message_id',
     ];
 
     const COLUMNS = [
-    'message_id','to_user_id','message','message_read',
+    'message_id','from_user_id','to_user_id','message','message_read',
     ];
 
     const VALIDATION = [];
 
     const BINARY = [
-    'message_id','to_user_id',
+    'message_id','from_user_id','to_user_id',
     ];
 
     /**
@@ -59,12 +59,12 @@ class user_messages extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class user_messages extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.user_messages';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.user_messages';
 
         $pdo = Database::database();
 
@@ -131,11 +131,14 @@ class user_messages extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
-        } 
+        } else {
+            $primary = $pdo->quote($primary);
+            $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
+        }
 
         if (isset($argv['aggregate'])) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -160,6 +163,9 @@ class user_messages extends Entities implements iRest
         */
 
         
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+            $return = [$return];
+        }
 
         return true;
     }
@@ -170,7 +176,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
+        $sql = 'INSERT INTO StatsCoach.user_messages (message_id, from_user_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:from_user_id), UNHEX(:to_user_id), :message, :message_read)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -180,9 +186,11 @@ class user_messages extends Entities implements iRest
         }
         $json['sql'][] = $sql;
 
+            $message_id = $id = isset($argv['message_id']) ? $argv['message_id'] : self::new_entity('user_messages');
+            $stmt->bindParam(':message_id',$message_id, 2, 16);
             
-                $message_id = isset($argv['message_id']) ? $argv['message_id'] : null;
-                $stmt->bindParam(':message_id',$message_id, 2, 16);
+                $from_user_id = isset($argv['from_user_id']) ? $argv['from_user_id'] : null;
+                $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
                     
                 $to_user_id = isset($argv['to_user_id']) ? $argv['to_user_id'] : null;
                 $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
@@ -191,8 +199,8 @@ class user_messages extends Entities implements iRest
                 $message_read = isset($argv['message_read']) ? $argv['message_read'] : '0';
                 $stmt->bindParam(':message_read',$message_read, 0, 1);
         
+        return $stmt->execute() ? $id : false;
 
-        return $stmt->execute();
     }
 
     /**
@@ -203,28 +211,35 @@ class user_messages extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.user_messages ';
+        $sql = 'UPDATE StatsCoach.user_messages ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['message_id'])) {
+        if (!empty($argv['message_id'])) {
             $set .= 'message_id=UNHEX(:message_id),';
         }
-        if (isset($argv['to_user_id'])) {
+        if (!empty($argv['from_user_id'])) {
+            $set .= 'from_user_id=UNHEX(:from_user_id),';
+        }
+        if (!empty($argv['to_user_id'])) {
             $set .= 'to_user_id=UNHEX(:to_user_id),';
         }
-        if (isset($argv['message'])) {
+        if (!empty($argv['message'])) {
             $set .= 'message=:message,';
         }
-        if (isset($argv['message_read'])) {
+        if (!empty($argv['message_read'])) {
             $set .= 'message_read=:message_read,';
         }
 
@@ -237,29 +252,34 @@ class user_messages extends Entities implements iRest
         $db = Database::database();
 
         
+        $primary = $db->quote($primary);
+        $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
 
         $stmt = $db->prepare($sql);
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['message_id'])) {
-            $message_id = 'UNHEX('.$argv['message_id'].')';
-            $stmt->bindParam(':message_id', $message_id, 2, 16);
+        if (!empty($argv['message_id'])) {
+            $message_id = $argv['message_id'];
+            $stmt->bindParam(':message_id',$message_id, 2, 16);
         }
-        if (isset($argv['to_user_id'])) {
-            $to_user_id = 'UNHEX('.$argv['to_user_id'].')';
-            $stmt->bindParam(':to_user_id', $to_user_id, 2, 16);
+        if (!empty($argv['from_user_id'])) {
+            $from_user_id = $argv['from_user_id'];
+            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
         }
-        if (isset($argv['message'])) {
+        if (!empty($argv['to_user_id'])) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+        }
+        if (!empty($argv['message'])) {
             $stmt->bindValue(':message',$argv['message'], 2);
         }
-        if (isset($argv['message_read'])) {
+        if (!empty($argv['message_read'])) {
             $message_read = $argv['message_read'];
             $stmt->bindParam(':message_read',$message_read, 0, 1);
         }
@@ -282,43 +302,6 @@ class user_messages extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.user_messages ';
-
-        foreach($argv as $column => $constraint){
-            if (!in_array($column, self::COLUMNS)){
-                unset($argv[$column]);
-            }
-        }
-
-        if (empty($primary)) {
-            /**
-            *   While useful, we've decided to disallow full
-            *   table deletions through the rest api. For the
-            *   n00bs and future self, "I got chu."
-            */
-            if (empty($argv)) {
-                return false;
-            }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
-                }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
-        } 
-
-        $remove = null;
-
-        global $json;
-
-        if (!isset($json['sql'])) {
-            $json['sql'] = [];
-        }
-        $json['sql'][] = $sql;
-
-        return self::execute($sql);
+        return \Table\carbon::Delete($remove, $primary, $argv);
     }
 }

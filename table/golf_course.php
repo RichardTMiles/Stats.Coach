@@ -59,12 +59,12 @@ class golf_course extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class golf_course extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.golf_course';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.golf_course';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class golf_course extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class golf_course extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class golf_course extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, course_input_completed, tee_boxes, created_by, handicap_count) VALUES ( UNHEX(:course_id), :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, :course_input_completed, :tee_boxes, UNHEX(:created_by), :handicap_count)';
+        $sql = 'INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, course_input_completed, tee_boxes, created_by, handicap_count) VALUES ( UNHEX(:course_id), :course_name, :course_holes, :course_phone, :course_difficulty, :course_rank, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, :course_input_completed, :tee_boxes, UNHEX(:created_by), :handicap_count)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -254,76 +254,80 @@ class golf_course extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.golf_course ';
+        $sql = 'UPDATE StatsCoach.golf_course ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
-        if (isset($argv['course_name'])) {
+        if (!empty($argv['course_name'])) {
             $set .= 'course_name=:course_name,';
         }
-        if (isset($argv['course_holes'])) {
+        if (!empty($argv['course_holes'])) {
             $set .= 'course_holes=:course_holes,';
         }
-        if (isset($argv['course_phone'])) {
+        if (!empty($argv['course_phone'])) {
             $set .= 'course_phone=:course_phone,';
         }
-        if (isset($argv['course_difficulty'])) {
+        if (!empty($argv['course_difficulty'])) {
             $set .= 'course_difficulty=:course_difficulty,';
         }
-        if (isset($argv['course_rank'])) {
+        if (!empty($argv['course_rank'])) {
             $set .= 'course_rank=:course_rank,';
         }
-        if (isset($argv['course_par'])) {
+        if (!empty($argv['course_par'])) {
             $set .= 'course_par=:course_par,';
         }
-        if (isset($argv['course_par_out'])) {
+        if (!empty($argv['course_par_out'])) {
             $set .= 'course_par_out=:course_par_out,';
         }
-        if (isset($argv['course_par_in'])) {
+        if (!empty($argv['course_par_in'])) {
             $set .= 'course_par_in=:course_par_in,';
         }
-        if (isset($argv['par_tot'])) {
+        if (!empty($argv['par_tot'])) {
             $set .= 'par_tot=:par_tot,';
         }
-        if (isset($argv['course_par_hcp'])) {
+        if (!empty($argv['course_par_hcp'])) {
             $set .= 'course_par_hcp=:course_par_hcp,';
         }
-        if (isset($argv['course_type'])) {
+        if (!empty($argv['course_type'])) {
             $set .= 'course_type=:course_type,';
         }
-        if (isset($argv['course_access'])) {
+        if (!empty($argv['course_access'])) {
             $set .= 'course_access=:course_access,';
         }
-        if (isset($argv['course_handicap'])) {
+        if (!empty($argv['course_handicap'])) {
             $set .= 'course_handicap=:course_handicap,';
         }
-        if (isset($argv['pga_professional'])) {
+        if (!empty($argv['pga_professional'])) {
             $set .= 'pga_professional=:pga_professional,';
         }
-        if (isset($argv['website'])) {
+        if (!empty($argv['website'])) {
             $set .= 'website=:website,';
         }
-        if (isset($argv['course_input_completed'])) {
+        if (!empty($argv['course_input_completed'])) {
             $set .= 'course_input_completed=:course_input_completed,';
         }
-        if (isset($argv['tee_boxes'])) {
+        if (!empty($argv['tee_boxes'])) {
             $set .= 'tee_boxes=:tee_boxes,';
         }
-        if (isset($argv['created_by'])) {
+        if (!empty($argv['created_by'])) {
             $set .= 'created_by=UNHEX(:created_by),';
         }
-        if (isset($argv['handicap_count'])) {
+        if (!empty($argv['handicap_count'])) {
             $set .= 'handicap_count=:handicap_count,';
         }
 
@@ -343,87 +347,86 @@ class golf_course extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (isset($argv['course_name'])) {
+        if (!empty($argv['course_name'])) {
             $course_name = $argv['course_name'];
             $stmt->bindParam(':course_name',$course_name, 2, 16);
         }
-        if (isset($argv['course_holes'])) {
+        if (!empty($argv['course_holes'])) {
             $course_holes = $argv['course_holes'];
             $stmt->bindParam(':course_holes',$course_holes, 2, 2);
         }
-        if (isset($argv['course_phone'])) {
+        if (!empty($argv['course_phone'])) {
             $course_phone = $argv['course_phone'];
             $stmt->bindParam(':course_phone',$course_phone, 2, 20);
         }
-        if (isset($argv['course_difficulty'])) {
+        if (!empty($argv['course_difficulty'])) {
             $course_difficulty = $argv['course_difficulty'];
             $stmt->bindParam(':course_difficulty',$course_difficulty, 2, 10);
         }
-        if (isset($argv['course_rank'])) {
+        if (!empty($argv['course_rank'])) {
             $course_rank = $argv['course_rank'];
             $stmt->bindParam(':course_rank',$course_rank, 2, 5);
         }
-        if (isset($argv['course_par'])) {
+        if (!empty($argv['course_par'])) {
             $stmt->bindValue(':course_par',$argv['course_par'], 2);
         }
-        if (isset($argv['course_par_out'])) {
+        if (!empty($argv['course_par_out'])) {
             $course_par_out = $argv['course_par_out'];
             $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
         }
-        if (isset($argv['course_par_in'])) {
+        if (!empty($argv['course_par_in'])) {
             $course_par_in = $argv['course_par_in'];
             $stmt->bindParam(':course_par_in',$course_par_in, 2, 2);
         }
-        if (isset($argv['par_tot'])) {
+        if (!empty($argv['par_tot'])) {
             $par_tot = $argv['par_tot'];
             $stmt->bindParam(':par_tot',$par_tot, 2, 2);
         }
-        if (isset($argv['course_par_hcp'])) {
+        if (!empty($argv['course_par_hcp'])) {
             $course_par_hcp = $argv['course_par_hcp'];
             $stmt->bindParam(':course_par_hcp',$course_par_hcp, 2, 4);
         }
-        if (isset($argv['course_type'])) {
+        if (!empty($argv['course_type'])) {
             $course_type = $argv['course_type'];
             $stmt->bindParam(':course_type',$course_type, 2, 30);
         }
-        if (isset($argv['course_access'])) {
+        if (!empty($argv['course_access'])) {
             $course_access = $argv['course_access'];
             $stmt->bindParam(':course_access',$course_access, 2, 10);
         }
-        if (isset($argv['course_handicap'])) {
+        if (!empty($argv['course_handicap'])) {
             $stmt->bindValue(':course_handicap',$argv['course_handicap'], 2);
         }
-        if (isset($argv['pga_professional'])) {
+        if (!empty($argv['pga_professional'])) {
             $pga_professional = $argv['pga_professional'];
             $stmt->bindParam(':pga_professional',$pga_professional, 2, 25);
         }
-        if (isset($argv['website'])) {
+        if (!empty($argv['website'])) {
             $website = $argv['website'];
             $stmt->bindParam(':website',$website, 2, 30);
         }
-        if (isset($argv['course_input_completed'])) {
+        if (!empty($argv['course_input_completed'])) {
             $course_input_completed = $argv['course_input_completed'];
             $stmt->bindParam(':course_input_completed',$course_input_completed, 0, 1);
         }
-        if (isset($argv['tee_boxes'])) {
+        if (!empty($argv['tee_boxes'])) {
             $tee_boxes = $argv['tee_boxes'];
             $stmt->bindParam(':tee_boxes',$tee_boxes, 2, 1);
         }
-        if (isset($argv['created_by'])) {
-            $created_by = 'UNHEX('.$argv['created_by'].')';
-            $stmt->bindParam(':created_by', $created_by, 2, 16);
+        if (!empty($argv['created_by'])) {
+            $created_by = $argv['created_by'];
+            $stmt->bindParam(':created_by',$created_by, 2, 16);
         }
-        if (isset($argv['handicap_count'])) {
+        if (!empty($argv['handicap_count'])) {
             $handicap_count = $argv['handicap_count'];
             $stmt->bindParam(':handicap_count',$handicap_count, 2, 1);
         }

@@ -44,6 +44,13 @@
         <!-- /.box-footer -->
     </div>
     <!--/.box -->
+    {{^users}}
+        <div class="alert alert-warning">
+            <h4><i class="icon fa fa-warning"></i> You have no connections yet!</h4>
+            Start Connecting Now.
+        </div>
+    {{/users}}
+
 </div>
 
 <div class="col-md-7">

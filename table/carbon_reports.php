@@ -59,12 +59,12 @@ class carbon_reports extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class carbon_reports extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_reports';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_reports';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class carbon_reports extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -170,7 +170,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_reports (log_level, report, date, call_trace) VALUES ( :log_level, :report, :date, :call_trace)';
+        $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, date, call_trace) VALUES ( :log_level, :report, :date, :call_trace)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -201,28 +201,32 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.carbon_reports ';
+        $sql = 'UPDATE StatsCoach.carbon_reports ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['log_level'])) {
+        if (!empty($argv['log_level'])) {
             $set .= 'log_level=:log_level,';
         }
-        if (isset($argv['report'])) {
+        if (!empty($argv['report'])) {
             $set .= 'report=:report,';
         }
-        if (isset($argv['date'])) {
+        if (!empty($argv['date'])) {
             $set .= 'date=:date,';
         }
-        if (isset($argv['call_trace'])) {
+        if (!empty($argv['call_trace'])) {
             $set .= 'call_trace=:call_trace,';
         }
 
@@ -240,24 +244,23 @@ class carbon_reports extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['log_level'])) {
+        if (!empty($argv['log_level'])) {
             $log_level = $argv['log_level'];
             $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-        if (isset($argv['report'])) {
+        if (!empty($argv['report'])) {
             $stmt->bindValue(':report',$argv['report'], 2);
         }
-        if (isset($argv['date'])) {
+        if (!empty($argv['date'])) {
             $date = $argv['date'];
             $stmt->bindParam(':date',$date, 2, 22);
         }
-        if (isset($argv['call_trace'])) {
+        if (!empty($argv['call_trace'])) {
             $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
 
@@ -279,7 +282,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.carbon_reports ';
+        $sql = 'DELETE FROM StatsCoach.carbon_reports ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
@@ -296,15 +299,24 @@ class carbon_reports extends Entities implements iRest
             if (empty($argv)) {
                 return false;
             }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+            $pdo = self::database();
+
+            $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                $sql = '(';
+                foreach ($set as $column => $value) {
+                    if (is_array($value)) {
+                        $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                    } else {
+                        if (in_array($column, self::BINARY)) {
+                            $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                        } else {
+                            $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                        }
+                    }
                 }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
+                return rtrim($sql, " $join") . ')';
+            };
+            $sql .= ' WHERE ' . $build_where($argv);
         } 
 
         $remove = null;

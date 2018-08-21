@@ -59,12 +59,12 @@ class sessions extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class sessions extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.sessions';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.sessions';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class sessions extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class sessions extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class sessions extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
+        $sql = 'INSERT INTO StatsCoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -213,34 +213,38 @@ class sessions extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.sessions ';
+        $sql = 'UPDATE StatsCoach.sessions ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['user_ip'])) {
+        if (!empty($argv['user_ip'])) {
             $set .= 'user_ip=UNHEX(:user_ip),';
         }
-        if (isset($argv['session_id'])) {
+        if (!empty($argv['session_id'])) {
             $set .= 'session_id=:session_id,';
         }
-        if (isset($argv['session_expires'])) {
+        if (!empty($argv['session_expires'])) {
             $set .= 'session_expires=:session_expires,';
         }
-        if (isset($argv['session_data'])) {
+        if (!empty($argv['session_data'])) {
             $set .= 'session_data=:session_data,';
         }
-        if (isset($argv['user_online_status'])) {
+        if (!empty($argv['user_online_status'])) {
             $set .= 'user_online_status=:user_online_status,';
         }
 
@@ -260,31 +264,30 @@ class sessions extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['user_ip'])) {
-            $user_ip = 'UNHEX('.$argv['user_ip'].')';
-            $stmt->bindParam(':user_ip', $user_ip, 2, 16);
+        if (!empty($argv['user_ip'])) {
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
         }
-        if (isset($argv['session_id'])) {
+        if (!empty($argv['session_id'])) {
             $session_id = $argv['session_id'];
             $stmt->bindParam(':session_id',$session_id, 2, 255);
         }
-        if (isset($argv['session_expires'])) {
+        if (!empty($argv['session_expires'])) {
             $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
         }
-        if (isset($argv['session_data'])) {
+        if (!empty($argv['session_data'])) {
             $stmt->bindValue(':session_data',$argv['session_data'], 2);
         }
-        if (isset($argv['user_online_status'])) {
+        if (!empty($argv['user_online_status'])) {
             $user_online_status = $argv['user_online_status'];
             $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         }
@@ -307,7 +310,7 @@ class sessions extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.sessions ';
+        $sql = 'DELETE FROM StatsCoach.sessions ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
@@ -324,15 +327,24 @@ class sessions extends Entities implements iRest
             if (empty($argv)) {
                 return false;
             }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+            $pdo = self::database();
+
+            $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                $sql = '(';
+                foreach ($set as $column => $value) {
+                    if (is_array($value)) {
+                        $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                    } else {
+                        if (in_array($column, self::BINARY)) {
+                            $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                        } else {
+                            $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                        }
+                    }
                 }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
+                return rtrim($sql, " $join") . ')';
+            };
+            $sql .= ' WHERE ' . $build_where($argv);
         } else {
             $primary = Database::database()->quote($primary);
             $sql .= ' WHERE  session_id=' . $primary .'';

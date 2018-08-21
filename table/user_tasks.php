@@ -59,12 +59,12 @@ class user_tasks extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class user_tasks extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.user_tasks';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.user_tasks';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class user_tasks extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class user_tasks extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class user_tasks extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.user_tasks (task_id, user_id, from_id, task_name, task_description, percent_complete, start_date, end_date) VALUES ( UNHEX(:task_id), UNHEX(:user_id), UNHEX(:from_id), :task_name, :task_description, :percent_complete, :start_date, :end_date)';
+        $sql = 'INSERT INTO StatsCoach.user_tasks (task_id, user_id, from_id, task_name, task_description, percent_complete, start_date, end_date) VALUES ( UNHEX(:task_id), UNHEX(:user_id), UNHEX(:from_id), :task_name, :task_description, :percent_complete, :start_date, :end_date)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -218,40 +218,44 @@ class user_tasks extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.user_tasks ';
+        $sql = 'UPDATE StatsCoach.user_tasks ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['task_id'])) {
+        if (!empty($argv['task_id'])) {
             $set .= 'task_id=UNHEX(:task_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['from_id'])) {
+        if (!empty($argv['from_id'])) {
             $set .= 'from_id=UNHEX(:from_id),';
         }
-        if (isset($argv['task_name'])) {
+        if (!empty($argv['task_name'])) {
             $set .= 'task_name=:task_name,';
         }
-        if (isset($argv['task_description'])) {
+        if (!empty($argv['task_description'])) {
             $set .= 'task_description=:task_description,';
         }
-        if (isset($argv['percent_complete'])) {
+        if (!empty($argv['percent_complete'])) {
             $set .= 'percent_complete=:percent_complete,';
         }
-        if (isset($argv['start_date'])) {
+        if (!empty($argv['start_date'])) {
             $set .= 'start_date=:start_date,';
         }
-        if (isset($argv['end_date'])) {
+        if (!empty($argv['end_date'])) {
             $set .= 'end_date=:end_date,';
         }
 
@@ -271,40 +275,39 @@ class user_tasks extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['task_id'])) {
-            $task_id = 'UNHEX('.$argv['task_id'].')';
-            $stmt->bindParam(':task_id', $task_id, 2, 16);
+        if (!empty($argv['task_id'])) {
+            $task_id = $argv['task_id'];
+            $stmt->bindParam(':task_id',$task_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['from_id'])) {
-            $from_id = 'UNHEX('.$argv['from_id'].')';
-            $stmt->bindParam(':from_id', $from_id, 2, 16);
+        if (!empty($argv['from_id'])) {
+            $from_id = $argv['from_id'];
+            $stmt->bindParam(':from_id',$from_id, 2, 16);
         }
-        if (isset($argv['task_name'])) {
+        if (!empty($argv['task_name'])) {
             $task_name = $argv['task_name'];
             $stmt->bindParam(':task_name',$task_name, 2, 40);
         }
-        if (isset($argv['task_description'])) {
+        if (!empty($argv['task_description'])) {
             $task_description = $argv['task_description'];
             $stmt->bindParam(':task_description',$task_description, 2, 225);
         }
-        if (isset($argv['percent_complete'])) {
+        if (!empty($argv['percent_complete'])) {
             $percent_complete = $argv['percent_complete'];
             $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
         }
-        if (isset($argv['start_date'])) {
+        if (!empty($argv['start_date'])) {
             $stmt->bindValue(':start_date',$argv['start_date'], 2);
         }
-        if (isset($argv['end_date'])) {
+        if (!empty($argv['end_date'])) {
             $stmt->bindValue(':end_date',$argv['end_date'], 2);
         }
 

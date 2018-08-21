@@ -59,12 +59,12 @@ class carbon_comments extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class carbon_comments extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_comments';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_comments';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class carbon_comments extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class carbon_comments extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class carbon_comments extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_comments (parent_id, comment_id, user_id, comment) VALUES ( UNHEX(:parent_id), UNHEX(:comment_id), UNHEX(:user_id), :comment)';
+        $sql = 'INSERT INTO StatsCoach.carbon_comments (parent_id, comment_id, user_id, comment) VALUES ( UNHEX(:parent_id), UNHEX(:comment_id), UNHEX(:user_id), :comment)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -208,28 +208,32 @@ class carbon_comments extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.carbon_comments ';
+        $sql = 'UPDATE StatsCoach.carbon_comments ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['parent_id'])) {
+        if (!empty($argv['parent_id'])) {
             $set .= 'parent_id=UNHEX(:parent_id),';
         }
-        if (isset($argv['comment_id'])) {
+        if (!empty($argv['comment_id'])) {
             $set .= 'comment_id=UNHEX(:comment_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['comment'])) {
+        if (!empty($argv['comment'])) {
             $set .= 'comment=:comment,';
         }
 
@@ -249,25 +253,24 @@ class carbon_comments extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['parent_id'])) {
-            $parent_id = 'UNHEX('.$argv['parent_id'].')';
-            $stmt->bindParam(':parent_id', $parent_id, 2, 16);
+        if (!empty($argv['parent_id'])) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
         }
-        if (isset($argv['comment_id'])) {
-            $comment_id = 'UNHEX('.$argv['comment_id'].')';
-            $stmt->bindParam(':comment_id', $comment_id, 2, 16);
+        if (!empty($argv['comment_id'])) {
+            $comment_id = $argv['comment_id'];
+            $stmt->bindParam(':comment_id',$comment_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['comment'])) {
+        if (!empty($argv['comment'])) {
             $stmt->bindValue(':comment',$argv['comment'], 2);
         }
 

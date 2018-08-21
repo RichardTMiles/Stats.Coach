@@ -59,12 +59,12 @@ class golf_stats extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class golf_stats extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.golf_stats';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.golf_stats';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class golf_stats extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class golf_stats extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class golf_stats extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ( UNHEX(:stats_id), :stats_tournaments, :stats_rounds, :stats_handicap, :stats_strokes, :stats_ffs, :stats_gnr, :stats_putts)';
+        $sql = 'INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ( UNHEX(:stats_id), :stats_tournaments, :stats_rounds, :stats_handicap, :stats_strokes, :stats_ffs, :stats_gnr, :stats_putts)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -222,40 +222,44 @@ class golf_stats extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.golf_stats ';
+        $sql = 'UPDATE StatsCoach.golf_stats ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['stats_id'])) {
+        if (!empty($argv['stats_id'])) {
             $set .= 'stats_id=UNHEX(:stats_id),';
         }
-        if (isset($argv['stats_tournaments'])) {
+        if (!empty($argv['stats_tournaments'])) {
             $set .= 'stats_tournaments=:stats_tournaments,';
         }
-        if (isset($argv['stats_rounds'])) {
+        if (!empty($argv['stats_rounds'])) {
             $set .= 'stats_rounds=:stats_rounds,';
         }
-        if (isset($argv['stats_handicap'])) {
+        if (!empty($argv['stats_handicap'])) {
             $set .= 'stats_handicap=:stats_handicap,';
         }
-        if (isset($argv['stats_strokes'])) {
+        if (!empty($argv['stats_strokes'])) {
             $set .= 'stats_strokes=:stats_strokes,';
         }
-        if (isset($argv['stats_ffs'])) {
+        if (!empty($argv['stats_ffs'])) {
             $set .= 'stats_ffs=:stats_ffs,';
         }
-        if (isset($argv['stats_gnr'])) {
+        if (!empty($argv['stats_gnr'])) {
             $set .= 'stats_gnr=:stats_gnr,';
         }
-        if (isset($argv['stats_putts'])) {
+        if (!empty($argv['stats_putts'])) {
             $set .= 'stats_putts=:stats_putts,';
         }
 
@@ -275,41 +279,40 @@ class golf_stats extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['stats_id'])) {
-            $stats_id = 'UNHEX('.$argv['stats_id'].')';
-            $stmt->bindParam(':stats_id', $stats_id, 2, 16);
+        if (!empty($argv['stats_id'])) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
         }
-        if (isset($argv['stats_tournaments'])) {
+        if (!empty($argv['stats_tournaments'])) {
             $stats_tournaments = $argv['stats_tournaments'];
             $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
         }
-        if (isset($argv['stats_rounds'])) {
+        if (!empty($argv['stats_rounds'])) {
             $stats_rounds = $argv['stats_rounds'];
             $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
         }
-        if (isset($argv['stats_handicap'])) {
+        if (!empty($argv['stats_handicap'])) {
             $stats_handicap = $argv['stats_handicap'];
             $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
         }
-        if (isset($argv['stats_strokes'])) {
+        if (!empty($argv['stats_strokes'])) {
             $stats_strokes = $argv['stats_strokes'];
             $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
         }
-        if (isset($argv['stats_ffs'])) {
+        if (!empty($argv['stats_ffs'])) {
             $stats_ffs = $argv['stats_ffs'];
             $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
         }
-        if (isset($argv['stats_gnr'])) {
+        if (!empty($argv['stats_gnr'])) {
             $stats_gnr = $argv['stats_gnr'];
             $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
         }
-        if (isset($argv['stats_putts'])) {
+        if (!empty($argv['stats_putts'])) {
             $stats_putts = $argv['stats_putts'];
             $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         }

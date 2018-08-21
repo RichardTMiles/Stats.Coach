@@ -59,12 +59,12 @@ class carbon_users extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class carbon_users extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_users';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_users';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class carbon_users extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class carbon_users extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class carbon_users extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history)';
+        $sql = 'INSERT INTO StatsCoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -270,94 +270,98 @@ class carbon_users extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.carbon_users ';
+        $sql = 'UPDATE StatsCoach.carbon_users ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['user_type'])) {
+        if (!empty($argv['user_type'])) {
             $set .= 'user_type=:user_type,';
         }
-        if (isset($argv['user_sport'])) {
+        if (!empty($argv['user_sport'])) {
             $set .= 'user_sport=:user_sport,';
         }
-        if (isset($argv['user_session_id'])) {
+        if (!empty($argv['user_session_id'])) {
             $set .= 'user_session_id=:user_session_id,';
         }
-        if (isset($argv['user_facebook_id'])) {
+        if (!empty($argv['user_facebook_id'])) {
             $set .= 'user_facebook_id=:user_facebook_id,';
         }
-        if (isset($argv['user_username'])) {
+        if (!empty($argv['user_username'])) {
             $set .= 'user_username=:user_username,';
         }
-        if (isset($argv['user_first_name'])) {
+        if (!empty($argv['user_first_name'])) {
             $set .= 'user_first_name=:user_first_name,';
         }
-        if (isset($argv['user_last_name'])) {
+        if (!empty($argv['user_last_name'])) {
             $set .= 'user_last_name=:user_last_name,';
         }
-        if (isset($argv['user_profile_pic'])) {
+        if (!empty($argv['user_profile_pic'])) {
             $set .= 'user_profile_pic=:user_profile_pic,';
         }
-        if (isset($argv['user_profile_uri'])) {
+        if (!empty($argv['user_profile_uri'])) {
             $set .= 'user_profile_uri=:user_profile_uri,';
         }
-        if (isset($argv['user_cover_photo'])) {
+        if (!empty($argv['user_cover_photo'])) {
             $set .= 'user_cover_photo=:user_cover_photo,';
         }
-        if (isset($argv['user_birthday'])) {
+        if (!empty($argv['user_birthday'])) {
             $set .= 'user_birthday=:user_birthday,';
         }
-        if (isset($argv['user_gender'])) {
+        if (!empty($argv['user_gender'])) {
             $set .= 'user_gender=:user_gender,';
         }
-        if (isset($argv['user_about_me'])) {
+        if (!empty($argv['user_about_me'])) {
             $set .= 'user_about_me=:user_about_me,';
         }
-        if (isset($argv['user_rank'])) {
+        if (!empty($argv['user_rank'])) {
             $set .= 'user_rank=:user_rank,';
         }
-        if (isset($argv['user_password'])) {
+        if (!empty($argv['user_password'])) {
             $set .= 'user_password=:user_password,';
         }
-        if (isset($argv['user_email'])) {
+        if (!empty($argv['user_email'])) {
             $set .= 'user_email=:user_email,';
         }
-        if (isset($argv['user_email_code'])) {
+        if (!empty($argv['user_email_code'])) {
             $set .= 'user_email_code=:user_email_code,';
         }
-        if (isset($argv['user_email_confirmed'])) {
+        if (!empty($argv['user_email_confirmed'])) {
             $set .= 'user_email_confirmed=:user_email_confirmed,';
         }
-        if (isset($argv['user_generated_string'])) {
+        if (!empty($argv['user_generated_string'])) {
             $set .= 'user_generated_string=:user_generated_string,';
         }
-        if (isset($argv['user_membership'])) {
+        if (!empty($argv['user_membership'])) {
             $set .= 'user_membership=:user_membership,';
         }
-        if (isset($argv['user_deactivated'])) {
+        if (!empty($argv['user_deactivated'])) {
             $set .= 'user_deactivated=:user_deactivated,';
         }
-        if (isset($argv['user_last_login'])) {
+        if (!empty($argv['user_last_login'])) {
             $set .= 'user_last_login=:user_last_login,';
         }
-        if (isset($argv['user_ip'])) {
+        if (!empty($argv['user_ip'])) {
             $set .= 'user_ip=:user_ip,';
         }
-        if (isset($argv['user_education_history'])) {
+        if (!empty($argv['user_education_history'])) {
             $set .= 'user_education_history=:user_education_history,';
         }
-        if (isset($argv['user_creation_date'])) {
+        if (!empty($argv['user_creation_date'])) {
             $set .= 'user_creation_date=:user_creation_date,';
         }
 
@@ -377,112 +381,111 @@ class carbon_users extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['user_type'])) {
+        if (!empty($argv['user_type'])) {
             $user_type = $argv['user_type'];
             $stmt->bindParam(':user_type',$user_type, 2, 20);
         }
-        if (isset($argv['user_sport'])) {
+        if (!empty($argv['user_sport'])) {
             $user_sport = $argv['user_sport'];
             $stmt->bindParam(':user_sport',$user_sport, 2, 20);
         }
-        if (isset($argv['user_session_id'])) {
+        if (!empty($argv['user_session_id'])) {
             $user_session_id = $argv['user_session_id'];
             $stmt->bindParam(':user_session_id',$user_session_id, 2, 225);
         }
-        if (isset($argv['user_facebook_id'])) {
+        if (!empty($argv['user_facebook_id'])) {
             $user_facebook_id = $argv['user_facebook_id'];
             $stmt->bindParam(':user_facebook_id',$user_facebook_id, 2, 225);
         }
-        if (isset($argv['user_username'])) {
+        if (!empty($argv['user_username'])) {
             $user_username = $argv['user_username'];
             $stmt->bindParam(':user_username',$user_username, 2, 25);
         }
-        if (isset($argv['user_first_name'])) {
+        if (!empty($argv['user_first_name'])) {
             $user_first_name = $argv['user_first_name'];
             $stmt->bindParam(':user_first_name',$user_first_name, 2, 25);
         }
-        if (isset($argv['user_last_name'])) {
+        if (!empty($argv['user_last_name'])) {
             $user_last_name = $argv['user_last_name'];
             $stmt->bindParam(':user_last_name',$user_last_name, 2, 25);
         }
-        if (isset($argv['user_profile_pic'])) {
+        if (!empty($argv['user_profile_pic'])) {
             $user_profile_pic = $argv['user_profile_pic'];
             $stmt->bindParam(':user_profile_pic',$user_profile_pic, 2, 225);
         }
-        if (isset($argv['user_profile_uri'])) {
+        if (!empty($argv['user_profile_uri'])) {
             $user_profile_uri = $argv['user_profile_uri'];
             $stmt->bindParam(':user_profile_uri',$user_profile_uri, 2, 225);
         }
-        if (isset($argv['user_cover_photo'])) {
+        if (!empty($argv['user_cover_photo'])) {
             $user_cover_photo = $argv['user_cover_photo'];
             $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
         }
-        if (isset($argv['user_birthday'])) {
+        if (!empty($argv['user_birthday'])) {
             $user_birthday = $argv['user_birthday'];
             $stmt->bindParam(':user_birthday',$user_birthday, 2, 12);
         }
-        if (isset($argv['user_gender'])) {
+        if (!empty($argv['user_gender'])) {
             $user_gender = $argv['user_gender'];
             $stmt->bindParam(':user_gender',$user_gender, 2, 25);
         }
-        if (isset($argv['user_about_me'])) {
+        if (!empty($argv['user_about_me'])) {
             $user_about_me = $argv['user_about_me'];
             $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
         }
-        if (isset($argv['user_rank'])) {
+        if (!empty($argv['user_rank'])) {
             $user_rank = $argv['user_rank'];
             $stmt->bindParam(':user_rank',$user_rank, 2, 8);
         }
-        if (isset($argv['user_password'])) {
+        if (!empty($argv['user_password'])) {
             $user_password = $argv['user_password'];
             $stmt->bindParam(':user_password',$user_password, 2, 225);
         }
-        if (isset($argv['user_email'])) {
+        if (!empty($argv['user_email'])) {
             $user_email = $argv['user_email'];
             $stmt->bindParam(':user_email',$user_email, 2, 50);
         }
-        if (isset($argv['user_email_code'])) {
+        if (!empty($argv['user_email_code'])) {
             $user_email_code = $argv['user_email_code'];
             $stmt->bindParam(':user_email_code',$user_email_code, 2, 225);
         }
-        if (isset($argv['user_email_confirmed'])) {
+        if (!empty($argv['user_email_confirmed'])) {
             $user_email_confirmed = $argv['user_email_confirmed'];
             $stmt->bindParam(':user_email_confirmed',$user_email_confirmed, 2, 20);
         }
-        if (isset($argv['user_generated_string'])) {
+        if (!empty($argv['user_generated_string'])) {
             $user_generated_string = $argv['user_generated_string'];
             $stmt->bindParam(':user_generated_string',$user_generated_string, 2, 200);
         }
-        if (isset($argv['user_membership'])) {
+        if (!empty($argv['user_membership'])) {
             $user_membership = $argv['user_membership'];
             $stmt->bindParam(':user_membership',$user_membership, 2, 10);
         }
-        if (isset($argv['user_deactivated'])) {
+        if (!empty($argv['user_deactivated'])) {
             $user_deactivated = $argv['user_deactivated'];
             $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
         }
-        if (isset($argv['user_last_login'])) {
+        if (!empty($argv['user_last_login'])) {
             $stmt->bindValue(':user_last_login',$argv['user_last_login'], 2);
         }
-        if (isset($argv['user_ip'])) {
+        if (!empty($argv['user_ip'])) {
             $user_ip = $argv['user_ip'];
             $stmt->bindParam(':user_ip',$user_ip, 2, 20);
         }
-        if (isset($argv['user_education_history'])) {
+        if (!empty($argv['user_education_history'])) {
             $user_education_history = $argv['user_education_history'];
             $stmt->bindParam(':user_education_history',$user_education_history, 2, 225);
         }
-        if (isset($argv['user_creation_date'])) {
+        if (!empty($argv['user_creation_date'])) {
             $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
         }
 

@@ -59,12 +59,12 @@ class team_members extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class team_members extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.team_members';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.team_members';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class team_members extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -170,7 +170,7 @@ class team_members extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.team_members (member_id, team_id, user_id, accepted) VALUES ( UNHEX(:member_id), UNHEX(:team_id), UNHEX(:user_id), :accepted)';
+        $sql = 'INSERT INTO StatsCoach.team_members (member_id, team_id, user_id, accepted) VALUES ( UNHEX(:member_id), UNHEX(:team_id), UNHEX(:user_id), :accepted)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -205,28 +205,32 @@ class team_members extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.team_members ';
+        $sql = 'UPDATE StatsCoach.team_members ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['member_id'])) {
+        if (!empty($argv['member_id'])) {
             $set .= 'member_id=UNHEX(:member_id),';
         }
-        if (isset($argv['team_id'])) {
+        if (!empty($argv['team_id'])) {
             $set .= 'team_id=UNHEX(:team_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['accepted'])) {
+        if (!empty($argv['accepted'])) {
             $set .= 'accepted=:accepted,';
         }
 
@@ -244,25 +248,24 @@ class team_members extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['member_id'])) {
-            $member_id = 'UNHEX('.$argv['member_id'].')';
-            $stmt->bindParam(':member_id', $member_id, 2, 16);
+        if (!empty($argv['member_id'])) {
+            $member_id = $argv['member_id'];
+            $stmt->bindParam(':member_id',$member_id, 2, 16);
         }
-        if (isset($argv['team_id'])) {
-            $team_id = 'UNHEX('.$argv['team_id'].')';
-            $stmt->bindParam(':team_id', $team_id, 2, 16);
+        if (!empty($argv['team_id'])) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['accepted'])) {
+        if (!empty($argv['accepted'])) {
             $accepted = $argv['accepted'];
             $stmt->bindParam(':accepted',$accepted, 0, 1);
         }
@@ -285,7 +288,7 @@ class team_members extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.team_members ';
+        $sql = 'DELETE FROM StatsCoach.team_members ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
@@ -302,15 +305,24 @@ class team_members extends Entities implements iRest
             if (empty($argv)) {
                 return false;
             }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+            $pdo = self::database();
+
+            $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                $sql = '(';
+                foreach ($set as $column => $value) {
+                    if (is_array($value)) {
+                        $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                    } else {
+                        if (in_array($column, self::BINARY)) {
+                            $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                        } else {
+                            $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                        }
+                    }
                 }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
+                return rtrim($sql, " $join") . ')';
+            };
+            $sql .= ' WHERE ' . $build_where($argv);
         } 
 
         $remove = null;

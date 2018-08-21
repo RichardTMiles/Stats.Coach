@@ -59,12 +59,12 @@ class carbon_locations extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class carbon_locations extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_locations';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_locations';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class carbon_locations extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -163,7 +163,7 @@ class carbon_locations extends Entities implements iRest
         */
 
         
-        if (empty($primary) && $argv['pagination']['limit'] !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
+        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
             $return = [$return];
         }
 
@@ -176,7 +176,7 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
+        $sql = 'INSERT INTO StatsCoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -219,37 +219,41 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.carbon_locations ';
+        $sql = 'UPDATE StatsCoach.carbon_locations ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['entity_id'])) {
+        if (!empty($argv['entity_id'])) {
             $set .= 'entity_id=UNHEX(:entity_id),';
         }
-        if (isset($argv['latitude'])) {
+        if (!empty($argv['latitude'])) {
             $set .= 'latitude=:latitude,';
         }
-        if (isset($argv['longitude'])) {
+        if (!empty($argv['longitude'])) {
             $set .= 'longitude=:longitude,';
         }
-        if (isset($argv['street'])) {
+        if (!empty($argv['street'])) {
             $set .= 'street=:street,';
         }
-        if (isset($argv['city'])) {
+        if (!empty($argv['city'])) {
             $set .= 'city=:city,';
         }
-        if (isset($argv['state'])) {
+        if (!empty($argv['state'])) {
             $set .= 'state=:state,';
         }
-        if (isset($argv['elevation'])) {
+        if (!empty($argv['elevation'])) {
             $set .= 'elevation=:elevation,';
         }
 
@@ -269,37 +273,36 @@ class carbon_locations extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['entity_id'])) {
-            $entity_id = 'UNHEX('.$argv['entity_id'].')';
-            $stmt->bindParam(':entity_id', $entity_id, 2, 16);
+        if (!empty($argv['entity_id'])) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (isset($argv['latitude'])) {
+        if (!empty($argv['latitude'])) {
             $latitude = $argv['latitude'];
             $stmt->bindParam(':latitude',$latitude, 2, 225);
         }
-        if (isset($argv['longitude'])) {
+        if (!empty($argv['longitude'])) {
             $longitude = $argv['longitude'];
             $stmt->bindParam(':longitude',$longitude, 2, 225);
         }
-        if (isset($argv['street'])) {
+        if (!empty($argv['street'])) {
             $street = $argv['street'];
             $stmt->bindParam(':street',$street, 2, 40);
         }
-        if (isset($argv['city'])) {
+        if (!empty($argv['city'])) {
             $city = $argv['city'];
             $stmt->bindParam(':city',$city, 2, 40);
         }
-        if (isset($argv['state'])) {
+        if (!empty($argv['state'])) {
             $state = $argv['state'];
             $stmt->bindParam(':state',$state, 2, 10);
         }
-        if (isset($argv['elevation'])) {
+        if (!empty($argv['elevation'])) {
             $elevation = $argv['elevation'];
             $stmt->bindParam(':elevation',$elevation, 2, 40);
         }

@@ -59,12 +59,12 @@ class golf_course_tee_boxes extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class golf_course_tee_boxes extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.golf_course_tee_boxes';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.golf_course_tee_boxes';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class golf_course_tee_boxes extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -170,7 +170,7 @@ class golf_course_tee_boxes extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.golf_course_tee_boxes (color, par, difficulty, slope, id, course_id) VALUES ( :color, :par, :difficulty, :slope, UNHEX(:id), UNHEX(:course_id))';
+        $sql = 'INSERT INTO StatsCoach.golf_course_tee_boxes (color, par, difficulty, slope, id, course_id) VALUES ( :color, :par, :difficulty, :slope, UNHEX(:id), UNHEX(:course_id))';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -207,34 +207,38 @@ class golf_course_tee_boxes extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.golf_course_tee_boxes ';
+        $sql = 'UPDATE StatsCoach.golf_course_tee_boxes ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['color'])) {
+        if (!empty($argv['color'])) {
             $set .= 'color=:color,';
         }
-        if (isset($argv['par'])) {
+        if (!empty($argv['par'])) {
             $set .= 'par=:par,';
         }
-        if (isset($argv['difficulty'])) {
+        if (!empty($argv['difficulty'])) {
             $set .= 'difficulty=:difficulty,';
         }
-        if (isset($argv['slope'])) {
+        if (!empty($argv['slope'])) {
             $set .= 'slope=:slope,';
         }
-        if (isset($argv['id'])) {
+        if (!empty($argv['id'])) {
             $set .= 'id=UNHEX(:id),';
         }
-        if (isset($argv['course_id'])) {
+        if (!empty($argv['course_id'])) {
             $set .= 'course_id=UNHEX(:course_id),';
         }
 
@@ -252,33 +256,32 @@ class golf_course_tee_boxes extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['color'])) {
+        if (!empty($argv['color'])) {
             $color = $argv['color'];
             $stmt->bindParam(':color',$color, 2, 20);
         }
-        if (isset($argv['par'])) {
+        if (!empty($argv['par'])) {
             $stmt->bindValue(':par',$argv['par'], 2);
         }
-        if (isset($argv['difficulty'])) {
+        if (!empty($argv['difficulty'])) {
             $stmt->bindValue(':difficulty',$argv['difficulty'], 2);
         }
-        if (isset($argv['slope'])) {
+        if (!empty($argv['slope'])) {
             $slope = $argv['slope'];
             $stmt->bindParam(':slope',$slope, 2, 3);
         }
-        if (isset($argv['id'])) {
-            $id = 'UNHEX('.$argv['id'].')';
-            $stmt->bindParam(':id', $id, 2, 16);
+        if (!empty($argv['id'])) {
+            $id = $argv['id'];
+            $stmt->bindParam(':id',$id, 2, 16);
         }
-        if (isset($argv['course_id'])) {
-            $course_id = 'UNHEX('.$argv['course_id'].')';
-            $stmt->bindParam(':course_id', $course_id, 2, 16);
+        if (!empty($argv['course_id'])) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
 
         if (!$stmt->execute()){
@@ -299,7 +302,7 @@ class golf_course_tee_boxes extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.golf_course_tee_boxes ';
+        $sql = 'DELETE FROM StatsCoach.golf_course_tee_boxes ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
@@ -316,15 +319,24 @@ class golf_course_tee_boxes extends Entities implements iRest
             if (empty($argv)) {
                 return false;
             }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+            $pdo = self::database();
+
+            $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                $sql = '(';
+                foreach ($set as $column => $value) {
+                    if (is_array($value)) {
+                        $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                    } else {
+                        if (in_array($column, self::BINARY)) {
+                            $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                        } else {
+                            $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                        }
+                    }
                 }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
+                return rtrim($sql, " $join") . ')';
+            };
+            $sql .= ' WHERE ' . $build_where($argv);
         } 
 
         $remove = null;

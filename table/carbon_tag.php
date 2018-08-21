@@ -59,12 +59,12 @@ class carbon_tag extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' DESC';
+                    $order .= self::PRIMARY[0] . ' ASC';
                 }
             }
             $limit = $order .' '. $limit;
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' DESC LIMIT 100';
+            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -112,7 +112,7 @@ class carbon_tag extends Entities implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM statscoach.carbon_tag';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_tag';
 
         $pdo = Database::database();
 
@@ -131,7 +131,7 @@ class carbon_tag extends Entities implements iRest
                             }
                         }
                     }
-                    return substr($sql, 0, strlen($sql) - (strlen($join) + 1)) . ')';
+                    return rtrim($sql, " $join") . ')';
                 };
                 $sql .= ' WHERE ' . $build_where($where);
             }
@@ -170,7 +170,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO statscoach.carbon_tag (entity_id, user_id, tag_id, creation_date) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id, :creation_date)';
+        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, user_id, tag_id, creation_date) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id, :creation_date)';
         $stmt = Database::database()->prepare($sql);
 
         global $json;
@@ -205,28 +205,32 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        if (empty($primary)) {
+            return false;
+        }
+
         foreach ($argv as $key => $value) {
             if (!in_array($key, self::COLUMNS)){
                 unset($argv[$key]);
             }
         }
 
-        $sql = 'UPDATE statscoach.carbon_tag ';
+        $sql = 'UPDATE StatsCoach.carbon_tag ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-        if (isset($argv['entity_id'])) {
+        if (!empty($argv['entity_id'])) {
             $set .= 'entity_id=UNHEX(:entity_id),';
         }
-        if (isset($argv['user_id'])) {
+        if (!empty($argv['user_id'])) {
             $set .= 'user_id=UNHEX(:user_id),';
         }
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $set .= 'tag_id=:tag_id,';
         }
-        if (isset($argv['creation_date'])) {
+        if (!empty($argv['creation_date'])) {
             $set .= 'creation_date=:creation_date,';
         }
 
@@ -244,25 +248,24 @@ class carbon_tag extends Entities implements iRest
 
         global $json;
 
-        if (!isset($json['sql'])) {
+        if (empty($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = $sql;
 
-
-        if (isset($argv['entity_id'])) {
-            $entity_id = 'UNHEX('.$argv['entity_id'].')';
-            $stmt->bindParam(':entity_id', $entity_id, 2, 16);
+        if (!empty($argv['entity_id'])) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (isset($argv['user_id'])) {
-            $user_id = 'UNHEX('.$argv['user_id'].')';
-            $stmt->bindParam(':user_id', $user_id, 2, 16);
+        if (!empty($argv['user_id'])) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (isset($argv['tag_id'])) {
+        if (!empty($argv['tag_id'])) {
             $tag_id = $argv['tag_id'];
             $stmt->bindParam(':tag_id',$tag_id, 2, 11);
         }
-        if (isset($argv['creation_date'])) {
+        if (!empty($argv['creation_date'])) {
             $creation_date = $argv['creation_date'];
             $stmt->bindParam(':creation_date',$creation_date, 2, 20);
         }
@@ -285,7 +288,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        $sql = 'DELETE FROM statscoach.carbon_tag ';
+        $sql = 'DELETE FROM StatsCoach.carbon_tag ';
 
         foreach($argv as $column => $constraint){
             if (!in_array($column, self::COLUMNS)){
@@ -302,15 +305,24 @@ class carbon_tag extends Entities implements iRest
             if (empty($argv)) {
                 return false;
             }
-            $sql .= ' WHERE ';
-            foreach ($argv as $column => $value) {
-                if (in_array($column, self::BINARY)) {
-                    $sql .= " $column =UNHEX(" . Database::database()->quote($value) . ') AND ';
-                } else {
-                    $sql .= " $column =" . Database::database()->quote($value) . ' AND ';
+            $pdo = self::database();
+
+            $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
+                $sql = '(';
+                foreach ($set as $column => $value) {
+                    if (is_array($value)) {
+                        $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
+                    } else {
+                        if (in_array($column, self::BINARY)) {
+                            $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
+                        } else {
+                            $sql .= "($column = " . $pdo->quote($value) . ") $join ";
+                        }
+                    }
                 }
-            }
-            $sql = substr($sql, 0, strlen($sql)-4);
+                return rtrim($sql, " $join") . ')';
+            };
+            $sql .= ' WHERE ' . $build_where($argv);
         } 
 
         $remove = null;
