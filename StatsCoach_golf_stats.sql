@@ -1,1 +1,0 @@
-INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES (0x588F90F6987711E8874273C47C2339B4, 0, 0, 0, 0, 0, 0, 0);

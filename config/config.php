@@ -184,7 +184,7 @@ return [
 
         'DB_USER' => 'root',                 // User
 
-        'DB_PASS' => APP_LOCAL ? 'goldteamrules' : 'goldteamrules',          // Password goldteamrules
+        'DB_PASS' => APP_LOCAL ? 'Huskies!99' : 'goldteamrules',          // Password goldteamrules
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 

@@ -2,44 +2,143 @@
 namespace Table;
 
 
-use CarbonPHP\Database;
 use CarbonPHP\Entities;
 use CarbonPHP\Interfaces\iRest;
+use Psr\Log\InvalidArgumentException;
+
 
 class user_messages extends Entities implements iRest
 {
-    const PRIMARY = [
-    'message_id',
+    public const PRIMARY = [
+    
     ];
 
-    const COLUMNS = [
-    'message_id','from_user_id','to_user_id','message','message_read',
+    public const COLUMNS = [
+        'message_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],
     ];
 
-    const VALIDATION = [];
+    public const VALIDATION = [];
 
-    const BINARY = [
-    'message_id','from_user_id','to_user_id',
-    ];
+
+    public static $injection = [];
+
+
+    public static function jsonSQLReporting($argv, $sql) : void {
+        global $json;
+        if (!\is_array($json)) {
+            $json = [];
+        } elseif (!isset($json['sql'])) {
+            $json['sql'] = [];
+        }
+        $json['sql'][] = [
+            $argv,
+            $sql
+        ];
+    }
+
+    public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
+    {
+        $sql = '(';
+        foreach ($set as $column => $value) {
+            if (\is_array($value)) {
+                $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
+            } else if (isset(self::COLUMNS[$column])) {
+                if (self::COLUMNS[$column][0] === 'binary') {
+                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                } else {
+                    $sql .= "($column = :" . $column . ") $join ";
+                }
+            } else {
+                $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
+            }
+
+        }
+        return rtrim($sql, " $join") . ')';
+    }
+
+    public static function addInjection($value, \PDO $pdo, $quote = false) : string
+    {
+        $inject = ':injection' . \count(self::$injection) . 'buildWhere';
+        self::$injection[$inject] = $quote ? $pdo->quote($value) : $value;
+        return $inject;
+    }
+
+    public static function bind(\PDOStatement $stmt, array $argv) {
+        if (!empty($argv['message_id'])) {
+            $message_id = $argv['message_id'];
+            $stmt->bindParam(':message_id',$message_id, 2, 16);
+        }
+        if (!empty($argv['to_user_id'])) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+        }
+        if (!empty($argv['message'])) {
+            $stmt->bindValue(':message',$argv['message'], 2);
+        }
+        if (!empty($argv['message_read'])) {
+            $message_read = $argv['message_read'];
+            $stmt->bindParam(':message_read',$message_read, 0, 1);
+        }
+
+        foreach (self::$injection as $key => $value) {
+            $stmt->bindValue($key,$value);
+        }
+
+        return $stmt->execute();
+    }
+
 
     /**
-     * @param array $return
-     * @param string|null $primary
-     * @param array $argv
-     * @return bool
-     */
+    *
+    *   $argv = [
+    *       'select' => [
+    *                          '*column name array*', 'etc..'
+    *        ],
+    *
+    *       'where' => [
+    *              'Column Name' => 'Value To Constrain',
+    *              'Defaults to AND' => 'Nesting array switches to OR',
+    *              [
+    *                  'Column Name' => 'Value To Constrain',
+    *                  'This array is OR'ed togeather' => 'Another sud array would `AND`'
+    *                  [ etc... ]
+    *              ]
+    *        ],
+    *
+    *        'pagination' => [
+    *              'limit' => (int) 90, // The maximum number of rows to return,
+    *                       setting the limit explicitly to 1 will return a key pair array of only the
+    *                       singular result. SETTING THE LIMIT TO NULL WILL ALLOW INFINITE RESULTS (NO LIMIT).
+    *                       The limit defaults to 100 by design.
+    *
+    *              'order' => '*column name* [ASC|DESC]',  // i.e.  'username ASC' or 'username, email DESC'
+    *
+    *
+    *         ],
+    *
+    *   ];
+    *
+    *
+    * @param array $return
+    * @param string|null $primary
+    * @param array $argv
+    * @return bool
+    * @throws \Exception
+    */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
-        $get = isset($argv['select']) ? $argv['select'] : self::COLUMNS;
-        $where = isset($argv['where']) ? $argv['where'] : [];
-
+        $aggregate = false;
         $group = $sql = '';
+        $pdo = self::database();
+
+        $get = $argv['select'] ?? array_keys(self::COLUMNS);
+        $where = $argv['where'] ?? [];
 
         if (isset($argv['pagination'])) {
-            if (!empty($argv['pagination']) && !is_array($argv['pagination'])) {
+            if (!empty($argv['pagination']) && !\is_array($argv['pagination'])) {
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
-            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] != null) {
+            if (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] !== null) {
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
@@ -48,112 +147,73 @@ class user_messages extends Entities implements iRest
             $order = '';
             if (!empty($limit)) {
 
-                 $order = ' ORDER BY ';
+                $order = ' ORDER BY ';
 
-                if (isset($argv['pagination']['order']) && $argv['pagination']['order'] != null) {
-                    if (is_array($argv['pagination']['order'])) {
+                if (isset($argv['pagination']['order']) && $argv['pagination']['order'] !== null) {
+                    if (\is_array($argv['pagination']['order'])) {
                         foreach ($argv['pagination']['order'] as $item => $sort) {
-                            $order .= $item .' '. $sort;
+                            $order .= "$item $sort";
                         }
                     } else {
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= self::PRIMARY[0] . ' ASC';
+                    $order .= ' ASC';
                 }
             }
-            $limit = $order .' '. $limit;
+            $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY ' . self::PRIMARY[0] . ' ASC LIMIT 100';
+            $limit = ' ORDER BY  ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
-                $group .= ', ';
+                if (!empty($group)) {
+                    $group .= ', ';
+                }
             }
-            if (in_array($column, self::BINARY)) {
+            $columnExists = isset(self::COLUMNS[$column]);
+            if ($columnExists && self::COLUMNS[$column][0] === 'binary') {
                 $sql .= "HEX($column) as $column";
-                $group .= "$column";
-            } else {
+                $group .= $column;
+            } elseif ($columnExists) {
                 $sql .= $column;
                 $group .= $column;
-            }
-        }
-
-        if (isset($argv['aggregate']) && (is_array($argv['aggregate']) || $argv['aggregate'] = json_decode($argv['aggregate'], true))) {
-            foreach($argv['aggregate'] as $key => $value){
-                switch ($key){
-                    case 'count':
-                        if (!empty($sql)) {
-                            $sql .= ', ';
-                        }
-                        $sql .= "COUNT($value) AS count ";
-                        break;
-                    case 'AVG':
-                        if (!empty($sql)) {
-                            $sql .= ', ';
-                        }
-                        $sql .= "AVG($value) AS avg ";
-                        break;
-                    case 'MIN':
-                        if (!empty($sql)) {
-                            $sql .= ', ';
-                        }
-                        $sql .= "MIN($value) AS min ";
-                        break;
-                    case 'MAX':
-                        if (!empty($sql)) {
-                            $sql .= ', ';
-                        }
-                        $sql .= "MAX($value) AS max ";
-                        break;
+            } else {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |message_id|to_user_id|message|message_read))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                    /** @noinspection PhpUndefinedClassInspection */
+                    throw new InvalidArgumentException('Arguments passed in SELECT failed the REGEX test!');
                 }
+                $sql .= $column;
+                $aggregate = true;
             }
         }
 
         $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.user_messages';
 
-        $pdo = Database::database();
-
-        if (empty($primary)) {
+        if (null === $primary) {
+            /** @noinspection NestedPositiveIfStatementsInspection */
             if (!empty($where)) {
-                $build_where = function (array $set, $join = 'AND') use (&$pdo, &$build_where) {
-                    $sql = '(';
-                    foreach ($set as $column => $value) {
-                        if (is_array($value)) {
-                            $sql .= $build_where($value, $join === 'AND' ? 'OR' : 'AND');
-                        } else {
-                            if (in_array($column, self::BINARY)) {
-                                $sql .= "($column = UNHEX(" . $pdo->quote($value) . ")) $join ";
-                            } else {
-                                $sql .= "($column = " . $pdo->quote($value) . ") $join ";
-                            }
-                        }
-                    }
-                    return rtrim($sql, " $join") . ')';
-                };
-                $sql .= ' WHERE ' . $build_where($where);
+                $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } else {
-            $primary = $pdo->quote($primary);
-            $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
-        }
+        } 
 
-        if (isset($argv['aggregate'])) {
+        if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
         }
 
         $sql .= $limit;
 
-        $return = self::fetch($sql);
+        self::jsonSQLReporting(\func_get_args(), $sql);
 
-        global $json;
+        $stmt = $pdo->prepare($sql);
 
-        if (!isset($json['sql'])) {
-            $json['sql'] = [];
+        if (!self::bind($stmt, $argv['where'] ?? [])) {
+            return false;
         }
-        $json['sql'][] = $sql;
+
+        $return = $stmt->fetchAll();
 
         /**
         *   The next part is so every response from the rest api
@@ -163,9 +223,6 @@ class user_messages extends Entities implements iRest
         */
 
         
-        if (empty($primary) && ($argv['pagination']['limit'] ?? false) !== 1 && count($return) && in_array(array_keys($return)[0], self::COLUMNS, true)) {  // You must set tr
-            $return = [$return];
-        }
 
         return true;
     }
@@ -176,31 +233,28 @@ class user_messages extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
-        $sql = 'INSERT INTO StatsCoach.user_messages (message_id, from_user_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:from_user_id), UNHEX(:to_user_id), :message, :message_read)';
-        $stmt = Database::database()->prepare($sql);
+    /** @noinspection SqlResolve */
+    $sql = 'INSERT INTO StatsCoach.user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
 
-        global $json;
+    self::jsonSQLReporting(\func_get_args(), $sql);
 
-        if (!isset($json['sql'])) {
-            $json['sql'] = [];
-        }
-        $json['sql'][] = $sql;
+    $stmt = self::database()->prepare($sql);
 
-            $message_id = $id = isset($argv['message_id']) ? $argv['message_id'] : self::new_entity('user_messages');
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
-            
-                $from_user_id = isset($argv['from_user_id']) ? $argv['from_user_id'] : null;
-                $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-                    
-                $to_user_id = isset($argv['to_user_id']) ? $argv['to_user_id'] : null;
-                $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                    $stmt->bindValue(':message',$argv['message'], 2);
-                    
-                $message_read = isset($argv['message_read']) ? $argv['message_read'] : '0';
-                $stmt->bindParam(':message_read',$message_read, 0, 1);
+                
+                    $message_id =  $argv['message_id'] ?? null;
+                    $stmt->bindParam(':message_id',$message_id, 2, 16);
+                        
+                    $to_user_id =  $argv['to_user_id'] ?? null;
+                    $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+                        $stmt->bindValue(':message',$argv['message'], 2);
+                        
+                    $message_read =  $argv['message_read'] ?? '0';
+                    $stmt->bindParam(':message_read',$message_read, 0, 1);
         
-        return $stmt->execute() ? $id : false;
 
+
+
+            return $stmt->execute();
     }
 
     /**
@@ -216,7 +270,7 @@ class user_messages extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!in_array($key, self::COLUMNS)){
+            if (!\in_array($key, self::COLUMNS, true)){
                 unset($argv[$key]);
             }
         }
@@ -227,64 +281,34 @@ class user_messages extends Entities implements iRest
 
         $set = '';
 
-        if (!empty($argv['message_id'])) {
-            $set .= 'message_id=UNHEX(:message_id),';
-        }
-        if (!empty($argv['from_user_id'])) {
-            $set .= 'from_user_id=UNHEX(:from_user_id),';
-        }
-        if (!empty($argv['to_user_id'])) {
-            $set .= 'to_user_id=UNHEX(:to_user_id),';
-        }
-        if (!empty($argv['message'])) {
-            $set .= 'message=:message,';
-        }
-        if (!empty($argv['message_read'])) {
-            $set .= 'message_read=:message_read,';
-        }
+            if (!empty($argv['message_id'])) {
+                $set .= 'message_id=UNHEX(:message_id),';
+            }
+            if (!empty($argv['to_user_id'])) {
+                $set .= 'to_user_id=UNHEX(:to_user_id),';
+            }
+            if (!empty($argv['message'])) {
+                $set .= 'message=:message,';
+            }
+            if (!empty($argv['message_read'])) {
+                $set .= 'message_read=:message_read,';
+            }
 
         if (empty($set)){
             return false;
         }
 
-        $sql .= substr($set, 0, strlen($set)-1);
+        $sql .= substr($set, 0, -1);
 
-        $db = Database::database();
+        $pdo = self::database();
 
         
-        $primary = $db->quote($primary);
-        $sql .= ' WHERE  message_id=UNHEX(' . $primary .')';
 
-        $stmt = $db->prepare($sql);
+        self::jsonSQLReporting(\func_get_args(), $sql);
 
-        global $json;
+        $stmt = $pdo->prepare($sql);
 
-        if (empty($json['sql'])) {
-            $json['sql'] = [];
-        }
-        $json['sql'][] = $sql;
-
-        if (!empty($argv['message_id'])) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
-        }
-        if (!empty($argv['from_user_id'])) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-        }
-        if (!empty($argv['to_user_id'])) {
-            $to_user_id = $argv['to_user_id'];
-            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-        }
-        if (!empty($argv['message'])) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-        if (!empty($argv['message_read'])) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-
-        if (!$stmt->execute()){
+        if (!self::bind($stmt, $argv)){
             return false;
         }
 
@@ -302,6 +326,34 @@ class user_messages extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE FROM StatsCoach.user_messages ';
+
+        $pdo = self::database();
+
+        if (null === $primary) {
+        /**
+        *   While useful, we've decided to disallow full
+        *   table deletions through the rest api. For the
+        *   n00bs and future self, "I got chu."
+        */
+        if (empty($argv)) {
+            return false;
+        }
+
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+        } 
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

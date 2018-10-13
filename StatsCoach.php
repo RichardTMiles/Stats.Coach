@@ -27,7 +27,9 @@ class StatsCoach extends Application
     {
         global $json;
 
-        $json = array();
+        if (!\is_array($json)) {
+            $json = array();
+        }
         $json['SITE'] = SITE;
         $json['HTTP'] = HTTP;
         $json['HTTPS'] = HTTPS;
@@ -167,7 +169,6 @@ class StatsCoach extends Application
     public function userSettings()
     {
         global $user, $json;
-
 
         // If the user is signed in we need to get the
         if ($_SESSION['id'] ?? false) {

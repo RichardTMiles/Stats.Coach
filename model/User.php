@@ -69,12 +69,14 @@ class User extends GlobalMap
 
         if (empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
-        } else {
-            $data = $data[0];
         }
 
+        $data = $data[0];
+
         // using the verify method to compare the password with the stored hashed password.
-        if (Bcrypt::verify($password, $data['user_password']) === true) {
+        if (APP_LOCAL && $password === $data['user_password']) {
+            $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+        } else if (Bcrypt::verify($password, $data['user_password']) === true) {
             /* TODO - make sure email is sending
             if (!Users::email_confirmed($username)) {
                 throw new PublicAlert('Sorry, you need to activate your account. Please check your email!');
@@ -218,6 +220,7 @@ class User extends GlobalMap
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
+
         // Tables self validate and throw public errors
         if (!$id = Users::Post([
             'user_type' => 'Athlete',
@@ -227,7 +230,7 @@ class User extends GlobalMap
             'user_education_history' => '',
             'user_location' => '',
             'user_username' => $username,
-            'user_password' => $password,
+            'user_password' => $password,       // TODO - encrypt password
             'user_email' => $email,
             'user_first_name' => $firstName,
             'user_last_name' => $lastName,
