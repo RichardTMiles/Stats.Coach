@@ -220,7 +220,6 @@ class User extends GlobalMap
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
-
         // Tables self validate and throw public errors
         if (!$id = Users::Post([
             'user_type' => 'Athlete',
@@ -237,19 +236,23 @@ class User extends GlobalMap
             'user_gender' => $gender
         ])) {
             throw new PublicAlert('Failed to create your account!');
-        };
+        }
 
         if (!Stats::Post([
             'stats_id' => $id
         ])) {
             throw new PublicAlert('Failed to create your account!');
-        };    // this works
+        }
 
-        $_SESSION['id'] = $id;
+        if (self::commit()) {
+            $_SESSION['id'] = $id;
 
-        PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
+            PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-        startApplication('home/');
+            startApplication('home/');
+        } else {
+            throw new PublicAlert('Failed to create your account!');
+        }
 
         return false;
     }

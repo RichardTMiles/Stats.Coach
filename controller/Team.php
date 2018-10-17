@@ -17,7 +17,7 @@ class Team extends Request
     /**
      * @param bool $team_id
      * @return array|bool|mixed
-     * @throws \Carbon\Error\PublicAlert
+     * @throws \CarbonPHP\Error\PublicAlert
      */
     public function team($team_id = false)
     {
@@ -54,11 +54,10 @@ class Team extends Request
 
     /**
      * @return array|bool|mixed|null
-     * @throws \Carbon\Error\PublicAlert
+     * @throws \CarbonPHP\Error\PublicAlert
      */
     public function joinTeam()
     {
-
         if (empty($_POST)) {
             return null;
         }

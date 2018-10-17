@@ -210,7 +210,7 @@ class carbon_locations extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  entity_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -258,7 +258,7 @@ class carbon_locations extends Entities implements iRest
 
     $stmt = self::database()->prepare($sql);
 
-                $entity_id = $id = $argv['entity_id'] ?? self::new_entity('carbon_locations');
+                $entity_id = $id = $argv['entity_id'] ?? self::beginTransaction('carbon_locations');
                 $stmt->bindParam(':entity_id',$entity_id, 2, 16);
                 
                     $latitude =  $argv['latitude'] ?? null;
@@ -337,7 +337,7 @@ class carbon_locations extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  entity_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

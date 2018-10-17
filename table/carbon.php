@@ -191,7 +191,7 @@ class carbon extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  entity_pk=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -290,7 +290,7 @@ class carbon extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  entity_pk=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -332,7 +332,7 @@ class carbon extends Entities implements iRest
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
         } else {
-        $sql .= ' WHERE  entity_pk=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         self::jsonSQLReporting(\func_get_args(), $sql);

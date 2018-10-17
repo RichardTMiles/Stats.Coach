@@ -215,7 +215,7 @@ class golf_stats extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  stats_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -263,7 +263,7 @@ class golf_stats extends Entities implements iRest
 
     $stmt = self::database()->prepare($sql);
 
-                $stats_id = $id = $argv['stats_id'] ?? self::new_entity('golf_stats');
+                $stats_id = $id = $argv['stats_id'] ?? self::beginTransaction('golf_stats');
                 $stmt->bindParam(':stats_id',$stats_id, 2, 16);
                 
                     $stats_tournaments =  $argv['stats_tournaments'] ?? '0';
@@ -350,7 +350,7 @@ class golf_stats extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  stats_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

@@ -208,7 +208,7 @@ class User extends Request
             throw new PublicAlert('The passwords entered must match!');
         }
 
-        $password = Bcrypt::genHash($password);
+        APP_LOCAL OR $password = Bcrypt::genHash($password);
 
         if (!$email) {
             throw new PublicAlert('Please enter a valid email address!');

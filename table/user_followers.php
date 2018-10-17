@@ -191,7 +191,7 @@ class user_followers extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  follows_user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  follows_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -239,7 +239,7 @@ class user_followers extends Entities implements iRest
 
     $stmt = self::database()->prepare($sql);
 
-                $follows_user_id = $id = $argv['follows_user_id'] ?? self::new_entity('user_followers');
+                $follows_user_id = $id = $argv['follows_user_id'] ?? self::beginTransaction('user_followers');
                 $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
                 
                     $user_id = $argv['user_id'];
@@ -290,7 +290,7 @@ class user_followers extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  follows_user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  follows_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

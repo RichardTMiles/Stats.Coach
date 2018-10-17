@@ -198,7 +198,7 @@ class carbon_comments extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  comment_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  comment_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -249,7 +249,7 @@ class carbon_comments extends Entities implements iRest
                 
                     $parent_id = $argv['parent_id'];
                     $stmt->bindParam(':parent_id',$parent_id, 2, 16);
-                        $comment_id = $id = $argv['comment_id'] ?? self::new_entity('carbon_comments');
+                        $comment_id = $id = $argv['comment_id'] ?? self::beginTransaction('carbon_comments');
                 $stmt->bindParam(':comment_id',$comment_id, 2, 16);
                 
                     $user_id = $argv['user_id'];
@@ -307,7 +307,7 @@ class carbon_comments extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  comment_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  comment_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

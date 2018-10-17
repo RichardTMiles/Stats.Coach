@@ -205,7 +205,7 @@ class sessions extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  session_id=".self::addInjection($primary, $pdo)."';
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -325,7 +325,7 @@ class sessions extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  session_id=".self::addInjection($primary, $pdo)."';
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -367,7 +367,7 @@ class sessions extends Entities implements iRest
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
         } else {
-        $sql .= ' WHERE  session_id=".self::addInjection($primary, $pdo)."';
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
         }
 
         self::jsonSQLReporting(\func_get_args(), $sql);

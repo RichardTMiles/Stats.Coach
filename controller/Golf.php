@@ -36,14 +36,14 @@ class Golf extends Request  // Validation
     {
         global $json;
 
-        $state = ucfirst($this->set($state)->alnum());
-        $course_id = $this->set($course_id)->alnum();         // hex id
-        $boxColor = $this->set($boxColor)->alnum();
-
         if (!$state) {
             $json['step1'] = true;
             return null;                                // goto view
         }
+
+        $state = ucfirst($this->set($state)->alnum());
+        $course_id = $this->set($course_id)->alnum();         // hex id
+        $boxColor = $this->set($boxColor)->alnum();
 
         if (empty($_POST)) {
             return [$state, $course_id, $boxColor];     // goto the model
@@ -167,7 +167,7 @@ class Golf extends Request  // Validation
 
         $color = $this->post('color')->word();
 
-        if (!in_array($color, [
+        if (!\in_array($color, [
             'blue',
             'black',
             'green',

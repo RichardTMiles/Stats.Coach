@@ -14,7 +14,7 @@ class carbon_reports extends Entities implements iRest
     ];
 
     public const COLUMNS = [
-        'log_level' => [ 'varchar', '2', '20' ],'report' => [ 'text,', '2', '' ],'date' => [ 'varchar', '2', '22' ],'call_trace' => [ 'text', '2', '' ],
+        'log_level' => [ 'varchar', '2', '20' ],'report' => [ 'text,', '2', '' ],'date' => [ 'datetime', '2', '' ],'call_trace' => [ 'text', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -72,8 +72,7 @@ class carbon_reports extends Entities implements iRest
             $stmt->bindValue(':report',$argv['report'], 2);
         }
         if (!empty($argv['date'])) {
-            $date = $argv['date'];
-            $stmt->bindParam(':date',$date, 2, 22);
+            $stmt->bindValue(':date',$argv['date'], 2);
         }
         if (!empty($argv['call_trace'])) {
             $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
@@ -233,7 +232,7 @@ class carbon_reports extends Entities implements iRest
     public static function Post(array $argv)
     {
     /** @noinspection SqlResolve */
-    $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, date, call_trace) VALUES ( :log_level, :report, :date, :call_trace)';
+    $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, call_trace) VALUES ( :log_level, :report, :call_trace)';
 
     self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -243,10 +242,7 @@ class carbon_reports extends Entities implements iRest
                     $log_level =  $argv['log_level'] ?? null;
                     $stmt->bindParam(':log_level',$log_level, 2, 20);
                         $stmt->bindValue(':report',$argv['report'], 2);
-                        
-                    $date = $argv['date'];
-                    $stmt->bindParam(':date',$date, 2, 22);
-                        $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+                                $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         
 
 

@@ -29,13 +29,13 @@ class Golf extends GlobalMap implements iSport
      */
     public function rounds($user_uri)
     {
-        global $user_id;
+        global $user, $user_id;
 
         if ($user_uri !== $_SESSION['id']) {
             $user_id = Users::user_id_from_uri($user_uri);
         }
 
-        Rounds::get($this->user[$user_id], $user_id, []);
+        Rounds::Get($user[$user_id], $user_id, []);
     }
 
     /**
@@ -50,7 +50,7 @@ class Golf extends GlobalMap implements iSport
             throw new InvalidArgumentException('Bad User Passed To Golf Stats');
         }
 
-        Rounds::get($user['rounds'], $id, []);
+        Rounds::Get($user['rounds'], $id, []);
 
         if (!array_key_exists(0, $user['rounds'])) {
             $user['rounds'] = [$user['rounds']];

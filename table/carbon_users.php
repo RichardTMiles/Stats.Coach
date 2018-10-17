@@ -14,7 +14,7 @@ class carbon_users extends Entities implements iRest
     ];
 
     public const COLUMNS = [
-        'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_username' => [ 'varchar', '2', '25' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'text,', '2', '' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'text,', '2', '' ],'user_rank' => [ 'int', '2', '8' ],'user_password' => [ 'varchar', '2', '225' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'varchar', '2', '14' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'text,', '2', '' ],'user_location' => [ 'text,', '2', '' ],'user_creation_date' => [ 'varchar', '2', '14' ],
+        'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_username' => [ 'varchar', '2', '25' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'varchar', '2', '9' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'varchar', '2', '225' ],'user_rank' => [ 'int', '2', '8' ],'user_password' => [ 'varchar', '2', '225' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'datetime', '2', '' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'varchar', '2', '200' ],'user_location' => [ 'varchar', '2', '20' ],'user_creation_date' => [ 'datetime', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -109,14 +109,16 @@ class carbon_users extends Entities implements iRest
             $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
         }
         if (!empty($argv['user_birthday'])) {
-            $stmt->bindValue(':user_birthday',$argv['user_birthday'], 2);
+            $user_birthday = $argv['user_birthday'];
+            $stmt->bindParam(':user_birthday',$user_birthday, 2, 9);
         }
         if (!empty($argv['user_gender'])) {
             $user_gender = $argv['user_gender'];
             $stmt->bindParam(':user_gender',$user_gender, 2, 25);
         }
         if (!empty($argv['user_about_me'])) {
-            $stmt->bindValue(':user_about_me',$argv['user_about_me'], 2);
+            $user_about_me = $argv['user_about_me'];
+            $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
         }
         if (!empty($argv['user_rank'])) {
             $user_rank = $argv['user_rank'];
@@ -151,22 +153,22 @@ class carbon_users extends Entities implements iRest
             $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
         }
         if (!empty($argv['user_last_login'])) {
-            $user_last_login = $argv['user_last_login'];
-            $stmt->bindParam(':user_last_login',$user_last_login, 2, 14);
+            $stmt->bindValue(':user_last_login',$argv['user_last_login'], 2);
         }
         if (!empty($argv['user_ip'])) {
             $user_ip = $argv['user_ip'];
             $stmt->bindParam(':user_ip',$user_ip, 2, 20);
         }
         if (!empty($argv['user_education_history'])) {
-            $stmt->bindValue(':user_education_history',$argv['user_education_history'], 2);
+            $user_education_history = $argv['user_education_history'];
+            $stmt->bindParam(':user_education_history',$user_education_history, 2, 200);
         }
         if (!empty($argv['user_location'])) {
-            $stmt->bindValue(':user_location',$argv['user_location'], 2);
+            $user_location = $argv['user_location'];
+            $stmt->bindParam(':user_location',$user_location, 2, 20);
         }
         if (!empty($argv['user_creation_date'])) {
-            $user_creation_date = $argv['user_creation_date'];
-            $stmt->bindParam(':user_creation_date',$user_creation_date, 2, 14);
+            $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
         }
 
         foreach (self::$injection as $key => $value) {
@@ -287,7 +289,7 @@ class carbon_users extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  user_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -329,19 +331,19 @@ class carbon_users extends Entities implements iRest
     public static function Post(array $argv)
     {
     /** @noinspection SqlResolve */
-    $sql = 'INSERT INTO StatsCoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_last_login, user_ip, user_education_history, user_location, user_creation_date) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_last_login, :user_ip, :user_education_history, :user_location, :user_creation_date)';
+    $sql = 'INSERT INTO StatsCoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location)';
 
     self::jsonSQLReporting(\func_get_args(), $sql);
 
     $stmt = self::database()->prepare($sql);
 
-                $user_id = $id = $argv['user_id'] ?? self::new_entity('carbon_users');
+                $user_id = $id = $argv['user_id'] ?? self::beginTransaction('carbon_users');
                 $stmt->bindParam(':user_id',$user_id, 2, 16);
                 
-                    $user_type = $argv['user_type'];
+                    $user_type =  $argv['user_type'] ?? 'Athlete';
                     $stmt->bindParam(':user_type',$user_type, 2, 20);
                         
-                    $user_sport =  $argv['user_sport'] ?? null;
+                    $user_sport =  $argv['user_sport'] ?? 'GOLF';
                     $stmt->bindParam(':user_sport',$user_sport, 2, 20);
                         
                     $user_session_id =  $argv['user_session_id'] ?? null;
@@ -367,19 +369,23 @@ class carbon_users extends Entities implements iRest
                         
                     $user_cover_photo =  $argv['user_cover_photo'] ?? null;
                     $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
-                        $stmt->bindValue(':user_birthday',$argv['user_birthday'], 2);
                         
-                    $user_gender =  $argv['user_gender'] ?? null;
+                    $user_birthday =  $argv['user_birthday'] ?? null;
+                    $stmt->bindParam(':user_birthday',$user_birthday, 2, 9);
+                        
+                    $user_gender = $argv['user_gender'];
                     $stmt->bindParam(':user_gender',$user_gender, 2, 25);
-                        $stmt->bindValue(':user_about_me',$argv['user_about_me'], 2);
+                        
+                    $user_about_me =  $argv['user_about_me'] ?? null;
+                    $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
                         
                     $user_rank =  $argv['user_rank'] ?? '0';
                     $stmt->bindParam(':user_rank',$user_rank, 2, 8);
                         
-                    $user_password =  $argv['user_password'] ?? null;
+                    $user_password = $argv['user_password'];
                     $stmt->bindParam(':user_password',$user_password, 2, 225);
                         
-                    $user_email =  $argv['user_email'] ?? null;
+                    $user_email = $argv['user_email'];
                     $stmt->bindParam(':user_email',$user_email, 2, 50);
                         
                     $user_email_code =  $argv['user_email_code'] ?? null;
@@ -396,18 +402,16 @@ class carbon_users extends Entities implements iRest
                         
                     $user_deactivated =  $argv['user_deactivated'] ?? '0';
                     $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
-                        
-                    $user_last_login = $argv['user_last_login'];
-                    $stmt->bindParam(':user_last_login',$user_last_login, 2, 14);
-                        
+                                
                     $user_ip = $argv['user_ip'];
                     $stmt->bindParam(':user_ip',$user_ip, 2, 20);
-                        $stmt->bindValue(':user_education_history',$argv['user_education_history'], 2);
-                        $stmt->bindValue(':user_location',$argv['user_location'], 2);
                         
-                    $user_creation_date =  $argv['user_creation_date'] ?? null;
-                    $stmt->bindParam(':user_creation_date',$user_creation_date, 2, 14);
-        
+                    $user_education_history =  $argv['user_education_history'] ?? null;
+                    $stmt->bindParam(':user_education_history',$user_education_history, 2, 200);
+                        
+                    $user_location =  $argv['user_location'] ?? null;
+                    $stmt->bindParam(':user_location',$user_location, 2, 20);
+                
 
 
         return $stmt->execute() ? $id : false;
@@ -528,7 +532,7 @@ class carbon_users extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  user_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

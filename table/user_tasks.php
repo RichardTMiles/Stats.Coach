@@ -213,7 +213,7 @@ class user_tasks extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  user_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -264,7 +264,7 @@ class user_tasks extends Entities implements iRest
                 
                     $task_id = $argv['task_id'];
                     $stmt->bindParam(':task_id',$task_id, 2, 16);
-                        $user_id = $id = $argv['user_id'] ?? self::new_entity('user_tasks');
+                        $user_id = $id = $argv['user_id'] ?? self::beginTransaction('user_tasks');
                 $stmt->bindParam(':user_id',$user_id, 2, 16);
                 
                     $from_id =  $argv['from_id'] ?? null;
@@ -344,7 +344,7 @@ class user_tasks extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  user_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  user_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

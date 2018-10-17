@@ -14,7 +14,7 @@ class golf_course extends Entities implements iRest
     ];
 
     public const COLUMNS = [
-        'course_id' => [ 'binary', '2', '16' ],'course_name' => [ 'binary', '2', '16' ],'course_holes' => [ 'int', '2', '2' ],'course_phone' => [ 'text', '2', '' ],'course_difficulty' => [ 'int', '2', '10' ],'course_rank' => [ 'int', '2', '5' ],'box_color_1' => [ 'varchar', '2', '10' ],'box_color_2' => [ 'varchar', '2', '10' ],'box_color_3' => [ 'varchar', '2', '10' ],'box_color_4' => [ 'varchar', '2', '10' ],'box_color_5' => [ 'varchar', '2', '10' ],'course_par' => [ 'blob', '2', '' ],'course_par_out' => [ 'int', '2', '2' ],'course_par_in' => [ 'int', '2', '2' ],'par_tot' => [ 'int', '2', '2' ],'course_par_hcp' => [ 'int', '2', '4' ],'course_type' => [ 'char', '2', '30' ],'course_access' => [ 'varchar', '2', '120' ],'course_handicap' => [ 'blob,', '2', '' ],'pga_professional' => [ 'text,', '2', '' ],'website' => [ 'text,', '2', '' ],
+        'course_id' => [ 'binary', '2', '16' ],'course_name' => [ 'binary', '2', '16' ],'course_holes' => [ 'int', '2', '2' ],'course_phone' => [ 'text', '2', '' ],'course_difficulty' => [ 'int', '2', '10' ],'course_rank' => [ 'int', '2', '5' ],'box_color_1' => [ 'varchar', '2', '10' ],'box_color_2' => [ 'varchar', '2', '10' ],'box_color_3' => [ 'varchar', '2', '10' ],'box_color_4' => [ 'varchar', '2', '10' ],'box_color_5' => [ 'varchar', '2', '10' ],'course_par' => [ 'json', '2', '' ],'course_par_out' => [ 'int', '2', '2' ],'course_par_in' => [ 'int', '2', '2' ],'par_tot' => [ 'int', '2', '2' ],'course_par_hcp' => [ 'int', '2', '4' ],'course_type' => [ 'char', '2', '30' ],'course_access' => [ 'varchar', '2', '120' ],'course_handicap' => [ 'blob,', '2', '' ],'pga_professional' => [ 'text,', '2', '' ],'website' => [ 'text,', '2', '' ],'created_by' => [ 'binary', '2', '16' ],'course_input_completed' => [ 'tinyint', '0', '1' ],
     ];
 
     public const VALIDATION = [];
@@ -143,6 +143,14 @@ class golf_course extends Entities implements iRest
         if (!empty($argv['website'])) {
             $stmt->bindValue(':website',$argv['website'], 2);
         }
+        if (!empty($argv['created_by'])) {
+            $created_by = $argv['created_by'];
+            $stmt->bindParam(':created_by',$created_by, 2, 16);
+        }
+        if (!empty($argv['course_input_completed'])) {
+            $course_input_completed = $argv['course_input_completed'];
+            $stmt->bindParam(':course_input_completed',$course_input_completed, 0, 1);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -245,7 +253,7 @@ class golf_course extends Entities implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |course_id|course_name|course_holes|course_phone|course_difficulty|course_rank|box_color_1|box_color_2|box_color_3|box_color_4|box_color_5|course_par|course_par_out|course_par_in|par_tot|course_par_hcp|course_type|course_access|course_handicap|pga_professional|website))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |course_id|course_name|course_holes|course_phone|course_difficulty|course_rank|box_color_1|box_color_2|box_color_3|box_color_4|box_color_5|course_par|course_par_out|course_par_in|par_tot|course_par_hcp|course_type|course_access|course_handicap|pga_professional|website|created_by|course_input_completed))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     /** @noinspection PhpUndefinedClassInspection */
                     throw new InvalidArgumentException('Arguments passed in SELECT failed the REGEX test!');
                 }
@@ -262,7 +270,7 @@ class golf_course extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  course_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  course_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -304,13 +312,13 @@ class golf_course extends Entities implements iRest
     public static function Post(array $argv)
     {
     /** @noinspection SqlResolve */
-    $sql = 'INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website)';
+    $sql = 'INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, created_by, course_input_completed) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, UNHEX(:created_by), :course_input_completed)';
 
     self::jsonSQLReporting(\func_get_args(), $sql);
 
     $stmt = self::database()->prepare($sql);
 
-                $course_id = $id = $argv['course_id'] ?? self::new_entity('golf_course');
+                $course_id = $id = $argv['course_id'] ?? self::beginTransaction('golf_course');
                 $stmt->bindParam(':course_id',$course_id, 2, 16);
                 
                     $course_name = $argv['course_name'];
@@ -342,16 +350,16 @@ class golf_course extends Entities implements iRest
                     $stmt->bindParam(':box_color_5',$box_color_5, 2, 10);
                         $stmt->bindValue(':course_par',$argv['course_par'], 2);
                         
-                    $course_par_out = $argv['course_par_out'];
+                    $course_par_out =  $argv['course_par_out'] ?? '0';
                     $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
                         
-                    $course_par_in = $argv['course_par_in'];
+                    $course_par_in =  $argv['course_par_in'] ?? '0';
                     $stmt->bindParam(':course_par_in',$course_par_in, 2, 2);
                         
-                    $par_tot = $argv['par_tot'];
+                    $par_tot =  $argv['par_tot'] ?? '0';
                     $stmt->bindParam(':par_tot',$par_tot, 2, 2);
                         
-                    $course_par_hcp =  $argv['course_par_hcp'] ?? null;
+                    $course_par_hcp =  $argv['course_par_hcp'] ?? '0';
                     $stmt->bindParam(':course_par_hcp',$course_par_hcp, 2, 4);
                         
                     $course_type =  $argv['course_type'] ?? null;
@@ -362,6 +370,12 @@ class golf_course extends Entities implements iRest
                         $stmt->bindValue(':course_handicap',$argv['course_handicap'], 2);
                         $stmt->bindValue(':pga_professional',$argv['pga_professional'], 2);
                         $stmt->bindValue(':website',$argv['website'], 2);
+                        
+                    $created_by =  $argv['created_by'] ?? null;
+                    $stmt->bindParam(':created_by',$created_by, 2, 16);
+                        
+                    $course_input_completed =  $argv['course_input_completed'] ?? '0';
+                    $stmt->bindParam(':course_input_completed',$course_input_completed, 0, 1);
         
 
 
@@ -456,6 +470,12 @@ class golf_course extends Entities implements iRest
             if (!empty($argv['website'])) {
                 $set .= 'website=:website,';
             }
+            if (!empty($argv['created_by'])) {
+                $set .= 'created_by=UNHEX(:created_by),';
+            }
+            if (!empty($argv['course_input_completed'])) {
+                $set .= 'course_input_completed=:course_input_completed,';
+            }
 
         if (empty($set)){
             return false;
@@ -465,7 +485,7 @@ class golf_course extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  course_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  course_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

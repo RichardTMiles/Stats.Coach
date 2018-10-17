@@ -231,7 +231,7 @@ class carbon_teams extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  team_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  team_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -279,7 +279,7 @@ class carbon_teams extends Entities implements iRest
 
     $stmt = self::database()->prepare($sql);
 
-                $team_id = $id = $argv['team_id'] ?? self::new_entity('carbon_teams');
+                $team_id = $id = $argv['team_id'] ?? self::beginTransaction('carbon_teams');
                 $stmt->bindParam(':team_id',$team_id, 2, 16);
                 
                     $team_coach = $argv['team_coach'];
@@ -390,7 +390,7 @@ class carbon_teams extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  team_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  team_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

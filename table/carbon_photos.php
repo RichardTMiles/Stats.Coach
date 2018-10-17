@@ -202,7 +202,7 @@ class carbon_photos extends Entities implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  parent_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  parent_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -250,7 +250,7 @@ class carbon_photos extends Entities implements iRest
 
     $stmt = self::database()->prepare($sql);
 
-                $parent_id = $id = $argv['parent_id'] ?? self::new_entity('carbon_photos');
+                $parent_id = $id = $argv['parent_id'] ?? self::beginTransaction('carbon_photos');
                 $stmt->bindParam(':parent_id',$parent_id, 2, 16);
                 
                     $photo_id = $argv['photo_id'];
@@ -317,7 +317,7 @@ class carbon_photos extends Entities implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  parent_id=UNHEX(".self::addInjection($primary, $pdo).")';
+        $sql .= ' WHERE  parent_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

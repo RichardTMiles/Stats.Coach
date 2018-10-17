@@ -12,6 +12,8 @@ use CarbonPHP\Application;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\View;
 use Controller\User;
+use /** @noinspection PhpUndefinedClassInspection */
+    Mustache_Engine;
 use Table\carbon_users;
 use Table\golf_stats;
 
@@ -48,7 +50,7 @@ class StatsCoach extends Application
 
     public function defaultRoute()
     {
-        // Sockets will not execute this
+        // Sockets will not execute this function
         View::$forceWrapper = true; // this will hard refresh the wrapper
 
         if (!$_SESSION['id']):
@@ -78,14 +80,12 @@ class StatsCoach extends Application
 
         if (null !== $uri) {
             $this->changeURI($uri);
-        } else {
-            if (empty($this->uri[0])) {
-                if (SOCKET) {
-                    throw new PublicAlert('$_SERVER["REQUEST_URI"] MUST BE SET IN SOCKET REQUESTS');
-                }
-                $this->matched = true;
-                return $this->defaultRoute();
+        } else if (empty($this->uri[0])) {
+            if (SOCKET) {
+                throw new PublicAlert('$_SERVER["REQUEST_URI"] MUST BE SET IN SOCKET REQUESTS');
             }
+            $this->matched = true;
+            return $this->defaultRoute();
         }
 
         $this->structure($this->MVC());
@@ -127,10 +127,9 @@ class StatsCoach extends Application
             $this->structure($this->MVC());
 
             ################################### Golf Stuff + User
-
-            if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')()||
-                $this->match('AddCourse/Color/{id}/{box_number}/*', 'Golf', 'AddCourseColor')()||
-                $this->match('AddCourse/Distance/{id}/{box_number}/*', 'Golf', 'AddCourseDistance')()){
+            if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')() ||
+                $this->match('AddCourse/Color/{id}/{box_number}/*', 'Golf', 'AddCourseColor')() ||
+                $this->match('AddCourse/Distance/{id}/{box_number}/*', 'Golf', 'AddCourseDistance')()) {
                 return true;
             }
 
@@ -161,60 +160,73 @@ class StatsCoach extends Application
      * App constructor. If no uri is set than
      * the Route constructor will execute the
      * defaultRoute method defined below.
-     * @return callable
-     * @throws \Mustache_Exception_InvalidArgumentException
+     * @return void
      * @throws \CarbonPHP\Error\PublicAlert
      */
 
-    public function userSettings()
+    public function userSettings() : void
     {
         global $user, $json;
 
-        // If the user is signed in we need to get the
-        if ($_SESSION['id'] ?? false) {
+        if (APP_LOCAL) {
+            $id = '71EB90B4D10111E89F328F0D91AFBA99';
+            $_SESSION['id'] = &$id;
+        } else {
+            $id = &$_SESSION['id'];
+        }
 
-            if (!carbon_users::Get($GLOBALS['user'][$_SESSION['id']], $_SESSION['id'],[]) ||
-                empty($GLOBALS['user'][$_SESSION['id']])) {
+        // If the user is signed in we need to get the
+        if ($id ?? false) {
+            if (!\is_array($user[$id])) {
+                $user[$id] = [];
+            }
+
+            if (!carbon_users::Get($user[$id], $id, [])) {
                 $_SESSION['id'] = false;
                 throw new PublicAlert('Failed to fetch user. This usually happens when a users id becomes invalid.');
             }
 
-            if ($GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] === null) {
-                $GLOBALS['user'][$_SESSION['id']]['user_profile_pic'] = '/view/img/Carbon-red.png';
+            if (empty($user[$id]['user_profile_pic']) || $user[$id]['user_profile_pic'] === null) {
+                $user[$id]['user_profile_pic'] = '/view/img/Carbon-red.png';
             }
 
-            $GLOBALS['user'][$_SESSION['id']]['stats'] = [];
-            if (!golf_stats::Get($GLOBALS['user'][$_SESSION['id']]['stats'], $_SESSION['id'], [])){
+            $user[$id]['stats'] = [];
+            if (!golf_stats::Get($user[$id]['stats'], $id, [])) {
                 print 'Could not get stats!';
                 exit(1);
             }
 
-            $json['my'] = &$GLOBALS['user'][$_SESSION['id']];
+            $json['my'] = &$user[$id];
             $json['signedIn'] = true;
             $json['nav-bar'] = '';
             $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
-
-            $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
-                global $json;
-                static $mustache;
-                if (empty($mustache)) {
-                    $mustache = new \Mustache_Engine();
+            /** @noinspection PhpUndefinedClassInspection */
+            $suppressible = new class extends Mustache_Engine {
+                public $string;
+                public function mustache($path) : string {
+                    global $json;
+                    if (!file_exists($path)) {
+                        print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
+                    }
+                    $this->string =  $this->render(file_get_contents($path), $json);
+                    return $this;
                 }
-                if (!file_exists($path)) {
-                    print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
+                public function __toString()
+                {
+                    return (string) debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+                    //return 'suppressed';
                 }
-                return $mustache->render(file_get_contents($path), $json);
             };
 
-            switch ($user[$_SESSION['id']]['user_type'] ?? false) {
+            switch ($user[$id]['user_type'] ?? false) {
                 case 'Athlete':
                     $json['body-layout'] = 'hold-transition skin-blue layout-top-nav';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.hbs');
+                    $json['header'] = $suppressible->mustache(APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.hbs');
                     break;
                 case 'Coach':
                     $json['body-layout'] = 'skin-green fixed sidebar-mini sidebar-collapse';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/CoachLayout.hbs');
+                    $json['header'] = $suppressible->mustache(APP_ROOT . APP_VIEW . 'Layout/CoachLayout.hbs');
                     break;
                 default:
                     throw new PublicAlert('No user type found!!!!');
