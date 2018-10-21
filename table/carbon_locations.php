@@ -64,30 +64,30 @@ class carbon_locations extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['entity_id'])) {
+        if (array_key_exists('entity_id', $argv)) {
             $entity_id = $argv['entity_id'];
             $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (!empty($argv['latitude'])) {
+        if (array_key_exists('latitude', $argv)) {
             $latitude = $argv['latitude'];
             $stmt->bindParam(':latitude',$latitude, 2, 225);
         }
-        if (!empty($argv['longitude'])) {
+        if (array_key_exists('longitude', $argv)) {
             $longitude = $argv['longitude'];
             $stmt->bindParam(':longitude',$longitude, 2, 225);
         }
-        if (!empty($argv['street'])) {
+        if (array_key_exists('street', $argv)) {
             $stmt->bindValue(':street',$argv['street'], 2);
         }
-        if (!empty($argv['city'])) {
+        if (array_key_exists('city', $argv)) {
             $city = $argv['city'];
             $stmt->bindParam(':city',$city, 2, 40);
         }
-        if (!empty($argv['state'])) {
+        if (array_key_exists('state', $argv)) {
             $state = $argv['state'];
             $stmt->bindParam(':state',$state, 2, 10);
         }
-        if (!empty($argv['elevation'])) {
+        if (array_key_exists('elevation', $argv)) {
             $elevation = $argv['elevation'];
             $stmt->bindParam(':elevation',$elevation, 2, 40);
         }
@@ -139,6 +139,7 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -227,7 +228,7 @@ class carbon_locations extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -251,6 +252,7 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
 
@@ -291,6 +293,7 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }

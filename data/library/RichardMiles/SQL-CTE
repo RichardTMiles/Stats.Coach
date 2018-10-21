@@ -1,0 +1,22 @@
+https://dba.stackexchange.com/questions/139950/insert-into-multiple-tables-with-one-query
+
+https://stackoverflow.com/questions/15809463/postgresql-using-foreign-keys-delete-parent-if-its-not-referenced-by-any-othe/15810159#15810159
+
+https://www.postgresql.org/docs/current/static/queries-with.html#QUERIES-WITH-MODIFYING
+
+WITH ins AS (
+  INSERT INTO core.adr
+    (street, "number", postal_code, city)
+  VALUES
+    ('test 1', '25a', '00912', 'villageman')
+  RETURNING id),
+ins2 AS (
+  INSERT INTO someothertable
+    (id, something)
+  SELECT id, 'something' FROM ins
+  RETURNING id -- this is necessary for CTE, but not used
+)
+INSERT INTO core.adr_information
+  (idref, info)
+SELECT id, 'test data'
+FROM ins;

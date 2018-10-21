@@ -14,7 +14,7 @@ class carbon_tag extends Entities implements iRest
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'int', '2', '11' ],'creation_date' => [ 'datetime', '2', '' ],
+        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '200' ],'creation_date' => [ 'datetime', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -64,19 +64,19 @@ class carbon_tag extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['entity_id'])) {
+        if (array_key_exists('entity_id', $argv)) {
             $entity_id = $argv['entity_id'];
             $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (!empty($argv['user_id'])) {
+        if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (!empty($argv['tag_id'])) {
+        if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 11);
+            $stmt->bindParam(':tag_id',$tag_id, 2, 200);
         }
-        if (!empty($argv['creation_date'])) {
+        if (array_key_exists('creation_date', $argv)) {
             $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
         }
 
@@ -127,6 +127,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -213,7 +214,7 @@ class carbon_tag extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -233,6 +234,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, user_id, tag_id) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id)';
 
@@ -248,7 +250,7 @@ class carbon_tag extends Entities implements iRest
                     $stmt->bindParam(':user_id',$user_id, 2, 16);
                         
                     $tag_id = $argv['tag_id'];
-                    $stmt->bindParam(':tag_id',$tag_id, 2, 11);
+                    $stmt->bindParam(':tag_id',$tag_id, 2, 200);
                 
 
 
@@ -264,6 +266,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -325,6 +328,7 @@ class carbon_tag extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.carbon_tag ';
 

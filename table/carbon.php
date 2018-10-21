@@ -64,11 +64,11 @@ class carbon extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['entity_pk'])) {
+        if (array_key_exists('entity_pk', $argv)) {
             $entity_pk = $argv['entity_pk'];
             $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-        if (!empty($argv['entity_fk'])) {
+        if (array_key_exists('entity_fk', $argv)) {
             $entity_fk = $argv['entity_fk'];
             $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
@@ -120,6 +120,7 @@ class carbon extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -208,7 +209,7 @@ class carbon extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -232,6 +233,7 @@ class carbon extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.carbon (entity_pk, entity_fk) VALUES ( UNHEX(:entity_pk), UNHEX(:entity_fk))';
 
@@ -259,6 +261,7 @@ class carbon extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -314,6 +317,7 @@ class carbon extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.carbon ';
 

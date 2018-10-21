@@ -64,25 +64,25 @@ class sessions extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['user_id'])) {
+        if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (!empty($argv['user_ip'])) {
+        if (array_key_exists('user_ip', $argv)) {
             $user_ip = $argv['user_ip'];
             $stmt->bindParam(':user_ip',$user_ip, 2, 16);
         }
-        if (!empty($argv['session_id'])) {
+        if (array_key_exists('session_id', $argv)) {
             $session_id = $argv['session_id'];
             $stmt->bindParam(':session_id',$session_id, 2, 255);
         }
-        if (!empty($argv['session_expires'])) {
+        if (array_key_exists('session_expires', $argv)) {
             $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
         }
-        if (!empty($argv['session_data'])) {
+        if (array_key_exists('session_data', $argv)) {
             $stmt->bindValue(':session_data',$argv['session_data'], 2);
         }
-        if (!empty($argv['user_online_status'])) {
+        if (array_key_exists('user_online_status', $argv)) {
             $user_online_status = $argv['user_online_status'];
             $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         }
@@ -134,6 +134,7 @@ class sessions extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -222,7 +223,7 @@ class sessions extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -246,6 +247,7 @@ class sessions extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
 
@@ -282,6 +284,7 @@ class sessions extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -349,6 +352,7 @@ class sessions extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.sessions ';
 

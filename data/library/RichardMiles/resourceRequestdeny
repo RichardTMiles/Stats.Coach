@@ -1,0 +1,4 @@
+switch(preg_replace("#(.+)?\.(\w+)(\?.+)?#", "$2", $_SERVER['REQUEST_URI']) . "\n") {
+    case 'css': case 'js': case 'php': echo "Sorry, the request could not be complete."; exit(1);
+    default:
+}

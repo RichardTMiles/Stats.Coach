@@ -10,7 +10,7 @@ use Psr\Log\InvalidArgumentException;
 class user_messages extends Entities implements iRest
 {
     public const PRIMARY = [
-    
+    'to_user_id',
     ];
 
     public const COLUMNS = [
@@ -64,18 +64,18 @@ class user_messages extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['message_id'])) {
+        if (array_key_exists('message_id', $argv)) {
             $message_id = $argv['message_id'];
             $stmt->bindParam(':message_id',$message_id, 2, 16);
         }
-        if (!empty($argv['to_user_id'])) {
+        if (array_key_exists('to_user_id', $argv)) {
             $to_user_id = $argv['to_user_id'];
             $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-        if (!empty($argv['message'])) {
+        if (array_key_exists('message', $argv)) {
             $stmt->bindValue(':message',$argv['message'], 2);
         }
-        if (!empty($argv['message_read'])) {
+        if (array_key_exists('message_read', $argv)) {
             $message_read = $argv['message_read'];
             $stmt->bindParam(':message_read',$message_read, 0, 1);
         }
@@ -127,6 +127,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -158,12 +159,12 @@ class user_messages extends Entities implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= ' ASC';
+                    $order .= 'to_user_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY  ASC LIMIT 100';
+            $limit = ' ORDER BY to_user_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -197,7 +198,9 @@ class user_messages extends Entities implements iRest
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } 
+        } else {
+        $sql .= ' WHERE  to_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -213,7 +216,7 @@ class user_messages extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -223,6 +226,10 @@ class user_messages extends Entities implements iRest
         */
 
         
+            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
+            $return = (\count($return) === 1 ?
+            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
+            }
 
         return true;
     }
@@ -233,6 +240,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
 
@@ -243,18 +251,17 @@ class user_messages extends Entities implements iRest
                 
                     $message_id =  $argv['message_id'] ?? null;
                     $stmt->bindParam(':message_id',$message_id, 2, 16);
-                        
-                    $to_user_id =  $argv['to_user_id'] ?? null;
-                    $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                        $stmt->bindValue(':message',$argv['message'], 2);
+                        $to_user_id = $id = $argv['to_user_id'] ?? self::beginTransaction('user_messages');
+                $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+                $stmt->bindValue(':message',$argv['message'], 2);
                         
                     $message_read =  $argv['message_read'] ?? '0';
                     $stmt->bindParam(':message_read',$message_read, 0, 1);
         
 
 
+        return $stmt->execute() ? $id : false;
 
-            return $stmt->execute();
     }
 
     /**
@@ -265,6 +272,7 @@ class user_messages extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -302,7 +310,7 @@ class user_messages extends Entities implements iRest
 
         $pdo = self::database();
 
-        
+        $sql .= ' WHERE  to_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -326,34 +334,6 @@ class user_messages extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.user_messages ';
-
-        $pdo = self::database();
-
-        if (null === $primary) {
-        /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
-        if (empty($argv)) {
-            return false;
-        }
-
-
-        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } 
-
-        self::jsonSQLReporting(\func_get_args(), $sql);
-
-        $stmt = $pdo->prepare($sql);
-
-        $r = self::bind($stmt, $argv);
-
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $r and $remove = null;
-
-        return $r;
+        return \Table\carbon::Delete($remove, $primary, $argv);
     }
 }

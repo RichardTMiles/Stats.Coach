@@ -64,34 +64,34 @@ class user_tasks extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['task_id'])) {
+        if (array_key_exists('task_id', $argv)) {
             $task_id = $argv['task_id'];
             $stmt->bindParam(':task_id',$task_id, 2, 16);
         }
-        if (!empty($argv['user_id'])) {
+        if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (!empty($argv['from_id'])) {
+        if (array_key_exists('from_id', $argv)) {
             $from_id = $argv['from_id'];
             $stmt->bindParam(':from_id',$from_id, 2, 16);
         }
-        if (!empty($argv['task_name'])) {
+        if (array_key_exists('task_name', $argv)) {
             $task_name = $argv['task_name'];
             $stmt->bindParam(':task_name',$task_name, 2, 40);
         }
-        if (!empty($argv['task_description'])) {
+        if (array_key_exists('task_description', $argv)) {
             $task_description = $argv['task_description'];
             $stmt->bindParam(':task_description',$task_description, 2, 225);
         }
-        if (!empty($argv['percent_complete'])) {
+        if (array_key_exists('percent_complete', $argv)) {
             $percent_complete = $argv['percent_complete'];
             $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
         }
-        if (!empty($argv['start_date'])) {
+        if (array_key_exists('start_date', $argv)) {
             $stmt->bindValue(':start_date',$argv['start_date'], 2);
         }
-        if (!empty($argv['end_date'])) {
+        if (array_key_exists('end_date', $argv)) {
             $stmt->bindValue(':end_date',$argv['end_date'], 2);
         }
 
@@ -142,6 +142,7 @@ class user_tasks extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -230,7 +231,7 @@ class user_tasks extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -254,6 +255,7 @@ class user_tasks extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.user_tasks (task_id, user_id, from_id, task_name, task_description, percent_complete, start_date, end_date) VALUES ( UNHEX(:task_id), UNHEX(:user_id), UNHEX(:from_id), :task_name, :task_description, :percent_complete, :start_date, :end_date)';
 
@@ -295,6 +297,7 @@ class user_tasks extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }

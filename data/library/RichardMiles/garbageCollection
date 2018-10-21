@@ -1,0 +1,2 @@
+gc_disable();        -- Due to my paranoia, I have this for testing errors/ but should never matter
+register_shutdown_function(function () { gc_enable(); });

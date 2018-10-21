@@ -1,0 +1,43 @@
+####### NOTES
+
+Websockets rely on pncl system module installed in php
+
+When developing apps in PHP-CLI (at least v7+), you must close all database connections before
+invoking the fork function. The server will respond with fault 32 == Broken pipe
+
+https://stackoverflow.com/questions/11866792/how-to-prevent-errno-32-broken-pipe/11866962#11866962
+
+The above reference notes the problem. "Your server process has received a SIGPIPE writing to a socket."
+
+
+
+websocketd --port=8080 --devconsole --ssl --sslkey=/etc/ssl/private/miles.secureserver.net.key --sslcert=/etc/ssl/certs/miles.secureserver.net.crt /home/stats/public_html/Application/Modules/Socket.php
+
+websocketd --port=8080 --devconsole --ssl --sslkey=/etc/ssl/private/miles.secureserver.net.key --sslcert=/etc/ssl/certs/miles.secureserver.net.crt /home/stats/public_html/Socket.php
+
+
+shebang php-cli
+#!/usr/local/bin/php
+
+/usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+/usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+/usr/local/bin/php composer-setup.php
+/usr/local/bin/php -r "unlink('composer-setup.php');"
+
+
+
+[1]+ websocketd --port=8080 --devconsole --ssl --sslkey=/etc/ssl/private/miles.secureserver.net.key --sslcert=/etc/ssl/certs/miles.secureserver.net.crt /home/stats/public_html/Application/Modules/Socket.php &
+
+websocketd --port=8888 --devconsole --ssl --sslkey=/Users/richardmiles/sites/ssl/stats/websocket/domainkey.txt --sslcert=/Users/richardmiles/sites/ssl/stats/websocket/domain-crt.txt php /library/server/web/data/sites/stats.coach/data/vendor/richardtmiles/carbonphp/Extras/Websocketd.php
+websocketd --port=8888 --devconsole /library/server/web/data/sites/stats.coach/data/vendor/richardtmiles/carbonphp/Extras/Websocketd.php
+
+
+// \Carbon\Database::reset(true);
+/*  giving away your user account name is very dangerous and should only be used in testing
+ *
+ * echo "Socket Communication Started
+ *    USER :: " . get_current_user() . "
+ *    PID :: " . getmypid() . "
+ *    ID  :: " . $_SESSION['id'] . "
+ *    SOCKET :: " . SOCKET . PHP_EOL;
+ */

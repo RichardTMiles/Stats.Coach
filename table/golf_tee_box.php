@@ -64,44 +64,44 @@ class golf_tee_box extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['course_id'])) {
+        if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
             $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (!empty($argv['tee_box'])) {
+        if (array_key_exists('tee_box', $argv)) {
             $tee_box = $argv['tee_box'];
             $stmt->bindParam(':tee_box',$tee_box, 2, 1);
         }
-        if (!empty($argv['distance'])) {
+        if (array_key_exists('distance', $argv)) {
             $stmt->bindValue(':distance',$argv['distance'], 2);
         }
-        if (!empty($argv['distance_color'])) {
+        if (array_key_exists('distance_color', $argv)) {
             $distance_color = $argv['distance_color'];
             $stmt->bindParam(':distance_color',$distance_color, 2, 10);
         }
-        if (!empty($argv['distance_general_slope'])) {
+        if (array_key_exists('distance_general_slope', $argv)) {
             $distance_general_slope = $argv['distance_general_slope'];
             $stmt->bindParam(':distance_general_slope',$distance_general_slope, 2, 4);
         }
-        if (!empty($argv['distance_general_difficulty'])) {
+        if (array_key_exists('distance_general_difficulty', $argv)) {
             $stmt->bindValue(':distance_general_difficulty',$argv['distance_general_difficulty'], 2);
         }
-        if (!empty($argv['distance_womens_slope'])) {
+        if (array_key_exists('distance_womens_slope', $argv)) {
             $distance_womens_slope = $argv['distance_womens_slope'];
             $stmt->bindParam(':distance_womens_slope',$distance_womens_slope, 2, 4);
         }
-        if (!empty($argv['distance_womens_difficulty'])) {
+        if (array_key_exists('distance_womens_difficulty', $argv)) {
             $stmt->bindValue(':distance_womens_difficulty',$argv['distance_womens_difficulty'], 2);
         }
-        if (!empty($argv['distance_out'])) {
+        if (array_key_exists('distance_out', $argv)) {
             $distance_out = $argv['distance_out'];
             $stmt->bindParam(':distance_out',$distance_out, 2, 7);
         }
-        if (!empty($argv['distance_in'])) {
+        if (array_key_exists('distance_in', $argv)) {
             $distance_in = $argv['distance_in'];
             $stmt->bindParam(':distance_in',$distance_in, 2, 7);
         }
-        if (!empty($argv['distance_tot'])) {
+        if (array_key_exists('distance_tot', $argv)) {
             $distance_tot = $argv['distance_tot'];
             $stmt->bindParam(':distance_tot',$distance_tot, 2, 10);
         }
@@ -153,6 +153,7 @@ class golf_tee_box extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -239,7 +240,7 @@ class golf_tee_box extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -259,6 +260,7 @@ class golf_tee_box extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.golf_tee_box (course_id, tee_box, distance, distance_color, distance_general_slope, distance_general_difficulty, distance_womens_slope, distance_womens_difficulty, distance_out, distance_in, distance_tot) VALUES ( UNHEX(:course_id), :tee_box, :distance, :distance_color, :distance_general_slope, :distance_general_difficulty, :distance_womens_slope, :distance_womens_difficulty, :distance_out, :distance_in, :distance_tot)';
 
@@ -308,6 +310,7 @@ class golf_tee_box extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -390,6 +393,7 @@ class golf_tee_box extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.golf_tee_box ';
 

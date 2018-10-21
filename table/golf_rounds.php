@@ -64,59 +64,59 @@ class golf_rounds extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['user_id'])) {
+        if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (!empty($argv['round_id'])) {
+        if (array_key_exists('round_id', $argv)) {
             $round_id = $argv['round_id'];
             $stmt->bindParam(':round_id',$round_id, 2, 16);
         }
-        if (!empty($argv['course_id'])) {
+        if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
             $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (!empty($argv['round_public'])) {
+        if (array_key_exists('round_public', $argv)) {
             $round_public = $argv['round_public'];
             $stmt->bindParam(':round_public',$round_public, 2, 1);
         }
-        if (!empty($argv['score'])) {
+        if (array_key_exists('score', $argv)) {
             $stmt->bindValue(':score',$argv['score'], 2);
         }
-        if (!empty($argv['score_gnr'])) {
+        if (array_key_exists('score_gnr', $argv)) {
             $stmt->bindValue(':score_gnr',$argv['score_gnr'], 2);
         }
-        if (!empty($argv['score_ffs'])) {
+        if (array_key_exists('score_ffs', $argv)) {
             $stmt->bindValue(':score_ffs',$argv['score_ffs'], 2);
         }
-        if (!empty($argv['score_putts'])) {
+        if (array_key_exists('score_putts', $argv)) {
             $stmt->bindValue(':score_putts',$argv['score_putts'], 2);
         }
-        if (!empty($argv['score_out'])) {
+        if (array_key_exists('score_out', $argv)) {
             $score_out = $argv['score_out'];
             $stmt->bindParam(':score_out',$score_out, 2, 2);
         }
-        if (!empty($argv['score_in'])) {
+        if (array_key_exists('score_in', $argv)) {
             $score_in = $argv['score_in'];
             $stmt->bindParam(':score_in',$score_in, 2, 3);
         }
-        if (!empty($argv['score_total'])) {
+        if (array_key_exists('score_total', $argv)) {
             $score_total = $argv['score_total'];
             $stmt->bindParam(':score_total',$score_total, 2, 3);
         }
-        if (!empty($argv['score_total_gnr'])) {
+        if (array_key_exists('score_total_gnr', $argv)) {
             $score_total_gnr = $argv['score_total_gnr'];
             $stmt->bindParam(':score_total_gnr',$score_total_gnr, 2, 11);
         }
-        if (!empty($argv['score_total_ffs'])) {
+        if (array_key_exists('score_total_ffs', $argv)) {
             $score_total_ffs = $argv['score_total_ffs'];
             $stmt->bindParam(':score_total_ffs',$score_total_ffs, 2, 3);
         }
-        if (!empty($argv['score_total_putts'])) {
+        if (array_key_exists('score_total_putts', $argv)) {
             $score_total_putts = $argv['score_total_putts'];
             $stmt->bindParam(':score_total_putts',$score_total_putts, 2, 11);
         }
-        if (!empty($argv['score_date'])) {
+        if (array_key_exists('score_date', $argv)) {
             $stmt->bindValue(':score_date',$argv['score_date'], 2);
         }
 
@@ -167,6 +167,7 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -253,7 +254,7 @@ class golf_rounds extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -273,6 +274,7 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.golf_rounds (user_id, round_id, course_id, round_public, score, score_gnr, score_ffs, score_putts, score_out, score_in, score_total, score_total_gnr, score_total_ffs, score_total_putts, score_date) VALUES ( UNHEX(:user_id), UNHEX(:round_id), UNHEX(:course_id), :round_public, :score, :score_gnr, :score_ffs, :score_putts, :score_out, :score_in, :score_total, :score_total_gnr, :score_total_ffs, :score_total_putts, :score_date)';
 
@@ -330,6 +332,7 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -424,6 +427,7 @@ class golf_rounds extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.golf_rounds ';
 

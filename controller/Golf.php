@@ -99,13 +99,17 @@ class Golf extends Request  // Validation
 
         golf_course::Get($json['course'], null, [
             'where'=>[
-                'created_by'=>$_SESSION['id'],
+               'created_by'=>$_SESSION['id'],
                 'course_input_completed'=> 0
             ],
             'pagination' => [
                 'limit'=>1
             ]
         ]);
+
+        // sortDump($json['course']);
+        # $argv = array_pop($json['sql']);
+        # sortDump([$argv, $json['course']]);
 
         if (!empty($json['course'])) {
             $json['course']['location'] = [];

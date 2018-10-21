@@ -1,0 +1,42 @@
+  public function __sleep(&$recursion = null)
+    {
+        if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
+        if ($recursion == null) $array = get_object_vars( $this ); else $array = &$recursion;
+        foreach ($array as $key => &$value) {
+
+            if (!empty($value) && is_array( $value )) self::__sleep($value);
+
+
+            if (is_object( $value )) {
+                if (!method_exists( $value, '__sleep' )) continue;
+                try {
+                    if ($recursion == null)
+                        $array[$key] = @serialize( $value );
+                    else $array[$key] = @serialize( $value );
+                } catch (\Exception $e){ continue; }}               // Database object we need to catch the error thrown.
+
+
+            if (empty($value)) continue;    // The object could be null from serialization?
+
+            $onlyKeys[] = $key;
+
+        } return (isset($onlyKeys) ? $onlyKeys : null);
+    }
+
+
+    ....*[]:
+
+
+    public function __sleep()
+        {
+            if (!defined( 'self::Singleton' ) || !self::Singleton) return null;
+            $object = get_object_vars( $this );
+            foreach ($object as $key => $value) {
+                if (is_object( $value )) {
+                    if (!method_exists( $value, '__sleep' )) continue;
+                    try { $this->$key = @serialize( $this->$key );
+                    } catch (\Exception $e){ continue; }                // Database object we need to catch the error thrown.
+                } if (empty($value) || empty($this->$key)) continue;    // The object could be null from serialization?
+                $onlyKeys[] = $key;
+            } return (isset($onlyKeys) ? $onlyKeys : null);
+        }

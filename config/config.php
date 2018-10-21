@@ -227,6 +227,8 @@ return [
 
         'CALLBACK' => function () {         // optional variable $reset which would be true if a url is passed to startApplication()
 
+            $_SESSION['id'] = '71EB90B4D10111E89F328F0D91AFBA99';
+
             if ($_SESSION['id'] ?? ($_SESSION['id'] = false)) {
 
                 #return $_SESSION['id'] = false;
@@ -239,8 +241,7 @@ return [
 
                 if (!is_array($my = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
                     $my = [];
-                    if (false === Table\carbon_users::Get($my, $_SESSION['id'], []) ||
-                        empty($my)) {
+                    if (false === Table\carbon_users::Get($my, $_SESSION['id'], [])) {
                         $_SESSION['id'] = false;
                         \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
                     }
@@ -275,11 +276,13 @@ return [
 
     // ERRORS on point
     'ERROR' => [
+        'LOCATION' => APP_ROOT . 'data' . DS . 'logs' . DS ,
+
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 
         'STORE' => true,      // Database if specified and / or File 'LOCATION' in your system
 
-        'SHOW' => true,       // Show errors on browser
+        'SHOW' => false,       // Show errors on browser
 
         'FULL' => true        // Generate custom stacktrace will high detail - DO NOT set to TRUE in PRODUCTION
     ],

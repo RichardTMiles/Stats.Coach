@@ -64,35 +64,35 @@ class golf_tournaments extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['tournament_id'])) {
+        if (array_key_exists('tournament_id', $argv)) {
             $tournament_id = $argv['tournament_id'];
             $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
         }
-        if (!empty($argv['tournament_name'])) {
+        if (array_key_exists('tournament_name', $argv)) {
             $tournament_name = $argv['tournament_name'];
             $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
         }
-        if (!empty($argv['course_id'])) {
+        if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
             $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (!empty($argv['host_name'])) {
+        if (array_key_exists('host_name', $argv)) {
             $host_name = $argv['host_name'];
             $stmt->bindParam(':host_name',$host_name, 2, 225);
         }
-        if (!empty($argv['tournament_style'])) {
+        if (array_key_exists('tournament_style', $argv)) {
             $tournament_style = $argv['tournament_style'];
             $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
         }
-        if (!empty($argv['tournament_team_price'])) {
+        if (array_key_exists('tournament_team_price', $argv)) {
             $tournament_team_price = $argv['tournament_team_price'];
             $stmt->bindParam(':tournament_team_price',$tournament_team_price, 2, 11);
         }
-        if (!empty($argv['tournament_paid'])) {
+        if (array_key_exists('tournament_paid', $argv)) {
             $tournament_paid = $argv['tournament_paid'];
             $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
         }
-        if (!empty($argv['tournament_date'])) {
+        if (array_key_exists('tournament_date', $argv)) {
             $stmt->bindValue(':tournament_date',$argv['tournament_date'], 2);
         }
 
@@ -143,6 +143,7 @@ class golf_tournaments extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -229,7 +230,7 @@ class golf_tournaments extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -249,6 +250,7 @@ class golf_tournaments extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.golf_tournaments (tournament_id, tournament_name, course_id, host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), UNHEX(:tournament_name), UNHEX(:course_id), :host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
 
@@ -293,6 +295,7 @@ class golf_tournaments extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -366,6 +369,7 @@ class golf_tournaments extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.golf_tournaments ';
 

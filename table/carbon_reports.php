@@ -64,17 +64,17 @@ class carbon_reports extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['log_level'])) {
+        if (array_key_exists('log_level', $argv)) {
             $log_level = $argv['log_level'];
             $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-        if (!empty($argv['report'])) {
+        if (array_key_exists('report', $argv)) {
             $stmt->bindValue(':report',$argv['report'], 2);
         }
-        if (!empty($argv['date'])) {
+        if (array_key_exists('date', $argv)) {
             $stmt->bindValue(':date',$argv['date'], 2);
         }
-        if (!empty($argv['call_trace'])) {
+        if (array_key_exists('call_trace', $argv)) {
             $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
 
@@ -125,6 +125,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -211,7 +212,7 @@ class carbon_reports extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -231,6 +232,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, call_trace) VALUES ( :log_level, :report, :call_trace)';
 
@@ -258,6 +260,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -319,6 +322,7 @@ class carbon_reports extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.carbon_reports ';
 

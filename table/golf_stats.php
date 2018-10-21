@@ -64,35 +64,35 @@ class golf_stats extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['stats_id'])) {
+        if (array_key_exists('stats_id', $argv)) {
             $stats_id = $argv['stats_id'];
             $stmt->bindParam(':stats_id',$stats_id, 2, 16);
         }
-        if (!empty($argv['stats_tournaments'])) {
+        if (array_key_exists('stats_tournaments', $argv)) {
             $stats_tournaments = $argv['stats_tournaments'];
             $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
         }
-        if (!empty($argv['stats_rounds'])) {
+        if (array_key_exists('stats_rounds', $argv)) {
             $stats_rounds = $argv['stats_rounds'];
             $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
         }
-        if (!empty($argv['stats_handicap'])) {
+        if (array_key_exists('stats_handicap', $argv)) {
             $stats_handicap = $argv['stats_handicap'];
             $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
         }
-        if (!empty($argv['stats_strokes'])) {
+        if (array_key_exists('stats_strokes', $argv)) {
             $stats_strokes = $argv['stats_strokes'];
             $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
         }
-        if (!empty($argv['stats_ffs'])) {
+        if (array_key_exists('stats_ffs', $argv)) {
             $stats_ffs = $argv['stats_ffs'];
             $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
         }
-        if (!empty($argv['stats_gnr'])) {
+        if (array_key_exists('stats_gnr', $argv)) {
             $stats_gnr = $argv['stats_gnr'];
             $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
         }
-        if (!empty($argv['stats_putts'])) {
+        if (array_key_exists('stats_putts', $argv)) {
             $stats_putts = $argv['stats_putts'];
             $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         }
@@ -144,6 +144,7 @@ class golf_stats extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -232,7 +233,7 @@ class golf_stats extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -256,6 +257,7 @@ class golf_stats extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ( UNHEX(:stats_id), :stats_tournaments, :stats_rounds, :stats_handicap, :stats_strokes, :stats_ffs, :stats_gnr, :stats_putts)';
 
@@ -301,6 +303,7 @@ class golf_stats extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }

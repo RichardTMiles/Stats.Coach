@@ -217,7 +217,7 @@ class Golf extends GlobalMap implements iSport
                 $putts_tot += $putts[$i];
             }
 
-            if (!$this->course[$course_id]['course_id'] ?? false) {
+            if (!($this->course[$course_id]['course_id'] ?? false)) {
                 $this->course($course_id);
             }
             alert('Post new round');
@@ -292,12 +292,10 @@ class Golf extends GlobalMap implements iSport
             throw new PublicAlert('Sorry, we failed to add that course.');
         }
 
-        if (false === carbon_locations::Post([])) {
-            throw new PublicAlert('Sorry, we failed to add that course.');
-        }
-
-        PublicAlert::success('YAYAY WE DID IT!');
-        startApplication("AddCourse/Color/$id/1");
+        self::commit(function() use ($id) {
+            PublicAlert::success('YAYAY WE DID IT!');
+            startApplication("AddCourse/Color/$id/1");
+        });
         return false;
     }
 
@@ -307,7 +305,7 @@ class Golf extends GlobalMap implements iSport
 
         global $json;
 
-        if (!is_array($json['course'])) {
+        if (!\is_array($json['course'])) {
             Course::Get($json['course'], $courseId, []);
         }
 

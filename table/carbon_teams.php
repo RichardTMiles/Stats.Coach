@@ -64,51 +64,51 @@ class carbon_teams extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['team_id'])) {
+        if (array_key_exists('team_id', $argv)) {
             $team_id = $argv['team_id'];
             $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (!empty($argv['team_coach'])) {
+        if (array_key_exists('team_coach', $argv)) {
             $team_coach = $argv['team_coach'];
             $stmt->bindParam(':team_coach',$team_coach, 2, 16);
         }
-        if (!empty($argv['parent_team'])) {
+        if (array_key_exists('parent_team', $argv)) {
             $parent_team = $argv['parent_team'];
             $stmt->bindParam(':parent_team',$parent_team, 2, 16);
         }
-        if (!empty($argv['team_code'])) {
+        if (array_key_exists('team_code', $argv)) {
             $team_code = $argv['team_code'];
             $stmt->bindParam(':team_code',$team_code, 2, 225);
         }
-        if (!empty($argv['team_name'])) {
+        if (array_key_exists('team_name', $argv)) {
             $team_name = $argv['team_name'];
             $stmt->bindParam(':team_name',$team_name, 2, 225);
         }
-        if (!empty($argv['team_rank'])) {
+        if (array_key_exists('team_rank', $argv)) {
             $team_rank = $argv['team_rank'];
             $stmt->bindParam(':team_rank',$team_rank, 2, 11);
         }
-        if (!empty($argv['team_sport'])) {
+        if (array_key_exists('team_sport', $argv)) {
             $team_sport = $argv['team_sport'];
             $stmt->bindParam(':team_sport',$team_sport, 2, 225);
         }
-        if (!empty($argv['team_division'])) {
+        if (array_key_exists('team_division', $argv)) {
             $team_division = $argv['team_division'];
             $stmt->bindParam(':team_division',$team_division, 2, 225);
         }
-        if (!empty($argv['team_school'])) {
+        if (array_key_exists('team_school', $argv)) {
             $team_school = $argv['team_school'];
             $stmt->bindParam(':team_school',$team_school, 2, 225);
         }
-        if (!empty($argv['team_district'])) {
+        if (array_key_exists('team_district', $argv)) {
             $team_district = $argv['team_district'];
             $stmt->bindParam(':team_district',$team_district, 2, 225);
         }
-        if (!empty($argv['team_membership'])) {
+        if (array_key_exists('team_membership', $argv)) {
             $team_membership = $argv['team_membership'];
             $stmt->bindParam(':team_membership',$team_membership, 2, 225);
         }
-        if (!empty($argv['team_photo'])) {
+        if (array_key_exists('team_photo', $argv)) {
             $team_photo = $argv['team_photo'];
             $stmt->bindParam(':team_photo',$team_photo, 2, 16);
         }
@@ -160,6 +160,7 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -248,7 +249,7 @@ class carbon_teams extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -272,6 +273,7 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.carbon_teams (team_id, team_coach, parent_team, team_code, team_name, team_rank, team_sport, team_division, team_school, team_district, team_membership, team_photo) VALUES ( UNHEX(:team_id), UNHEX(:team_coach), UNHEX(:parent_team), :team_code, :team_name, :team_rank, :team_sport, :team_division, :team_school, :team_district, :team_membership, UNHEX(:team_photo))';
 
@@ -329,6 +331,7 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }

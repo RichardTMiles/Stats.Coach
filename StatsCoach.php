@@ -168,16 +168,11 @@ class StatsCoach extends Application
     {
         global $user, $json;
 
-        if (APP_LOCAL) {
-            $id = '71EB90B4D10111E89F328F0D91AFBA99';
-            $_SESSION['id'] = &$id;
-        } else {
-            $id = &$_SESSION['id'];
-        }
+        $id = &$_SESSION['id'];
 
         // If the user is signed in we need to get the
         if ($id ?? false) {
-            if (!\is_array($user[$id])) {
+            if (!\is_array($user[$id] ?? false)) {
                 $user[$id] = [];
             }
 
@@ -201,32 +196,27 @@ class StatsCoach extends Application
             $json['nav-bar'] = '';
             $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
-            /** @noinspection PhpUndefinedClassInspection */
-            $suppressible = new class extends Mustache_Engine {
-                public $string;
-                public function mustache($path) : string {
-                    global $json;
-                    if (!file_exists($path)) {
-                        print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
-                    }
-                    $this->string =  $this->render(file_get_contents($path), $json);
-                    return $this;
+
+            $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
+                global $json;
+                static $mustache;
+                if (empty($mustache)) {
+                    $mustache = new \Mustache_Engine();
                 }
-                public function __toString()
-                {
-                    return (string) debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-                    //return 'suppressed';
+                if (!file_exists($path)) {
+                    print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
                 }
+                return $mustache->render(file_get_contents($path), $json);
             };
 
             switch ($user[$id]['user_type'] ?? false) {
                 case 'Athlete':
                     $json['body-layout'] = 'hold-transition skin-blue layout-top-nav';
-                    $json['header'] = $suppressible->mustache(APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.hbs');
+                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.hbs');
                     break;
                 case 'Coach':
                     $json['body-layout'] = 'skin-green fixed sidebar-mini sidebar-collapse';
-                    $json['header'] = $suppressible->mustache(APP_ROOT . APP_VIEW . 'Layout/CoachLayout.hbs');
+                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/CoachLayout.hbs');
                     break;
                 default:
                     throw new PublicAlert('No user type found!!!!');

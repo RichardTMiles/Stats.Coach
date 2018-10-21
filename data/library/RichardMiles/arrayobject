@@ -1,0 +1,24 @@
+... extends arrayobject {
+
+    public function offsetGet($name) {
+        if (array_key_exists( $name, get_object_vars( $this )))
+            return $this->{$name};
+        throw new \InvalidArgumentException("$name in not accessible through array objects. " . __METHOD__);
+    }
+
+    public function offsetSet($name, $value) {
+        if (array_key_exists( $name, get_object_vars( $this )))
+            return $this->{$name} = $value;
+        throw new \InvalidArgumentException("$name in not accessible through array objects. " . __METHOD__);
+    }
+
+    public function offsetExists($name) {
+            return array_key_exists( $name, get_object_vars( $this ));
+    }
+
+    public function offsetUnset($name) {
+        if (array_key_exists( $name, get_object_vars( $this )))
+            unset($this->{$name});
+        throw new \InvalidArgumentException("$name in not accessible through array objects. " . __METHOD__);
+    }
+}

@@ -1,0 +1,41 @@
+
+Carbon caught this Message: Undefined index: pga_professional
+line: /Users/richardmiles/Documents/WebServer/Stats.Coach/table/golf_course.php(371)
+
+
+	1)  /Users/richardmiles/Documents/WebServer/Stats.Coach/index.php (34): CarbonPHP\CarbonPHP->__invoke ('App\\StatsCoach')
+				["App\\StatsCoach"]
+
+	2)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/CarbonPHP.php (33): startApplication (false)
+				[false]
+
+	3)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Helpers/Application.php (75): App\StatsCoach->startApplication (NULL)
+				[null]
+
+	4)  /Users/richardmiles/Documents/WebServer/Stats.Coach/StatsCoach.php (130): CarbonPHP\Route->match ('AddCourse/Basic...', 'Golf', 'AddCourseBasic')
+				["AddCourse\/Basic\/{state?}\/*","Golf","AddCourseBasic"]
+
+	5)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Route.php (190): App\StatsCoach->CarbonPHP\{closure} ('Golf', 'AddCourseBasic', Array)
+				["Golf","AddCourseBasic",[false,false,false,"Richard Miles","Public","18","4906 Wimberly ln","Baytown","Alaska",1,0,18]]
+
+	6)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Application.php (46): MVC ('Golf', 'addcoursebasic', Array)
+				["Golf","addcoursebasic",[false,false,false,"Richard Miles","Public","18","4906 Wimberly ln","Baytown","Alaska",1,0,18]]
+
+	7)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Helpers/Application.php (269): {closure} ()
+				[]
+
+	8)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Helpers/Application.php (147): {closure} ()
+				[]
+
+	9)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Helpers/Application.php (223): {closure} ('Model\\Golf', Array)
+				["Model\\Golf",[false,false,false,"Richard Miles","Public","18","4906 Wimberly ln","Baytown","Alaska",1,0,18]]
+
+	10)  /Users/richardmiles/Documents/WebServer/Stats.Coach/vendor/richardtmiles/carbonphp/Helpers/Application.php (216): Model\Golf->AddCourseBasic (false, false, false, 'Richard Miles', 'Public', '18', '4906 Wimberly l...', 'Baytown', 'Alaska', 1, 0, 18)
+				[false,false,false,"Richard Miles","Public","18","4906 Wimberly ln","Baytown","Alaska",1,0,18]
+
+	11)  /Users/richardmiles/Documents/WebServer/Stats.Coach/model/Golf.php (284): Table\golf_course::Post (Array)
+				[{"course_name":"Richard Miles","created_by":"71EB90B4D10111E89F328F0D91AFBA99","course_input_completed":0,"tee_boxes":1,"handicap_count":0,"pga":false,"site":false,"course_holes":18,"course_phone":false,"course_type":"18","course_access":"Public","course_par":"","course_handicap":""}]
+
+	12)  /Users/richardmiles/Documents/WebServer/Stats.Coach/table/golf_course.php (371): CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (8, 'Undefined index...', '/Users/richardm...', 371, Array)
+				[8,"Undefined index: pga_professional","\/Users\/richardmiles\/Documents\/WebServer\/Stats.Coach\/table\/golf_course.php",371,{"argv":{"course_name":"Richard Miles","created_by":"71EB90B4D10111E89F328F0D91AFBA99","course_input_completed":0,"tee_boxes":1,"handicap_count":0,"pga":false,"site":false,"course_holes":18,"course_phone":false,"course_type":"18","course_access":"Public","course_par":"","course_handicap":""},"sql":"INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, created_by, course_input_completed) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, UNHEX(:created_by), :course_input_completed)","stmt":{"queryString":"INSERT INTO StatsCoach.golf_course (course_id, course_name, course_holes, course_phone, course_difficulty, course_rank, box_color_1, box_color_2, box_color_3, box_color_4, box_color_5, course_par, course_par_out, course_par_in, par_tot, course_par_hcp, course_type, course_access, course_handicap, pga_professional, website, created_by, course_input_completed) VALUES ( UNHEX(:course_id), UNHEX(:course_name), :course_holes, :course_phone, :course_difficulty, :course_rank, :box_color_1, :box_color_2, :box_color_3, :box_color_4, :box_color_5, :course_par, :course_par_out, :course_par_in, :par_tot, :course_par_hcp, :course_type, :course_access, :course_handicap, :pga_professional, :website, UNHEX(:created_by), :course_input_completed)"},"course_id":"61f264e0d4c511e885becba2cb14fec1","id":"61f264e0d4c511e885becba2cb14fec1","course_name":"Richard Miles","course_holes":18,"course_difficulty":null,"course_rank":null,"box_color_1":null,"box_color_2":null,"box_color_3":null,"box_color_4":null,"box_color_5":null,"course_par_out":"0","course_par_in":"0","par_tot":"0","course_par_hcp":"0","course_type":"18","course_access":"Public"}]
+

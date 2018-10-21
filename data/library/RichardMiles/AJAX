@@ -1,0 +1,15 @@
+<script>
+    $(function () {
+        // initial content
+        $.pjax.reload('#ajax-content');
+
+        // Every href on 'a' element
+        // when on document load add event to every a tag, when event fired trigger smart refresh
+        $.when($(document).pjax('a', '#ajax-content')).then(function() { Pace.restart(); });
+    });
+</script>
+
+
+
+// stop pjax
+class="no-pjax"

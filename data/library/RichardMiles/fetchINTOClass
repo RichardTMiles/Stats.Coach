@@ -1,0 +1,4 @@
+ $stmt = $this->db->prepare( 'SELECT * FROM StatsCoach.users WHERE user_id = ?' );
+            $stmt->setFetchMode( \PDO::FETCH_CLASS, User::class );
+            $stmt->execute( [$_SESSION['id']] );
+            return $stmt->fetch();

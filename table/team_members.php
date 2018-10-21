@@ -64,19 +64,19 @@ class team_members extends Entities implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (!empty($argv['member_id'])) {
+        if (array_key_exists('member_id', $argv)) {
             $member_id = $argv['member_id'];
             $stmt->bindParam(':member_id',$member_id, 2, 16);
         }
-        if (!empty($argv['team_id'])) {
+        if (array_key_exists('team_id', $argv)) {
             $team_id = $argv['team_id'];
             $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (!empty($argv['user_id'])) {
+        if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (!empty($argv['accepted'])) {
+        if (array_key_exists('accepted', $argv)) {
             $accepted = $argv['accepted'];
             $stmt->bindParam(':accepted',$accepted, 0, 1);
         }
@@ -128,6 +128,7 @@ class team_members extends Entities implements iRest
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         $aggregate = false;
         $group = $sql = '';
         $pdo = self::database();
@@ -214,7 +215,7 @@ class team_members extends Entities implements iRest
             return false;
         }
 
-        $return = $stmt->fetchAll();
+        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
         *   The next part is so every response from the rest api
@@ -234,6 +235,7 @@ class team_members extends Entities implements iRest
     */
     public static function Post(array $argv)
     {
+        self::$injection = [];
     /** @noinspection SqlResolve */
     $sql = 'INSERT INTO StatsCoach.team_members (member_id, team_id, user_id, accepted) VALUES ( UNHEX(:member_id), UNHEX(:team_id), UNHEX(:user_id), :accepted)';
 
@@ -268,6 +270,7 @@ class team_members extends Entities implements iRest
     */
     public static function Put(array &$return, string $primary, array $argv) : bool
     {
+        self::$injection = [];
         if (empty($primary)) {
             return false;
         }
@@ -329,6 +332,7 @@ class team_members extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
+        self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE FROM StatsCoach.team_members ';
 

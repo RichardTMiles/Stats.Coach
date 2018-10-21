@@ -1,0 +1,1 @@
+acme.sh --issue --dns -d stats.coach -d www.stats.coach -d stats.miles.systems
