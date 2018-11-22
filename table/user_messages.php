@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class user_messages extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -226,10 +228,11 @@ class user_messages extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -278,8 +281,9 @@ class user_messages extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -289,16 +293,16 @@ class user_messages extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['message_id'])) {
+            if (array_key_exists('message_id', $argv)) {
                 $set .= 'message_id=UNHEX(:message_id),';
             }
-            if (!empty($argv['to_user_id'])) {
+            if (array_key_exists('to_user_id', $argv)) {
                 $set .= 'to_user_id=UNHEX(:to_user_id),';
             }
-            if (!empty($argv['message'])) {
+            if (array_key_exists('message', $argv)) {
                 $set .= 'message=:message,';
             }
-            if (!empty($argv['message_read'])) {
+            if (array_key_exists('message_read', $argv)) {
                 $set .= 'message_read=:message_read,';
             }
 
@@ -334,6 +338,6 @@ class user_messages extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

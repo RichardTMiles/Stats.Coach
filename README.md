@@ -12,3 +12,11 @@ Admin X3
 
 
  php index.php rest -s StatsCoach -p 'Huskies!99' -json 
+ 
+    static $count;
+ 
+         null === $count and $count = 0;
+ 
+         if (++$count > 1 ){
+             sortDump('started app twice');
+         };

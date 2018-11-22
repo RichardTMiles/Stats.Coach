@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_tags extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -221,10 +223,11 @@ class carbon_tags extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -266,8 +269,9 @@ class carbon_tags extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -277,13 +281,13 @@ class carbon_tags extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['tag_id'])) {
+            if (array_key_exists('tag_id', $argv)) {
                 $set .= 'tag_id=:tag_id,';
             }
-            if (!empty($argv['tag_description'])) {
+            if (array_key_exists('tag_description', $argv)) {
                 $set .= 'tag_description=:tag_description,';
             }
-            if (!empty($argv['tag_name'])) {
+            if (array_key_exists('tag_name', $argv)) {
                 $set .= 'tag_name=:tag_name,';
             }
 

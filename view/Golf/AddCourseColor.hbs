@@ -16,16 +16,19 @@
             $('#color').attr('value', self.innerHTML).attr("style", "background-color: " + self.innerHTML + ";")
         };
 
-        carbon.alert("Tee boxes difficulty and slope may be left at 0 if not set.", "success");
+        {{#addColor}}
+            $('#color').attr('value', '{{color}}').attr("style", "background-color: {{color}};")
+        {{/addColor}}
+        //carbon.alert("Tee boxes difficulty and slope may be left at 0 if not set.", "success");
 
     });
 </script>
 
 
 <!-- Add Tee Box Selection -->
-<form data-pjax class="form-horizontal" method="post" action="/AddCourse/Color/{{course_id}}/{{current_hole}}" name="addCourse">
+<form style="margin-top: 20px" class="form-horizontal" method="post" action="/AddCourse/Color/{{course.course_id}}/{{current_hole}}" name="addCourse">
 
-    <div id='tee-box-color'>
+    <div id='tee-box-color' class="">
         <div class='box box-success' id='Tee-Box-Color-Section'
              style='background-color: #2c3b41; color: ghostwhite !important;'>
             <div class='box-header with-border' style='width: 100%; text-align: center'><h3 class='box-title'
@@ -51,18 +54,16 @@
                                 <li><a onclick='carbon.addColor(this)'>Gold</a></li>
                                 <li><a onclick='carbon.addColor(this)'>Red</a></li>
                                 <li><a onclick='carbon.addColor(this)'>White</a></li>
-
-
                             </ul>
                         </div>
-                        <input id='color' name='tee_" + current_hole + "_color' type='text'
+                        <input id='color' name='color' type='text'
                                class='form-control' disabled></div>
                 </div>
                 <br><br><br><br>
                 <div class='row'>
                     <div class='col-md-6 col-sm-6'>
                         <div class='col-xs-6 col-md-6 text-center'><input name='general_difficulty'
-                                                                          type='text' class='knob' value='0'
+                                                                          type='text' class='knob' value='{{^addColor.difficulty.m}}0{{/addColor.difficulty.m}}{{addColor.difficulty.m}}'
                                                                           data-step='0.1'
                                                                           data-min='0' data-max='90' data-anglearc='250'
                                                                           data-angleoffset='145' data-width='90'
@@ -70,7 +71,7 @@
                                                                           style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'>
                         </div>
                         <div class='col-xs-6 col-md-6 text-center'><input name='general_slope'
-                                                                          type='text' class='knob' value='0'
+                                                                          type='text' class='knob' value='{{^addColor.slope.m}}0{{/addColor.slope.m}}{{addColor.slope.m}}'
                                                                           data-min='0'
                                                                           data-max='200' data-anglearc='250'
                                                                           data-angleoffset='-35' data-width='90'
@@ -83,7 +84,7 @@
                     </div>
                     <div class='col-md-6 col-sm-6'>
                         <div class='col-xs-6 col-md-6 text-center'><input name='women_difficulty'
-                                                                          type='text' class='knob' value='0'
+                                                                          type='text' class='knob' value='{{^addColor.difficulty.w}}0{{/addColor.difficulty.w}}{{addColor.difficulty.w}}'
                                                                           data-step='0.1'
                                                                           data-min='0' data-max='90' data-anglearc='250'
                                                                           data-angleoffset='145' data-width='90'
@@ -91,7 +92,7 @@
                                                                           style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'>
                         </div>
                         <div class='col-xs-6 col-md-6 text-center'><input name='women_slope'
-                                                                          type='text' class='knob' value='0'
+                                                                          type='text' class='knob' value='{{^addColor.slope.w}}0{{/addColor.slope.w}}{{addColor.slope.w}}'
                                                                           data-min='0'
                                                                           data-max='200' data-anglearc='250'
                                                                           data-angleoffset='-35' data-width='90'

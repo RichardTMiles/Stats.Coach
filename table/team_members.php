@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class team_members extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -276,8 +278,9 @@ class team_members extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -287,16 +290,16 @@ class team_members extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['member_id'])) {
+            if (array_key_exists('member_id', $argv)) {
                 $set .= 'member_id=UNHEX(:member_id),';
             }
-            if (!empty($argv['team_id'])) {
+            if (array_key_exists('team_id', $argv)) {
                 $set .= 'team_id=UNHEX(:team_id),';
             }
-            if (!empty($argv['user_id'])) {
+            if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (!empty($argv['accepted'])) {
+            if (array_key_exists('accepted', $argv)) {
                 $set .= 'accepted=:accepted,';
             }
 

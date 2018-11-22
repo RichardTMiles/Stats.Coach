@@ -3,75 +3,78 @@
         font-family: Arial;
     }
 </style>
-<form data-pjax class="form-horizontal" method="post" action="/AddCourse/Color/{{course_id}}/{{box_number}}" name="addCourse">
 
-    <div id="hole-' + {{current_hole}} + '-distances" class="box box-success"
-         style="background-color: #2c3b41; border-top-color: #2c3b41; display: none">
+<form class="form-horizontal" method="post" action="/AddCourse/Distance/{{course.course_id}}/{{current_hole}}"
+      name="addCourse">
+
+    <div id="hole-{{current_hole}}-distances" class="box box-success"
+         style="background-color: #2c3b41; border-top-color: #2c3b41; margin-top: 20px">
         <div class="box-header with-border" style="width: 100%; text-align: center"><h3 class="box-title"
                                                                                         style="text-align: center; font-size: 200%; color: ghostwhite">
-            HOLE #' + {{current_hole}} + '</h3>
+            HOLE #{{current_hole}}</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
             </div>
         </div>
         <div class="box-body" style="background-color: #2c3b41; border-top-color: #2c3b41;">
-            {{#tee_boxes}}
+
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div style="display:inline;width:180px;height:180px;">
+                    <input name="{{current_hole}}" type="text" class="knob" value="{{par}}" data-min="1"
+                           data-max="9" data-width="180" data-height="180" data-fgcolor=""
+                           style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left:
+            -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight:
+            bold; font-size: 18; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90);
+            padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
+                </div>
+                <div class="knob-label" style="color: white;">Par {{current_hole}}</div>
+            </div>
+
+            {{#addDist}}
                 <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                     <div style="display:inline;width:180px;height:180px;">
-                        <input name="tee_{{tee}}_'{{current_hole}}" type="text" class="knob" value="1" data-min="1"
-                               data-max="1000" data-width="180" data-height="180" data-fgcolor="{{tee_box_color}}"
+                        <input name="{{color}}" type="text" class="knob" value="{{distance}}" data-min="1"
+                               data-max="1000" data-width="180" data-height="180" data-fgcolor="{{color}}"
                                style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left:
             -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight:
             bold; font-size: 18; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90);
             padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
                     </div>
-                    <div class="knob-label" style="color: white;">{{tee_box_color}}'s Distance</div>
+                    <div class="knob-label" style="color: white;">{{color}}'s Distance</div>
                 </div>
-            {{/tee_boxes}}
+            {{/addDist}}
 
-
-            <div class="col-xs-12 col-sm-6 col-md-3 text-center centered">
-                <div style="display:inline;width:180px;height:180px;">' +
-                    <label for="{{current_hole}}" class="knob-label" style="color: white;">Par {{current_hole}}</label>
-                    <input name="{{current_hole}}" id="{{current_hole}}" type="text" class="knob" value="1" data-min="1"
-                           data-max="9"
-                           data-width="180" data-height="180" data-fgcolor="yellow"
-                           style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left:
-        -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold;
-        font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding:
-        0px; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
-
-                </div>
-            </div>
-
-
-            {{#Handicap_number}}
+            {{#handicap}}
                 <div class="col-xs-12 col-sm-6 col-md-3 text-center centered">
                     <div style="display:inline;width:180px;height:180px;">' +
-                        <input name="hc_{{current_hole}}" id="hc_{{current_hole}}" type="text" class="knob" value="1"
+                        <input name="hc{{#name}}_{{name}}{{/name}}" id="hc{{#name}}_{{name}}{{/name}}" type="text" class="knob" value="{{value}}"
                                data-min="1"
                                data-max="18" data-width="180" data-height="180" data-fgcolor="teal"
                                style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left:
         -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold;
         font-size: 18px; line-height: normal; text-align: center; color: rgb(0, 166, 90); padding:
         0px; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
-
                     </div>
-                    <label for="hc_{{current_hole}}" class="knob-label" style="color: white;">Handicap</label>
+                    <label for="hc{{#name}}_{{name}}{{/name}}" class="knob-label" style="color: white;">{{name}}'s
+                        Handicap</label>
                 </div>
-            {{/Handicap_number}}
+            {{/handicap}}
 
 
         </div>
         <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
-            <button type="button" class="btn btn-default" onclick=""><< Back</button>
+            <button id="back" type="button" class="btn btn-default" onclick=""><< Back</button>
             <button type="submit" class="btn btn-info pull-right" onclick="">Submit</button>
         </div>
     </div>
 </form>
+
 <script>
     Carbon(() => {
+        $('#back').on('click', function (e) {
+            e.preventDefault();
+        });
         $('#datepicker').load_datepicker();
         $('.knob').load_knob();                // were pre loading
         $('.timepicker').load_timepicker();

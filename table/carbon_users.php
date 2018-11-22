@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_users extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -317,10 +319,11 @@ class carbon_users extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -434,8 +437,9 @@ class carbon_users extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -445,85 +449,85 @@ class carbon_users extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['user_id'])) {
+            if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (!empty($argv['user_type'])) {
+            if (array_key_exists('user_type', $argv)) {
                 $set .= 'user_type=:user_type,';
             }
-            if (!empty($argv['user_sport'])) {
+            if (array_key_exists('user_sport', $argv)) {
                 $set .= 'user_sport=:user_sport,';
             }
-            if (!empty($argv['user_session_id'])) {
+            if (array_key_exists('user_session_id', $argv)) {
                 $set .= 'user_session_id=:user_session_id,';
             }
-            if (!empty($argv['user_facebook_id'])) {
+            if (array_key_exists('user_facebook_id', $argv)) {
                 $set .= 'user_facebook_id=:user_facebook_id,';
             }
-            if (!empty($argv['user_username'])) {
+            if (array_key_exists('user_username', $argv)) {
                 $set .= 'user_username=:user_username,';
             }
-            if (!empty($argv['user_first_name'])) {
+            if (array_key_exists('user_first_name', $argv)) {
                 $set .= 'user_first_name=:user_first_name,';
             }
-            if (!empty($argv['user_last_name'])) {
+            if (array_key_exists('user_last_name', $argv)) {
                 $set .= 'user_last_name=:user_last_name,';
             }
-            if (!empty($argv['user_profile_pic'])) {
+            if (array_key_exists('user_profile_pic', $argv)) {
                 $set .= 'user_profile_pic=:user_profile_pic,';
             }
-            if (!empty($argv['user_profile_uri'])) {
+            if (array_key_exists('user_profile_uri', $argv)) {
                 $set .= 'user_profile_uri=:user_profile_uri,';
             }
-            if (!empty($argv['user_cover_photo'])) {
+            if (array_key_exists('user_cover_photo', $argv)) {
                 $set .= 'user_cover_photo=:user_cover_photo,';
             }
-            if (!empty($argv['user_birthday'])) {
+            if (array_key_exists('user_birthday', $argv)) {
                 $set .= 'user_birthday=:user_birthday,';
             }
-            if (!empty($argv['user_gender'])) {
+            if (array_key_exists('user_gender', $argv)) {
                 $set .= 'user_gender=:user_gender,';
             }
-            if (!empty($argv['user_about_me'])) {
+            if (array_key_exists('user_about_me', $argv)) {
                 $set .= 'user_about_me=:user_about_me,';
             }
-            if (!empty($argv['user_rank'])) {
+            if (array_key_exists('user_rank', $argv)) {
                 $set .= 'user_rank=:user_rank,';
             }
-            if (!empty($argv['user_password'])) {
+            if (array_key_exists('user_password', $argv)) {
                 $set .= 'user_password=:user_password,';
             }
-            if (!empty($argv['user_email'])) {
+            if (array_key_exists('user_email', $argv)) {
                 $set .= 'user_email=:user_email,';
             }
-            if (!empty($argv['user_email_code'])) {
+            if (array_key_exists('user_email_code', $argv)) {
                 $set .= 'user_email_code=:user_email_code,';
             }
-            if (!empty($argv['user_email_confirmed'])) {
+            if (array_key_exists('user_email_confirmed', $argv)) {
                 $set .= 'user_email_confirmed=:user_email_confirmed,';
             }
-            if (!empty($argv['user_generated_string'])) {
+            if (array_key_exists('user_generated_string', $argv)) {
                 $set .= 'user_generated_string=:user_generated_string,';
             }
-            if (!empty($argv['user_membership'])) {
+            if (array_key_exists('user_membership', $argv)) {
                 $set .= 'user_membership=:user_membership,';
             }
-            if (!empty($argv['user_deactivated'])) {
+            if (array_key_exists('user_deactivated', $argv)) {
                 $set .= 'user_deactivated=:user_deactivated,';
             }
-            if (!empty($argv['user_last_login'])) {
+            if (array_key_exists('user_last_login', $argv)) {
                 $set .= 'user_last_login=:user_last_login,';
             }
-            if (!empty($argv['user_ip'])) {
+            if (array_key_exists('user_ip', $argv)) {
                 $set .= 'user_ip=:user_ip,';
             }
-            if (!empty($argv['user_education_history'])) {
+            if (array_key_exists('user_education_history', $argv)) {
                 $set .= 'user_education_history=:user_education_history,';
             }
-            if (!empty($argv['user_location'])) {
+            if (array_key_exists('user_location', $argv)) {
                 $set .= 'user_location=:user_location,';
             }
-            if (!empty($argv['user_creation_date'])) {
+            if (array_key_exists('user_creation_date', $argv)) {
                 $set .= 'user_creation_date=:user_creation_date,';
             }
 
@@ -559,6 +563,6 @@ class carbon_users extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_locations extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -238,10 +240,11 @@ class carbon_locations extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -299,8 +302,9 @@ class carbon_locations extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -310,25 +314,25 @@ class carbon_locations extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['entity_id'])) {
+            if (array_key_exists('entity_id', $argv)) {
                 $set .= 'entity_id=UNHEX(:entity_id),';
             }
-            if (!empty($argv['latitude'])) {
+            if (array_key_exists('latitude', $argv)) {
                 $set .= 'latitude=:latitude,';
             }
-            if (!empty($argv['longitude'])) {
+            if (array_key_exists('longitude', $argv)) {
                 $set .= 'longitude=:longitude,';
             }
-            if (!empty($argv['street'])) {
+            if (array_key_exists('street', $argv)) {
                 $set .= 'street=:street,';
             }
-            if (!empty($argv['city'])) {
+            if (array_key_exists('city', $argv)) {
                 $set .= 'city=:city,';
             }
-            if (!empty($argv['state'])) {
+            if (array_key_exists('state', $argv)) {
                 $set .= 'state=:state,';
             }
-            if (!empty($argv['elevation'])) {
+            if (array_key_exists('elevation', $argv)) {
                 $set .= 'elevation=:elevation,';
             }
 
@@ -364,6 +368,6 @@ class carbon_locations extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

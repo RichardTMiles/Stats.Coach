@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/controller" isTestSource="false" packagePrefix="Controller\" />
       <sourceFolder url="file://$MODULE_DIR$/table" isTestSource="false" packagePrefix="Table\" />
       <sourceFolder url="file://$MODULE_DIR$/model" isTestSource="false" packagePrefix="Model\" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/almasaeed2010/adminlte" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/adapter-common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/filesystem-adapter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/tag-interop" />
@@ -45,7 +44,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/richardtmiles" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/richardtmiles/carbonphp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/rize/uri-template" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
@@ -328,20 +327,20 @@
         <CLASSES>
           <root url="phar://$MODULE_DIR$/../vendor/phar-io/manifest/tests/_fixture/test.phar/" />
           <root url="phar://$MODULE_DIR$/../vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-3.0.3.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/richardtmiles/carbonphp/composer.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-3.0.3.phar/" />
           <root url="phar://$MODULE_DIR$/../vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/richardtmiles/carbonphp/composer.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
           <root url="phar://$MODULE_DIR$/../vendor/phar-io/manifest/tests/_fixture/test.phar/" />
           <root url="phar://$MODULE_DIR$/../vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-3.0.3.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/richardtmiles/carbonphp/composer.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-3.0.3.phar/" />
           <root url="phar://$MODULE_DIR$/../vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/richardtmiles/carbonphp/composer.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
         </SOURCES>
       </library>
@@ -349,5 +348,7 @@
     <orderEntry type="library" name="html5shiv" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="respond" level="application" />
+    <orderEntry type="library" name="R User Library" level="project" />
+    <orderEntry type="library" name="R Skeletons" level="application" />
   </component>
 </module>

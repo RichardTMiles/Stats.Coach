@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class golf_rounds extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -338,8 +340,9 @@ class golf_rounds extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -349,49 +352,49 @@ class golf_rounds extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['user_id'])) {
+            if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (!empty($argv['round_id'])) {
+            if (array_key_exists('round_id', $argv)) {
                 $set .= 'round_id=UNHEX(:round_id),';
             }
-            if (!empty($argv['course_id'])) {
+            if (array_key_exists('course_id', $argv)) {
                 $set .= 'course_id=UNHEX(:course_id),';
             }
-            if (!empty($argv['round_public'])) {
+            if (array_key_exists('round_public', $argv)) {
                 $set .= 'round_public=:round_public,';
             }
-            if (!empty($argv['score'])) {
+            if (array_key_exists('score', $argv)) {
                 $set .= 'score=:score,';
             }
-            if (!empty($argv['score_gnr'])) {
+            if (array_key_exists('score_gnr', $argv)) {
                 $set .= 'score_gnr=:score_gnr,';
             }
-            if (!empty($argv['score_ffs'])) {
+            if (array_key_exists('score_ffs', $argv)) {
                 $set .= 'score_ffs=:score_ffs,';
             }
-            if (!empty($argv['score_putts'])) {
+            if (array_key_exists('score_putts', $argv)) {
                 $set .= 'score_putts=:score_putts,';
             }
-            if (!empty($argv['score_out'])) {
+            if (array_key_exists('score_out', $argv)) {
                 $set .= 'score_out=:score_out,';
             }
-            if (!empty($argv['score_in'])) {
+            if (array_key_exists('score_in', $argv)) {
                 $set .= 'score_in=:score_in,';
             }
-            if (!empty($argv['score_total'])) {
+            if (array_key_exists('score_total', $argv)) {
                 $set .= 'score_total=:score_total,';
             }
-            if (!empty($argv['score_total_gnr'])) {
+            if (array_key_exists('score_total_gnr', $argv)) {
                 $set .= 'score_total_gnr=:score_total_gnr,';
             }
-            if (!empty($argv['score_total_ffs'])) {
+            if (array_key_exists('score_total_ffs', $argv)) {
                 $set .= 'score_total_ffs=:score_total_ffs,';
             }
-            if (!empty($argv['score_total_putts'])) {
+            if (array_key_exists('score_total_putts', $argv)) {
                 $set .= 'score_total_putts=:score_total_putts,';
             }
-            if (!empty($argv['score_date'])) {
+            if (array_key_exists('score_date', $argv)) {
                 $set .= 'score_date=:score_date,';
             }
 

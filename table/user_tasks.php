@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class user_tasks extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -241,10 +243,11 @@ class user_tasks extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -303,8 +306,9 @@ class user_tasks extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -314,28 +318,28 @@ class user_tasks extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['task_id'])) {
+            if (array_key_exists('task_id', $argv)) {
                 $set .= 'task_id=UNHEX(:task_id),';
             }
-            if (!empty($argv['user_id'])) {
+            if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (!empty($argv['from_id'])) {
+            if (array_key_exists('from_id', $argv)) {
                 $set .= 'from_id=UNHEX(:from_id),';
             }
-            if (!empty($argv['task_name'])) {
+            if (array_key_exists('task_name', $argv)) {
                 $set .= 'task_name=:task_name,';
             }
-            if (!empty($argv['task_description'])) {
+            if (array_key_exists('task_description', $argv)) {
                 $set .= 'task_description=:task_description,';
             }
-            if (!empty($argv['percent_complete'])) {
+            if (array_key_exists('percent_complete', $argv)) {
                 $set .= 'percent_complete=:percent_complete,';
             }
-            if (!empty($argv['start_date'])) {
+            if (array_key_exists('start_date', $argv)) {
                 $set .= 'start_date=:start_date,';
             }
-            if (!empty($argv['end_date'])) {
+            if (array_key_exists('end_date', $argv)) {
                 $set .= 'end_date=:end_date,';
             }
 
@@ -371,6 +375,6 @@ class user_tasks extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

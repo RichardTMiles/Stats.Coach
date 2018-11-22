@@ -21,6 +21,7 @@ try {
     exit(1);
 }
 
+
 /**
  * At one point I returned the invocation of $app to show that
  * the application will not exit on completion, but rather return
@@ -29,6 +30,8 @@ try {
  * is returned here, the index will re-execute.
  * This turns very bad quickly.
  */
+
+
 
 
 $app(\App\StatsCoach::class);

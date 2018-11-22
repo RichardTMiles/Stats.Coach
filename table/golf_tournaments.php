@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class golf_tournaments extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -301,8 +303,9 @@ class golf_tournaments extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -312,28 +315,28 @@ class golf_tournaments extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['tournament_id'])) {
+            if (array_key_exists('tournament_id', $argv)) {
                 $set .= 'tournament_id=UNHEX(:tournament_id),';
             }
-            if (!empty($argv['tournament_name'])) {
+            if (array_key_exists('tournament_name', $argv)) {
                 $set .= 'tournament_name=UNHEX(:tournament_name),';
             }
-            if (!empty($argv['course_id'])) {
+            if (array_key_exists('course_id', $argv)) {
                 $set .= 'course_id=UNHEX(:course_id),';
             }
-            if (!empty($argv['host_name'])) {
+            if (array_key_exists('host_name', $argv)) {
                 $set .= 'host_name=:host_name,';
             }
-            if (!empty($argv['tournament_style'])) {
+            if (array_key_exists('tournament_style', $argv)) {
                 $set .= 'tournament_style=:tournament_style,';
             }
-            if (!empty($argv['tournament_team_price'])) {
+            if (array_key_exists('tournament_team_price', $argv)) {
                 $set .= 'tournament_team_price=:tournament_team_price,';
             }
-            if (!empty($argv['tournament_paid'])) {
+            if (array_key_exists('tournament_paid', $argv)) {
                 $set .= 'tournament_paid=:tournament_paid,';
             }
-            if (!empty($argv['tournament_date'])) {
+            if (array_key_exists('tournament_date', $argv)) {
                 $set .= 'tournament_date=:tournament_date,';
             }
 

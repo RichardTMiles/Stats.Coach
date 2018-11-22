@@ -33,6 +33,7 @@ class StatsCoach extends Application
             $json = array();
         }
         $json['SITE'] = SITE;
+        $json['POST'] = $_POST;
         $json['HTTP'] = HTTP;
         $json['HTTPS'] = HTTPS;
         $json['SOCKET'] = SOCKET;
@@ -68,6 +69,7 @@ class StatsCoach extends Application
      */
     public function startApplication($uri = null): bool
     {
+        global $json;
         static $count;
 
         if (empty($count)) {

@@ -19,6 +19,7 @@
                 Handicap_number,
                 total_holes = 18;
 
+
         carbon.hasDuplicates = (array) => {
             return (new Set(array)).size !== array.length;
         };
@@ -63,7 +64,7 @@
 
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="/AddCourse/Basic" name="addCourse">
+    <form class="form-horizontal" method="post" action="/AddCourse/Basic" name="addCourse">
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->
@@ -142,7 +143,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-phone"></i>
                             </div>
-                            <input value="{{#course}}{{course_phone}}{{/course}}" type="text" name="c_phone"
+                            <input value="{{course.course_phone}}" type="text" name="c_phone"
                                    id="phone" class="form-control"
                                    data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
@@ -153,14 +154,14 @@
 
                     <div class="form-group col-xs-12 col-md-12" id="c_street">
                         <label class="control-label" for="Street">Street</label>
-                        <input value="{{#course}}{{#location}}{{/location}}{{/course}}" name="c_street" type="text"
+                        <input value="{{course.location.street}}" name="c_street" type="text"
                                class="form-control" id="inputSuccess"
                                placeholder="Street Address">
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12" id="c_city">
                         <label class="control-label" for="City">City</label>
-                        <input value="{{#course}}{{course_phone}}{{/course}}" type="text" class="form-control"
+                        <input value="{{course.location.city}}" type="text" class="form-control"
                                id="City" placeholder="City"
                                name="c_city">
                     </div>
@@ -169,8 +170,8 @@
                         <label for="state">State</label>
                         <select id="state" name="c_state" class="form-control select2" style="width: 100%;">
 
-                            <option selected="selected" value="{{state}}">
-                                {{state}}{{^state}}State Selection{{/state}}
+                            <option selected="selected" value="{{course.location.state}}{{^course.location.state}}{{state}}{{/course.location.state}}">
+                                {{course.location.state}}{{^course.location.state}}{{state}}{{^state}}State Selection{{/state}}{{/course.location.state}}
                             </option>
                             <option value="Alabama">Alabama</option>
                             <option value="Alaska">Alaska</option>
@@ -184,6 +185,9 @@
                     <div class="form-group col-xs-12 col-md-12" id="tee_boxes">
                         <label>Number of Tee Boxes</label>
                         <select class="form-control" name="tee_boxes">
+                            <option selected="selected" value="{{course.tee_boxes}}{{^course.tee_boxes}}{{course.tee_boxes}}{{/course.tee_boxes}}">
+                                {{course.tee_boxes}}{{^course.tee_boxes}}Tee Boxes{{/course.tee_boxes}}
+                            </option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
@@ -194,7 +198,9 @@
                     <div class="form-group col-xs-12 col-md-12" id="Handicap_number">
                         <label>Handicap</label>
                         <select class="form-control" name="Handicap_number">
-                            <option value="0">None</option>
+                            <option selected="selected" value="{{course.handicap_count}}{{^course.handicap_count}}0{{/course.handicap_count}}">
+                                {{course.handicap_count}}{{^course.handicap_count}} None{{/course.handicap_count}}
+                            </option>
                             <option value="1">One Listed</option>
                             <option value="2">Mens and Womens Listed</option>
                         </select>
@@ -203,7 +209,7 @@
                         <label class="control-label" for="pga_professional">Course PGA Professional
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="{{pga_pro}}" type="text" class="form-control" placeholder="Course PRO"
+                        <input value="{{course.pga_professional}}" type="text" class="form-control" placeholder="Course PRO"
                                name="pga_professional">
 
                     </div>
@@ -211,7 +217,7 @@
                         <label class="control-label" for="course_website">Course Website
                             <a style="font-size: smaller; color: #9FAFD1;"> (Optional)</a>
                         </label>
-                        <input value="{{course_website}}" type="text" class="form-control"
+                        <input value="{{course.website}}" type="text" class="form-control"
                                placeholder="Course Website"
                                name="course_website">
                     </div>

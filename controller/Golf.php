@@ -32,7 +32,7 @@ class Golf extends Request  // Validation
      * @return array|bool
      * @throws PublicAlert
      */
-    public function PostScore(&$state, &$course_id, &$boxColor)
+    public function PostScore($state, $course_id, $boxColor)
     {
         global $json;
 
@@ -41,9 +41,11 @@ class Golf extends Request  // Validation
             return null;                                // goto view
         }
 
-        $state = ucfirst($this->set($state)->alnum());
-        $course_id = $this->set($course_id)->alnum();         // hex id
-        $boxColor = $this->set($boxColor)->alnum();
+        $state = ucfirst(strtolower($this->set($state)->alnum()));
+
+        $course_id = $this->set($course_id)->hex();         // hex id
+
+        $boxColor = $this->set($boxColor)->word();
 
         if (empty($_POST)) {
             return [$state, $course_id, $boxColor];     // goto the model
@@ -98,26 +100,20 @@ class Golf extends Request  // Validation
         $json['course'] = [];
 
         golf_course::Get($json['course'], null, [
-            'where'=>[
-               'created_by'=>$_SESSION['id'],
-                'course_input_completed'=> 0
+            'where' => [
+                'created_by' => $_SESSION['id'],
+                'course_input_completed' => 0
             ],
             'pagination' => [
-                'limit'=>1
+                'limit' => 1
             ]
         ]);
 
-        // sortDump($json['course']);
-        # $argv = array_pop($json['sql']);
-        # sortDump([$argv, $json['course']]);
-
         if (!empty($json['course'])) {
+            PublicAlert::success('It seems like you have unfinished changes! Please finish entering the data for this course.');
             $json['course']['location'] = [];
             carbon_locations::Get($json['course']['location'], $json['course']['course_id'], []);
-            var_dump($json['course']);
-            return null;
         }
-
 
         if ($state) {
             $state = ucfirst(parent::set($state)->alnum());
@@ -145,8 +141,6 @@ class Golf extends Request  // Validation
             throw new PublicAlert('Sorry, handicap number appears invalid');
         }
 
-
-
         switch ($style) {
             case '9-hole':
                 $holes = 9;
@@ -158,40 +152,64 @@ class Golf extends Request  // Validation
                 $holes = 18;
         }
 
-        return [$phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes,$handicap_number, $holes];
+        return [$phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes];
 
     }
 
 
     public function AddCourseColor($courseId, $box_number)
     {
+        global $json;
+
+        $json['current_hole'] = $box_number;
+
+        if ($courseId !== ($json['course']['course_id'] ?? false)) {
+            $json['course'] = [];
+            if (!golf_course::Get($json['course'], $courseId, [])) {
+                throw new PublicAlert('Failed to get course data');
+            }
+        }
+
+        if (\count($json['course']['course_tee_boxes']) + 1 < $box_number) {
+            PublicAlert::danger('Something when wrong. Moved to the correct input.');
+            return startApplication("AddCourse/Color/$courseId/$box_number/");
+        }
+
+        if ($box_number > $json['course']['tee_boxes']) {
+            return startApplication('AddCourse/Distance/' . $json['course']['course_id'] . '/1/');
+        }
+
+        $json['addColor'] = $json['course']['course_tee_boxes'][$box_number] ?? [];
+
         if (empty($_POST)) {
             return null;
         }
 
-        $color = $this->post('color')->word();
+        $color = ucfirst(strtolower($this->post('color')->word()));
 
-        if (!\in_array($color, [
-            'blue',
-            'black',
-            'green',
-            'gold',
-            'red',
-            'white'])) {
-            throw new PublicAlert('That appears to be an incorrect color choice. What did you do?');
-        }
-
+        // Lets make a new standard, we will always "softly" validate url prams first
         if (!$this->set($box_number)->int(1, 5)) {
-            throw new PublicAlert('That appears to be an incorrect tee box choice. What did you do?');
+            throw new PublicAlert('That appears to be an incorrect tee box choice.');
         }
 
         if (!$this->set($courseId)->hex()) {
-            throw new PublicAlert('That appears to be an incorrect course ID. What did you do?');
+            PublicAlert::danger('That appears to be an incorrect course ID.');
+            return startApplication(true);
         }
 
-        $slope = $this->post("general_slope", "women_slope")->int();
+        if (!\in_array($color, [
+            'Blue',
+            'Black',
+            'Green',
+            'Gold',
+            'Red',
+            'White'])) {
+            throw new PublicAlert('That appears to be an incorrect color choice.');
+        }
 
-        $difficulty = $this->post("general_difficulty", "women_difficulty")->int();
+        $slope = $this->post('general_slope', 'women_slope')->int();
+
+        $difficulty = $this->post('general_difficulty', 'women_difficulty')->int();
 
         return [$courseId, $box_number, $color, $slope, $difficulty];
     }
@@ -199,50 +217,91 @@ class Golf extends Request  // Validation
     /**
      * @param $courseId
      * @param $holeNumber
-     * @return array
+     * @return array|bool
      * @throws PublicAlert
      */
     public function AddCourseDistance($courseId, $holeNumber)
     {
+        global $json;
 
-        [$courseId, $holeNumber] = $this->set($courseId, $holeNumber)->hex();
+        $courseId = $this->set($courseId)->hex();
+
+        $holeNumber = $this->set($holeNumber)->int(1, 18);
 
         if (!($courseId && $holeNumber)) {
             throw new PublicAlert('Failed loading course!');
         }
 
+        $json['current_hole'] = $holeNumber;
 
-        [$par, $distance]= $this->post('par', 'distance')->int();
-
-        if (!($par && $distance)) {
-            throw new PublicAlert('Failed loading course!');
+        if ($courseId !== ($json['course']['course_id'] ?? false)) {
+            $json['course'] = [];
+            if (!golf_course::Get($json['course'], $courseId, [])) {
+                throw new PublicAlert('Failed to get course data');
+            }
         }
 
-        $handicap = [];
+        $json['par'] = $json['course']['course_par']['par'][$holeNumber] ?? 1;
 
-        switch ($handicap_number) {
-            case 2:     // No break
-                $handicap[2] = $this->post('hc_2_1', 'hc_2_2', 'hc_2_3', 'hc_2_4', 'hc_2_5', 'hc_2_6', 'hc_2_7', 'hc_2_8', 'hc_2_9', 'hc_2_10', 'hc_2_11', 'hc_2_12', 'hc_2_13', 'hc_2_14', 'hc_2_15', 'hc_2_16', 'hc_2_17', 'hc_2_18')->int();
-                $validate($handicap[2]);
+
+        $json['addDist'] = [];      // otherwise inputs will duplicate with startApplication is called with ++holeNumber
+
+        foreach ($json['course']['course_tee_boxes'] as $key => $value) {
+            $json['addDist'][] =
+                [
+                    'color' => ucfirst($value['color']),
+                    'distance' => (int)($json['course']['course_par'][$value['color']][$holeNumber] ?? 1),
+                ];
+        }
+
+        // This is only for the mustache template and isn't used anywhere else in this Controller/Model
+        switch ($json['course']['handicap_count']) {
             case 1:
-                $handicap[1] = $this->post('hc_1_1', 'hc_1_2', 'hc_1_3', 'hc_1_4', 'hc_1_5', 'hc_1_6', 'hc_1_7', 'hc_1_8', 'hc_1_9', 'hc_1_10', 'hc_1_11', 'hc_1_12', 'hc_1_13', 'hc_1_14', 'hc_1_15', 'hc_1_16', 'hc_1_17', 'hc_1_18')->int();
-                $validate($handicap[1]);
+                $json['handicap'] = [];
+                break;
+            case 2:
+                $json['handicap'] = [
+                    [
+                        'name' => 'Men',
+                        'value' => $json['course']['course_handicap'][$holeNumber]['m'] ?? 1
+                    ],
+                    [
+                        'name' => 'Women',
+                        'value' => $json['course']['course_handicap'][$holeNumber]['w'] ?? 1
+                    ]
+                ];
+                break;
+        }
+
+        if (!$_POST) {
+            return null;    // display the template, dont goto the model
+        }
+
+        switch ($json['course']['handicap_count']) {
+            case 1:
+                $handicap = $this->post('hc')->int();
+                break;
+            case 2:
+                $handicap = $this->post('hc_Men', 'hc_Women')->int();
                 break;
             default:
                 $handicap = null;
         }
 
-        $par_out = 0;
-        $par_in = 0;
-        for ($i = 0; $i < 9; $i++) {
-            $par_out += $par[$i];
+        $color = [];
+        // we need to get the colors out of the previous array
+        // Im going to be very uncreated about this
+        foreach ($json['course']['course_tee_boxes'] as $key => $value) {
+            $color[$value['color']] = $this->post(ucfirst($value['color']))->int();
         }
-        for ($i = 9; $i < 18; $i++) {
-            $par_in += $par[$i];
-        }
-        $par_tot = $par_out + $par_in;
 
-        return [$courseId, $holeNumber, $par, $par_tot, $par_out, $par_in, $handicap, $teeBox];
+        if (\in_array(false, $color, true)) {
+            throw new PublicAlert('Damn, something peculiar happened.');
+        }
+
+        $par = $this->post($holeNumber)->int();
+
+        return [$courseId, $holeNumber, $par, $handicap, $color];
     }
 
 

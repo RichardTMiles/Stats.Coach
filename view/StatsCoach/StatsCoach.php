@@ -66,7 +66,7 @@ switch ($userType) {
                 <div id="alert"></div>
                 <!-- content -->
                 <div id="pjax-content">
-                    <?= \Carbon\View::$bufferedContent ?>
+                    <?= \CarbonPHP\View::$bufferedContent ?>
                 </div>
                 <!-- /.content -->
             </div>
@@ -87,7 +87,7 @@ switch ($userType) {
 
         <?php
     } else {
-        print \Carbon\View::$bufferedContent;
+        print \CarbonPHP\View::$bufferedContent;
     } ?>
 </div>
 <?php

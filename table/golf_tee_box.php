@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class golf_tee_box extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -316,8 +318,9 @@ class golf_tee_box extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -327,37 +330,37 @@ class golf_tee_box extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['course_id'])) {
+            if (array_key_exists('course_id', $argv)) {
                 $set .= 'course_id=UNHEX(:course_id),';
             }
-            if (!empty($argv['tee_box'])) {
+            if (array_key_exists('tee_box', $argv)) {
                 $set .= 'tee_box=:tee_box,';
             }
-            if (!empty($argv['distance'])) {
+            if (array_key_exists('distance', $argv)) {
                 $set .= 'distance=:distance,';
             }
-            if (!empty($argv['distance_color'])) {
+            if (array_key_exists('distance_color', $argv)) {
                 $set .= 'distance_color=:distance_color,';
             }
-            if (!empty($argv['distance_general_slope'])) {
+            if (array_key_exists('distance_general_slope', $argv)) {
                 $set .= 'distance_general_slope=:distance_general_slope,';
             }
-            if (!empty($argv['distance_general_difficulty'])) {
+            if (array_key_exists('distance_general_difficulty', $argv)) {
                 $set .= 'distance_general_difficulty=:distance_general_difficulty,';
             }
-            if (!empty($argv['distance_womens_slope'])) {
+            if (array_key_exists('distance_womens_slope', $argv)) {
                 $set .= 'distance_womens_slope=:distance_womens_slope,';
             }
-            if (!empty($argv['distance_womens_difficulty'])) {
+            if (array_key_exists('distance_womens_difficulty', $argv)) {
                 $set .= 'distance_womens_difficulty=:distance_womens_difficulty,';
             }
-            if (!empty($argv['distance_out'])) {
+            if (array_key_exists('distance_out', $argv)) {
                 $set .= 'distance_out=:distance_out,';
             }
-            if (!empty($argv['distance_in'])) {
+            if (array_key_exists('distance_in', $argv)) {
                 $set .= 'distance_in=:distance_in,';
             }
-            if (!empty($argv['distance_tot'])) {
+            if (array_key_exists('distance_tot', $argv)) {
                 $set .= 'distance_tot=:distance_tot,';
             }
 

@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_tag extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -272,8 +274,9 @@ class carbon_tag extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -283,16 +286,16 @@ class carbon_tag extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['entity_id'])) {
+            if (array_key_exists('entity_id', $argv)) {
                 $set .= 'entity_id=UNHEX(:entity_id),';
             }
-            if (!empty($argv['user_id'])) {
+            if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (!empty($argv['tag_id'])) {
+            if (array_key_exists('tag_id', $argv)) {
                 $set .= 'tag_id=:tag_id,';
             }
-            if (!empty($argv['creation_date'])) {
+            if (array_key_exists('creation_date', $argv)) {
                 $set .= 'creation_date=:creation_date,';
             }
 

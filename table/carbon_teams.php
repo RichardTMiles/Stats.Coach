@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_teams extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -259,10 +261,11 @@ class carbon_teams extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -337,8 +340,9 @@ class carbon_teams extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -348,40 +352,40 @@ class carbon_teams extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['team_id'])) {
+            if (array_key_exists('team_id', $argv)) {
                 $set .= 'team_id=UNHEX(:team_id),';
             }
-            if (!empty($argv['team_coach'])) {
+            if (array_key_exists('team_coach', $argv)) {
                 $set .= 'team_coach=UNHEX(:team_coach),';
             }
-            if (!empty($argv['parent_team'])) {
+            if (array_key_exists('parent_team', $argv)) {
                 $set .= 'parent_team=UNHEX(:parent_team),';
             }
-            if (!empty($argv['team_code'])) {
+            if (array_key_exists('team_code', $argv)) {
                 $set .= 'team_code=:team_code,';
             }
-            if (!empty($argv['team_name'])) {
+            if (array_key_exists('team_name', $argv)) {
                 $set .= 'team_name=:team_name,';
             }
-            if (!empty($argv['team_rank'])) {
+            if (array_key_exists('team_rank', $argv)) {
                 $set .= 'team_rank=:team_rank,';
             }
-            if (!empty($argv['team_sport'])) {
+            if (array_key_exists('team_sport', $argv)) {
                 $set .= 'team_sport=:team_sport,';
             }
-            if (!empty($argv['team_division'])) {
+            if (array_key_exists('team_division', $argv)) {
                 $set .= 'team_division=:team_division,';
             }
-            if (!empty($argv['team_school'])) {
+            if (array_key_exists('team_school', $argv)) {
                 $set .= 'team_school=:team_school,';
             }
-            if (!empty($argv['team_district'])) {
+            if (array_key_exists('team_district', $argv)) {
                 $set .= 'team_district=:team_district,';
             }
-            if (!empty($argv['team_membership'])) {
+            if (array_key_exists('team_membership', $argv)) {
                 $set .= 'team_membership=:team_membership,';
             }
-            if (!empty($argv['team_photo'])) {
+            if (array_key_exists('team_photo', $argv)) {
                 $set .= 'team_photo=UNHEX(:team_photo),';
             }
 
@@ -417,6 +421,6 @@ class carbon_teams extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class golf_tournament_teams extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -276,8 +278,9 @@ class golf_tournament_teams extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -287,16 +290,16 @@ class golf_tournament_teams extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['team_id'])) {
+            if (array_key_exists('team_id', $argv)) {
                 $set .= 'team_id=UNHEX(:team_id),';
             }
-            if (!empty($argv['tournament_id'])) {
+            if (array_key_exists('tournament_id', $argv)) {
                 $set .= 'tournament_id=UNHEX(:tournament_id),';
             }
-            if (!empty($argv['tournament_paid'])) {
+            if (array_key_exists('tournament_paid', $argv)) {
                 $set .= 'tournament_paid=:tournament_paid,';
             }
-            if (!empty($argv['tournament_accepted'])) {
+            if (array_key_exists('tournament_accepted', $argv)) {
                 $set .= 'tournament_accepted=:tournament_accepted,';
             }
 

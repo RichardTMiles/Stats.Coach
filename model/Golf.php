@@ -5,6 +5,7 @@ namespace Model;
 use Psr\Log\InvalidArgumentException;
 use Table\carbon_locations;
 use Table\golf_course as Course;
+use Table\golf_course;
 use Table\golf_rounds as Rounds;
 use CarbonPHP\Singleton;
 use Model\Helpers\iSport;
@@ -63,19 +64,20 @@ class Golf extends GlobalMap implements iSport
 
     /**
      * @param $id
-     * @return mixed
-     * @throws \RuntimeException
+     * @return bool
+     * @throws PublicAlert
      */
     public function course($id): bool
     {
-        $this->course[$id] = self::fetch('SELECT * FROM golf_course JOIN carbon_locations ON entity_id = course_id WHERE course_id = ? LIMIT 1', $id);
+        $this->course[$id] = $this->course[$id] ?? [];
+
+        if (!golf_course::Get($this->course[$id], $id, [])) {
+         throw new PublicAlert('Failed to fetch course!');
+        }
 
         if (!\is_array($this->course[$id])) {
             return false;
         }
-
-        $this->course[$id]['course_par'] = unserialize($this->course[$id]['course_par'], []);
-        $this->course[$id]['course_handicap'] = unserialize($this->course[$id]['course_handicap'], []);
 
         return true;
     }
@@ -111,16 +113,13 @@ class Golf extends GlobalMap implements iSport
      */
     public function postScore($state, $course_id, $boxColor)
     {
-        // forum variables are stored in globals
-        global $gnr, $ffs, $putts, $newScore, $roundDate;
-
-        //json
-        global $json;   // This will fill our template
+        // forum variables are stored in globals?
+        global $json, $gnr, $ffs, $putts, $newScore, $roundDate;
 
         $json['state'] = $state;    // was validated in controller
 
         // low key got to high one day camping and moved the state selection to
-        // an even tin the bootstrap.. it loads the mustache in a seperate div using startApplication in js...
+        // an even in the bootstrap.. it loads the mustache in a separate div using startApplication in js...
         // I felt like it should be a thing
 
         // Get Course so we can display the tee box colors
@@ -156,15 +155,14 @@ class Golf extends GlobalMap implements iSport
 
         // Get each color and make it readable in mustache bc im
         // dumb and made it this way back in the the day TODO - this engouth validation???
-        if (empty($boxColor) && !empty($course_id) && \is_array($this->course)) {      // TODO - to high =-- see tif this is okay
-            for ($i = 1; $i < 6; $i++) {
-                if (empty($c = $this->course[$course_id]["box_color_$i"])) {
-                    break;
-                }
-
+        if (empty($boxColor)
+            && !empty($course_id)
+            && ($this->course[$course_id]['course_tee_boxes'] ?? false)
+            && \is_array($this->course[$course_id]['course_tee_boxes'])) {      // TODO - to high =-- see tif this is okay
+            foreach ($this->course[$course_id]['course_tee_boxes'] as $key => $value) {
                 $json['colors'][] = [
-                    'color' => $c,
-                    'lower' => strtolower($c)
+                    'color' => $value['color'] ?? null,
+                    'lower' => strtolower($value['color'])
                 ];
             }
             return true;
@@ -256,10 +254,9 @@ class Golf extends GlobalMap implements iSport
     {
         global $json;
 
-        $sql = 'SELECT course_name, course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
+        $sql = 'SELECT course_name, HEX(course_id) as course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$state]);
-
         $json['courses'] = $stmt->fetchAll();                 // setting to global
 
         return true;
@@ -268,6 +265,39 @@ class Golf extends GlobalMap implements iSport
 
     public function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
     {
+        global $json;
+
+        if ($id = $json['course']['course_id'] ?? false) {
+            if (!(Course::Put($json['course'], $id, [
+                    'course_name' => $name,
+                    'created_by' => $_SESSION['id'],
+                    'course_input_completed' => 0,
+                    'tee_boxes' => $tee_boxes,
+                    'handicap_count' => $handicap_number,
+                    'pga_professional' => $pga_pro,
+                    'website' => $course_website,
+                    'course_holes' => $holes,
+                    'course_phone' => $phone,
+                    'course_type' => $style,
+                    'course_access' => $access,
+                    'course_handicap' => []
+                ]) &&
+                carbon_locations::Put($json['course']['location'], $id, [
+                    'entity_id' => $json['course']['course_id'],
+                    'city' => $city,
+                    'street' => $street,
+                    'state' => $state,
+                ]))) {
+                /** @noinspection ForgottenDebugOutputInspection */
+                throw new PublicAlert(
+                    'Failed to Update Data!');
+            }
+
+            PublicAlert::success('Course Save Started!');
+
+            return startApplication("AddCourse/Color/$id/1");
+
+        }
         if (false === (($id = Course::Post([
                     'course_name' => $name,
                     'created_by' => $_SESSION['id'],
@@ -280,8 +310,10 @@ class Golf extends GlobalMap implements iSport
                     'course_phone' => $phone,
                     'course_type' => $style,
                     'course_access' => $access,
-                    'course_par' => '',
-                    'course_handicap' => ''])) &&
+                    'course_tee_boxes' => [],
+                    'course_par' => [],
+                    'course_handicap' => []
+                ])) &&
                 carbon_locations::Post([
                     'entity_id' => $id,
                     'city' => $city,
@@ -292,41 +324,89 @@ class Golf extends GlobalMap implements iSport
             throw new PublicAlert('Sorry, we failed to add that course.');
         }
 
-        self::commit(function() use ($id) {
-            PublicAlert::success('YAYAY WE DID IT!');
-            startApplication("AddCourse/Color/$id/1");
+        return self::commit(function () use ($id) {
+            PublicAlert::success('Course Save Started!');
+            return startApplication("AddCourse/Color/$id/1");
         });
-        return false;
     }
 
 
     public function AddCourseColor($courseId, $box_number, $color, $slope, $difficulty)
     {
-
         global $json;
 
-        if (!\is_array($json['course'])) {
-            Course::Get($json['course'], $courseId, []);
-        }
-
-        if (!Course::Put($json['course'], null, [
-            'course_id' => $courseId,
-            'number' => $box_number,
+        $json['course']['course_tee_boxes'][$box_number] = [
+            'box' => $box_number,
             'color' => $color,
-            'slope' => json_encode($slope),
-            'difficulty' => json_encode($difficulty)
+            'slope' => [
+                'm' => $slope[0],
+                'w' => $slope[1]
+            ],
+            'difficulty' => [
+                'm' => $difficulty[0],
+                'w' => $difficulty[1]
+            ]
+        ];
+
+        if (!Course::Put($json['course'], $courseId, [
+            'course_tee_boxes' => $json['course']['course_tee_boxes'],
         ])) {
             throw new PublicAlert('Sorry, we failed to add that course.');
         }
 
+        if ($box_number === $json['course']['tee_boxes']) {
+            return startApplication('AddCourse/Distance/' . $json['course']['course_id'] . '/1/');
+        }
+
+        $json['current_hole'] = ++$box_number;
+
+        $json['addColor'] = $json['course']['course_tee_boxes'][$box_number] ?? [];
+
+        return true;
     }
 
 
-    public function AddCourseDistance()
+    /** TODO - add input constraint validation (not just type checking)
+     * @param $courseId
+     * @param $holeNumber
+     * @param $par
+     * @param $handicap
+     * @param $colors
+     * @throws PublicAlert
+     */
+    public function AddCourseDistance($courseId, $holeNumber, $par, $handicap, $colors)
     {
+        global $json;
+
+        $json['course']['course_par']['par'][$holeNumber] = $par;
+
+        foreach ($colors as $color => $distance) {
+            $json['course']['course_par'][$color][$holeNumber] = $distance;
+        }
+
+        $json['course']['course_handicap'][$holeNumber] = \count($handicap) === 2 ?
+            [
+                'm' => $handicap[0],
+                'w' => $handicap[1]
+            ]
+            : $handicap;
+
+        if (!Course::Put($json['course'], $courseId, [
+            'course_par' => $json['course']['course_par'],
+            'course_handicap' => $json['course']['course_handicap'],
+            'course_input_completed' => $course_input_completed = $holeNumber === (int)$json['course']['course_type']
+        ])) {
+            throw new PublicAlert('Sorry, we failed to add that course.');
+        }
 
         PublicAlert::success('The course has been added and is public to the world!');
 
+        if ($course_input_completed) {
+            startApplication(true);
+        } else {
+            $holeNumber++;
+            startApplication("AddCourse/Distance/$courseId/$holeNumber/");
+        }
     }
 
 

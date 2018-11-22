@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class carbon_reports extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -266,8 +268,9 @@ class carbon_reports extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -277,16 +280,16 @@ class carbon_reports extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['log_level'])) {
+            if (array_key_exists('log_level', $argv)) {
                 $set .= 'log_level=:log_level,';
             }
-            if (!empty($argv['report'])) {
+            if (array_key_exists('report', $argv)) {
                 $set .= 'report=:report,';
             }
-            if (!empty($argv['date'])) {
+            if (array_key_exists('date', $argv)) {
                 $set .= 'date=:date,';
             }
-            if (!empty($argv['call_trace'])) {
+            if (array_key_exists('call_trace', $argv)) {
                 $set .= 'call_trace=:call_trace,';
             }
 

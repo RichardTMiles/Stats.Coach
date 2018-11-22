@@ -3,6 +3,7 @@ namespace Table;
 
 
 use CarbonPHP\Entities;
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Interfaces\iRest;
 use Psr\Log\InvalidArgumentException;
 
@@ -27,7 +28,8 @@ class golf_stats extends Entities implements iRest
         global $json;
         if (!\is_array($json)) {
             $json = [];
-        } elseif (!isset($json['sql'])) {
+        }
+        if (!isset($json['sql'])) {
             $json['sql'] = [];
         }
         $json['sql'][] = [
@@ -243,10 +245,11 @@ class golf_stats extends Entities implements iRest
         */
 
         
-            if (!empty($primary) || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1)) {
-            $return = (\count($return) === 1 ?
-            (\is_array($return['0']) ? $return['0'] : $return) : $return);   // promise this is needed and will still return the desired array except for a single record will not be an array
-            }
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = \is_array($return[0] ?? false) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -309,8 +312,9 @@ class golf_stats extends Entities implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\in_array($key, self::COLUMNS, true)){
-                unset($argv[$key]);
+            if (!\array_key_exists($key, self::COLUMNS)){
+                throw new PublicAlert('The key {' . $key . '} does not exist.');
+                #unset($argv[$key]);
             }
         }
 
@@ -320,28 +324,28 @@ class golf_stats extends Entities implements iRest
 
         $set = '';
 
-            if (!empty($argv['stats_id'])) {
+            if (array_key_exists('stats_id', $argv)) {
                 $set .= 'stats_id=UNHEX(:stats_id),';
             }
-            if (!empty($argv['stats_tournaments'])) {
+            if (array_key_exists('stats_tournaments', $argv)) {
                 $set .= 'stats_tournaments=:stats_tournaments,';
             }
-            if (!empty($argv['stats_rounds'])) {
+            if (array_key_exists('stats_rounds', $argv)) {
                 $set .= 'stats_rounds=:stats_rounds,';
             }
-            if (!empty($argv['stats_handicap'])) {
+            if (array_key_exists('stats_handicap', $argv)) {
                 $set .= 'stats_handicap=:stats_handicap,';
             }
-            if (!empty($argv['stats_strokes'])) {
+            if (array_key_exists('stats_strokes', $argv)) {
                 $set .= 'stats_strokes=:stats_strokes,';
             }
-            if (!empty($argv['stats_ffs'])) {
+            if (array_key_exists('stats_ffs', $argv)) {
                 $set .= 'stats_ffs=:stats_ffs,';
             }
-            if (!empty($argv['stats_gnr'])) {
+            if (array_key_exists('stats_gnr', $argv)) {
                 $set .= 'stats_gnr=:stats_gnr,';
             }
-            if (!empty($argv['stats_putts'])) {
+            if (array_key_exists('stats_putts', $argv)) {
                 $set .= 'stats_putts=:stats_putts,';
             }
 
@@ -377,6 +381,6 @@ class golf_stats extends Entities implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return \Table\carbon::Delete($remove, $primary, $argv);
+        return carbon::Delete($remove, $primary, $argv);
     }
 }

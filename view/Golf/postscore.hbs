@@ -1,8 +1,6 @@
 {{#step1}}
     <script>
-
-        var state = null;
-
+        let state = null;
 
         function course_given_states(select) {
 
@@ -24,17 +22,9 @@
             let courseId = select.value;
             // Jump to a new page using Pjax
             if (courseId === "Add")
-                return $.pjax({
-                    url: ('/AddCourse/Basic/' + state + '/'),         // Redirect
-                    container: '#pjax-content'
-                });
-
-            $.pjax({
-                url: ('/PostScore/' + state + '/' + courseId + '/'),         // Redirect
-                container: '#pjax-content'
-            });
+                return carbon.app('/AddCourse/Basic/' + state + '/');
+            carbon.app('/PostScore/' + state + '/' + courseId + '/');
         }
-
         Carbon(() => $('.select2').load_select2());
     </script>
 
@@ -155,10 +145,7 @@
 {{#step2}}
     <script>
         function startScoreCard(boxColor) {
-            $.pjax({
-                url: (window.location + boxColor + '/'),         // Redirect
-                container: '#pjax-content'
-            });
+            carbon.app(window.location + boxColor + '/');
         }
     </script>
     <!-- Content Header (Page header) -->
