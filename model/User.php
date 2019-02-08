@@ -4,11 +4,11 @@ namespace Model;
 
 use CarbonPHP\Helpers\Serialized;
 use Model\Helpers\GlobalMap;
-use Table\carbon_users;
-use Table\Golf_Stats as Stats;
-use Table\Carbon_Users as Users;
-use Table\User_Followers as Followers;
-use Table\User_Messages as Messages;
+use Tables\carbon_users;
+use Tables\Golf_Stats as Stats;
+use Tables\Carbon_Users as Users;
+use Tables\User_Followers as Followers;
+use Tables\User_Messages as Messages;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;

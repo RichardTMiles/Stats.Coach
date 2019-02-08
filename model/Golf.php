@@ -3,19 +3,91 @@
 namespace Model;
 
 use Psr\Log\InvalidArgumentException;
-use Table\carbon_locations;
-use Table\golf_course as Course;
-use Table\golf_course;
-use Table\golf_rounds as Rounds;
+use Tables\carbon_locations;
+use Tables\carbon_golf_courses as Course;
+use Tables\carbon_golf_course_rounds as Rounds;
 use CarbonPHP\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Error\PublicAlert;
-use Table\carbon_users as Users;
+use Tables\carbon_users as Users;
+use Tables\golf_rounds;
 
 class Golf extends GlobalMap implements iSport
 {
     use Singleton;
+
+
+    public function PostScoreDistance($id, $color, $hole) {
+        global $json;
+
+
+        if (!$this->course($id)) {
+            PublicAlert::danger('Failed to load the course!');
+            return startApplication('/PostScore/Basic/');
+        }
+
+        $holes = $this->course[$id]['course_par'][ucfirst(strtolower($color))] ?? false;
+
+        if (false === $holes) {
+            PublicAlert::danger('Failed to load the course tee box!');
+            return startApplication('/PostScore/Basic/');
+        }
+
+        $max = max($holes);
+
+        $json['holes'] = [];
+
+        foreach ($holes as $key => $distance) {
+            $json['holes'][] = [
+                'par' => $this->course[$id]['course_par']['par'][$key],
+                'first' => $key === 1,
+                'number' => $key,
+                'distance' => $distance,
+                'data_max' => $max
+            ];
+        }
+
+        if (empty($_POST)) {
+            return null;
+        }
+
+        sortDump($_POST);
+        $post = [];
+
+        if (false === Rounds::Get($post, null, [
+                'where' => [
+                    'round_input_complete' => false,
+                    'course_id' => $id
+                ]
+            ])) {
+            throw new PublicAlert('Failed to load rounds.');
+        }
+
+        if (empty($post)) {
+            Rounds::Post([
+                'round_id' => self::beginTransaction('carbon_golf_course', $id),
+                'user_id' => $_SESSION['id'],
+                'course_id' => $id,
+                'round_json' => [
+                    'color' => $color,
+                    $hole => 1
+                ]
+            ]);
+        } else {
+
+            sortDump($post);
+
+            Rounds::Put($json['course'], $post['round_id'], [
+                'round_id' => $post['round_id'],
+                'user_id' => $_SESSION['id'],
+                'course_id' => $id,
+            ]);
+
+        }
+
+        return null;
+    }
 
     /**
      * @return bool
@@ -57,7 +129,7 @@ class Golf extends GlobalMap implements iSport
             $user['rounds'] = [$user['rounds']];
         }
 
-        $user['stats'] = self::fetch('SELECT stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_putts, stats_gnr, stats_ffs FROM StatsCoach.golf_stats WHERE stats_id = ? LIMIT 1', $id);
+        $user['stats'] = self::fetch('SELECT stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_putts, stats_gnr, stats_ffs FROM StatsCoach.carbon_user_golf_stats WHERE stats_id = ? LIMIT 1', $id);
 
         return $user;
     }
@@ -71,8 +143,8 @@ class Golf extends GlobalMap implements iSport
     {
         $this->course[$id] = $this->course[$id] ?? [];
 
-        if (!golf_course::Get($this->course[$id], $id, [])) {
-         throw new PublicAlert('Failed to fetch course!');
+        if (!Course::Get($this->course[$id], $id, [])) {
+            throw new PublicAlert('Failed to fetch course!');
         }
 
         if (!\is_array($this->course[$id])) {
@@ -93,7 +165,7 @@ class Golf extends GlobalMap implements iSport
         if (!\is_array($this->course[$id])) {
             throw new \RuntimeException('invalid distance lookup');
         }
-        $sql = 'SELECT * FROM golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1';
+        $sql = 'SELECT * FROM carbon_golf_tee_box WHERE course_id = ? AND distance_color = ? LIMIT 1';
 
         $this->course[$id]['teeBox'] = self::fetch($sql, $id, $color);
 
@@ -117,41 +189,6 @@ class Golf extends GlobalMap implements iSport
         global $json, $gnr, $ffs, $putts, $newScore, $roundDate;
 
         $json['state'] = $state;    // was validated in controller
-
-        // low key got to high one day camping and moved the state selection to
-        // an even in the bootstrap.. it loads the mustache in a separate div using startApplication in js...
-        // I felt like it should be a thing
-
-        // Get Course so we can display the tee box colors
-        if (!empty($course_id) &&
-            (!($this->course[$course_id] ?? false))
-            && !$this->course($course_id)) {
-            throw new PublicAlert('The course could not be found');
-        }
-
-        if (empty($boxColor)) {
-            $json['step2'] = true;
-            $json['course'] = $this->course[$course_id];
-
-            // TODO - make this color palate happen
-            /*
-            foreach ($course_colors as $key => $value) {
-                if (empty($value)) {
-                    break;
-                }
-                switch ($value = strtolower($value)) {
-                    case 'white':
-                        $color = 'aqua';
-                        break;
-                    case 'gold':
-                        $color = 'yellow';
-                        break;
-                    default:
-                        $color = $value;
-                }
-            }
-            */
-        }
 
         // Get each color and make it readable in mustache bc im
         // dumb and made it this way back in the the day TODO - this engouth validation???
@@ -235,7 +272,7 @@ class Golf extends GlobalMap implements iSport
                 'putts_tot' => $putts_tot
             ]);
 
-            $sql = 'UPDATE StatsCoach.golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE stats_id = ?';
+            $sql = 'UPDATE StatsCoach.carbon_user_golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE stats_id = ?';
 
             if (!$this->db->prepare($sql)->execute([$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']])) {
                 throw new \RuntimeException('stats update failed');
@@ -249,12 +286,44 @@ class Golf extends GlobalMap implements iSport
         return true;
     }
 
-
-    public function coursesByState($state)
+    public function PostScoreColor($course_id)
     {
         global $json;
 
-        $sql = 'SELECT course_name, HEX(course_id) as course_id FROM StatsCoach.golf_course LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
+        if (!empty($course_id) &&
+            (!($this->course[$course_id] ?? false))
+            && !$this->course($course_id)) {
+            throw new PublicAlert('The course could not be found');
+        }
+
+        $json['course_id'] = $this->course[$course_id]['course_id'];
+
+        $json['course_name'] = $this->course[$course_id]['course_name'];
+
+        $json['course_colors'] = [];
+
+        foreach ($this->course[$course_id]['course_tee_boxes'] as $box) {
+            switch ($color = strtolower($box['color'])) {
+                case 'white':
+                    $json['course_colors'][] = ['color'=>'aqua'];
+                    break;
+                case 'gold':
+                    $json['course_colors'][] = ['color'=>'yellow'];
+                    break;
+                default:
+                    $json['course_colors'][] = ['color'=>$color];
+            }
+        }
+
+    }
+
+
+    public function PostScoreBasic($state)
+    {
+        global $json;
+
+        $json['state'] = $state;
+        $sql = 'SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$state]);
         $json['courses'] = $stmt->fetchAll();                 // setting to global
@@ -263,7 +332,8 @@ class Golf extends GlobalMap implements iSport
     }
 
 
-    public function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
+    public
+    function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
     {
         global $json;
 
@@ -331,7 +401,8 @@ class Golf extends GlobalMap implements iSport
     }
 
 
-    public function AddCourseColor($courseId, $box_number, $color, $slope, $difficulty)
+    public
+    function AddCourseColor($courseId, $box_number, $color, $slope, $difficulty)
     {
         global $json;
 
@@ -374,7 +445,8 @@ class Golf extends GlobalMap implements iSport
      * @param $colors
      * @throws PublicAlert
      */
-    public function AddCourseDistance($courseId, $holeNumber, $par, $handicap, $colors)
+    public
+    function AddCourseDistance($courseId, $holeNumber, $par, $handicap, $colors)
     {
         global $json;
 

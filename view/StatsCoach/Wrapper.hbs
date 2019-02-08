@@ -153,8 +153,9 @@
 <script>
     const TEMPLATE = "/node_modules/admin-lte/", APP_VIEW = "/view/", COMPOSER = "/vendor/";
 
-    const carbon = new CarbonPHP('#pjax-content', 'wss://rootprerogative.com:8888/', false);
+    // const carbon = new CarbonPHP('#pjax-content', 'wss://rootprerogative.com:8888/', false);
 
+    const carbon = new CarbonPHP('#pjax-content');
 
     carbon.event("Carbon");
 
@@ -178,7 +179,7 @@
         $('#my-box-widget').boxRefresh('load');
     });
 
-    $.load_backStretch(APP_VIEW + 'img/unsplash.png');
+    $.load_backStretch(APP_VIEW + 'Img/unsplash.png');
 
     $('.sidebar-menu').tree();
 

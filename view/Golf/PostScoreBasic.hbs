@@ -1,0 +1,140 @@
+<script>
+    function course_given_states(select) {
+
+        console.log(select.value);
+
+        let courses = $("#course"); // container to be placed in
+
+        console.log(courses);
+
+        courses.removeAttr('disabled', 'disabled');     // To ensure they at least search for it
+
+        carbon.app('/PostScore/Basic/' + select.value + '/');
+
+    }
+    function box_colors_given_id(select) {
+        let courseId = select.value;
+        // Jump to a new page using Pjax
+        if (courseId === "Add")
+            return carbon.app('/AddCourse/Basic/');
+        carbon.app('/PostScore/Color/' + courseId + '/');
+    }
+    Carbon(() => $('.select2').load_select2());
+</script>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 style="color: ghostwhite">
+        Post Score
+        <small style="color: ghostwhite">Course Select</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active" style="color: ghostwhite">Post Score</li>
+    </ol>
+</section>
+
+<!-- Alerts -->
+<div id="alert"></div>
+
+<!-- Main content -->
+<section class="content">
+    <!-- SELECT COURSE -->
+    <div class="box box-custom">
+
+        <div class="box-header">
+            <h3 class="box-title">Where Was Your Round?</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>State</label>
+                        <select class="form-control select2" style="width: 100%;"
+                                onchange="course_given_states(this)" required>
+                            <option selected="selected" disabled="" value="">{{state}}{{^state}}State{{/state}}</option>
+                            <option value="Alabama">Alabama</option>
+                            <option value="Alaska">Alaska</option>
+                            <option value="Arizona">Arizona</option>
+                            <option value="Arkansas">Arkansas</option>
+                            <option value="California">California</option>
+                            <option value="Colorado">Colorado</option>
+                            <option value="Connecticut">Connecticut</option>
+                            <option value="Delaware">Delaware</option>
+                            <option value="Florida">Florida</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Hawaii">Hawaii</option>
+                            <option value="Idaho">Idaho</option>
+                            <option value="Illinois">Illinois</option>
+                            <option value="Indiana">Indiana</option>
+                            <option value="Iowa">Iowa</option>
+                            <option value="Kansas">Kansas</option>
+                            <option value="Kentucky">Kentucky</option>
+                            <option value="Louisiana">Louisiana</option>
+                            <option value="Maine">Maine</option>
+                            <option value="Maryland">Maryland</option>
+                            <option value="Massachusetts">Massachusetts</option>
+                            <option value="Michigan">Michigan</option>
+                            <option value="Minnesota">Minnesota</option>
+                            <option value="Mississippi">Mississippi</option>
+                            <option value="Missouri">Missouri</option>
+                            <option value="Montana">Montana</option>
+                            <option value="Nebraska">Nebraska</option>
+                            <option value="Nevada">Nevada</option>
+                            <option value="New Hampshire">New Hampshire</option>
+                            <option value="New Jersey">New Jersey</option>
+                            <option value="New Mexico">New Mexico</option>
+                            <option value="New York">New York</option>
+                            <option value="North Carolina">North Carolina</option>
+                            <option value="North Dakota">North Dakota</option>
+                            <option value="Ohio">Ohio</option>
+                            <option value="Oklahoma">Oklahoma</option>
+                            <option value="Oregon">Oregon</option>
+                            <option value="Pennsylvania">Pennsylvania</option>
+                            <option value="Rhode Island">Rhode Island</option>
+                            <option value="South Carolina">South Carolina</option>
+                            <option value="South Dakota">South Dakota</option>
+                            <option value="Tennessee">Tennessee</option>
+                            <option value="Texas">Texas</option>
+                            <option value="Utah">Utah</option>
+                            <option value="Vermont">Vermont</option>
+                            <option value="Virginia">Virginia</option>
+                            <option value="Washington">Washington</option>
+                            <option value="West Virginia">West Virginia</option>
+                            <option value="Wisconsin">Wisconsin</option>
+                            <option value="Wyoming">Wyoming</option>
+                            <option value="District of Columbia">District of Columbia</option>
+                            <option value="Puerto Rico">Puerto Rico</option>
+                            <option value="Guam">Guam</option>
+                            <option value="American Samoa">American Samoa</option>
+                            <option value="U.S. Virgin Islands">U.S. Virgin Islands</option>
+                            <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                        </select>
+                    </div><!-- /.form-group -->
+
+                    <div data-pjax class="form-group">
+                        <label>Course</label>
+                        <select id="course" class="form-control select2"
+                                onchange="box_colors_given_id(this)" style="width: 100%;">
+                            <option value="" selected disabled>Course Select</option>
+                            <option value="Add">Add Course</option>
+                            {{#courses}}
+                                <option value='{{course_id}}'>{{course_name}}</option>
+                            {{/courses}}
+
+                            <!-- step 1.5 goes here -->
+
+                        </select>
+                    </div><!-- /.form-group -->
+                </div><!-- /.col -->
+            </div>
+        </div>
+
+    </div>
+
+</section><!-- /.content -->

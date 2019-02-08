@@ -9,8 +9,8 @@
 namespace Controller;
 
 use CarbonPHP\Request;
-use Table\Messages as Table;
-use Table\Users as U;
+use Tables\Messages as Table;
+use Tables\Users as U;
 
 class Messages extends Request
 {

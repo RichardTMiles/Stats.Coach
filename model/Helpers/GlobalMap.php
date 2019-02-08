@@ -52,10 +52,10 @@
 
 namespace Model\Helpers;
 
-use CarbonPHP\Entities;
+use CarbonPHP\Database;
 use CarbonPHP\Helpers\Pipe;
 
-abstract class GlobalMap extends Entities
+abstract class GlobalMap extends Database
 {
     protected $user = array();
     protected $team = array();
@@ -72,7 +72,12 @@ abstract class GlobalMap extends Entities
         $this->tournament = &$tournament;
     }
 
-    public static function sendUpdate(string $id, string $uri){
+
+    /** This class only exits for this function atm. The above will be deprecating soon
+     * @param string $id
+     * @param string $uri
+     */
+    public static function sendUpdate(string $id, string $uri) : void {
         Pipe::send( $uri, SERVER_ROOT . 'Data/Temp/' . $id . '.fifo' );
     }
 

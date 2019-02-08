@@ -1,0 +1,227 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 style="color: #fff">
+        {{course.course_name}}
+        <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
+        <li><a href="#" style="color: ghostwhite;">{{course.state}}</a></li>
+        <li style="color: ghostwhite;">{{course.course_name}}</li>
+        <li style="color: ghostwhite;">{{holes.0.distance_color}}</li>
+        <li style="color: ghostwhite;"> Score Input</li>
+    </ol>
+</section>
+
+<section class="content">
+    <form data-hbs class="form-horizontal" method="post"
+          action="{{SITE}}PostScore/{{course.state}}/{{course.course_id}}/{{holes.0.distance_color}}/"
+          name="postScore">
+        <div class="row" id="dateTime">
+            <div class="col-xs-12">
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <i class="fa fa-clock-o"></i>
+                        <h3 class="box-title">Tee off time?</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date:</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input name="datepicker" type="text" class="form-control pull-right"
+                                                   id="datepicker" value="{{date}}">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- time Picker -->
+                                    <div class="bootstrap-timepicker" style="color: #000">
+                                        <div class="form-group">
+                                            <label style="color: #fff">Time:</label>
+                                            <div class="input-group">
+                                                <input name="timepicker" type="text"
+                                                       class="form-control timepicker"/>
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                            </div><!-- /.input group -->
+                                        </div><!-- /.form group -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{#holes}}
+            <!-- row -->
+            <div class="row" id="input-score-hole-{{number}}"
+                 style="display: {{#first}}block{{/first}}{{^first}}none{{/first}}">
+                <div class="col-xs-12">
+                    <!-- jQuery Knob -->
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <h3 class="box-title">Hole {{number}} Stats</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 text-center">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+
+                                        <div style="display:inline;width:200px;height:200px;">
+                                            <input type="text" class="knob"
+                                                   value="{{distance}}" data-min="1"
+                                                   data-max="{{data_max}}"
+                                                   data-thickness="0.25" data-height="180" data-width="180"
+                                                   data-fgcolor="#3c8dbc" data-readonly="true"
+                                                   readonly="readonly"
+                                                   style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
+                                        </div>
+                                        <div class="knob-label">Distance</div>
+
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+
+                                        <div style="display:inline;width:200px;height:200px;">
+                                            <input name="par-{{number}}" type="text" class="knob"
+                                                   value="{{par}}" data-min="1"
+                                                   data-max="9"
+                                                   data-fgcolor="#f56954" data-readonly="true"
+                                                   readonly="readonly"
+                                                   data-height="180" data-width="180"
+                                                   style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
+                                        </div>
+                                        <div class="knob-label">Par</div>
+                                    </div>
+                                </div>
+                                <!-- ./col -->
+                                <div class="col-xs-12 col-sm-12 col-md-6 text-center">
+
+                                    <div class="col-xs-12 col-sm-6 col-md-6  text-center">
+                                        <div style="display:inline;width:200px;height:200px;">
+                                            <input name="hole-{{number}}" type="text" class="knob" value="1"
+                                                   data-min="1" data-max="9"
+                                                   data-fgcolor="#00a65a" data-height="180" data-width="180"
+                                                   style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
+                                        </div>
+                                        <div class="knob-label">Strokes</div>
+
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+
+                                        <div style="display:inline;width:200px;height:200px;">
+                                            <input name="putts-{{number}}" type="text" class="knob" value="0"
+                                                   data-min="0" data-max="8"
+                                                   data-fgcolor="#00c0ef" data-height="180" data-width="180"
+                                                   data-angleArc="250" data-angleoffset="-125"
+                                                   style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
+                                        </div>
+                                        <div class="knob-label">Putts</div>
+
+                                    </div>
+
+                                </div>
+                                <!-- ./col -->
+                                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                                    <br>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 text-center">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="ffs-{{number}}" type="checkbox" value="1"> Fairway
+                                                on
+                                                first shot
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 text-center">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="gnr-{{number}}" type="checkbox" value="1"> Green in
+                                                regulation
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                </div>
+                                <!-- ./col -->
+                            </div>
+                            <!-- /.row -->
+
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            {{^first}}
+                                <button type="button" class="btn btn-default"
+                                        onclick="last_score_input('{{number}}')"><< Back
+                                </button>
+                            {{/first}}
+                            <!-- button -->
+                            <button class="btn btn-info pull-right"
+                                    type="{{^last}}button{{/last}}{{#last}}submit{{/last}}"
+                                    {{^last}}onclick="next_score_input('{{number}}')"{{/last}}>
+                                Next &gt;&gt;
+                            </button>
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        {{/holes}}
+    </form>
+</section>
+
+<script>
+    Carbon(() => {
+        $('input').load_iCheck();
+        $('.knob').load_knob();
+        $('.timepicker').load_timepicker()
+
+        //Date picker
+        carbon.js('/node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js', () =>
+                $('#datepicker').datepicker({
+                    autoclose: true
+                }));
+
+    });
+
+    function next_score_input(current) {
+        let Form = document.forms["postScore"];
+        let input = ['putts-' + current, 'hole-' + current, 'par-' + current, 'gnr-' + current];
+
+        if (Form[input[0]].value > Form[input[1]].value) {
+            return carbon.alert("You can't putt more than you shoot!");
+        } else if (Form[input[0]].value === Form[input[1]].value) {
+            return carbon.alert("This isn't put-put. Please change your input.");
+        } else if (Form[input[3]].checked && ((Form[input[2]].value - Form[input[0]].value) < 2)) {
+            return carbon.alert("Green in regulation (GIR) A green is considered hit \"in regulation\" if any part of the ball is touching the putting surface while the number of strokes taken is at least two fewer than par (i.e., by the first stroke on a par 3, the second stroke on a par 4, or the third stroke on a par 5).");
+        }
+
+        document.getElementById("input-score-hole-" + current++).style.display = "none";
+        document.getElementById("input-score-hole-" + current).style.display = "block";
+    }
+
+    function last_score_input(current) {
+        document.getElementById("input-score-hole-" + current--).style.display = "none";
+        document.getElementById("input-score-hole-" + current).style.display = "block";
+    }
+</script>

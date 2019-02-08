@@ -15,12 +15,13 @@ if (false === include APP_ROOT . 'vendor/autoload.php') {
 }
 
 try {
-    $app = new CarbonPHP\CarbonPHP(APP_ROOT . 'config/config.php');
-} catch (Exception $e) {
+    $app = new CarbonPHP\CarbonPHP(APP_ROOT . 'config' . DS . 'config.php');
+} catch (\Throwable $e) {
+    /** @noinspection ForgottenDebugOutputInspection */
+    APP_LOCAL and print_r($e->getMessage());
     print '<h1>Fuck, Carbon Failed.</h1>';
     exit(1);
 }
-
 
 /**
  * At one point I returned the invocation of $app to show that
@@ -30,8 +31,6 @@ try {
  * is returned here, the index will re-execute.
  * This turns very bad quickly.
  */
-
-
 
 
 $app(\App\StatsCoach::class);

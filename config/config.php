@@ -180,7 +180,9 @@ function urlGoogle($request = null)
 return [
     'DATABASE' => [
 
-        'DB_DSN' => APP_LOCAL ? 'mysql:host=127.0.0.1;dbname=StatsCoach;' : 'mysql:host=35.224.229.250;dbname=StatsCoach;',      // Host and Database get put here
+        'DB_HOST' => APP_LOCAL ? '127.0.0.1' : '35.224.229.250',      // Host and Database get put here
+
+        'DB_NAME' => 'StatsCoach',
 
         'DB_USER' => 'root',                 // User
 
@@ -214,8 +216,6 @@ return [
 
         'REPLY_EMAIL' => 'support@carbonphp.com',
 
-        'BOOTSTRAP' => 'Application/Bootstrap.php',     // This file is executed when the startApplication() function is called
-
         'HTTP' => true   // I assume that HTTP is okay by default
     ],
 
@@ -227,7 +227,7 @@ return [
 
         'CALLBACK' => function () {         // optional variable $reset which would be true if a url is passed to startApplication()
 
-            $_SESSION['id'] = '71EB90B4D10111E89F328F0D91AFBA99';
+            //$_SESSION['id'] = false;#'71EB90B4D10111E89F328F0D91AFBA99';
 
             if ($_SESSION['id'] ?? ($_SESSION['id'] = false)) {
 
@@ -241,48 +241,50 @@ return [
 
                 if (!is_array($my = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
                     $my = [];
-                    if (false === Table\carbon_users::Get($my, $_SESSION['id'], [])) {
+                    /** @noinspection NotOptimalIfConditionsInspection */
+                    if (false === Tables\carbon_users::Get($my, $_SESSION['id'], []) ||
+                        empty($my)) {
                         $_SESSION['id'] = false;
                         \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
                     }
 
                     $my['stats'] = [];
-                    Table\golf_stats::Get($my['stats'], $_SESSION['id'], []);
+                    Tables\carbon_user_golf_stats::Get($my['stats'], $_SESSION['id'], []);
 
                     $my['teams'] = [];
-                    Table\carbon_teams::Get($my['teams'], $_SESSION['id'], []);
+                    Tables\carbon_teams::Get($my['teams'], $_SESSION['id'], []);
 
                     $my['followers'] = [];
-                    Table\user_followers::Get($my['followers'], $_SESSION['id'], []);
+                    Tables\carbon_user_followers::Get($my['followers'], $_SESSION['id'], []);
 
                     $my['messages'] = [];
-                    Table\user_messages::Get($my['messages'], $_SESSION['id'], []);
+                    Tables\carbon_user_messages::Get($my['messages'], $_SESSION['id'], []);
 
                 }
             }
         },
     ],
 
-    /*          TODO - finish building php websockets
+    /*          TODO - finish building php websockets          */
     'SOCKET' => [
         'WEBSOCKETD' => false,  // if you'd like to use web
         'PORT' => 8888,
         'DEV' => true,
         'SSL' => [
-        'KEY' => '',
-        'CERT' => ''
-    ]
-    ],  */
+            'KEY' => '',
+            'CERT' => ''
+        ]
+    ],
 
     // ERRORS on point
     'ERROR' => [
-        'LOCATION' => APP_ROOT . 'data' . DS . 'logs' . DS ,
+        'LOCATION' => APP_ROOT . 'data' . DS . 'logs' . DS,
 
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 
         'STORE' => true,      // Database if specified and / or File 'LOCATION' in your system
 
-        'SHOW' => false,       // Show errors on browser
+        'SHOW' => true,       // Show errors on browser
 
         'FULL' => true        // Generate custom stacktrace will high detail - DO NOT set to TRUE in PRODUCTION
     ],

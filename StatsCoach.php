@@ -14,8 +14,8 @@ use CarbonPHP\View;
 use Controller\User;
 use /** @noinspection PhpUndefinedClassInspection */
     Mustache_Engine;
-use Table\carbon_users;
-use Table\golf_stats;
+use Tables\carbon_users;
+use Tables\carbon_user_golf_stats as Stats;
 
 class StatsCoach extends Application
 {
@@ -69,7 +69,6 @@ class StatsCoach extends Application
      */
     public function startApplication($uri = null): bool
     {
-        global $json;
         static $count;
 
         if (empty($count)) {
@@ -110,7 +109,7 @@ class StatsCoach extends Application
                     $this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('Messages/', 'Messages', 'navigation')() ||
                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||    // chat box widget
-                    $this->structure($this->events())->match('Follow/{user_id}/', 'User', 'follow')() ||
+                    $this->structure($this->JSON())->match('Follow/{user_id}/', 'User', 'follow')() ||
                     $this->match('Unfollow/{user_id}/', 'User', 'unfollow')())) {
                 return true;         // Event
             }
@@ -118,8 +117,6 @@ class StatsCoach extends Application
             // $url->match('Notifications/*', 'notifications/notifications', ['widget' => '#NavNotifications']);
 
             // $url->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
-
-            $this->structure($this->events('#course'))->match('PostScore/{state}/', 'Golf', 'coursesByState');
 
             if (SOCKET) {
                 return false;
@@ -129,6 +126,13 @@ class StatsCoach extends Application
             $this->structure($this->MVC());
 
             ################################### Golf Stuff + User
+
+            if ($this->match('PostScore/Basic/{state?}/*', 'Golf', 'PostScoreBasic')() ||
+                $this->match('PostScore/Color/{id}/*', 'Golf', 'PostScoreColor')() ||
+                $this->match('PostScore/Distance/{id}/{color}/{hole?}/*', 'Golf', 'PostScoreDistance')()) {
+                return true;
+            }
+
             if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')() ||
                 $this->match('AddCourse/Color/{id}/{box_number}/*', 'Golf', 'AddCourseColor')() ||
                 $this->match('AddCourse/Distance/{id}/{box_number}/*', 'Golf', 'AddCourseDistance')()) {
@@ -143,7 +147,6 @@ class StatsCoach extends Application
                 $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
                 $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
                 $this->match('CreateTeam/', 'Team', 'createTeam')() ||
-                $this->match('PostScore/{state?}/{course_id?}/{box_color?}/*', 'Golf', 'postScore')() ||
                 $this->match('Logout/*', function () {
                     User::logout();
                 })) {
@@ -188,7 +191,7 @@ class StatsCoach extends Application
             }
 
             $user[$id]['stats'] = [];
-            if (!golf_stats::Get($user[$id]['stats'], $id, [])) {
+            if (!Stats::Get($user[$id]['stats'], $id, [])) {
                 print 'Could not get stats!';
                 exit(1);
             }

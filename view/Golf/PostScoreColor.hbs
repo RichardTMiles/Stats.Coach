@@ -1,0 +1,40 @@
+
+<script>
+    function startScoreCard(boxColor) {
+        carbon.app('/PostScore/Distance/{{course_id}}/' + boxColor + '/');
+    }
+</script>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 style="color: #fff">
+        {{course_name}}
+        <small style="color: ghostwhite;">What tee box did you play from?</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
+        <li><a href="#" style="color: ghostwhite;"> {{course_name}}</a></li>
+        <li class="active" style="color: ghostwhite;">Choose Color</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        {{#course_colors}}
+            <div class="col-lg-12 col-xs-12" onclick="startScoreCard('{{color}}')">
+                <!-- small box // TOO lower note -->
+                <div class="small-box bg-{{color}}">
+                    <div class="inner">
+                        <h3>{{color}}<sup style="font-size: 12px">Tee Box</sup></h3>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-flag-o"></i>
+                    </div>
+                    <a class="small-box-footer">
+                        Enter Score <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        {{/course_colors}}
+    </div>
+</section>

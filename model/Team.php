@@ -10,9 +10,9 @@ namespace Model;
 
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Helpers\Bcrypt;
-use Table\Photos;
-use Table\Teams;
-use Table\Users;
+use Tables\carbon_photos as Photos;
+use Tables\Teams;
+use Tables\Users;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Singleton;
 
@@ -104,7 +104,7 @@ class Team extends GlobalMap
         }
 
         $member = self::beginTransaction( 6, $_SESSION['id'] );
-        $sql = 'INSERT INTO StatsCoach.team_members (member_id, user_id, team_id) VALUES (?,?,?)';
+        $sql = 'INSERT INTO StatsCoach.carbon_team_members (member_id, user_id, team_id) VALUES (?,?,?)';
 
         if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId] )) {
             throw new PublicAlert( 'Unable to join this team. ', '' );

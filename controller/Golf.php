@@ -2,13 +2,39 @@
 
 namespace Controller;
 
+use CarbonPHP\Controller;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
-use Table\carbon_locations;
-use Table\golf_course;
+use Tables\carbon_locations;
+use Tables\carbon_golf_courses as Course;
 
 class Golf extends Request  // Validation
 {
+
+    public function PostScoreDistance($id, $color, $hole = null) {
+        if (!ctype_xdigit($id)) {
+            PublicAlert::danger('Failed to load course.');
+            return startApplication('/PostScore/Basic');
+        }
+        if (!$this->set($color)->word()) {
+            PublicAlert::danger('The color chosen appears invalid.');
+            return startApplication("/PostScore/$id");
+        }
+        if ($hole === null) {
+            PublicAlert::info('Hole 1 input started!');
+            $hole = 1;
+        } elseif (!is_numeric($hole)){
+            PublicAlert::danger('Failed to take input.');
+            return startApplication('/PostScore/Basic');    // TODO - make score input basic retrieve unfinished scores
+        }
+
+        if (empty($_POST)) {
+            return [$id, $color, $hole];
+        }
+
+        return [$id, $color, $hole];
+    }
+
     public function golf(): ?bool
     {
         return null;    // This will skip the model and just run the view
@@ -20,9 +46,19 @@ class Golf extends Request  // Validation
         return $this->set($user_uri)->alnum() ?: $user_id = $_SESSION['id'];  // session id must be set (route)
     }
 
-    public function coursesByState($state)
+    public function PostScoreBasic($state)
     {
-        return $this->set($state)->word();
+        if (!$this->set($state)->word()) {
+            return null;
+        }
+        return $state;
+    }
+
+    public function PostScoreColor($id){
+        if (!ctype_xdigit($id)) {
+            throw new PublicAlert('Could not load the course requested!');
+        }
+        return $id;
     }
 
     /**
@@ -99,7 +135,7 @@ class Golf extends Request  // Validation
 
         $json['course'] = [];
 
-        golf_course::Get($json['course'], null, [
+        Course::Get($json['course'], null, [
             'where' => [
                 'created_by' => $_SESSION['id'],
                 'course_input_completed' => 0
@@ -165,7 +201,7 @@ class Golf extends Request  // Validation
 
         if ($courseId !== ($json['course']['course_id'] ?? false)) {
             $json['course'] = [];
-            if (!golf_course::Get($json['course'], $courseId, [])) {
+            if (!Course::Get($json['course'], $courseId, [])) {
                 throw new PublicAlert('Failed to get course data');
             }
         }
