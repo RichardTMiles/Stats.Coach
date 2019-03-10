@@ -8,10 +8,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
 use Tables\carbon_users as Users;
+use \CarbonPHP\Database;
 
 final class UserTest extends TestCase
 {
@@ -42,7 +43,7 @@ final class UserTest extends TestCase
 
     public function commit(callable $lambda = null): bool
     {
-        $commit = new class extends \CarbonPHP\Database
+        $commit = new class extends Database
         {
             public function testCommit($lambda)
             {

@@ -2,16 +2,19 @@
 
 namespace Model;
 
-use CarbonPHP\Helpers\Serialized;
 use Model\Helpers\GlobalMap;
-use Tables\carbon_users;
-use Tables\Golf_Stats as Stats;
+
+
+use Tables\Carbon_User_Golf_Stats as Stats;
 use Tables\Carbon_Users as Users;
-use Tables\User_Followers as Followers;
-use Tables\User_Messages as Messages;
+use Tables\Carbon_User_Followers as Followers;
+use Tables\Carbon_User_Messages as Messages;
+
+
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
+use CarbonPHP\Helpers\Serialized;
 
 /**
  * Class User
@@ -63,7 +66,8 @@ class User extends GlobalMap
                 'user_last_name',
                 'user_profile_pic',
                 'user_id',
-                'user_password']
+                'user_password'
+            ]
         ]);
 
 
@@ -245,6 +249,7 @@ class User extends GlobalMap
         }
 
         if (self::commit()) {
+
             $_SESSION['id'] = $id;
 
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
@@ -369,7 +374,7 @@ class User extends GlobalMap
     public function profile($user_uri)
     {
         if ($user_uri === 'DeleteAccount') {
-            Users::Delete($this->user[$_SESSION['id']], $_SESSION['id']);
+            Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], []);
             Serialized::clear();
             startApplication(true);
             return false;

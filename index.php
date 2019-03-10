@@ -8,6 +8,16 @@ define('APP_ROOT', __DIR__ . DS);  // Set our root folder for the application
 
 const SERVER_ROOT = APP_ROOT;        // I would like to change to only using app_root soon
 
+// Template
+const COMPOSER = 'vendor/';
+
+const TEMPLATE = COMPOSER . 'almasaeed2010/adminlte/';   // I learned That URLS need `/` not `DS`
+
+// Facebook
+const FACEBOOK_APP_ID = '1456106104433760';
+
+const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
+
 if (false === include APP_ROOT . 'vendor/autoload.php') {
     // Load the autoload() for composer dependencies located in the Services folder
     print '<h1>Fuck, Composer Failed.</h1>' and die;

@@ -10,171 +10,6 @@
  * data table.
  */
 
-const USER = 1;
-const USER_FOLLOWERS = 2;
-const USER_NOTIFICATIONS = 3;
-const USER_MESSAGES = 4;
-const USER_TASKS = 5;
-const ENTITY_COMMENTS = 6;
-const ENTITY_PHOTOS = 7;
-const TEAMS = 8;
-const TEAM_MEMBERS = 9;
-const GOLF_TOURNAMENTS = 10;
-const GOLF_ROUNDS = 11;
-const GOLF_COURSE = 12;
-
-// Template
-const COMPOSER = 'vendor/';
-const TEMPLATE = COMPOSER . 'almasaeed2010/adminlte/';   // I learned That URLS need `/` not `DS`
-
-// Facebook
-const FACEBOOK_APP_ID = '1456106104433760';
-const FACEBOOK_APP_SECRET = 'c35d6779a1e5eebf7a4a3bd8f1e16026';
-
-function urlFacebook($request = null)
-{
-    try {
-        $fb = new Facebook\Facebook([
-            'app_id' => FACEBOOK_APP_ID,            // Replace {app-id} with your app id
-            'app_secret' => FACEBOOK_APP_SECRET,
-            'default_graph_version' => 'v2.12',
-            'http_client_handler' => 'stream',      // better compatibility
-        ]);
-
-
-        if (isset($_GET['state'])) {
-            $_SESSION['FBRLH_state'] = $_GET['state'];
-        }
-
-        $helper = $fb->getRedirectLoginHelper();
-
-
-        #if (isset($_SESSION['facebook_access_token'])) {
-        #    $accessToken = $_SESSION['facebook_access_token'];
-        #} else {
-        $accessToken = $helper->getAccessToken();
-        #}
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-        // When Graph returns an error
-        echo 'Graph returned an error: ' . $e->getMessage();
-        exit;
-    }
-
-    if (null !== $accessToken) {
-        if (isset($_SESSION['facebook_access_token'])) {
-            $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
-        } else {
-            // getting short-lived access token
-            $_SESSION['facebook_access_token'] = (string)$accessToken;
-            // OAuth 2.0 client handler
-            $oAuth2Client = $fb->getOAuth2Client();
-            // Exchanges a short-lived access token for a long-lived one
-            $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
-            $_SESSION['facebook_access_token'] = (string)$longLivedAccessToken;
-            // setting default access token to be used in script
-            $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
-        }
-        // redirect the user back to the same page if it has "code" GET variable
-        #if (isset($_GET['code'])) {
-        ##   header('Location: ./');
-        #}
-        // getting basic info about user
-
-        try {
-            $profile_request = $fb->get('/me?fields=name,first_name,last_name,email,gender,cover,picture', $_SESSION['facebook_access_token']);
-            $profile = $profile_request->getGraphNode()->asArray();
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            // redirecting user back to app login page
-            exit;
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-        // Now you can redirect to another page and use the access token from $_SESSION['facebook_access_token']
-    } else {
-        try {
-            // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
-            return $helper->getLoginUrl(SITE . 'oAuth/Facebook/' . $request . DS, [
-                'public_profile', 'user_friends', 'email',
-                'user_birthday',
-                'user_hometown',
-                'user_location', 'user_photos', 'user_friends']);
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-    }
-
-    \CarbonPHP\Request::changeURI(SITE . 'oAuth/Facebook/?much=love');  // clear GET data.
-
-    return array(
-        'id' => $profile['id'],
-        'first_name' => $profile['first_name'] ?? '',
-        'last_name' => $profile['last_name'] ?? '',
-        'email' => $profile['email'] ?? '',
-        'gender' => $profile['gender'] ?? '',
-        'picture' => $profile['picture']['url'] ?? '',
-        'cover' => $profile['cover']['source'] ?? '',
-    );
-
-}
-
-/**
- * @param null $request
- * @return array|string
- * @throws Google_Exception
- * @throws \CarbonPHP\Error\PublicAlert
- */
-function urlGoogle($request = null)
-{
-    //Call Google API
-    $client = new Google_Client();
-    $client->setApplicationName('Stats.Coach');
-    $client->setAuthConfig(APP_ROOT . 'config/gAuth.json');
-
-    if ($request !== null) {
-        $request .= DS;
-        $client->setRedirectUri('https://stats.coach/oAuth/Google/' . $request);
-    }
-
-    $client->setIncludeGrantedScopes(true);   // incremental auth
-    $client->addScope('profile');
-    $client->addScope('email');
-
-    $google = new Google_Service_Oauth2($client);
-
-
-    if (!isset($_GET['code'])) {
-        return $client->createAuthUrl();
-    }
-
-    $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-
-    if ($accessToken) {
-
-        $client->setAccessToken($accessToken);
-
-        //Get user profile data from google
-        $gpUserProfile = $google->userinfo->get();
-
-        //Insert or update user data to the database
-        return array(
-            'id' => $gpUserProfile['id'],
-            'first_name' => $gpUserProfile['given_name'],
-            'last_name' => $gpUserProfile['family_name'],
-            'email' => $gpUserProfile['email'],
-            'gender' => $gpUserProfile['gender'],
-            'locale' => $gpUserProfile['locale'],
-            'picture' => $gpUserProfile['picture'],
-            'link' => $gpUserProfile['link']
-        );
-    }
-    throw new \CarbonPHP\Error\PublicAlert('failed to get access token');
-}
 
 
 return [
@@ -239,6 +74,7 @@ return [
                     $user = [];
                 }
 
+
                 if (!is_array($my = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
                     $my = [];
                     /** @noinspection NotOptimalIfConditionsInspection */
@@ -292,8 +128,47 @@ return [
     'VIEW' => [
         'VIEW' => 'view/',  // This is where the MVC() function will map the HTML.PHP and HTML.HBS . See Carbonphp.com/mvc
 
-        'WRAPPER' => 'StatsCoach/Wrapper.hbs',     // View::content() will produce this
+        'WRAPPER' => 'Layout/Wrapper.hbs',     // View::content() will produce this
     ],
+
+    'MINIFY' => [
+        'CSS' => [
+            'OUT' => APP_ROOT . 'view/css/style.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css',
+            APP_ROOT .'node_modules/admin-lte/dist/css/AdminLTE.min.css',
+            APP_ROOT .'node_modules/admin-lte/dist/css/skins/_all-skins.min.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/iCheck/all.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/Ionicons/css/ionicons.min.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/bootstrap-slider/slider.css',
+            APP_ROOT .'node_modules/admin-lte/dist/css/skins/skin-green.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/select2/dist/css/select2.min.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/iCheck/flat/blue.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/morris.js/morris.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/pace/pace.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/jvectormap/jquery-jvectormap.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/bootstrap-daterangepicker/daterangepicker.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/timepicker/bootstrap-timepicker.css',
+            APP_ROOT .'node_modules/admin-lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/font-awesome/css/font-awesome.min.css',
+            APP_ROOT .'node_modules/admin-lte/bower_components/fullcalendar/dist/fullcalendar.min.css'
+        ],
+        'JS' => [
+            'OUT' => APP_ROOT . 'view/js/javascript.js',
+            APP_ROOT .'node_modules/admin-lte/bower_components/jquery/dist/jquery.min.js',
+            APP_ROOT .'node_modules/jquery-pjax/jquery.pjax.js',
+            CARBON_ROOT .'view/mustache/Layout/mustache.js',
+            CARBON_ROOT .'helpers/Carbon.js',
+            CARBON_ROOT .'helpers/asynchronous.js',
+            APP_ROOT .'node_modules/jquery-form/src/jquery.form.js',
+            APP_ROOT .'node_modules/admin-lte/bower_components/bootstrap/dist/js/bootstrap.min.js',
+            APP_ROOT .'node_modules/admin-lte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
+            APP_ROOT .'node_modules/admin-lte/bower_components/fastclick/lib/fastclick.js',
+            APP_ROOT .'node_modules/admin-lte/dist/js/adminlte.js',
+        ],
+    ]
 
 ];
 

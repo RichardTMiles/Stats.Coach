@@ -191,7 +191,7 @@ class Golf extends GlobalMap implements iSport
         $json['state'] = $state;    // was validated in controller
 
         // Get each color and make it readable in mustache bc im
-        // dumb and made it this way back in the the day TODO - this engouth validation???
+        // dumb and made it this way back in the the day TODO - this enough validation???
         if (empty($boxColor)
             && !empty($course_id)
             && ($this->course[$course_id]['course_tee_boxes'] ?? false)
@@ -274,7 +274,7 @@ class Golf extends GlobalMap implements iSport
 
             $sql = 'UPDATE StatsCoach.carbon_user_golf_stats SET stats_rounds = stats_rounds + 1, stats_strokes = stats_strokes + ?, stats_putts = stats_putts + ?, stats_ffs = stats_ffs + ?, stats_gnr = stats_gnr + ? WHERE stats_id = ?';
 
-            if (!$this->db->prepare($sql)->execute([$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']])) {
+            if (!self::database()->prepare($sql)->execute([$score_tot, $putts_tot, $ffs_tot, $gnr_tot, $_SESSION['id']])) {
                 throw new \RuntimeException('stats update failed');
             }
 
@@ -323,11 +323,7 @@ class Golf extends GlobalMap implements iSport
         global $json;
 
         $json['state'] = $state;
-        $sql = 'SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$state]);
-        $json['courses'] = $stmt->fetchAll();                 // setting to global
-
+        $json['courses'] = self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);
         return true;
     }
 

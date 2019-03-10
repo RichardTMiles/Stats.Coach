@@ -64,7 +64,6 @@ abstract class GlobalMap extends Database
     
     public function __construct()
     {
-        parent::__construct();
         global $user, $team, $course, $tournament;
         $this->user = &$user;
         $this->team = &$team;

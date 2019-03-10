@@ -8,7 +8,7 @@
         <div id="alert"></div>
 
         {{^UserName}}
-            <form data-pjax action="/login/" method="post"> <!-- return false; -->
+            <form id="loginForm" data-pjax action="/login/" method="post"> <!-- return false; -->
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="username" placeholder="Username" value="">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -27,7 +27,7 @@
                         </div>
                     </div><!-- /.col no-pjax -->
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                        <button name="signin" type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div><!-- /.col -->
                 </div>
             </form>
@@ -43,8 +43,8 @@
 
             <br/>
             <div class="categories-bottom">
-                <a href="/recover/">Forgot password<br></a>
-                <a href="/register/" class="text-center">Register a new membership</a>
+                <a id="forgot" href="/recover/">Forgot password<br></a>
+                <a id="register" href="/register/" class="text-center">Register a new membership</a>
             </div>
         {{/UserName}}
         {{#UserName}}
