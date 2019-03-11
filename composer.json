@@ -5,6 +5,8 @@
   "config": {
     "vendor-dir": "vendor"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "App\\":"",
@@ -27,9 +29,9 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-carbon#df59d602199de3198c25b70991630ba8d39262c8-dev",
+    "richardtmiles/carbonphp" : "dev-Reacting#5a0e3d47d6f4a7a5b30aa564e9201d133091dcbd-dev",
     "google/cloud-tools": "^0.6",
-    "phpunit/phpunit-selenium": "dev-master"
+    "phpunit/phpunit-selenium": "^4.1"
   },
   "scripts": {
     "post-status-cmd": [
@@ -49,6 +51,5 @@
     "facebook/webdriver": "dev-master",
     "matthiasmullie/minify": "dev-master",
     "patchwork/jsqueeze": "^2.0"
-  },
-  "minimum-stability": "dev"
+  }
 }

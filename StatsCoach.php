@@ -55,19 +55,18 @@ class StatsCoach extends Application
         View::$forceWrapper = true; // this will hard refresh the wrapper
 
         if (!$_SESSION['id']):
-            return MVC('User', 'login');
+            return $this->MVC()('User', 'login');
         else:
-            return MVC('Golf', 'golf');
+            return $this->MVC()('Golf', 'golf');
         endif;
     }
 
     /**
-     * @param null $uri
+     * @param null|string $uri
      * @return bool
-     * @throws \Mustache_Exception_InvalidArgumentException
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws PublicAlert
      */
-    public function startApplication($uri = null): bool
+    public function startApplication(string $uri): bool
     {
         static $count;
 
@@ -79,7 +78,7 @@ class StatsCoach extends Application
 
         $this->userSettings();          // Update the current user
 
-        if (null !== $uri) {
+        if ('' !== $uri) {
             $this->changeURI($uri);
         } else if (empty($this->uri[0])) {
             if (SOCKET) {
