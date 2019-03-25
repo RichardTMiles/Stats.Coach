@@ -11,8 +11,8 @@ namespace Model;
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Helpers\Bcrypt;
 use Tables\carbon_photos as Photos;
-use Tables\Teams;
-use Tables\Users;
+use Tables\carbon_teams as Teams;
+use Tables\carbon_users as Users;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Singleton;
 
@@ -53,7 +53,7 @@ class Team extends GlobalMap
             throw new \RuntimeException( 'Why is there no coach?' );
         }
 
-        Users::All( $this->user[$team['team_coach']], $team['team_coach'] );
+        // Users::Get( $this->user[$team['team_coach']], $team['team_coach'] );
 
         return true;
     }
@@ -66,17 +66,20 @@ class Team extends GlobalMap
      */
     public function createTeam($teamName, $schoolName = null)
     {
-        $key = self::beginTransaction( 5, $_SESSION['id'] );
-
-        $sql = 'INSERT INTO StatsCoach.carbon_teams (team_id, team_name, team_school, team_coach, team_code) VALUES (?,?,?,?,?)';
-
-        if (!$this->db->prepare( $sql )->execute( [$key, $teamName, $schoolName, $_SESSION['id'], Bcrypt::genRandomHex( 20 )] )) {
+        if (!Teams::Post([
+            'team_name' => $teamName,
+            'team_school'=> $schoolName,
+            'team_coach' => $_SESSION['id'],
+            'team_code' => Bcrypt::genRandomHex( 20 )
+        ])) {
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
         }
 
         $sql = 'UPDATE carbon_users SET user_type = "Coach" WHERE user_id = ?';
 
-        if (!$this->db->prepare($sql)->execute([$_SESSION['id']])) {
+        $return = [];
+
+        if (!Users::Put($return, $_SESSION['id'], ['user_type' => 'Coach'])) {
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         }
 

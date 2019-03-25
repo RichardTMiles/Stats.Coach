@@ -16,7 +16,8 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 {
     public function setUp()
     {
-        print PHP_EOL.'java -jar '. dirname(__DIR__) .'/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
+        static $count;
+        $count or $count=1 and print PHP_EOL.'java -jar '. dirname(__DIR__) .'/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
         self::shareSession(TRUE);
         $this->setHost('localhost');
         $this->setPort(4444);
@@ -38,13 +39,9 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $link = $this->byLinkText('Register a new membership');
 
-        $link->click();
+        $link->click(); // we must grab all new elements now
 
-        $this->moveto($register);
-
-        $register->click();
-
-        $this->assertStringEndsWith('register', $this->title());
+        $this->timeouts()->implicitWait(10000);//10 seconds
 
     }
 
@@ -54,11 +51,9 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-
         $user = $this->byName( 'username' )->value('Username');
         $pass = $this->byName( 'password' )->value('Password');
-
-        $submit = $this->byName( 'signin' );
+        $submit = $this->byName( 'signin' )->value('Sign In');
 
         // test that input above was a
         $this->assertEquals( 'Username', $user->value() );
@@ -67,7 +62,43 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
     }
 
-    public function testSubmitToSelf()
+
+    public function testRegister() {
+        $this->url('/');
+
+        $this->assertEquals(SITE_TITLE, $this->title());
+
+        $link = $this->byLinkText('Register a new membership');
+
+        $link->click(); // we must grab all new elements now
+
+        $this->timeouts()->implicitWait(2000);//10 seconds
+
+        $register = $this->byName('submit');
+
+        # $register = $form->attribute( 'action' ); // another way to do it
+        # $register->submit();
+
+        $this->timeouts()->implicitWait(5000);//10 seconds
+
+        $this->byName( 'firstname' )->value( 'Richard' );
+        $this->byName( 'lastname' )->value( 'Miles' );
+        $this->byName( 'email' )->value( 'Richard@Miles.Systems' );
+        $this->byName( 'username' )->value( 'admin' );
+        $this->byName( 'password' )->value( 'adminadmin' );
+        $this->byName( 'password2' )->value( 'adminadmin' );
+
+        $this->select($this->byName('gender'))->selectOptionByValue('male');
+
+        $this->timeouts()->implicitWait(3000);//10 seconds
+
+        $register->click();
+
+        sleep(10);
+
+    }
+
+    public function testLogin()
     {
         // set the url
         $this->url( '/' );

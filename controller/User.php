@@ -37,6 +37,7 @@ class User extends Request
 
         $UserImage = file_exists(SERVER_ROOT . $UserImage) ? SITE . $UserImage : false;
 
+
         $rememberMe = $this->post('RememberMe')->int();
 
         if (!$rememberMe) {

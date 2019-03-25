@@ -24,8 +24,10 @@ if (false === include APP_ROOT . 'vendor/autoload.php') {
     // Composer autoload
 }
 
+
+
 try {
-    $app = new CarbonPHP\CarbonPHP(APP_ROOT . 'config' . DS . 'config.php');
+    $app = CarbonPHP\CarbonPHP::make(APP_ROOT . 'config' . DS . 'config.php');
 } catch (\Throwable $e) {
     /** @noinspection ForgottenDebugOutputInspection */
     APP_LOCAL and print_r($e->getMessage());
@@ -43,7 +45,7 @@ try {
  */
 
 
-$app(\App\StatsCoach::class);
+CarbonPHP\CarbonPHP::run(\App\StatsCoach::class);
 
 return true;
 

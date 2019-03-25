@@ -272,7 +272,7 @@ class Golf extends Request  // Validation
 
         if ($courseId !== ($json['course']['course_id'] ?? false)) {
             $json['course'] = [];
-            if (!golf_course::Get($json['course'], $courseId, [])) {
+            if (!Course::Get($json['course'], $courseId, [])) {
                 throw new PublicAlert('Failed to get course data');
             }
         }

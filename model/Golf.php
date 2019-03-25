@@ -467,17 +467,16 @@ class Golf extends GlobalMap implements iSport
             throw new PublicAlert('Sorry, we failed to add that course.');
         }
 
-        PublicAlert::success('The course has been added and is public to the world!');
 
         if ($course_input_completed) {
-            startApplication(true);
+            PublicAlert::success('The course has been added and is public to the world!');
+            return startApplication('/');
         } else {
+            PublicAlert::info("Hole $holeNumber was successfully saved!");
             $holeNumber++;
-            startApplication("AddCourse/Distance/$courseId/$holeNumber/");
+            return startApplication("AddCourse/Distance/$courseId/$holeNumber/");
         }
     }
-
-
 }
 
 
