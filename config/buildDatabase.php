@@ -74,95 +74,6 @@ END;
         $db->exec($sql) === false and die(print_r($db->errorInfo(), true));
         print '<br><p style="color: green">Table `carbon_comments` Created</p>';
     }try {
-        $db->prepare('SELECT 1 FROM carbon_golf_course_rounds LIMIT 1;')->execute();
-        print '<br>Table `carbon_golf_course_rounds` already exists</p>';
-    } catch (PDOException $e) {
-        print '<br><p style="color: red">Creating `carbon_golf_course_rounds`</p>';
-        $sql = <<<END
-        $head
-    DROP TABLE IF EXISTS `carbon_golf_course_rounds`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `carbon_golf_course_rounds` (
-  `user_id` binary(16) NOT NULL,
-  `round_id` binary(16) NOT NULL,
-  `course_id` binary(16) NOT NULL COMMENT 'golf_courses(course_id)',
-  `round_json` json DEFAULT NULL,
-  `round_public` int(1) NOT NULL DEFAULT '1' COMMENT 'true "1" or false "2"',
-  `round_out` int(2) NOT NULL,
-  `round_in` int(3) NOT NULL,
-  `round_total` int(3) NOT NULL,
-  `round_total_gnr` int(11) DEFAULT '0',
-  `round_total_ffs` int(3) DEFAULT '0',
-  `round_total_putts` int(11) DEFAULT NULL,
-  `round_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `round_input_complete` tinyint(1) DEFAULT '0',
-  `round_tee_box_color` varchar(10) NOT NULL,
-  PRIMARY KEY (`round_id`),
-  UNIQUE KEY `golf_rounds_entity_entity_pk_fk` (`round_id`),
-  KEY `golf_rounds_entity_course_pk_fk` (`course_id`),
-  KEY `golf_rounds_entity_user_pk_fk` (`user_id`),
-  CONSTRAINT `golf_rounds_entity_course_pk_fk` FOREIGN KEY (`course_id`) REFERENCES `carbons` (`entity_pk`) ON UPDATE CASCADE,
-  CONSTRAINT `golf_rounds_entity_entity_pk_fk` FOREIGN KEY (`round_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `golf_rounds_entity_user_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-        $foot
-END;
-
-        print $sql . '<br>';
-        $db->exec($sql) === false and die(print_r($db->errorInfo(), true));
-        print '<br><p style="color: green">Table `carbon_golf_course_rounds` Created</p>';
-    }try {
-        $db->prepare('SELECT 1 FROM carbon_golf_courses LIMIT 1;')->execute();
-        print '<br>Table `carbon_golf_courses` already exists</p>';
-    } catch (PDOException $e) {
-        print '<br><p style="color: red">Creating `carbon_golf_courses`</p>';
-        $sql = <<<END
-        $head
-    DROP TABLE IF EXISTS `carbon_golf_courses`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `carbon_golf_courses` (
-  `course_id` binary(16) NOT NULL,
-  `course_name` varchar(16) NOT NULL,
-  `course_holes` int(2) NOT NULL DEFAULT '18',
-  `course_phone` varchar(15) DEFAULT NULL,
-  `course_difficulty` int(10) DEFAULT NULL,
-  `course_rank` int(5) DEFAULT NULL,
-  `course_tee_boxes` json DEFAULT NULL,
-  `course_par` json NOT NULL,
-  `course_handicap` json DEFAULT NULL,
-  `course_par_out` int(2) NOT NULL DEFAULT '0',
-  `course_par_in` int(2) NOT NULL DEFAULT '0',
-  `par_tot` int(2) NOT NULL DEFAULT '0',
-  `course_par_hcp` int(4) DEFAULT '0',
-  `course_type` char(30) DEFAULT NULL,
-  `course_access` varchar(120) DEFAULT NULL,
-  `pga_professional` varchar(40) DEFAULT NULL,
-  `website` varchar(20) DEFAULT NULL,
-  `created_by` binary(16) DEFAULT NULL,
-  `course_input_completed` varchar(10) DEFAULT 'NO',
-  `tee_boxes` int(11) DEFAULT NULL,
-  `handicap_count` int(11) DEFAULT NULL,
-  PRIMARY KEY (`course_id`),
-  UNIQUE KEY `golf_course_course_id_uindex` (`course_id`),
-  UNIQUE KEY `golf_courses_course_id_uindex` (`course_id`),
-  KEY `golf_course_carbon_users_user_id_fk` (`created_by`),
-  CONSTRAINT `golf_course_carbon_entity_pk_fk` FOREIGN KEY (`course_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-        $foot
-END;
-
-        print $sql . '<br>';
-        $db->exec($sql) === false and die(print_r($db->errorInfo(), true));
-        print '<br><p style="color: green">Table `carbon_golf_courses` Created</p>';
-    }try {
         $db->prepare('SELECT 1 FROM carbon_golf_tournament_teams LIMIT 1;')->execute();
         print '<br>Table `carbon_golf_tournament_teams` already exists</p>';
     } catch (PDOException $e) {
@@ -301,7 +212,8 @@ CREATE TABLE `carbon_reports` (
   `log_level` varchar(20) DEFAULT NULL,
   `report` text,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `call_trace` text NOT NULL
+  `call_trace` text NOT NULL,
+  UNIQUE KEY `carbon_reports_date_uindex` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -325,12 +237,14 @@ END;
 CREATE TABLE `carbon_tag` (
   `entity_id` binary(16) NOT NULL,
   `user_id` binary(16) DEFAULT NULL,
-  `tag_id` varchar(200) NOT NULL,
-  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tag_id` varchar(80) NOT NULL,
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `entity_tag_entity_entity_pk_fk` (`entity_id`),
   KEY `entity_tag_entity_user_pk_fk` (`user_id`),
   KEY `entity_tag_tag_tag_id_fk` (`tag_id`),
-  CONSTRAINT `entity_tag_entity_entity_pk_fk` FOREIGN KEY (`entity_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `carbon_tag_tags_tag_id_fk` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`tag_id`),
+  CONSTRAINT `entity_tag_entity_entity_pk_fk` FOREIGN KEY (`entity_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `entity_tag_entity_user_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -357,7 +271,7 @@ CREATE TABLE `carbon_tags` (
   `tag_name` text,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_tag_id_uindex` (`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -710,12 +624,11 @@ END;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tags` (
-  `tag_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tag_id` varchar(80) NOT NULL,
   `tag_description` text NOT NULL,
   `tag_name` text,
-  PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_tag_id_uindex` (`tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -736,9 +649,9 @@ END;
         print '<br><p style="color: green">Table `tags` Created</p>';
     }Try {
     $sql = <<<END
-REPLACE INTO carbon_tags (tag_id, tag_description, tag_name) VALUES (?,?,?);
+REPLACE INTO tags (tag_id, tag_description, tag_name) VALUES (?,?,?);
 END;
-     $tag = [['carbon_comments','','carbon_comments'],['carbon_golf_course_rounds','','carbon_golf_course_rounds'],['carbon_golf_courses','','carbon_golf_courses'],['carbon_golf_tournament_teams','','carbon_golf_tournament_teams'],['carbon_golf_tournaments','','carbon_golf_tournaments'],['carbon_locations','','carbon_locations'],['carbon_photos','','carbon_photos'],['carbon_reports','','carbon_reports'],['carbon_tag','','carbon_tag'],['carbon_tags','','carbon_tags'],['carbon_team_members','','carbon_team_members'],['carbon_teams','','carbon_teams'],['carbon_user_followers','','carbon_user_followers'],['carbon_user_golf_stats','','carbon_user_golf_stats'],['carbon_user_messages','','carbon_user_messages'],['carbon_user_sessions','','carbon_user_sessions'],['carbon_user_tasks','','carbon_user_tasks'],['carbon_users','','carbon_users'],['carbons','','carbons'],['sessions','','sessions'],['tags','','tags'],];
+     $tag = [['carbon_comments','','carbon_comments'],['carbon_golf_tournament_teams','','carbon_golf_tournament_teams'],['carbon_golf_tournaments','','carbon_golf_tournaments'],['carbon_locations','','carbon_locations'],['carbon_photos','','carbon_photos'],['carbon_reports','','carbon_reports'],['carbon_tag','','carbon_tag'],['carbon_tags','','carbon_tags'],['carbon_team_members','','carbon_team_members'],['carbon_teams','','carbon_teams'],['carbon_user_followers','','carbon_user_followers'],['carbon_user_golf_stats','','carbon_user_golf_stats'],['carbon_user_messages','','carbon_user_messages'],['carbon_user_sessions','','carbon_user_sessions'],['carbon_user_tasks','','carbon_user_tasks'],['carbon_users','','carbon_users'],['carbons','','carbons'],['sessions','','sessions'],['tags','','tags'],];
     foreach ($tag as $key => $value) {
         $db->prepare($sql)->execute($value);
     }

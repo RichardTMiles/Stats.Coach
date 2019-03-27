@@ -9,11 +9,11 @@ use CarbonPHP\Interfaces\iRest;
 class tags extends Database implements iRest
 {
     public const PRIMARY = [
-    'tag_id',
+    
     ];
 
     public const COLUMNS = [
-        'tag_id' => [ 'int', '2', '11' ],'tag_description' => [ 'text', '2', '' ],'tag_name' => [ 'text,', '2', '' ],
+        'tag_id' => [ 'varchar', '2', '80' ],'tag_description' => [ 'text', '2', '' ],'tag_name' => [ 'text,', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -65,7 +65,7 @@ class tags extends Database implements iRest
     public static function bind(\PDOStatement $stmt, array $argv) {
         if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 11);
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
         if (array_key_exists('tag_description', $argv)) {
             $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
@@ -153,12 +153,12 @@ class tags extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'tag_id ASC';
+                    $order .= ' ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY tag_id ASC LIMIT 100';
+            $limit = ' ORDER BY  ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -191,9 +191,7 @@ class tags extends Database implements iRest
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } else {
-        $sql .= ' WHERE  tag_id='.self::addInjection($primary, $pdo).'';
-        }
+        } 
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -219,11 +217,6 @@ class tags extends Database implements iRest
         */
 
         
-        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
-            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
-            // promise this is needed and will still return the desired array except for a single record will not be an array
-        
-        }
 
         return true;
     }
@@ -236,12 +229,15 @@ class tags extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.tags (tag_description, tag_name) VALUES ( :tag_description, :tag_name)';
+        $sql = 'INSERT INTO StatsCoach.tags (tag_id, tag_description, tag_name) VALUES ( :tag_id, :tag_description, :tag_name)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
+                
+                    $tag_id = $argv['tag_id'];
+                    $stmt->bindParam(':tag_id',$tag_id, 2, 80);
                         $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
                         $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         
@@ -294,7 +290,7 @@ class tags extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  tag_id='.self::addInjection($primary, $pdo).'';
+        
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -336,9 +332,7 @@ class tags extends Database implements iRest
 
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } else {
-        $sql .= ' WHERE  tag_id='.self::addInjection($primary, $pdo).'';
-        }
+        } 
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

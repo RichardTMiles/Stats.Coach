@@ -9,6 +9,8 @@ Admin X3
  carbonphp.com
  
  
+php -S localhost:80 index.php
+"C:\xampp\php\php.exe" -S localhost:80 index.php
 
 
  php index.php rest -s StatsCoach -p 'Huskies!99' -json 
