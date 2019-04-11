@@ -19,7 +19,7 @@ return [
 
         'DB_NAME' => 'StatsCoach',
 
-        'DB_USER' => 'root',                     // User
+        'DB_USER' => 'root',                 // User
 
         'DB_PASS' => APP_LOCAL ? 'Huskies!99' : 'goldteamrules',      // Password goldteamrules
 
@@ -39,13 +39,13 @@ return [
             'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
         ],
 
-        'CONFIG' => __FILE__,               // Send to sockets
+        'CONFIG' => __FILE__,      // Send to sockets
 
         'TIMEZONE' => 'America/Phoenix',    //  Current timezone TODO - look up php
 
-        'TITLE' => 'Stats • Coach',         // Website title
+        'TITLE' => 'Stats • Coach',     // Website title
 
-        'VERSION' => '0.0.0',               // Add link to semantic versioning
+        'VERSION' => '0.0.0',       // Add link to semantic versioning
 
         'SEND_EMAIL' => 'no-reply@carbonphp.com',     // I send emails to validate accounts
 
