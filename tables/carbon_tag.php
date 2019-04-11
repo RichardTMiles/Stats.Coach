@@ -13,7 +13,7 @@ class carbon_tag extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
+        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -66,6 +66,10 @@ class carbon_tag extends Database implements iRest
         if (array_key_exists('entity_id', $argv)) {
             $entity_id = $argv['entity_id'];
             $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+        }
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
         if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
@@ -230,7 +234,7 @@ class carbon_tag extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, tag_id) VALUES ( UNHEX(:entity_id), :tag_id)';
+        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, user_id, tag_id) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -239,7 +243,10 @@ class carbon_tag extends Database implements iRest
                 
                     $entity_id = $argv['entity_id'];
                     $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-
+                        
+                    $user_id =  $argv['user_id'] ?? null;
+                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+                        
                     $tag_id = $argv['tag_id'];
                     $stmt->bindParam(':tag_id',$tag_id, 2, 80);
                 

@@ -301,7 +301,8 @@ CREATE TABLE `carbon_reports` (
   `log_level` varchar(20) DEFAULT NULL,
   `report` text,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `call_trace` text NOT NULL
+  `call_trace` text NOT NULL,
+  UNIQUE KEY `carbon_reports_date_uindex` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -343,32 +344,6 @@ END;
         print $sql . '<br>';
         $db->exec($sql) === false and die(print_r($db->errorInfo(), true));
         print '<br><p style="color: green">Table `carbon_tag` Created</p>';
-    }try {
-        $db->prepare('SELECT 1 FROM carbon_tags LIMIT 1;')->execute();
-        print '<br>Table `carbon_tags` already exists</p>';
-    } catch (PDOException $e) {
-        print '<br><p style="color: red">Creating `carbon_tags`</p>';
-        $sql = <<<END
-        $head
-    DROP TABLE IF EXISTS `carbon_tags`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `carbon_tags` (
-  `tag_id` int(11) NOT NULL AUTO_INCREMENT,
-  `tag_description` text NOT NULL,
-  `tag_name` text,
-  PRIMARY KEY (`tag_id`),
-  UNIQUE KEY `tag_tag_id_uindex` (`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-        $foot
-END;
-
-        print $sql . '<br>';
-        $db->exec($sql) === false and die(print_r($db->errorInfo(), true));
-        print '<br><p style="color: green">Table `carbon_tags` Created</p>';
     }try {
         $db->prepare('SELECT 1 FROM carbon_team_members LIMIT 1;')->execute();
         print '<br>Table `carbon_team_members` already exists</p>';
@@ -739,7 +714,7 @@ END;
     $sql = <<<END
 REPLACE INTO tags (tag_id, tag_description, tag_name) VALUES (?,?,?);
 END;
-     $tag = [['carbon_comments','','carbon_comments'],['carbon_golf_course_rounds','','carbon_golf_course_rounds'],['carbon_golf_courses','','carbon_golf_courses'],['carbon_golf_tournament_teams','','carbon_golf_tournament_teams'],['carbon_golf_tournaments','','carbon_golf_tournaments'],['carbon_locations','','carbon_locations'],['carbon_photos','','carbon_photos'],['carbon_reports','','carbon_reports'],['carbon_tag','','carbon_tag'],['carbon_tags','','carbon_tags'],['carbon_team_members','','carbon_team_members'],['carbon_teams','','carbon_teams'],['carbon_user_followers','','carbon_user_followers'],['carbon_user_golf_stats','','carbon_user_golf_stats'],['carbon_user_messages','','carbon_user_messages'],['carbon_user_sessions','','carbon_user_sessions'],['carbon_user_tasks','','carbon_user_tasks'],['carbon_users','','carbon_users'],['carbons','','carbons'],['sessions','','sessions'],['tags','','tags'],];
+     $tag = [['carbon_comments','','carbon_comments'],['carbon_golf_course_rounds','','carbon_golf_course_rounds'],['carbon_golf_courses','','carbon_golf_courses'],['carbon_golf_tournament_teams','','carbon_golf_tournament_teams'],['carbon_golf_tournaments','','carbon_golf_tournaments'],['carbon_locations','','carbon_locations'],['carbon_photos','','carbon_photos'],['carbon_reports','','carbon_reports'],['carbon_tag','','carbon_tag'],['carbon_team_members','','carbon_team_members'],['carbon_teams','','carbon_teams'],['carbon_user_followers','','carbon_user_followers'],['carbon_user_golf_stats','','carbon_user_golf_stats'],['carbon_user_messages','','carbon_user_messages'],['carbon_user_sessions','','carbon_user_sessions'],['carbon_user_tasks','','carbon_user_tasks'],['carbon_users','','carbon_users'],['carbons','','carbons'],['sessions','','sessions'],['tags','','tags'],];
     foreach ($tag as $key => $value) {
         $db->prepare($sql)->execute($value);
     }
