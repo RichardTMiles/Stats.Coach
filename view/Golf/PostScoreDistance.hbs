@@ -8,14 +8,14 @@
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
         <li><a href="#" style="color: ghostwhite;">{{course.state}}</a></li>
         <li style="color: ghostwhite;">{{course.course_name}}</li>
-        <li style="color: ghostwhite;">{{holes.0.distance_color}}</li>
+        <li style="color: ghostwhite;">{{score_color_input}}</li>
         <li style="color: ghostwhite;"> Score Input</li>
     </ol>
 </section>
 
 <section class="content">
     <form data-hbs class="form-horizontal" method="post"
-          action="{{SITE}}PostScore/{{course.state}}/{{course.course_id}}/{{holes.0.distance_color}}/"
+          action="/PostScore/Distance/{{course.course_id}}/{{score_color_input}}/"
           name="postScore">
         <div class="row" id="dateTime">
             <div class="col-xs-12">
@@ -173,11 +173,13 @@
                                 </button>
                             {{/first}}
                             <!-- button -->
-                            <button class="btn btn-info pull-right"
+                            <button class="btn btn-{{#last}}success{{/last}}{{^last}}info{{/last}} pull-right"
                                     type="{{^last}}button{{/last}}{{#last}}submit{{/last}}"
                                     {{^last}}onclick="next_score_input('{{number}}')"{{/last}}>
-                                Next &gt;&gt;
+                                    {{^last}} Next &gt;&gt;{{/last}}
+                                {{#last}}Submit{{/last}}
                             </button>
+
                         </div>
                         <!-- /.box-footer -->
                     </div>

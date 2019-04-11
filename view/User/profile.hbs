@@ -44,7 +44,7 @@
                                class="btn btn-success btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
                             <script>
                                 function follow() {
-                                    carbon.start('{{ SITE }}Follow/{{ user_id }}');
+                                    carbon.start('/Follow/{{ user_id }}');
                                     document.getElementById('FollowUser').style.display = 'none';
                                     document.getElementById('UnfollowUser').style.display = 'block';
                                 }
@@ -111,7 +111,7 @@
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
-                            <form data-pjax class="form-horizontal" action="{{SITE}}Profile/" method="post"
+                            <form data-pjax class="form-horizontal" action="/Profile/" method="post"
                                   enctype="multipart/form-data">
 
                                 <div class="box-body">

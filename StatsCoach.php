@@ -52,7 +52,8 @@ class StatsCoach extends Application
     public function defaultRoute()
     {
         // Sockets will not execute this function
-        View::$forceWrapper = true; // this will hard refresh the wrapper
+
+        // View::$forceWrapper = true; // this will hard refresh the wrapper
 
         if (!$_SESSION['id']):
             return $this->MVC()('User', 'login');
@@ -128,7 +129,7 @@ class StatsCoach extends Application
 
             if ($this->match('PostScore/Basic/{state?}/*', 'Golf', 'PostScoreBasic')() ||
                 $this->match('PostScore/Color/{id}/*', 'Golf', 'PostScoreColor')() ||
-                $this->match('PostScore/Distance/{id}/{color}/{hole?}/*', 'Golf', 'PostScoreDistance')()) {
+                $this->match('PostScore/Distance/{id}/{color}/*', 'Golf', 'PostScoreDistance')()) {
                 return true;
             }
 

@@ -70,23 +70,29 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Course</th>
-                                <th>Fairway</th>
-                                <th>Green</th>
+                                <th>Color</th>
+                                <th>Distance</th>
+                                <th>Fairways</th>
+                                <th>Greens</th>
                                 <th>Putts</th>
                                 <th>Par</th>
                                 <th>Strokes</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {{#rounds}}
                                 <tr>
-                                    <td>{{ score_date}}</td>
+                                    <td>{{round_date}}</td>
                                     <td>{{course_name}}</td>
-                                    <td>{{score_total_ffs}}</td>
-                                    <td>{{score_total_gnr}}</td>
-                                    <td>{{score_total_putts}}</td>
-                                    <td>{{course_par_tot}}</td>
-                                    <td>{{score_total}}</td>
+                                    <td>{{round_tee_box_color}}</td>
+                                    <td>{{course_distance}}</td>
+                                    <td>{{round_total_ffs}}</td>
+                                    <td>{{round_total_gnr}}</td>
+                                    <td>{{round_total_putts}}</td>
+                                    <td>{{course_par}}</td>
+                                    <td>{{round_total}}</td>
                                 </tr>
+                            {{/rounds}}
                             </tbody>
                         </table>
                     </div><!-- /.table-responsive -->
@@ -131,7 +137,6 @@
             </div><!-- /.info-box -->
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
-
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-book"></i></span>
                 <div class="info-box-content">

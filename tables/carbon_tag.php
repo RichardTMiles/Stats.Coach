@@ -13,7 +13,7 @@ class carbon_tag extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '200' ],'creation_date' => [ 'datetime', '2', '' ],
+        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -73,7 +73,7 @@ class carbon_tag extends Database implements iRest
         }
         if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 200);
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
         if (array_key_exists('creation_date', $argv)) {
             $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
@@ -248,7 +248,7 @@ class carbon_tag extends Database implements iRest
                     $stmt->bindParam(':user_id',$user_id, 2, 16);
                         
                     $tag_id = $argv['tag_id'];
-                    $stmt->bindParam(':tag_id',$tag_id, 2, 200);
+                    $stmt->bindParam(':tag_id',$tag_id, 2, 80);
                 
 
 

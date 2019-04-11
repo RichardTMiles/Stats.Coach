@@ -3,7 +3,7 @@
 namespace Model;
 
 use Psr\Log\InvalidArgumentException;
-use Tables\carbon_locations;
+use Tables\carbon_locations as Location;
 use Tables\carbon_golf_courses as Course;
 use Tables\carbon_golf_course_rounds as Rounds;
 use CarbonPHP\Singleton;
@@ -18,7 +18,8 @@ class Golf extends GlobalMap implements iSport
     use Singleton;
 
 
-    public function PostScoreDistance($id, $color, $hole) {
+    public function PostScoreDistance($id, $color, $post = null)
+    {
         global $json;
 
 
@@ -27,7 +28,10 @@ class Golf extends GlobalMap implements iSport
             return startApplication('/PostScore/Basic/');
         }
 
+        $json['course'] = &$this->course[$id];
+
         $holes = $this->course[$id]['course_par'][ucfirst(strtolower($color))] ?? false;
+
 
         if (false === $holes) {
             PublicAlert::danger('Failed to load the course tee box!');
@@ -37,6 +41,7 @@ class Golf extends GlobalMap implements iSport
         $max = max($holes);
 
         $json['holes'] = [];
+        $json['number_of_holes'] = count($holes);
 
         foreach ($holes as $key => $distance) {
             $json['holes'][] = [
@@ -44,49 +49,53 @@ class Golf extends GlobalMap implements iSport
                 'first' => $key === 1,
                 'number' => $key,
                 'distance' => $distance,
-                'data_max' => $max
+                'data_max' => $max,
+                'last' => $key === $json['number_of_holes']
             ];
         }
 
-        if (empty($_POST)) {
+        if (empty($post)) {
             return null;
         }
 
-        sortDump($_POST);
-        $post = [];
-
-        if (false === Rounds::Get($post, null, [
-                'where' => [
-                    'round_input_complete' => false,
-                    'course_id' => $id
-                ]
-            ])) {
-            throw new PublicAlert('Failed to load rounds.');
-        }
-
-        if (empty($post)) {
+        if (false ===
             Rounds::Post([
-                'round_id' => self::beginTransaction('carbon_golf_course', $id),
                 'user_id' => $_SESSION['id'],
                 'course_id' => $id,
-                'round_json' => [
-                    'color' => $color,
-                    $hole => 1
-                ]
-            ]);
-        } else {
-
-            sortDump($post);
-
-            Rounds::Put($json['course'], $post['round_id'], [
-                'round_id' => $post['round_id'],
-                'user_id' => $_SESSION['id'],
-                'course_id' => $id,
-            ]);
-
+                'round_json' => $post,
+                'round_public' => true,
+                'round_out' => $out = array_sum(array_slice($post['shots'], 0, 8)),
+                'round_in' => $in = array_sum(array_slice($post['shots'], 9, 17)),
+                'round_total' => $total = $out + $in,
+                'round_total_gnr' => $gnr = array_sum($post['gnr']),
+                'round_total_ffs' => $ffs = array_sum($post['ffs']),
+                'round_total_putts' => $putts = array_sum($post['putts']),
+                'round_date' => $post['date'],
+                'round_input_complete' => true,
+                'round_tee_box_color' => $color
+            ])) {
+            throw new PublicAlert('Failed to post round!');
         }
 
-        return null;
+        if (!self::execute('UPDATE StatsCoach.carbon_user_golf_stats SET 
+                                             stats_rounds = stats_rounds + 1, 
+                                             stats_strokes = stats_strokes + ?, 
+                                             stats_putts = stats_putts + ?, 
+                                             stats_ffs = stats_ffs + ?, 
+                                             stats_gnr = stats_gnr + ? WHERE stats_id = UNHEX(?)',
+            $total, $putts, $ffs, $gnr, $_SESSION['id'])) {
+            throw new PublicAlert('Could not update user stats.');
+        }
+
+        if (!self::commit(function () {
+            PublicAlert::success('We posted your score successfully!');
+            return true;
+        })) {
+            PublicAlert::danger('Sorry, we failed to post your score.');
+            return true;
+        }
+
+        return startApplication('/');
     }
 
     /**
@@ -100,15 +109,56 @@ class Golf extends GlobalMap implements iSport
     /**
      * @param $user_uri
      */
-    public function rounds($user_uri)
+    public function rounds($user_uri_id, $limit = 20)
     {
-        global $user, $user_id;
+        global $json;
 
-        if ($user_uri !== $_SESSION['id']) {
-            $user_id = Users::user_id_from_uri($user_uri);
+        $json['roundUser'] = [];
+
+        Users::Get($json['roundUser'], $user_uri_id, [
+            'select' => [
+                'user_first_name',
+                'user_last_name',
+                'user_profile_pic',
+                'user_id',
+            ]
+        ]);
+
+        $json['my']['rounds'] = [];
+
+        Rounds::Get($json['my']['rounds'], null, [
+            'where' => [
+                'user_id' => $user_uri_id
+            ],
+            'pagination' => [
+                'limit' => $limit
+            ]
+        ]);
+
+        foreach ($json['my']['rounds'] as $k => &$v) {
+            if (!$this->course($v['course_id'])) {
+                throw new PublicAlert('Course lookup failed.');
+            }
+
+            $json['my']['rounds'][$k]['course'] = $json['course'][$v['course_id']];
+            $json['my']['rounds'][$k]['course_name'] = $json['course'][$v['course_id']]['course_name'];
+
+            $json['my']['rounds'][$k]['course_distance'] =
+                array_sum(
+                    $json['course']
+                    [$v['course_id']]
+                    ['course_par']
+                    [ucfirst($v['round_tee_box_color'])]);
+
+            $json['my']['rounds'][$k]['course_par'] =
+                array_sum($json['course'][$v['course_id']]
+                ['course_par']['par']);
+
+
         }
 
-        Rounds::Get($user[$user_id], $user_id, []);
+        // date( 'm/d/Y',
+
     }
 
     /**
@@ -141,13 +191,24 @@ class Golf extends GlobalMap implements iSport
      */
     public function course($id): bool
     {
-        $this->course[$id] = $this->course[$id] ?? [];
+        global $json;
 
-        if (!Course::Get($this->course[$id], $id, [])) {
+        $json['course'][$id] = $json['course'][$id] ?? [];
+
+        if (!Course::Get($json['course'][$id], $id, [])) {
             throw new PublicAlert('Failed to fetch course!');
         }
 
-        if (!\is_array($this->course[$id])) {
+        $location = [];
+
+        if (!Location::Get($location, $id, [])) {
+            throw new PublicAlert('Failed to fetch course location!');
+        }
+
+        // Should this use case mean rest should change?
+        $json['course'][$id] = array_merge_recursive($json['course'][$id], $location);
+
+        if (!\is_array($json['course'][$id])) {
             return false;
         }
 
@@ -177,6 +238,9 @@ class Golf extends GlobalMap implements iSport
     }
 
     /**
+     *  TBD
+     *
+     *
      * @param $state
      * @param $course_id
      * @param $boxColor
@@ -305,13 +369,23 @@ class Golf extends GlobalMap implements iSport
         foreach ($this->course[$course_id]['course_tee_boxes'] as $box) {
             switch ($color = strtolower($box['color'])) {
                 case 'white':
-                    $json['course_colors'][] = ['color'=>'aqua'];
+                    $json['course_colors'][] = [
+                        'color' => $color,
+                        'color_style_name' => 'aqua'
+                    ];
                     break;
                 case 'gold':
-                    $json['course_colors'][] = ['color'=>'yellow'];
+                    $json['course_colors'][] = [
+                        'color' => $color,
+                        'color_style_name' => 'yellow'
+
+                    ];
                     break;
                 default:
-                    $json['course_colors'][] = ['color'=>$color];
+                    $json['course_colors'][] = [
+                        'color' => $color,
+                        'color_style_name' => $color
+                    ];
             }
         }
 
@@ -321,6 +395,8 @@ class Golf extends GlobalMap implements iSport
     public function PostScoreBasic($state)
     {
         global $json;
+
+        //return startApplication('/');
 
         $json['state'] = $state;
         $json['courses'] = self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);

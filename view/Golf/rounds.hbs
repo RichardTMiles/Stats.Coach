@@ -1,19 +1,10 @@
-<?php
-
-global $user_id;
-
-$my = $this->user[$user_id ?: $_SESSION['id']];
-
-?>
-
-
 <section class="content-header" style="color: ghostwhite">
     <h1>
-        <?= $my['user_first_last'] ?>
+        {{#roundUser}}{{user_first_name}} {{user_last_name}}{{/roundUser}}
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Profile</a></li>
+        <li><a href="/" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Rounds</a></li>
     </ol>
     <p>
     </p>
@@ -40,6 +31,8 @@ $my = $this->user[$user_id ?: $_SESSION['id']];
                                 <tr>
                                     <th>Date</th>
                                     <th>Course</th>
+                                    <th>Color</th>
+                                    <th>Distance</th>
                                     <th>Fairways</th>
                                     <th>Greens</th>
                                     <th>Putts</th>
@@ -48,26 +41,25 @@ $my = $this->user[$user_id ?: $_SESSION['id']];
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                <?php if (!empty( $my['rounds'] ) && is_array( $my['rounds'] )) {
-                                    foreach ($my['rounds'] as $stats) {
-                                        print "<tr>
-                                                    <td> ".date( 'm/d/Y', $stats['score_date'] )."</td>
-                                                    <td> {$stats['course_name']} </td>
-                                                    <td> {$stats['score_total_ffs']} </td>
-                                                    <td> {$stats['score_total_gnr']} </td>
-                                                    <td> {$stats['score_total_putts']} </td>
-                                                    <td> {$stats['par_tot']} </td>
-                                                    <td> {$stats['score_total']} </td>";
-                                    }
-                                } ?>
-
+                                {{#rounds}}
+                                    <tr>
+                                        <td>{{round_date}}</td>
+                                        <td>{{course_name}}</td>
+                                        <td>{{round_tee_box_color}}</td>
+                                        <td>{{course_distance}}</td>
+                                        <td>{{round_total_ffs}}</td>
+                                        <td>{{round_total_gnr}}</td>
+                                        <td>{{round_total_putts}}</td>
+                                        <td>{{course_par}}</td>
+                                        <td>{{round_total}}</td>
+                                    </tr>
+                                {{/rounds}}
                                 </tbody>
                             </table>
                         </div><!-- /.table-responsive -->
                     </div><!-- /.box-body -->
                     <div class="box-footer clearfix">
-                        <a href="<?= SITE ?>PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                        <a href="/PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
                     </div><!-- /.box-footer -->
                 </div>
             </div>
