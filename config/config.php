@@ -58,7 +58,9 @@ return [
 
         'REMOTE' => true,                                    // Store the session in the SQL database
 
-        'SERIALIZE' => ['user', 'team', 'course'],           // These global variables will be stored between session
+        'SERIALIZE' => [
+
+        ],           // These global variables will be stored between session
 
         'CALLBACK' => function () {         // optional variable $reset which would be true if a url is passed to startApplication()
 
@@ -74,8 +76,7 @@ return [
                     $user = [];
                 }
 
-
-                if (!is_array($my = &$user[$_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
+                if (!is_array($my = &$user[$id = $_SESSION['id']])) {          // || $reset  /  but this shouldn't matter
                     $my = [];
                     /** @noinspection NotOptimalIfConditionsInspection */
                     if (false === Tables\carbon_users::Get($my, $_SESSION['id'], []) ||
@@ -84,18 +85,52 @@ return [
                         \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
                     }
 
-                    $my['stats'] = [];
+                    if (empty($user[$id]['user_profile_pic']) || $user[$id]['user_profile_pic'] === null) {
+                        $user[$id]['user_profile_pic'] = '/view/img/Carbon-red.png';
+                    }
+
+                    // todo check return of all rest api
+
+                    $my = array_merge($my, [
+                        'stats' => [],
+                        'coachedTeams' => [],
+                        'teamsJoined' => [],
+                        'teams' => [],
+                        'followers' => [],
+                        'messages' => []
+                    ]);
                     Tables\carbon_user_golf_stats::Get($my['stats'], $_SESSION['id'], []);
 
-                    $my['teams'] = [];
-                    Tables\carbon_teams::Get($my['teams'], $_SESSION['id'], []);
+                    Tables\carbon_team_members::Get($my['teamsJoined'], null, [
+                        'where' => [
+                            'user_id' => $_SESSION['id']
+                        ]
+                    ]);
 
-                    $my['followers'] = [];
-                    Tables\carbon_user_followers::Get($my['followers'], $_SESSION['id'], []);
+                    Tables\carbon_teams::Get($my['coachedTeams'], null, [
+                        'where' => [
+                            'team_coach' => $_SESSION['id'],
+                        ]
+                    ]);
 
-                    $my['messages'] = [];
-                    Tables\carbon_user_messages::Get($my['messages'], $_SESSION['id'], []);
+                    foreach ($my['teamsJoined'] as $key => &$value) {
+                        Tables\carbon_teams::Get($my['teams'], $value['team_id'], []);
+                        $value = array_merge($value, $my['teams']);
+                    }
 
+                    $my['teams'] = array_merge($my['teamsJoined'], $my['coachedTeams']);
+
+                    Tables\carbon_user_followers::Get($my['followers'], null, [
+                        'where' => [
+                            'follows_user_id' => $_SESSION['id']
+                        ]
+                    ]);
+
+                    Tables\carbon_user_messages::Get($my['messages'], null, [
+                        'where' => [
+                            'to_user_id' => $_SESSION['id']
+                        ]
+                    ]);
                 }
             }
         },

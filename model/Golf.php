@@ -28,10 +28,7 @@ class Golf extends GlobalMap implements iSport
             return startApplication('/PostScore/Basic/');
         }
 
-        $json['course'] = &$this->course[$id];
-
-        $holes = $this->course[$id]['course_par'][ucfirst(strtolower($color))] ?? false;
-
+        $holes = $json['course'][$id]['course_par'][ucfirst(strtolower($color))] ?? false;
 
         if (false === $holes) {
             PublicAlert::danger('Failed to load the course tee box!');
@@ -45,7 +42,7 @@ class Golf extends GlobalMap implements iSport
 
         foreach ($holes as $key => $distance) {
             $json['holes'][] = [
-                'par' => $this->course[$id]['course_par']['par'][$key],
+                'par' => $json['course'][$id]['course_par']['par'][$key],
                 'first' => $key === 1,
                 'number' => $key,
                 'distance' => $distance,
@@ -126,6 +123,7 @@ class Golf extends GlobalMap implements iSport
 
         $json['my']['rounds'] = [];
 
+
         Rounds::Get($json['my']['rounds'], null, [
             'where' => [
                 'user_id' => $user_uri_id
@@ -141,6 +139,7 @@ class Golf extends GlobalMap implements iSport
             }
 
             $json['my']['rounds'][$k]['course'] = $json['course'][$v['course_id']];
+
             $json['my']['rounds'][$k]['course_name'] = $json['course'][$v['course_id']]['course_name'];
 
             $json['my']['rounds'][$k]['course_distance'] =
@@ -207,6 +206,8 @@ class Golf extends GlobalMap implements iSport
 
         // Should this use case mean rest should change?
         $json['course'][$id] = array_merge_recursive($json['course'][$id], $location);
+
+        $this->course[$id] = &$json['course'][$id];
 
         if (!\is_array($json['course'][$id])) {
             return false;
@@ -355,18 +356,18 @@ class Golf extends GlobalMap implements iSport
         global $json;
 
         if (!empty($course_id) &&
-            (!($this->course[$course_id] ?? false))
+            (!($json['course'][$course_id] ?? false))
             && !$this->course($course_id)) {
             throw new PublicAlert('The course could not be found');
         }
 
-        $json['course_id'] = $this->course[$course_id]['course_id'];
+        $json['course_id'] = $json['course'][$course_id]['course_id'];
 
-        $json['course_name'] = $this->course[$course_id]['course_name'];
+        $json['course_name'] = $json['course'][$course_id]['course_name'];
 
         $json['course_colors'] = [];
 
-        foreach ($this->course[$course_id]['course_tee_boxes'] as $box) {
+        foreach ($json['course'][$course_id]['course_tee_boxes'] as $box) {
             switch ($color = strtolower($box['color'])) {
                 case 'white':
                     $json['course_colors'][] = [

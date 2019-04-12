@@ -10,6 +10,7 @@ namespace App;
 
 use CarbonPHP\Application;
 use CarbonPHP\Error\PublicAlert;
+use CarbonPHP\Session;
 use CarbonPHP\View;
 use Controller\User;
 use /** @noinspection PhpUndefinedClassInspection */
@@ -176,31 +177,20 @@ class StatsCoach extends Application
         $id = &$_SESSION['id'];
 
         // If the user is signed in we need to get the
+
         if ($id ?? false) {
+
             if (!\is_array($user[$id] ?? false)) {
-                $user[$id] = [];
-            }
-
-            if (!carbon_users::Get($user[$id], $id, [])) {
-                $_SESSION['id'] = false;
-                throw new PublicAlert('Failed to fetch user. This usually happens when a users id becomes invalid.');
-            }
-
-            if (empty($user[$id]['user_profile_pic']) || $user[$id]['user_profile_pic'] === null) {
-                $user[$id]['user_profile_pic'] = '/view/img/Carbon-red.png';
-            }
-
-            $user[$id]['stats'] = [];
-            if (!Stats::Get($user[$id]['stats'], $id, [])) {
-                print 'Could not get stats!';
-                exit(1);
+                Session::update();
             }
 
             $json['my'] = &$user[$id];
-            $json['signedIn'] = true;
-            $json['nav-bar'] = '';
-            $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
+            $json['signedIn'] = true;
+
+            $json['nav-bar'] = '';
+
+            $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
             $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
                 global $json;

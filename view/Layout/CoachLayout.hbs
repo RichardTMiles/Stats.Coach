@@ -125,7 +125,7 @@
                         <li class="user-header">
                             <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image"/>
                             <p>
-                                {{my.user_first_last}} - {{my.user_sport}}
+                                {{ my.user_first_name }} {{ my.user_last_name }} - {{my.user_sport}}
                                 <small>Member since {{my.user_creation_date}}</small>
                             </p>
                         </li>
@@ -200,7 +200,7 @@
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
-                        <a href="/" onclick=""><i class="fa fa-circle-o"></i>{{my.user_full_name}}
+                        <a href="/" onclick=""><i class="fa fa-circle-o"></i>{{ my.user_first_name }} {{ my.user_last_name }}
                         </a>
                     </li>
                     {{#my.teams}}
@@ -219,7 +219,7 @@
             -->
 
             <li>
-                <a href="/PostScore/">
+                <a href="/PostScore/Basic/">
                     <i class="fa fa-edit"></i><span>Post Score</span>
                 </a>
             </li>

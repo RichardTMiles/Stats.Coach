@@ -13,7 +13,7 @@ class carbon_user_messages extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'message_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],
+        'message_id' => [ 'binary', '2', '16' ],'from_user_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],
     ];
 
     public const VALIDATION = [];
@@ -66,6 +66,10 @@ class carbon_user_messages extends Database implements iRest
         if (array_key_exists('message_id', $argv)) {
             $message_id = $argv['message_id'];
             $stmt->bindParam(':message_id',$message_id, 2, 16);
+        }
+        if (array_key_exists('from_user_id', $argv)) {
+            $from_user_id = $argv['from_user_id'];
+            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
         }
         if (array_key_exists('to_user_id', $argv)) {
             $to_user_id = $argv['to_user_id'];
@@ -181,7 +185,7 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |message_id|to_user_id|message|message_read))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |message_id|from_user_id|to_user_id|message|message_read))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -241,7 +245,7 @@ class carbon_user_messages extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_messages (message_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:to_user_id), :message, :message_read)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_messages (message_id, from_user_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:from_user_id), UNHEX(:to_user_id), :message, :message_read)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -250,6 +254,9 @@ class carbon_user_messages extends Database implements iRest
                 
                     $message_id =  $argv['message_id'] ?? null;
                     $stmt->bindParam(':message_id',$message_id, 2, 16);
+                        
+                    $from_user_id = $argv['from_user_id'];
+                    $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
                         $to_user_id = $id = $argv['to_user_id'] ?? self::beginTransaction('carbon_user_messages');
                 $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
                 $stmt->bindValue(':message',$argv['message'], 2);
@@ -290,6 +297,9 @@ class carbon_user_messages extends Database implements iRest
 
             if (array_key_exists('message_id', $argv)) {
                 $set .= 'message_id=UNHEX(:message_id),';
+            }
+            if (array_key_exists('from_user_id', $argv)) {
+                $set .= 'from_user_id=UNHEX(:from_user_id),';
             }
             if (array_key_exists('to_user_id', $argv)) {
                 $set .= 'to_user_id=UNHEX(:to_user_id),';

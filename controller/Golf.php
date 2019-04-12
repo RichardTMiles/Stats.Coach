@@ -85,8 +85,6 @@ class Golf extends Request  // Validation
 
     public function PostScoreBasic($state)
     {
-        //return startApplication('/');
-
         if (!$this->set($state)->word()) {
             return null;
         }

@@ -1,31 +1,9 @@
-<?php
-
-
-/**
+<!-- **
  * Created by IntelliJ IDEA.
  * User: Miles
  * Date: 7/29/17
  * Time: 10:12 PM
- */
-
-$myTeam = $this->team[$this->team_id] or die( 1 );
-
-$rounds = $tournaments = $strokes = $FFS = $GIR = $putts = 0;
-
-foreach ($myTeam['members'] as $an => $id) {
-    $an = $this->user[$id]['stats'] ?? false;
-    if (!$an) continue;
-    $rounds += $an['stats_rounds'];
-    $tournaments += $an['stats_tournaments'];
-    $strokes += $an['stats_strokes'];
-    $FFS = $an['stats_ffs'];
-    $GIR = $an['stats_gnr'];
-    $putts = $an['stats_putts'];
-}
-
-$imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
-
-?>
+ */ -->
 <!-- Content Header (Page header) -->
 <section class="content-header" style="color: #d9edf7">
     <h1></h1>
@@ -49,42 +27,50 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                         <div class="widget-user-header bg-green">
                             <div class="widget-user-image">
                                 <img class="img-circle"
-                                     src="<?= SITE . ((!empty( $myTeam['team_photo'] ) && ($myTeam['photo'][$myTeam['team_photo']] ?? false) && ($photo = $myTeam['photo'][$myTeam['team_photo']]['photo'] ?? false)) ? $photo : "Data/Uploads/Pictures/Defaults/team-icon.png") ?>"
+                                     src="/Data/Uploads/Pictures/Defaults/team-icon.png"
                                      alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username"><?= $myTeam['team_name'] ?></h3>
+                            <h3 class="widget-user-username">{{myTeam.team_name}}</h3>
                             <h5 class="widget-user-desc">
-                                <i class="fa fa-fw fa-coffee"></i>
-                                <a style="color: #ffffff" href="<?= SITE . 'Profile/' . $this->user[$myTeam['team_coach']]['user_profile_uri'] ?>/"><?= $this->user[$myTeam['team_coach']]['user_full_name'] ?></a></h5>
-                            <?php if($imTheCoach): ?>
-                            <h6 class="widget-user-desc" onclick="Carbon($.fn.startApplication('Team/'))"><i class="fa fa-fw fa-cog"></i>Team Settings</h6>
-                            <?php endif; ?>
+                                {{#myTeam.members}}
+                                    <i class="fa fa-fw fa-coffee"></i>
+                                    <a style="color: #ffffff" href="/Profile/"><!-- loop team members here --></a></h5>
+                                {{/myTeam.members}}
+                                    {{#imTheCoach}}
+                                <h6 class="widget-user-desc" onclick="Carbon($.fn.startApplication('Team/'))"><i
+                                        class="fa fa-fw fa-cog"></i>Team Settings</h6>
+                            {{/imTheCoach}}
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="">Team Code <span class="pull-right badge bg-blue"><?= $myTeam['team_code'] ?></span></a></li>
-                                <li><a onclick="$.fn.startApplication('Team/<?= $myTeam['team_id'] ?>/Members/')">Members <span
-                                                class="pull-right badge bg-aqua"><?= count( $myTeam['members'] ) ?></span></a></li>
-                                <li><a href="#">Rounds <span class="pull-right badge bg-green"><?=$rounds?></span></a></li>
-                                <li><a href="#">Tournaments <span class="pull-right badge bg-red"><?=$tournaments?></span></a></li>
-                                <li><a href="#">Strokes <span class="pull-right badge bg-red"><?=$strokes?></span></a></li>
-                                <li><a href="#">FFS <span class="pull-right badge bg-red"><?=$FFS?></span></a></li>
-                                <li><a href="#">PNR <span class="pull-right badge bg-red"><?=$GIR?></span></a></li>
-                                <li><a href="#">Putts <span class="pull-right badge bg-red"><?=$putts?></span></a></li>
+                                <li><a href="">Team Code <span class="pull-right badge bg-blue">{{myTeam.team_code}}</span></a>
+                                </li>
+                                <li><a onclick="$.fn.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span
+                                        class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
+                                <li><a href="#">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a>
+                                </li>
+                                <li><a href="#">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a>
+                                </li>
+                                <li><a href="#">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a>
+                                </li>
+                                <li><a href="#">FFS <span class="pull-right badge bg-red">{{myTeam.FFS}}</span></a></li>
+                                <li><a href="#">PNR <span class="pull-right badge bg-red">{{myTeam.GIR}}</span></a></li>
+                                <li><a href="#">Putts <span class="pull-right badge bg-red">{{myTeam.putts}}</span></a></li>
                             </ul>
                         </div>
                     </div>
                     <!-- /.widget-team -->
                 </div>
 
-                <?php if ($imTheCoach) { ?>
+                {{#imTheCoach}}
 
                     <div class="col-md-12">
                         <div class="box box-widget">
                             <div class="box-body">
 
-                                <form data-pjax class="form-horizontal" action="<?= SITE . 'Team/' . $myTeam['team_id'] ?>" method="post"
+                                <form data-pjax class="form-horizontal" action="/Team/{{myTeam.team_id}}"
+                                      method="post"
                                       enctype="multipart/form-data">
                                     <div class="input-group input-group-sm">
                                         <input class="form-control" type="file" id="InputFile" name="FileToUpload">
@@ -96,29 +82,24 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                             </div>
                         </div>
                     </div>
-                <?php } ?>
-
-
-
+                {{/imTheCoach}}
             </div>
-
         </div>
         <div class="col-md-8">
             <!-- User team member -->
-            <?php foreach ($myTeam['members'] as $an => $id) {
-            $obj = $this->user[$id];
+            {{#members}}
 
-            ?>
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <a href="<?=SITE. 'Profile/'. ($obj['user_profile_uri'] ?: $id) ?>/">
-                            <?= $obj['user_first_name'] . ' ' . $obj['user_last_name'] ?>
+                        <a href="/Profile/{{user_profile_uri}}/">
+                            {{user_first_name}} {{user_last_name}}
                         </a>
                     </h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
                         </button>
                         <div class="btn-group">
                             <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
@@ -132,7 +113,8 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                                 <li><a href="#">Remove Team Member</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- /.box-header -->
@@ -142,12 +124,12 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                             <div class="box box-widget widget-user">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header bg-black"
-                                     style="background: url('<?= $obj['user_cover_photo'] ?>') center center;">
+                                     style="background: url('{{user_cover_photo}}') center center;">
                                     <h3 class="widget-user-username"></h3>
                                     <h5 class="widget-user-desc"></h5>
                                 </div>
                                 <div class="widget-user-image">
-                                    <img class="img-circle" src="<?= $obj['user_profile_pic'] ?>" alt="User Avatar">
+                                    <img class="img-circle" src="{{user_profile_pic}}" alt="User Avatar">
                                 </div>
 
                                 <div class="box-footer">
@@ -231,7 +213,8 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                     <div class="row">
                         <div class="col-sm-3 col-xs-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                                <span class="description-percentage text-green"><i
+                                        class="fa fa-caret-up"></i> 17%</span>
                                 <h5 class="description-header">230</h5>
                                 <span class="description-text">Rounds</span>
                             </div>
@@ -240,7 +223,8 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                         <!-- /.col -->
                         <div class="col-sm-3 col-xs-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                                <span class="description-percentage text-yellow"><i
+                                        class="fa fa-caret-left"></i> 0%</span>
                                 <h5 class="description-header">32</h5>
                                 <span class="description-text">Putts</span>
                             </div>
@@ -249,7 +233,8 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                         <!-- /.col -->
                         <div class="col-sm-3 col-xs-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                                <span class="description-percentage text-green"><i
+                                        class="fa fa-caret-up"></i> 20%</span>
                                 <h5 class="description-header">Profit</h5>
                                 <span class="description-text">TOTAL PROFIT</span>
                             </div>
@@ -258,7 +243,8 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                         <!-- /.col -->
                         <div class="col-sm-3 col-xs-6">
                             <div class="description-block">
-                                <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                                <span class="description-percentage text-red"><i
+                                        class="fa fa-caret-down"></i> 18%</span>
                                 <h5 class="description-header">1200</h5>
                                 <span class="description-text">GOAL COMPLETIONS</span>
                             </div>
@@ -267,11 +253,13 @@ $imTheCoach = $myTeam['team_coach'] == $_SESSION['id'];
                     </div>
                     <!-- /.row -->
                 </div>
-                <!-- /.box-footer -->
-            </div>
+
+            <!-- /.box-footer -->
+        </div>
+            {{/members}}
         </div>
 
-        <?php } ?>
+
 
 </section>
 

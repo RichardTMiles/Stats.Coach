@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/controller" isTestSource="false" packagePrefix="Controller\" />
       <sourceFolder url="file://$MODULE_DIR$/model" isTestSource="false" packagePrefix="Model\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/adapter-common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/filesystem-adapter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/cache/tag-interop" />

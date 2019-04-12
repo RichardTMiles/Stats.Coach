@@ -9,7 +9,7 @@ use CarbonPHP\Interfaces\iRest;
 class carbon_team_members extends Database implements iRest
 {
     public const PRIMARY = [
-    
+    'member_id',
     ];
 
     public const COLUMNS = [
@@ -159,12 +159,12 @@ class carbon_team_members extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= ' ASC';
+                    $order .= 'member_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY  ASC LIMIT 100';
+            $limit = ' ORDER BY member_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -197,7 +197,9 @@ class carbon_team_members extends Database implements iRest
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } 
+        } else {
+        $sql .= ' WHERE  member_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -223,6 +225,11 @@ class carbon_team_members extends Database implements iRest
         */
 
         
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -241,10 +248,9 @@ class carbon_team_members extends Database implements iRest
 
         $stmt = self::database()->prepare($sql);
 
+                $member_id = $id = $argv['member_id'] ?? self::beginTransaction('carbon_team_members');
+                $stmt->bindParam(':member_id',$member_id, 2, 16);
                 
-                    $member_id =  $argv['member_id'] ?? null;
-                    $stmt->bindParam(':member_id',$member_id, 2, 16);
-                        
                     $team_id = $argv['team_id'];
                     $stmt->bindParam(':team_id',$team_id, 2, 16);
                         
@@ -256,8 +262,8 @@ class carbon_team_members extends Database implements iRest
         
 
 
+        return $stmt->execute() ? $id : false;
 
-            return $stmt->execute();
     }
 
     /**
@@ -306,7 +312,7 @@ class carbon_team_members extends Database implements iRest
 
         $pdo = self::database();
 
-        
+        $sql .= ' WHERE  member_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -330,35 +336,6 @@ class carbon_team_members extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_team_members ';
-
-        $pdo = self::database();
-
-        if (null === $primary) {
-        /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
-        if (empty($argv)) {
-            return false;
-        }
-
-
-        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } 
-
-        self::jsonSQLReporting(\func_get_args(), $sql);
-
-        $stmt = $pdo->prepare($sql);
-
-        $r = self::bind($stmt, $argv);
-
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $r and $remove = null;
-
-        return $r;
+        return carbons::Delete($remove, $primary, $argv);
     }
 }

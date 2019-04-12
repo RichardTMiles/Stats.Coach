@@ -8,11 +8,13 @@
 
 namespace Model;
 
+
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Helpers\Bcrypt;
 use Tables\carbon_photos as Photos;
 use Tables\carbon_teams as Teams;
 use Tables\carbon_users as Users;
+use Tables\carbon_team_members as TeamMembers;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Singleton;
 
@@ -26,19 +28,57 @@ class Team extends GlobalMap
      * @throws \RuntimeException
      * @throws \CarbonPHP\Error\PublicAlert
      */
-    public function team(string $teamIdentifier)
+    public function team(string $team_id)
     {
-        global $team_id, $team_photo;
+        global $json;
 
-        if (!$team_id = Teams::team_exists( $teamIdentifier )) {
-            startApplication( 'Home/' );
-            return false;
+        $this->team[$team_id] = [];
+
+
+        $json['myTeam'] = &$this->team[$team_id];
+
+        if (!Teams::get($this->team[$team_id], $team_id, [])
+            || empty($this->team[$team_id])) {
+            PublicAlert::warning('Failed to lookup team id.');
+            return startApplication( 'Home/' );
         }
 
-        // if (!is_object($this->team[$team_id] ?? false))
-        $team = Teams::get($this->team[$team_id], $team_id);
+        $json['imTheCoach'] = $_SESSION['id'] === $json['myTeam']['team_coach'];
 
-        if (($team_photo ?? false ) && $team['team_coach'] == $_SESSION['id']) {
+        $json['myTeam']['members']=[];
+
+        if(!TeamMembers::get($json['myTeam']['members'], null, [
+            'where' => [
+                'team_id' => $team_id
+            ]
+        ])) {
+            PublicAlert::danger('Failed to lookup team members.');
+            return startApplication( 'Home/' );
+        }
+
+        $json['members'] = count($json['myTeam']['members']);
+
+        $json['rounds'] = 2;
+
+       // sortDump($json);
+        $json['imTheCoach'] = $_SESSION['id'];
+
+        //sortDump($json);
+        /*$rounds = $tournaments = $strokes = $FFS = $GIR = $putts = 0;
+
+        foreach ($myTeam['members'] as $an => $id) {
+            $an = $this->user[$id]['stats'] ?? false;
+            if (!$an) continue;
+            $rounds += $an['stats_rounds'];
+            $tournaments += $an['stats_tournaments'];
+            $strokes += $an['stats_strokes'];
+            $FFS = $an['stats_ffs'];
+            $GIR = $an['stats_gnr'];
+            $putts = $an['stats_putts'];
+        }*/
+
+
+        /*if (($team_photo ?? false ) && $team['team_coach'] == $_SESSION['id']) {
             // unlink( $team->photo_path ); TODO - Delete photo from db
             Photos::add( $team, $team_id, [
                 'photo_path' => "$team_photo",
@@ -51,7 +91,7 @@ class Team extends GlobalMap
 
         if ($team['team_coach'] === null) {
             throw new \RuntimeException( 'Why is there no coach?' );
-        }
+        }*/
 
         // Users::Get( $this->user[$team['team_coach']], $team['team_coach'] );
 
@@ -75,11 +115,11 @@ class Team extends GlobalMap
             throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
         }
 
-        $sql = 'UPDATE carbon_users SET user_type = "Coach" WHERE user_id = ?';
-
         $return = [];
 
-        if (!Users::Put($return, $_SESSION['id'], ['user_type' => 'Coach'])) {
+        if (!Users::Put($return, $_SESSION['id'], [
+            'user_type' => 'Coach'
+        ])) {
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         }
 
@@ -87,7 +127,7 @@ class Team extends GlobalMap
 
         PublicAlert::success( "We successfully created `$teamName`!" );
 
-        startApplication(true);
+        return startApplication(true);
     }
 
     /**
@@ -96,31 +136,50 @@ class Team extends GlobalMap
      */
     public function joinTeam($teamCode)
     {
-        if (!$teamId = Teams::team_exists( $teamCode )) {
+        $team = [];
+
+        if (!Teams::get($team, null, [
+            'where' => [
+                'team_code' => $teamCode
+            ],
+            'pagination' => [
+                'limit' => 1
+            ]
+        ])) {
+            throw new PublicAlert( 'We failed to lookup the team. Please try again later.', 'warning' );
+        }
+
+        if (empty($team)) {
             throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
         }
 
-        Teams::all( $this->user[$_SESSION['id']], $_SESSION['id'] );
+        $member = [];
 
-        if (array_key_exists( $teamCode, $this->user[$_SESSION['id']]['teams'] )) {
+        if (!TeamMembers::get($member, null, [
+            'where' => [
+                'team_id' => $team['team_id'],
+                'user_id' => $_SESSION['id'],
+                'accepted' => 0
+            ]
+        ])) {
+            throw new PublicAlert('We failed to lookup the membership history. Please try again later.', 'danger');
+        }
+
+        if (!empty($member)) {
             throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
         }
 
-        $member = self::beginTransaction( 6, $_SESSION['id'] );
-        $sql = 'INSERT INTO StatsCoach.carbon_team_members (member_id, user_id, team_id) VALUES (?,?,?)';
-
-        if (!$this->db->prepare( $sql )->execute( [$member, $_SESSION['id'], $teamId] )) {
-            throw new PublicAlert( 'Unable to join this team. ', '' );
+        if (!TeamMembers::Post([
+            'user_id' => $_SESSION['id'],
+            'team_id' => $team['team_id']
+        ])) {
+            throw new PublicAlert('Failed to update team status. Please try again later.', 'danger');
         }
 
         self::commit();
 
         PublicAlert::success( 'We successfully add you!' );
 
-        startApplication( true );
-
+        return startApplication( true );
     }
-
-
-
 }
