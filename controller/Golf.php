@@ -18,6 +18,7 @@ class Golf extends Request  // Validation
             PublicAlert::danger('Failed to load course.');
             return startApplication('/PostScore/Basic');
         }
+
         if (!$this->set($color)->word()) {
             PublicAlert::danger('The color chosen appears invalid.');
             return startApplication("/PostScore/$id");

@@ -45,8 +45,19 @@ class Team extends GlobalMap
 
         $json['imTheCoach'] = $_SESSION['id'] === $json['myTeam']['team_coach'];
 
+        if (!$json['imTheCoach']) {
+            $id = $json['myTeam']['team_coach'];
+            $json['myTeam']['team_coach'] = [];
+            if (!Users::Get($json['myTeam']['team_coach'], $id, [])
+            || empty($json['myTeam']['team_coach'])) {
+                PublicAlert::danger('Failed to lookup team coach.');
+                return startApplication( 'Home/' );
+            }
+        }
+
         $json['myTeam']['members']=[];
 
+        // get team members
         if(!TeamMembers::get($json['myTeam']['members'], null, [
             'where' => [
                 'team_id' => $team_id
@@ -56,44 +67,24 @@ class Team extends GlobalMap
             return startApplication( 'Home/' );
         }
 
-        $json['members'] = count($json['myTeam']['members']);
+        foreach ($json['myTeam']['members'] as $key => &$value) {
+            $user = [];
+            if (!Users::Get($user, $value['user_id'], [])
+                || empty($json['myTeam']['team_coach'])) {
+                PublicAlert::danger('Failed to lookup team coach.');
+                return startApplication( 'Home/' );
+            }
+            $value = $user;
+        }
+
+        $json['myTeam']['memberCount'] = count($json['myTeam']['members']);
 
         $json['rounds'] = 2;
 
        // sortDump($json);
-        $json['imTheCoach'] = $_SESSION['id'];
-
-        //sortDump($json);
-        /*$rounds = $tournaments = $strokes = $FFS = $GIR = $putts = 0;
-
-        foreach ($myTeam['members'] as $an => $id) {
-            $an = $this->user[$id]['stats'] ?? false;
-            if (!$an) continue;
-            $rounds += $an['stats_rounds'];
-            $tournaments += $an['stats_tournaments'];
-            $strokes += $an['stats_strokes'];
-            $FFS = $an['stats_ffs'];
-            $GIR = $an['stats_gnr'];
-            $putts = $an['stats_putts'];
-        }*/
 
 
-        /*if (($team_photo ?? false ) && $team['team_coach'] == $_SESSION['id']) {
-            // unlink( $team->photo_path ); TODO - Delete photo from db
-            Photos::add( $team, $team_id, [
-                'photo_path' => "$team_photo",
-                'photo_description' => "profile pic"] );
-        }
 
-        if (isset( $this->user[$this->team[$team_id]['team_coach']] )) {
-            return true;
-        }
-
-        if ($team['team_coach'] === null) {
-            throw new \RuntimeException( 'Why is there no coach?' );
-        }*/
-
-        // Users::Get( $this->user[$team['team_coach']], $team['team_coach'] );
 
         return true;
     }

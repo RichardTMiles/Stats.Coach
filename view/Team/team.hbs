@@ -32,39 +32,35 @@
                             </div>
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-username">{{myTeam.team_name}}</h3>
-                            <h5 class="widget-user-desc">
-                                {{#myTeam.members}}
-                                    <i class="fa fa-fw fa-coffee"></i>
-                                    <a style="color: #ffffff" href="/Profile/"><!-- loop team members here --></a></h5>
-                                {{/myTeam.members}}
-                                    {{#imTheCoach}}
+                        <h5 class="widget-user-desc">
+                            {{^imTheCoach}}
+                                <i class="fa fa-fw fa-coffee"></i>
+                                <a style="color: #ffffff" href="/Profile/">Coach {{ myTeam.team_coach.user_last_name }}</a></h5>
+                            {{/imTheCoach}}
+                            {{#imTheCoach}}
+                                <i class="fa fa-fw fa-coffee"></i>
+                                <a style="color: #ffffff" href="/Profile/">Coach {{ my.user_last_name }}</a></h5>
                                 <h6 class="widget-user-desc" onclick="Carbon($.fn.startApplication('Team/'))"><i
                                         class="fa fa-fw fa-cog"></i>Team Settings</h6>
                             {{/imTheCoach}}
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="">Team Code <span class="pull-right badge bg-blue">{{myTeam.team_code}}</span></a>
-                                </li>
-                                <li><a onclick="$.fn.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span
-                                        class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
-                                <li><a href="#">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a>
-                                </li>
-                                <li><a href="#">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a>
-                                </li>
-                                <li><a href="#">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a>
-                                </li>
+                                <li><a href="">Team Code <span class="pull-right badge bg-blue">{{myTeam.team_code}}</span></a></li>
+                                <li><a onclick="$.fn.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
+                                <li><a href="#">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a></li>
+                                <li><a href="#">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a></li>
+                                <li><a href="#">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a></li>
                                 <li><a href="#">FFS <span class="pull-right badge bg-red">{{myTeam.FFS}}</span></a></li>
                                 <li><a href="#">PNR <span class="pull-right badge bg-red">{{myTeam.GIR}}</span></a></li>
-                                <li><a href="#">Putts <span class="pull-right badge bg-red">{{myTeam.putts}}</span></a></li>
+                                <li><a href="#">Putts <span class="pull-right badge bg-red">{{myTeam.putts}}</span></a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                     <!-- /.widget-team -->
                 </div>
-
                 {{#imTheCoach}}
-
                     <div class="col-md-12">
                         <div class="box box-widget">
                             <div class="box-body">
@@ -87,178 +83,177 @@
         </div>
         <div class="col-md-8">
             <!-- User team member -->
-            {{#members}}
+            {{#myTeam.members}}
+                <div class="box" style="margin-top: 20px">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <a href="/Profile/{{user_profile_uri}}/">
+                                {{user_first_name}} {{user_last_name}}
+                            </a>
+                        </h3>
 
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">
-                        <a href="/Profile/{{user_profile_uri}}/">
-                            {{user_first_name}} {{user_last_name}}
-                        </a>
-                    </h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
-                        </button>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-wrench"></i></button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Add Goal</a></li>
-                                <li><a href="#">Edit Goals</a></li>
-                                <li><a href="#">Send Message</a></li>
-                                <li><a href="#">View All Rounds</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Remove Team Member</a></li>
-                            </ul>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-wrench"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Add Goal</a></li>
+                                    <li><a href="#">Edit Goals</a></li>
+                                    <li><a href="#">Send Message</a></li>
+                                    <li><a href="#">View All Rounds</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Remove Team Member</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                    class="fa fa-times"></i>
+                            </button>
                         </div>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
                     </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="box box-widget widget-user">
-                                <!-- Add the bg color to the header using any of the bg-* classes -->
-                                <div class="widget-user-header bg-black"
-                                     style="background: url('{{user_cover_photo}}') center center;">
-                                    <h3 class="widget-user-username"></h3>
-                                    <h5 class="widget-user-desc"></h5>
-                                </div>
-                                <div class="widget-user-image">
-                                    <img class="img-circle" src="{{user_profile_pic}}" alt="User Avatar">
-                                </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="box box-widget widget-user">
+                                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                                    <div class="widget-user-header bg-black"
+                                         style="background: url('{{user_cover_photo}}') center center;">
+                                        <h3 class="widget-user-username"></h3>
+                                        <h5 class="widget-user-desc"></h5>
+                                    </div>
+                                    <div class="widget-user-image">
+                                        <img class="img-circle" src="{{user_profile_pic}}" alt="User Avatar">
+                                    </div>
 
-                                <div class="box-footer">
-                                    <div class="row">
-                                        <div class="col-sm-4 border-right">
-                                            <div class="description-block">
-                                                <h5 class="description-header">12</h5>
-                                                <span class="description-text">FFS</span>
-                                            </div><!-- /.description-block -->
+                                    <div class="box-footer">
+                                        <div class="row">
+                                            <div class="col-sm-4 border-right">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">12</h5>
+                                                    <span class="description-text">FFS</span>
+                                                </div><!-- /.description-block -->
 
-                                        </div><!-- /.col -->
+                                            </div><!-- /.col -->
 
-                                        <div class="col-sm-4 border-right">
-                                            <div class="description-block">
-                                                <h5 class="description-header">3</h5>
-                                                <span class="description-text">Rounds</span>
-                                            </div><!-- /.description-block -->
+                                            <div class="col-sm-4 border-right">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">3</h5>
+                                                    <span class="description-text">Rounds</span>
+                                                </div><!-- /.description-block -->
 
-                                        </div><!-- /.col -->
+                                            </div><!-- /.col -->
 
-                                        <div class="col-sm-4">
-                                            <div class="description-block">
-                                                <h5 class="description-header">16</h5>
-                                                <span class="description-text">GNR</span>
-                                            </div><!-- /.description-block -->
-                                        </div><!-- /.col -->
-                                    </div><!-- /.row -->
+                                            <div class="col-sm-4">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">16</h5>
+                                                    <span class="description-text">GNR</span>
+                                                </div><!-- /.description-block -->
+                                            </div><!-- /.col -->
+                                        </div><!-- /.row -->
 
+                                    </div>
                                 </div>
                             </div>
+                            <!-- /.col -->
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    <strong>Goal Completion</strong>
+                                </p>
+
+                                <div class="progress-group">
+                                    <span class="progress-text">Rounds this month</span>
+                                    <span class="progress-number"><b>160</b>/200</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    <span class="progress-text">Hours on Range</span>
+                                    <span class="progress-number"><b>10</b>/400</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-red" style="width: 03%"></div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    <span class="progress-text">Handicap</span>
+                                    <span class="progress-number"><b>3</b>/6</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-green" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    <span class="progress-text">Send Inquiries</span>
+                                    <span class="progress-number"><b>250</b>/500</span>
+
+                                    <div class="progress sm">
+                                        <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                            </div>
+                            <!-- /.col -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col-md-4">
-                            <p class="text-center">
-                                <strong>Goal Completion</strong>
-                            </p>
-
-                            <div class="progress-group">
-                                <span class="progress-text">Rounds this month</span>
-                                <span class="progress-number"><b>160</b>/200</span>
-
-                                <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            <!-- /.progress-group -->
-                            <div class="progress-group">
-                                <span class="progress-text">Hours on Range</span>
-                                <span class="progress-number"><b>10</b>/400</span>
-
-                                <div class="progress sm">
-                                    <div class="progress-bar progress-bar-red" style="width: 03%"></div>
-                                </div>
-                            </div>
-                            <!-- /.progress-group -->
-                            <div class="progress-group">
-                                <span class="progress-text">Handicap</span>
-                                <span class="progress-number"><b>3</b>/6</span>
-
-                                <div class="progress sm">
-                                    <div class="progress-bar progress-bar-green" style="width: 50%"></div>
-                                </div>
-                            </div>
-                            <!-- /.progress-group -->
-                            <div class="progress-group">
-                                <span class="progress-text">Send Inquiries</span>
-                                <span class="progress-number"><b>250</b>/500</span>
-
-                                <div class="progress sm">
-                                    <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            <!-- /.progress-group -->
-                        </div>
-                        <!-- /.col -->
+                        <!-- /.row -->
                     </div>
-                    <!-- /.row -->
-                </div>
-                <!-- ./box-body -->
-                <div class="box-footer">
-                    <div class="row">
-                        <div class="col-sm-3 col-xs-6">
-                            <div class="description-block border-right">
+                    <!-- ./box-body -->
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
                                 <span class="description-percentage text-green"><i
                                         class="fa fa-caret-up"></i> 17%</span>
-                                <h5 class="description-header">230</h5>
-                                <span class="description-text">Rounds</span>
+                                    <h5 class="description-header">230</h5>
+                                    <span class="description-text">Rounds</span>
+                                </div>
+                                <!-- /.description-block -->
                             </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-3 col-xs-6">
-                            <div class="description-block border-right">
+                            <!-- /.col -->
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
                                 <span class="description-percentage text-yellow"><i
                                         class="fa fa-caret-left"></i> 0%</span>
-                                <h5 class="description-header">32</h5>
-                                <span class="description-text">Putts</span>
+                                    <h5 class="description-header">32</h5>
+                                    <span class="description-text">Putts</span>
+                                </div>
+                                <!-- /.description-block -->
                             </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-3 col-xs-6">
-                            <div class="description-block border-right">
+                            <!-- /.col -->
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block border-right">
                                 <span class="description-percentage text-green"><i
                                         class="fa fa-caret-up"></i> 20%</span>
-                                <h5 class="description-header">Profit</h5>
-                                <span class="description-text">TOTAL PROFIT</span>
+                                    <h5 class="description-header">Profit</h5>
+                                    <span class="description-text">TOTAL PROFIT</span>
+                                </div>
+                                <!-- /.description-block -->
                             </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-3 col-xs-6">
-                            <div class="description-block">
+                            <!-- /.col -->
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="description-block">
                                 <span class="description-percentage text-red"><i
                                         class="fa fa-caret-down"></i> 18%</span>
-                                <h5 class="description-header">1200</h5>
-                                <span class="description-text">GOAL COMPLETIONS</span>
+                                    <h5 class="description-header">1200</h5>
+                                    <span class="description-text">GOAL COMPLETIONS</span>
+                                </div>
+                                <!-- /.description-block -->
                             </div>
-                            <!-- /.description-block -->
                         </div>
+                        <!-- /.row -->
                     </div>
-                    <!-- /.row -->
+
+                    <!-- /.box-footer -->
                 </div>
-
-            <!-- /.box-footer -->
+            {{/myTeam.members}}
         </div>
-            {{/members}}
-        </div>
-
 
 
 </section>

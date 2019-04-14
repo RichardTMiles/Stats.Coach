@@ -28,6 +28,8 @@ class Golf extends GlobalMap implements iSport
             return startApplication('/PostScore/Basic/');
         }
 
+        $json['courseInput'] = &$json['course'][$id];
+
         $holes = $json['course'][$id]['course_par'][ucfirst(strtolower($color))] ?? false;
 
         if (false === $holes) {
@@ -191,6 +193,7 @@ class Golf extends GlobalMap implements iSport
     public function course($id): bool
     {
         global $json;
+
 
         $json['course'][$id] = $json['course'][$id] ?? [];
 

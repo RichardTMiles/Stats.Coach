@@ -1,13 +1,13 @@
 <!-- Content Header (Page header) -->
-<section class="content-header">
+<section class="content-header" style="margin-top: 20px">
     <h1 style="color: #fff">
-        {{course.course_name}}
+        {{courseInput.course_name}}
         <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
-        <li><a href="#" style="color: ghostwhite;">{{course.state}}</a></li>
-        <li style="color: ghostwhite;">{{course.course_name}}</li>
+        <li><a href="#" style="color: ghostwhite;">{{courseInput.state}}</a></li>
+        <li style="color: ghostwhite;">{{courseInput.course_name}}</li>
         <li style="color: ghostwhite;">{{score_color_input}}</li>
         <li style="color: ghostwhite;"> Score Input</li>
     </ol>
@@ -15,7 +15,7 @@
 
 <section class="content">
     <form data-hbs class="form-horizontal" method="post"
-          action="/PostScore/Distance/{{course.course_id}}/{{score_color_input}}/"
+          action="/PostScore/Distance/{{courseInput.course_id}}/{{score_color_input}}/"
           name="postScore">
         <div class="row" id="dateTime">
             <div class="col-xs-12">
