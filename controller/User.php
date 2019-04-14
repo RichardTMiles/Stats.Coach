@@ -195,7 +195,7 @@ class User extends Request
 
         $email = $this->post('email')->email();
 
-        $terms = $this->post('Terms')->int();
+        $terms = $_POST['Terms'] === 'true';
 
         if (!$username) {
             throw new PublicAlert('Please enter a username with only numbers & letters!');
@@ -222,7 +222,6 @@ class User extends Request
         if (!$firstName) {
             throw new PublicAlert('Please enter your first name!');
         }
-
         if (!$lastName) {
             throw new PublicAlert('Please enter your last name!');
         }
