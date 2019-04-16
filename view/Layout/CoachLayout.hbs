@@ -19,7 +19,8 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <li id="NavMessages" class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
                         <i class="fa fa-envelope-o"></i>
                         {{#newMessages}}
                             <span id="NewMessagesSpan" class="label label-success">{{newMessages}}</span>
@@ -28,22 +29,25 @@
                     <ul class="dropdown-menu">
                         <li class="header">You have {{newMessages}}{{^newMessages}}0{{/newMessages}} new messages</li>
                         <!-- inner menu: contains the actual data -->
-                        <li><ul class="menu">
-                            {{#users}}
-                                <li><!-- start message -->
-                                    <a href="{{user_uri}}">
-                                        <div class="pull-left">
-                                            <img src="{{user_profile_picture}}" class="img-circle" alt="User Image"/>
-                                        </div>
-                                        <h4>
-                                            {{first_name}} {{last_name}}
-                                            <small><i class="fa fa-clock-o"></i>{{creation_date}}</small>
-                                        </h4>
-                                        <p>{{message}}</p>
-                                    </a>
-                                </li><!-- end message -->
-                            {{/users}}
-                        </ul></li>
+                        <li>
+                            <ul class="menu">
+                                {{#users}}
+                                    <li><!-- start message -->
+                                        <a href="{{user_uri}}">
+                                            <div class="pull-left">
+                                                <img src="{{user_profile_picture}}" class="img-circle"
+                                                     alt="User Image"/>
+                                            </div>
+                                            <h4>
+                                                {{first_name}} {{last_name}}
+                                                <small><i class="fa fa-clock-o"></i>{{creation_date}}</small>
+                                            </h4>
+                                            <p>{{message}}</p>
+                                        </a>
+                                    </li><!-- end message -->
+                                {{/users}}
+                            </ul>
+                        </li>
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
                 </li>
@@ -56,7 +60,9 @@
                         {{/newNotifications}}
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have {{newNotifications}}{{^newNotifications}}0{{/newNotifications}} notifications</li>
+                        <li class="header">You have {{newNotifications}}{{^newNotifications}}
+                            0{{/newNotifications}} notifications
+                        </li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
@@ -95,7 +101,8 @@
                                                 <small class="pull-right">{{progress}}%</small>
                                             </h3>
                                             <div class="progress xs">
-                                                <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0"
+                                                <div class="progress-bar progress-bar-red" style="width: 60%"
+                                                     role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0"
                                                      aria-valuemax="100">
                                                     <span class="sr-only">{{progress}}% Complete</span>
                                                 </div>
@@ -171,7 +178,7 @@
                 <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>{{my.user_first_last}}</p>
+                <p>{{ my.user_first_name }} {{ my.user_last_name }}</p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -200,7 +207,8 @@
                 </a>
                 <ul class="treeview-menu" style="display: block;">
                     <li class="active">
-                        <a href="/" onclick=""><i class="fa fa-circle-o"></i>{{ my.user_first_name }} {{ my.user_last_name }}
+                        <a href="/" onclick=""><i
+                                class="fa fa-circle-o"></i>{{ my.user_first_name }} {{ my.user_last_name }}
                         </a>
                     </li>
                     {{#my.teams}}
@@ -231,17 +239,19 @@
                         <li class="treeview menu-open">
                             <a href="/Team/{{team_id}}/"><i
                                     class="fa fa-circle-o"></i>
-
+                                {{team_name}}
                                 <span class="pull-right-container"><i
-                                        class="fa fa-angle-left pull-right"></i></span>
+                                        class="fa fa-angle-left pull-right">
+                                </i></span>
                             </a>
                             <ul class="treeview-menu" style="display: block;">
-                                <li>
-                                    <a href="/Profile/{{my.user_profile_uri}}/"><i
-                                            class="fa fa-circle-o"></i>{{user_full_name}}
-                                    </a>
-                                </li>
-
+                                {{#members}}
+                                    <li>
+                                        <a href="/Profile/{{user_id}}/"><i
+                                                class="fa fa-circle-o"></i>{{ user_first_name }} {{ user_last_name }}
+                                        </a>
+                                    </li>
+                                {{/members}}
                             </ul>
 
                         </li>

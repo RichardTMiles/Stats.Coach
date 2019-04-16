@@ -106,7 +106,7 @@ class StatsCoach extends Application
             }
         } else {
             // Event
-            if (((AJAX && !PJAX) || SOCKET) && (
+            if (((AJAX && PJAX) || SOCKET) && (
                     $this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('Messages/', 'Messages', 'navigation')() ||
                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||    // chat box widget
@@ -141,7 +141,7 @@ class StatsCoach extends Application
             }
 
             if ($this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
-                $this->match('Messages/*', 'Messages', 'messages')() ||
+                $this->match('Messages/', 'Messages', 'messages')() ||
                 $this->match('Home/*', 'Golf', 'golf')() ||
                 $this->match('Golf/*', 'Golf', 'golf')() ||
                 $this->match('Team/{team_id}/*', 'Team', 'team')() ||

@@ -8,32 +8,35 @@
 
 namespace Controller;
 
+use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
-use Tables\Messages as Table;
-use Tables\Users as U;
+use Tables\carbon_user_messages as message;
+
 
 class Messages extends Request
 {
-    public function messages() {
+    public function messages($user_uri)
+    {
         // list($us_id, $messages) = $this->post('user_id','message')->alnum();
+
+        if (ctype_xdigit($user_uri)) {
+            return $user_uri;
+        }
         return true;
     }
 
-    public function navigation() {
+    public function navigation()
+    {
         return true;
     }
 
-    public function chat($user_uri = false){
-        global $user_id;
+    public function chat($user_id = false)
+    {
+        if (!ctype_xdigit($user_id)) {
+            PublicAlert::danger('Invalid user id given for chat.');
+            return null;
+        }
 
-        $user_id = U::user_id_from_uri($user_uri) or die(1);        // if post isset we can assume an add
-
-        if (!empty($_POST) && !empty($string = $this->post('message')->noHTML()->value())) {
-            Table::Post($this->user[$user_id], $user_id, $string);
-        }     // else were grabbing content (json, html, etc)
-
-        Table::All($this->user[$user_id], $user_id);
-
-        return true;
+        return $user_id;
     }
 }

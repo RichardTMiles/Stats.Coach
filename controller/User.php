@@ -283,9 +283,11 @@ class User extends Request
     public function profile($user_id = false)
     {
         global $json;
+
+
         $user_id = $this->set($user_id)->alnum();
 
-        if (false !== $user_id) {
+        if (!empty($user_id)) {
             return $user_id;
         }
 
@@ -295,7 +297,7 @@ class User extends Request
             return null;        // don't go onto the model, but run the view
         }
 
-        if (!$this->post('Terms')->int()) {
+        if (!$this->post('Terms')->value() === 'true') {
             throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
         }
 
@@ -312,7 +314,10 @@ class User extends Request
 
         $about_me = $this->post('about_me')->text();
 
-        $profile_pic = $this->files('FileToUpload')->storeFiles('Data/Uploads/Pictures/Profile/');
+        //sortDump($_POST['FileToUpload']);
+
+        if ($_POST['FileToUpload'])
+            $profile_pic = $this->files('FileToUpload')->storeFiles('Data/Uploads/Pictures/Profile/');
 
         return true;
     }

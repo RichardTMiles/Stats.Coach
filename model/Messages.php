@@ -8,7 +8,10 @@
 
 namespace Model;
 
+use CarbonPHP\Error\PublicAlert;
 use Model\Helpers\GlobalMap;
+use Tables\carbon_user_messages as Message;
+use Tables\carbon_users as Users;
 
 class Messages extends GlobalMap
 {
@@ -61,21 +64,48 @@ class Messages extends GlobalMap
         return $json;
     }
 
-    public function chat()
+    public function chat($user_id)
     {
-        global $user_id, $user, $json;
+        global $json;
 
-        if (!(is_array($account = $user[$user_id] ?? false)))
-            throw new \Exception('User not loaded');
+        $this->user[$user_id] = [];
 
-        $json = [
-            'widget' => '.direct-chat',
+        if (false === Users::get($this->user[$user_id], $user_id, [])) {
+            throw new PublicAlert('Failed to get restful user in chat.');
+        }
+
+        if (empty($this->user[$user_id])) {
+            throw new \Exception('Could not find user.');
+        }
+
+        $this->user[$user_id]['messages'] = [];
+
+        if (!empty($_POST) && !empty($string = $this->post('message')->noHTML()->value())) {
+            Message::Post($this->user[$user_id]['messages'], $user_id, $string);
+        }     // else were grabbing content (json, html, etc)
+
+        Message::get($this->user[$user_id]['messages'], $user_id, [
+            'where' => [
+                [
+                    'to_user_id' => $_SESSION['id'],
+                    'from_user_id' => $user_id
+                ],
+                [
+                    'to_user_id' => $user_id,
+                    'from_user_id' => $_SESSION['id'],
+                ],
+            ]
+        ]);
+
+
+        $json = array_merge($json, [
+            'Widget' => '.direct-chat',
             'scroll' => '#messages',
             'to_User' => $user_id,
             'scrollTo' => 'bottom'
-        ];
+        ]);
 
-        foreach ($account['messages'] as $key => $message) {
+        foreach ($this->user[$user_id]['messages'] as $key => $message) {
             $json['Messages'][] = [
                 'me' => $message['user_id'] == $_SESSION['id'],
                 'first_name' => $user[$message['user_id']]['user_first_name'],

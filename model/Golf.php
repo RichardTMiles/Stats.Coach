@@ -10,6 +10,9 @@ use CarbonPHP\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Error\PublicAlert;
+use Tables\carbon_team_members as members;
+use Tables\carbon_teams as teams;
+use Tables\carbon_user_golf_stats as stats;
 use Tables\carbon_users as Users;
 use Tables\golf_rounds;
 
@@ -17,11 +20,52 @@ class Golf extends GlobalMap implements iSport
 {
     use Singleton;
 
+    public static function sessionStuff(&$my) {
+        $my = array_merge($my, [
+            'stats' => [],
+            'coachedTeams' => [],
+            'teamsJoined' => [],
+            'teams' => [],
+            'followers' => [],
+            'messages' => []
+        ]);
+
+        stats::Get($my['stats'], $_SESSION['id'], []);
+
+        members::Get($my['teamsJoined'], null, [
+            'where' => [
+                'user_id' => $_SESSION['id']
+            ]
+        ]);
+
+        teams::Get($my['coachedTeams'], null, [
+            'where' => [
+                'team_coach' => $_SESSION['id'],
+            ]
+        ]);
+
+        foreach ($my['coachedTeams'] as $key => &$value) {
+            // get team members
+            $value['members'] = self::fetch('select user_first_name, user_last_name, HEX(carbon_users.user_id) as user_id, user_profile_pic, user_cover_photo from carbon_users join carbon_team_members join carbon_teams 
+                                  where carbon_teams.team_id = carbon_team_members.team_id 
+                                    and carbon_users.user_id = carbon_team_members.user_id
+                                    and carbon_teams.team_id = unhex(?)', $value['team_id']);
+
+
+        }
+
+        foreach ($my['teamsJoined'] as $key => &$value) {
+            teams::Get($my['teams'], $value['team_id'], []);
+            $value = array_merge($value, $my['teams']);
+        }
+
+        $my['teams'] = array_merge($my['teamsJoined'], $my['coachedTeams']);
+
+    }
 
     public function PostScoreDistance($id, $color, $post = null)
     {
         global $json;
-
 
         if (!$this->course($id)) {
             PublicAlert::danger('Failed to load the course!');

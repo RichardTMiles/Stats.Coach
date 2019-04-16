@@ -40,7 +40,7 @@ class Team extends GlobalMap
         if (!Teams::get($this->team[$team_id], $team_id, [])
             || empty($this->team[$team_id])) {
             PublicAlert::warning('Failed to lookup team id.');
-            return startApplication( 'Home/' );
+            return startApplication('Home/');
         }
 
         $json['imTheCoach'] = $_SESSION['id'] === $json['myTeam']['team_coach'];
@@ -49,41 +49,25 @@ class Team extends GlobalMap
             $id = $json['myTeam']['team_coach'];
             $json['myTeam']['team_coach'] = [];
             if (!Users::Get($json['myTeam']['team_coach'], $id, [])
-            || empty($json['myTeam']['team_coach'])) {
-                PublicAlert::danger('Failed to lookup team coach.');
-                return startApplication( 'Home/' );
-            }
-        }
-
-        $json['myTeam']['members']=[];
-
-        // get team members
-        if(!TeamMembers::get($json['myTeam']['members'], null, [
-            'where' => [
-                'team_id' => $team_id
-            ]
-        ])) {
-            PublicAlert::danger('Failed to lookup team members.');
-            return startApplication( 'Home/' );
-        }
-
-        foreach ($json['myTeam']['members'] as $key => &$value) {
-            $user = [];
-            if (!Users::Get($user, $value['user_id'], [])
                 || empty($json['myTeam']['team_coach'])) {
                 PublicAlert::danger('Failed to lookup team coach.');
-                return startApplication( 'Home/' );
+                return startApplication('Home/');
             }
-            $value = $user;
         }
+
+        $json['myTeam']['members'] = self::fetch('select user_first_name, user_last_name, HEX(carbon_users.user_id) as user_id, 
+       user_profile_pic, user_cover_photo, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts
+from carbon_users join carbon_team_members join carbon_teams join carbon_user_golf_stats
+                                  where carbon_teams.team_id = carbon_team_members.team_id 
+                                    and carbon_user_golf_stats.stats_id = carbon_users.user_id
+                                    and carbon_users.user_id = carbon_team_members.user_id
+                                    and carbon_teams.team_id = unhex(?)', $team_id);
 
         $json['myTeam']['memberCount'] = count($json['myTeam']['members']);
 
         $json['rounds'] = 2;
 
-       // sortDump($json);
-
-
+        // sortDump($json);
 
 
         return true;
@@ -99,11 +83,11 @@ class Team extends GlobalMap
     {
         if (!Teams::Post([
             'team_name' => $teamName,
-            'team_school'=> $schoolName,
+            'team_school' => $schoolName,
             'team_coach' => $_SESSION['id'],
-            'team_code' => Bcrypt::genRandomHex( 20 )
+            'team_code' => Bcrypt::genRandomHex(20)
         ])) {
-            throw new PublicAlert( 'Sorry, we we\'re unable to create your team at this time.' );
+            throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         }
 
         $return = [];
@@ -116,7 +100,7 @@ class Team extends GlobalMap
 
         self::commit();
 
-        PublicAlert::success( "We successfully created `$teamName`!" );
+        PublicAlert::success("We successfully created `$teamName`!");
 
         return startApplication(true);
     }
@@ -137,11 +121,11 @@ class Team extends GlobalMap
                 'limit' => 1
             ]
         ])) {
-            throw new PublicAlert( 'We failed to lookup the team. Please try again later.', 'warning' );
+            throw new PublicAlert('We failed to lookup the team. Please try again later.', 'warning');
         }
 
         if (empty($team)) {
-            throw new PublicAlert( 'The team code you provided appears to be invalid.', 'warning' );
+            throw new PublicAlert('The team code you provided appears to be invalid.', 'warning');
         }
 
         $member = [];
@@ -157,7 +141,7 @@ class Team extends GlobalMap
         }
 
         if (!empty($member)) {
-            throw new PublicAlert( 'It appears you are already a member of this team.', 'warning' );
+            throw new PublicAlert('It appears you are already a member of this team.', 'warning');
         }
 
         if (!TeamMembers::Post([
@@ -169,8 +153,8 @@ class Team extends GlobalMap
 
         self::commit();
 
-        PublicAlert::success( 'We successfully add you!' );
+        PublicAlert::success('We successfully add you!');
 
-        return startApplication( true );
+        return startApplication(true);
     }
 }

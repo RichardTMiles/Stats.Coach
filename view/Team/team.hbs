@@ -35,7 +35,7 @@
                         <h5 class="widget-user-desc">
                             {{^imTheCoach}}
                                 <i class="fa fa-fw fa-coffee"></i>
-                                <a style="color: #ffffff" href="/Profile/">Coach {{ myTeam.team_coach.user_last_name }}</a></h5>
+                                <a style="color: #ffffff" href="/Profile/{{myTeam.team_coach.user_id}}">Coach {{ myTeam.team_coach.user_last_name }}</a></h5>
                             {{/imTheCoach}}
                             {{#imTheCoach}}
                                 <i class="fa fa-fw fa-coffee"></i>
@@ -120,19 +120,19 @@
                                 <div class="box box-widget widget-user">
                                     <!-- Add the bg color to the header using any of the bg-* classes -->
                                     <div class="widget-user-header bg-black"
-                                         style="background: url('{{user_cover_photo}}') center center;">
+                                         style="background: url('{{user_cover_photo}}{{^user_cover_photo}}/view/img/Carbon-green.png{{/user_cover_photo}}') center center;">
                                         <h3 class="widget-user-username"></h3>
                                         <h5 class="widget-user-desc"></h5>
                                     </div>
                                     <div class="widget-user-image">
-                                        <img class="img-circle" src="{{user_profile_pic}}" alt="User Avatar">
+                                        <img class="img-circle" src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" alt="User Avatar">
                                     </div>
 
                                     <div class="box-footer">
                                         <div class="row">
                                             <div class="col-sm-4 border-right">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">12</h5>
+                                                    <h5 class="description-header">{{stats_ffs}}</h5>
                                                     <span class="description-text">FFS</span>
                                                 </div><!-- /.description-block -->
 
@@ -140,15 +140,15 @@
 
                                             <div class="col-sm-4 border-right">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">3</h5>
-                                                    <span class="description-text">Rounds</span>
+                                                    <h5 class="description-header">{{stats_putts}}</h5>
+                                                    <span class="description-text">PUTTS</span>
                                                 </div><!-- /.description-block -->
 
                                             </div><!-- /.col -->
 
                                             <div class="col-sm-4">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">16</h5>
+                                                    <h5 class="description-header">{{stats_gnr}}</h5>
                                                     <span class="description-text">GNR</span>
                                                 </div><!-- /.description-block -->
                                             </div><!-- /.col -->
@@ -191,7 +191,7 @@
                                 </div>
                                 <!-- /.progress-group -->
                                 <div class="progress-group">
-                                    <span class="progress-text">Send Inquiries</span>
+                                    <span class="progress-text">Other Goal</span>
                                     <span class="progress-number"><b>250</b>/500</span>
 
                                     <div class="progress sm">
@@ -209,40 +209,40 @@
                         <div class="row">
                             <div class="col-sm-3 col-xs-6">
                                 <div class="description-block border-right">
-                                <span class="description-percentage text-green"><i
-                                        class="fa fa-caret-up"></i> 17%</span>
-                                    <h5 class="description-header">230</h5>
-                                    <span class="description-text">Rounds</span>
+                                <!--span class="description-percentage text-green"><i
+                                        class="fa fa-caret-up"></i> 17%</span-->
+                                    <h5 class="description-header">{{stats_tournaments}}</h5>
+                                    <span class="description-text">Tournaments</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-xs-6">
                                 <div class="description-block border-right">
-                                <span class="description-percentage text-yellow"><i
-                                        class="fa fa-caret-left"></i> 0%</span>
-                                    <h5 class="description-header">32</h5>
-                                    <span class="description-text">Putts</span>
+                                <!--span class="description-percentage text-yellow"><i
+                                        class="fa fa-caret-left"></i> 0%</span-->
+                                    <h5 class="description-header">{{stats_handicap}}</h5>
+                                    <span class="description-text">Handicap</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-xs-6">
                                 <div class="description-block border-right">
-                                <span class="description-percentage text-green"><i
-                                        class="fa fa-caret-up"></i> 20%</span>
-                                    <h5 class="description-header">Profit</h5>
-                                    <span class="description-text">TOTAL PROFIT</span>
+                                <!--span class="description-percentage text-green"><i
+                                        class="fa fa-caret-up"></i> 20%</span-->
+                                    <h5 class="description-header">{{stats_strokes}}</h5>
+                                    <span class="description-text">Strokes</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-xs-6">
                                 <div class="description-block">
-                                <span class="description-percentage text-red"><i
-                                        class="fa fa-caret-down"></i> 18%</span>
-                                    <h5 class="description-header">1200</h5>
-                                    <span class="description-text">GOAL COMPLETIONS</span>
+                                <!--span class="description-percentage text-red"><i
+                                        class="fa fa-caret-down"></i> 18%</span-->
+                                    <h5 class="description-header">{{stats_rounds}}</h5>
+                                    <span class="description-text">Rounds</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>

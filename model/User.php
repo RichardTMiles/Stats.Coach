@@ -2,11 +2,12 @@
 
 namespace Model;
 
+use CarbonPHP\Session;
 use Model\Helpers\GlobalMap;
 
 
 use Tables\Carbon_User_Golf_Stats as Stats;
-use Tables\Carbon_Users as Users;
+use Tables\carbon_users as Users;
 use Tables\Carbon_User_Followers as Followers;
 use Tables\Carbon_User_Messages as Messages;
 
@@ -15,6 +16,7 @@ use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
 use CarbonPHP\Helpers\Serialized;
+use Tables\carbon_users;
 
 /**
  * Class User
@@ -373,6 +375,8 @@ class User extends GlobalMap
      */
     public function profile($user_uri)
     {
+        return null;
+
         if ($user_uri === 'DeleteAccount') {
             Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], []);
             Serialized::clear();
@@ -389,7 +393,7 @@ class User extends GlobalMap
             }
         }
 
-        carbon_users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
+        Users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
 
         if (empty($_POST)) {
             return null;
@@ -403,7 +407,7 @@ class User extends GlobalMap
 
         //throw new PublicAlert($first);
 
-        if (false === carbon_users::Put($my, $_SESSION['id'], [
+        if (false === Users::Put($my, $_SESSION['id'], [
             'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
             'user_first_name' => $first ?: $my['user_first_name'],
             'user_birthday' => $dob ?: $my['user_birthday'],
@@ -439,10 +443,12 @@ class User extends GlobalMap
             PublicAlert::success('Please check your email to activate your account!');
         } else {
             PublicAlert::success('Your account has been updated!');
+            PublicAlert::info('You may need to refresh the page to see all changes made.');
         }
-        startApplication('home/');
 
-        return true;
+        Session::update();
+
+        return startApplication('/');
     }
 
 }
