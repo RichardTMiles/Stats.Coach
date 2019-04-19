@@ -37,7 +37,6 @@ class User extends Request
 
         $UserImage = file_exists(SERVER_ROOT . $UserImage) ? SITE . $UserImage : false;
 
-
         $rememberMe = $this->post('RememberMe')->int();
 
         if (!$rememberMe) {
@@ -238,7 +237,7 @@ class User extends Request
 
         if (!$email) {
             PublicAlert::warning('Sorry the url submitted is invalid.');
-            return startApplication(true); // who knows what state we're in, best just restart.
+            return startApplication(true);
         }
         return [$email, $email_code];
     }
