@@ -92,6 +92,10 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(3000);//10 seconds
 
+        $this->byClassName('icheckbox_square-blue')->click();
+
+        $this->timeouts()->implicitWait(3000);//10 seconds
+
         $register->click();
 
         sleep(10);
@@ -122,7 +126,61 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         // submit the form
         $form->submit();
 
+
         sleep(10);
+
+
+    }
+
+    public function testPostScores()
+    {
+
+        $this->testLogin();
+
+        $this->byId('postScoreHeader')->click();
+
+       // $this->byId('select2-uzdm-container')->click();
+
+        sleep(5);
+
+
+        $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Alaska');
+
+        sleep(2);
+
+        $this->select($this->byId('course'))->selectOptionByValue('Add');
+
+
+        sleep(10);
+
+        $this->byName( 'c_name' )->value( 'Lake Park' );
+        sleep(2);
+        $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
+        $this->select($this->byId('course_play'))->selectOptionByValue('9');
+
+        $this->byId( 'phone' )->value( '2145551234' );
+        $this->byName( 'c_street' )->value( '6 Lake Park Rd, TX 75057' );
+        $this->byName( 'c_city' )->value( 'Lewisville' );
+        $this->select($this->byId('state'))->selectOptionByValue('California');
+        $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
+        $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
+        $this->byId('next')->click();
+        sleep(10);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

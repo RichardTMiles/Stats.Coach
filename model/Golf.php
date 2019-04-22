@@ -14,7 +14,7 @@ use Tables\carbon_team_members as members;
 use Tables\carbon_teams as teams;
 use Tables\carbon_user_golf_stats as stats;
 use Tables\carbon_users as Users;
-use Tables\golf_rounds;
+use Tables\carbon_golf_rounds;
 
 class Golf extends GlobalMap implements iSport
 {
@@ -472,7 +472,7 @@ class Golf extends GlobalMap implements iSport
                     'course_access' => $access,
                     'course_handicap' => []
                 ]) &&
-                carbon_locations::Put($json['course']['location'], $id, [
+                Location::Put($json['course']['location'], $id, [
                     'entity_id' => $json['course']['course_id'],
                     'city' => $city,
                     'street' => $street,
@@ -504,7 +504,7 @@ class Golf extends GlobalMap implements iSport
                     'course_par' => [],
                     'course_handicap' => []
                 ])) &&
-                carbon_locations::Post([
+                Location::Post([
                     'entity_id' => $id,
                     'city' => $city,
                     'street' => $street,
