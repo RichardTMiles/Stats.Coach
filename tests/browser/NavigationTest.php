@@ -51,14 +51,15 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-        $user = $this->byName( 'username' )->value('Username');
-        $pass = $this->byName( 'password' )->value('Password');
-        $submit = $this->byName( 'signin' )->value('Sign In');
+        $user = $this->byName( 'username' )->value('Test Username');
+        $pass = $this->byName( 'password' )->value('Test Password');
+        //$submit = $this->byName( 'signin' )->value('Sign In');
 
+        sleep(10);
         // test that input above was a
-        $this->assertEquals( 'Username', $user->value() );
-        $this->assertEquals( 'Password', $pass->value() );
-        $this->assertEquals( 'Sign In', $submit->value() );
+        $this->assertEquals( 'Test Username', $user->value() );
+        $this->assertEquals( 'Test Password', $pass->value() );
+       // $this->assertEquals( 'Sign In', $submit->value() );
 
     }
 

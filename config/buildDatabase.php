@@ -11,6 +11,9 @@
  *
  */
 
+
+echo 'hwewe'; die;
+
 print '<h1>Setting up CarbonPHP</h1>';
 
 $db = \CarbonPHP\Database::database();
