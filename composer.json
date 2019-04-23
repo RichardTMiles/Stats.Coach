@@ -29,7 +29,7 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-Reacting#ef357e56fe47aa38269bc9667cf1c1045f6bea14-dev",
+    "richardtmiles/carbonphp" : "dev-StatsCoach#c73128ac3a0cbd68d7310dd9c3e91ac0c94704a2-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": "^4.1"
   },
