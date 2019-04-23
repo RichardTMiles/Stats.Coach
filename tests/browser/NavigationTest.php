@@ -121,13 +121,13 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byName( 'password' )->value( 'adminadmin' );
 
-        sleep(10);
+        sleep(5);
 
         // submit the form
         $form->submit();
 
 
-        sleep(10);
+        sleep(3);
 
 
     }
@@ -170,19 +170,31 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
 
 
+    }
 
 
+    public function testCreateTeam()
+    {
+        $this->testLogin();
+        $this->byId('navMenu')->click();
+        $this->byId('createTeamLink')->click();
+        $this->byName('teamName')->value('Ateam');
+        $this->byName('schoolName')->value('southlake');
+        sleep(3);
+        $this->byId('teamSubmit')->click();
+        sleep(10);
+    }
 
-
-
-
-
-
-
-
-
-
-
+    public function testDeleteAccount()
+    {
+        $this->testLogin();
+        $this->byId('navUserTopRightUserImage')->click();
+        $this->byId('navTopRightUserDropdownProfile')->click();
+        sleep(1);
+        $this->byId('profileDeleteButton')->click();
+        sleep(1);
+        $this->byId('confirmDeleteButton')->click();
+        sleep(10);
     }
 
 }

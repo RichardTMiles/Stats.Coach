@@ -375,7 +375,6 @@ class User extends GlobalMap
      */
     public function profile($user_uri)
     {
-        return null;
 
         if ($user_uri === 'DeleteAccount') {
             Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], []);
