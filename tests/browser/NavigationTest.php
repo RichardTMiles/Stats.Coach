@@ -170,8 +170,6 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         sleep(10);
 
 
-
-
     }
 
 
