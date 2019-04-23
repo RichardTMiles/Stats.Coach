@@ -121,7 +121,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byName( 'password' )->value( 'adminadmin' );
 
-        sleep(10);
+        sleep(2);
 
         // submit the form
         $form->submit();
@@ -165,7 +165,15 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
         $this->byId('next')->click();
+        sleep(3);
+
+        $this->select($this->byName('general_difficulty'))->ByValue('13.2');
+        //$this->select($this->byClassName('knob'))->selectOptionByValue('13.2');
+
         sleep(10);
+
+
+
 
 
 
