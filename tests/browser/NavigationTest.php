@@ -127,7 +127,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $form->submit();
 
 
-        sleep(10);
+        sleep(3);
 
 
     }
@@ -153,6 +153,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         sleep(10);
 
+        $this->byName( 'c_name' )->value( '' );
         $this->byName( 'c_name' )->value( 'Lake Park' );
         sleep(2);
         $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
@@ -175,22 +176,31 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
 
 
+    }
 
 
+    public function testCreateTeam()
+    {
+        $this->testLogin();
+        $this->byId('navMenu')->click();
+        $this->byId('createTeamLink')->click();
+        $this->byName('teamName')->value('Ateam');
+        $this->byName('schoolName')->value('southlake');
+        sleep(3);
+        $this->byId('teamSubmit')->click();
+        sleep(10);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public function testDeleteAccount()
+    {
+        $this->testLogin();
+        $this->byId('navUserTopRightUserImage')->click();
+        $this->byId('navTopRightUserDropdownProfile')->click();
+        sleep(1);
+        $this->byId('profileDeleteButton')->click();
+        sleep(1);
+        $this->byId('confirmDeleteButton')->click();
+        sleep(10);
     }
 
 }

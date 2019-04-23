@@ -8,7 +8,13 @@
 -->
 
 <script>
-    Carbon(() => {
+    function resetInput() {
+        alert('reset')
+        $('#c_name').attr('value', '')
+        alert($('#c_name').val());
+    }
+
+    Carbon(()=>{
         $('#datepicker').load_datepicker();
         $('.knob').load_knob();                // were pre loading
         $('.timepicker').load_timepicker();
@@ -83,9 +89,9 @@
                 <!-- text input -->
                 <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
-                    <div class="form-group col-xs-12 col-md-12" id="c_name">
+                    <div class="form-group col-xs-12 col-md-12">
                         <label for="c_name">Course</label>
-                        <input type="text" class="form-control " placeholder="Course Name" name="c_name"
+                        <input id="c_name" type="text" class="form-control " placeholder="Course Name" name="c_name"
                                value="{{#course}}{{course_name}}{{/course}}">
                     </div>
                     <!-- Type of Course -->
@@ -225,7 +231,7 @@
             </div>
 
             <div class="box-footer">
-                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="reset" class="btn btn-default" onclick="resetInput()">Reset</button>
                 <!-- button -->
                 <button id="next" class="btn btn-info pull-right" type="submit">Next >></button>
             </div>
@@ -233,6 +239,5 @@
         </div>
 
     </form>
-
-
 </section>
+

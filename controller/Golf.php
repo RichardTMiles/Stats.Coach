@@ -381,10 +381,5 @@ class Golf extends Request  // Validation
     }
 
 
-    public function AddCourseDistance($state)
-    {
-
-        return
-    }
 
 }
