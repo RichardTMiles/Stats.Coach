@@ -67,6 +67,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
     public function testRegister() {
         $this->url('/');
 
+
         $this->assertEquals(SITE_TITLE, $this->title());
 
         $link = $this->byLinkText('Register a new membership');
@@ -90,6 +91,10 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->byName( 'password2' )->value( 'adminadmin' );
 
         $this->select($this->byName('gender'))->selectOptionByValue('male');
+
+        $this->timeouts()->implicitWait(3000);//10 seconds
+
+        $this->byClassName('icheckbox_square-blue')->click();
 
         $this->timeouts()->implicitWait(3000);//10 seconds
 
@@ -118,14 +123,80 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byName( 'password' )->value( 'adminadmin' );
 
-        sleep(10);
+        sleep(5);
 
         // submit the form
         $form->submit();
 
+
+        sleep(3);
+
+
+    }
+
+    public function testPostScores()
+    {
+
+        $this->testLogin();
+
+        $this->byId('postScoreHeader')->click();
+
+       // $this->byId('select2-uzdm-container')->click();
+
+        sleep(5);
+
+
+        $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Alaska');
+
+        sleep(2);
+
+        $this->select($this->byId('course'))->selectOptionByValue('Add');
+
+
+        sleep(10);
+
+        $this->byName( 'c_name' )->value( 'Lake Park' );
+        sleep(2);
+        $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
+        $this->select($this->byId('course_play'))->selectOptionByValue('9');
+
+        $this->byId( 'phone' )->value( '2145551234' );
+        $this->byName( 'c_street' )->value( '6 Lake Park Rd, TX 75057' );
+        $this->byName( 'c_city' )->value( 'Lewisville' );
+        $this->select($this->byId('state'))->selectOptionByValue('California');
+        $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
+        $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
+        $this->byId('next')->click();
         sleep(10);
 
 
+
+
+    }
+
+
+    public function testCreateTeam()
+    {
+        $this->testLogin();
+        $this->byId('navMenu')->click();
+        $this->byId('createTeamLink')->click();
+        $this->byName('teamName')->value('Ateam');
+        $this->byName('schoolName')->value('southlake');
+        sleep(3);
+        $this->byId('teamSubmit')->click();
+        sleep(10);
+    }
+
+    public function testDeleteAccount()
+    {
+        $this->testLogin();
+        $this->byId('navUserTopRightUserImage')->click();
+        $this->byId('navTopRightUserDropdownProfile')->click();
+        sleep(1);
+        $this->byId('profileDeleteButton')->click();
+        sleep(1);
+        $this->byId('confirmDeleteButton')->click();
+        sleep(10);
     }
 
 }

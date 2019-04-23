@@ -123,9 +123,9 @@
                 <!-- User Account: style can be found in dropdown.less -->
 
                 <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a id="navUserTopRightUserImage" ref="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">{{my.user_first_last}}</span>
+                        <span class="hidden-xs">{{ my.user_first_name }} {{ my.user_last_name }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -151,7 +151,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="/Profile/" class="btn btn-default btn-flat">Profile</a>
+                                <a id="navTopRightUserDropdownProfile" href="/Profile/" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
@@ -231,11 +231,16 @@
                     <i class="fa fa-edit"></i><span>Post Score</span>
                 </a>
             </li>
+            <li>
+                <a href="/AddCourse/Basic">
+                    <i class="fa fa-plus-square"></i><span>Add Courses</span>
+                </a>
+            </li>
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 {{#my.teams}}
-                    <ul class="treeview-menu">
+                        <ul class="treeview-menu">
                         <li class="treeview menu-open">
                             <a href="/Team/{{team_id}}/"><i
                                     class="fa fa-circle-o"></i>

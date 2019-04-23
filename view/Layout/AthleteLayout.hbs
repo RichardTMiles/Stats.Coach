@@ -13,9 +13,9 @@
                 <ul class="nav navbar-nav">
                     <!-- class="active" -->
                     <li>
-                        <a href="/PostScore/Basic/">Post Score</a></li>
+                        <a id="postScoreHeader" href="/PostScore/Basic/">Post Score</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
+                        <a id ="navMenu" class="dropdown-toggle" data-toggle="dropdown">Menu<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             {{#my}}
                                 {{#teams}}
@@ -23,8 +23,8 @@
                                 {{/teams}}
                                 <li class="divider"></li>
                             {{/my}}
-                            <li><a href="/JoinTeam/">Join a Team</a></li>
-                            <li><a href="/CreateTeam/">Create Team</a></li>
+                            <li><a id="joinTeamLink" href="/JoinTeam/">Join a Team</a></li>
+                            <li><a id="createTeamLink" href="/CreateTeam/">Create Team</a></li>
                             <li class="divider"></li>
                             <li><a href="/Messages/">Messages</a></li>
                             <li class="divider"></li>
@@ -146,6 +146,8 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
+                            <span class="hidden-xs">{{ my.user_first_name }} {{ my.user_last_name }}</span>
+
                             <span class="hidden-xs">{{my.user_first_last}}</span>
                         </a>
                         <ul class="dropdown-menu">
