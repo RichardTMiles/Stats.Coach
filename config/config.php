@@ -51,7 +51,7 @@ return [
 
         'REPLY_EMAIL' => 'support@carbonphp.com',
 
-        'HTTP' => true   // I assume that HTTP is okay by default
+        'HTTP' => false   // I assume that HTTP is okay by default
     ],
 
     'SESSION' => [
@@ -81,7 +81,7 @@ return [
                     if (false === Tables\carbon_users::Get($my, $_SESSION['id'], []) ||
                         empty($my)) {
                         $_SESSION['id'] = false;
-                        \CarbonPHP\Error\PublicAlert::danger('Failed to user.');
+                        \CarbonPHP\Error\PublicAlert::danger('Failed get to user restful api failed.');
                     }
 
                     if (empty($user[$id]['user_profile_pic']) || $user[$id]['user_profile_pic'] === null) {
