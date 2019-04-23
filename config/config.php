@@ -117,13 +117,15 @@ return [
 
     /*          TODO - finish building php websockets          */
     'SOCKET' => [
-        'WEBSOCKETD' => false,  // if you'd like to use web
+        'WEBSOCKETD' => true,  // if you'd like to use web
         'PORT' => 8888,
         'DEV' => true,
+        /*
         'SSL' => [
             'KEY' => '',
             'CERT' => ''
         ]
+        */
     ],
 
     // ERRORS on point
