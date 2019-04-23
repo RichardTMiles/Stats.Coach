@@ -62,7 +62,7 @@
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
                 {{^myAccountBool}}
-                    <div class="box box-success direct-chat direct-chat-success"></div>
+                    <div id="direct-chat" class="box box-success direct-chat direct-chat-success"></div>
                 {{/myAccountBool}}
                 <!-- DIRECT CHAT SUCCESS -->
 
@@ -268,7 +268,7 @@
     <script>Carbon(() => {
         $('#datepicker').load_datepicker();
         {{^myAccountBool}}
-            carbon.startApplication('/Messages/{{user_id}}/');
+            carbon.startApplication('/Messages/{{user_id}}/', '#direct-chat');
         {{/myAccountBool}}
     })</script>
 
