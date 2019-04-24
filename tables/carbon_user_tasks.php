@@ -39,16 +39,23 @@ class carbon_user_tasks extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,36 +70,51 @@ class carbon_user_tasks extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('task_id', $argv)) {
-            $task_id = $argv['task_id'];
-            $stmt->bindParam(':task_id',$task_id, 2, 16);
-        }
-        if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
-        }
-        if (array_key_exists('from_id', $argv)) {
-            $from_id = $argv['from_id'];
-            $stmt->bindParam(':from_id',$from_id, 2, 16);
-        }
-        if (array_key_exists('task_name', $argv)) {
-            $task_name = $argv['task_name'];
-            $stmt->bindParam(':task_name',$task_name, 2, 40);
-        }
-        if (array_key_exists('task_description', $argv)) {
-            $task_description = $argv['task_description'];
-            $stmt->bindParam(':task_description',$task_description, 2, 225);
-        }
-        if (array_key_exists('percent_complete', $argv)) {
-            $percent_complete = $argv['percent_complete'];
-            $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
-        }
-        if (array_key_exists('start_date', $argv)) {
-            $stmt->bindValue(':start_date',$argv['start_date'], 2);
-        }
-        if (array_key_exists('end_date', $argv)) {
-            $stmt->bindValue(':end_date',$argv['end_date'], 2);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'task_id':
+                        $task_id = $argv['task_id'];
+                        $stmt->bindParam(':task_id',$task_id, 2, 16);
+                    break;
+                   case 'user_id':
+                        $user_id = $argv['user_id'];
+                        $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    break;
+                   case 'from_id':
+                        $from_id = $argv['from_id'];
+                        $stmt->bindParam(':from_id',$from_id, 2, 16);
+                    break;
+                   case 'task_name':
+                        $task_name = $argv['task_name'];
+                        $stmt->bindParam(':task_name',$task_name, 2, 40);
+                    break;
+                   case 'task_description':
+                        $task_description = $argv['task_description'];
+                        $stmt->bindParam(':task_description',$task_description, 2, 225);
+                    break;
+                   case 'percent_complete':
+                        $percent_complete = $argv['percent_complete'];
+                        $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
+                    break;
+                   case 'start_date':
+                        $stmt->bindValue(':start_date',$argv['start_date'], 2);
+                    break;
+                   case 'end_date':
+                        $stmt->bindValue(':end_date',$argv['end_date'], 2);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

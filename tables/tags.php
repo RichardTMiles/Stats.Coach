@@ -39,16 +39,23 @@ class tags extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,16 +70,31 @@ class tags extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('tag_id', $argv)) {
-            $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
-        }
-        if (array_key_exists('tag_description', $argv)) {
-            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
-        }
-        if (array_key_exists('tag_name', $argv)) {
-            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'tag_id':
+                        $tag_id = $argv['tag_id'];
+                        $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                    break;
+                   case 'tag_description':
+                        $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+                    break;
+                   case 'tag_name':
+                        $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

@@ -64,13 +64,20 @@ class Messages extends GlobalMap
         return $json;
     }
 
-    public function chat($user_id)
+    public function chat($user_id, $message = false)
     {
-        global $json;
+        global $json, $user;
 
         $this->user[$user_id] = [];
 
-        if (false === Users::get($this->user[$user_id], $user_id, [])) {
+        if (false === Users::get($this->user[$user_id], $user_id, [
+                'select' => [
+                    'user_id',
+                    'user_first_name',
+                    'user_last_name',
+                    'user_profile_pic',
+                ]
+            ])) {
             throw new PublicAlert('Failed to get restful user in chat.');
         }
 
@@ -80,24 +87,6 @@ class Messages extends GlobalMap
 
         $this->user[$user_id]['messages'] = [];
 
-        if (!empty($_POST) && !empty($string = $this->post('message')->noHTML()->value())) {
-            Message::Post($this->user[$user_id]['messages'], $user_id, $string);
-        }     // else were grabbing content (json, html, etc)
-
-        Message::get($this->user[$user_id]['messages'], $user_id, [
-            'where' => [
-                [
-                    'to_user_id' => $_SESSION['id'],
-                    'from_user_id' => $user_id
-                ],
-                [
-                    'to_user_id' => $user_id,
-                    'from_user_id' => $_SESSION['id'],
-                ],
-            ]
-        ]);
-
-
         $json = array_merge($json, [
             'Widget' => '.direct-chat',
             'scroll' => '#messages',
@@ -105,12 +94,45 @@ class Messages extends GlobalMap
             'scrollTo' => 'bottom'
         ]);
 
-        foreach ($this->user[$user_id]['messages'] as $key => $message) {
+        if ($message && !$json['message_id'] = Message::Post([
+                'from_user_id' => $_SESSION['id'],
+                'to_user_id' => $user_id,
+                'message' => $message
+            ]) && !self::commit(function(){
+                // toDO - find the message notifications
+                #self::sendUpdate($user_id, '');
+
+                return true;
+            })) {
+            PublicAlert::warning('Failed to send message :( Please try again later');
+            return null;
+        }     // else were grabbing content (json, html, etc)
+
+        Message::get($this->user[$user_id]['messages'], null, [
+            'where' => [
+                [
+                    [
+                        'to_user_id' => $_SESSION['id'],
+                        'from_user_id' => $user_id,
+                    ]
+                ],
+                [
+                    [
+                        'to_user_id' => $user_id,
+                        'from_user_id' => $_SESSION['id'],
+                    ]
+
+                ],
+            ]
+        ]);
+
+        // this is rough, but it needs to get formatted for mustache templates
+        foreach ($user[$user_id]['messages'] as $key => $message) {
             $json['Messages'][] = [
-                'me' => $message['user_id'] == $_SESSION['id'],
-                'first_name' => $user[$message['user_id']]['user_first_name'],
-                'user_profile_picture' => $user[$message['user_id']]['user_profile_pic'],
-                'creation_date' => date("F j, Y, g:i a", $message['creation_date']),
+                'me' => $message['from_user_id'] === $_SESSION['id'],
+                'first_name' => $user[$message['to_user_id']]['user_first_name'],
+                'user_profile_picture' => $user[$message['to_user_id']]['user_profile_pic'],
+                'creation_date' => $message['creation_date'], //date("F j, Y, g:i a", $message['creation_date']),
                 'message' => $message['message']
             ];
         }

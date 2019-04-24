@@ -39,16 +39,23 @@ class carbon_golf_tournament_teams extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,22 +70,37 @@ class carbon_golf_tournament_teams extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('team_id', $argv)) {
-            $team_id = $argv['team_id'];
-            $stmt->bindParam(':team_id',$team_id, 2, 16);
-        }
-        if (array_key_exists('tournament_id', $argv)) {
-            $tournament_id = $argv['tournament_id'];
-            $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
-        }
-        if (array_key_exists('tournament_paid', $argv)) {
-            $tournament_paid = $argv['tournament_paid'];
-            $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
-        }
-        if (array_key_exists('tournament_accepted', $argv)) {
-            $tournament_accepted = $argv['tournament_accepted'];
-            $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'team_id':
+                        $team_id = $argv['team_id'];
+                        $stmt->bindParam(':team_id',$team_id, 2, 16);
+                    break;
+                   case 'tournament_id':
+                        $tournament_id = $argv['tournament_id'];
+                        $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
+                    break;
+                   case 'tournament_paid':
+                        $tournament_paid = $argv['tournament_paid'];
+                        $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
+                    break;
+                   case 'tournament_accepted':
+                        $tournament_accepted = $argv['tournament_accepted'];
+                        $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

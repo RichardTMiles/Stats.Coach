@@ -37,6 +37,8 @@ class Messages extends Request
             return null;
         }
 
-        return $user_id;
+        $message = $this->post('message')->noHTML()->value();
+
+        return [$user_id, $message];
     }
 }

@@ -397,13 +397,11 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-        if (true !== $user_uri) {   // an actual user id
-            global $user_id;
-            $user_id = Users::user_id_from_uri($user_uri);
-            if (!empty($user_id) && $user_id !== $_SESSION['id']) {
-                new User($user_id);
-                return true;
-            }
+        if (true !== $user_uri) {   // !! an actual user id
+            global $json, $user;
+            getUser($user_uri);
+            $json['my'] = $user[$user_uri];
+            return true;
         }
 
         Users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);

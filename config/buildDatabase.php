@@ -406,7 +406,7 @@ CREATE TABLE `carbon_teams` (
   KEY `teams_teams_team_id_fk` (`parent_team`),
   CONSTRAINT `teams_entity_coach_pk_fk` FOREIGN KEY (`team_coach`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_entity_entity_pk_fk` FOREIGN KEY (`team_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `carbon_photos` (`photo_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `CarbonPHP`.`carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_teams_team_id_fk` FOREIGN KEY (`parent_team`) REFERENCES `carbon_teams` (`team_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -487,12 +487,12 @@ END;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `carbon_user_messages` (
-  `message_id` binary(16) DEFAULT NULL,
+  `message_id` binary(16) NOT NULL,
   `from_user_id` binary(16) NOT NULL,
   `to_user_id` binary(16) NOT NULL,
   `message` text NOT NULL,
   `message_read` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`to_user_id`),
+  PRIMARY KEY (`message_id`),
   KEY `messages_entity_entity_pk_fk` (`message_id`),
   KEY `messages_entity_user_from_pk_fk` (`to_user_id`),
   KEY `carbon_user_messages_carbon_entity_pk_fk` (`from_user_id`),
@@ -664,7 +664,7 @@ END;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
   `user_id` binary(16) NOT NULL,
-  `user_ip` binary(16) DEFAULT NULL,
+  `user_ip` varchar(20) DEFAULT NULL,
   `session_id` varchar(255) NOT NULL,
   `session_expires` datetime NOT NULL,
   `session_data` text,

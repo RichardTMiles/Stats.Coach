@@ -28,11 +28,13 @@ class StatsCoach extends Application
      */
     public function __construct($structure = null)
     {
-        global $json;
+        global $json, $user;
 
         if (!\is_array($json)) {
             $json = array();
         }
+
+        $json['user'] = &$user;
         $json['SITE'] = SITE;
         $json['POST'] = $_POST;
         $json['HTTP'] = HTTP;

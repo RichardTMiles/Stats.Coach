@@ -39,16 +39,23 @@ class carbon_comments extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,21 +70,36 @@ class carbon_comments extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('parent_id', $argv)) {
-            $parent_id = $argv['parent_id'];
-            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
-        }
-        if (array_key_exists('comment_id', $argv)) {
-            $comment_id = $argv['comment_id'];
-            $stmt->bindParam(':comment_id',$comment_id, 2, 16);
-        }
-        if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
-        }
-        if (array_key_exists('comment', $argv)) {
-            $stmt->bindValue(':comment',$argv['comment'], 2);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'parent_id':
+                        $parent_id = $argv['parent_id'];
+                        $stmt->bindParam(':parent_id',$parent_id, 2, 16);
+                    break;
+                   case 'comment_id':
+                        $comment_id = $argv['comment_id'];
+                        $stmt->bindParam(':comment_id',$comment_id, 2, 16);
+                    break;
+                   case 'user_id':
+                        $user_id = $argv['user_id'];
+                        $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    break;
+                   case 'comment':
+                        $stmt->bindValue(':comment',$argv['comment'], 2);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
