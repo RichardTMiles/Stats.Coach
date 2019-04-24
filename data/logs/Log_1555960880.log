@@ -1,0 +1,20 @@
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S22",1054,"Unknown column 'from_user_id' in 'field list'"]}]
+
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S22",1054,"Unknown column 'from_user_id' in 'field list'"]}]
+
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S22",1054,"Unknown column 'from_user_id' in 'field list'"]}]
+
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S22",1054,"Unknown column 'from_user_id' in 'field list'"]}]
+

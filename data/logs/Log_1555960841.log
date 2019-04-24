@@ -1,0 +1,61 @@
+(set_error_handler || set_exception_handler) caught this error. #Bubbled up#
+
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'from_user_id' in 'field list'
+
+
+	1)  /Users/KristinCarden/Stats.Coach/index.php (47): CarbonPHP\CarbonPHP::run ('App\\StatsCoach')
+				["App\\StatsCoach"]
+
+	2)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/CarbonPHP.php (115): CarbonPHP\CarbonPHP::startApplication (false)
+				[false]
+
+	3)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/CarbonPHP.php (105): App\StatsCoach->startApplication ('Register')
+				["Register"]
+
+	4)  /Users/KristinCarden/Stats.Coach/StatsCoach.php (103): CarbonPHP\Route->match ('Register/*', 'User', 'Register')
+				["Register\/*","User","Register"]
+
+	5)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Route.php (190): App\StatsCoach->CarbonPHP\{closure} ('User', 'Register', true)
+				["User","Register",true]
+
+	6)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Application.php (166): CarbonPHP\Application::ControllerModelView ('User', 'register', true)
+				["User","register",true]
+
+	7)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Application.php (137): CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} ()
+				[]
+
+	8)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/error/ErrorCatcher.php (52): CarbonPHP\Application::CarbonPHP\{closure} ()
+				[]
+
+	9)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Application.php (90): CarbonPHP\Application::CarbonPHP\{closure} ('Model\\User', Array)
+				["Model\\User",[true]]
+
+	10)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Application.php (80): Model\User->register (true)
+				[true]
+
+	11)  /Users/KristinCarden/Stats.Coach/model/User.php (259): startApplication ('home/')
+				["home\/"]
+
+	12)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/helpers/Application.php (40): CarbonPHP\CarbonPHP::startApplication (true)
+				[true]
+
+	13)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/CarbonPHP.php (94): CarbonPHP\Session::update (true)
+				[true]
+
+	14)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Session.php (139): CarbonPHP\CarbonPHP::{closure} (true)
+				[true]
+
+	15)  /Users/KristinCarden/Stats.Coach/config/config.php (110): Tables\carbon_user_messages::Get (Array, NULL, Array)
+				[[],null,{"where":{"to_user_id":"b7961c58653311e9b9a941aa92da9042"}}]
+
+	16)  /Users/KristinCarden/Stats.Coach/tables/carbon_user_messages.php (217): Tables\carbon_user_messages::bind (Object (PDOStatement), Array)
+				[{"queryString":"SELECT HEX(message_id) as message_id, HEX(from_user_id) as from_user_id, HEX(to_user_id) as to_user_id, message, message_read FROM StatsCoach.carbon_user_messages WHERE ((to_user_id = UNHEX(:to_user_id))) ORDER BY to_user_id ASC LIMIT 100"},{"to_user_id":"b7961c58653311e9b9a941aa92da9042"}]
+
+	17)  /Users/KristinCarden/Stats.Coach/tables/carbon_user_messages.php (90): PDOStatement->execute ()
+				[]
+
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S22",1054,"Unknown column 'from_user_id' in 'field list'"]}]
+

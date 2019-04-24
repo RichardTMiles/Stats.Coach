@@ -1,0 +1,10 @@
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S02",1146,"Table 'statscoach.carbon_user_messages' doesn't exist"]}]
+
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (Object (PDOException))
+				[{"errorInfo":["42S02",1146,"Table 'statscoach.carbon_user_messages' doesn't exist"]}]
+
