@@ -15,7 +15,7 @@ function getUser($id = false)
     global $user;
 
     if ($id === false) {
-        throw new \CarbonPHP\Error\PublicAlert('nothing passed to getUser');
+        throw new \CarbonPHP\Error\PublicAlert('No arguments to getUser.');
     }
 
     if (!is_array($user)) {
@@ -63,6 +63,8 @@ function getUser($id = false)
             'to_user_id' => $id
         ]
     ]);
+
+    return true;
 }
 
 return [
@@ -88,8 +90,8 @@ return [
 
         'CACHE_CONTROL' => [
             'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
-            'jpg|jpeg|png|gif|swf|xml|txt|css|js|woff2|tff' => 'Cache-Control: max-age=604800, public',
-            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
+            'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff' => 'Cache-Control: max-age=604800, public',
+            'html|htm|php|hbs|css|js' => 'Cache-Control: max-age=0, private, public',
         ],
 
         'CONFIG' => __FILE__,      // Send to sockets

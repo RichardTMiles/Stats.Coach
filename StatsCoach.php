@@ -108,25 +108,40 @@ class StatsCoach extends Application
             }
         } else {
             // Event
-            if (((AJAX && PJAX) || SOCKET) && (
-                    $this->match('Search/{search}/', 'Search', 'all')() ||
+            if ((AJAX && PJAX) || SOCKET) {
+
+                // So in this we know we're looking for a json responce regardless of the
+                // if startApplication(true) is called again with === true passed in, the
+                // force wrapper will be set to true
+
+                global $alert, $json;
+
+                $json['user-layout'] = 'Json Method Removed';   // TODO - this could break things if we start app and
+                $json['body-layout'] = 'Json Method Removed';
+                $json['header'] = 'Json Method Removed';
+
+                if ($this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('Messages/', 'Messages', 'navigation')() ||
-                    $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||    // chat box widget
+                    $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||
                     $this->structure($this->JSON())->match('Follow/{user_id}/', 'User', 'follow')() ||
-                    $this->match('Unfollow/{user_id}/', 'User', 'unfollow')())) {
-                return true;         // Event
+                    $this->match('Unfollow/{user_id}/', 'User', 'unfollow')() ||
+                    $this->structure($this->JSON('#NavNotifications'))->match('Notifications/*', 'notifications', 'notifications')() ||
+                    $this->structure($this->JSON('#NavTasks'))->match('tasks/*', 'tasks', 'tasks')() ||
+                    $this->structure($this->JSON('.direct-chat'))->match('Messages/{user_uri}/', 'Messages', 'chat')()
+                ) {
+                    return true;         // Event
+                }
+                if (SOCKET) {
+                    return false;
+                }
             }
 
-            // $url->match('Notifications/*', 'notifications/notifications', ['widget' => '#NavNotifications']);
 
-            // $url->match('tasks/*', 'tasks/tasks', ['widget' => '#NavTasks']);
 
-            if (SOCKET) {
-                return false;
-            }                // Sockets only get json
 
             ################################### MVC
             $this->structure($this->MVC());
+
 
             ################################### Golf Stuff + User
 

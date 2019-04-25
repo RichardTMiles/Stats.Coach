@@ -9,11 +9,11 @@ use CarbonPHP\Interfaces\iRest;
 class carbon_user_followers extends Database implements iRest
 {
     public const PRIMARY = [
-    'follows_user_id',
+    'follower_table_id',
     ];
 
     public const COLUMNS = [
-        'follows_user_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],
+        'follower_table_id' => [ 'binary', '2', '16' ],'follows_user_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],
     ];
 
     public const VALIDATION = [];
@@ -80,6 +80,10 @@ class carbon_user_followers extends Database implements iRest
                 }
                 switch ($key) {
                 
+                   case 'follower_table_id':
+                        $follower_table_id = $argv['follower_table_id'];
+                        $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+                    break;
                    case 'follows_user_id':
                         $follows_user_id = $argv['follows_user_id'];
                         $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
@@ -173,12 +177,12 @@ class carbon_user_followers extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'follows_user_id ASC';
+                    $order .= 'follower_table_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY follows_user_id ASC LIMIT 100';
+            $limit = ' ORDER BY follower_table_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -196,7 +200,7 @@ class carbon_user_followers extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |follows_user_id|user_id))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |follower_table_id|follows_user_id|user_id))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -212,7 +216,7 @@ class carbon_user_followers extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  follows_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -256,15 +260,18 @@ class carbon_user_followers extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_followers (follows_user_id, user_id) VALUES ( UNHEX(:follows_user_id), UNHEX(:user_id))';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_followers (follower_table_id, follows_user_id, user_id) VALUES ( UNHEX(:follower_table_id), UNHEX(:follows_user_id), UNHEX(:user_id))';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $follows_user_id = $id = $argv['follows_user_id'] ?? self::beginTransaction('carbon_user_followers');
-                $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                $follower_table_id = $id = $argv['follower_table_id'] ?? self::fetchColumn('SELECT (REPLACE(UUID() COLLATE utf8_unicode_ci,"-",""))')[0];
+                $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
                 
+                    $follows_user_id = $argv['follows_user_id'];
+                    $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                        
                     $user_id = $argv['user_id'];
                     $stmt->bindParam(':user_id',$user_id, 2, 16);
         
@@ -299,6 +306,9 @@ class carbon_user_followers extends Database implements iRest
 
         $set = '';
 
+            if (array_key_exists('follower_table_id', $argv)) {
+                $set .= 'follower_table_id=UNHEX(:follower_table_id),';
+            }
             if (array_key_exists('follows_user_id', $argv)) {
                 $set .= 'follows_user_id=UNHEX(:follows_user_id),';
             }
@@ -314,7 +324,7 @@ class carbon_user_followers extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  follows_user_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -338,6 +348,37 @@ class carbon_user_followers extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE FROM StatsCoach.carbon_user_followers ';
+
+        $pdo = self::database();
+
+        if (null === $primary) {
+        /**
+        *   While useful, we've decided to disallow full
+        *   table deletions through the rest api. For the
+        *   n00bs and future self, "I got chu."
+        */
+        if (empty($argv)) {
+            return false;
+        }
+
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+        } else {
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

@@ -1,13 +1,13 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="/" class="logo hidden-md-down">
+    <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>S</b>C</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>Stats</b>.Coach</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top" role="navigation">
+    <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -19,13 +19,14 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <li id="NavMessages" class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height: 50px;"
                        onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
                         <i class="fa fa-envelope-o"></i>
                         {{#newMessages}}
                             <span id="NewMessagesSpan" class="label label-success">{{newMessages}}</span>
                         {{/newMessages}}
                     </a>
+
                     <ul class="dropdown-menu">
                         <li class="header">You have {{newMessages}}{{^newMessages}}0{{/newMessages}} new messages</li>
                         <!-- inner menu: contains the actual data -->
@@ -39,7 +40,7 @@
                                                      alt="User Image"/>
                                             </div>
                                             <h4>
-                                                {{first_name}} {{last_name}}
+                                                {{user_first_name}} {{user_last_name}}
                                                 <small><i class="fa fa-clock-o"></i>{{creation_date}}</small>
                                             </h4>
                                             <p>{{message}}</p>
@@ -53,7 +54,7 @@
                 </li>
                 <!-- Notifications: style can be found in dropdown.less -->
                 <li id="NavNotifications" class="dropdown notifications-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height: 50px;">
                         <i class="fa fa-bell-o"></i>
                         {{#newNotifications}}
                             <span class="label label-warning">{{newNotifications}}</span>
@@ -80,7 +81,7 @@
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
                 <li id="NavTasks" class="dropdown tasks-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="height: 50px;">
                         <i class="fa fa-flag-o"></i>
 
                         {{#newTasks}}
@@ -125,7 +126,7 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">{{my.user_first_last}}</span>
+                        <span class="hidden-xs"> {{my.user_first_name}} {{my.user_last_name}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -171,7 +172,7 @@
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar" style="height: auto;">
+    <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
@@ -205,7 +206,7 @@
                     <i class="fa fa-dashboard"></i> <span>Overview</span> <i
                         class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu" style="display: block;">
+                <ul class="treeview-menu">
                     <li class="active">
                         <a href="/" onclick=""><i
                                 class="fa fa-circle-o"></i>{{ my.user_first_name }} {{ my.user_last_name }}

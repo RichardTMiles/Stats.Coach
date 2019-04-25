@@ -88,7 +88,6 @@ class Messages extends GlobalMap
         $this->user[$user_id]['messages'] = [];
 
         $json = array_merge($json, [
-            'Widget' => '.direct-chat',
             'scroll' => '#messages',
             'to_User' => $user_id,
             'scrollTo' => 'bottom'
@@ -98,15 +97,19 @@ class Messages extends GlobalMap
                 'from_user_id' => $_SESSION['id'],
                 'to_user_id' => $user_id,
                 'message' => $message
-            ]) && !self::commit(function(){
-                // toDO - find the message notifications
-                #self::sendUpdate($user_id, '');
-
-                return true;
-            })) {
+            ])) {
             PublicAlert::warning('Failed to send message :( Please try again later');
-            return null;
         }     // else were grabbing content (json, html, etc)
+
+
+        if (!self::commit(function(){
+            // toDO - find the message notifications
+            #self::sendUpdate($user_id, '');
+
+            return true;
+        })) {
+            PublicAlert::warning('Failed to commit transaction :( Please try again later');
+        }
 
         Message::get($this->user[$user_id]['messages'], null, [
             'where' => [
@@ -114,15 +117,17 @@ class Messages extends GlobalMap
                     [
                         'to_user_id' => $_SESSION['id'],
                         'from_user_id' => $user_id,
-                    ]
-                ],
-                [
+                    ],
                     [
                         'to_user_id' => $user_id,
                         'from_user_id' => $_SESSION['id'],
                     ]
-
                 ],
+            ],
+            'pagination' => [
+                'limit' => '100',
+                'order' => 'creation_date ASC'
+
             ]
         ]);
 

@@ -188,10 +188,19 @@ class User extends GlobalMap
      */
     public function follow($user_id): bool
     {
-        if (!$out = Users::user_exists($user_id)) {
+        global $json;
+
+        if (!$out = getUser($user_id)) {
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
-        return Followers::Post([$user_id]);
+        if (false === Followers::Post([
+            'user_id' => $_SESSION['id'],
+            'follows_user_id' => $user_id
+        ])) {
+            PublicAlert::warning('Could not follow user!');
+        }
+
+        return true;
     }
 
     /**
@@ -201,10 +210,23 @@ class User extends GlobalMap
      */
     public function unfollow($user_id): bool
     {
-        if (!Users::user_exists($user_id)) {
-            throw new PublicAlert('That user does not exist?!');
+
+        if (!$out = getUser($user_id)) {
+            throw new PublicAlert("That user does not exist $user_id >> $out");
         }
-        Followers::Delete($this->user[$_SESSION['id']], $user_id);
+        if (false === Followers::Post([
+                'user_id' => $_SESSION['id'],
+                'follows_user_id' => $user_id
+            ])) {
+            PublicAlert::warning('Could not follow user!');
+        }
+
+        if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
+            'follows_user_id' => $user_id,
+            'user_id' => $_SESSION['id']
+        ])) {
+            PublicAlert::warning('Could not unfollow user.');
+        }
 
         return true;
 
@@ -418,6 +440,7 @@ class User extends GlobalMap
 
         //throw new PublicAlert($first);
 
+        // todo - shrink this?
         if (false === Users::Put($my, $_SESSION['id'], [
                 'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
                 'user_first_name' => $first ?: $my['user_first_name'],
@@ -459,7 +482,7 @@ class User extends GlobalMap
 
         Session::update();
 
-        return startApplication('/');
+        return null;
     }
 
 }
