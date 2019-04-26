@@ -6,6 +6,7 @@ use CarbonPHP\Session;
 use Model\Helpers\GlobalMap;
 
 
+use Tables\carbon_user_followers;
 use Tables\Carbon_User_Golf_Stats as Stats;
 use Tables\carbon_users as Users;
 use Tables\Carbon_User_Followers as Followers;
@@ -420,6 +421,22 @@ class User extends GlobalMap
         if (true !== $user_uri) {   // !! an actual user id
             global $json, $user;
             getUser($user_uri);
+
+            $user[$user_uri]['following'] = [];
+
+            if (!carbon_user_followers::Get($user[$user_uri]['following'], null, [
+                    'where' => [
+                        'user_id' => $_SESSION['id'],
+                        'follows_user_id' => $user_uri
+                    ],
+                    'pagination' => [
+                        'limit' => 1
+                    ]
+                ]
+            )){
+                PublicAlert::warning('Failed to look up following status!');
+            }
+
             $json['my'] = $user[$user_uri];
             return true;
         }
