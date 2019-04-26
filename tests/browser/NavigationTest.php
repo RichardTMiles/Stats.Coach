@@ -22,6 +22,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->setHost('localhost');
         $this->setPort(4444);
         $this->setBrowser('chrome');
+
         $this->setBrowserUrl('http://localhost:80/');
         $this->prepareSession()->currentWindow()->maximize();
     }
