@@ -608,7 +608,8 @@ class Golf extends GlobalMap implements iSport
 
         if ($course_input_completed) {
             PublicAlert::success('The course has been added and is public to the world!');
-            return startApplication('/');
+            startApplication('/');
+            return false;
         } else {
             PublicAlert::info("Hole $holeNumber was successfully saved!");
             $holeNumber++;

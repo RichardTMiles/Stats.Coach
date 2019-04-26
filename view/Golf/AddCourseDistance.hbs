@@ -65,7 +65,7 @@
         </div>
         <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <button id="back" type="button" class="btn btn-default" onclick="{{current_hole}} === 1 ? carbon.startApplication('/AddCourse/Basic/') : carbon.startApplication('/AddCourse/Color/{{course.course_id}}/' + ({{current_hole}}-1))"><< Back</button>
-            <button type="submit" class="btn btn-info pull-right" onclick="">Submit</button>
+            <button id= "submit" type="submit" class="btn btn-info pull-right" onclick="">Submit</button>
         </div>
     </div>
 </form>

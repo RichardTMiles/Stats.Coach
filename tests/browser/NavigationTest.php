@@ -17,7 +17,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
     public function setUp()
     {
         static $count;
-        $count or $count=1 and print PHP_EOL.'java -jar '. dirname(__DIR__) .'/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
+        $count or $count = 1 and print PHP_EOL . 'java -jar ' . dirname(__DIR__) . '/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
         self::shareSession(TRUE);
         $this->setHost('localhost');
         $this->setPort(4444);
@@ -48,24 +48,25 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
     public function testLoginFormExists()
     {
-        $this->url( '/' );
+        $this->url('/');
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-        $user = $this->byName( 'username' )->value('Test Username');
-        $pass = $this->byName( 'password' )->value('Test Password');
+        $user = $this->byName('username')->value('Test Username');
+        $pass = $this->byName('password')->value('Test Password');
         //$submit = $this->byName( 'signin' )->value('Sign In');
 
         sleep(10);
         // test that input above was a
-        $this->assertEquals( 'Test Username', $user->value() );
-        $this->assertEquals( 'Test Password', $pass->value() );
-       // $this->assertEquals( 'Sign In', $submit->value() );
+        $this->assertEquals('Test Username', $user->value());
+        $this->assertEquals('Test Password', $pass->value());
+        // $this->assertEquals( 'Sign In', $submit->value() );
 
     }
 
 
-    public function testRegister() {
+    public function testRegister()
+    {
         $this->url('/');
 
 
@@ -84,12 +85,12 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(5000);//10 seconds
 
-        $this->byName( 'firstname' )->value( 'Richard' );
-        $this->byName( 'lastname' )->value( 'Miles' );
-        $this->byName( 'email' )->value( 'Richard@Miles.Systems' );
-        $this->byName( 'username' )->value( 'admin' );
-        $this->byName( 'password' )->value( 'adminadmin' );
-        $this->byName( 'password2' )->value( 'adminadmin' );
+        $this->byName('firstname')->value('Richard');
+        $this->byName('lastname')->value('Miles');
+        $this->byName('email')->value('Richard@Miles.Systems');
+        $this->byName('username')->value('admin');
+        $this->byName('password')->value('adminadmin');
+        $this->byName('password2')->value('adminadmin');
 
         $this->select($this->byName('gender'))->selectOptionByValue('male');
 
@@ -108,21 +109,21 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
     public function testLogin()
     {
         // set the url
-        $this->url( '/' );
+        $this->url('/');
 
         // create a form object for reuse
-        $form = $this->byId( 'loginForm' );
+        $form = $this->byId('loginForm');
 
         // get the form action
-        $action = $form->attribute( 'action' );
+        $action = $form->attribute('action');
 
         // check the action value
-        $this->assertEquals( 'http://localhost/login/', $action );
+        $this->assertEquals('http://localhost/login/', $action);
 
         // fill in the form field values
-        $this->byName( 'username' )->value( 'admin' );
+        $this->byName('username')->value('admin');
 
-        $this->byName( 'password' )->value( 'adminadmin' );
+        $this->byName('password')->value('adminadmin');
 
         sleep(1);
 
@@ -140,7 +141,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byId('postScoreHeader')->click();
 
-       // $this->byId('select2-uzdm-container')->click();
+        // $this->byId('select2-uzdm-container')->click();
 
         sleep(1);
 
@@ -158,12 +159,12 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->byId('clear')->click();
         sleep(1);
 
-        $this->byName( 'c_name' )->value( 'Lake Park' );
+        $this->byName('c_name')->value('Lake Park');
         $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
         $this->select($this->byId('course_play'))->selectOptionByValue('9');
-        $this->byId( 'phone' )->value( '2145551234' );
-        $this->byName( 'c_street' )->value( '6 Lake Park Rd, TX 75057' );
-        $this->byName( 'c_city' )->value( 'Lewisville' );
+        $this->byId('phone')->value('2145551234');
+        $this->byName('c_street')->value('6 Lake Park Rd, TX 75057');
+        $this->byName('c_city')->value('Lewisville');
         $this->select($this->byId('state'))->selectOptionByValue('California');
         $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
@@ -197,16 +198,18 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         sleep(3);
         $this->byId('next')->click();
         sleep(1);
-        $this->byId('current_hole_1')->value('11');
-        $this->byName('Black')->value('5');
-        $this->byName('Blue')->value('7');
-        $this->byName('White')->value('9');
-        $this->byName('hc_Men')->value('2');
-        $this->byName('hc_Women')->value('3');
+
+        for ($i = 1; $i < 18; $i++) {
+            sleep(2);
+            $this->byId('current_hole_' . $i)->value('2');
+            $this->byName('Black')->value('5');
+            $this->byName('Blue')->value('7');
+            $this->byName('White')->value('9');
+            $this->byName('hc_Men')->value('2');
+            $this->byName('hc_Women')->value('3');
+            $this->byId('submit')->click();
+        }
         sleep(10);
-        $this->byId('next')->click();
-
-
 
 
         //$this->select($this->byClassName('knob'))->selectOptionByValue('13.2');
