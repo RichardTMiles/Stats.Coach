@@ -102,7 +102,7 @@ CREATE TABLE `carbon_golf_course_rounds` (
   UNIQUE KEY `golf_rounds_entity_entity_pk_fk` (`round_id`),
   KEY `golf_rounds_entity_course_pk_fk` (`course_id`),
   KEY `golf_rounds_entity_user_pk_fk` (`user_id`),
-  CONSTRAINT `golf_rounds_entity_course_pk_fk` FOREIGN KEY (`course_id`) REFERENCES `carbons` (`entity_pk`) ON UPDATE CASCADE,
+  CONSTRAINT `golf_rounds_entity_course_pk_fk` FOREIGN KEY (`course_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `golf_rounds_entity_entity_pk_fk` FOREIGN KEY (`round_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `golf_rounds_entity_user_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -406,7 +406,7 @@ CREATE TABLE `carbon_teams` (
   KEY `teams_teams_team_id_fk` (`parent_team`),
   CONSTRAINT `teams_entity_coach_pk_fk` FOREIGN KEY (`team_coach`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_entity_entity_pk_fk` FOREIGN KEY (`team_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `CarbonPHP`.`carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_teams_team_id_fk` FOREIGN KEY (`parent_team`) REFERENCES `carbon_teams` (`team_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -435,6 +435,7 @@ CREATE TABLE `carbon_user_followers` (
   PRIMARY KEY (`follower_table_id`),
   KEY `followers_entity_entity_pk_fk` (`follows_user_id`),
   KEY `followers_entity_entity_followers_pk_fk` (`user_id`),
+  CONSTRAINT `carbon_user_followers_carbons_entity_pk_fk` FOREIGN KEY (`follower_table_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `followers_entity_entity_follows_pk_fk` FOREIGN KEY (`follows_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `followers_entity_followers_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -499,7 +500,7 @@ CREATE TABLE `carbon_user_messages` (
   KEY `messages_entity_entity_pk_fk` (`message_id`),
   KEY `messages_entity_user_from_pk_fk` (`to_user_id`),
   KEY `carbon_user_messages_carbon_entity_pk_fk` (`from_user_id`),
-  CONSTRAINT `carbon_user_messages_carbon_entity_pk_fk` FOREIGN KEY (`from_user_id`) REFERENCES `carbons` (`entity_pk`),
+  CONSTRAINT `carbon_user_messages_carbon_entity_pk_fk` FOREIGN KEY (`from_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messages_entity_entity_pk_fk` FOREIGN KEY (`message_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messages_entity_user_from_pk_fk` FOREIGN KEY (`to_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

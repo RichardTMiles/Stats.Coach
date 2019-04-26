@@ -199,10 +199,14 @@ class User extends GlobalMap
             'follows_user_id' => $user_id
         ])) {
             PublicAlert::warning('Could not follow user!');
-        } else {
+        } elseif (self::commit(
+            function() use ($user_id) {
+                self::sendUpdate($user_id, 'NavigationMessages');
+                return true;
+            }
+        )){
             $json['success'] = true;
         }
-
         return true;
     }
 
@@ -213,6 +217,7 @@ class User extends GlobalMap
      */
     public function unfollow($user_id): bool
     {
+        global $json;
 
         if (!getUser($user_id)) {
             PublicAlert::warning("That user does not exist $user_id");
@@ -277,7 +282,7 @@ class User extends GlobalMap
 
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-            startApplication('home/');
+            return startApplication('home/');
         } else {
             throw new PublicAlert('Failed to create your account!');
         }
@@ -440,8 +445,6 @@ class User extends GlobalMap
             $json['my'] = $user[$user_uri];
             return true;
         }
-
-        Users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
 
         if (empty($_POST)) {
             return null;

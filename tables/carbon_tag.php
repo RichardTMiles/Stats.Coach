@@ -70,36 +70,21 @@ class carbon_tag extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'entity_id':
-                        $entity_id = $argv['entity_id'];
-                        $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-                    break;
-                   case 'user_id':
-                        $user_id = $argv['user_id'];
-                        $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    break;
-                   case 'tag_id':
-                        $tag_id = $argv['tag_id'];
-                        $stmt->bindParam(':tag_id',$tag_id, 2, 80);
-                    break;
-                   case 'creation_date':
-                        $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+        }
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+        if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+        }
+        if (array_key_exists('creation_date', $argv)) {
+            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

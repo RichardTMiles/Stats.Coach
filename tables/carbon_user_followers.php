@@ -70,33 +70,18 @@ class carbon_user_followers extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'follower_table_id':
-                        $follower_table_id = $argv['follower_table_id'];
-                        $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
-                    break;
-                   case 'follows_user_id':
-                        $follows_user_id = $argv['follows_user_id'];
-                        $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
-                    break;
-                   case 'user_id':
-                        $user_id = $argv['user_id'];
-                        $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('follower_table_id', $argv)) {
+            $follower_table_id = $argv['follower_table_id'];
+            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+        }
+        if (array_key_exists('follows_user_id', $argv)) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+        }
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -266,7 +251,7 @@ class carbon_user_followers extends Database implements iRest
 
         $stmt = self::database()->prepare($sql);
 
-                $follower_table_id = $id = $argv['follower_table_id'] ?? self::fetchColumn('SELECT (REPLACE(UUID() COLLATE utf8_unicode_ci,"-",""))')[0];
+                $follower_table_id = $id = $argv['follower_table_id'] ?? self::beginTransaction('carbon_user_followers');
                 $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
                 
                     $follows_user_id = $argv['follows_user_id'];
@@ -348,27 +333,27 @@ class carbon_user_followers extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_user_followers ';
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
 
-        $pdo = self::database();
-
-        if (null === $primary) {
         /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
         if (empty($argv)) {
             return false;
         }
 
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_user_followers on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } else {
-        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
-        }
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

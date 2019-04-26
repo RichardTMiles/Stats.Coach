@@ -70,43 +70,28 @@ class carbon_user_messages extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'message_id':
-                        $message_id = $argv['message_id'];
-                        $stmt->bindParam(':message_id',$message_id, 2, 16);
-                    break;
-                   case 'from_user_id':
-                        $from_user_id = $argv['from_user_id'];
-                        $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-                    break;
-                   case 'to_user_id':
-                        $to_user_id = $argv['to_user_id'];
-                        $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                    break;
-                   case 'message':
-                        $stmt->bindValue(':message',$argv['message'], 2);
-                    break;
-                   case 'message_read':
-                        $message_read = $argv['message_read'];
-                        $stmt->bindParam(':message_read',$message_read, 0, 1);
-                    break;
-                   case 'creation_date':
-                        $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('message_id', $argv)) {
+            $message_id = $argv['message_id'];
+            $stmt->bindParam(':message_id',$message_id, 2, 16);
+        }
+        if (array_key_exists('from_user_id', $argv)) {
+            $from_user_id = $argv['from_user_id'];
+            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+        }
+        if (array_key_exists('to_user_id', $argv)) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+        }
+        if (array_key_exists('message', $argv)) {
+            $stmt->bindValue(':message',$argv['message'], 2);
+        }
+        if (array_key_exists('message_read', $argv)) {
+            $message_read = $argv['message_read'];
+            $stmt->bindParam(':message_read',$message_read, 0, 1);
+        }
+        if (array_key_exists('creation_date', $argv)) {
+            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -371,6 +356,37 @@ class carbon_user_messages extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_user_messages on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }
