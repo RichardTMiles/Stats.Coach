@@ -70,53 +70,38 @@ class carbon_user_golf_stats extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'stats_id':
-                        $stats_id = $argv['stats_id'];
-                        $stmt->bindParam(':stats_id',$stats_id, 2, 16);
-                    break;
-                   case 'stats_tournaments':
-                        $stats_tournaments = $argv['stats_tournaments'];
-                        $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
-                    break;
-                   case 'stats_rounds':
-                        $stats_rounds = $argv['stats_rounds'];
-                        $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
-                    break;
-                   case 'stats_handicap':
-                        $stats_handicap = $argv['stats_handicap'];
-                        $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
-                    break;
-                   case 'stats_strokes':
-                        $stats_strokes = $argv['stats_strokes'];
-                        $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
-                    break;
-                   case 'stats_ffs':
-                        $stats_ffs = $argv['stats_ffs'];
-                        $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
-                    break;
-                   case 'stats_gnr':
-                        $stats_gnr = $argv['stats_gnr'];
-                        $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
-                    break;
-                   case 'stats_putts':
-                        $stats_putts = $argv['stats_putts'];
-                        $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('stats_id', $argv)) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
+        }
+        if (array_key_exists('stats_tournaments', $argv)) {
+            $stats_tournaments = $argv['stats_tournaments'];
+            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
+        }
+        if (array_key_exists('stats_rounds', $argv)) {
+            $stats_rounds = $argv['stats_rounds'];
+            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
+        }
+        if (array_key_exists('stats_handicap', $argv)) {
+            $stats_handicap = $argv['stats_handicap'];
+            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
+        }
+        if (array_key_exists('stats_strokes', $argv)) {
+            $stats_strokes = $argv['stats_strokes'];
+            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
+        }
+        if (array_key_exists('stats_ffs', $argv)) {
+            $stats_ffs = $argv['stats_ffs'];
+            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
+        }
+        if (array_key_exists('stats_gnr', $argv)) {
+            $stats_gnr = $argv['stats_gnr'];
+            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+        }
+        if (array_key_exists('stats_putts', $argv)) {
+            $stats_putts = $argv['stats_putts'];
+            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -398,6 +383,37 @@ class carbon_user_golf_stats extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_user_golf_stats on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

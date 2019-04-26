@@ -70,51 +70,36 @@ class carbon_user_tasks extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'task_id':
-                        $task_id = $argv['task_id'];
-                        $stmt->bindParam(':task_id',$task_id, 2, 16);
-                    break;
-                   case 'user_id':
-                        $user_id = $argv['user_id'];
-                        $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    break;
-                   case 'from_id':
-                        $from_id = $argv['from_id'];
-                        $stmt->bindParam(':from_id',$from_id, 2, 16);
-                    break;
-                   case 'task_name':
-                        $task_name = $argv['task_name'];
-                        $stmt->bindParam(':task_name',$task_name, 2, 40);
-                    break;
-                   case 'task_description':
-                        $task_description = $argv['task_description'];
-                        $stmt->bindParam(':task_description',$task_description, 2, 225);
-                    break;
-                   case 'percent_complete':
-                        $percent_complete = $argv['percent_complete'];
-                        $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
-                    break;
-                   case 'start_date':
-                        $stmt->bindValue(':start_date',$argv['start_date'], 2);
-                    break;
-                   case 'end_date':
-                        $stmt->bindValue(':end_date',$argv['end_date'], 2);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('task_id', $argv)) {
+            $task_id = $argv['task_id'];
+            $stmt->bindParam(':task_id',$task_id, 2, 16);
+        }
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+        if (array_key_exists('from_id', $argv)) {
+            $from_id = $argv['from_id'];
+            $stmt->bindParam(':from_id',$from_id, 2, 16);
+        }
+        if (array_key_exists('task_name', $argv)) {
+            $task_name = $argv['task_name'];
+            $stmt->bindParam(':task_name',$task_name, 2, 40);
+        }
+        if (array_key_exists('task_description', $argv)) {
+            $task_description = $argv['task_description'];
+            $stmt->bindParam(':task_description',$task_description, 2, 225);
+        }
+        if (array_key_exists('percent_complete', $argv)) {
+            $percent_complete = $argv['percent_complete'];
+            $stmt->bindParam(':percent_complete',$percent_complete, 2, 11);
+        }
+        if (array_key_exists('start_date', $argv)) {
+            $stmt->bindValue(':start_date',$argv['start_date'], 2);
+        }
+        if (array_key_exists('end_date', $argv)) {
+            $stmt->bindValue(':end_date',$argv['end_date'], 2);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -392,6 +377,37 @@ class carbon_user_tasks extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_user_tasks on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

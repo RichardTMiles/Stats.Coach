@@ -10,9 +10,11 @@ namespace App;
 
 use CarbonPHP\Application;
 use CarbonPHP\Error\PublicAlert;
+use CarbonPHP\Helpers\Pipe;
 use CarbonPHP\Session;
 use CarbonPHP\View;
 use Controller\User;
+use Model\Helpers\GlobalMap;
 use /** @noinspection PhpUndefinedClassInspection */
     Mustache_Engine;
 use Tables\carbon_users;
@@ -120,7 +122,15 @@ class StatsCoach extends Application
                 $json['body-layout'] = 'Json Method Removed';
                 $json['header'] = 'Json Method Removed';
 
-                if ($this->match('Search/{search}/', 'Search', 'all')() ||
+                if (
+                    $this->match('whoami/', function() {
+                        print $_SESSION['id'] . PHP_EOL;
+                    })() ||
+                    $this->match('Send/{user_id}/{message}/', function($user_id, $message) {
+                        print 'About to send' . PHP_EOL;
+                        print 'Did we send? '.Pipe::send( $message, '/tmp/' . $user_id . '.fifo' ). PHP_EOL .PHP_EOL;
+                    })() ||
+                    $this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('NavigationMessages/', 'Messages', 'navigation')() ||
                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||
                     $this->match('Follow/{user_id}/', 'User', 'follow')() ||

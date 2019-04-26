@@ -70,36 +70,21 @@ class carbon_comments extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'parent_id':
-                        $parent_id = $argv['parent_id'];
-                        $stmt->bindParam(':parent_id',$parent_id, 2, 16);
-                    break;
-                   case 'comment_id':
-                        $comment_id = $argv['comment_id'];
-                        $stmt->bindParam(':comment_id',$comment_id, 2, 16);
-                    break;
-                   case 'user_id':
-                        $user_id = $argv['user_id'];
-                        $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    break;
-                   case 'comment':
-                        $stmt->bindValue(':comment',$argv['comment'], 2);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('parent_id', $argv)) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
+        }
+        if (array_key_exists('comment_id', $argv)) {
+            $comment_id = $argv['comment_id'];
+            $stmt->bindParam(':comment_id',$comment_id, 2, 16);
+        }
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+        if (array_key_exists('comment', $argv)) {
+            $stmt->bindValue(':comment',$argv['comment'], 2);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -355,6 +340,37 @@ class carbon_comments extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_comments on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

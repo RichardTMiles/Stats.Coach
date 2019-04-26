@@ -70,75 +70,60 @@ class carbon_golf_course_rounds extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'user_id':
-                        $user_id = $argv['user_id'];
-                        $stmt->bindParam(':user_id',$user_id, 2, 16);
-                    break;
-                   case 'round_id':
-                        $round_id = $argv['round_id'];
-                        $stmt->bindParam(':round_id',$round_id, 2, 16);
-                    break;
-                   case 'course_id':
-                        $course_id = $argv['course_id'];
-                        $stmt->bindParam(':course_id',$course_id, 2, 16);
-                    break;
-                   case 'round_json':
-                        $stmt->bindValue(':round_json',json_encode($argv['round_json']), 2);
-                    break;
-                   case 'round_public':
-                        $round_public = $argv['round_public'];
-                        $stmt->bindParam(':round_public',$round_public, 2, 1);
-                    break;
-                   case 'round_out':
-                        $round_out = $argv['round_out'];
-                        $stmt->bindParam(':round_out',$round_out, 2, 2);
-                    break;
-                   case 'round_in':
-                        $round_in = $argv['round_in'];
-                        $stmt->bindParam(':round_in',$round_in, 2, 3);
-                    break;
-                   case 'round_total':
-                        $round_total = $argv['round_total'];
-                        $stmt->bindParam(':round_total',$round_total, 2, 3);
-                    break;
-                   case 'round_total_gnr':
-                        $round_total_gnr = $argv['round_total_gnr'];
-                        $stmt->bindParam(':round_total_gnr',$round_total_gnr, 2, 11);
-                    break;
-                   case 'round_total_ffs':
-                        $round_total_ffs = $argv['round_total_ffs'];
-                        $stmt->bindParam(':round_total_ffs',$round_total_ffs, 2, 3);
-                    break;
-                   case 'round_total_putts':
-                        $round_total_putts = $argv['round_total_putts'];
-                        $stmt->bindParam(':round_total_putts',$round_total_putts, 2, 11);
-                    break;
-                   case 'round_date':
-                        $stmt->bindValue(':round_date',$argv['round_date'], 2);
-                    break;
-                   case 'round_input_complete':
-                        $round_input_complete = $argv['round_input_complete'];
-                        $stmt->bindParam(':round_input_complete',$round_input_complete, 0, 1);
-                    break;
-                   case 'round_tee_box_color':
-                        $round_tee_box_color = $argv['round_tee_box_color'];
-                        $stmt->bindParam(':round_tee_box_color',$round_tee_box_color, 2, 10);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+        if (array_key_exists('round_id', $argv)) {
+            $round_id = $argv['round_id'];
+            $stmt->bindParam(':round_id',$round_id, 2, 16);
+        }
+        if (array_key_exists('course_id', $argv)) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
+        }
+        if (array_key_exists('round_json', $argv)) {
+            $stmt->bindValue(':round_json',json_encode($argv['round_json']), 2);
+        }
+        if (array_key_exists('round_public', $argv)) {
+            $round_public = $argv['round_public'];
+            $stmt->bindParam(':round_public',$round_public, 2, 1);
+        }
+        if (array_key_exists('round_out', $argv)) {
+            $round_out = $argv['round_out'];
+            $stmt->bindParam(':round_out',$round_out, 2, 2);
+        }
+        if (array_key_exists('round_in', $argv)) {
+            $round_in = $argv['round_in'];
+            $stmt->bindParam(':round_in',$round_in, 2, 3);
+        }
+        if (array_key_exists('round_total', $argv)) {
+            $round_total = $argv['round_total'];
+            $stmt->bindParam(':round_total',$round_total, 2, 3);
+        }
+        if (array_key_exists('round_total_gnr', $argv)) {
+            $round_total_gnr = $argv['round_total_gnr'];
+            $stmt->bindParam(':round_total_gnr',$round_total_gnr, 2, 11);
+        }
+        if (array_key_exists('round_total_ffs', $argv)) {
+            $round_total_ffs = $argv['round_total_ffs'];
+            $stmt->bindParam(':round_total_ffs',$round_total_ffs, 2, 3);
+        }
+        if (array_key_exists('round_total_putts', $argv)) {
+            $round_total_putts = $argv['round_total_putts'];
+            $stmt->bindParam(':round_total_putts',$round_total_putts, 2, 11);
+        }
+        if (array_key_exists('round_date', $argv)) {
+            $stmt->bindValue(':round_date',$argv['round_date'], 2);
+        }
+        if (array_key_exists('round_input_complete', $argv)) {
+            $round_input_complete = $argv['round_input_complete'];
+            $stmt->bindParam(':round_input_complete',$round_input_complete, 0, 1);
+        }
+        if (array_key_exists('round_tee_box_color', $argv)) {
+            $round_tee_box_color = $argv['round_tee_box_color'];
+            $stmt->bindParam(':round_tee_box_color',$round_tee_box_color, 2, 10);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -454,6 +439,37 @@ class carbon_golf_course_rounds extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_golf_course_rounds on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

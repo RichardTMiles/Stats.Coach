@@ -70,102 +70,87 @@ class carbon_golf_courses extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'course_id':
-                        $course_id = $argv['course_id'];
-                        $stmt->bindParam(':course_id',$course_id, 2, 16);
-                    break;
-                   case 'course_name':
-                        $course_name = $argv['course_name'];
-                        $stmt->bindParam(':course_name',$course_name, 2, 16);
-                    break;
-                   case 'course_holes':
-                        $course_holes = $argv['course_holes'];
-                        $stmt->bindParam(':course_holes',$course_holes, 2, 2);
-                    break;
-                   case 'course_phone':
-                        $course_phone = $argv['course_phone'];
-                        $stmt->bindParam(':course_phone',$course_phone, 2, 15);
-                    break;
-                   case 'course_difficulty':
-                        $course_difficulty = $argv['course_difficulty'];
-                        $stmt->bindParam(':course_difficulty',$course_difficulty, 2, 10);
-                    break;
-                   case 'course_rank':
-                        $course_rank = $argv['course_rank'];
-                        $stmt->bindParam(':course_rank',$course_rank, 2, 5);
-                    break;
-                   case 'course_tee_boxes':
-                        $stmt->bindValue(':course_tee_boxes',json_encode($argv['course_tee_boxes']), 2);
-                    break;
-                   case 'course_par':
-                        $stmt->bindValue(':course_par',json_encode($argv['course_par']), 2);
-                    break;
-                   case 'course_handicap':
-                        $stmt->bindValue(':course_handicap',json_encode($argv['course_handicap']), 2);
-                    break;
-                   case 'course_par_out':
-                        $course_par_out = $argv['course_par_out'];
-                        $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
-                    break;
-                   case 'course_par_in':
-                        $course_par_in = $argv['course_par_in'];
-                        $stmt->bindParam(':course_par_in',$course_par_in, 2, 2);
-                    break;
-                   case 'par_tot':
-                        $par_tot = $argv['par_tot'];
-                        $stmt->bindParam(':par_tot',$par_tot, 2, 2);
-                    break;
-                   case 'course_par_hcp':
-                        $course_par_hcp = $argv['course_par_hcp'];
-                        $stmt->bindParam(':course_par_hcp',$course_par_hcp, 2, 4);
-                    break;
-                   case 'course_type':
-                        $course_type = $argv['course_type'];
-                        $stmt->bindParam(':course_type',$course_type, 2, 30);
-                    break;
-                   case 'course_access':
-                        $course_access = $argv['course_access'];
-                        $stmt->bindParam(':course_access',$course_access, 2, 120);
-                    break;
-                   case 'pga_professional':
-                        $pga_professional = $argv['pga_professional'];
-                        $stmt->bindParam(':pga_professional',$pga_professional, 2, 40);
-                    break;
-                   case 'website':
-                        $website = $argv['website'];
-                        $stmt->bindParam(':website',$website, 2, 20);
-                    break;
-                   case 'created_by':
-                        $created_by = $argv['created_by'];
-                        $stmt->bindParam(':created_by',$created_by, 2, 16);
-                    break;
-                   case 'course_input_completed':
-                        $course_input_completed = $argv['course_input_completed'];
-                        $stmt->bindParam(':course_input_completed',$course_input_completed, 2, 10);
-                    break;
-                   case 'tee_boxes':
-                        $tee_boxes = $argv['tee_boxes'];
-                        $stmt->bindParam(':tee_boxes',$tee_boxes, 2, 11);
-                    break;
-                   case 'handicap_count':
-                        $handicap_count = $argv['handicap_count'];
-                        $stmt->bindParam(':handicap_count',$handicap_count, 2, 11);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('course_id', $argv)) {
+            $course_id = $argv['course_id'];
+            $stmt->bindParam(':course_id',$course_id, 2, 16);
+        }
+        if (array_key_exists('course_name', $argv)) {
+            $course_name = $argv['course_name'];
+            $stmt->bindParam(':course_name',$course_name, 2, 16);
+        }
+        if (array_key_exists('course_holes', $argv)) {
+            $course_holes = $argv['course_holes'];
+            $stmt->bindParam(':course_holes',$course_holes, 2, 2);
+        }
+        if (array_key_exists('course_phone', $argv)) {
+            $course_phone = $argv['course_phone'];
+            $stmt->bindParam(':course_phone',$course_phone, 2, 15);
+        }
+        if (array_key_exists('course_difficulty', $argv)) {
+            $course_difficulty = $argv['course_difficulty'];
+            $stmt->bindParam(':course_difficulty',$course_difficulty, 2, 10);
+        }
+        if (array_key_exists('course_rank', $argv)) {
+            $course_rank = $argv['course_rank'];
+            $stmt->bindParam(':course_rank',$course_rank, 2, 5);
+        }
+        if (array_key_exists('course_tee_boxes', $argv)) {
+            $stmt->bindValue(':course_tee_boxes',json_encode($argv['course_tee_boxes']), 2);
+        }
+        if (array_key_exists('course_par', $argv)) {
+            $stmt->bindValue(':course_par',json_encode($argv['course_par']), 2);
+        }
+        if (array_key_exists('course_handicap', $argv)) {
+            $stmt->bindValue(':course_handicap',json_encode($argv['course_handicap']), 2);
+        }
+        if (array_key_exists('course_par_out', $argv)) {
+            $course_par_out = $argv['course_par_out'];
+            $stmt->bindParam(':course_par_out',$course_par_out, 2, 2);
+        }
+        if (array_key_exists('course_par_in', $argv)) {
+            $course_par_in = $argv['course_par_in'];
+            $stmt->bindParam(':course_par_in',$course_par_in, 2, 2);
+        }
+        if (array_key_exists('par_tot', $argv)) {
+            $par_tot = $argv['par_tot'];
+            $stmt->bindParam(':par_tot',$par_tot, 2, 2);
+        }
+        if (array_key_exists('course_par_hcp', $argv)) {
+            $course_par_hcp = $argv['course_par_hcp'];
+            $stmt->bindParam(':course_par_hcp',$course_par_hcp, 2, 4);
+        }
+        if (array_key_exists('course_type', $argv)) {
+            $course_type = $argv['course_type'];
+            $stmt->bindParam(':course_type',$course_type, 2, 30);
+        }
+        if (array_key_exists('course_access', $argv)) {
+            $course_access = $argv['course_access'];
+            $stmt->bindParam(':course_access',$course_access, 2, 120);
+        }
+        if (array_key_exists('pga_professional', $argv)) {
+            $pga_professional = $argv['pga_professional'];
+            $stmt->bindParam(':pga_professional',$pga_professional, 2, 40);
+        }
+        if (array_key_exists('website', $argv)) {
+            $website = $argv['website'];
+            $stmt->bindParam(':website',$website, 2, 20);
+        }
+        if (array_key_exists('created_by', $argv)) {
+            $created_by = $argv['created_by'];
+            $stmt->bindParam(':created_by',$created_by, 2, 16);
+        }
+        if (array_key_exists('course_input_completed', $argv)) {
+            $course_input_completed = $argv['course_input_completed'];
+            $stmt->bindParam(':course_input_completed',$course_input_completed, 2, 10);
+        }
+        if (array_key_exists('tee_boxes', $argv)) {
+            $tee_boxes = $argv['tee_boxes'];
+            $stmt->bindParam(':tee_boxes',$tee_boxes, 2, 11);
+        }
+        if (array_key_exists('handicap_count', $argv)) {
+            $handicap_count = $argv['handicap_count'];
+            $stmt->bindParam(':handicap_count',$handicap_count, 2, 11);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -528,6 +513,37 @@ class carbon_golf_courses extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_golf_courses on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

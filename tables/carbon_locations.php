@@ -70,48 +70,33 @@ class carbon_locations extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-   
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                switch ($key) {
-                
-                   case 'entity_id':
-                        $entity_id = $argv['entity_id'];
-                        $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-                    break;
-                   case 'latitude':
-                        $latitude = $argv['latitude'];
-                        $stmt->bindParam(':latitude',$latitude, 2, 225);
-                    break;
-                   case 'longitude':
-                        $longitude = $argv['longitude'];
-                        $stmt->bindParam(':longitude',$longitude, 2, 225);
-                    break;
-                   case 'street':
-                        $stmt->bindValue(':street',$argv['street'], 2);
-                    break;
-                   case 'city':
-                        $city = $argv['city'];
-                        $stmt->bindParam(':city',$city, 2, 40);
-                    break;
-                   case 'state':
-                        $state = $argv['state'];
-                        $stmt->bindParam(':state',$state, 2, 10);
-                    break;
-                   case 'elevation':
-                        $elevation = $argv['elevation'];
-                        $stmt->bindParam(':elevation',$elevation, 2, 40);
-                    break;
-            }
-          }
-        };
-        
-        $bind($argv);
+        if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+        }
+        if (array_key_exists('latitude', $argv)) {
+            $latitude = $argv['latitude'];
+            $stmt->bindParam(':latitude',$latitude, 2, 225);
+        }
+        if (array_key_exists('longitude', $argv)) {
+            $longitude = $argv['longitude'];
+            $stmt->bindParam(':longitude',$longitude, 2, 225);
+        }
+        if (array_key_exists('street', $argv)) {
+            $stmt->bindValue(':street',$argv['street'], 2);
+        }
+        if (array_key_exists('city', $argv)) {
+            $city = $argv['city'];
+            $stmt->bindParam(':city',$city, 2, 40);
+        }
+        if (array_key_exists('state', $argv)) {
+            $state = $argv['state'];
+            $stmt->bindParam(':state',$state, 2, 10);
+        }
+        if (array_key_exists('elevation', $argv)) {
+            $elevation = $argv['elevation'];
+            $stmt->bindParam(':elevation',$elevation, 2, 40);
+        }
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -385,6 +370,37 @@ class carbon_locations extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_locations on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }
