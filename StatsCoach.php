@@ -121,9 +121,9 @@ class StatsCoach extends Application
                 $json['header'] = 'Json Method Removed';
 
                 if ($this->match('Search/{search}/', 'Search', 'all')() ||
-                    $this->match('Messages/', 'Messages', 'navigation')() ||
+                    $this->match('NavigationMessages/', 'Messages', 'navigation')() ||
                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||
-                    $this->structure($this->JSON())->match('Follow/{user_id}/', 'User', 'follow')() ||
+                    $this->match('Follow/{user_id}/', 'User', 'follow')() ||
                     $this->match('Unfollow/{user_id}/', 'User', 'unfollow')() ||
                     $this->structure($this->JSON('#NavNotifications'))->match('Notifications/*', 'notifications', 'notifications')() ||
                     $this->structure($this->JSON('#NavTasks'))->match('tasks/*', 'tasks', 'tasks')() ||

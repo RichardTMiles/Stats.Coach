@@ -198,6 +198,8 @@ class User extends GlobalMap
             'follows_user_id' => $user_id
         ])) {
             PublicAlert::warning('Could not follow user!');
+        } else {
+            $json['success'] = true;
         }
 
         return true;
@@ -211,14 +213,8 @@ class User extends GlobalMap
     public function unfollow($user_id): bool
     {
 
-        if (!$out = getUser($user_id)) {
-            throw new PublicAlert("That user does not exist $user_id >> $out");
-        }
-        if (false === Followers::Post([
-                'user_id' => $_SESSION['id'],
-                'follows_user_id' => $user_id
-            ])) {
-            PublicAlert::warning('Could not follow user!');
+        if (!getUser($user_id)) {
+            PublicAlert::warning("That user does not exist $user_id");
         }
 
         if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
@@ -226,6 +222,8 @@ class User extends GlobalMap
             'user_id' => $_SESSION['id']
         ])) {
             PublicAlert::warning('Could not unfollow user.');
+        } else {
+            $json['success'] = true;
         }
 
         return true;

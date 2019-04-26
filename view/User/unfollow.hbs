@@ -1,0 +1,20 @@
+{{^success}}
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-ban"></i> Oh No!</h4>
+        Failed to unfollow user
+    </div>
+    <a style="display: block" style="padding-top: 10px"
+       onclick="unfollow()"
+       class="btn btn-warning btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
+{{/success}}
+{{#success}}
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-check"></i> It's Done!</h4>
+        You unfollowed this user
+    </div>
+    <a style="display: block" style="padding-top: 10px"
+       onclick="follow()"
+       class="btn btn-primary btn-block" id="FollowUser"><b>Follow :)</b></a>
+{{/success}}
