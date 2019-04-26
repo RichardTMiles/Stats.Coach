@@ -51,20 +51,22 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-        $user = $this->byName( 'username' )->value('Username');
-        $pass = $this->byName( 'password' )->value('Password');
-        $submit = $this->byName( 'signin' )->value('Sign In');
+        $user = $this->byName( 'username' )->value('Test Username');
+        $pass = $this->byName( 'password' )->value('Test Password');
+        //$submit = $this->byName( 'signin' )->value('Sign In');
 
+        sleep(10);
         // test that input above was a
-        $this->assertEquals( 'Username', $user->value() );
-        $this->assertEquals( 'Password', $pass->value() );
-        $this->assertEquals( 'Sign In', $submit->value() );
+        $this->assertEquals( 'Test Username', $user->value() );
+        $this->assertEquals( 'Test Password', $pass->value() );
+       // $this->assertEquals( 'Sign In', $submit->value() );
 
     }
 
 
     public function testRegister() {
         $this->url('/');
+
 
         $this->assertEquals(SITE_TITLE, $this->title());
 
@@ -153,6 +155,10 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         sleep(10);
 
+
+        $this->byId('clear')->click();
+        sleep(10);
+
         $this->byName( 'c_name' )->value( 'Lake Park' );
         sleep(2);
         $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
@@ -166,13 +172,17 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
         $this->byId('next')->click();
         sleep(3);
+        $this->byName('general_difficulty')->value('13');
+        $this->byName('general_slope')->value('34');
+        $this->byName('women_difficulty')->value('52');
+        $this->byName('women_slope')->value('19');
+        sleep(3);
+        $this->byId('next')->click();
 
-        $this->select($this->byName('general_difficulty'))->ByValue('13.2');
+
         //$this->select($this->byClassName('knob'))->selectOptionByValue('13.2');
 
         sleep(10);
-
-
 
 
     }

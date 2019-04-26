@@ -1,0 +1,22 @@
+
+Carbon caught this Message: PDOStatement::execute(): MySQL server has gone away
+line: /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Session.php(257)
+
+
+	1)  [internal function]: CarbonPHP\Session->write ('e754b8482fb3b58...', 'id|b:0;X_PJAX_V...')
+				["e754b8482fb3b58678793039217d9c33","id|b:0;X_PJAX_Version|s:5:\"0.0.0\";FBRLH_state|s:32:\"71ef5b3fdfd9ae04b4612df7b3e876bf\";"]
+
+	2)  /Users/KristinCarden/Stats.Coach/vendor/richardtmiles/carbonphp/Session.php (257): PDOStatement->execute (Array)
+				[["e754b8482fb3b58678793039217d9c33",false,"127.0.0.1","1969-12-31 17:00:00","id|b:0;X_PJAX_Version|s:5:\"0.0.0\";FBRLH_state|s:32:\"71ef5b3fdfd9ae04b4612df7b3e876bf\";"]]
+
+	3)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (2, 'PDOStatement::e...', '/Users/KristinC...', 257, Array)
+				[2,"PDOStatement::execute(): MySQL server has gone away","\/Users\/KristinCarden\/Stats.Coach\/vendor\/richardtmiles\/carbonphp\/Session.php",257,{"id":"e754b8482fb3b58678793039217d9c33","data":"id|b:0;X_PJAX_Version|s:5:\"0.0.0\";FBRLH_state|s:32:\"71ef5b3fdfd9ae04b4612df7b3e876bf\";","db":{},"NewDateTime":"1969-12-31 17:00:00"}]
+
+
+Carbon caught this Message: Unknown: Cannot call session save handler in a recursive manner
+line: Unknown(0)
+
+
+	1)  [internal function]: CarbonPHP\Error\ErrorCatcher::CarbonPHP\Error\{closure} (2, 'Unknown: Cannot...', 'Unknown', 0, NULL)
+				[2,"Unknown: Cannot call session save handler in a recursive manner","Unknown",0,null]
+

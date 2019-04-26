@@ -62,7 +62,8 @@
                 <br><br><br><br>
                 <div class='row'>
                     <div class='col-md-6 col-sm-6'>
-                        <div class='col-xs-6 col-md-6 text-center'><input name='general_difficulty'
+                        <div class='col-xs-6 col-md-6 text-center'><input id = "1"
+                                                                          name='general_difficulty'
                                                                           type='text' class='knob' value='{{^addColor.difficulty.m}}0{{/addColor.difficulty.m}}{{addColor.difficulty.m}}'
                                                                           data-step='0.1'
                                                                           data-min='0' data-max='90' data-anglearc='250'
@@ -70,7 +71,8 @@
                                                                           data-height='90' data-fgcolor='#3c8dbc'
                                                                           style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'>
                         </div>
-                        <div class='col-xs-6 col-md-6 text-center'><input name='general_slope'
+                        <div class='col-xs-6 col-md-6 text-center'><input id = "2"
+                                                                          name='general_slope'
                                                                           type='text' class='knob' value='{{^addColor.slope.m}}0{{/addColor.slope.m}}{{addColor.slope.m}}'
                                                                           data-min='0'
                                                                           data-max='200' data-anglearc='250'
@@ -83,7 +85,8 @@
                         </div>
                     </div>
                     <div class='col-md-6 col-sm-6'>
-                        <div class='col-xs-6 col-md-6 text-center'><input name='women_difficulty'
+                        <div class='col-xs-6 col-md-6 text-center'><input id = "3"
+                                                                          name='women_difficulty'
                                                                           type='text' class='knob' value='{{^addColor.difficulty.w}}0{{/addColor.difficulty.w}}{{addColor.difficulty.w}}'
                                                                           data-step='0.1'
                                                                           data-min='0' data-max='90' data-anglearc='250'
@@ -91,7 +94,8 @@
                                                                           data-height='90' data-fgcolor='#00a65a'
                                                                           style='width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;'>
                         </div>
-                        <div class='col-xs-6 col-md-6 text-center'><input name='women_slope'
+                        <div class='col-xs-6 col-md-6 text-center'><input id = "4"
+                                                                          name='women_slope'
                                                                           type='text' class='knob' value='{{^addColor.slope.w}}0{{/addColor.slope.w}}{{addColor.slope.w}}'
                                                                           data-min='0'
                                                                           data-max='200' data-anglearc='250'
@@ -106,7 +110,7 @@
                 </div><!-- ./col -->
 
                 <button type='button' class='btn btn-default' onclick=""><< Back</button>
-                <button type='submit' class='btn btn-info pull-right'>Next >></button>
+                <button id="next" type='submit' class='btn btn-info pull-right'>Next >></button>
             </div>
         </div>
     </div>

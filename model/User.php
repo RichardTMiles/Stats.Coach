@@ -272,28 +272,40 @@ class User extends GlobalMap
      */
     public function activate($email, $email_code): bool
     {
-        if (!Users::email_exists($email)) {
-            throw new PublicAlert('Please make sure the Url you have entered is correct.', 'danger');
+        $user = [];
+
+        if (false === Users::Get($user, null, [
+                'select' => [
+                    'user_id'
+                ],
+                'where' => [
+                    'user_email' => $email,
+                    'user_email_code' => $email_code
+                ],
+                'pagination' => [
+                    'limit' => 1
+                ]
+            ])) {
+            PublicAlert::danger('The Rest API Failed.');
+            return startApplication(true);
         }
 
-        $stmt = $this->db->prepare('SELECT COUNT(user_id) FROM carbon_users WHERE user_email = ? AND user_email_code = ?');
-        $stmt->execute([$email, $email_code]);
-
-        if ($stmt->fetch() === 0) {
+        if (empty($user)) {
             PublicAlert::warning('Sorry, you may be using an old activation code.');
             return startApplication(true);
         }
 
-        if (!$this->db->prepare('UPDATE carbon_users SET user_email_confirmed = 1 WHERE user_email = ?')->execute(array($email)))
-            throw new PublicAlert('The code provided appears to be invalid.', 'danger');
 
+        if (false === Users::Put($user, $user['user_id'], [
+            'user_email_confirmed' => 1
+        ])) {
+            PublicAlert::danger('The Rest API Failed.');
+            return startApplication(true);
+        }
 
-        $stmt = $this->db->prepare('SELECT user_id FROM carbon_users WHERE user_email = ?');
-        $stmt->execute([$email]);
-        $_SESSION['id'] = $stmt->fetchColumn();
+        $_SESSION['id'] = $user['user_id'];
         PublicAlert::success('We successfully activated your account.');
-        startApplication(true); // there is not an activate template file
-        exit(1);
+        return startApplication(true); // there is not an activate template file
     }
 
     /**
@@ -375,12 +387,14 @@ class User extends GlobalMap
      */
     public function profile($user_uri)
     {
-
         if ($user_uri === 'DeleteAccount') {
-            Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], []);
+            if (false === Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], [])) {
+                throw new PublicAlert('Failed to delete user.');
+            }
             Serialized::clear();
-            startApplication(true);
-            return false;
+            $_SESSION['id'] = false;
+            self::commit();
+            return startApplication(true);
         }
 
         if (true !== $user_uri) {   // an actual user id
@@ -407,16 +421,16 @@ class User extends GlobalMap
         //throw new PublicAlert($first);
 
         if (false === Users::Put($my, $_SESSION['id'], [
-            'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
-            'user_first_name' => $first ?: $my['user_first_name'],
-            'user_birthday' => $dob ?: $my['user_birthday'],
-            'user_last_name' => $last ?: $my['user_last_name'],
-            'user_gender' => $gender ?: $my['user_gender'],
-            'user_email' => $email ?: $my['user_email'],
-            'user_password' =>  $password ? Bcrypt::genHash($password) : $my['user_password'],
-            'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
-            'user_education_history' => $user_education_history ?: $my['user_education_history'],
-            'user_about_me' => $about_me ?: $my['user_about_me']])) {
+                'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
+                'user_first_name' => $first ?: $my['user_first_name'],
+                'user_birthday' => $dob ?: $my['user_birthday'],
+                'user_last_name' => $last ?: $my['user_last_name'],
+                'user_gender' => $gender ?: $my['user_gender'],
+                'user_email' => $email ?: $my['user_email'],
+                'user_password' => $password ? Bcrypt::genHash($password) : $my['user_password'],
+                'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
+                'user_education_history' => $user_education_history ?: $my['user_education_history'],
+                'user_about_me' => $about_me ?: $my['user_about_me']])) {
             throw new PublicAlert('Sorry, we could not process your information at this time.', 'warning');
         }
 
