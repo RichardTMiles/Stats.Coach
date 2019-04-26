@@ -1,13 +1,13 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="/" class="logo hidden-md-down">
+    <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>S</b>C</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>Stats</b>.Coach</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top" role="navigation">
+    <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -19,13 +19,14 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <li id="NavMessages" class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height: 50px;"
                        onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
                         <i class="fa fa-envelope-o"></i>
                         {{#newMessages}}
                             <span id="NewMessagesSpan" class="label label-success">{{newMessages}}</span>
                         {{/newMessages}}
                     </a>
+
                     <ul class="dropdown-menu">
                         <li class="header">You have {{newMessages}}{{^newMessages}}0{{/newMessages}} new messages</li>
                         <!-- inner menu: contains the actual data -->
@@ -123,9 +124,9 @@
                 <!-- User Account: style can be found in dropdown.less -->
 
                 <li class="dropdown user user-menu">
-                    <a id="navUserTopRightUserImage" ref="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">{{ my.user_first_name }} {{ my.user_last_name }}</span>
+                        <span class="hidden-xs">{{my.user_first_last}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -151,7 +152,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a id="navTopRightUserDropdownProfile" href="/Profile/" class="btn btn-default btn-flat">Profile</a>
+                                <a href="/Profile/" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
@@ -231,16 +232,11 @@
                     <i class="fa fa-edit"></i><span>Post Score</span>
                 </a>
             </li>
-            <li>
-                <a href="/AddCourse/Basic">
-                    <i class="fa fa-plus-square"></i><span>Add Courses</span>
-                </a>
-            </li>
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 {{#my.teams}}
-                        <ul class="treeview-menu">
+                    <ul class="treeview-menu">
                         <li class="treeview menu-open">
                             <a href="/Team/{{team_id}}/"><i
                                     class="fa fa-circle-o"></i>

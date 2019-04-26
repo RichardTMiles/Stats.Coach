@@ -145,7 +145,7 @@
 
     // const carbon = new CarbonPHP('#pjax-content', 'wss://rootprerogative.com:8888/', false);
 
-    const carbon = new CarbonPHP('#pjax-content');
+    const carbon = new CarbonPHP('#pjax-content', 'ws://localhost:8888/');
 
     carbon.event("Carbon");
 
@@ -169,7 +169,7 @@
         $('#my-box-widget').boxRefresh('load');
     });
 
-    $.load_backStretch(APP_VIEW + 'Img/unsplash.png');
+    $.load_backStretch(APP_VIEW + 'Img/Carbon-green.png');
 
     $('.sidebar-menu').tree();
 

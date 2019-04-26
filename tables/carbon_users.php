@@ -13,7 +13,7 @@ class carbon_users extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_username' => [ 'varchar', '2', '25' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'varchar', '2', '9' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'varchar', '2', '225' ],'user_rank' => [ 'int', '2', '8' ],'user_password' => [ 'varchar', '2', '225' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'datetime', '2', '' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'varchar', '2', '200' ],'user_location' => [ 'varchar', '2', '20' ],'user_creation_date' => [ 'datetime', '2', '' ],
+        'user_username' => [ 'varchar', '2', '25' ],'user_password' => [ 'varchar', '2', '225' ],'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'varchar', '2', '9' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'varchar', '2', '225' ],'user_rank' => [ 'int', '2', '8' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'datetime', '2', '' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'varchar', '2', '200' ],'user_location' => [ 'varchar', '2', '20' ],'user_creation_date' => [ 'datetime', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -39,16 +39,23 @@ class carbon_users extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,112 +70,127 @@ class carbon_users extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
-        }
-        if (array_key_exists('user_type', $argv)) {
-            $user_type = $argv['user_type'];
-            $stmt->bindParam(':user_type',$user_type, 2, 20);
-        }
-        if (array_key_exists('user_sport', $argv)) {
-            $user_sport = $argv['user_sport'];
-            $stmt->bindParam(':user_sport',$user_sport, 2, 20);
-        }
-        if (array_key_exists('user_session_id', $argv)) {
-            $user_session_id = $argv['user_session_id'];
-            $stmt->bindParam(':user_session_id',$user_session_id, 2, 225);
-        }
-        if (array_key_exists('user_facebook_id', $argv)) {
-            $user_facebook_id = $argv['user_facebook_id'];
-            $stmt->bindParam(':user_facebook_id',$user_facebook_id, 2, 225);
-        }
-        if (array_key_exists('user_username', $argv)) {
-            $user_username = $argv['user_username'];
-            $stmt->bindParam(':user_username',$user_username, 2, 25);
-        }
-        if (array_key_exists('user_first_name', $argv)) {
-            $user_first_name = $argv['user_first_name'];
-            $stmt->bindParam(':user_first_name',$user_first_name, 2, 25);
-        }
-        if (array_key_exists('user_last_name', $argv)) {
-            $user_last_name = $argv['user_last_name'];
-            $stmt->bindParam(':user_last_name',$user_last_name, 2, 25);
-        }
-        if (array_key_exists('user_profile_pic', $argv)) {
-            $user_profile_pic = $argv['user_profile_pic'];
-            $stmt->bindParam(':user_profile_pic',$user_profile_pic, 2, 225);
-        }
-        if (array_key_exists('user_profile_uri', $argv)) {
-            $user_profile_uri = $argv['user_profile_uri'];
-            $stmt->bindParam(':user_profile_uri',$user_profile_uri, 2, 225);
-        }
-        if (array_key_exists('user_cover_photo', $argv)) {
-            $user_cover_photo = $argv['user_cover_photo'];
-            $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
-        }
-        if (array_key_exists('user_birthday', $argv)) {
-            $user_birthday = $argv['user_birthday'];
-            $stmt->bindParam(':user_birthday',$user_birthday, 2, 9);
-        }
-        if (array_key_exists('user_gender', $argv)) {
-            $user_gender = $argv['user_gender'];
-            $stmt->bindParam(':user_gender',$user_gender, 2, 25);
-        }
-        if (array_key_exists('user_about_me', $argv)) {
-            $user_about_me = $argv['user_about_me'];
-            $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
-        }
-        if (array_key_exists('user_rank', $argv)) {
-            $user_rank = $argv['user_rank'];
-            $stmt->bindParam(':user_rank',$user_rank, 2, 8);
-        }
-        if (array_key_exists('user_password', $argv)) {
-            $user_password = $argv['user_password'];
-            $stmt->bindParam(':user_password',$user_password, 2, 225);
-        }
-        if (array_key_exists('user_email', $argv)) {
-            $user_email = $argv['user_email'];
-            $stmt->bindParam(':user_email',$user_email, 2, 50);
-        }
-        if (array_key_exists('user_email_code', $argv)) {
-            $user_email_code = $argv['user_email_code'];
-            $stmt->bindParam(':user_email_code',$user_email_code, 2, 225);
-        }
-        if (array_key_exists('user_email_confirmed', $argv)) {
-            $user_email_confirmed = $argv['user_email_confirmed'];
-            $stmt->bindParam(':user_email_confirmed',$user_email_confirmed, 2, 20);
-        }
-        if (array_key_exists('user_generated_string', $argv)) {
-            $user_generated_string = $argv['user_generated_string'];
-            $stmt->bindParam(':user_generated_string',$user_generated_string, 2, 200);
-        }
-        if (array_key_exists('user_membership', $argv)) {
-            $user_membership = $argv['user_membership'];
-            $stmt->bindParam(':user_membership',$user_membership, 2, 10);
-        }
-        if (array_key_exists('user_deactivated', $argv)) {
-            $user_deactivated = $argv['user_deactivated'];
-            $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
-        }
-        if (array_key_exists('user_last_login', $argv)) {
-            $stmt->bindValue(':user_last_login',$argv['user_last_login'], 2);
-        }
-        if (array_key_exists('user_ip', $argv)) {
-            $user_ip = $argv['user_ip'];
-            $stmt->bindParam(':user_ip',$user_ip, 2, 20);
-        }
-        if (array_key_exists('user_education_history', $argv)) {
-            $user_education_history = $argv['user_education_history'];
-            $stmt->bindParam(':user_education_history',$user_education_history, 2, 200);
-        }
-        if (array_key_exists('user_location', $argv)) {
-            $user_location = $argv['user_location'];
-            $stmt->bindParam(':user_location',$user_location, 2, 20);
-        }
-        if (array_key_exists('user_creation_date', $argv)) {
-            $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'user_username':
+                        $user_username = $argv['user_username'];
+                        $stmt->bindParam(':user_username',$user_username, 2, 25);
+                    break;
+                   case 'user_password':
+                        $user_password = $argv['user_password'];
+                        $stmt->bindParam(':user_password',$user_password, 2, 225);
+                    break;
+                   case 'user_id':
+                        $user_id = $argv['user_id'];
+                        $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    break;
+                   case 'user_type':
+                        $user_type = $argv['user_type'];
+                        $stmt->bindParam(':user_type',$user_type, 2, 20);
+                    break;
+                   case 'user_sport':
+                        $user_sport = $argv['user_sport'];
+                        $stmt->bindParam(':user_sport',$user_sport, 2, 20);
+                    break;
+                   case 'user_session_id':
+                        $user_session_id = $argv['user_session_id'];
+                        $stmt->bindParam(':user_session_id',$user_session_id, 2, 225);
+                    break;
+                   case 'user_facebook_id':
+                        $user_facebook_id = $argv['user_facebook_id'];
+                        $stmt->bindParam(':user_facebook_id',$user_facebook_id, 2, 225);
+                    break;
+                   case 'user_first_name':
+                        $user_first_name = $argv['user_first_name'];
+                        $stmt->bindParam(':user_first_name',$user_first_name, 2, 25);
+                    break;
+                   case 'user_last_name':
+                        $user_last_name = $argv['user_last_name'];
+                        $stmt->bindParam(':user_last_name',$user_last_name, 2, 25);
+                    break;
+                   case 'user_profile_pic':
+                        $user_profile_pic = $argv['user_profile_pic'];
+                        $stmt->bindParam(':user_profile_pic',$user_profile_pic, 2, 225);
+                    break;
+                   case 'user_profile_uri':
+                        $user_profile_uri = $argv['user_profile_uri'];
+                        $stmt->bindParam(':user_profile_uri',$user_profile_uri, 2, 225);
+                    break;
+                   case 'user_cover_photo':
+                        $user_cover_photo = $argv['user_cover_photo'];
+                        $stmt->bindParam(':user_cover_photo',$user_cover_photo, 2, 225);
+                    break;
+                   case 'user_birthday':
+                        $user_birthday = $argv['user_birthday'];
+                        $stmt->bindParam(':user_birthday',$user_birthday, 2, 9);
+                    break;
+                   case 'user_gender':
+                        $user_gender = $argv['user_gender'];
+                        $stmt->bindParam(':user_gender',$user_gender, 2, 25);
+                    break;
+                   case 'user_about_me':
+                        $user_about_me = $argv['user_about_me'];
+                        $stmt->bindParam(':user_about_me',$user_about_me, 2, 225);
+                    break;
+                   case 'user_rank':
+                        $user_rank = $argv['user_rank'];
+                        $stmt->bindParam(':user_rank',$user_rank, 2, 8);
+                    break;
+                   case 'user_email':
+                        $user_email = $argv['user_email'];
+                        $stmt->bindParam(':user_email',$user_email, 2, 50);
+                    break;
+                   case 'user_email_code':
+                        $user_email_code = $argv['user_email_code'];
+                        $stmt->bindParam(':user_email_code',$user_email_code, 2, 225);
+                    break;
+                   case 'user_email_confirmed':
+                        $user_email_confirmed = $argv['user_email_confirmed'];
+                        $stmt->bindParam(':user_email_confirmed',$user_email_confirmed, 2, 20);
+                    break;
+                   case 'user_generated_string':
+                        $user_generated_string = $argv['user_generated_string'];
+                        $stmt->bindParam(':user_generated_string',$user_generated_string, 2, 200);
+                    break;
+                   case 'user_membership':
+                        $user_membership = $argv['user_membership'];
+                        $stmt->bindParam(':user_membership',$user_membership, 2, 10);
+                    break;
+                   case 'user_deactivated':
+                        $user_deactivated = $argv['user_deactivated'];
+                        $stmt->bindParam(':user_deactivated',$user_deactivated, 0, 1);
+                    break;
+                   case 'user_last_login':
+                        $stmt->bindValue(':user_last_login',$argv['user_last_login'], 2);
+                    break;
+                   case 'user_ip':
+                        $user_ip = $argv['user_ip'];
+                        $stmt->bindParam(':user_ip',$user_ip, 2, 20);
+                    break;
+                   case 'user_education_history':
+                        $user_education_history = $argv['user_education_history'];
+                        $stmt->bindParam(':user_education_history',$user_education_history, 2, 200);
+                    break;
+                   case 'user_location':
+                        $user_location = $argv['user_location'];
+                        $stmt->bindParam(':user_location',$user_location, 2, 20);
+                    break;
+                   case 'user_creation_date':
+                        $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -272,7 +294,7 @@ class carbon_users extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_id|user_type|user_sport|user_session_id|user_facebook_id|user_username|user_first_name|user_last_name|user_profile_pic|user_profile_uri|user_cover_photo|user_birthday|user_gender|user_about_me|user_rank|user_password|user_email|user_email_code|user_email_confirmed|user_generated_string|user_membership|user_deactivated|user_last_login|user_ip|user_education_history|user_location|user_creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_username|user_password|user_id|user_type|user_sport|user_session_id|user_facebook_id|user_first_name|user_last_name|user_profile_pic|user_profile_uri|user_cover_photo|user_birthday|user_gender|user_about_me|user_rank|user_email|user_email_code|user_email_confirmed|user_generated_string|user_membership|user_deactivated|user_last_login|user_ip|user_education_history|user_location|user_creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -332,13 +354,19 @@ class carbon_users extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_users (user_id, user_type, user_sport, user_session_id, user_facebook_id, user_username, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_password, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location) VALUES ( UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_username, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_password, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location)';
+        $sql = 'INSERT INTO StatsCoach.carbon_users (user_username, user_password, user_id, user_type, user_sport, user_session_id, user_facebook_id, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location) VALUES ( :user_username, :user_password, UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $user_id = $id = $argv['user_id'] ?? self::beginTransaction('carbon_users');
+                
+                    $user_username = $argv['user_username'];
+                    $stmt->bindParam(':user_username',$user_username, 2, 25);
+                        
+                    $user_password = $argv['user_password'];
+                    $stmt->bindParam(':user_password',$user_password, 2, 225);
+                        $user_id = $id = $argv['user_id'] ?? self::beginTransaction('carbon_users');
                 $stmt->bindParam(':user_id',$user_id, 2, 16);
                 
                     $user_type =  $argv['user_type'] ?? 'Athlete';
@@ -352,9 +380,6 @@ class carbon_users extends Database implements iRest
                         
                     $user_facebook_id =  $argv['user_facebook_id'] ?? null;
                     $stmt->bindParam(':user_facebook_id',$user_facebook_id, 2, 225);
-                        
-                    $user_username = $argv['user_username'];
-                    $stmt->bindParam(':user_username',$user_username, 2, 25);
                         
                     $user_first_name = $argv['user_first_name'];
                     $stmt->bindParam(':user_first_name',$user_first_name, 2, 25);
@@ -382,9 +407,6 @@ class carbon_users extends Database implements iRest
                         
                     $user_rank =  $argv['user_rank'] ?? '0';
                     $stmt->bindParam(':user_rank',$user_rank, 2, 8);
-                        
-                    $user_password = $argv['user_password'];
-                    $stmt->bindParam(':user_password',$user_password, 2, 225);
                         
                     $user_email = $argv['user_email'];
                     $stmt->bindParam(':user_email',$user_email, 2, 50);
@@ -444,6 +466,12 @@ class carbon_users extends Database implements iRest
 
         $set = '';
 
+            if (array_key_exists('user_username', $argv)) {
+                $set .= 'user_username=:user_username,';
+            }
+            if (array_key_exists('user_password', $argv)) {
+                $set .= 'user_password=:user_password,';
+            }
             if (array_key_exists('user_id', $argv)) {
                 $set .= 'user_id=UNHEX(:user_id),';
             }
@@ -458,9 +486,6 @@ class carbon_users extends Database implements iRest
             }
             if (array_key_exists('user_facebook_id', $argv)) {
                 $set .= 'user_facebook_id=:user_facebook_id,';
-            }
-            if (array_key_exists('user_username', $argv)) {
-                $set .= 'user_username=:user_username,';
             }
             if (array_key_exists('user_first_name', $argv)) {
                 $set .= 'user_first_name=:user_first_name,';
@@ -488,9 +513,6 @@ class carbon_users extends Database implements iRest
             }
             if (array_key_exists('user_rank', $argv)) {
                 $set .= 'user_rank=:user_rank,';
-            }
-            if (array_key_exists('user_password', $argv)) {
-                $set .= 'user_password=:user_password,';
             }
             if (array_key_exists('user_email', $argv)) {
                 $set .= 'user_email=:user_email,';

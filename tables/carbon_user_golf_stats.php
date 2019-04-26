@@ -39,16 +39,23 @@ class carbon_user_golf_stats extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,38 +70,53 @@ class carbon_user_golf_stats extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('stats_id', $argv)) {
-            $stats_id = $argv['stats_id'];
-            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
-        }
-        if (array_key_exists('stats_tournaments', $argv)) {
-            $stats_tournaments = $argv['stats_tournaments'];
-            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
-        }
-        if (array_key_exists('stats_rounds', $argv)) {
-            $stats_rounds = $argv['stats_rounds'];
-            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
-        }
-        if (array_key_exists('stats_handicap', $argv)) {
-            $stats_handicap = $argv['stats_handicap'];
-            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
-        }
-        if (array_key_exists('stats_strokes', $argv)) {
-            $stats_strokes = $argv['stats_strokes'];
-            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
-        }
-        if (array_key_exists('stats_ffs', $argv)) {
-            $stats_ffs = $argv['stats_ffs'];
-            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
-        }
-        if (array_key_exists('stats_gnr', $argv)) {
-            $stats_gnr = $argv['stats_gnr'];
-            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
-        }
-        if (array_key_exists('stats_putts', $argv)) {
-            $stats_putts = $argv['stats_putts'];
-            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'stats_id':
+                        $stats_id = $argv['stats_id'];
+                        $stmt->bindParam(':stats_id',$stats_id, 2, 16);
+                    break;
+                   case 'stats_tournaments':
+                        $stats_tournaments = $argv['stats_tournaments'];
+                        $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
+                    break;
+                   case 'stats_rounds':
+                        $stats_rounds = $argv['stats_rounds'];
+                        $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
+                    break;
+                   case 'stats_handicap':
+                        $stats_handicap = $argv['stats_handicap'];
+                        $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
+                    break;
+                   case 'stats_strokes':
+                        $stats_strokes = $argv['stats_strokes'];
+                        $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
+                    break;
+                   case 'stats_ffs':
+                        $stats_ffs = $argv['stats_ffs'];
+                        $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
+                    break;
+                   case 'stats_gnr':
+                        $stats_gnr = $argv['stats_gnr'];
+                        $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+                    break;
+                   case 'stats_putts':
+                        $stats_putts = $argv['stats_putts'];
+                        $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

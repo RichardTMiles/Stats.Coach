@@ -11,9 +11,6 @@
  *
  */
 
-
-echo 'hwewe'; die;
-
 print '<h1>Setting up CarbonPHP</h1>';
 
 $db = \CarbonPHP\Database::database();
@@ -409,7 +406,7 @@ CREATE TABLE `carbon_teams` (
   KEY `teams_teams_team_id_fk` (`parent_team`),
   CONSTRAINT `teams_entity_coach_pk_fk` FOREIGN KEY (`team_coach`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_entity_entity_pk_fk` FOREIGN KEY (`team_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `carbon_photos` (`photo_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `teams_entity_photos_photo_id_fk` FOREIGN KEY (`team_photo`) REFERENCES `CarbonPHP`.`carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `teams_teams_team_id_fk` FOREIGN KEY (`parent_team`) REFERENCES `carbon_teams` (`team_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -432,12 +429,14 @@ END;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `carbon_user_followers` (
+  `follower_table_id` binary(16) NOT NULL,
   `follows_user_id` binary(16) NOT NULL,
   `user_id` binary(16) NOT NULL,
-  PRIMARY KEY (`follows_user_id`),
-  KEY `followers_entity_entity_pk_fk` (`user_id`),
+  PRIMARY KEY (`follower_table_id`),
+  KEY `followers_entity_entity_pk_fk` (`follows_user_id`),
+  KEY `followers_entity_entity_followers_pk_fk` (`user_id`),
   CONSTRAINT `followers_entity_entity_follows_pk_fk` FOREIGN KEY (`follows_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `followers_entity_entity_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `followers_entity_followers_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -490,12 +489,13 @@ END;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `carbon_user_messages` (
-  `message_id` binary(16) DEFAULT NULL,
+  `message_id` binary(16) NOT NULL,
   `from_user_id` binary(16) NOT NULL,
   `to_user_id` binary(16) NOT NULL,
   `message` text NOT NULL,
   `message_read` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`to_user_id`),
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`message_id`),
   KEY `messages_entity_entity_pk_fk` (`message_id`),
   KEY `messages_entity_user_from_pk_fk` (`to_user_id`),
   KEY `carbon_user_messages_carbon_entity_pk_fk` (`from_user_id`),
@@ -586,12 +586,13 @@ END;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `carbon_users` (
+  `user_username` varchar(25) NOT NULL,
+  `user_password` varchar(225) NOT NULL,
   `user_id` binary(16) NOT NULL,
   `user_type` varchar(20) NOT NULL DEFAULT 'Athlete',
   `user_sport` varchar(20) DEFAULT 'GOLF',
   `user_session_id` varchar(225) DEFAULT NULL,
   `user_facebook_id` varchar(225) DEFAULT NULL,
-  `user_username` varchar(25) NOT NULL,
   `user_first_name` varchar(25) NOT NULL,
   `user_last_name` varchar(25) NOT NULL,
   `user_profile_pic` varchar(225) DEFAULT NULL,
@@ -601,7 +602,6 @@ CREATE TABLE `carbon_users` (
   `user_gender` varchar(25) NOT NULL,
   `user_about_me` varchar(225) DEFAULT NULL,
   `user_rank` int(8) DEFAULT '0',
-  `user_password` varchar(225) NOT NULL,
   `user_email` varchar(50) NOT NULL,
   `user_email_code` varchar(225) DEFAULT NULL,
   `user_email_confirmed` varchar(20) NOT NULL DEFAULT '0',
@@ -667,7 +667,7 @@ END;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
   `user_id` binary(16) NOT NULL,
-  `user_ip` binary(16) DEFAULT NULL,
+  `user_ip` varchar(20) DEFAULT NULL,
   `session_id` varchar(255) NOT NULL,
   `session_expires` datetime NOT NULL,
   `session_data` text,

@@ -11,7 +11,6 @@
         <p></p>
     </section>
     <!-- Main content -->
-
     <section class="content">
         <div id="alert"></div>
         <div class="row">
@@ -35,27 +34,29 @@
                                 <a class="pull-right">{{followingCount}}</a>
                             </li>
                         </ul>
-                        {{^myAccountBool}}
-                            <a style="display: {{#following}} none {{/following}}{{^following}}block{{/following}}"
-                               onclick="follow()"
-                               class="btn btn-primary btn-block" id="FollowUser"><b>Follow :)</b></a>
-                            <a style="display: {{#following}}block{{/following}}{{^following}}none{{/following}}"
-                               onclick="unfollow()"
-                               class="btn btn-success btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
-                            <script>
-                                function follow() {
-                                    carbon.start('/Follow/{{ user_id }}');
-                                    document.getElementById('FollowUser').style.display = 'none';
-                                    document.getElementById('UnfollowUser').style.display = 'block';
-                                }
+                        <div id="followAlert">
+                            {{^myAccountBool}}
+                                <a style="display: {{#following}} none {{/following}}{{^following}}block{{/following}}"
+                                   onclick="follow()"
+                                   class="btn btn-primary btn-block" id="FollowUser"><b>Follow :)</b></a>
+                                <a style="display: {{#following}}block{{/following}}{{^following}}none{{/following}}"
+                                   onclick="unfollow()"
+                                   class="btn btn-success btn-block" id="UnfollowUser"><b>Unfollow :(</b></a>
+                                <script>
+                                    function follow() {
+                                        carbon.start('/Follow/{{ user_id }}', '#followAlert');
+                                        document.getElementById('FollowUser').style.display = 'none';
+                                        document.getElementById('UnfollowUser').style.display = 'block';
+                                    }
 
-                                function unfollow() {
-                                    carbon.start('{{ SITE }}Unfollow/{{ user_id }}/');
-                                    document.getElementById('FollowUser').style.display = 'block';
-                                    document.getElementById('UnfollowUser').style.display = 'none';
-                                }
-                            </script>
-                        {{/myAccountBool}}
+                                    function unfollow() {
+                                        carbon.start('/Unfollow/{{ user_id }}/', '#followAlert');
+                                        document.getElementById('FollowUser').style.display = 'block';
+                                        document.getElementById('UnfollowUser').style.display = 'none';
+                                    }
+                                </script>
+                            {{/myAccountBool}}
+                        </div>
                         {{#myAccountBool}}
                             <a href="/Messages/" class="btn btn-success btn-block">Messages</a>
                         {{/myAccountBool}}

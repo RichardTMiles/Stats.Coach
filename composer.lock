@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "410b2bb615ca1ae394e519a8a7b9ed96",
+    "content-hash": "4a31e138d7bbf1d792762bbf18b26c4c",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -3030,7 +3030,11 @@
         },
         {
             "name": "symfony/browser-kit",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v3.4.25",
+=========
             "version": "v3.4.26",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -3087,7 +3091,11 @@
         },
         {
             "name": "symfony/console",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v3.4.25",
+=========
             "version": "v3.4.26",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -3159,7 +3167,11 @@
         },
         {
             "name": "symfony/debug",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v4.2.6",
+=========
             "version": "v4.2.7",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -3215,7 +3227,11 @@
         },
         {
             "name": "symfony/dom-crawler",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v4.2.6",
+=========
             "version": "v4.2.7",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
@@ -3272,7 +3288,11 @@
         },
         {
             "name": "symfony/filesystem",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v3.4.25",
+=========
             "version": "v3.4.26",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3439,7 +3459,11 @@
         },
         {
             "name": "symfony/process",
+<<<<<<<<< Temporary merge branch 1
+            "version": "v3.4.25",
+=========
             "version": "v3.4.26",
+>>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",

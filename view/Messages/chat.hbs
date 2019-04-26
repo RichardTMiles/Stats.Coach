@@ -26,7 +26,7 @@
                         <span class="direct-chat-timestamp pull-right">{{creation_date}}</span>
                     </div>
                     <!-- /.direct-chat-info -->
-                    <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image">
+                    <img class="direct-chat-img" src="{{user_profile_picture}}{{^user_profile_picture}}/view/img/Carbon-red.png{{/user_profile_picture}}" alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">{{message}}</div>
                     <!-- /.direct-chat-text -->
@@ -41,7 +41,7 @@
                         <span class="direct-chat-timestamp pull-left">{{creation_date}}</span>
                     </div>
                     <!-- /.direct-chat-info -->
-                    <img class="direct-chat-img" src="{{user_profile_picture}}" alt="Message User Image">
+                    <img class="direct-chat-img" src="{{user_profile_picture}}{{^user_profile_picture}}/view/img/Carbon-red.png{{/user_profile_picture}}" alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">{{message}}</div>
                     <!-- /.direct-chat-text -->
@@ -62,7 +62,7 @@
                         <img class="contacts-list-img" src="{{user_profile_picture}}" alt="User Image">
                         <div class="contacts-list-info">
                             <span class="contacts-list-name">
-                                {{user full name}}
+                                {{user_first_name}} {{user_last_name}}
                                 <small class="contacts-list-date pull-right">{{lastMessageDate}}</small>
                             </span>
                             <span class="contacts-list-msg">{{#lastMessage}}{{#You}}
@@ -81,7 +81,7 @@
 <!-- /.box-body -->
 
 <div class="box-footer">
-    <form data-hbs method="post" action="https://Stats.Coach/Messages/{{to_User}}/">
+    <form data-hbs method="post" action="/Messages/{{to_User}}/">
         <div class="input-group">
             <input name="message" placeholder="Type Message ..." class="form-control">
             <span class="input-group-btn">

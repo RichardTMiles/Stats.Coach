@@ -6,6 +6,7 @@ use CarbonPHP\Session;
 use Model\Helpers\GlobalMap;
 
 
+use Tables\carbon_user_followers;
 use Tables\Carbon_User_Golf_Stats as Stats;
 use Tables\carbon_users as Users;
 use Tables\Carbon_User_Followers as Followers;
@@ -188,10 +189,21 @@ class User extends GlobalMap
      */
     public function follow($user_id): bool
     {
-        if (!$out = Users::user_exists($user_id)) {
+        global $json;
+
+        if (!$out = getUser($user_id)) {
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
-        return Followers::Post([$user_id]);
+        if (false === Followers::Post([
+            'user_id' => $_SESSION['id'],
+            'follows_user_id' => $user_id
+        ])) {
+            PublicAlert::warning('Could not follow user!');
+        } else {
+            $json['success'] = true;
+        }
+
+        return true;
     }
 
     /**
@@ -201,10 +213,19 @@ class User extends GlobalMap
      */
     public function unfollow($user_id): bool
     {
-        if (!Users::user_exists($user_id)) {
-            throw new PublicAlert('That user does not exist?!');
+
+        if (!getUser($user_id)) {
+            PublicAlert::warning("That user does not exist $user_id");
         }
-        Followers::Delete($this->user[$_SESSION['id']], $user_id);
+
+        if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
+            'follows_user_id' => $user_id,
+            'user_id' => $_SESSION['id']
+        ])) {
+            PublicAlert::warning('Could not unfollow user.');
+        } else {
+            $json['success'] = true;
+        }
 
         return true;
 
@@ -397,13 +418,27 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-        if (true !== $user_uri) {   // an actual user id
-            global $user_id;
-            $user_id = Users::user_id_from_uri($user_uri);
-            if (!empty($user_id) && $user_id !== $_SESSION['id']) {
-                new User($user_id);
-                return true;
+        if (true !== $user_uri) {   // !! an actual user id
+            global $json, $user;
+            getUser($user_uri);
+
+            $user[$user_uri]['following'] = [];
+
+            if (!carbon_user_followers::Get($user[$user_uri]['following'], null, [
+                    'where' => [
+                        'user_id' => $_SESSION['id'],
+                        'follows_user_id' => $user_uri
+                    ],
+                    'pagination' => [
+                        'limit' => 1
+                    ]
+                ]
+            )){
+                PublicAlert::warning('Failed to look up following status!');
             }
+
+            $json['my'] = $user[$user_uri];
+            return true;
         }
 
         Users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
@@ -420,6 +455,7 @@ class User extends GlobalMap
 
         //throw new PublicAlert($first);
 
+        // todo - shrink this?
         if (false === Users::Put($my, $_SESSION['id'], [
                 'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
                 'user_first_name' => $first ?: $my['user_first_name'],
@@ -461,7 +497,7 @@ class User extends GlobalMap
 
         Session::update();
 
-        return startApplication('/');
+        return null;
     }
 
 }

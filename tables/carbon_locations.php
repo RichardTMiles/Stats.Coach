@@ -39,16 +39,23 @@ class carbon_locations extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,33 +70,48 @@ class carbon_locations extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('entity_id', $argv)) {
-            $entity_id = $argv['entity_id'];
-            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-        }
-        if (array_key_exists('latitude', $argv)) {
-            $latitude = $argv['latitude'];
-            $stmt->bindParam(':latitude',$latitude, 2, 225);
-        }
-        if (array_key_exists('longitude', $argv)) {
-            $longitude = $argv['longitude'];
-            $stmt->bindParam(':longitude',$longitude, 2, 225);
-        }
-        if (array_key_exists('street', $argv)) {
-            $stmt->bindValue(':street',$argv['street'], 2);
-        }
-        if (array_key_exists('city', $argv)) {
-            $city = $argv['city'];
-            $stmt->bindParam(':city',$city, 2, 40);
-        }
-        if (array_key_exists('state', $argv)) {
-            $state = $argv['state'];
-            $stmt->bindParam(':state',$state, 2, 10);
-        }
-        if (array_key_exists('elevation', $argv)) {
-            $elevation = $argv['elevation'];
-            $stmt->bindParam(':elevation',$elevation, 2, 40);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'entity_id':
+                        $entity_id = $argv['entity_id'];
+                        $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                    break;
+                   case 'latitude':
+                        $latitude = $argv['latitude'];
+                        $stmt->bindParam(':latitude',$latitude, 2, 225);
+                    break;
+                   case 'longitude':
+                        $longitude = $argv['longitude'];
+                        $stmt->bindParam(':longitude',$longitude, 2, 225);
+                    break;
+                   case 'street':
+                        $stmt->bindValue(':street',$argv['street'], 2);
+                    break;
+                   case 'city':
+                        $city = $argv['city'];
+                        $stmt->bindParam(':city',$city, 2, 40);
+                    break;
+                   case 'state':
+                        $state = $argv['state'];
+                        $stmt->bindParam(':state',$state, 2, 10);
+                    break;
+                   case 'elevation':
+                        $elevation = $argv['elevation'];
+                        $stmt->bindParam(':elevation',$elevation, 2, 40);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
