@@ -187,6 +187,8 @@ class Golf extends Request  // Validation
             PublicAlert::success('It seems like you have unfinished changes! Please finish entering the data for this course.');
             $json['course']['location'] = [];
             carbon_locations::Get($json['course']['location'], $json['course']['course_id'], []);
+
+
         }
 
         if ($state) {
@@ -377,6 +379,7 @@ class Golf extends Request  // Validation
 
         return [$courseId, $holeNumber, $par, $handicap, $color];
     }
+
 
 
 }

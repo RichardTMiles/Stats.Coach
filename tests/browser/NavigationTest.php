@@ -124,14 +124,12 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byName( 'password' )->value( 'adminadmin' );
 
-        sleep(5);
+        sleep(1);
 
         // submit the form
         $form->submit();
 
-
-        sleep(3);
-
+        sleep(2);
 
     }
 
@@ -144,23 +142,25 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
        // $this->byId('select2-uzdm-container')->click();
 
-        sleep(5);
+        sleep(1);
 
 
         $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Alaska');
 
-        sleep(2);
+        sleep(1);
 
         $this->select($this->byId('course'))->selectOptionByValue('Add');
 
 
-        sleep(10);
+        sleep(1);
+
+
+        $this->byId('clear')->click();
+        sleep(1);
 
         $this->byName( 'c_name' )->value( 'Lake Park' );
-        sleep(2);
         $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
         $this->select($this->byId('course_play'))->selectOptionByValue('9');
-
         $this->byId( 'phone' )->value( '2145551234' );
         $this->byName( 'c_street' )->value( '6 Lake Park Rd, TX 75057' );
         $this->byName( 'c_city' )->value( 'Lewisville' );
@@ -168,6 +168,49 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
         $this->byId('next')->click();
+        sleep(1);
+        $this->byId('tee_color')->click();
+        $this->byId('Black')->click();
+        sleep(1);
+        $this->byName('general_difficulty')->value('13');
+        $this->byName('general_slope')->value('34');
+        $this->byName('women_difficulty')->value('52');
+        $this->byName('women_slope')->value('19');
+        sleep(5);
+        $this->byId('next')->click();
+        sleep(1);
+        $this->byId('tee_color')->click();
+        $this->byId('Blue')->click();
+        $this->byName('general_difficulty')->value('23');
+        $this->byName('general_slope')->value('12');
+        $this->byName('women_difficulty')->value('24');
+        $this->byName('women_slope')->value('43');
+        sleep(3);
+        $this->byId('next')->click();
+        sleep(1);
+        $this->byId('tee_color')->click();
+        $this->byId('White')->click();
+        $this->byName('general_difficulty')->value('43');
+        $this->byName('general_slope')->value('3');
+        $this->byName('women_difficulty')->value('54');
+        $this->byName('women_slope')->value('14');
+        sleep(3);
+        $this->byId('next')->click();
+        sleep(1);
+        $this->byId('current_hole_1')->value('11');
+        $this->byName('Black')->value('5');
+        $this->byName('Blue')->value('7');
+        $this->byName('White')->value('9');
+        $this->byName('hc_Men')->value('2');
+        $this->byName('hc_Women')->value('3');
+        sleep(10);
+        $this->byId('next')->click();
+
+
+
+
+        //$this->select($this->byClassName('knob'))->selectOptionByValue('13.2');
+
         sleep(10);
 
 

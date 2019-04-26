@@ -9,10 +9,11 @@
 
 <script>
     function resetInput() {
-        alert('reset')
         $('#c_name').attr('value', '')
-        alert($('#c_name').val());
-
+        $('#phone').attr('value', '')
+        $('#inputSuccess').attr('value', '')
+        $('#City').attr('value', '')
+        $("input[name=Handicap_number]").attr('value', '')
 
     }
 
@@ -233,7 +234,7 @@
             </div>
 
             <div class="box-footer">
-                <button type="reset" class="btn btn-default" onclick="resetInput()">Reset</button>
+                <button id="clear" type="reset" class="btn btn-default" onclick="resetInput()">Reset</button>
                 <!-- button -->
                 <button id="next" class="btn btn-info pull-right" type="submit">Next >></button>
             </div>

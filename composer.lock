@@ -2422,19 +2422,21 @@
         },
         {
             "name": "richardtmiles/carbonphp",
-            "version": "dev-Reacting",
+            "version": "dev-StatsCoach",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RichardTMiles/CarbonPHP",
-                "reference": "a95e54d3ea3bf7a916cf1bd85606c925e071e1d5"
+                "reference": "5c61b6838bd5199ff673e330161da166d5008840"
             },
             "require": {
                 "matthiasmullie/minify": "dev-master",
                 "mustache/mustache": "v2.12.0",
                 "patchwork/jsqueeze": "^2.0",
                 "php": "^7.1",
-                "phpunit/phpunit-selenium": "^4.1",
                 "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit-selenium": "^4.1"
             },
             "type": "library",
             "autoload": {
@@ -2467,7 +2469,7 @@
                 "Pipes",
                 "Sockets"
             ],
-            "time": "2019-04-07T02:46:31+00:00"
+            "time": "2019-04-26T06:45:06+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3030,11 +3032,7 @@
         },
         {
             "name": "symfony/browser-kit",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v3.4.25",
-=========
             "version": "v3.4.26",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -3091,11 +3089,7 @@
         },
         {
             "name": "symfony/console",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v3.4.25",
-=========
             "version": "v3.4.26",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -3167,11 +3161,7 @@
         },
         {
             "name": "symfony/debug",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v4.2.6",
-=========
             "version": "v4.2.7",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -3227,11 +3217,7 @@
         },
         {
             "name": "symfony/dom-crawler",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v4.2.6",
-=========
             "version": "v4.2.7",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
@@ -3288,11 +3274,7 @@
         },
         {
             "name": "symfony/filesystem",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v3.4.25",
-=========
             "version": "v3.4.26",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3459,11 +3441,7 @@
         },
         {
             "name": "symfony/process",
-<<<<<<<<< Temporary merge branch 1
-            "version": "v3.4.25",
-=========
             "version": "v3.4.26",
->>>>>>>>> Temporary merge branch 2
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",

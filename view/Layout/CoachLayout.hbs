@@ -81,7 +81,7 @@
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
                 <li id="NavTasks" class="dropdown tasks-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="height: 50px;">
                         <i class="fa fa-flag-o"></i>
 
                         {{#newTasks}}
@@ -127,6 +127,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
                         <span class="hidden-xs">{{my.user_first_last}}</span>
+                        <span class="hidden-xs"> {{my.user_first_name}} {{my.user_last_name}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -152,7 +153,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="/Profile/" class="btn btn-default btn-flat">Profile</a>
+                                <a id="navTopRightUserDropdownProfile" href="/Profile/" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
@@ -172,7 +173,7 @@
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar" style="height: auto;">
+    <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
@@ -206,7 +207,7 @@
                     <i class="fa fa-dashboard"></i> <span>Overview</span> <i
                         class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu" style="display: block;">
+                <ul class="treeview-menu">
                     <li class="active">
                         <a href="/" onclick=""><i
                                 class="fa fa-circle-o"></i>{{ my.user_first_name }} {{ my.user_last_name }}
@@ -232,11 +233,16 @@
                     <i class="fa fa-edit"></i><span>Post Score</span>
                 </a>
             </li>
+            <li>
+                <a href="/AddCourse/Basic">
+                    <i class="fa fa-plus-square"></i><span>Add Courses</span>
+                </a>
+            </li>
 
             <li class="treeview"><a href="#"><i class="fa fa-pie-chart"></i><span>Player Reports</span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 {{#my.teams}}
-                    <ul class="treeview-menu">
+                        <ul class="treeview-menu">
                         <li class="treeview menu-open">
                             <a href="/Team/{{team_id}}/"><i
                                     class="fa fa-circle-o"></i>

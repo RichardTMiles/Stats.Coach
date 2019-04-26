@@ -167,6 +167,8 @@ class carbon_golf_courses extends Database implements iRest
         
         $bind($argv);
 
+
+
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
         }
@@ -505,6 +507,8 @@ class carbon_golf_courses extends Database implements iRest
         $pdo = self::database();
 
         $sql .= ' WHERE  course_id=UNHEX('.self::addInjection($primary, $pdo).')';
+
+        //sortDump(self::$injection);
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
