@@ -158,12 +158,20 @@ class User extends Request
 
     public function follow($user_id)
     {
-        return $this->set($user_id)->alnum();
+        global $json;
+
+        $json = [];
+
+        if (!ctype_xdigit($user_id)) {
+            return null;
+        }
+
+        return $user_id;
     }
 
     public function unfollow($user_id)
     {
-        return $this->set($user_id)->alnum();
+        return $this->follow($user_id); // its the same check.
     }
 
     public function messages()

@@ -85,15 +85,11 @@ php -S localhost:80 index.php
   
 http://chromedriver.chromium.org/downloads
 
-
-
 downloaded the driver for chrome. that downloaded it to the desktop, and then we had to move it into the path 
 
 
 
 copy of terminal
-
-
 
 Kristins-MBP:~ KristinCarden$ pwd
 /Users/KristinCarden

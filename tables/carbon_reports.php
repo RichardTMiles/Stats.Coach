@@ -39,16 +39,23 @@ class carbon_reports extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,19 +70,34 @@ class carbon_reports extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('log_level', $argv)) {
-            $log_level = $argv['log_level'];
-            $stmt->bindParam(':log_level',$log_level, 2, 20);
-        }
-        if (array_key_exists('report', $argv)) {
-            $stmt->bindValue(':report',$argv['report'], 2);
-        }
-        if (array_key_exists('date', $argv)) {
-            $stmt->bindValue(':date',$argv['date'], 2);
-        }
-        if (array_key_exists('call_trace', $argv)) {
-            $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'log_level':
+                        $log_level = $argv['log_level'];
+                        $stmt->bindParam(':log_level',$log_level, 2, 20);
+                    break;
+                   case 'report':
+                        $stmt->bindValue(':report',$argv['report'], 2);
+                    break;
+                   case 'date':
+                        $stmt->bindValue(':date',$argv['date'], 2);
+                    break;
+                   case 'call_trace':
+                        $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

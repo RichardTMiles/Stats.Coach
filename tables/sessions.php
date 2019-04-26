@@ -13,7 +13,7 @@ class sessions extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'user_id' => [ 'binary', '2', '16' ],'user_ip' => [ 'binary', '2', '16' ],'session_id' => [ 'varchar', '2', '255' ],'session_expires' => [ 'datetime', '2', '' ],'session_data' => [ 'text,', '2', '' ],'user_online_status' => [ 'tinyint', '0', '1' ],
+        'user_id' => [ 'binary', '2', '16' ],'user_ip' => [ 'varchar', '2', '20' ],'session_id' => [ 'varchar', '2', '255' ],'session_expires' => [ 'datetime', '2', '' ],'session_data' => [ 'text,', '2', '' ],'user_online_status' => [ 'tinyint', '0', '1' ],
     ];
 
     public const VALIDATION = [];
@@ -39,16 +39,23 @@ class sessions extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
                     $sql .= "($column = UNHEX(:" . $column . ")) $join ";
                 } else {
                     $sql .= "($column = :" . $column . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,28 +70,43 @@ class sessions extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
-        }
-        if (array_key_exists('user_ip', $argv)) {
-            $user_ip = $argv['user_ip'];
-            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
-        }
-        if (array_key_exists('session_id', $argv)) {
-            $session_id = $argv['session_id'];
-            $stmt->bindParam(':session_id',$session_id, 2, 255);
-        }
-        if (array_key_exists('session_expires', $argv)) {
-            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
-        }
-        if (array_key_exists('session_data', $argv)) {
-            $stmt->bindValue(':session_data',$argv['session_data'], 2);
-        }
-        if (array_key_exists('user_online_status', $argv)) {
-            $user_online_status = $argv['user_online_status'];
-            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
-        }
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                switch ($key) {
+                
+                   case 'user_id':
+                        $user_id = $argv['user_id'];
+                        $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    break;
+                   case 'user_ip':
+                        $user_ip = $argv['user_ip'];
+                        $stmt->bindParam(':user_ip',$user_ip, 2, 20);
+                    break;
+                   case 'session_id':
+                        $session_id = $argv['session_id'];
+                        $stmt->bindParam(':session_id',$session_id, 2, 255);
+                    break;
+                   case 'session_expires':
+                        $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+                    break;
+                   case 'session_data':
+                        $stmt->bindValue(':session_data',$argv['session_data'], 2);
+                    break;
+                   case 'user_online_status':
+                        $user_online_status = $argv['user_online_status'];
+                        $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
+                    break;
+            }
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -248,7 +270,7 @@ class sessions extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
+        $sql = 'INSERT INTO StatsCoach.sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), :user_ip, :session_id, :session_expires, :session_data, :user_online_status)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -259,7 +281,7 @@ class sessions extends Database implements iRest
                     $stmt->bindParam(':user_id',$user_id, 2, 16);
                         
                     $user_ip =  $argv['user_ip'] ?? null;
-                    $stmt->bindParam(':user_ip',$user_ip, 2, 16);
+                    $stmt->bindParam(':user_ip',$user_ip, 2, 20);
                         
                     $session_id = $argv['session_id'];
                     $stmt->bindParam(':session_id',$session_id, 2, 255);
@@ -304,7 +326,7 @@ class sessions extends Database implements iRest
                 $set .= 'user_id=UNHEX(:user_id),';
             }
             if (array_key_exists('user_ip', $argv)) {
-                $set .= 'user_ip=UNHEX(:user_ip),';
+                $set .= 'user_ip=:user_ip,';
             }
             if (array_key_exists('session_id', $argv)) {
                 $set .= 'session_id=:session_id,';
