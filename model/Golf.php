@@ -539,6 +539,20 @@ class Golf extends GlobalMap implements iSport
             ]
         ];
 
+
+        foreach ($json['course']['course_tee_boxes'] as $key => $value) {
+            if ($value['box'] === $box_number) {
+                break;
+            }
+
+            if ($value['color'] === $color) {
+                PublicAlert::warning('Change colors');
+                $json['current_hole'] = $box_number;
+                $json['addColor'] = $json['course']['course_tee_boxes'][$box_number] ?? [];
+                return null;
+            }
+        }
+
         if (!Course::Put($json['course'], $courseId, [
             'course_tee_boxes' => $json['course']['course_tee_boxes'],
         ])) {
