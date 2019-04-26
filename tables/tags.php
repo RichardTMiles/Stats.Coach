@@ -70,16 +70,30 @@ class tags extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('tag_id', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
             $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
-        if (array_key_exists('tag_description', $argv)) {
+                   if (array_key_exists('tag_description', $argv)) {
             $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
         }
-        if (array_key_exists('tag_name', $argv)) {
+                   if (array_key_exists('tag_name', $argv)) {
             $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e45660a9226c78a4a0914fb83bf6284a",
+    "content-hash": "b716efaa40eb9b7677d9e9bae7f2d662",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -2426,7 +2426,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/RichardTMiles/CarbonPHP",
-                "reference": "8f876fcd3c8a39cd0e80f684398694b3b5fc0f47"
+                "reference": "f148eac0aabb149bf822f9820208e7a8f9b7775d"
             },
             "require": {
                 "matthiasmullie/minify": "dev-master",
@@ -2469,7 +2469,7 @@
                 "Pipes",
                 "Sockets"
             ],
-            "time": "2019-04-26T08:21:13+00:00"
+            "time": "2019-04-26T09:52:48+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

@@ -70,22 +70,36 @@ class carbon_team_members extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('member_id', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('member_id', $argv)) {
             $member_id = $argv['member_id'];
             $stmt->bindParam(':member_id',$member_id, 2, 16);
         }
-        if (array_key_exists('team_id', $argv)) {
+                   if (array_key_exists('team_id', $argv)) {
             $team_id = $argv['team_id'];
             $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (array_key_exists('user_id', $argv)) {
+                   if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (array_key_exists('accepted', $argv)) {
+                   if (array_key_exists('accepted', $argv)) {
             $accepted = $argv['accepted'];
             $stmt->bindParam(':accepted',$accepted, 0, 1);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

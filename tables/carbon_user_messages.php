@@ -70,28 +70,42 @@ class carbon_user_messages extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('message_id', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('message_id', $argv)) {
             $message_id = $argv['message_id'];
             $stmt->bindParam(':message_id',$message_id, 2, 16);
         }
-        if (array_key_exists('from_user_id', $argv)) {
+                   if (array_key_exists('from_user_id', $argv)) {
             $from_user_id = $argv['from_user_id'];
             $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
         }
-        if (array_key_exists('to_user_id', $argv)) {
+                   if (array_key_exists('to_user_id', $argv)) {
             $to_user_id = $argv['to_user_id'];
             $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-        if (array_key_exists('message', $argv)) {
+                   if (array_key_exists('message', $argv)) {
             $stmt->bindValue(':message',$argv['message'], 2);
         }
-        if (array_key_exists('message_read', $argv)) {
+                   if (array_key_exists('message_read', $argv)) {
             $message_read = $argv['message_read'];
             $stmt->bindParam(':message_read',$message_read, 0, 1);
         }
-        if (array_key_exists('creation_date', $argv)) {
+                   if (array_key_exists('creation_date', $argv)) {
             $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

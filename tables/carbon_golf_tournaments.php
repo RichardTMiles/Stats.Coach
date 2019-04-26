@@ -70,37 +70,51 @@ class carbon_golf_tournaments extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('tournament_id', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('tournament_id', $argv)) {
             $tournament_id = $argv['tournament_id'];
             $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
         }
-        if (array_key_exists('tournament_name', $argv)) {
+                   if (array_key_exists('tournament_name', $argv)) {
             $tournament_name = $argv['tournament_name'];
             $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
         }
-        if (array_key_exists('course_id', $argv)) {
+                   if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
             $stmt->bindParam(':course_id',$course_id, 2, 16);
         }
-        if (array_key_exists('host_name', $argv)) {
+                   if (array_key_exists('host_name', $argv)) {
             $host_name = $argv['host_name'];
             $stmt->bindParam(':host_name',$host_name, 2, 225);
         }
-        if (array_key_exists('tournament_style', $argv)) {
+                   if (array_key_exists('tournament_style', $argv)) {
             $tournament_style = $argv['tournament_style'];
             $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
         }
-        if (array_key_exists('tournament_team_price', $argv)) {
+                   if (array_key_exists('tournament_team_price', $argv)) {
             $tournament_team_price = $argv['tournament_team_price'];
             $stmt->bindParam(':tournament_team_price',$tournament_team_price, 2, 11);
         }
-        if (array_key_exists('tournament_paid', $argv)) {
+                   if (array_key_exists('tournament_paid', $argv)) {
             $tournament_paid = $argv['tournament_paid'];
             $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
         }
-        if (array_key_exists('tournament_date', $argv)) {
+                   if (array_key_exists('tournament_date', $argv)) {
             $stmt->bindValue(':tournament_date',$argv['tournament_date'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

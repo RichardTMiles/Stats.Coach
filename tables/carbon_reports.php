@@ -70,19 +70,33 @@ class carbon_reports extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('log_level', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('log_level', $argv)) {
             $log_level = $argv['log_level'];
             $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-        if (array_key_exists('report', $argv)) {
+                   if (array_key_exists('report', $argv)) {
             $stmt->bindValue(':report',$argv['report'], 2);
         }
-        if (array_key_exists('date', $argv)) {
+                   if (array_key_exists('date', $argv)) {
             $stmt->bindValue(':date',$argv['date'], 2);
         }
-        if (array_key_exists('call_trace', $argv)) {
+                   if (array_key_exists('call_trace', $argv)) {
             $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

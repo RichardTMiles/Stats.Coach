@@ -39,7 +39,7 @@ class Messages extends GlobalMap
         global $user, $json;
         $unread = 0;
 
-        $json['widget'] = '#NavMessages';
+        $json['Widget'] = '#NavMessages';
 
         foreach ($user as $id => $their) {
             if ($id == $_SESSION['id'])

@@ -70,14 +70,28 @@ class carbons extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('entity_pk', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('entity_pk', $argv)) {
             $entity_pk = $argv['entity_pk'];
             $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-        if (array_key_exists('entity_fk', $argv)) {
+                   if (array_key_exists('entity_fk', $argv)) {
             $entity_fk = $argv['entity_fk'];
             $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

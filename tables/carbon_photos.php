@@ -70,25 +70,39 @@ class carbon_photos extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('parent_id', $argv)) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('parent_id', $argv)) {
             $parent_id = $argv['parent_id'];
             $stmt->bindParam(':parent_id',$parent_id, 2, 16);
         }
-        if (array_key_exists('photo_id', $argv)) {
+                   if (array_key_exists('photo_id', $argv)) {
             $photo_id = $argv['photo_id'];
             $stmt->bindParam(':photo_id',$photo_id, 2, 16);
         }
-        if (array_key_exists('user_id', $argv)) {
+                   if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (array_key_exists('photo_path', $argv)) {
+                   if (array_key_exists('photo_path', $argv)) {
             $photo_path = $argv['photo_path'];
             $stmt->bindParam(':photo_path',$photo_path, 2, 225);
         }
-        if (array_key_exists('photo_description', $argv)) {
+                   if (array_key_exists('photo_description', $argv)) {
             $stmt->bindValue(':photo_description',$argv['photo_description'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv);
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);

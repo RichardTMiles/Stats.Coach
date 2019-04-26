@@ -147,8 +147,6 @@ class StatsCoach extends Application
             }
 
 
-
-
             ################################### MVC
             $this->structure($this->MVC());
 
