@@ -153,7 +153,6 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         sleep(10);
 
-        $this->byName( 'c_name' )->value( '' );
         $this->byName( 'c_name' )->value( 'Lake Park' );
         sleep(2);
         $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
