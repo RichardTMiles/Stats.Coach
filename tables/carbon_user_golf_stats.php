@@ -71,6 +71,7 @@ class carbon_user_golf_stats extends Database implements iRest
 
     public static function bind(\PDOStatement $stmt, array $argv) {
    
+   /*
     $bind = function (array $argv) use (&$bind, &$stmt) {
             foreach ($argv as $key => $value) {
                 
@@ -115,7 +116,7 @@ class carbon_user_golf_stats extends Database implements iRest
           }
         };
         
-        $bind($argv);
+        $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
