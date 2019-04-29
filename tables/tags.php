@@ -50,9 +50,9 @@ class tags extends Database implements iRest
             } else if (array_key_exists($column, self::COLUMNS)) {
                 $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(:" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = :" . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
                 $bump = false;

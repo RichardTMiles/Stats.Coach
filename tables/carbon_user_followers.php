@@ -1,5 +1,4 @@
 <?php
-
 namespace Tables;
 
 
@@ -10,11 +9,11 @@ use CarbonPHP\Interfaces\iRest;
 class carbon_user_followers extends Database implements iRest
 {
     public const PRIMARY = [
-        'follower_table_id',
+    'follower_table_id',
     ];
 
     public const COLUMNS = [
-        'follower_table_id' => ['binary', '2', '16'], 'follows_user_id' => ['binary', '2', '16'], 'user_id' => ['binary', '2', '16'],
+        'follower_table_id' => [ 'binary', '2', '16' ],'follows_user_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],
     ];
 
     public const VALIDATION = [];
@@ -23,8 +22,7 @@ class carbon_user_followers extends Database implements iRest
     public static $injection = [];
 
 
-    public static function jsonSQLReporting($argv, $sql): void
-    {
+    public static function jsonSQLReporting($argv, $sql) : void {
         global $json;
         if (!\is_array($json)) {
             $json = [];
@@ -38,7 +36,7 @@ class carbon_user_followers extends Database implements iRest
         ];
     }
 
-    public static function buildWhere(array $set, \PDO $pdo, $join = 'AND'): string
+    public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
         $bump = false;
@@ -52,9 +50,9 @@ class carbon_user_followers extends Database implements iRest
             } else if (array_key_exists($column, self::COLUMNS)) {
                 $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(:" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = :" . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
                 $bump = false;
@@ -64,44 +62,43 @@ class carbon_user_followers extends Database implements iRest
         return rtrim($sql, " $join") . ')';
     }
 
-    public static function addInjection($value, \PDO $pdo, $quote = false): string
+    public static function addInjection($value, \PDO $pdo, $quote = false) : string
     {
         $inject = ':injection' . \count(self::$injection) . 'buildWhere';
         self::$injection[$inject] = $quote ? $pdo->quote($value) : $value;
         return $inject;
     }
 
-    public static function bind(\PDOStatement $stmt, array $argv)
-    {
-
-        $bind = function (array $argv) use (&$bind, &$stmt) {
+    public static function bind(\PDOStatement $stmt, array $argv) {
+   
+    $bind = function (array $argv) use (&$bind, &$stmt) {
             foreach ($argv as $key => $value) {
-
+                
                 if (is_numeric($key) && is_array($value)) {
                     $bind($value);
                     continue;
                 }
-
-                if (array_key_exists('follower_table_id', $argv)) {
-                    $follower_table_id = $argv['follower_table_id'];
-                    $stmt->bindParam(':follower_table_id', $follower_table_id, 2, 16);
-                }
-                if (array_key_exists('follows_user_id', $argv)) {
-                    $follows_user_id = $argv['follows_user_id'];
-                    $stmt->bindParam(':follows_user_id', $follows_user_id, 2, 16);
-                }
-                if (array_key_exists('user_id', $argv)) {
-                    $user_id = $argv['user_id'];
-                    $stmt->bindParam(':user_id', $user_id, 2, 16);
-                }
-
-            }
+                
+                   if (array_key_exists('follower_table_id', $argv)) {
+            $follower_table_id = $argv['follower_table_id'];
+            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+        }
+                   if (array_key_exists('follows_user_id', $argv)) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+           
+          }
         };
-
+        
         $bind($argv);
 
         foreach (self::$injection as $key => $value) {
-            $stmt->bindValue($key, $value);
+            $stmt->bindValue($key,$value);
         }
 
         return $stmt->execute();
@@ -109,43 +106,43 @@ class carbon_user_followers extends Database implements iRest
 
 
     /**
-     *
-     *   $argv = [
-     *       'select' => [
-     *                          '*column name array*', 'etc..'
-     *        ],
-     *
-     *       'where' => [
-     *              'Column Name' => 'Value To Constrain',
-     *              'Defaults to AND' => 'Nesting array switches to OR',
-     *              [
-     *                  'Column Name' => 'Value To Constrain',
-     *                  'This array is OR'ed togeather' => 'Another sud array would `AND`'
-     *                  [ etc... ]
-     *              ]
-     *        ],
-     *
-     *        'pagination' => [
-     *              'limit' => (int) 90, // The maximum number of rows to return,
-     *                       setting the limit explicitly to 1 will return a key pair array of only the
-     *                       singular result. SETTING THE LIMIT TO NULL WILL ALLOW INFINITE RESULTS (NO LIMIT).
-     *                       The limit defaults to 100 by design.
-     *
-     *              'order' => '*column name* [ASC|DESC]',  // i.e.  'username ASC' or 'username, email DESC'
-     *
-     *
-     *         ],
-     *
-     *   ];
-     *
-     *
-     * @param array $return
-     * @param string|null $primary
-     * @param array $argv
-     * @return bool
-     * @throws \Exception
-     */
-    public static function Get(array &$return, string $primary = null, array $argv): bool
+    *
+    *   $argv = [
+    *       'select' => [
+    *                          '*column name array*', 'etc..'
+    *        ],
+    *
+    *       'where' => [
+    *              'Column Name' => 'Value To Constrain',
+    *              'Defaults to AND' => 'Nesting array switches to OR',
+    *              [
+    *                  'Column Name' => 'Value To Constrain',
+    *                  'This array is OR'ed togeather' => 'Another sud array would `AND`'
+    *                  [ etc... ]
+    *              ]
+    *        ],
+    *
+    *        'pagination' => [
+    *              'limit' => (int) 90, // The maximum number of rows to return,
+    *                       setting the limit explicitly to 1 will return a key pair array of only the
+    *                       singular result. SETTING THE LIMIT TO NULL WILL ALLOW INFINITE RESULTS (NO LIMIT).
+    *                       The limit defaults to 100 by design.
+    *
+    *              'order' => '*column name* [ASC|DESC]',  // i.e.  'username ASC' or 'username, email DESC'
+    *
+    *
+    *         ],
+    *
+    *   ];
+    *
+    *
+    * @param array $return
+    * @param string|null $primary
+    * @param array $argv
+    * @return bool
+    * @throws \Exception
+    */
+    public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
         self::$injection = [];
         $aggregate = false;
@@ -155,11 +152,11 @@ class carbon_user_followers extends Database implements iRest
         $get = $argv['select'] ?? array_keys(self::COLUMNS);
         $where = $argv['where'] ?? [];
 
-        if (array_key_exists('pagination', $argv)) {
+        if (array_key_exists('pagination',$argv)) {
             if (!empty($argv['pagination']) && !\is_array($argv['pagination'])) {
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
-            if (array_key_exists('limit', $argv['pagination']) && $argv['pagination']['limit'] !== null) {
+            if (array_key_exists('limit',$argv['pagination']) && $argv['pagination']['limit'] !== null) {
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
@@ -170,7 +167,7 @@ class carbon_user_followers extends Database implements iRest
 
                 $order = ' ORDER BY ';
 
-                if (array_key_exists('order', $argv['pagination']) && $argv['pagination']['order'] !== null) {
+                if (array_key_exists('order',$argv['pagination']) && $argv['pagination']['order'] !== null) {
                     if (\is_array($argv['pagination']['order'])) {
                         foreach ($argv['pagination']['order'] as $item => $sort) {
                             $order .= "$item $sort";
@@ -187,7 +184,7 @@ class carbon_user_followers extends Database implements iRest
             $limit = ' ORDER BY follower_table_id ASC LIMIT 100';
         }
 
-        foreach ($get as $key => $column) {
+        foreach($get as $key => $column){
             if (!empty($sql)) {
                 $sql .= ', ';
                 if (!empty($group)) {
@@ -210,7 +207,7 @@ class carbon_user_followers extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' . $sql . ' FROM StatsCoach.carbon_user_followers';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_followers';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -218,10 +215,10 @@ class carbon_user_followers extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-            $sql .= ' WHERE  follower_table_id=UNHEX(' . self::addInjection($primary, $pdo) . ')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
-        if ($aggregate && !empty($group)) {
+        if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
         }
 
@@ -238,26 +235,26 @@ class carbon_user_followers extends Database implements iRest
         $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
-         *   The next part is so every response from the rest api
-         *   formats to a set of rows. Even if only one row is returned.
-         *   You must set the third parameter to true, otherwise '0' is
-         *   apparently in the self::COLUMNS
-         */
+        *   The next part is so every response from the rest api
+        *   formats to a set of rows. Even if only one row is returned.
+        *   You must set the third parameter to true, otherwise '0' is
+        *   apparently in the self::COLUMNS
+        */
 
-
+        
         if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
             $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
             // promise this is needed and will still return the desired array except for a single record will not be an array
-
+        
         }
 
         return true;
     }
 
     /**
-     * @param array $argv
-     * @return bool|mixed
-     */
+    * @param array $argv
+    * @return bool|mixed
+    */
     public static function Post(array $argv)
     {
         self::$injection = [];
@@ -268,14 +265,15 @@ class carbon_user_followers extends Database implements iRest
 
         $stmt = self::database()->prepare($sql);
 
-        $follower_table_id = $id = $argv['follower_table_id'] ?? self::beginTransaction('carbon_user_followers');
-        $stmt->bindParam(':follower_table_id', $follower_table_id, 2, 16);
-
-        $follows_user_id = $argv['follows_user_id'];
-        $stmt->bindParam(':follows_user_id', $follows_user_id, 2, 16);
-
-        $user_id = $argv['user_id'];
-        $stmt->bindParam(':user_id', $user_id, 2, 16);
+                $follower_table_id = $id = $argv['follower_table_id'] ?? self::beginTransaction('carbon_user_followers');
+                $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+                
+                    $follows_user_id = $argv['follows_user_id'];
+                    $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                        
+                    $user_id = $argv['user_id'];
+                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+        
 
 
         return $stmt->execute() ? $id : false;
@@ -283,12 +281,12 @@ class carbon_user_followers extends Database implements iRest
     }
 
     /**
-     * @param array $return
-     * @param string $primary
-     * @param array $argv
-     * @return bool
-     */
-    public static function Put(array &$return, string $primary, array $argv): bool
+    * @param array $return
+    * @param string $primary
+    * @param array $argv
+    * @return bool
+    */
+    public static function Put(array &$return, string $primary, array $argv) : bool
     {
         self::$injection = [];
         if (empty($primary)) {
@@ -296,7 +294,7 @@ class carbon_user_followers extends Database implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\array_key_exists($key, self::COLUMNS)) {
+            if (!\array_key_exists($key, self::COLUMNS)){
                 return false;
             }
         }
@@ -307,17 +305,17 @@ class carbon_user_followers extends Database implements iRest
 
         $set = '';
 
-        if (array_key_exists('follower_table_id', $argv)) {
-            $set .= 'follower_table_id=UNHEX(:follower_table_id),';
-        }
-        if (array_key_exists('follows_user_id', $argv)) {
-            $set .= 'follows_user_id=UNHEX(:follows_user_id),';
-        }
-        if (array_key_exists('user_id', $argv)) {
-            $set .= 'user_id=UNHEX(:user_id),';
-        }
+            if (array_key_exists('follower_table_id', $argv)) {
+                $set .= 'follower_table_id=UNHEX(:follower_table_id),';
+            }
+            if (array_key_exists('follows_user_id', $argv)) {
+                $set .= 'follows_user_id=UNHEX(:follows_user_id),';
+            }
+            if (array_key_exists('user_id', $argv)) {
+                $set .= 'user_id=UNHEX(:user_id),';
+            }
 
-        if (empty($set)) {
+        if (empty($set)){
             return false;
         }
 
@@ -325,13 +323,13 @@ class carbon_user_followers extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  follower_table_id=UNHEX(' . self::addInjection($primary, $pdo) . ')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-        if (!self::bind($stmt, $argv)) {
+        if (!self::bind($stmt, $argv)){
             return false;
         }
 
@@ -342,12 +340,12 @@ class carbon_user_followers extends Database implements iRest
     }
 
     /**
-     * @param array $remove
-     * @param string|null $primary
-     * @param array $argv
-     * @return bool
-     */
-    public static function Delete(array &$remove, string $primary = null, array $argv): bool
+    * @param array $remove
+    * @param string|null $primary
+    * @param array $argv
+    * @return bool
+    */
+    public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
         if (null !== $primary) {
             return carbons::Delete($remove, $primary, $argv);
