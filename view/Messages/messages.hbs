@@ -27,34 +27,34 @@
             </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body no-padding">
+        <div class="box-body no-padding chat" id="chat-box">
             <ul class="users-list clearfix">
-                {{#users}}
+                {{#friends}}
                     <li>
-                        <a class="users-list-name" onclick="$.fn.startApplication('https://stats.coach/Messages/{{user_id}}/')">
-                            <img src="{{user_profile_pic}}" alt="User Image" width="60em" height="60em"><br>
-                            {{user_full_name}}
+                        <a class="users-list-name" onclick="carbon.startApplication('/Messages/{{user_id}}/', '#direct-chat')">
+                            <img style="min-height: 60px; max-height: 60px" src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" class="img-circle" alt="User Image" width="60em" height="60em"><br>
+                            {{user_first_name}} {{user_last_name}}
                             <span class="users-list-date">{{user_last_login}}</span>
                         </a>
                     </li>
-                {{/users}}
+                {{/friends}}
             </ul>
             <!-- /.users-list -->
         </div>
         <!-- /.box-footer -->
     </div>
     <!--/.box -->
-    {{^users}}
+    {{^friends}}
         <div class="alert alert-warning">
             <h4><i class="icon fa fa-warning"></i> You have no connections yet!</h4>
             Start Connecting Now.
         </div>
-    {{/users}}
+    {{/friends}}
 
 </div>
 
 <div class="col-md-7">
-    <div class="box box-success direct-chat direct-chat-success">
+    <div id="direct-chat" class="box box-success direct-chat direct-chat-success">
         <div class="box-header with-border">
             <h3 class="box-title">Direct Chat</h3>
         </div>

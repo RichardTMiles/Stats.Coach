@@ -19,7 +19,7 @@
                 <div class="box box-primary" data-widget="">
                     <div class="box-body box-profile">
                         <img class="profile-user-img img-responsive img-circle"
-                             src="{{user_profile_pic}}" alt="User profile picture">
+                             src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" alt="User profile picture">
                         <h3 class="profile-username text-center">
                             {{user_first_name}} {{user_last_name}}
                         </h3>
@@ -27,11 +27,11 @@
                         <ul class="list-group list-group-unbordered">
                             <li class="list-group-item">
                                 <b>Followers</b>
-                                <a class="pull-right">{{followersCount}}</a>
+                                <a class="pull-right" {{#myAccountBool}}href="/Followers/" {{/myAccountBool}}>{{followersCount}}</a>
                             </li>
                             <li class="list-group-item">
                                 <b>Following</b>
-                                <a class="pull-right">{{followingCount}}</a>
+                                <a class="pull-right" {{#myAccountBool}}href="/Following/" {{/myAccountBool}}>{{followingCount}}</a>
                             </li>
                         </ul>
                         <div id="followAlert">
@@ -78,8 +78,8 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <dl class="dl-horizontal">
-                                <dt>About Me</dt>
-                                <dd>{{user_about_me}}{{^user_about_me}}Come on, nothing{{/user_about_me}}</dd>
+                                <dt>About {{#myAccountBool}}Me{{/myAccountBool}}{{^myAccountBool}}{{user_first_name}} {{user_last_name}}{{/myAccountBool}}</dt>
+                                <dd>{{user_about_me}} {{#myAccountBool}}{{^user_about_me}}Come on, nothing{{/user_about_me}}{{/myAccountBool}}</dd>
                                 <br>
                                 <dt>Birthday</dt>
                                 <dd>{{user_birthday}}</dd>
@@ -88,8 +88,8 @@
                                 <dd>{{user_education_history}}</dd>
                                 <br>
                                 <dt>Mutual Friends</dt>
-                                <dd>{{user_facebook_id}}{{^user_facebook_id}}
-                                    Connect to Facebook{{/user_facebook_id}}</dd>
+                                <dd>{{#myAccountBool}}{{^user_facebook_id}}
+                                    Connect to Facebook{{/user_facebook_id}}{{/myAccountBool}}</dd>
                             </dl>
                         </div>
                         <!-- /.box-body -->

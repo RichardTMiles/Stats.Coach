@@ -16,12 +16,12 @@
 
     <div class="box box-widget widget-user">
         <!-- Add the bg color to the header using any of the bg-* classes -->
-        <div class="widget-user-header bg-black" style="background: url('{{my.user_cover_photo}}') center center;">
+        <div class="widget-user-header bg-black" style="background: url('{{my.user_cover_photo}}{{^my.user_cover_photo}}/view/img/Carbon-green.png{{/my.user_cover_photo}}') center center;">
             <h3 class="widget-user-username"></h3>
             <h5 class="widget-user-desc"></h5>
         </div>
         <div class="widget-user-image">
-            <img class="img-circle" src="{{my.user_profile_pic}}" alt="User Avatar">
+            <img class="img-circle" src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" alt="User Avatar">
         </div>
 
         <div class="box-footer">
@@ -107,7 +107,7 @@
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="fa fa-pencil"></i></span>
+                <span class="info-box-icon bg-aqua" style="text-align: center"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Shots</span>
                     <span class="info-box-number">{{my.stats.stats_strokes}}</span>

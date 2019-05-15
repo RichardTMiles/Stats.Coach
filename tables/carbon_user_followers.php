@@ -330,6 +330,19 @@ class carbon_user_followers extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('follower_table_id', $argv)) {
+            $follower_table_id = $argv['follower_table_id'];
+            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+        }
+                   if (array_key_exists('follows_user_id', $argv)) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

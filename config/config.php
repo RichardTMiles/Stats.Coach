@@ -1,4 +1,11 @@
 <?php
+
+use CarbonPHP\Error\PublicAlert;
+use Model\Golf;
+use Model\Messages;
+use Tables\carbon_user_followers;
+use Tables\carbon_user_messages;
+
 /**
  * Created by IntelliJ IDEA.
  * User: richardmiles
@@ -10,12 +17,19 @@
  * data table.
  */
 
-function getUser($id = false)
+
+/**
+ * @param bool $id
+ * @param string $level
+ * @return array
+ * @throws PublicAlert
+ */
+function getUser($id = false, $level = 'All') : array
 {
     global $user;
 
     if ($id === false) {
-        throw new \CarbonPHP\Error\PublicAlert('No arguments to getUser.');
+        throw new PublicAlert('No arguments to getUser.');
     }
 
     if (!is_array($user)) {
@@ -27,44 +41,114 @@ function getUser($id = false)
     }
 
     /**
-     * TODO - This needs to not suck
      * @noinspection NotOptimalIfConditionsInspection
+     * @param array $options
+     * @return void
      */
-    if (false === Tables\carbon_users::Get($my, $id, []) || empty($my)) {
-        $_SESSION['id'] = false;
-        \CarbonPHP\Error\PublicAlert::danger('Failed get to user restful api failed.');
-        return false; // todo - figure out what the return here does // throw alert?
-    }
-    // end pos
+    $getUser = function ($options = []) use (&$my, $id, $level) {
+        if (false === Tables\carbon_users::Get($my, empty($options) ? $id : null, $options) || empty($my)) {
+            $_SESSION['id'] = false;
+            throw new PublicAlert('Failed get to user restful api failed.');
+        }
+    };
 
-    if (empty($user[$id]['user_profile_pic']) || $user[$id]['user_profile_pic'] === null) {
-        $user[$id]['user_profile_pic'] = '/view/img/Carbon-red.png';
+    switch ($level) {
+        case 'All':
+            $getUser();
+            break;
+        case 'Profile':
+            $getUser([
+                'select' => [
+                    'user_first_name',
+                    'user_last_name',
+                    'user_id',
+                    'user_sport',
+                    'user_profile_pic',
+                    'user_cover_photo',
+                    'user_about_me'
+                ],
+                'where' => [
+                    'user_id' => $id
+                ],
+                'pagination' => [
+                    'limit' => 1
+                ]
+            ]);
+            break;
+        case 'Basic':
+            $getUser([
+                'select' => [
+                    'user_first_name',
+                    'user_last_name',
+                    'user_id',
+                    'user_sport',
+                    'user_profile_pic',
+                    'user_cover_photo',
+                    'user_about_me'
+                ],
+                'where' => [
+                    'user_id' => $id
+                ],
+                'pagination' => [
+                    'limit' => 1
+                ]
+            ]);
+            break;
+        default:
+            throw new PublicAlert('Invalid option passed to getUser => ' . $level);
+
     }
 
     // todo check return of all rest api
-    \Model\Golf::sessionStuff($my);
+    switch ($level) {
+        /** @noinspection PhpMissingBreakStatementInspection */
+        case 'All':
 
-    Tables\carbon_user_followers::Get($my['followers'], null, [
-        'where' => [
-            'follows_user_id' => $id
-        ]
-    ]);
+            $my['notifications'] = [];
 
-    $my['followersCount'] = count($my['followers']);
+            Tables\carbon_user_notifications::Get($my['notifications'], null, [
+                'where' => [
+                    'to_user_id' => $id,
+                ]
+            ]);
 
-    $my['following'] = [];
+            $my['tasks'] = [];
 
-    Tables\carbon_user_followers::Get($my['following'], $id, []);
+            Tables\carbon_user_tasks::Get($my['tasks'], null, [
+                'where' => [
+                    'to_user_id' => $id
+                ]
+            ]);
 
-    $my['followingCount'] = count($my['following']);
+            $my['navMessages'] = Messages::unreadMessages();
 
-    Tables\carbon_user_messages::Get($my['messages'], null, [
-        'where' => [
-            'to_user_id' => $id
-        ]
-    ]);
+            $my['newMessages'] = count($my['navMessages']);
 
-    return true;
+            $my['messages'] = [];
+
+
+        case 'Profile':
+            $my['followers'] = \Model\User::followers($_SESSION['id']);
+
+            $my['followersCount'] = count($my['followers']);
+
+            $my['following'] = \Model\User::following($_SESSION['id']);
+
+            $my['followingCount'] = count($my['following']);
+
+
+            // Im thinking its a faster op to foreach than database select again
+
+
+
+            $my['friends'] = empty($my['following']) || empty($my['followers'])
+                ? [] : array_intersect( $my['following'], $my['followers']);
+
+        /** @noinspection PhpMissingBreakStatementInspection */
+        case 'Basic':
+            Golf::sessionStuff($my);
+    }
+    return $my;
 }
 
 return [
@@ -106,7 +190,7 @@ return [
 
         'REPLY_EMAIL' => 'support@carbonphp.com',
 
-        'HTTP' => false   // I assume that HTTP is okay by default
+        'HTTP' => APP_LOCAL   // I assume that HTTP is okay by default
     ],
 
     'SESSION' => [
@@ -125,17 +209,17 @@ return [
         },
     ],
 
-    /*          TODO - finish building php websockets          */
+    /** TODO - finish building php websockets
+     * https://certbot.eff.org/docs/using.html#where-are-my-certificates
+     */
     'SOCKET' => [
         'WEBSOCKETD' => true,  // if you'd like to use web
         'PORT' => 8888,
         'DEV' => true,
-        /*
         'SSL' => [
-            'KEY' => '',
-            'CERT' => ''
+            'KEY' => '/var/www/stats.coach/privkey.pem',
+            'CERT' => '/var/www/stats.coach/cert.pem'
         ]
-        */
     ],
 
     // ERRORS on point
@@ -154,7 +238,7 @@ return [
     'VIEW' => [
         'VIEW' => 'view/',  // This is where the MVC() function will map the HTML.PHP and HTML.HBS . See Carbonphp.com/mvc
 
-        'WRAPPER' => 'Layout/Wrapper.hbs',     // View::content() will produce this
+        'WRAPPER' => 'layout/Wrapper.hbs',     // View::content() will produce this
     ],
 
     'MINIFY' => [

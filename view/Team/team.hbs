@@ -27,7 +27,7 @@
                         <div class="widget-user-header bg-green">
                             <div class="widget-user-image">
                                 <img class="img-circle"
-                                     src="/Data/Uploads/Pictures/Defaults/team-icon.png"
+                                     src="/data/uploads/pictures/defaults/team-icon.png"
                                      alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
@@ -40,14 +40,14 @@
                             {{#imTheCoach}}
                                 <i class="fa fa-fw fa-coffee"></i>
                                 <a style="color: #ffffff" href="/Profile/">Coach {{ my.user_last_name }}</a></h5>
-                                <h6 class="widget-user-desc" onclick="Carbon($.fn.startApplication('Team/'))"><i
+                                <h6 class="widget-user-desc" onclick="carbon.startApplication('Team/')"><i
                                         class="fa fa-fw fa-cog"></i>Team Settings</h6>
                             {{/imTheCoach}}
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
                                 <li><a href="">Team Code <span class="pull-right badge bg-blue">{{myTeam.team_code}}</span></a></li>
-                                <li><a onclick="$.fn.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
+                                <li><a onclick="carbon.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
                                 <li><a href="#">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a></li>
                                 <li><a href="#">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a></li>
                                 <li><a href="#">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a></li>

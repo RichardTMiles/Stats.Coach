@@ -318,6 +318,17 @@ class tags extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+        }
+                   if (array_key_exists('tag_description', $argv)) {
+            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+        }
+                   if (array_key_exists('tag_name', $argv)) {
+            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

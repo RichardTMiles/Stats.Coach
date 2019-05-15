@@ -334,6 +334,23 @@ class carbon_golf_tournament_teams extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('team_id', $argv)) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_id', $argv)) {
+            $tournament_id = $argv['tournament_id'];
+            $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_paid', $argv)) {
+            $tournament_paid = $argv['tournament_paid'];
+            $stmt->bindParam(':tournament_paid',$tournament_paid, 2, 1);
+        }
+                   if (array_key_exists('tournament_accepted', $argv)) {
+            $tournament_accepted = $argv['tournament_accepted'];
+            $stmt->bindParam(':tournament_accepted',$tournament_accepted, 2, 1);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

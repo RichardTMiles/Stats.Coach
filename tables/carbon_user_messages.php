@@ -1,4 +1,5 @@
 <?php
+
 namespace Tables;
 
 
@@ -9,11 +10,11 @@ use CarbonPHP\Interfaces\iRest;
 class carbon_user_messages extends Database implements iRest
 {
     public const PRIMARY = [
-    'message_id',
+        'message_id',
     ];
 
     public const COLUMNS = [
-        'message_id' => [ 'binary', '2', '16' ],'from_user_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],'creation_date' => [ 'datetime', '2', '' ],
+        'message_id' => ['binary', '2', '16'], 'from_user_id' => ['binary', '2', '16'], 'to_user_id' => ['binary', '2', '16'], 'message' => ['text', '2', ''], 'message_read' => ['tinyint', '0', '1'], 'creation_date' => ['datetime', '2', ''],
     ];
 
     public const VALIDATION = [];
@@ -22,7 +23,8 @@ class carbon_user_messages extends Database implements iRest
     public static $injection = [];
 
 
-    public static function jsonSQLReporting($argv, $sql) : void {
+    public static function jsonSQLReporting($argv, $sql): void
+    {
         global $json;
         if (!\is_array($json)) {
             $json = [];
@@ -36,7 +38,7 @@ class carbon_user_messages extends Database implements iRest
         ];
     }
 
-    public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
+    public static function buildWhere(array $set, \PDO $pdo, $join = 'AND'): string
     {
         $sql = '(';
         $bump = false;
@@ -50,7 +52,7 @@ class carbon_user_messages extends Database implements iRest
             } else if (array_key_exists($column, self::COLUMNS)) {
                 $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo)  . ")) $join ";
+                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo) . ")) $join ";
                 } else {
                     $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
                 }
@@ -62,54 +64,55 @@ class carbon_user_messages extends Database implements iRest
         return rtrim($sql, " $join") . ')';
     }
 
-    public static function addInjection($value, \PDO $pdo, $quote = false) : string
+    public static function addInjection($value, \PDO $pdo, $quote = false): string
     {
         $inject = ':injection' . \count(self::$injection) . 'buildWhere';
         self::$injection[$inject] = $quote ? $pdo->quote($value) : $value;
         return $inject;
     }
 
-    public static function bind(\PDOStatement $stmt, array $argv) {
-   
-   /*
-    $bind = function (array $argv) use (&$bind, &$stmt) {
-            foreach ($argv as $key => $value) {
-                
-                if (is_numeric($key) && is_array($value)) {
-                    $bind($value);
-                    continue;
-                }
-                
-                   if (array_key_exists('message_id', $argv)) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
-        }
-                   if (array_key_exists('from_user_id', $argv)) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-        }
-                   if (array_key_exists('to_user_id', $argv)) {
-            $to_user_id = $argv['to_user_id'];
-            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-        }
-                   if (array_key_exists('message', $argv)) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-                   if (array_key_exists('message_read', $argv)) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
-        }
-           
-          }
-        };
-        
-        $bind($argv); */
+    public static function bind(\PDOStatement $stmt, array $argv)
+    {
+
+        /*
+         $bind = function (array $argv) use (&$bind, &$stmt) {
+                 foreach ($argv as $key => $value) {
+
+                     if (is_numeric($key) && is_array($value)) {
+                         $bind($value);
+                         continue;
+                     }
+
+                        if (array_key_exists('message_id', $argv)) {
+                 $message_id = $argv['message_id'];
+                 $stmt->bindParam(':message_id',$message_id, 2, 16);
+             }
+                        if (array_key_exists('from_user_id', $argv)) {
+                 $from_user_id = $argv['from_user_id'];
+                 $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+             }
+                        if (array_key_exists('to_user_id', $argv)) {
+                 $to_user_id = $argv['to_user_id'];
+                 $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+             }
+                        if (array_key_exists('message', $argv)) {
+                 $stmt->bindValue(':message',$argv['message'], 2);
+             }
+                        if (array_key_exists('message_read', $argv)) {
+                 $message_read = $argv['message_read'];
+                 $stmt->bindParam(':message_read',$message_read, 0, 1);
+             }
+                        if (array_key_exists('creation_date', $argv)) {
+                 $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+             }
+
+               }
+             };
+
+             $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
-            $stmt->bindValue($key,$value);
+            $stmt->bindValue($key, $value);
         }
 
         return $stmt->execute();
@@ -117,43 +120,43 @@ class carbon_user_messages extends Database implements iRest
 
 
     /**
-    *
-    *   $argv = [
-    *       'select' => [
-    *                          '*column name array*', 'etc..'
-    *        ],
-    *
-    *       'where' => [
-    *              'Column Name' => 'Value To Constrain',
-    *              'Defaults to AND' => 'Nesting array switches to OR',
-    *              [
-    *                  'Column Name' => 'Value To Constrain',
-    *                  'This array is OR'ed togeather' => 'Another sud array would `AND`'
-    *                  [ etc... ]
-    *              ]
-    *        ],
-    *
-    *        'pagination' => [
-    *              'limit' => (int) 90, // The maximum number of rows to return,
-    *                       setting the limit explicitly to 1 will return a key pair array of only the
-    *                       singular result. SETTING THE LIMIT TO NULL WILL ALLOW INFINITE RESULTS (NO LIMIT).
-    *                       The limit defaults to 100 by design.
-    *
-    *              'order' => '*column name* [ASC|DESC]',  // i.e.  'username ASC' or 'username, email DESC'
-    *
-    *
-    *         ],
-    *
-    *   ];
-    *
-    *
-    * @param array $return
-    * @param string|null $primary
-    * @param array $argv
-    * @return bool
-    * @throws \Exception
-    */
-    public static function Get(array &$return, string $primary = null, array $argv) : bool
+     *
+     *   $argv = [
+     *       'select' => [
+     *                          '*column name array*', 'etc..'
+     *        ],
+     *
+     *       'where' => [
+     *              'Column Name' => 'Value To Constrain',
+     *              'Defaults to AND' => 'Nesting array switches to OR',
+     *              [
+     *                  'Column Name' => 'Value To Constrain',
+     *                  'This array is OR'ed togeather' => 'Another sud array would `AND`'
+     *                  [ etc... ]
+     *              ]
+     *        ],
+     *
+     *        'pagination' => [
+     *              'limit' => (int) 90, // The maximum number of rows to return,
+     *                       setting the limit explicitly to 1 will return a key pair array of only the
+     *                       singular result. SETTING THE LIMIT TO NULL WILL ALLOW INFINITE RESULTS (NO LIMIT).
+     *                       The limit defaults to 100 by design.
+     *
+     *              'order' => '*column name* [ASC|DESC]',  // i.e.  'username ASC' or 'username, email DESC'
+     *
+     *
+     *         ],
+     *
+     *   ];
+     *
+     *
+     * @param array $return
+     * @param string|null $primary
+     * @param array $argv
+     * @return bool
+     * @throws \Exception
+     */
+    public static function Get(array &$return, string $primary = null, array $argv): bool
     {
         self::$injection = [];
         $aggregate = false;
@@ -163,11 +166,11 @@ class carbon_user_messages extends Database implements iRest
         $get = $argv['select'] ?? array_keys(self::COLUMNS);
         $where = $argv['where'] ?? [];
 
-        if (array_key_exists('pagination',$argv)) {
+        if (array_key_exists('pagination', $argv)) {
             if (!empty($argv['pagination']) && !\is_array($argv['pagination'])) {
                 $argv['pagination'] = json_decode($argv['pagination'], true);
             }
-            if (array_key_exists('limit',$argv['pagination']) && $argv['pagination']['limit'] !== null) {
+            if (array_key_exists('limit', $argv['pagination']) && $argv['pagination']['limit'] !== null) {
                 $limit = ' LIMIT ' . $argv['pagination']['limit'];
             } else {
                 $limit = '';
@@ -178,7 +181,7 @@ class carbon_user_messages extends Database implements iRest
 
                 $order = ' ORDER BY ';
 
-                if (array_key_exists('order',$argv['pagination']) && $argv['pagination']['order'] !== null) {
+                if (array_key_exists('order', $argv['pagination']) && $argv['pagination']['order'] !== null) {
                     if (\is_array($argv['pagination']['order'])) {
                         foreach ($argv['pagination']['order'] as $item => $sort) {
                             $order .= "$item $sort";
@@ -195,7 +198,7 @@ class carbon_user_messages extends Database implements iRest
             $limit = ' ORDER BY message_id ASC LIMIT 100';
         }
 
-        foreach($get as $key => $column){
+        foreach ($get as $key => $column) {
             if (!empty($sql)) {
                 $sql .= ', ';
                 if (!empty($group)) {
@@ -218,7 +221,7 @@ class carbon_user_messages extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_messages';
+        $sql = 'SELECT ' . $sql . ' FROM StatsCoach.carbon_user_messages';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -226,10 +229,10 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+            $sql .= ' WHERE  message_id=UNHEX(' . self::addInjection($primary, $pdo) . ')';
         }
 
-        if ($aggregate  && !empty($group)) {
+        if ($aggregate && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
         }
 
@@ -246,26 +249,26 @@ class carbon_user_messages extends Database implements iRest
         $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         /**
-        *   The next part is so every response from the rest api
-        *   formats to a set of rows. Even if only one row is returned.
-        *   You must set the third parameter to true, otherwise '0' is
-        *   apparently in the self::COLUMNS
-        */
+         *   The next part is so every response from the rest api
+         *   formats to a set of rows. Even if only one row is returned.
+         *   You must set the third parameter to true, otherwise '0' is
+         *   apparently in the self::COLUMNS
+         */
 
-        
+
         if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
             $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
             // promise this is needed and will still return the desired array except for a single record will not be an array
-        
+
         }
 
         return true;
     }
 
     /**
-    * @param array $argv
-    * @return bool|mixed
-    */
+     * @param array $argv
+     * @return bool|mixed
+     */
     public static function Post(array $argv)
     {
         self::$injection = [];
@@ -276,19 +279,18 @@ class carbon_user_messages extends Database implements iRest
 
         $stmt = self::database()->prepare($sql);
 
-                $message_id = $id = $argv['message_id'] ?? self::beginTransaction('carbon_user_messages');
-                $stmt->bindParam(':message_id',$message_id, 2, 16);
-                
-                    $from_user_id = $argv['from_user_id'];
-                    $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-                        
-                    $to_user_id = $argv['to_user_id'];
-                    $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                        $stmt->bindValue(':message',$argv['message'], 2);
-                        
-                    $message_read =  $argv['message_read'] ?? '0';
-                    $stmt->bindParam(':message_read',$message_read, 0, 1);
-                
+        $message_id = $id = $argv['message_id'] ?? self::beginTransaction('carbon_user_messages');
+        $stmt->bindParam(':message_id', $message_id, 2, 16);
+
+        $from_user_id = $argv['from_user_id'];
+        $stmt->bindParam(':from_user_id', $from_user_id, 2, 16);
+
+        $to_user_id = $argv['to_user_id'];
+        $stmt->bindParam(':to_user_id', $to_user_id, 2, 16);
+        $stmt->bindValue(':message', $argv['message'], 2);
+
+        $message_read = $argv['message_read'] ?? '0';
+        $stmt->bindParam(':message_read', $message_read, 0, 1);
 
 
         return $stmt->execute() ? $id : false;
@@ -296,12 +298,12 @@ class carbon_user_messages extends Database implements iRest
     }
 
     /**
-    * @param array $return
-    * @param string $primary
-    * @param array $argv
-    * @return bool
-    */
-    public static function Put(array &$return, string $primary, array $argv) : bool
+     * @param array $return
+     * @param string $primary
+     * @param array $argv
+     * @return bool
+     */
+    public static function Put(array &$return, string $primary, array $argv): bool
     {
         self::$injection = [];
         if (empty($primary)) {
@@ -309,7 +311,7 @@ class carbon_user_messages extends Database implements iRest
         }
 
         foreach ($argv as $key => $value) {
-            if (!\array_key_exists($key, self::COLUMNS)){
+            if (!\array_key_exists($key, self::COLUMNS)) {
                 return false;
             }
         }
@@ -320,26 +322,26 @@ class carbon_user_messages extends Database implements iRest
 
         $set = '';
 
-            if (array_key_exists('message_id', $argv)) {
-                $set .= 'message_id=UNHEX(:message_id),';
-            }
-            if (array_key_exists('from_user_id', $argv)) {
-                $set .= 'from_user_id=UNHEX(:from_user_id),';
-            }
-            if (array_key_exists('to_user_id', $argv)) {
-                $set .= 'to_user_id=UNHEX(:to_user_id),';
-            }
-            if (array_key_exists('message', $argv)) {
-                $set .= 'message=:message,';
-            }
-            if (array_key_exists('message_read', $argv)) {
-                $set .= 'message_read=:message_read,';
-            }
-            if (array_key_exists('creation_date', $argv)) {
-                $set .= 'creation_date=:creation_date,';
-            }
+        if (array_key_exists('message_id', $argv)) {
+            $set .= 'message_id=UNHEX(:message_id),';
+        }
+        if (array_key_exists('from_user_id', $argv)) {
+            $set .= 'from_user_id=UNHEX(:from_user_id),';
+        }
+        if (array_key_exists('to_user_id', $argv)) {
+            $set .= 'to_user_id=UNHEX(:to_user_id),';
+        }
+        if (array_key_exists('message', $argv)) {
+            $set .= 'message=:message,';
+        }
+        if (array_key_exists('message_read', $argv)) {
+            $set .= 'message_read=:message_read,';
+        }
+        if (array_key_exists('creation_date', $argv)) {
+            $set .= 'creation_date=:creation_date,';
+        }
 
-        if (empty($set)){
+        if (empty($set)) {
             return false;
         }
 
@@ -347,13 +349,36 @@ class carbon_user_messages extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  message_id=UNHEX(' . self::addInjection($primary, $pdo) . ')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-        if (!self::bind($stmt, $argv)){
+        if (array_key_exists('message_id', $argv)) {
+            $message_id = $argv['message_id'];
+            $stmt->bindParam(':message_id', $message_id, 2, 16);
+        }
+        if (array_key_exists('from_user_id', $argv)) {
+            $from_user_id = $argv['from_user_id'];
+            $stmt->bindParam(':from_user_id', $from_user_id, 2, 16);
+        }
+        if (array_key_exists('to_user_id', $argv)) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id', $to_user_id, 2, 16);
+        }
+        if (array_key_exists('message', $argv)) {
+            $stmt->bindValue(':message', $argv['message'], 2);
+        }
+        if (array_key_exists('message_read', $argv)) {
+            $message_read = $argv['message_read'];
+            $stmt->bindParam(':message_read', $message_read, 0, 1);
+        }
+        if (array_key_exists('creation_date', $argv)) {
+            $stmt->bindValue(':creation_date', $argv['creation_date'], 2);
+        }
+
+        if (!self::bind($stmt, $argv)) {
             return false;
         }
 
@@ -364,12 +389,12 @@ class carbon_user_messages extends Database implements iRest
     }
 
     /**
-    * @param array $remove
-    * @param string|null $primary
-    * @param array $argv
-    * @return bool
-    */
-    public static function Delete(array &$remove, string $primary = null, array $argv) : bool
+     * @param array $remove
+     * @param string|null $primary
+     * @param array $argv
+     * @return bool
+     */
+    public static function Delete(array &$remove, string $primary = null, array $argv): bool
     {
         if (null !== $primary) {
             return carbons::Delete($remove, $primary, $argv);

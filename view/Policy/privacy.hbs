@@ -4,12 +4,19 @@
     <div class="row">
         <div class="col-xs-12">
             <h2 class="page-header">
-                <i class="fa fa-globe"></i> <a href="<?= SITE ?>">Stats Coach</a>
-                <small class="pull-right"><?= date( 'm/d/Y', filemtime( __FILE__ ) ) ?></small>
+                <i class="fa fa-globe"></i> <a href="/">Stats Coach</a>
+                <small id="date" class="pull-right"></small>
             </h2>
         </div>
         <!-- /.col -->
     </div>
+    <script>
+        Carbon(()=> {
+            let today = new Date();
+            let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            $('#date').html(date);
+        })
+    </script>
     <!-- info row -->
     <div class="row invoice-info">
         <div class="col-sm-4 invoice-col">
@@ -31,20 +38,22 @@
                 <h2>Stats Coach </h2> ("us", "we", or "our") operates https://Stats.Coach (the "Site"). This page informs you of our policies regarding the
                 collection, use and disclosure of Personal Information we receive from users of the Site.
                 We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of
-                information in accordance with this policy.
+                information in accordance with this policy. Users under the age of 13 must have approval from a parent or guardian before creating an
+                account with our site.
 
                 <h3>Information Collection And Use</h3>
                 While using our Site, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you.
-                Personally identifiable information may include, but is not limited to your name ("Personal Information").
+                Personally identifiable information may include, but is not limited to your name, email, and site usage statistics ("Personal Information").
 
                 <h3>Log Data</h3>
                 Like many site operators, we collect information that your browser sends whenever you visit our Site ("Log Data").
                 This Log Data may include information such as your computer's Internet Protocol ("IP") address, browser type, browser version, the pages of our
                 Site that you visit, the time and date of your visit, the time spent on those pages and other statistics.
-                In addition, we may use third party services such as Google Analytics that collect, monitor and analyze this ...
+                In addition, we may use third party services such as Google Analytics that collect, monitor and analyze this data.
 
                 <h3>Communications</h3>
-                We may use your Personal Information to contact you with newsletters, marketing or promotional materials and other information that ...
+                We may use your Personal Information to contact you with newsletters, marketing or promotional materials and other information that makes
+                use of your personal information.
                 <br>
                 The Log Data section is for businesses that use analytics or tracking services in websites or apps, like Google Analytics. For the full
                 disclosure section, create your own Privacy Policy.

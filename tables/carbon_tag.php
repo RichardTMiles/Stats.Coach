@@ -320,6 +320,18 @@ class carbon_tag extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+        }
+                   if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+        }
+                   if (array_key_exists('creation_date', $argv)) {
+            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

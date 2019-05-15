@@ -347,6 +347,26 @@ class carbon_photos extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('parent_id', $argv)) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
+        }
+                   if (array_key_exists('photo_id', $argv)) {
+            $photo_id = $argv['photo_id'];
+            $stmt->bindParam(':photo_id',$photo_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+                   if (array_key_exists('photo_path', $argv)) {
+            $photo_path = $argv['photo_path'];
+            $stmt->bindParam(':photo_path',$photo_path, 2, 225);
+        }
+                   if (array_key_exists('photo_description', $argv)) {
+            $stmt->bindValue(':photo_description',$argv['photo_description'], 2);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

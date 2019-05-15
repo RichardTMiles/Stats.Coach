@@ -22,6 +22,32 @@ class User extends Request
         return false;
     }
 
+
+    public function listFollowers($id = null) {
+        if ($id === null) {
+            return $_SESSION['id'];
+        }
+        if (!ctype_xdigit($id)) {
+            PublicAlert::danger('Could not look up user followers!');
+            return startApplication('home/');
+        }
+        return $id;
+    }
+
+    public function listFollowing($id = null) {
+        if ($id === null) {
+            return $_SESSION['id'];
+        }
+        if (!ctype_xdigit($id)) {
+            PublicAlert::danger('Could not look up the users following!');
+            return startApplication('home/');
+        }
+        return $id;
+    }
+
+
+
+
     /**
      * @return array|bool
      * @throws PublicAlert
@@ -83,16 +109,12 @@ class User extends Request
 
         if (!\is_array($UserInfo)) {
             if ($service === 'google'){
-                $UserInfo = urlGoogle();
+                $UserInfo = self::urlGoogle($request);
             } elseif ($service === 'facebook') {
-                $UserInfo = urlFacebook();
+                $UserInfo = self::urlFacebook($request);
             }
             if (!\is_array($UserInfo)) {
-
-                sortDump($UserInfo);
-
-                #startApplication('login/');
-                return false;                   // don't return this view
+                return startApplication('login/');  // return null, bc were in a
             }
 
             return [$service, &$request];    // return the view
@@ -107,7 +129,7 @@ class User extends Request
 
             $email = $this->post('email')->email();
 
-            $terms = $this->post('Terms')->int();
+            $terms = 'true' === ($_POST['Terms']  ?? false);
 
             if (!$username) {
                 throw new PublicAlert('Please enter a username with only numbers & letters!');
@@ -432,6 +454,7 @@ class User extends Request
      * @return array|string
      * @throws Google_Exception
      * @throws \CarbonPHP\Error\PublicAlert
+     * @throws \Google_Exception
      */
     static function urlGoogle($request = null)
     {

@@ -20,23 +20,23 @@
                 <!-- Messages: style can be found in dropdown.less-->
                 <li id="NavMessages" class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height: 50px;"
-                       onclick="this.removeChild(document.getElementById('NewMessagesSpan'))">
+                       onclick="document.getElementById('NewMessagesSpan') && this.removeChild(document.getElementById('NewMessagesSpan'))">
                         <i class="fa fa-envelope-o"></i>
-                        {{#newMessages}}
-                            <span id="NewMessagesSpan" class="label label-success">{{newMessages}}</span>
-                        {{/newMessages}}
+                        {{#my.newMessages}}
+                            <span id="NewMessagesSpan" class="label label-danger">{{my.newMessages}}</span>
+                        {{/my.newMessages}}
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li class="header">You have {{newMessages}}{{^newMessages}}0{{/newMessages}} new messages</li>
+                        <li class="header">You have {{my.newMessages}} new messages</li>
                         <!-- inner menu: contains the actual data -->
                         <li>
                             <ul class="menu">
-                                {{#users}}
+                                {{#my.navMessages}}
                                     <li><!-- start message -->
-                                        <a href="{{user_uri}}">
+                                        <a href="/Profile/{{user_id}}">
                                             <div class="pull-left">
-                                                <img src="{{user_profile_picture}}" class="img-circle"
+                                                <img src="{{user_profile_pic}}" class="img-circle"
                                                      alt="User Image"/>
                                             </div>
                                             <h4>
@@ -46,10 +46,10 @@
                                             <p>{{message}}</p>
                                         </a>
                                     </li><!-- end message -->
-                                {{/users}}
+                                {{/my.navMessages}}
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">See All Messages</a></li>
+                        <li class="footer"><a href="/messages">See All Messages</a></li>
                     </ul>
                 </li>
                 <!-- Notifications: style can be found in dropdown.less -->
@@ -125,13 +125,13 @@
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
+                        <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"> {{my.user_first_name}} {{my.user_last_name}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image"/>
+                            <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="img-circle" alt="User Image"/>
                             <p>
                                 {{ my.user_first_name }} {{ my.user_last_name }} - {{my.user_sport}}
                                 <small>Member since {{my.user_creation_date}}</small>
@@ -140,13 +140,13 @@
                         <!-- Menu Body -->
                         <li class="user-body">
                             <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
+                                <a href="/Followers/">Followers</a>
                             </div>
                             <div class="col-xs-4 text-center">
                                 <a href="/Rounds/">Rounds</a>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <a href="#">Following</a>
+                                <a href="/Following/">Following</a>
                             </div>
                         </li>
                         <!-- Menu Footer-->
@@ -176,7 +176,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image">
+                <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p>{{ my.user_first_name }} {{ my.user_last_name }}</p>
@@ -187,7 +187,7 @@
         <form action="/Search/" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search..."
-                       onkeyup="$.fn.startApplication('/Search/'+this.value)">
+                       onkeyup="this.value.length && carbon.start('/Search/' + this.value)">
                 <span class="input-group-btn">
                                 <button name="search" id="search-btn" class="btn btn-flat">
                                     <i class="fa fa-search"></i>
@@ -267,7 +267,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="/Tournaments/"><i class="fa fa-circle-o"></i> Create New </a></li>
+                    <li><a href="/NewTournament/"><i class="fa fa-circle-o"></i> Create New </a></li>
                 </ul>
             </li>
 
@@ -289,10 +289,10 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Putting</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Approach</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Accuracy</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Distance</a></li>
+                    <li><a href="/Drills/Putting/"><i class="fa fa-circle-o"></i> Putting</a></li>
+                    <li><a href="/Drills/Approach/"><i class="fa fa-circle-o"></i> Approach</a></li>
+                    <li><a href="/Drills/Accuracy/"><i class="fa fa-circle-o"></i> Accuracy</a></li>
+                    <li><a href="/Drills/Distance/"><i class="fa fa-circle-o"></i> Distance</a></li>
                 </ul>
             </li>
 
@@ -329,7 +329,7 @@
                 </ul>
             </li>
 
-            <li><a href="#"><i class="fa fa-book"></i><span>Documentation</span></a></li>
+            <li><a href="https://carbonphp.com"><i class="fa fa-book"></i><span>Documentation</span></a></li>
 
             <li class="header">2016 Overall Leaderboard</li>
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Individual</span></a></li>

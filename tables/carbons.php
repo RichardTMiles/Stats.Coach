@@ -320,6 +320,15 @@ class carbons extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('entity_pk', $argv)) {
+            $entity_pk = $argv['entity_pk'];
+            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
+        }
+                   if (array_key_exists('entity_fk', $argv)) {
+            $entity_fk = $argv['entity_fk'];
+            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

@@ -124,7 +124,7 @@
         <footer class="main-footer" style="">
             <div class="container">
                 <div class="pull-right hidden-xs">
-                    <a href="{{site}}Privacy/">Privacy Policy</a> <b>Version</b>  {{SITE_VERSION}}
+                    <a href="/Privacy/">Privacy Policy</a> <b>Version</b>  {{SITE_VERSION}}
                 </div>
                 <strong>Copyright &copy; 2014-2017 <a href="http://miles.systems">Stats Coach</a>.</strong>
                 <!--script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script-->
@@ -145,7 +145,7 @@
 
     // const carbon = new CarbonPHP('#pjax-content', 'wss://rootprerogative.com:8888/', false);
 
-    const carbon = new CarbonPHP('#pjax-content', 'ws://localhost:8888/');
+    const carbon = new CarbonPHP('#pjax-content', 'wss://stats.coach:8888/');
 
     carbon.event("Carbon");
 
@@ -169,7 +169,7 @@
         $('#my-box-widget').boxRefresh('load');
     });
 
-    $.load_backStretch(APP_VIEW + 'Img/Carbon-green.png');
+    $.load_backStretch(APP_VIEW + 'img/Carbon-green.png');
 
     $('.sidebar-menu').tree();
 

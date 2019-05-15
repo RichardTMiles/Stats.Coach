@@ -83,7 +83,7 @@ abstract class GlobalMap extends Database
      * @param string $uri
      */
     public static function sendUpdate(string $id, string $uri) : void {
-        Pipe::send( $uri, SERVER_ROOT . 'Data/Temp/' . $id . '.fifo' );
+        Pipe::send( $uri, APP_ROOT . 'data/sessions/' . $id . '.fifo' );
     }
 
 }

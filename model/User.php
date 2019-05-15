@@ -3,21 +3,21 @@
 namespace Model;
 
 use CarbonPHP\Session;
+use Exception;
 use Model\Helpers\GlobalMap;
 
 
 use Tables\carbon_user_followers;
-use Tables\Carbon_User_Golf_Stats as Stats;
+use Tables\carbon_user_golf_stats as Stats;
 use Tables\carbon_users as Users;
-use Tables\Carbon_User_Followers as Followers;
-use Tables\Carbon_User_Messages as Messages;
+use Tables\carbon_user_followers as Followers;
+use Tables\carbon_user_messages as Messages;
 
 
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
 use CarbonPHP\Helpers\Serialized;
-use Tables\carbon_users;
 
 /**
  * Class User
@@ -28,7 +28,7 @@ class User extends GlobalMap
     /**
      * User constructor.
      * @param string|null $id
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws Exception
      */
     public function __construct(string $id = null)
     {
@@ -47,6 +47,42 @@ class User extends GlobalMap
             Followers::get($this->user[$id], $id, []);
             Messages::get($this->user[$id], $id, []);
         }
+    }
+
+
+    public static function followers($id) {
+        return self::fetchColumn('SELECT HEX(user_id) FROM carbon_user_followers WHERE follows_user_id = UNHEX(?)', $id);
+    }
+
+    /**
+     * @param $id
+     * @throws PublicAlert
+     */
+    public function listFollowers($id) {
+        global $json;
+        $users = self::followers($id);
+        foreach ($users as &$value) {
+            $value = getUser($value, 'Basic');
+        }
+        $json['followers'] = $users;
+    }
+
+
+    public static function following($id) {
+        return self::fetchColumn('SELECT HEX(follows_user_id) FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
+    }
+
+    /**
+     * @param $id
+     * @throws PublicAlert
+     */
+    public function listFollowing($id) {
+        global $json;
+        $users = self::followers($id);
+        foreach ($users as &$value) {
+            $value = getUser($value, 'Basic');
+        }
+        $json['following'] = $users;
     }
 
     /**
@@ -111,7 +147,7 @@ class User extends GlobalMap
      * @param string $service
      * @param string|bool $request will map the the global scope
      * @return bool|mixed
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws PublicAlert
      */
     public function oAuth($service, &$request)
     {
@@ -119,11 +155,29 @@ class User extends GlobalMap
 
         $UserInfo['service'] = ucfirst($service);
 
+        $json['UserInfo'] = &$UserInfo;
+
         $service = "user_{$service}_id";
 
-        $sql = "SELECT user_id, $service FROM carbon_users WHERE user_email = ? OR $service = ?";
+        $sql = []; // quick refactor
 
-        $sql = self::fetch($sql, $UserInfo['email'], $UserInfo['id']);
+        if (false === Users::Get($sql, null, [
+            'select' => [
+                'user_id', $service
+            ],
+            'where' => [
+                [
+                    'user_email' => $UserInfo['email'],
+                    $service => $UserInfo['id']
+                ]
+            ],
+            'pagination' => [
+                'limit' => 1
+            ]
+        ])) {
+            $json['oauth'] = ('Failed to lookup user OAuth.');
+            return null;
+        }
 
         $user_id = $sql['user_id'] ?? false;
 
@@ -131,20 +185,29 @@ class User extends GlobalMap
 
         if (!$user_id && !$service_id) { // create new account
             if ($request === 'SignUp') {                         // This will set the session id
-                Users::Post([
-                    'username' => $UserInfo['username'],
-                    'password' => $UserInfo['password'],
+                $id = Users::Post([
+                    'user_username' => $UserInfo['username'],
+                    'user_password' => $UserInfo['password'],
                     $service => $UserInfo['id'],
-                    'profile_pic' => $UserInfo['picture'] ?? '',
-                    'cover_photo' => $UserInfo['cover'] ?? '',
-                    'email' => $UserInfo['email'],
-                    'type' => 'Athlete',
-                    'first_name' => $UserInfo['first_name'],
-                    'last_name' => $UserInfo['last_name'],
-                    'gender' => $UserInfo['gender']
+                    'user_profile_pic' => $UserInfo['picture'] ?? '',
+                    'user_cover_photo' => $UserInfo['cover'] ?? '',
+                    'user_email' => $UserInfo['email'],
+                    'user_type' => 'Athlete',
+                    'user_first_name' => $UserInfo['first_name'],
+                    'user_last_name' => $UserInfo['last_name'],
+                    'user_gender' => $UserInfo['gender'],
+                    'user_ip' => IP,
                 ]);
 
-                Stats::Post([]);
+                Stats::Post([
+                    'stats_id' => $id
+                ]);
+                $_SESSION['id'] = $id;
+
+                if (!self::commit()) {
+                    PublicAlert::danger('Failed to add oAuth user.');
+                    return startApplication('login');
+                }
 
             } else {
 
@@ -158,10 +221,8 @@ class User extends GlobalMap
             }
         } elseif ($user_id && !$service_id) {
             if ($request === 'SignIn') {
-                //Users::Put()
-
-                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
-                $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
+                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = HEX(?)";     // UPDATE user
+                self::execute($sql, $UserInfo['id'], $_SESSION['id']);
                 $_SESSION['id'] = $user_id;
             } else {
                 $_SESSION['UserInfo'] = $UserInfo;  // were trying to sign up when we need to sign in
@@ -178,8 +239,8 @@ class User extends GlobalMap
             $_SESSION['id'] = $user_id;
         }
         $_SESSION['UserInfo'] = $UserInfo = null;
-        startApplication(true);
-        return false;
+
+        return startApplication(true);
     }
 
     /**
@@ -195,16 +256,16 @@ class User extends GlobalMap
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
         if (false === Followers::Post([
-            'user_id' => $_SESSION['id'],
-            'follows_user_id' => $user_id
-        ])) {
+                'user_id' => $_SESSION['id'],
+                'follows_user_id' => $user_id
+            ])) {
             PublicAlert::warning('Could not follow user!');
         } elseif (self::commit(
-            function() use ($user_id) {
+            function () use ($user_id) {
                 self::sendUpdate($user_id, 'NavigationMessages');
                 return true;
             }
-        )){
+        )) {
             $json['success'] = true;
         }
         return true;
@@ -224,9 +285,9 @@ class User extends GlobalMap
         }
 
         if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
-            'follows_user_id' => $user_id,
-            'user_id' => $_SESSION['id']
-        ])) {
+                'follows_user_id' => $user_id,
+                'user_id' => $_SESSION['id']
+            ])) {
             PublicAlert::warning('Could not unfollow user.');
         } else {
             $json['success'] = true;
@@ -244,11 +305,11 @@ class User extends GlobalMap
     {
         global $username, $password, $email, $firstName, $lastName, $gender;
 
-        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_username = ? LIMIT 1', $username)['COUNT(*)']) {
+        if (self::fetch('SELECT COUNT(*) FROM StatsCoach.carbon_users WHERE user_username = ? LIMIT 1', $username)['COUNT(*)']) {
             throw new PublicAlert ('That username already exists', 'warning');
         }
 
-        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_email = ? LIMIT 1', $email)['COUNT(*)']) {
+        if (self::fetch('SELECT COUNT(*) FROM StatsCoach.carbon_users WHERE user_email = ? LIMIT 1', $email)['COUNT(*)']) {
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
@@ -282,7 +343,8 @@ class User extends GlobalMap
 
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-            return startApplication('home/');
+            startApplication('home/');
+            return false;
         } else {
             throw new PublicAlert('Failed to create your account!');
         }
@@ -323,8 +385,8 @@ class User extends GlobalMap
 
 
         if (false === Users::Put($user, $user['user_id'], [
-            'user_email_confirmed' => 1
-        ])) {
+                'user_email_confirmed' => 1
+            ])) {
             PublicAlert::danger('The Rest API Failed.');
             return startApplication(true);
         }
@@ -438,7 +500,7 @@ class User extends GlobalMap
                         'limit' => 1
                     ]
                 ]
-            )){
+            )) {
                 PublicAlert::warning('Failed to look up following status!');
             }
 

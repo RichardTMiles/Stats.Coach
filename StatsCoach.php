@@ -54,15 +54,19 @@ class StatsCoach extends Application
         parent::__construct($structure);
     }
 
+    /**
+     * @return mixed
+     * @throws PublicAlert
+     */
     public function defaultRoute()
     {
         // Sockets will not execute this function
-
-        // View::$forceWrapper = true; // this will hard refresh the wrapper
+        View::$forceWrapper = true; // this will hard refresh the wrapper
 
         if (!$_SESSION['id']):
             return $this->MVC()('User', 'login');
         else:
+            $this->userSettings();          // Update the current user
             return $this->MVC()('Golf', 'golf');
         endif;
     }
@@ -82,8 +86,6 @@ class StatsCoach extends Application
             $count++;
         }
 
-        $this->userSettings();          // Update the current user
-
         if ('' !== $uri) {
             $this->changeURI($uri);
         } else if (empty($this->uri[0])) {
@@ -93,6 +95,8 @@ class StatsCoach extends Application
             $this->matched = true;
             return $this->defaultRoute();
         }
+
+        $this->userSettings();          // Update the current user
 
         $this->structure($this->MVC());
 
@@ -112,11 +116,11 @@ class StatsCoach extends Application
             // Event
             if ((AJAX && PJAX) || SOCKET) {
 
-                // So in this we know we're looking for a json responce regardless of the
+                // So in this we know we're looking for a json response regardless of the
                 // if startApplication(true) is called again with === true passed in, the
                 // force wrapper will be set to true
 
-                global $alert, $json;
+                global $json;
 
                 $json['user-layout'] = 'Json Method Removed';   // TODO - this could break things if we start app and
                 $json['body-layout'] = 'Json Method Removed';
@@ -128,7 +132,7 @@ class StatsCoach extends Application
                     })() ||
                     $this->match('Send/{user_id}/{message}/', function($user_id, $message) {
                         print 'About to send' . PHP_EOL;
-                        print 'Did we send? '.Pipe::send( $message, '/tmp/' . $user_id . '.fifo' ). PHP_EOL .PHP_EOL;
+                        print 'Did we send? ' . Pipe::send( $message, '/tmp/' . $user_id . '.fifo' ). PHP_EOL .PHP_EOL;
                     })() ||
                     $this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('NavigationMessages/', 'Messages', 'navigation')() ||
@@ -145,6 +149,21 @@ class StatsCoach extends Application
                     return false;
                 }
             }
+
+
+            ################################### Lessons
+
+            $this->structure($this->wrap());
+
+
+            if ($this->match('Drills/Putting', 'golf/putting.hbs')() ||
+                $this->match('Drills/Approach', 'golf/approach.hbs')() ||
+                $this->match('Drills/Accuracy', 'golf/accuracy.hbs')() ||
+                $this->match('Drills/Distance', 'golf/distance.hbs')()
+            ) {
+                return true;
+            }
+
 
 
             ################################### MVC
@@ -165,8 +184,14 @@ class StatsCoach extends Application
                 return true;
             }
 
+            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')()) {
+                return true;
+            }
+
             if ($this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
                 $this->match('Messages/', 'Messages', 'messages')() ||
+                $this->match('Followers/', 'User', 'listFollowers')() ||
+                $this->match('Following/', 'User', 'listFollowing')() ||
                 $this->match('Home/*', 'Golf', 'golf')() ||
                 $this->match('Golf/*', 'Golf', 'golf')() ||
                 $this->match('Team/{team_id}/*', 'Team', 'team')() ||
@@ -175,15 +200,18 @@ class StatsCoach extends Application
                 $this->match('CreateTeam/', 'Team', 'createTeam')() ||
                 $this->match('Logout/*', function () {
                     User::logout();
-                })) {
+                })()) {
                 return true;          // Logout
             }
         }
 
         return
             $this->structure($this->MVC())->match('Activate/{email?}/{email_code?}/', 'User', 'activate')() ||  // Activate $email $email_code
-            $this->structure($this->wrap())->match('404/*', 'Error/404error.php')() ||
-            $this->match('500/*', 'Error/500error.php')();
+            $this->structure($this->wrap())->match('Privacy/', 'policy/privacy.hbs')() ||
+            $this->match('404/*', 'error/404error.hbs')() ||
+            $this->match('500/*', 'error/500error.hbs')();
+
+
 
     }
 
@@ -193,7 +221,7 @@ class StatsCoach extends Application
      * the Route constructor will execute the
      * defaultRoute method defined below.
      * @return void
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws PublicAlert
      */
 
     public function userSettings() : void
@@ -233,11 +261,11 @@ class StatsCoach extends Application
             switch ($user[$id]['user_type'] ?? false) {
                 case 'Athlete':
                     $json['body-layout'] = 'hold-transition skin-blue layout-top-nav';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/AthleteLayout.hbs');
+                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'layout/AthleteLayout.hbs');
                     break;
                 case 'Coach':
                     $json['body-layout'] = 'skin-green fixed sidebar-mini sidebar-collapse';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'Layout/CoachLayout.hbs');
+                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'layout/CoachLayout.hbs');
                     break;
                 default:
                     throw new PublicAlert('No user type found!!!!');

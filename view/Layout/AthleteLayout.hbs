@@ -74,7 +74,7 @@
                                     </li><!-- end message -->
                                     {{/users}}
                                 </ul></li>
-                            <li class="footer"><a href="#">See All Messages</a></li>
+                            <li class="footer"><a href="/Messages/">See All Messages</a></li>
                         </ul>
                     </li>
                     <!-- Notifications: style can be found in dropdown.less -->
@@ -153,7 +153,7 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="{{my.user_profile_pic}}" class="img-circle" alt="User Image"/>
+                                <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="img-circle" alt="User Image"/>
                                 <p>
                                     {{my.user_first_name}} {{my.user_last_name}} - {{my.user_sport}}
                                     <small>Member since {{my.user_creation_date}}</small>
@@ -162,13 +162,13 @@
                             <!-- Menu Body -->
                             <li class="user-body">
                                 <div class="col-xs-4 text-center">
-                                    <a href="#">Followers</a>
+                                    <a href="/Followers/">Followers</a>
                                 </div>
                                 <div class="col-xs-4 text-center">
                                     <a href="/Rounds/">Rounds</a>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <a href="#">Following</a>
+                                    <a href="/Following/">Following</a>
                                 </div>
                             </li>
                             <!-- Menu Footer-->

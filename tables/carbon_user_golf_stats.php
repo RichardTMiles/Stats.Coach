@@ -380,6 +380,39 @@ class carbon_user_golf_stats extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('stats_id', $argv)) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
+        }
+                   if (array_key_exists('stats_tournaments', $argv)) {
+            $stats_tournaments = $argv['stats_tournaments'];
+            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
+        }
+                   if (array_key_exists('stats_rounds', $argv)) {
+            $stats_rounds = $argv['stats_rounds'];
+            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
+        }
+                   if (array_key_exists('stats_handicap', $argv)) {
+            $stats_handicap = $argv['stats_handicap'];
+            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
+        }
+                   if (array_key_exists('stats_strokes', $argv)) {
+            $stats_strokes = $argv['stats_strokes'];
+            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
+        }
+                   if (array_key_exists('stats_ffs', $argv)) {
+            $stats_ffs = $argv['stats_ffs'];
+            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
+        }
+                   if (array_key_exists('stats_gnr', $argv)) {
+            $stats_gnr = $argv['stats_gnr'];
+            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+        }
+                   if (array_key_exists('stats_putts', $argv)) {
+            $stats_putts = $argv['stats_putts'];
+            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

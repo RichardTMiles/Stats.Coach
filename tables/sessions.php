@@ -355,6 +355,29 @@ class sessions extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+                   if (array_key_exists('user_ip', $argv)) {
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, 2, 20);
+        }
+                   if (array_key_exists('session_id', $argv)) {
+            $session_id = $argv['session_id'];
+            $stmt->bindParam(':session_id',$session_id, 2, 255);
+        }
+                   if (array_key_exists('session_expires', $argv)) {
+            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+        }
+                   if (array_key_exists('session_data', $argv)) {
+            $stmt->bindValue(':session_data',$argv['session_data'], 2);
+        }
+                   if (array_key_exists('user_online_status', $argv)) {
+            $user_online_status = $argv['user_online_status'];
+            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }

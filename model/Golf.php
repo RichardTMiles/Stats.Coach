@@ -20,6 +20,11 @@ class Golf extends GlobalMap implements iSport
 {
     use Singleton;
 
+
+    public function NewTournament() {
+        return null;
+    }
+
     public static function sessionStuff(&$my) {
         $my = array_merge($my, [
             'stats' => [],

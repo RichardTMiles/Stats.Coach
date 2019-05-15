@@ -11,6 +11,11 @@ use Tables\carbon_golf_courses as Course;
 class Golf extends Request  // Validation
 {
 
+
+    public function NewTournament() {
+        return null;
+    }
+
     public function PostScoreDistance($id, $color) {
         global $json;
 
