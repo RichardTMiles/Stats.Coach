@@ -8,6 +8,12 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_team_members extends Database implements iRest
 {
+
+    public const MEMBER_ID = 'member_id';
+    public const TEAM_ID = 'team_id';
+    public const USER_ID = 'user_id';
+    public const ACCEPTED = 'accepted';
+
     public const PRIMARY = [
     'member_id',
     ];

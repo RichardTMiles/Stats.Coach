@@ -8,6 +8,15 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_locations extends Database implements iRest
 {
+
+    public const ENTITY_ID = 'entity_id';
+    public const LATITUDE = 'latitude';
+    public const LONGITUDE = 'longitude';
+    public const STREET = 'street';
+    public const CITY = 'city';
+    public const STATE = 'state';
+    public const ELEVATION = 'elevation';
+
     public const PRIMARY = [
     'entity_id',
     ];

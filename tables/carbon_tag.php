@@ -8,6 +8,11 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_tag extends Database implements iRest
 {
+
+    public const ENTITY_ID = 'entity_id';
+    public const TAG_ID = 'tag_id';
+    public const CREATION_DATE = 'creation_date';
+
     public const PRIMARY = [
     
     ];

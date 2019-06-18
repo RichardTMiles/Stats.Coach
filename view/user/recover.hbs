@@ -1,7 +1,7 @@
 
 <div class="login-box">
     <div class="register-logo">
-        <a href="/" style="color: #ffffff; font-size: 150%"><b>Asset</b>Scheduler</a>
+        <a href="/" style="color: #ffffff; font-size: 150%"><b>Stats</b>Coach</a>
     </div><!-- /.login-logo -->
 
 
@@ -9,7 +9,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Recover Username & Password</p>
 
-        <form data-pjax action="<?= SITE ?>Recover/" method="post">
+        <form data-pjax action="/Recover/" method="post">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" name="user_email" placeholder="Email" >
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -24,10 +24,9 @@
 
         <div id="alert"></div>
 
-
         <a href="/Login/">Already Have an account? Login Here </a><br>
         <a href="/Register/" class="text-center">Register a new membership</a>
-
+        <a href="/Privacy/" class="text-center">Privacy Policy<br></a>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
@@ -41,7 +40,7 @@
     });
 
     $(document).on('submit', 'form[data-pjax]', function (event) {
-        $.pjax.submit(event, '#ajax-content')
+        $.pjax.submit(event, '#pjax-content')
     });
 
 </script>

@@ -11,6 +11,7 @@ namespace App\tests\browser;
 
 /** Selenium2TestCase
  * @link https://github.com/giorgiosironi/phpunit-selenium/blob/master/Tests/Selenium2TestCaseTest.php
+ * @link http://apigen.juzna.cz/doc/sebastianbergmann/phpunit-selenium/class-PHPUnit_Extensions_Selenium2TestCase.html
  */
 class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 {

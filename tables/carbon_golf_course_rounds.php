@@ -8,6 +8,22 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_golf_course_rounds extends Database implements iRest
 {
+
+    public const USER_ID = 'user_id';
+    public const ROUND_ID = 'round_id';
+    public const COURSE_ID = 'course_id';
+    public const ROUND_JSON = 'round_json';
+    public const ROUND_PUBLIC = 'round_public';
+    public const ROUND_OUT = 'round_out';
+    public const ROUND_IN = 'round_in';
+    public const ROUND_TOTAL = 'round_total';
+    public const ROUND_TOTAL_GNR = 'round_total_gnr';
+    public const ROUND_TOTAL_FFS = 'round_total_ffs';
+    public const ROUND_TOTAL_PUTTS = 'round_total_putts';
+    public const ROUND_DATE = 'round_date';
+    public const ROUND_INPUT_COMPLETE = 'round_input_complete';
+    public const ROUND_TEE_BOX_COLOR = 'round_tee_box_color';
+
     public const PRIMARY = [
     'round_id',
     ];

@@ -8,6 +8,12 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_reports extends Database implements iRest
 {
+
+    public const LOG_LEVEL = 'log_level';
+    public const REPORT = 'report';
+    public const DATE = 'date';
+    public const CALL_TRACE = 'call_trace';
+
     public const PRIMARY = [
     
     ];

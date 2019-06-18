@@ -8,6 +8,11 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_user_followers extends Database implements iRest
 {
+
+    public const FOLLOWER_TABLE_ID = 'follower_table_id';
+    public const FOLLOWS_USER_ID = 'follows_user_id';
+    public const USER_ID = 'user_id';
+
     public const PRIMARY = [
     'follower_table_id',
     ];

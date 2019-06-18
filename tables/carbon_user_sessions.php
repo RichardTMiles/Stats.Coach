@@ -8,6 +8,14 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_user_sessions extends Database implements iRest
 {
+
+    public const USER_ID = 'user_id';
+    public const USER_IP = 'user_ip';
+    public const SESSION_ID = 'session_id';
+    public const SESSION_EXPIRES = 'session_expires';
+    public const SESSION_DATA = 'session_data';
+    public const USER_ONLINE_STATUS = 'user_online_status';
+
     public const PRIMARY = [
     'session_id',
     ];

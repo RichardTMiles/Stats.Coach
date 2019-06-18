@@ -8,6 +8,10 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbons extends Database implements iRest
 {
+
+    public const ENTITY_PK = 'entity_pk';
+    public const ENTITY_FK = 'entity_fk';
+
     public const PRIMARY = [
     'entity_pk',
     ];

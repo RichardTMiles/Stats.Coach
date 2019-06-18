@@ -8,6 +8,16 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_user_golf_stats extends Database implements iRest
 {
+
+    public const STATS_ID = 'stats_id';
+    public const STATS_TOURNAMENTS = 'stats_tournaments';
+    public const STATS_ROUNDS = 'stats_rounds';
+    public const STATS_HANDICAP = 'stats_handicap';
+    public const STATS_STROKES = 'stats_strokes';
+    public const STATS_FFS = 'stats_ffs';
+    public const STATS_GNR = 'stats_gnr';
+    public const STATS_PUTTS = 'stats_putts';
+
     public const PRIMARY = [
     'stats_id',
     ];

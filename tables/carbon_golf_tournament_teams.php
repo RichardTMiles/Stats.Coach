@@ -8,6 +8,12 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_golf_tournament_teams extends Database implements iRest
 {
+
+    public const TEAM_ID = 'team_id';
+    public const TOURNAMENT_ID = 'tournament_id';
+    public const TOURNAMENT_PAID = 'tournament_paid';
+    public const TOURNAMENT_ACCEPTED = 'tournament_accepted';
+
     public const PRIMARY = [
     
     ];

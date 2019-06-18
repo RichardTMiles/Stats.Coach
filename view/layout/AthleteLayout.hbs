@@ -63,7 +63,7 @@
                                     <li><!-- start message -->
                                         <a href="{{user_uri}}">
                                             <div class="pull-left">
-                                                <img src="{{user_profile_picture}}" class="img-circle" alt="User Image"/>
+                                                <img src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" class="img-circle" alt="User Image"/>
                                             </div>
                                             <h4>
                                                 {{first_name}} {{last_name}}
@@ -147,7 +147,7 @@
 
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{my.user_profile_pic}}" class="user-image" alt="User Image"/>
+                            <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="user-image" alt="User Image"/>
                             <span class="hidden-xs">{{my.user_first_name}} {{my.user_last_name}}</span>
                         </a>
                         <ul class="dropdown-menu">

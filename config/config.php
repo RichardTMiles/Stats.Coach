@@ -3,8 +3,10 @@
 use CarbonPHP\Error\PublicAlert;
 use Model\Golf;
 use Model\Messages;
-use Tables\carbon_user_followers;
-use Tables\carbon_user_messages;
+use Model\User;
+use Tables\carbon_user_notifications;
+use Tables\carbon_user_tasks;
+use Tables\carbon_users;
 
 /**
  * Created by IntelliJ IDEA.
@@ -46,7 +48,7 @@ function getUser($id = false, $level = 'All') : array
      * @return void
      */
     $getUser = function ($options = []) use (&$my, $id, $level) {
-        if (false === Tables\carbon_users::Get($my, empty($options) ? $id : null, $options) || empty($my)) {
+        if (false === carbon_users::Get($my, empty($options) ? $id : null, $options) || empty($my)) {
             $_SESSION['id'] = false;
             throw new PublicAlert('Failed get to user restful api failed.');
         }
@@ -59,16 +61,16 @@ function getUser($id = false, $level = 'All') : array
         case 'Profile':
             $getUser([
                 'select' => [
-                    'user_first_name',
-                    'user_last_name',
-                    'user_id',
-                    'user_sport',
-                    'user_profile_pic',
-                    'user_cover_photo',
-                    'user_about_me'
+                    carbon_users::USER_FIRST_NAME,
+                    carbon_users::USER_LAST_NAME,
+                    carbon_users::USER_ID,
+                    carbon_users::USER_SPORT,
+                    carbon_users::USER_PROFILE_PIC,
+                    carbon_users::USER_COVER_PHOTO,
+                    carbon_users::USER_ABOUT_ME,
                 ],
                 'where' => [
-                    'user_id' => $id
+                    carbon_users::USER_ID => $id
                 ],
                 'pagination' => [
                     'limit' => 1
@@ -78,16 +80,16 @@ function getUser($id = false, $level = 'All') : array
         case 'Basic':
             $getUser([
                 'select' => [
-                    'user_first_name',
-                    'user_last_name',
-                    'user_id',
-                    'user_sport',
-                    'user_profile_pic',
-                    'user_cover_photo',
-                    'user_about_me'
+                    carbon_users::USER_FIRST_NAME,
+                    carbon_users::USER_LAST_NAME,
+                    carbon_users::USER_ID,
+                    carbon_users::USER_SPORT,
+                    carbon_users::USER_PROFILE_PIC,
+                    carbon_users::USER_COVER_PHOTO,
+                    carbon_users::USER_ABOUT_ME,
                 ],
                 'where' => [
-                    'user_id' => $id
+                    carbon_users::USER_ID => $id
                 ],
                 'pagination' => [
                     'limit' => 1
@@ -106,17 +108,17 @@ function getUser($id = false, $level = 'All') : array
 
             $my['notifications'] = [];
 
-            Tables\carbon_user_notifications::Get($my['notifications'], null, [
+            carbon_user_notifications::Get($my['notifications'], null, [
                 'where' => [
-                    'to_user_id' => $id,
+                    carbon_user_notifications::TO_USER_ID => $id,
                 ]
             ]);
 
             $my['tasks'] = [];
 
-            Tables\carbon_user_tasks::Get($my['tasks'], null, [
+            carbon_user_tasks::Get($my['tasks'], null, [
                 'where' => [
-                    'to_user_id' => $id
+                    carbon_user_tasks::USER_ID => $id
                 ]
             ]);
 
@@ -127,20 +129,16 @@ function getUser($id = false, $level = 'All') : array
             $my['messages'] = [];
 
 
-        case 'Profile':
-            $my['followers'] = \Model\User::followers($_SESSION['id']);
+        /** @noinspection PhpMissingBreakStatementInspection */ case 'Profile':
+            $my['followers'] = User::followers($_SESSION['id']);
 
             $my['followersCount'] = count($my['followers']);
 
-            $my['following'] = \Model\User::following($_SESSION['id']);
+            $my['following'] = User::following($_SESSION['id']);
 
             $my['followingCount'] = count($my['following']);
 
-
             // Im thinking its a faster op to foreach than database select again
-
-
-
             $my['friends'] = empty($my['following']) || empty($my['followers'])
                 ? [] : array_intersect( $my['following'], $my['followers']);
 
@@ -160,7 +158,7 @@ return [
 
         'DB_USER' => 'root',                 // User
 
-        'DB_PASS' => APP_LOCAL ? 'Huskies!99' : 'goldteamrules',      // Password goldteamrules
+        'DB_PASS' => APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 
@@ -173,9 +171,9 @@ return [
         'ROOT' => SERVER_ROOT,     // This was defined in our ../index.php
 
         'CACHE_CONTROL' => [
-            'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
+            'ico|pdf|flv|css|js' => 'Cache-Control: max-age=29030400, public',
             'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff' => 'Cache-Control: max-age=604800, public',
-            'html|htm|php|hbs|css|js' => 'Cache-Control: max-age=0, private, public',
+            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
         ],
 
         'CONFIG' => __FILE__,      // Send to sockets

@@ -8,6 +8,29 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_golf_courses extends Database implements iRest
 {
+
+    public const COURSE_ID = 'course_id';
+    public const COURSE_NAME = 'course_name';
+    public const COURSE_HOLES = 'course_holes';
+    public const COURSE_PHONE = 'course_phone';
+    public const COURSE_DIFFICULTY = 'course_difficulty';
+    public const COURSE_RANK = 'course_rank';
+    public const COURSE_TEE_BOXES = 'course_tee_boxes';
+    public const COURSE_PAR = 'course_par';
+    public const COURSE_HANDICAP = 'course_handicap';
+    public const COURSE_PAR_OUT = 'course_par_out';
+    public const COURSE_PAR_IN = 'course_par_in';
+    public const PAR_TOT = 'par_tot';
+    public const COURSE_PAR_HCP = 'course_par_hcp';
+    public const COURSE_TYPE = 'course_type';
+    public const COURSE_ACCESS = 'course_access';
+    public const PGA_PROFESSIONAL = 'pga_professional';
+    public const WEBSITE = 'website';
+    public const CREATED_BY = 'created_by';
+    public const COURSE_INPUT_COMPLETED = 'course_input_completed';
+    public const TEE_BOXES = 'tee_boxes';
+    public const HANDICAP_COUNT = 'handicap_count';
+
     public const PRIMARY = [
     'course_id',
     ];

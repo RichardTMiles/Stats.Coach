@@ -8,6 +8,12 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_comments extends Database implements iRest
 {
+
+    public const PARENT_ID = 'parent_id';
+    public const COMMENT_ID = 'comment_id';
+    public const USER_ID = 'user_id';
+    public const COMMENT = 'comment';
+
     public const PRIMARY = [
     'comment_id',
     ];

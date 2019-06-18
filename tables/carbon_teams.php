@@ -8,6 +8,20 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_teams extends Database implements iRest
 {
+
+    public const TEAM_ID = 'team_id';
+    public const TEAM_COACH = 'team_coach';
+    public const PARENT_TEAM = 'parent_team';
+    public const TEAM_CODE = 'team_code';
+    public const TEAM_NAME = 'team_name';
+    public const TEAM_RANK = 'team_rank';
+    public const TEAM_SPORT = 'team_sport';
+    public const TEAM_DIVISION = 'team_division';
+    public const TEAM_SCHOOL = 'team_school';
+    public const TEAM_DISTRICT = 'team_district';
+    public const TEAM_MEMBERSHIP = 'team_membership';
+    public const TEAM_PHOTO = 'team_photo';
+
     public const PRIMARY = [
     'team_id',
     ];

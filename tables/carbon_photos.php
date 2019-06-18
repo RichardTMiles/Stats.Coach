@@ -8,6 +8,13 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_photos extends Database implements iRest
 {
+
+    public const PARENT_ID = 'parent_id';
+    public const PHOTO_ID = 'photo_id';
+    public const USER_ID = 'user_id';
+    public const PHOTO_PATH = 'photo_path';
+    public const PHOTO_DESCRIPTION = 'photo_description';
+
     public const PRIMARY = [
     'parent_id',
     ];
