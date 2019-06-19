@@ -27,12 +27,14 @@ class Golf extends GlobalMap implements iSport
         if (!carbon_golf_tournaments::Post([
             carbon_golf_tournaments::TOURNAMENT_NAME => $tournamentName,
             carbon_golf_tournaments::HOST_NAME => $hostName,
-            carbon_golf_tournaments::TOURNAMENT_STYLE => $playStyle
+            carbon_golf_tournaments::TOURNAMENT_STYLE => $playStyle,
         ])) {
             return null;
         }
 
-        if (!self::commit()) {
+        if (!self::commit(function () {
+            PublicAlert::success('Tournament created!');
+        })) {
             PublicAlert::danger('An Unexpected Error Occurred');
             return null;
         }
@@ -48,7 +50,8 @@ class Golf extends GlobalMap implements iSport
             'teamsJoined' => [],
             'teams' => [],
             'followers' => [],
-            'messages' => []
+            'messages' => [],
+            'tournaments' => []
         ]);
 
         stats::Get($my['stats'], $_SESSION['id'], []);
@@ -71,7 +74,6 @@ class Golf extends GlobalMap implements iSport
                                   where carbon_teams.team_id = carbon_team_members.team_id 
                                     and carbon_users.user_id = carbon_team_members.user_id
                                     and carbon_teams.team_id = unhex(?)', $value['team_id']);
-
         }
 
         foreach ($my['teamsJoined'] as $key => &$value) {

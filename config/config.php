@@ -140,7 +140,7 @@ function getUser($id = false, $level = 'All') : array
 
             // Im thinking its a faster op to foreach than database select again
             $my['friends'] = empty($my['following']) || empty($my['followers'])
-                ? [] : array_intersect( $my['following'], $my['followers']);
+                ? [] : array_intersect($my['following'], $my['followers']);
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case 'Basic':

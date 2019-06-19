@@ -16,9 +16,6 @@ class Golf extends Request  // Validation
             return null;
         }
 
-
-        var_dump($_POST);
-
         [$tournamentName, $hostName] = $this->post('tournamentName', 'hostName')->text();
 
         $playStyles = [
@@ -51,9 +48,15 @@ class Golf extends Request  // Validation
             return null;
         }
 
-       return [$tournamentName, $hostName, $_POST['style']];
+        return [$tournamentName, $hostName, $_POST['style']];
     }
 
+    /**
+     * @param $id
+     * @param $color
+     * @return array|bool
+     * @throws PublicAlert
+     */
     public function PostScoreDistance($id, $color)
     {
         global $json;
@@ -108,13 +111,14 @@ class Golf extends Request  // Validation
         }
 
 
-        return [$id, $color, [
-            'date' => $roundDate,
-            'shots' => $newScore,
-            'ffs' => $ffs,
-            'gnr' => $gnr,
-            'putts' => $putts
-        ]
+        return [
+            $id, $color, [
+                'date' => $roundDate,
+                'shots' => $newScore,
+                'ffs' => $ffs,
+                'gnr' => $gnr,
+                'putts' => $putts
+            ]
         ];
     }
 
