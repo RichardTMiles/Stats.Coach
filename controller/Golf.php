@@ -2,7 +2,6 @@
 
 namespace Controller;
 
-use CarbonPHP\Controller;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
 use Tables\carbon_locations;
@@ -11,7 +10,52 @@ use Tables\carbon_golf_courses as Course;
 class Golf extends Request  // Validation
 {
 
-    public function PostScoreDistance($id, $color) {
+    public function NewTournament()
+    {
+        if (empty($_POST)) {
+            return null;
+        }
+
+
+        var_dump($_POST);
+
+        [$tournamentName, $hostName] = $this->post('tournamentName', 'hostName')->text();
+
+        $playStyles = [
+            "Match_Play",
+            "Stroke_Play",
+            "Best_Ball",
+            "Scramble",
+            "Alternate_Shot",
+            "Four_Ball",
+            "Skins_Game",
+            "Ryder_Cup",
+            "Shamble",
+            "Stableford",
+            "Chapman_or_Pinehurst",
+            "Bingo_Bango_Bongo",
+            "Flags",
+            "Money_Ball_or_Lone_Ranger",
+            "Quota_Tournament",
+            "Peoria_System"
+        ];
+
+        if (!in_array($_POST['style'], $playStyles)) {
+            PublicAlert::danger('The play style appears incorrect.');
+            return null;
+        }
+
+
+        if (!$tournamentName || !$hostName) {
+            PublicAlert::danger('You must provide input for both input fields.');
+            return null;
+        }
+
+       return [$tournamentName, $hostName, $_POST['style']];
+    }
+
+    public function PostScoreDistance($id, $color)
+    {
         global $json;
 
         if (!ctype_xdigit($id)) {
@@ -65,12 +109,12 @@ class Golf extends Request  // Validation
 
 
         return [$id, $color, [
-                'date' => $roundDate,
-                'shots' => $newScore,
-                'ffs' => $ffs,
-                'gnr' => $gnr,
-                'putts' => $putts
-            ]
+            'date' => $roundDate,
+            'shots' => $newScore,
+            'ffs' => $ffs,
+            'gnr' => $gnr,
+            'putts' => $putts
+        ]
         ];
     }
 
@@ -92,7 +136,8 @@ class Golf extends Request  // Validation
         return $state;
     }
 
-    public function PostScoreColor($id){
+    public function PostScoreColor($id)
+    {
         if (!ctype_xdigit($id)) {
             throw new PublicAlert('Could not load the course requested!');
         }
@@ -175,8 +220,8 @@ class Golf extends Request  // Validation
 
         Course::Get($json['course'], null, [
             'where' => [
-                'created_by' => $_SESSION['id'],
-                'course_input_completed' => 0
+                Course::CREATED_BY => $_SESSION['id'],
+                Course::COURSE_INPUT_COMPLETED => 0
             ],
             'pagination' => [
                 'limit' => 1

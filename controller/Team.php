@@ -28,8 +28,7 @@ class Team extends Request
         }
 
         if (!$team_id) {
-            startApplication( 'Home/' );
-            return false;
+            return startApplication( 'Home/' );
         }
 
         return $this->set( $team_id )->alnum();

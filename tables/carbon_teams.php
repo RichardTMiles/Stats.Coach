@@ -8,6 +8,20 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_teams extends Database implements iRest
 {
+
+    public const TEAM_ID = 'team_id';
+    public const TEAM_COACH = 'team_coach';
+    public const PARENT_TEAM = 'parent_team';
+    public const TEAM_CODE = 'team_code';
+    public const TEAM_NAME = 'team_name';
+    public const TEAM_RANK = 'team_rank';
+    public const TEAM_SPORT = 'team_sport';
+    public const TEAM_DIVISION = 'team_division';
+    public const TEAM_SCHOOL = 'team_school';
+    public const TEAM_DISTRICT = 'team_district';
+    public const TEAM_MEMBERSHIP = 'team_membership';
+    public const TEAM_PHOTO = 'team_photo';
+
     public const PRIMARY = [
     'team_id',
     ];
@@ -39,16 +53,23 @@ class carbon_teams extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,54 +84,69 @@ class carbon_teams extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('team_id', $argv)) {
+   
+   /*
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('team_id', $argv)) {
             $team_id = $argv['team_id'];
             $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (array_key_exists('team_coach', $argv)) {
+                   if (array_key_exists('team_coach', $argv)) {
             $team_coach = $argv['team_coach'];
             $stmt->bindParam(':team_coach',$team_coach, 2, 16);
         }
-        if (array_key_exists('parent_team', $argv)) {
+                   if (array_key_exists('parent_team', $argv)) {
             $parent_team = $argv['parent_team'];
             $stmt->bindParam(':parent_team',$parent_team, 2, 16);
         }
-        if (array_key_exists('team_code', $argv)) {
+                   if (array_key_exists('team_code', $argv)) {
             $team_code = $argv['team_code'];
             $stmt->bindParam(':team_code',$team_code, 2, 225);
         }
-        if (array_key_exists('team_name', $argv)) {
+                   if (array_key_exists('team_name', $argv)) {
             $team_name = $argv['team_name'];
             $stmt->bindParam(':team_name',$team_name, 2, 225);
         }
-        if (array_key_exists('team_rank', $argv)) {
+                   if (array_key_exists('team_rank', $argv)) {
             $team_rank = $argv['team_rank'];
             $stmt->bindParam(':team_rank',$team_rank, 2, 11);
         }
-        if (array_key_exists('team_sport', $argv)) {
+                   if (array_key_exists('team_sport', $argv)) {
             $team_sport = $argv['team_sport'];
             $stmt->bindParam(':team_sport',$team_sport, 2, 225);
         }
-        if (array_key_exists('team_division', $argv)) {
+                   if (array_key_exists('team_division', $argv)) {
             $team_division = $argv['team_division'];
             $stmt->bindParam(':team_division',$team_division, 2, 225);
         }
-        if (array_key_exists('team_school', $argv)) {
+                   if (array_key_exists('team_school', $argv)) {
             $team_school = $argv['team_school'];
             $stmt->bindParam(':team_school',$team_school, 2, 225);
         }
-        if (array_key_exists('team_district', $argv)) {
+                   if (array_key_exists('team_district', $argv)) {
             $team_district = $argv['team_district'];
             $stmt->bindParam(':team_district',$team_district, 2, 225);
         }
-        if (array_key_exists('team_membership', $argv)) {
+                   if (array_key_exists('team_membership', $argv)) {
             $team_membership = $argv['team_membership'];
             $stmt->bindParam(':team_membership',$team_membership, 2, 225);
         }
-        if (array_key_exists('team_photo', $argv)) {
+                   if (array_key_exists('team_photo', $argv)) {
             $team_photo = $argv['team_photo'];
             $stmt->bindParam(':team_photo',$team_photo, 2, 16);
         }
+           
+          }
+        };
+        
+        $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -155,7 +191,6 @@ class carbon_teams extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -398,6 +433,55 @@ class carbon_teams extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('team_id', $argv)) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
+        }
+                   if (array_key_exists('team_coach', $argv)) {
+            $team_coach = $argv['team_coach'];
+            $stmt->bindParam(':team_coach',$team_coach, 2, 16);
+        }
+                   if (array_key_exists('parent_team', $argv)) {
+            $parent_team = $argv['parent_team'];
+            $stmt->bindParam(':parent_team',$parent_team, 2, 16);
+        }
+                   if (array_key_exists('team_code', $argv)) {
+            $team_code = $argv['team_code'];
+            $stmt->bindParam(':team_code',$team_code, 2, 225);
+        }
+                   if (array_key_exists('team_name', $argv)) {
+            $team_name = $argv['team_name'];
+            $stmt->bindParam(':team_name',$team_name, 2, 225);
+        }
+                   if (array_key_exists('team_rank', $argv)) {
+            $team_rank = $argv['team_rank'];
+            $stmt->bindParam(':team_rank',$team_rank, 2, 11);
+        }
+                   if (array_key_exists('team_sport', $argv)) {
+            $team_sport = $argv['team_sport'];
+            $stmt->bindParam(':team_sport',$team_sport, 2, 225);
+        }
+                   if (array_key_exists('team_division', $argv)) {
+            $team_division = $argv['team_division'];
+            $stmt->bindParam(':team_division',$team_division, 2, 225);
+        }
+                   if (array_key_exists('team_school', $argv)) {
+            $team_school = $argv['team_school'];
+            $stmt->bindParam(':team_school',$team_school, 2, 225);
+        }
+                   if (array_key_exists('team_district', $argv)) {
+            $team_district = $argv['team_district'];
+            $stmt->bindParam(':team_district',$team_district, 2, 225);
+        }
+                   if (array_key_exists('team_membership', $argv)) {
+            $team_membership = $argv['team_membership'];
+            $stmt->bindParam(':team_membership',$team_membership, 2, 225);
+        }
+                   if (array_key_exists('team_photo', $argv)) {
+            $team_photo = $argv['team_photo'];
+            $stmt->bindParam(':team_photo',$team_photo, 2, 16);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }
@@ -416,6 +500,37 @@ class carbon_teams extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_teams on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

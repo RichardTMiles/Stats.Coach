@@ -8,12 +8,17 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_tag extends Database implements iRest
 {
+
+    public const ENTITY_ID = 'entity_id';
+    public const TAG_ID = 'tag_id';
+    public const CREATION_DATE = 'creation_date';
+
     public const PRIMARY = [
     
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
+        'entity_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -39,16 +44,23 @@ class carbon_tag extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,21 +75,32 @@ class carbon_tag extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('entity_id', $argv)) {
+   
+   /*
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('entity_id', $argv)) {
             $entity_id = $argv['entity_id'];
             $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-        if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
-        }
-        if (array_key_exists('tag_id', $argv)) {
+                   if (array_key_exists('tag_id', $argv)) {
             $tag_id = $argv['tag_id'];
             $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
-        if (array_key_exists('creation_date', $argv)) {
+                   if (array_key_exists('creation_date', $argv)) {
             $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
         }
+           
+          }
+        };
+        
+        $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -122,7 +145,6 @@ class carbon_tag extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -181,7 +203,7 @@ class carbon_tag extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_id|user_id|tag_id|creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_id|tag_id|creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -234,7 +256,7 @@ class carbon_tag extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, user_id, tag_id) VALUES ( UNHEX(:entity_id), UNHEX(:user_id), :tag_id)';
+        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, tag_id) VALUES ( UNHEX(:entity_id), :tag_id)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -243,9 +265,6 @@ class carbon_tag extends Database implements iRest
                 
                     $entity_id = $argv['entity_id'];
                     $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-                        
-                    $user_id =  $argv['user_id'] ?? null;
-                    $stmt->bindParam(':user_id',$user_id, 2, 16);
                         
                     $tag_id = $argv['tag_id'];
                     $stmt->bindParam(':tag_id',$tag_id, 2, 80);
@@ -284,9 +303,6 @@ class carbon_tag extends Database implements iRest
             if (array_key_exists('entity_id', $argv)) {
                 $set .= 'entity_id=UNHEX(:entity_id),';
             }
-            if (array_key_exists('user_id', $argv)) {
-                $set .= 'user_id=UNHEX(:user_id),';
-            }
             if (array_key_exists('tag_id', $argv)) {
                 $set .= 'tag_id=:tag_id,';
             }
@@ -307,6 +323,18 @@ class carbon_tag extends Database implements iRest
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
+
+                   if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+        }
+                   if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+        }
+                   if (array_key_exists('creation_date', $argv)) {
+            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+        }
 
         if (!self::bind($stmt, $argv)){
             return false;

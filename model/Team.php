@@ -27,13 +27,13 @@ class Team extends GlobalMap
      * @return bool
      * @throws \RuntimeException
      * @throws \CarbonPHP\Error\PublicAlert
+     * @throws \Exception
      */
     public function team(string $team_id)
     {
         global $json;
 
         $this->team[$team_id] = [];
-
 
         $json['myTeam'] = &$this->team[$team_id];
 

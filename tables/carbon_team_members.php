@@ -8,6 +8,12 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbon_team_members extends Database implements iRest
 {
+
+    public const MEMBER_ID = 'member_id';
+    public const TEAM_ID = 'team_id';
+    public const USER_ID = 'user_id';
+    public const ACCEPTED = 'accepted';
+
     public const PRIMARY = [
     'member_id',
     ];
@@ -39,16 +45,23 @@ class carbon_team_members extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,22 +76,37 @@ class carbon_team_members extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('member_id', $argv)) {
+   
+   /*
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('member_id', $argv)) {
             $member_id = $argv['member_id'];
             $stmt->bindParam(':member_id',$member_id, 2, 16);
         }
-        if (array_key_exists('team_id', $argv)) {
+                   if (array_key_exists('team_id', $argv)) {
             $team_id = $argv['team_id'];
             $stmt->bindParam(':team_id',$team_id, 2, 16);
         }
-        if (array_key_exists('user_id', $argv)) {
+                   if (array_key_exists('user_id', $argv)) {
             $user_id = $argv['user_id'];
             $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-        if (array_key_exists('accepted', $argv)) {
+                   if (array_key_exists('accepted', $argv)) {
             $accepted = $argv['accepted'];
             $stmt->bindParam(':accepted',$accepted, 0, 1);
         }
+           
+          }
+        };
+        
+        $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -123,7 +151,6 @@ class carbon_team_members extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -318,6 +345,23 @@ class carbon_team_members extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
+                   if (array_key_exists('member_id', $argv)) {
+            $member_id = $argv['member_id'];
+            $stmt->bindParam(':member_id',$member_id, 2, 16);
+        }
+                   if (array_key_exists('team_id', $argv)) {
+            $team_id = $argv['team_id'];
+            $stmt->bindParam(':team_id',$team_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+                   if (array_key_exists('accepted', $argv)) {
+            $accepted = $argv['accepted'];
+            $stmt->bindParam(':accepted',$accepted, 0, 1);
+        }
+
         if (!self::bind($stmt, $argv)){
             return false;
         }
@@ -336,6 +380,37 @@ class carbon_team_members extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        return carbons::Delete($remove, $primary, $argv);
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
+
+        /**
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
+        if (empty($argv)) {
+            return false;
+        }
+
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_team_members on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
+
+        $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+
+        self::jsonSQLReporting(\func_get_args(), $sql);
+
+        $stmt = $pdo->prepare($sql);
+
+        $r = self::bind($stmt, $argv);
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $r and $remove = null;
+
+        return $r;
     }
 }

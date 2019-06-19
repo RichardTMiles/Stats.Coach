@@ -3,20 +3,21 @@
 namespace Model;
 
 use CarbonPHP\Session;
+use Exception;
 use Model\Helpers\GlobalMap;
 
 
-use Tables\Carbon_User_Golf_Stats as Stats;
+use Tables\carbon_user_followers;
+use Tables\carbon_user_golf_stats as Stats;
 use Tables\carbon_users as Users;
-use Tables\Carbon_User_Followers as Followers;
-use Tables\Carbon_User_Messages as Messages;
+use Tables\carbon_user_followers as Followers;
+use Tables\carbon_user_messages as Messages;
 
 
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
 use CarbonPHP\Request;
 use CarbonPHP\Helpers\Serialized;
-use Tables\carbon_users;
 
 /**
  * Class User
@@ -27,7 +28,7 @@ class User extends GlobalMap
     /**
      * User constructor.
      * @param string|null $id
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws Exception
      */
     public function __construct(string $id = null)
     {
@@ -48,6 +49,42 @@ class User extends GlobalMap
         }
     }
 
+
+    public static function followers($id) {
+        return self::fetchColumn('SELECT HEX(user_id) FROM carbon_user_followers WHERE follows_user_id = UNHEX(?)', $id);
+    }
+
+    /**
+     * @param $id
+     * @throws PublicAlert
+     */
+    public function listFollowers($id) {
+        global $json;
+        $users = self::followers($id);
+        foreach ($users as &$value) {
+            $value = getUser($value, 'Basic');
+        }
+        $json['followers'] = $users;
+    }
+
+
+    public static function following($id) {
+        return self::fetchColumn('SELECT HEX('.carbon_user_followers::FOLLOWS_USER_ID.') FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
+    }
+
+    /**
+     * @param $id
+     * @throws PublicAlert
+     */
+    public function listFollowing($id) {
+        global $json;
+        $users = self::followers($id);
+        foreach ($users as &$value) {
+            $value = getUser($value, 'Basic');
+        }
+        $json['following'] = $users;
+    }
+
     /**
      * @param $username
      * @param $password
@@ -61,14 +98,14 @@ class User extends GlobalMap
 
         Users::Get($data, null, [
             'where' => [
-                'user_username' => $username
+                Users::USER_USERNAME => $username
             ],
             'select' => [
-                'user_first_name',
-                'user_last_name',
-                'user_profile_pic',
-                'user_id',
-                'user_password'
+                Users::USER_FIRST_NAME,
+                Users::USER_LAST_NAME,
+                Users::USER_PROFILE_PIC,
+                Users::USER_ID,
+                Users::USER_PASSWORD
             ]
         ]);
 
@@ -89,6 +126,10 @@ class User extends GlobalMap
             }
             */
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+
+        } else if ($password === $data['user_password']) {
+            $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+            PublicAlert::warning('Password encryption not detected, be sure to update before live release.');
         } else {
             throw new PublicAlert('Sorry, the username and password combination you have entered is invalid.', 'warning');
         }
@@ -110,7 +151,6 @@ class User extends GlobalMap
      * @param string $service
      * @param string|bool $request will map the the global scope
      * @return bool|mixed
-     * @throws \CarbonPHP\Error\PublicAlert
      */
     public function oAuth($service, &$request)
     {
@@ -118,11 +158,30 @@ class User extends GlobalMap
 
         $UserInfo['service'] = ucfirst($service);
 
-        $service = "user_{$service}_id";
+        $json['UserInfo'] = &$UserInfo;
 
-        $sql = "SELECT user_id, $service FROM carbon_users WHERE user_email = ? OR $service = ?";
+        $service = $service === 'google' ? Users::USER_GOOGLE_ID :
+            Users::USER_FACEBOOK_ID;
 
-        $sql = self::fetch($sql, $UserInfo['email'], $UserInfo['id']);
+        $sql = []; // quick refactor
+
+        if (false === Users::Get($sql, null, [
+            'select' => [
+                'user_id', $service
+            ],
+            'where' => [
+                [
+                    Users::USER_EMAIL => $UserInfo['email'],
+                    $service => $UserInfo['id']
+                ]
+            ],
+            'pagination' => [
+                'limit' => 1
+            ]
+        ])) {
+            $json['oauth'] = ('Failed to lookup user OAuth.');
+            return null;
+        }
 
         $user_id = $sql['user_id'] ?? false;
 
@@ -130,20 +189,29 @@ class User extends GlobalMap
 
         if (!$user_id && !$service_id) { // create new account
             if ($request === 'SignUp') {                         // This will set the session id
-                Users::Post([
-                    'username' => $UserInfo['username'],
-                    'password' => $UserInfo['password'],
+                $id = Users::Post([
+                    Users::USER_USERNAME  => $UserInfo['username'],
+                    Users::USER_PASSWORD => $UserInfo['password'],
                     $service => $UserInfo['id'],
-                    'profile_pic' => $UserInfo['picture'] ?? '',
-                    'cover_photo' => $UserInfo['cover'] ?? '',
-                    'email' => $UserInfo['email'],
-                    'type' => 'Athlete',
-                    'first_name' => $UserInfo['first_name'],
-                    'last_name' => $UserInfo['last_name'],
-                    'gender' => $UserInfo['gender']
+                    Users::USER_PROFILE_PIC => $UserInfo['picture'] ?? '',
+                    Users::USER_COVER_PHOTO => $UserInfo['cover'] ?? '',
+                    Users::USER_EMAIL => $UserInfo['email'],
+                    Users::USER_TYPE => 'Athlete',
+                    Users::USER_FIRST_NAME => $UserInfo['first_name'],
+                    Users::USER_LAST_NAME => $UserInfo['last_name'],
+                    Users::USER_GENDER => $UserInfo['gender'],
+                    Users::USER_IP => IP,
                 ]);
 
-                Stats::Post([]);
+                Stats::Post([
+                    'stats_id' => $id
+                ]);
+                $_SESSION['id'] = $id;
+
+                if (!self::commit()) {
+                    PublicAlert::danger('Failed to add oAuth user.');
+                    return startApplication('login');
+                }
 
             } else {
 
@@ -157,10 +225,8 @@ class User extends GlobalMap
             }
         } elseif ($user_id && !$service_id) {
             if ($request === 'SignIn') {
-                //Users::Put()
-
-                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = ?";     // UPDATE user
-                $this->db->prepare($sql)->execute([$UserInfo['id'], $_SESSION['id']]);
+                $sql = "UPDATE carbon_users SET $service = ? WHERE user_id = HEX(?)";     // UPDATE user
+                self::execute($sql, $UserInfo['id'], $_SESSION['id']);
                 $_SESSION['id'] = $user_id;
             } else {
                 $_SESSION['UserInfo'] = $UserInfo;  // were trying to sign up when we need to sign in
@@ -177,8 +243,8 @@ class User extends GlobalMap
             $_SESSION['id'] = $user_id;
         }
         $_SESSION['UserInfo'] = $UserInfo = null;
-        startApplication(true);
-        return false;
+
+        return startApplication(true);
     }
 
     /**
@@ -188,10 +254,25 @@ class User extends GlobalMap
      */
     public function follow($user_id): bool
     {
-        if (!$out = Users::user_exists($user_id)) {
+        global $json;
+
+        if (!$out = getUser($user_id)) {
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
-        return Followers::Post([$user_id]);
+        if (false === Followers::Post([
+                Followers::USER_ID => $_SESSION['id'],
+                Followers::FOLLOWS_USER_ID => $user_id
+            ])) {
+            PublicAlert::warning('Could not follow user!');
+        } elseif (self::commit(
+            function () use ($user_id) {
+                self::sendUpdate($user_id, 'NavigationMessages');
+                return true;
+            }
+        )) {
+            $json['success'] = true;
+        }
+        return true;
     }
 
     /**
@@ -201,10 +282,20 @@ class User extends GlobalMap
      */
     public function unfollow($user_id): bool
     {
-        if (!Users::user_exists($user_id)) {
-            throw new PublicAlert('That user does not exist?!');
+        global $json;
+
+        if (!getUser($user_id)) {
+            PublicAlert::warning("That user does not exist $user_id");
         }
-        Followers::Delete($this->user[$_SESSION['id']], $user_id);
+
+        if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
+                'follows_user_id' => $user_id,
+                'user_id' => $_SESSION['id']
+            ])) {
+            PublicAlert::warning('Could not unfollow user.');
+        } else {
+            $json['success'] = true;
+        }
 
         return true;
 
@@ -218,28 +309,28 @@ class User extends GlobalMap
     {
         global $username, $password, $email, $firstName, $lastName, $gender;
 
-        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_username = ? LIMIT 1', $username)['COUNT(*)']) {
+        if (self::fetch('SELECT COUNT(*) FROM StatsCoach.carbon_users WHERE user_username = ? LIMIT 1', $username)['COUNT(*)']) {
             throw new PublicAlert ('That username already exists', 'warning');
         }
 
-        if (self::fetch('SELECT COUNT(*) FROM statscoach.carbon_users WHERE user_email = ? LIMIT 1', $email)['COUNT(*)']) {
+        if (self::fetch('SELECT COUNT(*) FROM StatsCoach.carbon_users WHERE user_email = ? LIMIT 1', $email)['COUNT(*)']) {
             throw new PublicAlert ('That email already exists.', 'warning');
         }
 
         // Tables self validate and throw public errors
         if (!$id = Users::Post([
-            'user_type' => 'Athlete',
-            'user_ip' => IP,
-            'user_sport' => 'GOLF',
-            'user_email_confirmed' => 1,
-            'user_education_history' => '',
-            'user_location' => '',
-            'user_username' => $username,
-            'user_password' => $password,       // TODO - encrypt password
-            'user_email' => $email,
-            'user_first_name' => $firstName,
-            'user_last_name' => $lastName,
-            'user_gender' => $gender
+            Users::USER_TYPE => 'Athlete',
+            Users::USER_IP => IP,
+            Users::USER_SPORT => 'GOLF',
+            Users::USER_EMAIL_CONFIRMED => 1,
+            Users::USER_EDUCATION_HISTORY => '',
+            Users::USER_LOCATION => '',
+            Users::USER_USERNAME => $username,
+            Users::USER_PASSWORD => $password,       // TODO - encrypt password
+            Users::USER_EMAIL => $email,
+            Users::USER_FIRST_NAME => $firstName,
+            Users::USER_LAST_NAME => $lastName,
+            Users::USER_GENDER => $gender
         ])) {
             throw new PublicAlert('Failed to create your account!');
         }
@@ -256,44 +347,53 @@ class User extends GlobalMap
 
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-            startApplication('home/');
+            startApplication('home/'); // TODO - Im not going to return this but I feel like I should... idk
+            return false;
         } else {
             throw new PublicAlert('Failed to create your account!');
         }
-
-        return false;
     }
 
     /**
      * @param $email
      * @param $email_code
      * @return bool
-     * @throws PublicAlert
      */
     public function activate($email, $email_code): bool
     {
-        if (!Users::email_exists($email)) {
-            throw new PublicAlert('Please make sure the Url you have entered is correct.', 'danger');
+        $user = [];
+
+        if (false === Users::Get($user, null, [
+                'select' => [
+                    Users::USER_ID
+                ],
+                'where' => [
+                    Users::USER_EMAIL => $email,
+                    Users::USER_EMAIL_CODE => $email_code
+                ],
+                'pagination' => [
+                    'limit' => 1
+                ]
+            ])) {
+            PublicAlert::danger('The Rest API Failed.');
+            return startApplication(true);
         }
 
-        $stmt = $this->db->prepare('SELECT COUNT(user_id) FROM carbon_users WHERE user_email = ? AND user_email_code = ?');
-        $stmt->execute([$email, $email_code]);
-
-        if ($stmt->fetch() === 0) {
+        if (empty($user)) {
             PublicAlert::warning('Sorry, you may be using an old activation code.');
             return startApplication(true);
         }
 
-        if (!$this->db->prepare('UPDATE carbon_users SET user_email_confirmed = 1 WHERE user_email = ?')->execute(array($email)))
-            throw new PublicAlert('The code provided appears to be invalid.', 'danger');
+        if (false === Users::Put($user, $user['user_id'], [
+                Users::USER_EMAIL_CONFIRMED => 1
+            ])) {
+            PublicAlert::danger('The Rest API Failed.');
+            return startApplication(true);
+        }
 
-
-        $stmt = $this->db->prepare('SELECT user_id FROM carbon_users WHERE user_email = ?');
-        $stmt->execute([$email]);
-        $_SESSION['id'] = $stmt->fetchColumn();
+        $_SESSION['id'] = $user['user_id'];
         PublicAlert::success('We successfully activated your account.');
-        startApplication(true); // there is not an activate template file
-        exit(1);
+        return startApplication(true); // there is not an activate template file
     }
 
     /**
@@ -375,25 +475,38 @@ class User extends GlobalMap
      */
     public function profile($user_uri)
     {
-        return null;
-
         if ($user_uri === 'DeleteAccount') {
-            Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], []);
-            Serialized::clear();
-            startApplication(true);
-            return false;
-        }
-
-        if (true !== $user_uri) {   // an actual user id
-            global $user_id;
-            $user_id = Users::user_id_from_uri($user_uri);
-            if (!empty($user_id) && $user_id !== $_SESSION['id']) {
-                new User($user_id);
-                return true;
+            if (false === Users::Delete($this->user[$_SESSION['id']], $_SESSION['id'], [])) {
+                throw new PublicAlert('Failed to delete user.');
             }
+            Serialized::clear();
+            $_SESSION['id'] = false;
+            self::commit();
+            return startApplication(true);
         }
 
-        Users::Get($this->user[$_SESSION['id']], $_SESSION['id'], []);
+        if (true !== $user_uri) {   // !! an actual user id
+            global $json, $user;
+            getUser($user_uri);
+
+            $user[$user_uri]['following'] = [];
+
+            if (!carbon_user_followers::Get($user[$user_uri]['following'], null, [
+                    'where' => [
+                        carbon_user_followers::USER_ID => $_SESSION['id'],
+                        carbon_user_followers::FOLLOWS_USER_ID => $user_uri
+                    ],
+                    'pagination' => [
+                        'limit' => 1
+                    ]
+                ]
+            )) {
+                PublicAlert::warning('Failed to look up following status!');
+            }
+
+            $json['my'] = $user[$user_uri];
+            return true;
+        }
 
         if (empty($_POST)) {
             return null;
@@ -407,17 +520,18 @@ class User extends GlobalMap
 
         //throw new PublicAlert($first);
 
+        // todo - shrink this?
         if (false === Users::Put($my, $_SESSION['id'], [
-            'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
-            'user_first_name' => $first ?: $my['user_first_name'],
-            'user_birthday' => $dob ?: $my['user_birthday'],
-            'user_last_name' => $last ?: $my['user_last_name'],
-            'user_gender' => $gender ?: $my['user_gender'],
-            'user_email' => $email ?: $my['user_email'],
-            'user_password' =>  $password ? Bcrypt::genHash($password) : $my['user_password'],
-            'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
-            'user_education_history' => $user_education_history ?: $my['user_education_history'],
-            'user_about_me' => $about_me ?: $my['user_about_me']])) {
+                Users::USER_PROFILE_PIC => $profile_pic ?: $my['user_profile_pic'],
+                Users::USER_FIRST_NAME => $first ?: $my['user_first_name'],
+                Users::USER_BIRTHDAY => $dob ?: $my['user_birthday'],
+                Users::USER_LAST_NAME => $last ?: $my['user_last_name'],
+                Users::USER_GENDER => $gender ?: $my['user_gender'],
+                Users::USER_EMAIL => $email ?: $my['user_email'],
+                Users::USER_PASSWORD => $password ? Bcrypt::genHash($password) : $my['user_password'],
+                Users::USER_EMAIL_CONFIRMED => $email ? 0 : $my['user_email_confirmed'],
+                Users::USER_EDUCATION_HISTORY => $user_education_history ?: $my['user_education_history'],
+                Users::USER_ABOUT_ME => $about_me ?: $my['user_about_me']])) {
             throw new PublicAlert('Sorry, we could not process your information at this time.', 'warning');
         }
 
@@ -448,7 +562,7 @@ class User extends GlobalMap
 
         Session::update();
 
-        return startApplication('/');
+        return null;
     }
 
 }
