@@ -1,0 +1,73 @@
+<section class="content-header" style="color: ghostwhite">
+    <h1>
+        {{#roundUser}}{{user_first_name}} {{user_last_name}}{{/roundUser}}
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Rounds</a></li>
+    </ol>
+    <p>
+    </p>
+</section>
+<!-- Main content -->
+
+<section class="content">
+    <div id="alert"></div>
+
+    <div class="row">
+        <div class="col-md-auto">
+            <div class="box box-widget widget-user">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Latest Scores</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Course</th>
+                                    <th>Color</th>
+                                    <th>Distance</th>
+                                    <th>Fairways</th>
+                                    <th>Greens</th>
+                                    <th>Putts</th>
+                                    <th>Par</th>
+                                    <th>Strokes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#my.rounds}}
+                                    <tr>
+                                        <td>{{round_date}}</td>
+                                        <td>{{course_name}}</td>
+                                        <td>{{round_tee_box_color}}</td>
+                                        <td>{{course_distance}}</td>
+                                        <td>{{round_total_ffs}}</td>
+                                        <td>{{round_total_gnr}}</td>
+                                        <td>{{round_total_putts}}</td>
+                                        <td>{{course_par}}</td>
+                                        <td>{{round_total}}</td>
+                                    </tr>
+                                {{/my.rounds}}
+                                </tbody>
+                            </table>
+                        </div><!-- /.table-responsive -->
+                    </div><!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <a href="/PostScore/Basic" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
+                    </div><!-- /.box-footer -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+

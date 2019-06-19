@@ -15,7 +15,7 @@ use Tables\carbon_user_messages as message;
 
 class Messages extends Request
 {
-    public function messages($user_uri)
+    public function messages($user_uri = false)
     {
         // list($us_id, $messages) = $this->post('user_id','message')->alnum();
 
@@ -37,6 +37,8 @@ class Messages extends Request
             return null;
         }
 
-        return $user_id;
+        $message = $this->post('message')->noHTML()->value();
+
+        return [$user_id, $message];
     }
 }

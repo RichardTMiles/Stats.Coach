@@ -99,13 +99,13 @@ RewriteRule (.*) index.php [QSA]
 Header set Cache-Control "max-age=29030400, public"
 </FilesMatch>
 
-<FilesMatch "\.(jpg|jpeg|png|gif|swf|xml|txt|css|js)$">
+<FilesMatch "\.(jpg|jpeg|png|gif|swf|xml|txt|css)$">
 Header set Cache-Control "max-age=604800, public"
 </FilesMatch>
 
 # TODO - Eventually we should cache mustache files
 # normally 60
-<FilesMatch "\.(html|htm|php|hbs)$">
+<FilesMatch "\.(html|htm|php|hbs|js)$">
 Header set Cache-Control "max-age=0, private, public"
 </FilesMatch>
 

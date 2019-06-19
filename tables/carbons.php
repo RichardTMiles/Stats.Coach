@@ -8,6 +8,10 @@ use CarbonPHP\Interfaces\iRest;
 
 class carbons extends Database implements iRest
 {
+
+    public const ENTITY_PK = 'entity_pk';
+    public const ENTITY_FK = 'entity_fk';
+
     public const PRIMARY = [
     'entity_pk',
     ];
@@ -39,16 +43,23 @@ class carbons extends Database implements iRest
     public static function buildWhere(array $set, \PDO $pdo, $join = 'AND') : string
     {
         $sql = '(';
+        $bump = false;
         foreach ($set as $column => $value) {
             if (\is_array($value)) {
+                if ($bump) {
+                    $sql .= " $join ";
+                }
+                $bump = true;
                 $sql .= self::buildWhere($value, $pdo, $join === 'AND' ? 'OR' : 'AND');
             } else if (array_key_exists($column, self::COLUMNS)) {
+                $bump = false;
                 if (self::COLUMNS[$column][0] === 'binary') {
-                    $sql .= "($column = UNHEX(:" . $column . ")) $join ";
+                    $sql .= "($column = UNHEX(" . self::addInjection($value, $pdo)  . ")) $join ";
                 } else {
-                    $sql .= "($column = :" . $column . ") $join ";
+                    $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
                 }
             } else {
+                $bump = false;
                 $sql .= "($column = " . self::addInjection($value, $pdo) . ") $join ";
             }
         }
@@ -63,14 +74,29 @@ class carbons extends Database implements iRest
     }
 
     public static function bind(\PDOStatement $stmt, array $argv) {
-        if (array_key_exists('entity_pk', $argv)) {
+   
+   /*
+    $bind = function (array $argv) use (&$bind, &$stmt) {
+            foreach ($argv as $key => $value) {
+                
+                if (is_numeric($key) && is_array($value)) {
+                    $bind($value);
+                    continue;
+                }
+                
+                   if (array_key_exists('entity_pk', $argv)) {
             $entity_pk = $argv['entity_pk'];
             $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-        if (array_key_exists('entity_fk', $argv)) {
+                   if (array_key_exists('entity_fk', $argv)) {
             $entity_fk = $argv['entity_fk'];
             $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
+           
+          }
+        };
+        
+        $bind($argv); */
 
         foreach (self::$injection as $key => $value) {
             $stmt->bindValue($key,$value);
@@ -115,7 +141,6 @@ class carbons extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -297,6 +322,15 @@ class carbons extends Database implements iRest
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
+
+                   if (array_key_exists('entity_pk', $argv)) {
+            $entity_pk = $argv['entity_pk'];
+            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
+        }
+                   if (array_key_exists('entity_fk', $argv)) {
+            $entity_fk = $argv['entity_fk'];
+            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
+        }
 
         if (!self::bind($stmt, $argv)){
             return false;

@@ -57,6 +57,11 @@ use CarbonPHP\Helpers\Pipe;
 
 abstract class GlobalMap extends Database
 {
+    /* So these are actually globals..
+     * I now kinda think this ws dumb...
+     * but i'll leave it for options
+     */
+    protected $json = array();
     protected $user = array();
     protected $team = array();
     protected $course = array();
@@ -64,7 +69,8 @@ abstract class GlobalMap extends Database
     
     public function __construct()
     {
-        global $user, $team, $course, $tournament;
+        global $json, $user, $team, $course, $tournament;
+        $this->json = &$json;
         $this->user = &$user;
         $this->team = &$team;
         $this->course = &$course;
@@ -77,7 +83,7 @@ abstract class GlobalMap extends Database
      * @param string $uri
      */
     public static function sendUpdate(string $id, string $uri) : void {
-        Pipe::send( $uri, SERVER_ROOT . 'Data/Temp/' . $id . '.fifo' );
+        Pipe::send( $uri, APP_ROOT . 'data/sessions/' . $id . '.fifo' );
     }
 
 }
