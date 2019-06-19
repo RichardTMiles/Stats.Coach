@@ -69,7 +69,7 @@ class User extends GlobalMap
 
 
     public static function following($id) {
-        return self::fetchColumn('SELECT HEX(follows_user_id) FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
+        return self::fetchColumn('SELECT HEX('.carbon_user_followers::FOLLOWS_USER_ID.') FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
     }
 
     /**
@@ -98,14 +98,14 @@ class User extends GlobalMap
 
         Users::Get($data, null, [
             'where' => [
-                'user_username' => $username
+                Users::USER_USERNAME => $username
             ],
             'select' => [
-                'user_first_name',
-                'user_last_name',
-                'user_profile_pic',
-                'user_id',
-                'user_password'
+                Users::USER_FIRST_NAME,
+                Users::USER_LAST_NAME,
+                Users::USER_PROFILE_PIC,
+                Users::USER_ID,
+                Users::USER_PASSWORD
             ]
         ]);
 
@@ -126,6 +126,10 @@ class User extends GlobalMap
             }
             */
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+
+        } else if ($password === $data['user_password']) {
+            $_SESSION['id'] = $data['user_id'];    // returning the user's id.
+            PublicAlert::warning('Password encryption not detected, be sure to update before live release.');
         } else {
             throw new PublicAlert('Sorry, the username and password combination you have entered is invalid.', 'warning');
         }
@@ -147,7 +151,6 @@ class User extends GlobalMap
      * @param string $service
      * @param string|bool $request will map the the global scope
      * @return bool|mixed
-     * @throws PublicAlert
      */
     public function oAuth($service, &$request)
     {
@@ -157,7 +160,8 @@ class User extends GlobalMap
 
         $json['UserInfo'] = &$UserInfo;
 
-        $service = "user_{$service}_id";
+        $service = $service === 'google' ? Users::USER_GOOGLE_ID :
+            Users::USER_FACEBOOK_ID;
 
         $sql = []; // quick refactor
 
@@ -167,7 +171,7 @@ class User extends GlobalMap
             ],
             'where' => [
                 [
-                    'user_email' => $UserInfo['email'],
+                    Users::USER_EMAIL => $UserInfo['email'],
                     $service => $UserInfo['id']
                 ]
             ],
@@ -186,17 +190,17 @@ class User extends GlobalMap
         if (!$user_id && !$service_id) { // create new account
             if ($request === 'SignUp') {                         // This will set the session id
                 $id = Users::Post([
-                    'user_username' => $UserInfo['username'],
-                    'user_password' => $UserInfo['password'],
+                    Users::USER_USERNAME  => $UserInfo['username'],
+                    Users::USER_PASSWORD => $UserInfo['password'],
                     $service => $UserInfo['id'],
-                    'user_profile_pic' => $UserInfo['picture'] ?? '',
-                    'user_cover_photo' => $UserInfo['cover'] ?? '',
-                    'user_email' => $UserInfo['email'],
-                    'user_type' => 'Athlete',
-                    'user_first_name' => $UserInfo['first_name'],
-                    'user_last_name' => $UserInfo['last_name'],
-                    'user_gender' => $UserInfo['gender'],
-                    'user_ip' => IP,
+                    Users::USER_PROFILE_PIC => $UserInfo['picture'] ?? '',
+                    Users::USER_COVER_PHOTO => $UserInfo['cover'] ?? '',
+                    Users::USER_EMAIL => $UserInfo['email'],
+                    Users::USER_TYPE => 'Athlete',
+                    Users::USER_FIRST_NAME => $UserInfo['first_name'],
+                    Users::USER_LAST_NAME => $UserInfo['last_name'],
+                    Users::USER_GENDER => $UserInfo['gender'],
+                    Users::USER_IP => IP,
                 ]);
 
                 Stats::Post([
@@ -256,8 +260,8 @@ class User extends GlobalMap
             throw new PublicAlert("That user does not exist $user_id >> $out");
         }
         if (false === Followers::Post([
-                'user_id' => $_SESSION['id'],
-                'follows_user_id' => $user_id
+                Followers::USER_ID => $_SESSION['id'],
+                Followers::FOLLOWS_USER_ID => $user_id
             ])) {
             PublicAlert::warning('Could not follow user!');
         } elseif (self::commit(
@@ -315,18 +319,18 @@ class User extends GlobalMap
 
         // Tables self validate and throw public errors
         if (!$id = Users::Post([
-            'user_type' => 'Athlete',
-            'user_ip' => IP,
-            'user_sport' => 'GOLF',
-            'user_email_confirmed' => 1,
-            'user_education_history' => '',
-            'user_location' => '',
-            'user_username' => $username,
-            'user_password' => $password,       // TODO - encrypt password
-            'user_email' => $email,
-            'user_first_name' => $firstName,
-            'user_last_name' => $lastName,
-            'user_gender' => $gender
+            Users::USER_TYPE => 'Athlete',
+            Users::USER_IP => IP,
+            Users::USER_SPORT => 'GOLF',
+            Users::USER_EMAIL_CONFIRMED => 1,
+            Users::USER_EDUCATION_HISTORY => '',
+            Users::USER_LOCATION => '',
+            Users::USER_USERNAME => $username,
+            Users::USER_PASSWORD => $password,       // TODO - encrypt password
+            Users::USER_EMAIL => $email,
+            Users::USER_FIRST_NAME => $firstName,
+            Users::USER_LAST_NAME => $lastName,
+            Users::USER_GENDER => $gender
         ])) {
             throw new PublicAlert('Failed to create your account!');
         }
@@ -343,20 +347,17 @@ class User extends GlobalMap
 
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
-            startApplication('home/');
+            startApplication('home/'); // TODO - Im not going to return this but I feel like I should... idk
             return false;
         } else {
             throw new PublicAlert('Failed to create your account!');
         }
-
-        return false;
     }
 
     /**
      * @param $email
      * @param $email_code
      * @return bool
-     * @throws PublicAlert
      */
     public function activate($email, $email_code): bool
     {
@@ -364,11 +365,11 @@ class User extends GlobalMap
 
         if (false === Users::Get($user, null, [
                 'select' => [
-                    'user_id'
+                    Users::USER_ID
                 ],
                 'where' => [
-                    'user_email' => $email,
-                    'user_email_code' => $email_code
+                    Users::USER_EMAIL => $email,
+                    Users::USER_EMAIL_CODE => $email_code
                 ],
                 'pagination' => [
                     'limit' => 1
@@ -383,9 +384,8 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-
         if (false === Users::Put($user, $user['user_id'], [
-                'user_email_confirmed' => 1
+                Users::USER_EMAIL_CONFIRMED => 1
             ])) {
             PublicAlert::danger('The Rest API Failed.');
             return startApplication(true);
@@ -493,8 +493,8 @@ class User extends GlobalMap
 
             if (!carbon_user_followers::Get($user[$user_uri]['following'], null, [
                     'where' => [
-                        'user_id' => $_SESSION['id'],
-                        'follows_user_id' => $user_uri
+                        carbon_user_followers::USER_ID => $_SESSION['id'],
+                        carbon_user_followers::FOLLOWS_USER_ID => $user_uri
                     ],
                     'pagination' => [
                         'limit' => 1
@@ -522,16 +522,16 @@ class User extends GlobalMap
 
         // todo - shrink this?
         if (false === Users::Put($my, $_SESSION['id'], [
-                'user_profile_pic' => $profile_pic ?: $my['user_profile_pic'],
-                'user_first_name' => $first ?: $my['user_first_name'],
-                'user_birthday' => $dob ?: $my['user_birthday'],
-                'user_last_name' => $last ?: $my['user_last_name'],
-                'user_gender' => $gender ?: $my['user_gender'],
-                'user_email' => $email ?: $my['user_email'],
-                'user_password' => $password ? Bcrypt::genHash($password) : $my['user_password'],
-                'user_email_confirmed' => $email ? 0 : $my['user_email_confirmed'],
-                'user_education_history' => $user_education_history ?: $my['user_education_history'],
-                'user_about_me' => $about_me ?: $my['user_about_me']])) {
+                Users::USER_PROFILE_PIC => $profile_pic ?: $my['user_profile_pic'],
+                Users::USER_FIRST_NAME => $first ?: $my['user_first_name'],
+                Users::USER_BIRTHDAY => $dob ?: $my['user_birthday'],
+                Users::USER_LAST_NAME => $last ?: $my['user_last_name'],
+                Users::USER_GENDER => $gender ?: $my['user_gender'],
+                Users::USER_EMAIL => $email ?: $my['user_email'],
+                Users::USER_PASSWORD => $password ? Bcrypt::genHash($password) : $my['user_password'],
+                Users::USER_EMAIL_CONFIRMED => $email ? 0 : $my['user_email_confirmed'],
+                Users::USER_EDUCATION_HISTORY => $user_education_history ?: $my['user_education_history'],
+                Users::USER_ABOUT_ME => $about_me ?: $my['user_about_me']])) {
             throw new PublicAlert('Sorry, we could not process your information at this time.', 'warning');
         }
 

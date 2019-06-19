@@ -165,7 +165,6 @@ class carbon_locations extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {

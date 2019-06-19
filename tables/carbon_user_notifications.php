@@ -6,22 +6,19 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_user_messages extends Database implements iRest
+class carbon_user_notifications extends Database implements iRest
 {
 
-    public const MESSAGE_ID = 'message_id';
-    public const FROM_USER_ID = 'from_user_id';
+    public const NOTIFICATION_ID = 'notification_id';
     public const TO_USER_ID = 'to_user_id';
-    public const MESSAGE = 'message';
-    public const MESSAGE_READ = 'message_read';
-    public const CREATION_DATE = 'creation_date';
+    public const NOTIFICATION_DATA = 'notification_data';
 
     public const PRIMARY = [
-    'message_id',
+    'notification_id',
     ];
 
     public const COLUMNS = [
-        'message_id' => [ 'binary', '2', '16' ],'from_user_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],'creation_date' => [ 'datetime', '2', '' ],
+        'notification_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'notification_data' => [ 'json', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -88,27 +85,16 @@ class carbon_user_messages extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('message_id', $argv)) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
-        }
-                   if (array_key_exists('from_user_id', $argv)) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+                   if (array_key_exists('notification_id', $argv)) {
+            $notification_id = $argv['notification_id'];
+            $stmt->bindParam(':notification_id',$notification_id, 2, 16);
         }
                    if (array_key_exists('to_user_id', $argv)) {
             $to_user_id = $argv['to_user_id'];
             $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-                   if (array_key_exists('message', $argv)) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-                   if (array_key_exists('message_read', $argv)) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('notification_data', $argv)) {
+            $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
         }
            
           }
@@ -194,12 +180,12 @@ class carbon_user_messages extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'message_id ASC';
+                    $order .= 'notification_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY message_id ASC LIMIT 100';
+            $limit = ' ORDER BY notification_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -217,7 +203,7 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |message_id|from_user_id|to_user_id|message|message_read|creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |notification_id|to_user_id|notification_data))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -225,7 +211,7 @@ class carbon_user_messages extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_messages';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_notifications';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -233,7 +219,7 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  notification_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -263,6 +249,9 @@ class carbon_user_messages extends Database implements iRest
         if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
             $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
             // promise this is needed and will still return the desired array except for a single record will not be an array
+        if (array_key_exists('notification_data', $return)) {
+                $return['notification_data'] = json_decode($return['notification_data'], true);
+            }
         
         }
 
@@ -277,25 +266,19 @@ class carbon_user_messages extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_messages (message_id, from_user_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:from_user_id), UNHEX(:to_user_id), :message, :message_read)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_notifications (notification_id, to_user_id, notification_data) VALUES ( UNHEX(:notification_id), UNHEX(:to_user_id), :notification_data)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $message_id = $id = $argv['message_id'] ?? self::beginTransaction('carbon_user_messages');
-                $stmt->bindParam(':message_id',$message_id, 2, 16);
+                $notification_id = $id = $argv['notification_id'] ?? self::beginTransaction('carbon_user_notifications');
+                $stmt->bindParam(':notification_id',$notification_id, 2, 16);
                 
-                    $from_user_id = $argv['from_user_id'];
-                    $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
-                        
-                    $to_user_id = $argv['to_user_id'];
+                    $to_user_id =  $argv['to_user_id'] ?? null;
                     $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                        $stmt->bindValue(':message',$argv['message'], 2);
-                        
-                    $message_read =  $argv['message_read'] ?? '0';
-                    $stmt->bindParam(':message_read',$message_read, 0, 1);
-                
+                        $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
+        
 
 
         return $stmt->execute() ? $id : false;
@@ -321,29 +304,20 @@ class carbon_user_messages extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_user_messages ';
+        $sql = 'UPDATE StatsCoach.carbon_user_notifications ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('message_id', $argv)) {
-                $set .= 'message_id=UNHEX(:message_id),';
-            }
-            if (array_key_exists('from_user_id', $argv)) {
-                $set .= 'from_user_id=UNHEX(:from_user_id),';
+            if (array_key_exists('notification_id', $argv)) {
+                $set .= 'notification_id=UNHEX(:notification_id),';
             }
             if (array_key_exists('to_user_id', $argv)) {
                 $set .= 'to_user_id=UNHEX(:to_user_id),';
             }
-            if (array_key_exists('message', $argv)) {
-                $set .= 'message=:message,';
-            }
-            if (array_key_exists('message_read', $argv)) {
-                $set .= 'message_read=:message_read,';
-            }
-            if (array_key_exists('creation_date', $argv)) {
-                $set .= 'creation_date=:creation_date,';
+            if (array_key_exists('notification_data', $argv)) {
+                $set .= 'notification_data=:notification_data,';
             }
 
         if (empty($set)){
@@ -354,33 +328,22 @@ class carbon_user_messages extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  notification_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('message_id', $argv)) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
-        }
-                   if (array_key_exists('from_user_id', $argv)) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+                   if (array_key_exists('notification_id', $argv)) {
+            $notification_id = $argv['notification_id'];
+            $stmt->bindParam(':notification_id',$notification_id, 2, 16);
         }
                    if (array_key_exists('to_user_id', $argv)) {
             $to_user_id = $argv['to_user_id'];
             $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-                   if (array_key_exists('message', $argv)) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-                   if (array_key_exists('message_read', $argv)) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('notification_data', $argv)) {
+            $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -417,7 +380,7 @@ class carbon_user_messages extends Database implements iRest
         self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE c FROM StatsCoach.carbons c 
-                JOIN StatsCoach.carbon_user_messages on c.entity_pk = follower_table_id';
+                JOIN StatsCoach.carbon_user_notifications on c.entity_pk = follower_table_id';
 
         $pdo = self::database();
 

@@ -50,6 +50,7 @@
     "cache/filesystem-adapter": "^1.0",
     "facebook/webdriver": "dev-master",
     "matthiasmullie/minify": "dev-master",
-    "patchwork/jsqueeze": "^2.0"
+    "patchwork/jsqueeze": "^2.0",
+    "ext-pdo": "*"
   }
 }

@@ -19,11 +19,11 @@ class carbon_golf_tournaments extends Database implements iRest
     public const TOURNAMENT_DATE = 'tournament_date';
 
     public const PRIMARY = [
-    
+    'tournament_id',
     ];
 
     public const COLUMNS = [
-        'tournament_id' => [ 'binary', '2', '16' ],'tournament_name' => [ 'binary', '2', '16' ],'course_id' => [ 'binary', '2', '16' ],'host_name' => [ 'varchar', '2', '225' ],'tournament_style' => [ 'int', '2', '11' ],'tournament_team_price' => [ 'int', '2', '11' ],'tournament_paid' => [ 'int', '2', '1' ],'tournament_date' => [ 'date', '2', '' ],
+        'tournament_id' => [ 'binary', '2', '16' ],'tournament_name' => [ 'varchar', '2', '225' ],'course_id' => [ 'binary', '2', '16' ],'host_name' => [ 'varchar', '2', '225' ],'tournament_style' => [ 'int', '2', '11' ],'tournament_team_price' => [ 'int', '2', '11' ],'tournament_paid' => [ 'int', '2', '1' ],'tournament_date' => [ 'date', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -96,7 +96,7 @@ class carbon_golf_tournaments extends Database implements iRest
         }
                    if (array_key_exists('tournament_name', $argv)) {
             $tournament_name = $argv['tournament_name'];
-            $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
+            $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
         }
                    if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
@@ -170,7 +170,6 @@ class carbon_golf_tournaments extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -206,12 +205,12 @@ class carbon_golf_tournaments extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= ' ASC';
+                    $order .= 'tournament_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY  ASC LIMIT 100';
+            $limit = ' ORDER BY tournament_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -244,7 +243,9 @@ class carbon_golf_tournaments extends Database implements iRest
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } 
+        } else {
+        $sql .= ' WHERE  tournament_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -270,6 +271,11 @@ class carbon_golf_tournaments extends Database implements iRest
         */
 
         
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -282,18 +288,17 @@ class carbon_golf_tournaments extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_golf_tournaments (tournament_id, tournament_name, course_id, host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), UNHEX(:tournament_name), UNHEX(:course_id), :host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
+        $sql = 'INSERT INTO StatsCoach.carbon_golf_tournaments (tournament_id, tournament_name, course_id, host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), :tournament_name, UNHEX(:course_id), :host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
+                $tournament_id = $id = $argv['tournament_id'] ?? self::beginTransaction('carbon_golf_tournaments');
+                $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
                 
-                    $tournament_id = $argv['tournament_id'];
-                    $stmt->bindParam(':tournament_id',$tournament_id, 2, 16);
-                        
                     $tournament_name = $argv['tournament_name'];
-                    $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
+                    $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
                         
                     $course_id =  $argv['course_id'] ?? null;
                     $stmt->bindParam(':course_id',$course_id, 2, 16);
@@ -313,8 +318,8 @@ class carbon_golf_tournaments extends Database implements iRest
         
 
 
+        return $stmt->execute() ? $id : false;
 
-            return $stmt->execute();
     }
 
     /**
@@ -346,7 +351,7 @@ class carbon_golf_tournaments extends Database implements iRest
                 $set .= 'tournament_id=UNHEX(:tournament_id),';
             }
             if (array_key_exists('tournament_name', $argv)) {
-                $set .= 'tournament_name=UNHEX(:tournament_name),';
+                $set .= 'tournament_name=:tournament_name,';
             }
             if (array_key_exists('course_id', $argv)) {
                 $set .= 'course_id=UNHEX(:course_id),';
@@ -375,7 +380,7 @@ class carbon_golf_tournaments extends Database implements iRest
 
         $pdo = self::database();
 
-        
+        $sql .= ' WHERE  tournament_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -387,7 +392,7 @@ class carbon_golf_tournaments extends Database implements iRest
         }
                    if (array_key_exists('tournament_name', $argv)) {
             $tournament_name = $argv['tournament_name'];
-            $stmt->bindParam(':tournament_name',$tournament_name, 2, 16);
+            $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
         }
                    if (array_key_exists('course_id', $argv)) {
             $course_id = $argv['course_id'];
@@ -431,25 +436,27 @@ class carbon_golf_tournaments extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_golf_tournaments ';
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
 
-        $pdo = self::database();
-
-        if (null === $primary) {
         /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
         if (empty($argv)) {
             return false;
         }
 
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_golf_tournaments on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } 
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

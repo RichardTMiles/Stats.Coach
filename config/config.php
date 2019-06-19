@@ -118,7 +118,7 @@ function getUser($id = false, $level = 'All') : array
 
             carbon_user_tasks::Get($my['tasks'], null, [
                 'where' => [
-                    carbon_user_tasks::USER_ID => $id
+                    carbon_user_tasks::TO_USER_ID => $id
                 ]
             ]);
 

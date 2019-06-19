@@ -5,55 +5,155 @@
         New Tournament
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">Messages</a></li>
+        <li><a href="/" style="color: ghostwhite"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active" style="color: ghostwhite"><a href="#" style="color: ghostwhite">NewTournament</a></li>
     </ol>
     <p>
     </p>
 </section>
 <!-- Main content -->
-
-
 <!-- USERS LIST -->
-
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="/CreateTeam/" name="addCourse">
+    <form data-pjax class="form-horizontal" method="post" action="/NewTournament/" name="NewTournament">
         <div id="alert"></div>
-
         <!-- Add Course Main Info -->
         <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
-
             <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Create Your Team</h3>
+                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">New Tournament</h3>
             </div>
-
             <div class="box-body" style="color: ghostwhite">
-
                 <!-- text input -->
                 <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
                     <div class="form-group col-xs-12 col-md-12" id="teamCode">
-                        <label for="teamName">Please enter the teams name</label>
-                        <input type="text" class="form-control " placeholder="Team Name" name="teamName">
+                        <label for="teamName">Tournament Name</label>
+                        <input type="text" class="form-control " placeholder="Tournament Name" name="tournamentName">
                     </div>
                     <div class="form-group col-xs-12 col-md-12" id="teamCode">
-                        <label for="schoolName">Please enter the teams school (optional)</label>
-                        <input type="text" class="form-control " placeholder="Team Code" name="schoolName">
+                        <label for="schoolName">Host Name</label>
+                        <input type="text" class="form-control " placeholder="Host Name/Team" name="hostName">
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label for="schoolName">Tournament Style</label>
+                        <select id="selectPlay" class="form-control" name="style" required>
+                            <option value="Match_Play" selected>Match Play</option>
+                            <option value="Stroke_Play">Stroke Play</option>
+                            <option value="Best_Ball">Better/Best Ball</option>
+                            <option value="Scramble">Scramble</option>
+                            <option value="Alternate_Shot">Alternate Shot (Foursome)</option>
+                            <option value="Four_Ball">Four Ball</option>
+                            <option value="Skins_Game">Skins Game</option>
+                            <option value="Ryder_Cup">Ryder Cup</option>
+                            <option value="Shamble">Ryder Cup</option>
+                            <option value="Stableford">Stableford</option>
+                            <option value="Chapman_or_Pinehurst">Chapman or Pinehurst</option>
+                            <option value="Bingo_Bango_Bongo">Bingo Bango Bongo</option>
+                            <option value="Flags">Flags</option>
+                            <option value="Money_Ball_or_Lone_Ranger">Money Ball or Lone Ranger</option>
+                            <option value="Quota_Tournament">Quota Tournament</option>
+                            <option value="Peoria_System">Peoria System</option>
+                        </select>
                     </div>
                 </div>
             </div>
-
             <div class="box-footer" style="background-color: #2c3b41; color: ghostwhite !important;">
-                <button type="reset" class="btn btn-default">Reset</button>
                 <!-- button -->
-                <button class="btn btn-info pull-right" type="submit">Submit</button>
+                <button class="btn btn-info pull-right" type="submit">Next >></button>
             </div>
-
         </div>
-
-
     </form>
+    <div class="callout callout-success">
+        <h4 id="playName">Match Play</h4>
 
-
+        <p id="playDescription">Match play is a hole-by-hole competition where the golfer who makes the best score on
+            the individual hole wins that hole. The player who wins the most holes throughout the match is the winner.
+            In match play you are going up against your opponent in head to head competition.</p>
+        <br>
+        <a href="https://golfcollege.edu/popular-golf-tournament-formats/">Tournament Play Information From Golf College</a>
+    </div>
 </section>
+
+
+<script>
+    const playInfo = {
+        'Match_Play': 'Match play is a hole-by-hole competition where the golfer who makes the best score on the individual hole wins that hole. The player who wins the most holes throughout the match is the winner. In match play you are going up against your opponent in head to head competition.',
+        'Stroke_Play': 'Stroke play is an 18 hole cumulative score competition where the golfer with the best overall score after 18 holes wins. In stroke play you are going up against the course and trying to out play your fellow competitors.',
+        'Best_Ball': 'A Better/Best Ball tournament involves teams of 2, 3, or 4 golfers and can be played as match or stroke play. Each team member plays their own ball throughout the round. After each hole, the lowest score from each team member is the score for that team on the hole. For instance, on a par 4 for team 1 golfer A makes a 5 while golfer B makes a 4 and team 2 golfer C makes a 3 while golfer D makes a 6; so team 1 would use golfer B’s score of 4 and team 2 would use golfer C’s score of 3. The team with the lowest best ball score at the end of 18 holes wins. Strong players, low handicappers or scratch golfers, could play individually against a 2 or 3 person team playing best ball.\n' +
+                '\n' +
+                'With larger teams of 3 or 4 golfers you can play 2 Best Balls format, where you take the top two scores from the team members after each hole as the team score.',
+        'Scramble': 'Scramble tournaments involve teams of 2, 3, or 4 golfers. In a Scramble tournament each team member tees off on every hole. After the initial tee shots, the team selects the best shot out of their teammates and then each team member plays their next shot from that spot. This continues throughout the rest of the shots on the hole including putting. A player is allowed to place the ball within one club length of the spot of the best shot, but not nearer to the hole. The scramble is often played as stroke play event with the team with the lowest cumulative score after 18 holes winning.',
+        'Alternate_Shot': 'Alternate Shot format involves teams of 2 golfers. Players from each team alternate shots on each hole throughout 18 holes. Teammates alternate who hits the tee shot on each hole. For instance team 1 with golfers A & B: on hole 1 golfer A tees off, B hits 2nd shot, A hits 3rd shot, then B putts it in, and then on hole 2 B tees off, A hits 2nd, and so on.',
+        'Four_Ball': 'Four Ball format is played with teams of two and uses a better ball scoring method. It can be played as either match play or stroke play. Each golfer plays their own ball during the entire match. For match play, at the end of each hole the golfer with the lowest score wins the hole for their team, earning a point. The team with the most points at the end of the round wins. An example: after hole 1, for team 1 player A scored 5 and player B scored 6, for team 2 player C scored 4 and player D scored 5. Player C has won hole 1 for team 2, earning their team a point. For stroke play, the team’s score on each hole is that of the lowest scoring team member. The team with the lowest score at the end of the round wins.',
+        'Skins_Game': 'The Skins Game format can be played individually or as teams. For a Skins Game each hole is worth a skin. The golfer with the lowest score on a hole wins the skin. If two or more players tie then no skin is awarded, instead the skin is carried over to the next hole. The player who earns the most skins at the end is the winner.\n' +
+                '\n' +
+                'Additionally you can also award skins for achievements on each hole such as: a ‘Greenie’ for landing a tee shot onto the green, ‘Sandies’ for a sand save, ‘Woodies’ for saving par after hitting a tree, and ‘Arnies’ for making par without hitting the fairway. You can add your own variations as well.',
+        'Ryder_Cup': 'The Ryder Cup is an international tournament between the United Kingdom and the United States. The format of Ryder Cup can be adopted by tournament organizers. The Ryder Cup consists of 2 teams of 12 players each and is typically played over 3 days. The Ryder Cup involves a set of eight Alternate Shot matches, eight Four Ball matches, and 12 singles matches. Each match is played as match play. A point is awarded for each match won. The team with the most points at the conclusion wins.',
+        'Shamble': 'A Shamble format tournament can be played with teams of 2, 3, or 4. In a Shamble each golfer tees off on every hole. The team then selects their best drive and each team member plays their second shot from there. After the second shot each golfer plays their own ball for the remainder of the hole. For example, players A & B are on a team, both A & B tee off, A hit the better drive so they select to take their second shot from A’s spot, both A & B hit from A’s spot, and play their own balls throughout the rest of the hole.',
+        'Stableford': 'The Stableford format is a stroke play tournament that can be played as an individual or team event using a points system in which the goal is to gain the highest score. A Stableford uses a points system established in the Rules of Golf, under rule 32, and are as follows:\n' +
+                '\n' +
+                'More than 1 over fixed score (or no score returned) – 0 points [Double Bogey or Worse]\n' +
+                'One over fixed score – 1 point [Bogey]\n' +
+                'Fixed score – 2 points [Par]\n' +
+                'One under fixed score – 3 points [Birdie]\n' +
+                'Two under fixed score – 4 points [Eagle]\n' +
+                'Three under fixed score – 5 points [Double Eagle]\n' +
+                'Four under fixed score – 6 points\n' +
+                'The golfer or team who has the highest score after 18 holes is the winner. A Modified Stableford is where you play using a points system other than those set in the Rules of Golf. For example, a past PGA Tour event The International used the following scale:\n' +
+                '\n' +
+                'Double Eagle: 8 points\n' +
+                'Eagle: 5 points\n' +
+                'Birdie: 2 points\n' +
+                'Par: 0 points\n' +
+                'Bogey: -1 point\n' +
+                'Double Bogey or Worse: -3 points\n' +
+                'In a Modified Stableford if handicaps aren’t being used, the points system may be skewed to give every player a fair chance. By categorizing players into flights based upon skill level you can then assign each flight their own point values. For instance, better players in flight A will be awarded 0 points for par while weaker players in flight B will be awarded 1 point for par.',
+        'Chapman_or_Pinehurst': 'The Chapman, or Pinehurst, System is a tournament format involving 2-person teams. Chapman merges the styles of several formats into one. To start, each team member takes a tee shot, then teammates switch balls and play each other’s drives. The team then selects the best of their second shots and plays from that spot, the player whose shot wasn’t selected must play the third shot; this means teams may choose their best ball based on who’ll hit the next shot. After the third shot the team alternates shots until the ball is holed.\n' +
+                '\n' +
+                'Here’s an example: Player A & B are on a team, A & B both tee off, A then hits B’s tee shot and B hits A’s tee shot. A and B select which is the best of their 2nd shot, in this example they decide to go with B. A now has to hit the 3rd shot from B’s spot. The players alternate shots and B hits the next shot, then A, and so on, until they make it in the hole.',
+        'Bingo_Bango_Bongo': 'Bingo Bango Bongo is a points based tournament format which can be played as a team event or individually. Bingo Bango Bongo offers three opportunities for points on each hole. The first point is awarded for the first player to reach the green, bingo. The second point goes to the player who is closest to the pin once all balls are on the green, bango. The final point is for the person who holes out first, bongo. All shots are taken in order of which player is furthest away from the hole. The player with the most points at the end of the game wins.\n' +
+                '\n' +
+                'Bingo Bango Bongo provides players of all skill levels with chances to earn points each hole. For instance, a player who hits the worst drive would be the first to hit their second shot, giving them the first chance to reach the green and earn the bingo point. For variety you could award a player who wins all three points on a hole with double points.',
+        'Flags': 'A Flags tournament is a format in which each golfer starts the round with a designated amount of strokes and plays until they run out. Each golfer in the tournament carries a flag with their name on it as they play and uses it to mark where their final shot landed. The player who makes it through the course the farthest using their designated strokes wins.\n' +
+                '\n' +
+                'The number of strokes a player starts with is determined using the player’s full or partial handicap. For a player with a handicap of 19 they would receive 91 strokes at a par-72 course using full handicaps. When using full handicap there’s a higher probability many golfers will make it through all 18 holes with strokes still left. In that case, players with remaining strokes would return to the 1st tee and continue until they use up all their strokes. Alternatively, after 18 holes players can stop and the golfer with the most strokes left over wins.\n' +
+                '\n' +
+                'In the event of a tie, where multiple players have run out of strokes on the same hole, like the 18th hole, then the player with their final shot closest to the hole wins.',
+        'Money_Ball_or_Lone_Ranger': 'Known by a variety of names such as Money Ball, Lone Ranger, Pink Ball, or Yellow Ball. It is played with teams of four, on each hole one team member is designated to use the ‘Money Ball.’ The money ball position is rotated throughout the round; so player A starts with it at the 1st hole, B on the 2nd, C on the 3rd, D on the 4th, and then back to A on the 5th, etc. Some tournaments may in fact designate a special ball, like a colored ball, as the money ball.\n' +
+                '\n' +
+                'For Money Ball, the team takes two scores per hole to count towards the team score, one of which must be the score of the golfer using the money ball. So each hole the team’s score will be that of the money ball player and the lowest score of the other three. The team with the lowest total team score at the end of the round wins.\n' +
+                '\n',
+        'Quota_Tournament': 'Quota format involves individuals or teams starting with a certain number of points, based on handicap, then adding points for achievements on the course. Each golfer begins the match with points equivalent to their handicap, so a 3 handicap golfer starts with 3 points and a 10 handicap golfer starts with 10 points. The goal is to reach 36 points, which can vary in some tournaments to 39. Points are awarded to golfers based on performance on the course, and are awarded as follows:\n' +
+                '\n' +
+                'Bogeys – 1 point\n' +
+                'Pars – 2 points\n' +
+                'Birdies – 4 points\n' +
+                'Eagles – 8 points\n' +
+                'The winner of the tournament is the individual who exceeds the target score, 36 or 39, by the largest amount. Alternate options for this format could be changing the point’s value, such as making bogeys worth zero or negative, or starting with a partial handicapped score.\n' +
+                '\n' +
+                'A similar tournament format to Quota is known as Chicago, but the players start with negative points and work towards getting back into the positive.',
+        'Peoria_System': 'The Peoria System is a type of 1-day handicapping system for tournaments which can be used when most golfers don’t have established handicaps. Players use the Peoria system after their round to determine a handicap allowance that will be applied to their score.\n' +
+                '\n' +
+                'The golfers’ 1-day handicap using the Peoria System is based on their score over six holes, which are secretly determined by the tournament committee. The holes selected are typically two par 3s, two par 4s and two par 5s, usually one of each from the front and back nine. Golfers competing in the tournament are unaware of which holes were selected until they’ve competed their round.\n' +
+                '\n' +
+                'Once rounds are completed, players present their normal stroke play score, except that double par is the maximum score one can get on a hole. Once all players have finished the six holes selected for the Peoria system are unveiled. Each golfer totals up their scores for the six holes, that number is then tripled, then course par is subtracted from the total; the number is then multiplied by 80%. This is the golfer’s handicap allowance. The allowance gets deducted from the golfers 18 hole score becoming their net Peoria System score.\n' +
+                '\n' +
+                'Here’s an example: A golfer closes his 18 holes with a score of 90. Their total for the six Peoria holes is 30. 30 tripled, or multiplied by three, is 90. 90 minus par 72 is 18. 80% of 18 is 14, rounding off the number. So 14 is the handicap allowance for this golfer. His 18 hole score of 90 is then subtracted by 14 and his resulting Peoria System score is 76.'
+
+    };
+
+    function info(id) {
+        if (!(id in playInfo)) {
+            carbon.alert('Could not access play information!', 'danger')
+        } else {
+            $("#playName").html(id.replace('_', ' '));
+            $("#playDescription").html(playInfo[id].replace('\n', '<br/><br/>'));
+        }
+    }
+
+    Carbon(() =>
+            $("select#selectPlay").change(function () {
+                info($(this).val());
+            }))
+
+</script>

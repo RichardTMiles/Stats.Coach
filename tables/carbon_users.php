@@ -36,13 +36,14 @@ class carbon_users extends Database implements iRest
     public const USER_EDUCATION_HISTORY = 'user_education_history';
     public const USER_LOCATION = 'user_location';
     public const USER_CREATION_DATE = 'user_creation_date';
+    public const USER_GOOGLE_ID = 'user_google_id';
 
     public const PRIMARY = [
     'user_id',
     ];
 
     public const COLUMNS = [
-        'user_username' => [ 'varchar', '2', '25' ],'user_password' => [ 'varchar', '2', '225' ],'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'varchar', '2', '9' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'varchar', '2', '225' ],'user_rank' => [ 'int', '2', '8' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'datetime', '2', '' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'varchar', '2', '200' ],'user_location' => [ 'varchar', '2', '20' ],'user_creation_date' => [ 'datetime', '2', '' ],
+        'user_username' => [ 'varchar', '2', '25' ],'user_password' => [ 'varchar', '2', '225' ],'user_id' => [ 'binary', '2', '16' ],'user_type' => [ 'varchar', '2', '20' ],'user_sport' => [ 'varchar', '2', '20' ],'user_session_id' => [ 'varchar', '2', '225' ],'user_facebook_id' => [ 'varchar', '2', '225' ],'user_first_name' => [ 'varchar', '2', '25' ],'user_last_name' => [ 'varchar', '2', '25' ],'user_profile_pic' => [ 'varchar', '2', '225' ],'user_profile_uri' => [ 'varchar', '2', '225' ],'user_cover_photo' => [ 'varchar', '2', '225' ],'user_birthday' => [ 'varchar', '2', '9' ],'user_gender' => [ 'varchar', '2', '25' ],'user_about_me' => [ 'varchar', '2', '225' ],'user_rank' => [ 'int', '2', '8' ],'user_email' => [ 'varchar', '2', '50' ],'user_email_code' => [ 'varchar', '2', '225' ],'user_email_confirmed' => [ 'varchar', '2', '20' ],'user_generated_string' => [ 'varchar', '2', '200' ],'user_membership' => [ 'int', '2', '10' ],'user_deactivated' => [ 'tinyint', '0', '1' ],'user_last_login' => [ 'datetime', '2', '' ],'user_ip' => [ 'varchar', '2', '20' ],'user_education_history' => [ 'varchar', '2', '200' ],'user_location' => [ 'varchar', '2', '20' ],'user_creation_date' => [ 'datetime', '2', '' ],'user_google_id' => [ 'varchar', '2', '225' ],
     ];
 
     public const VALIDATION = [];
@@ -215,6 +216,10 @@ class carbon_users extends Database implements iRest
                    if (array_key_exists('user_creation_date', $argv)) {
             $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
         }
+                   if (array_key_exists('user_google_id', $argv)) {
+            $user_google_id = $argv['user_google_id'];
+            $stmt->bindParam(':user_google_id',$user_google_id, 2, 225);
+        }
            
           }
         };
@@ -264,7 +269,6 @@ class carbon_users extends Database implements iRest
     * @param string|null $primary
     * @param array $argv
     * @return bool
-    * @throws \Exception
     */
     public static function Get(array &$return, string $primary = null, array $argv) : bool
     {
@@ -323,7 +327,7 @@ class carbon_users extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_username|user_password|user_id|user_type|user_sport|user_session_id|user_facebook_id|user_first_name|user_last_name|user_profile_pic|user_profile_uri|user_cover_photo|user_birthday|user_gender|user_about_me|user_rank|user_email|user_email_code|user_email_confirmed|user_generated_string|user_membership|user_deactivated|user_last_login|user_ip|user_education_history|user_location|user_creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_username|user_password|user_id|user_type|user_sport|user_session_id|user_facebook_id|user_first_name|user_last_name|user_profile_pic|user_profile_uri|user_cover_photo|user_birthday|user_gender|user_about_me|user_rank|user_email|user_email_code|user_email_confirmed|user_generated_string|user_membership|user_deactivated|user_last_login|user_ip|user_education_history|user_location|user_creation_date|user_google_id))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -383,7 +387,7 @@ class carbon_users extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_users (user_username, user_password, user_id, user_type, user_sport, user_session_id, user_facebook_id, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location) VALUES ( :user_username, :user_password, UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location)';
+        $sql = 'INSERT INTO StatsCoach.carbon_users (user_username, user_password, user_id, user_type, user_sport, user_session_id, user_facebook_id, user_first_name, user_last_name, user_profile_pic, user_profile_uri, user_cover_photo, user_birthday, user_gender, user_about_me, user_rank, user_email, user_email_code, user_email_confirmed, user_generated_string, user_membership, user_deactivated, user_ip, user_education_history, user_location, user_google_id) VALUES ( :user_username, :user_password, UNHEX(:user_id), :user_type, :user_sport, :user_session_id, :user_facebook_id, :user_first_name, :user_last_name, :user_profile_pic, :user_profile_uri, :user_cover_photo, :user_birthday, :user_gender, :user_about_me, :user_rank, :user_email, :user_email_code, :user_email_confirmed, :user_generated_string, :user_membership, :user_deactivated, :user_ip, :user_education_history, :user_location, :user_google_id)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -463,7 +467,10 @@ class carbon_users extends Database implements iRest
                         
                     $user_location =  $argv['user_location'] ?? null;
                     $stmt->bindParam(':user_location',$user_location, 2, 20);
-                
+                                
+                    $user_google_id =  $argv['user_google_id'] ?? null;
+                    $stmt->bindParam(':user_google_id',$user_google_id, 2, 225);
+        
 
 
         return $stmt->execute() ? $id : false;
@@ -575,6 +582,9 @@ class carbon_users extends Database implements iRest
             }
             if (array_key_exists('user_creation_date', $argv)) {
                 $set .= 'user_creation_date=:user_creation_date,';
+            }
+            if (array_key_exists('user_google_id', $argv)) {
+                $set .= 'user_google_id=:user_google_id,';
             }
 
         if (empty($set)){
@@ -696,6 +706,10 @@ class carbon_users extends Database implements iRest
         }
                    if (array_key_exists('user_creation_date', $argv)) {
             $stmt->bindValue(':user_creation_date',$argv['user_creation_date'], 2);
+        }
+                   if (array_key_exists('user_google_id', $argv)) {
+            $user_google_id = $argv['user_google_id'];
+            $stmt->bindParam(':user_google_id',$user_google_id, 2, 225);
         }
 
         if (!self::bind($stmt, $argv)){

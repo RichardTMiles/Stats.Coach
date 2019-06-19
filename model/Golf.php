@@ -3,6 +3,7 @@
 namespace Model;
 
 use Psr\Log\InvalidArgumentException;
+use Tables\carbon_golf_tournaments;
 use Tables\carbon_locations as Location;
 use Tables\carbon_golf_courses as Course;
 use Tables\carbon_golf_course_rounds as Rounds;
@@ -21,11 +22,26 @@ class Golf extends GlobalMap implements iSport
     use Singleton;
 
 
-    public function NewTournament() {
-        return null;
+    public function NewTournament($tournamentName, $hostName, $playStyle)
+    {
+        if (!carbon_golf_tournaments::Post([
+            carbon_golf_tournaments::TOURNAMENT_NAME => $tournamentName,
+            carbon_golf_tournaments::HOST_NAME => $hostName,
+            carbon_golf_tournaments::TOURNAMENT_STYLE => $playStyle
+        ])) {
+            return null;
+        }
+
+        if (!self::commit()) {
+            PublicAlert::danger('An Unexpected Error Occurred');
+            return null;
+        }
+
+        return startApplication('home');
     }
 
-    public static function sessionStuff(&$my) {
+    public static function sessionStuff(&$my)
+    {
         $my = array_merge($my, [
             'stats' => [],
             'coachedTeams' => [],
@@ -39,13 +55,13 @@ class Golf extends GlobalMap implements iSport
 
         members::Get($my['teamsJoined'], null, [
             'where' => [
-                'user_id' => $_SESSION['id']
+                members::USER_ID => $_SESSION['id']
             ]
         ]);
 
         teams::Get($my['coachedTeams'], null, [
             'where' => [
-                'team_coach' => $_SESSION['id'],
+                teams::TEAM_COACH => $_SESSION['id'],
             ]
         ]);
 
@@ -55,7 +71,6 @@ class Golf extends GlobalMap implements iSport
                                   where carbon_teams.team_id = carbon_team_members.team_id 
                                     and carbon_users.user_id = carbon_team_members.user_id
                                     and carbon_teams.team_id = unhex(?)', $value['team_id']);
-
 
         }
 
@@ -106,21 +121,20 @@ class Golf extends GlobalMap implements iSport
             return null;
         }
 
-        if (false ===
-            Rounds::Post([
-                'user_id' => $_SESSION['id'],
-                'course_id' => $id,
-                'round_json' => $post,
-                'round_public' => true,
-                'round_out' => $out = array_sum(array_slice($post['shots'], 0, 8)),
-                'round_in' => $in = array_sum(array_slice($post['shots'], 9, 17)),
-                'round_total' => $total = $out + $in,
-                'round_total_gnr' => $gnr = array_sum($post['gnr']),
-                'round_total_ffs' => $ffs = array_sum($post['ffs']),
-                'round_total_putts' => $putts = array_sum($post['putts']),
-                'round_date' => $post['date'],
-                'round_input_complete' => true,
-                'round_tee_box_color' => $color
+        if (false === Rounds::Post([
+                Rounds::USER_ID => $_SESSION['id'],
+                Rounds::COURSE_ID => $id,
+                Rounds::ROUND_JSON => $post,
+                Rounds::ROUND_PUBLIC => true,
+                Rounds::ROUND_OUT => $out = array_sum(array_slice($post['shots'], 0, 8)),
+                Rounds::ROUND_IN => $in = array_sum(array_slice($post['shots'], 9, 17)),
+                Rounds::ROUND_TOTAL => $total = $out + $in,
+                Rounds::ROUND_TOTAL_GNR => $gnr = array_sum($post['gnr']),
+                Rounds::ROUND_TOTAL_FFS => $ffs = array_sum($post['ffs']),
+                Rounds::ROUND_TOTAL_PUTTS => $putts = array_sum($post['putts']),
+                Rounds::ROUND_DATE => $post['date'],
+                Rounds::ROUND_INPUT_COMPLETE => true,
+                Rounds::ROUND_TEE_BOX_COLOR => $color
             ])) {
             throw new PublicAlert('Failed to post round!');
         }
@@ -155,7 +169,9 @@ class Golf extends GlobalMap implements iSport
     }
 
     /**
-     * @param $user_uri
+     * @param $user_uri_id
+     * @param int $limit
+     * @throws PublicAlert
      */
     public function rounds($user_uri_id, $limit = 20)
     {
@@ -165,10 +181,10 @@ class Golf extends GlobalMap implements iSport
 
         Users::Get($json['roundUser'], $user_uri_id, [
             'select' => [
-                'user_first_name',
-                'user_last_name',
-                'user_profile_pic',
-                'user_id',
+                Users::USER_FIRST_NAME,
+                Users::USER_LAST_NAME,
+                Users::USER_PROFILE_PIC,
+                Users::USER_ID,
             ]
         ]);
 
@@ -177,7 +193,7 @@ class Golf extends GlobalMap implements iSport
 
         Rounds::Get($json['my']['rounds'], null, [
             'where' => [
-                'user_id' => $user_uri_id
+                Rounds::USER_ID => $user_uri_id
             ],
             'pagination' => [
                 'limit' => $limit
