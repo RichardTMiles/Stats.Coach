@@ -128,8 +128,8 @@ function getUser($id = false, $level = 'All') : array
 
             $my['messages'] = [];
 
-
-        /** @noinspection PhpMissingBreakStatementInspection */ case 'Profile':
+        /** @noinspection PhpMissingBreakStatementInspection */
+        case 'Profile':
             $my['followers'] = User::followers($_SESSION['id']);
 
             $my['followersCount'] = count($my['followers']);
@@ -148,6 +148,11 @@ function getUser($id = false, $level = 'All') : array
     }
     return $my;
 }
+
+
+/**
+ * Begin C6 configurations
+ */
 
 return [
     'DATABASE' => [
@@ -226,7 +231,7 @@ return [
 
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 
-        'STORE' => true,      // Database if specified and / or File 'LOCATION' in your system
+        'STORE' => false,      // Database if specified and / or File 'LOCATION' in your system
 
         'SHOW' => true,       // Show errors on browser
 

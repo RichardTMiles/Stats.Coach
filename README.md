@@ -106,3 +106,8 @@ MovieTheater Solution				hw7-2.py					spring 2018
 Kristins-MBP:Desktop KristinCarden$ sudo cp chromedriver /usr/local/bin/chromedriver
 Kristins-MBP:Desktop KristinCarden$ 
 
+
+
+lol...
+
+brew cask install chromedriver

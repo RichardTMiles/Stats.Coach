@@ -22,23 +22,32 @@ class Golf extends GlobalMap implements iSport
     use Singleton;
 
 
-    public function NewTournament($tournamentName, $hostName, $playStyle)
+    public function coursesByState($state)
+    {
+        return self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);
+    }
+
+    public function NewTournament($tournamentName, $hostName, $hostID, $courseID, $playStyle)
     {
         if (!carbon_golf_tournaments::Post([
             carbon_golf_tournaments::TOURNAMENT_NAME => $tournamentName,
-            carbon_golf_tournaments::HOST_NAME => $hostName,
+            carbon_golf_tournaments::TOURNAMENT_HOST_NAME => $hostName,
+            carbon_golf_tournaments::TOURNAMENT_HOST_ID => $hostID,
+            carbon_golf_tournaments::TOURNAMENT_COURSE_ID => $courseID,
             carbon_golf_tournaments::TOURNAMENT_STYLE => $playStyle,
+            carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
         ])) {
+            PublicAlert::danger('Failed to post new tournament!');
             return null;
         }
 
-        if (!self::commit(function () {
+        if (false === self::commit(function () {
             PublicAlert::success('Tournament created!');
+            return true;
         })) {
-            PublicAlert::danger('An Unexpected Error Occurred');
+            PublicAlert::danger('An unexpected error occurred!');
             return null;
         }
-
         return startApplication('home');
     }
 
@@ -53,6 +62,18 @@ class Golf extends GlobalMap implements iSport
             'messages' => [],
             'tournaments' => []
         ]);
+
+        if (!carbon_golf_tournaments::Get($my['tournaments'], null, [
+            'select' => [
+                carbon_golf_tournaments::TOURNAMENT_ID,
+                carbon_golf_tournaments::TOURNAMENT_NAME
+            ],
+            'where' => [
+                carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
+            ]
+        ])) {
+            PublicAlert::danger('Failed to lookup golf tournaments');
+        }
 
         stats::Get($my['stats'], $_SESSION['id'], []);
 
@@ -291,6 +312,7 @@ class Golf extends GlobalMap implements iSport
      * @param $color
      * @return mixed
      * @throws \RuntimeException
+     * @deprecated TODO - check this again
      */
     public function teeBox($id, $color)
     {
@@ -466,11 +488,8 @@ class Golf extends GlobalMap implements iSport
     public function PostScoreBasic($state)
     {
         global $json;
-
-        //return startApplication('/');
-
         $json['state'] = $state;
-        $json['courses'] = self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);
+        $json['courses'] = $this->coursesByState($state);
         return true;
     }
 
