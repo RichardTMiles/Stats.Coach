@@ -46,6 +46,7 @@ class StatsCoach extends Application
         $json['PJAX'] = PJAX;
         $json['SITE_TITLE'] = SITE_TITLE;
         $json['APP_VIEW'] = APP_VIEW;
+        $json['APP_LOCAL'] = (bool)APP_LOCAL;     // mainly for ws vs wss
         $json['TEMPLATE'] = TEMPLATE;
         $json['COMPOSER'] = COMPOSER;
         $json['X_PJAX_Version'] = &$_SESSION['X_PJAX_Version'];
