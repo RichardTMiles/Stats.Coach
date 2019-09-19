@@ -1,5 +1,8 @@
 <?php
 /**
+ *
+ * This was pulled from somewhere in hope of useful reference.. looks like laravel plugin
+ *
  * Created by IntelliJ IDEA.
  * User: richardmiles
  * Date: 2/9/19
@@ -9,9 +12,16 @@
 namespace App\Tests\Selenium;
 
 
+use PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener;
+use Throwable;
+
 class SeleniumClearTestCase extends MigrationToSelenium2
 {
     protected $baseUrl = 'http://yourservice.dev';
+    /**
+     * @var PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener
+     */
+    private $listener;
 
     protected function setUp()
     {
@@ -26,7 +36,7 @@ class SeleniumClearTestCase extends MigrationToSelenium2
         $this->createApplication(); // bootstrap laravel app
     }
 
-    public function onNotSuccessfulTest($e)
+    public function onNotSuccessfulTest(Throwable $e): void
     {
         $this->listener->addError($this, $e, null);
         parent::onNotSuccessfulTest($e);
@@ -38,7 +48,7 @@ class SeleniumClearTestCase extends MigrationToSelenium2
      */
     public function screenshot()
     {
-        $this->listener->addError($this, new Exception, null); // ta funkcja troche myli nazwą, ale wykona ona tylko screenshota nic ponadto
+        $this->listener->addError($this, new \Exception, null); // ta funkcja troche myli nazwą, ale wykona ona tylko screenshota nic ponadto
     }
 
     /**

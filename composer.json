@@ -29,10 +29,10 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-StatsCoach#6900b5d7652a7981f1139b26f7fc3ddea8baf02d-dev",
+    "richardtmiles/carbonphp" : "dev-StatsCoach#590d33f73b5d940b382de14b8f757c3febb157d4-dev",
     "google/cloud-tools": "^0.6",
-    "phpunit/phpunit-selenium": "^4.1",
-    "phpunit/phpunit": "^6"
+    "phpunit/phpunit-selenium": ">=7",
+    "phpunit/phpunit": ">=6"
   },
   "scripts": {
     "post-status-cmd": [
@@ -53,6 +53,7 @@
     "facebook/webdriver": "dev-master",
     "matthiasmullie/minify": "dev-master",
     "patchwork/jsqueeze": "^2.0",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-json": "*"
   }
 }

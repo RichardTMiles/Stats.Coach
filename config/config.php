@@ -159,13 +159,13 @@ function getUser($id = false, $level = 'All') : array
 return [
     'DATABASE' => [
 
-        'DB_HOST' => APP_LOCAL ? '127.0.0.1' : '35.224.229.250',      // Host and Database get put here
+        'DB_HOST' => APP_LOCAL ? '127.0.0.1' : '35.224.229.250',      // Host and Database get put here # APP_LOCAL ? '127.0.0.1' :
 
         'DB_NAME' => 'StatsCoach',
 
-        'DB_USER' => 'root',                 // User
+        'DB_USER' => 'root',                // User
 
-        'DB_PASS' => APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules
+        'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules # APP_LOCAL ? 'password' :
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 
@@ -179,8 +179,8 @@ return [
 
         'CACHE_CONTROL' => [
             'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
-            'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff' => 'Cache-Control: max-age=604800, public',
-            'html|htm|php|hbs|css|js' => 'Cache-Control: max-age=0, private, public',
+            'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff|css|js' => 'Cache-Control: max-age=604800, public',
+            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
         ],
 
         'CONFIG' => __FILE__,      // Send to sockets
@@ -249,6 +249,7 @@ return [
     'MINIFY' => [
         'CSS' => [
             'OUT' => APP_ROOT . 'view/css/style.css',
+            APP_ROOT . 'view/css/stats.css',
             APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css',
             APP_ROOT . 'node_modules/admin-lte/dist/css/AdminLTE.min.css',
             APP_ROOT . 'node_modules/admin-lte/dist/css/skins/_all-skins.min.css',

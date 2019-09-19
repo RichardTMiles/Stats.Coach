@@ -15,14 +15,14 @@
 <!-- USERS LIST -->
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="/NewTournament/" name="NewTournament">
+    <form data-pjax class="form-horizontal dark-box" method="post" action="/NewTournament/" name="NewTournament">
         <div id="alert"></div>
         <!-- Add Course Main Info -->
-        <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
-            <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">New Tournament</h3>
+        <div class="box box-custom dark-box" id="CourseInfo">
+            <div class="box-header with-border dark-box" style="width: 100%; text-align: center">
+                <h3 class="box-title box-title-center-light" style="">New Tournament</h3>
             </div>
-            <div class="box-body" style="color: ghostwhite">
+            <div class="box-body dark-box" style="color: ghostwhite">
                 <!-- text input -->
                 <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
@@ -266,6 +266,7 @@
             carbon.app('/AddCourse/Basic/');
         }
     }
+
 
     function course_given_states(select) {
 

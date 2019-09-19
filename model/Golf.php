@@ -24,7 +24,8 @@ class Golf extends GlobalMap implements iSport
 
     public function coursesByState($state)
     {
-        return self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);
+        // this is actually a resolving route with an hbs. do not modify
+        return $this->json['courses'] = self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ? AND course_input_completed = 1', $state);
     }
 
     public function NewTournament($tournamentName, $hostName, $hostID, $courseID, $playStyle)
@@ -185,9 +186,11 @@ class Golf extends GlobalMap implements iSport
 
     /**
      * @return bool
+     * @throws PublicAlert
      */
     public function golf(): bool  // This is the home page for the user
     {
+        $this->rounds($_SESSION['id']);
         return true;
     }
 
@@ -199,6 +202,7 @@ class Golf extends GlobalMap implements iSport
     public function rounds($user_uri_id, $limit = 20)
     {
         global $json;
+
 
         $json['roundUser'] = [];
 
@@ -495,7 +499,7 @@ class Golf extends GlobalMap implements iSport
 
 
     public
-    function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
+    function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): ?bool
     {
         global $json;
 

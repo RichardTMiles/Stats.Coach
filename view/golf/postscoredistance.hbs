@@ -2,7 +2,7 @@
 <section class="content-header" style="margin-top: 20px">
     <h1 style="color: #fff">
         {{courseInput.course_name}}
-        <small style="color: ghostwhite;">Yo, what'd you shoot?</small>
+        <small style="color: ghostwhite;">How did you play?</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" style="color: ghostwhite; "><i class="fa fa-dashboard"></i> Post Score</a></li>
@@ -19,10 +19,10 @@
           name="postScore">
         <div class="row" id="dateTime">
             <div class="col-xs-12">
-                <div class="box box-solid">
+                <div class="box box-solid" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                     <div class="box-header">
-                        <i class="fa fa-clock-o"></i>
-                        <h3 class="box-title">Tee off time?</h3>
+                        <i class="fa fa-clock-o" style="font-size: 200%; color: #ffffff;"></i>
+                        <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Tee off time?</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -34,7 +34,7 @@
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Date:</label>
+                                        <label style="font-size: 200%; color: #ffffff;">Date:</label>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
@@ -49,7 +49,7 @@
                                     <!-- time Picker -->
                                     <div class="bootstrap-timepicker" style="color: #000">
                                         <div class="form-group">
-                                            <label style="color: #fff">Time:</label>
+                                            <label style="font-size: 200%; color: #ffffff;">Time:</label>
                                             <div class="input-group">
                                                 <input name="timepicker" type="text"
                                                        class="form-control timepicker"/>
@@ -73,10 +73,10 @@
                  style="display: {{#first}}block{{/first}}{{^first}}none{{/first}}">
                 <div class="col-xs-12">
                     <!-- jQuery Knob -->
-                    <div class="box box-solid">
+                    <div class="box box-solid" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                         <div class="box-header">
-                            <i class="fa fa-bar-chart-o"></i>
-                            <h3 class="box-title">Hole {{number}} Stats</h3>
+                            <i class="fa fa-bar-chart-o" style="font-size: 200%; color: #ffffff;"></i>
+                            <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Hole {{number}} Stats</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -93,7 +93,7 @@
                                                    readonly="readonly"
                                                    style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background-position: initial initial; background-repeat: initial initial;">
                                         </div>
-                                        <div class="knob-label">Distance</div>
+                                        <div class="knob-label" style="font-size: 200%; color: #ffffff;">Distance</div>
 
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6 text-center">
@@ -107,7 +107,7 @@
                                                    data-height="180" data-width="180"
                                                    style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
                                         </div>
-                                        <div class="knob-label">Par</div>
+                                        <div class="knob-label" style="font-size: 200%; color: #ffffff;">Par</div>
                                     </div>
                                 </div>
                                 <!-- ./col -->
@@ -120,7 +120,7 @@
                                                    data-fgcolor="#00a65a" data-height="180" data-width="180"
                                                    style="width: 100%; height: 100%; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
                                         </div>
-                                        <div class="knob-label">Strokes</div>
+                                        <div class="knob-label" style="font-size: 200%; color: #ffffff;">Strokes</div>
 
                                     </div>
 
@@ -133,7 +133,7 @@
                                                    data-angleArc="250" data-angleoffset="-125"
                                                    style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0; background-image: none; font-style: normal; font-variant-caps: normal; font-weight: bold; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0; -webkit-appearance: none; background-position: initial; background-repeat: initial;">
                                         </div>
-                                        <div class="knob-label">Putts</div>
+                                        <div class="knob-label" style="font-size: 200%; color: #ffffff;">Putts</div>
 
                                     </div>
 
@@ -143,7 +143,7 @@
                                     <br>
                                     <div class="col-xs-6 col-sm-6 col-md-6 text-center">
                                         <div class="checkbox">
-                                            <label>
+                                            <label style="font-size: 200%; color: #ffffff;">
                                                 <input name="ffs-{{number}}" type="checkbox" value="1"> Fairway
                                                 on
                                                 first shot
@@ -152,7 +152,7 @@
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 text-center">
                                         <div class="checkbox">
-                                            <label>
+                                            <label style="font-size: 200%; color: #ffffff;">
                                                 <input name="gnr-{{number}}" type="checkbox" value="1"> Green in
                                                 regulation
                                             </label>
@@ -166,7 +166,7 @@
 
                         </div>
                         <!-- /.box-body -->
-                        <div class="box-footer">
+                        <div class="box-footer"  style="background-color: #2c3b41; border-top-color: #2c3b41;">
                             {{^first}}
                                 <button type="button" class="btn btn-default"
                                         onclick="last_score_input('{{number}}')"><< Back

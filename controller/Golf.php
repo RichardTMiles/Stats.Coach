@@ -151,7 +151,7 @@ class Golf extends Request  // Validation
 
     public function golf(): ?bool
     {
-        return null;    // This will skip the model and just run the view
+        return true;    // moving to the model to get round data
     }
 
     public function Rounds($user_uri)

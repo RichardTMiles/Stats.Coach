@@ -24,28 +24,28 @@
             <img class="img-circle" src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" alt="User Avatar">
         </div>
 
-        <div class="box-footer">
+        <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <div class="row">
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header">{{my.stats.stats_ffs}}</h5>
-                        <span class="description-text">Fairways on First Shot</span>
+                        <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_ffs}}</h5>
+                        <span class="description-text" style="font-size: 200%; color: #ffffff;">Fairways on First Shot</span>
                     </div><!-- /.description-block -->
 
                 </div><!-- /.col -->
 
                 <div class="col-sm-4 border-right">
                     <div class="description-block">
-                        <h5 class="description-header">{{my.stats.stats_rounds}}</h5>
-                        <span class="description-text">Rounds</span>
+                        <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_rounds}}</h5>
+                        <span class="description-text" style="font-size: 200%; color: #ffffff;">Rounds</span>
                     </div><!-- /.description-block -->
 
                 </div><!-- /.col -->
 
                 <div class="col-sm-4">
                     <div class="description-block">
-                        <h5 class="description-header">{{my.stats.stats_gnr}}</h5>
-                        <span class="description-text">Greens in Regulation</span>
+                        <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_gnr}}</h5>
+                        <span class="description-text" style="font-size: 200%; color: #ffffff;">Greens in Regulation</span>
                     </div><!-- /.description-block -->
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -55,9 +55,9 @@
 
     {{#my.rounds}}
         <div class="box box-widget widget-user">
-            <div class="box box-info">
+            <div class="box box-info" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Latest Scores</h3>
+                    <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Latest Scores</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -65,7 +65,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table class="table no-margin">
+                        <table class="table no-margin" style="color: #ffffff;">
                             <thead>
                             <tr>
                                 <th>Date</th>
@@ -80,24 +80,24 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{#rounds}}
+                            {{#my.rounds}}
                                 <tr>
                                     <td>{{round_date}}</td>
                                     <td>{{course_name}}</td>
                                     <td>{{round_tee_box_color}}</td>
-                                    <td>{{course_distance}}</td>
+                                    <td>{{course_distance}}yds</td>
                                     <td>{{round_total_ffs}}</td>
                                     <td>{{round_total_gnr}}</td>
                                     <td>{{round_total_putts}}</td>
                                     <td>{{course_par}}</td>
                                     <td>{{round_total}}</td>
                                 </tr>
-                            {{/rounds}}
+                            {{/my.rounds}}
                             </tbody>
                         </table>
                     </div><!-- /.table-responsive -->
                 </div><!-- /.box-body -->
-                <div class="box-footer clearfix">
+                <div class="box-footer clearfix" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                     <a href="/PostScore/" class="btn btn-sm btn-info btn-flat pull-left">Post New Round</a>
                     <a href="/Rounds/" class="btn btn-sm btn-default btn-flat pull-right">View All Rounds</a>
                 </div><!-- /.box-footer -->
@@ -106,41 +106,41 @@
     {{/my.rounds}}
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
+            <div class="info-box" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                 <span class="info-box-icon bg-aqua" style="text-align: center"><i class="fa fa-pencil"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Total Shots</span>
-                    <span class="info-box-number">{{my.stats.stats_strokes}}</span>
+                    <span class="info-box-text" style="color: #ffffff;">Total Shots</span>
+                    <span class="info-box-number" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_strokes}}</span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
 
-            <div class="info-box">
+            <div class="info-box" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                 <span class="info-box-icon bg-green"><i class="fa fa-flag-checkered"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Rounds Played</span>
-                    <span class="info-box-number">{{my.stats.stats_rounds}}</span>
+                    <span class="info-box-text" style="color: #ffffff;">Rounds Played</span>
+                    <span class="info-box-number" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_rounds}}</span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
 
-            <div class="info-box">
+            <div class="info-box" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-tree"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Handicap</span>
-                    <span class="info-box-number">{{my.stats.stats_handicap}}</span>
+                    <span class="info-box-text" style="color: #ffffff;">Handicap</span>
+                    <span class="info-box-number" style="font-size: 200%; color: #ffffff;">{{my.stats.stats_handicap}}</span>
 
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
+            <div class="info-box" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                 <span class="info-box-icon bg-red"><i class="fa fa-book"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Last Round</span>
-                    <span class="info-box-number">{{my.last_round}}{{^my.last_round}}0{{/my.last_round}}</span>
+                    <span class="info-box-text" style="color: #ffffff;">Last Round</span>
+                    <span class="info-box-number" style="font-size: 200%; color: #ffffff;">{{my.last_round}}{{^my.last_round}}0{{/my.last_round}}</span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>

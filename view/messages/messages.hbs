@@ -17,21 +17,21 @@
 <div class="col-md-5">
     <!-- USERS LIST -->
     <div class="box box-danger">
-        <div class="box-header with-border">
-            <h3 class="box-title">Connections</h3>
+        <div class="box-header with-border" style="background-color: #2c3b41; border-top-color: #2c3b41;">
+            <h3 class="box-title" style="color: #fff">Connections</h3>
 
             <div class="box-tools pull-right">
                 {{#Users}}
-                    <span class="label label-danger">New Members</span>
+                    <span class="label label-danger" style="color: #fff">New Members</span>
                 {{/Users}}
             </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body no-padding chat" id="chat-box">
+        <div class="box-body no-padding chat" id="chat-box" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <ul class="users-list clearfix">
                 {{#friends}}
                     <li>
-                        <a class="users-list-name" onclick="carbon.startApplication('/Messages/{{user_id}}/', '#direct-chat')">
+                        <a class="users-list-name" onclick="carbon.startApplication('/Messages/{{user_id}}/', '#direct-chat')" style="color:#fff;">
                             <img style="min-height: 60px; max-height: 60px" src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" class="img-circle" alt="User Image" width="60em" height="60em"><br>
                             {{user_first_name}} {{user_last_name}}
                             <span class="users-list-date">{{user_last_login}}</span>
@@ -55,11 +55,11 @@
 
 <div class="col-md-7">
     <div id="direct-chat" class="box box-success direct-chat direct-chat-success">
-        <div class="box-header with-border">
+        <div class="box-header with-border" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <h3 class="box-title">Direct Chat</h3>
         </div>
         <!-- /.box-header -->
-        <div class="box-body">
+        <div class="box-body" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <!-- Conversations are loaded here -->
             <div class="direct-chat-messages">
                 <!-- /.direct-chat-msg -->
@@ -68,7 +68,7 @@
             <!-- /.direct-chat-pane -->
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">
+        <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
             <form action="#" method="post">
                 <div class="input-group">
                     <input type="text" name="message" placeholder="Type Message ..." class="form-control">
