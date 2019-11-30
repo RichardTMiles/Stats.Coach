@@ -29,7 +29,7 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-StatsCoach#590d33f73b5d940b382de14b8f757c3febb157d4-dev",
+    "richardtmiles/carbonphp" : "dev-master#29741703c1122e34872d306a42f837a8d3c5a0f0-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": ">=7",
     "phpunit/phpunit": ">=6"
@@ -39,8 +39,14 @@
       "php index.php buildDatabase",
       "php index.php minify",
       "php index.php rest -json",
-      "./vendor/bin/phpunit --version",
       "./vendor/bin/phpunit --testdox"
+    ],
+    "test": [
+      "php index.php setup --mysql_native_password",
+      "php index.php setup --rebuild",
+      "php index.php minify",
+      "php index.php rest -json -logClasses",
+      "./vendor/bin/phpunit --testdox --filter feature"
     ]
   },
   "require": {

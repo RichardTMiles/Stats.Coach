@@ -179,8 +179,8 @@ return [
 
         'CACHE_CONTROL' => [
             'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
-            'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff|css|js' => 'Cache-Control: max-age=604800, public',
-            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
+            'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff' => 'Cache-Control: max-age=604800, public',
+            'html|htm|php|hbs|css|js' => 'Cache-Control: max-age=0, private, public',
         ],
 
         'CONFIG' => __FILE__,      // Send to sockets
@@ -280,6 +280,8 @@ return [
             CARBON_ROOT . 'helpers/asynchronous.js',
             APP_ROOT . 'node_modules/jquery-form/src/jquery.form.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap/dist/js/bootstrap.min.js',
+            APP_ROOT . 'node_modules/admin-lte/bower_components/moment/moment.js',
+            APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap-daterangepicker/daterangepicker.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/fastclick/lib/fastclick.js',
             APP_ROOT . 'node_modules/admin-lte/dist/js/adminlte.js',

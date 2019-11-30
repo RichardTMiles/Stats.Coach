@@ -316,7 +316,7 @@ class User extends Request
 
         $user_id = $this->set($user_id)->alnum();
 
-        if (!empty($user_id)) { // we can assume no post data then
+        if (!empty($user_id) && $user_id !== $_SESSION['id']) { // we can assume no post data then
             return $user_id;
         }
 

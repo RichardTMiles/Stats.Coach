@@ -10,6 +10,25 @@ use Tables\carbon_golf_courses as Course;
 class Golf extends Request  // Validation
 {
 
+    public function tournamentSettings($id) {
+        return null;
+
+        if (!ctype_xdigit($id)) {
+
+            PublicAlert::danger('Failed to load tournament.');
+            //return startApplication('/home');
+        }
+        return null;
+    }
+
+    public function tournament($id) {
+        if (!ctype_xdigit($id)) {
+            PublicAlert::danger('Failed to load tournament.');
+            return startApplication('/');
+        }
+        return $id;
+    }
+
     public function coursesByState($state) {
         // TODO - validate state
         if (!$this->set($state)->word()) {

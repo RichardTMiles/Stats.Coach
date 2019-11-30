@@ -30,6 +30,19 @@
                         <label for="teamName">Tournament Name</label>
                         <input type="text" class="form-control " placeholder="Tournament Name" name="tournamentName">
                     </div>
+                    <!-- Date and time range -->
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label>Date and time range: (doesnt work)</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="reservationtime" name="datetimes">
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
                     <div class="form-group col-xs-12 col-md-12">
                         <label for="schoolName">Host</label>
                         <select id="selectHost" class="form-control" name="hostID" required>
@@ -174,6 +187,13 @@
         $("select#selectPlay").change(function () {
             info($(this).val());
         })
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            format: 'MM/DD/YYYY h:mm A'
+        })
+
     })
 
     const playInfo = {
@@ -259,7 +279,7 @@
         }
     }
 
-    function redirectIfAdd(select){
+    function redirectIfAdd(select) {
         let courseId = select.value;
         // Jump to a new page using Pjax C6
         if (courseId === "Add") {
