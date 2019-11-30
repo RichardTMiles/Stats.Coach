@@ -45,7 +45,7 @@
             <div class="categories-bottom">
                 <a id="forgot" href="/recover/">Forgot password<br></a>
                 <a id="register" href="/register/" class="text-center">Register a new membership<br></a>
-                <a id="register" href="/Privacy/" class="text-center">Privacy Policy<br></a>
+                <a id="privacy" href="/privacy/" class="text-center">Privacy policy<br></a>
             </div>
         {{/UserName}}
         {{#UserName}}
@@ -62,7 +62,7 @@
                     <!-- /.lockscreen-image -->
 
                     <!-- lockscreen credentials (contains the form) -->
-                    <form data-pjax class="lockscreen-credentials" action="<?= SITE ?>login/" method="post">
+                    <form data-pjax class="lockscreen-credentials" action="/login/" method="post">
                         <div class="input-group">
                             <input style="display: none" type="text" value="1" name="RememberMe" id="RememberMe">
                             <input style="display: none" type="text" class="form-control" name="username"

@@ -38,23 +38,22 @@
 <div id="alert"></div>
 
 <!-- Main content -->
-<section class="content">
+<section class="content ">
     <!-- SELECT COURSE -->
-    <div class="box box-custom">
-
-        <div class="box-header">
-            <h3 class="box-title">Where Was Your Round?</h3>
+    <div class="box box-custom" style="border-top-color: #2c3b41;">
+        <div class="box-header dark-box">
+            <h3 class="box-title box-title-center-light">Where Was Your Round?</h3>
             <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div>
         </div>
         <!-- /.box-header -->
 
-        <div class="box-body">
+        <div class="box-body dark-box">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>State</label>
+                        <label style="color: whitesmoke">State</label>
                         <select class="form-control select2" style="width: 100%;"
                                 onchange="course_given_states(this)" required>
                             <option selected="selected" disabled="" value="">{{state}}{{^state}}State{{/state}}</option>
@@ -118,7 +117,7 @@
                     </div><!-- /.form-group -->
 
                     <div data-pjax class="form-group">
-                        <label>Course</label>
+                        <label style="color: whitesmoke">Course</label>
                         <select id="course" class="form-control select2"
                                 onchange="box_colors_given_id(this)" style="width: 100%;">
                             <option value="" selected disabled>Course Select</option>

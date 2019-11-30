@@ -29,6 +29,7 @@ class User extends GlobalMap
      * User constructor.
      * @param string|null $id
      * @throws Exception
+     * @deprecated TODO - ??
      */
     public function __construct(string $id = null)
     {
@@ -463,7 +464,7 @@ class User extends GlobalMap
             PublicAlert::success("Your password has been successfully reset.");
         }
 
-        startApplication('login/');
+        startApplication('login/'); // TODO - returning start app requires the mvc pattern be used here
 
         return false;
     }
@@ -485,8 +486,9 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-        if (true !== $user_uri) {   // !! an actual user id
+        if (true !== $user_uri) {   // !! an actual user id -- NOT US
             global $json, $user;
+
             getUser($user_uri);
 
             $user[$user_uri]['following'] = [];

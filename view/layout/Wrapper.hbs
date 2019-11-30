@@ -29,7 +29,7 @@
                 script.src = src;
                 script.async = true;
                 ref.parentNode.insertBefore(script, ref);
-                if (cb && typeof(cb) === "function")
+                if (cb && typeof (cb) === "function")
                     script.onload = cb;
 
                 return script;
@@ -76,8 +76,7 @@
 
 <!-- Full Width Column -->
 
-<body class="{{{body-layout}}}" style="background-color: transparent">
-
+<body class="{{{body-layout}}}" style="height: auto; min-height: 100%; background-color: transparent; ">
 <div {{{user-layout}}} >
     {{#signedIn}}
         <!-- Begin Layout-Header -->
@@ -111,18 +110,19 @@
         <div class="content-wrapper" style="background: transparent">
             <div class="container">
                 <div id="alert"></div>
-                <!-- content -->
-                <div id="pjax-content">
+                <!-- content style as seen https://adminlte.io/themes/AdminLTE/pages/UI/modals.html-->
+                <div id="pjax-content" style="min-height: 1036px;">
                     {{{content}}}
                 </div>
                 <!-- /.content -->
             </div>
-            <div class="clearfix"></div>
+
             <!-- /.container -->
         </div>
+        <div class="clearfix"></div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer" style="">
-            <div class="container">
+        <footer class="main-footer fixed" style="background-color: #2c3b41; border-top-color: #2c3b41;">
+            <div class="container" style="color: #ffffff;">
                 <div class="pull-right hidden-xs">
                     <a href="/Privacy/">Privacy Policy</a> <b>Version</b>  {{SITE_VERSION}}
                 </div>
@@ -141,11 +141,12 @@
 
 <script src="/view/js/javascript.js"></script>
 <script>
-    const TEMPLATE = "/node_modules/admin-lte/", APP_VIEW = "/view/", COMPOSER = "/vendor/";
-
-    // const carbon = new CarbonPHP('#pjax-content', 'wss://rootprerogative.com:8888/', false);
-
-    const carbon = new CarbonPHP('#pjax-content', 'wss://stats.coach:8888/');
+    // noinspection JSAnnotator - js rules dont analyse mustache
+    const TEMPLATE = "/node_modules/admin-lte/",
+            APP_VIEW = "/view/",
+            COMPOSER = "/vendor/",
+            APP_LOCAL = '{{APP_LOCAL}}',
+            carbon = new CarbonPHP('#pjax-content', APP_LOCAL ? 'ws://localhost:8888/' : 'wss://stats.coach:8888/');
 
     carbon.event("Carbon");
 
@@ -194,6 +195,6 @@
     <!-- REQUIRED STYLE SHEETS -->
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" type="text/css" href="/view/css/style.css">
-  </noscript>
+</noscript>
 </body>
 </html>

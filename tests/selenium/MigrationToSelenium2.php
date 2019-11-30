@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 /**
+ *
+ * @note this is a good resource -- richard miles
+ *
  * @link https://stackoverflow.com/questions/33845828/set-up-tests-with-phpunit-and-selenium/37890854#37890854
  *
  * Implements adapter for migration from PHPUnit_Extensions_SeleniumTestCase
@@ -27,6 +30,9 @@
 
 namespace App\Tests\Selenium;
 
+
+use Exception;
+use PHPUnit_Extensions_Selenium2TestCase;
 
 class MigrationToSelenium2 extends PHPUnit_Extensions_Selenium2TestCase
 {
@@ -41,6 +47,11 @@ class MigrationToSelenium2 extends PHPUnit_Extensions_Selenium2TestCase
         $input->value($value);
     }
 
+    /**
+     * @param $selector
+     * @return \PHPUnit_Extensions_Selenium2TestCase_Element
+     * @throws Exception
+     */
     protected function byQuery($selector)
     {
         if (preg_match('/^\/\/(.+)/', $selector)) {

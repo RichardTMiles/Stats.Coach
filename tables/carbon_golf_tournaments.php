@@ -11,8 +11,10 @@ class carbon_golf_tournaments extends Database implements iRest
 
     public const TOURNAMENT_ID = 'tournament_id';
     public const TOURNAMENT_NAME = 'tournament_name';
-    public const COURSE_ID = 'course_id';
-    public const HOST_NAME = 'host_name';
+    public const TOURNAMENT_CREATED_BY_USER_ID = 'tournament_created_by_user_id';
+    public const TOURNAMENT_COURSE_ID = 'tournament_course_id';
+    public const TOURNAMENT_HOST_ID = 'tournament_host_id';
+    public const TOURNAMENT_HOST_NAME = 'tournament_host_name';
     public const TOURNAMENT_STYLE = 'tournament_style';
     public const TOURNAMENT_TEAM_PRICE = 'tournament_team_price';
     public const TOURNAMENT_PAID = 'tournament_paid';
@@ -23,7 +25,7 @@ class carbon_golf_tournaments extends Database implements iRest
     ];
 
     public const COLUMNS = [
-        'tournament_id' => [ 'binary', '2', '16' ],'tournament_name' => [ 'varchar', '2', '225' ],'course_id' => [ 'binary', '2', '16' ],'host_name' => [ 'varchar', '2', '225' ],'tournament_style' => [ 'int', '2', '11' ],'tournament_team_price' => [ 'int', '2', '11' ],'tournament_paid' => [ 'int', '2', '1' ],'tournament_date' => [ 'date', '2', '' ],
+        'tournament_id' => [ 'binary', '2', '16' ],'tournament_name' => [ 'varchar', '2', '225' ],'tournament_created_by_user_id' => [ 'binary', '2', '16' ],'tournament_course_id' => [ 'binary', '2', '16' ],'tournament_host_id' => [ 'binary', '2', '16' ],'tournament_host_name' => [ 'varchar', '2', '225' ],'tournament_style' => [ 'varchar', '2', '20' ],'tournament_team_price' => [ 'int', '2', '11' ],'tournament_paid' => [ 'int', '2', '1' ],'tournament_date' => [ 'date', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -98,17 +100,25 @@ class carbon_golf_tournaments extends Database implements iRest
             $tournament_name = $argv['tournament_name'];
             $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
         }
-                   if (array_key_exists('course_id', $argv)) {
-            $course_id = $argv['course_id'];
-            $stmt->bindParam(':course_id',$course_id, 2, 16);
+                   if (array_key_exists('tournament_created_by_user_id', $argv)) {
+            $tournament_created_by_user_id = $argv['tournament_created_by_user_id'];
+            $stmt->bindParam(':tournament_created_by_user_id',$tournament_created_by_user_id, 2, 16);
         }
-                   if (array_key_exists('host_name', $argv)) {
-            $host_name = $argv['host_name'];
-            $stmt->bindParam(':host_name',$host_name, 2, 225);
+                   if (array_key_exists('tournament_course_id', $argv)) {
+            $tournament_course_id = $argv['tournament_course_id'];
+            $stmt->bindParam(':tournament_course_id',$tournament_course_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_host_id', $argv)) {
+            $tournament_host_id = $argv['tournament_host_id'];
+            $stmt->bindParam(':tournament_host_id',$tournament_host_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_host_name', $argv)) {
+            $tournament_host_name = $argv['tournament_host_name'];
+            $stmt->bindParam(':tournament_host_name',$tournament_host_name, 2, 225);
         }
                    if (array_key_exists('tournament_style', $argv)) {
             $tournament_style = $argv['tournament_style'];
-            $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
+            $stmt->bindParam(':tournament_style',$tournament_style, 2, 20);
         }
                    if (array_key_exists('tournament_team_price', $argv)) {
             $tournament_team_price = $argv['tournament_team_price'];
@@ -228,7 +238,7 @@ class carbon_golf_tournaments extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |tournament_id|tournament_name|course_id|host_name|tournament_style|tournament_team_price|tournament_paid|tournament_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |tournament_id|tournament_name|tournament_created_by_user_id|tournament_course_id|tournament_host_id|tournament_host_name|tournament_style|tournament_team_price|tournament_paid|tournament_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -288,7 +298,7 @@ class carbon_golf_tournaments extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_golf_tournaments (tournament_id, tournament_name, course_id, host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), :tournament_name, UNHEX(:course_id), :host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
+        $sql = 'INSERT INTO StatsCoach.carbon_golf_tournaments (tournament_id, tournament_name, tournament_created_by_user_id, tournament_course_id, tournament_host_id, tournament_host_name, tournament_style, tournament_team_price, tournament_paid, tournament_date) VALUES ( UNHEX(:tournament_id), :tournament_name, UNHEX(:tournament_created_by_user_id), UNHEX(:tournament_course_id), UNHEX(:tournament_host_id), :tournament_host_name, :tournament_style, :tournament_team_price, :tournament_paid, :tournament_date)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
@@ -300,14 +310,20 @@ class carbon_golf_tournaments extends Database implements iRest
                     $tournament_name = $argv['tournament_name'];
                     $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
                         
-                    $course_id =  $argv['course_id'] ?? null;
-                    $stmt->bindParam(':course_id',$course_id, 2, 16);
+                    $tournament_created_by_user_id =  $argv['tournament_created_by_user_id'] ?? null;
+                    $stmt->bindParam(':tournament_created_by_user_id',$tournament_created_by_user_id, 2, 16);
                         
-                    $host_name = $argv['host_name'];
-                    $stmt->bindParam(':host_name',$host_name, 2, 225);
+                    $tournament_course_id =  $argv['tournament_course_id'] ?? null;
+                    $stmt->bindParam(':tournament_course_id',$tournament_course_id, 2, 16);
+                        
+                    $tournament_host_id =  $argv['tournament_host_id'] ?? null;
+                    $stmt->bindParam(':tournament_host_id',$tournament_host_id, 2, 16);
+                        
+                    $tournament_host_name = $argv['tournament_host_name'];
+                    $stmt->bindParam(':tournament_host_name',$tournament_host_name, 2, 225);
                         
                     $tournament_style = $argv['tournament_style'];
-                    $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
+                    $stmt->bindParam(':tournament_style',$tournament_style, 2, 20);
                         
                     $tournament_team_price =  $argv['tournament_team_price'] ?? null;
                     $stmt->bindParam(':tournament_team_price',$tournament_team_price, 2, 11);
@@ -353,11 +369,17 @@ class carbon_golf_tournaments extends Database implements iRest
             if (array_key_exists('tournament_name', $argv)) {
                 $set .= 'tournament_name=:tournament_name,';
             }
-            if (array_key_exists('course_id', $argv)) {
-                $set .= 'course_id=UNHEX(:course_id),';
+            if (array_key_exists('tournament_created_by_user_id', $argv)) {
+                $set .= 'tournament_created_by_user_id=UNHEX(:tournament_created_by_user_id),';
             }
-            if (array_key_exists('host_name', $argv)) {
-                $set .= 'host_name=:host_name,';
+            if (array_key_exists('tournament_course_id', $argv)) {
+                $set .= 'tournament_course_id=UNHEX(:tournament_course_id),';
+            }
+            if (array_key_exists('tournament_host_id', $argv)) {
+                $set .= 'tournament_host_id=UNHEX(:tournament_host_id),';
+            }
+            if (array_key_exists('tournament_host_name', $argv)) {
+                $set .= 'tournament_host_name=:tournament_host_name,';
             }
             if (array_key_exists('tournament_style', $argv)) {
                 $set .= 'tournament_style=:tournament_style,';
@@ -394,17 +416,25 @@ class carbon_golf_tournaments extends Database implements iRest
             $tournament_name = $argv['tournament_name'];
             $stmt->bindParam(':tournament_name',$tournament_name, 2, 225);
         }
-                   if (array_key_exists('course_id', $argv)) {
-            $course_id = $argv['course_id'];
-            $stmt->bindParam(':course_id',$course_id, 2, 16);
+                   if (array_key_exists('tournament_created_by_user_id', $argv)) {
+            $tournament_created_by_user_id = $argv['tournament_created_by_user_id'];
+            $stmt->bindParam(':tournament_created_by_user_id',$tournament_created_by_user_id, 2, 16);
         }
-                   if (array_key_exists('host_name', $argv)) {
-            $host_name = $argv['host_name'];
-            $stmt->bindParam(':host_name',$host_name, 2, 225);
+                   if (array_key_exists('tournament_course_id', $argv)) {
+            $tournament_course_id = $argv['tournament_course_id'];
+            $stmt->bindParam(':tournament_course_id',$tournament_course_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_host_id', $argv)) {
+            $tournament_host_id = $argv['tournament_host_id'];
+            $stmt->bindParam(':tournament_host_id',$tournament_host_id, 2, 16);
+        }
+                   if (array_key_exists('tournament_host_name', $argv)) {
+            $tournament_host_name = $argv['tournament_host_name'];
+            $stmt->bindParam(':tournament_host_name',$tournament_host_name, 2, 225);
         }
                    if (array_key_exists('tournament_style', $argv)) {
             $tournament_style = $argv['tournament_style'];
-            $stmt->bindParam(':tournament_style',$tournament_style, 2, 11);
+            $stmt->bindParam(':tournament_style',$tournament_style, 2, 20);
         }
                    if (array_key_exists('tournament_team_price', $argv)) {
             $tournament_team_price = $argv['tournament_team_price'];

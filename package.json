@@ -8,10 +8,12 @@
   },
   "dependencies": {
     "admin-lte": "2.4",
+    "chromedriver": "^75.0.1",
     "jquery-backstretch": "2.1.16",
     "jquery-form": "^4.2.2",
     "jquery-pjax": "^2.0.1",
-    "mustache": "^2.3.0"
+    "mustache": "^2.3.0",
+    "selenium-webdriver": "^4.0.0-alpha.4"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/RichardTMiles/Stats.Coach/issues"
   },
-  "homepage": "https://github.com/RichardTMiles/Stats.Coach#readme"
+  "homepage": "https://github.com/RichardTMiles/Stats.Coach#readme",
+  "devDependencies": {
+    "mocha": "^6.1.4"
+  }
 }

@@ -1,0 +1,235 @@
+{{#tournament}}
+    <!-- Content Header (Page header) style="font-size: 200%; color: #ffffff;" style="background-color: #2c3b41; border-top-color: #2c3b41;"-->
+    <section class="content-header" style="color: #d9edf7">
+        <h1></h1>
+        <ol class="breadcrumb">
+            <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Tournament Report</a></li>
+        </ol>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content" id="content-pane">
+        <div id="alert"></div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Team Info -->
+                        <div class="box box-widget widget-user-2">
+                            <!-- Add the bg color to the header using any of the bg-* classes -->
+                            <div class="widget-user-header bg-green">
+                                <div class="widget-user-image">
+                                    <img class="img-circle"
+                                         src="/data/uploads/pictures/defaults/team-icon.png"
+                                         alt="User Avatar">
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <h3 class="widget-user-username">{{tournament_name}}</h3>
+                                <h5 class="widget-user-desc">
+                                    <i class="fa fa-fw fa-coffee"></i>
+                                    <a style="color: #ffffff"
+                                       href="/Profile/{{tournament_host_info.user_id}}">Host {{ tournament_host_info.user_last_name }}</a>
+                                </h5>
+                                {{#im_the_host}}
+                                    <h6 class="widget-user-desc" onclick="carbon.startApplication('TournamentSettings/{{tournament.tournament_id}}', '#TournamentContent')"><i
+                                            class="fa fa-fw fa-cog"></i>Tournament Settings</h6>
+                                {{/im_the_host}}
+                            </div>
+                            <div class="box-footer no-padding"
+                                 style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
+                                <ul class="nav nav-stacked">
+                                    <li><a style="color: #ffffff;"
+                                           onclick="carbon.startApplication('TournamentSettings/{{tournament_id}}/', '#TournamentContent')">Tournament Settings <span
+                                            class="pull-right badge bg-blue"
+                                            style="font-size: 100%;">{{myTeam.team_code}}</span></a></li>
+
+
+                                    <li><a style="color: #ffffff;"
+                                           onclick="carbon.startApplication('TournamentMembers/{{myTeam.team_id}}/Members/')">Members
+                                        <span class="pull-right badge bg-aqua"
+                                              style="font-size: 100%;">{{myTeam.memberCount}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">Rounds <span
+                                            class="pull-right badge bg-green">{{myTeam.rounds}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">Tournaments <span
+                                            class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">Strokes <span
+                                            class="pull-right badge bg-red">{{myTeam.strokes}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">FFS <span
+                                            class="pull-right badge bg-red">{{myTeam.FFS}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">PNR <span
+                                            class="pull-right badge bg-red">{{myTeam.GIR}}</span></a></li>
+                                    <li><a href="#" style="color: #ffffff;">Putts <span
+                                            class="pull-right badge bg-red">{{myTeam.putts}}</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.widget-team -->
+                    </div>
+                    {{#imTheCoach}}
+                        <div class="col-md-12">
+                            <div class="box box-widget">
+                                <div class="box-body">
+
+                                    <form data-pjax class="form-horizontal" action="/Team/{{myTeam.team_id}}"
+                                          method="post"
+                                          enctype="multipart/form-data">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" type="file" id="InputFile" name="FileToUpload">
+                                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-flat">Upload team photo</button>
+                            </span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {{/imTheCoach}}
+                </div>
+            </div>
+            <div class="col-md-8" id="TournamentContent">
+                <!-- User team member -->
+                {{#myTeam.members}}
+                    <div class="box" style="margin-top: 20px; background-color: #2c3b41; border-top-color: #2c3b41;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">
+                                <a href="/Profile/{{user_id}}/" style="font-size: 200%">
+                                    {{user_first_name}} {{user_last_name}}
+                                </a>
+                            </h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                                </button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-box-tool dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <i class="fa fa-wrench"></i></button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Add Goal</a></li>
+                                        <li><a href="#">Edit Goals</a></li>
+                                        <li><a href="#">Send Message</a></li>
+                                        <li><a href="#">View All Rounds</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Remove Team Member</a></li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="box box-widget widget-user">
+                                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                                        <div class="widget-user-header bg-black"
+                                             style="background: url('{{user_cover_photo}}{{^user_cover_photo}}/view/img/Carbon-green.png{{/user_cover_photo}}') center center;">
+                                            <h3 class="widget-user-username"></h3>
+                                            <h5 class="widget-user-desc"></h5>
+                                        </div>
+                                        <div class="widget-user-image">
+                                            <img class="img-circle"
+                                                 src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}"
+                                                 alt="User Avatar">
+                                        </div>
+
+                                        <div class="box-footer"
+                                             style="background-color: #2c3b41; border-top-color: #2c3b41;">
+                                            <div class="row">
+                                                <div class="col-sm-4 border-right">
+                                                    <div class="description-block">
+                                                        <h5 class="description-header"
+                                                            style="font-size: 200%; color: #ffffff;">{{stats_ffs}}</h5>
+                                                        <span class="description-text"
+                                                              style="font-size: 200%; color: #ffffff;">FFS</span>
+                                                    </div><!-- /.description-block -->
+
+                                                </div><!-- /.col -->
+
+                                                <div class="col-sm-4 border-right">
+                                                    <div class="description-block">
+                                                        <h5 class="description-header"
+                                                            style="font-size: 200%; color: #ffffff;">{{stats_putts}}</h5>
+                                                        <span class="description-text"
+                                                              style="font-size: 200%; color: #ffffff;">PUTTS</span>
+                                                    </div><!-- /.description-block -->
+
+                                                </div><!-- /.col -->
+
+                                                <div class="col-sm-4">
+                                                    <div class="description-block">
+                                                        <h5 class="description-header"
+                                                            style="font-size: 200%; color: #ffffff;">{{stats_gnr}}</h5>
+                                                        <span class="description-text"
+                                                              style="font-size: 200%; color: #ffffff;">GNR</span>
+                                                    </div><!-- /.description-block -->
+                                                </div><!-- /.col -->
+                                            </div><!-- /.row -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- ./box-body -->
+                        <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <!--span class="description-percentage text-green"><i
+                                                class="fa fa-caret-up"></i> 17%</span-->
+                                        <h5 class="description-header"
+                                            style="color: #ffffff;">{{stats_tournaments}}</h5>
+                                        <span class="description-text" style="color: #ffffff;">Tournaments</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <!--span class="description-percentage text-yellow"><i
+                                                class="fa fa-caret-left"></i> 0%</span-->
+                                        <h5 class="description-header" style="color: #ffffff;">{{stats_handicap}}</h5>
+                                        <span class="description-text" style="color: #ffffff;">Handicap</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <!--span class="description-percentage text-green"><i
+                                                class="fa fa-caret-up"></i> 20%</span-->
+                                        <h5 class="description-header" style="color: #ffffff;">{{stats_strokes}}</h5>
+                                        <span class="description-text" style="color: #ffffff;">Strokes</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block">
+                                        <!--span class="description-percentage text-red"><i
+                                                class="fa fa-caret-down"></i> 18%</span-->
+                                        <h5 class="description-header" style="color: #ffffff;">{{stats_rounds}}</h5>
+                                        <span class="description-text" style="color: #ffffff;">Rounds</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+
+                        <!-- /.box-footer -->
+                    </div>
+                {{/myTeam.members}}
+            </div>
+        </div>
+    </section>
+{{/tournament}}

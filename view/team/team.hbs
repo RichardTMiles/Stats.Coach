@@ -4,7 +4,7 @@
  * Date: 7/29/17
  * Time: 10:12 PM
  */ -->
-<!-- Content Header (Page header) -->
+<!-- Content Header (Page header) style="font-size: 200%; color: #ffffff;" style="background-color: #2c3b41; border-top-color: #2c3b41;"-->
 <section class="content-header" style="color: #d9edf7">
     <h1></h1>
     <ol class="breadcrumb">
@@ -16,7 +16,6 @@
 <!-- Main content -->
 <section class="content" id="content-pane">
     <div id="alert"></div>
-
     <div class="row">
         <div class="col-md-4">
             <div class="row">
@@ -44,16 +43,16 @@
                                         class="fa fa-fw fa-cog"></i>Team Settings</h6>
                             {{/imTheCoach}}
                         </div>
-                        <div class="box-footer no-padding">
+                        <div class="box-footer no-padding" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                             <ul class="nav nav-stacked">
-                                <li><a href="">Team Code <span class="pull-right badge bg-blue">{{myTeam.team_code}}</span></a></li>
-                                <li><a onclick="carbon.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span class="pull-right badge bg-aqua">{{myTeam.memberCount}}</span></a></li>
-                                <li><a href="#">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a></li>
-                                <li><a href="#">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a></li>
-                                <li><a href="#">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a></li>
-                                <li><a href="#">FFS <span class="pull-right badge bg-red">{{myTeam.FFS}}</span></a></li>
-                                <li><a href="#">PNR <span class="pull-right badge bg-red">{{myTeam.GIR}}</span></a></li>
-                                <li><a href="#">Putts <span class="pull-right badge bg-red">{{myTeam.putts}}</span></a>
+                                <li><a href="#" style="color: #ffffff;">Team Code <span class="pull-right badge bg-blue" style="font-size: 100%;">{{myTeam.team_code}}</span></a></li>
+                                <li><a style="color: #ffffff;" onclick="carbon.startApplication('Team/{{myTeam.team_id}}/Members/')">Members <span class="pull-right badge bg-aqua" style="font-size: 100%;">{{myTeam.memberCount}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">Rounds <span class="pull-right badge bg-green">{{myTeam.rounds}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">Tournaments <span class="pull-right badge bg-red">{{myTeam.tournaments}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">Strokes <span class="pull-right badge bg-red">{{myTeam.strokes}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">FFS <span class="pull-right badge bg-red">{{myTeam.FFS}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">PNR <span class="pull-right badge bg-red">{{myTeam.GIR}}</span></a></li>
+                                <li><a href="#" style="color: #ffffff;">Putts <span class="pull-right badge bg-red">{{myTeam.putts}}</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -84,10 +83,10 @@
         <div class="col-md-8">
             <!-- User team member -->
             {{#myTeam.members}}
-                <div class="box" style="margin-top: 20px">
-                    <div class="box-header with-border">
+                <div class="box" style="margin-top: 20px; background-color: #2c3b41; border-top-color: #2c3b41;">
+                    <div class="box-header with-border" >
                         <h3 class="box-title">
-                            <a href="/Profile/{{user_id}}/">
+                            <a href="/Profile/{{user_id}}/" style="font-size: 200%">
                                 {{user_first_name}} {{user_last_name}}
                             </a>
                         </h3>
@@ -117,7 +116,7 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="box box-widget widget-user">
+                                <div class="box box-widget widget-user" >
                                     <!-- Add the bg color to the header using any of the bg-* classes -->
                                     <div class="widget-user-header bg-black"
                                          style="background: url('{{user_cover_photo}}{{^user_cover_photo}}/view/img/Carbon-green.png{{/user_cover_photo}}') center center;">
@@ -128,28 +127,28 @@
                                         <img class="img-circle" src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" alt="User Avatar">
                                     </div>
 
-                                    <div class="box-footer">
+                                    <div class="box-footer" style="background-color: #2c3b41; border-top-color: #2c3b41;">
                                         <div class="row">
                                             <div class="col-sm-4 border-right">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">{{stats_ffs}}</h5>
-                                                    <span class="description-text">FFS</span>
+                                                    <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{stats_ffs}}</h5>
+                                                    <span class="description-text" style="font-size: 200%; color: #ffffff;">FFS</span>
                                                 </div><!-- /.description-block -->
 
                                             </div><!-- /.col -->
 
                                             <div class="col-sm-4 border-right">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">{{stats_putts}}</h5>
-                                                    <span class="description-text">PUTTS</span>
+                                                    <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{stats_putts}}</h5>
+                                                    <span class="description-text" style="font-size: 200%; color: #ffffff;">PUTTS</span>
                                                 </div><!-- /.description-block -->
 
                                             </div><!-- /.col -->
 
                                             <div class="col-sm-4">
                                                 <div class="description-block">
-                                                    <h5 class="description-header">{{stats_gnr}}</h5>
-                                                    <span class="description-text">GNR</span>
+                                                    <h5 class="description-header" style="font-size: 200%; color: #ffffff;">{{stats_gnr}}</h5>
+                                                    <span class="description-text" style="font-size: 200%; color: #ffffff;">GNR</span>
                                                 </div><!-- /.description-block -->
                                             </div><!-- /.col -->
                                         </div><!-- /.row -->
@@ -163,14 +162,14 @@
                         <!-- /.row -->
                     </div>
                     <!-- ./box-body -->
-                    <div class="box-footer">
+                    <div class="box-footer"  style="background-color: #2c3b41; border-top-color: #2c3b41;">
                         <div class="row">
                             <div class="col-sm-3 col-xs-6">
                                 <div class="description-block border-right">
                                 <!--span class="description-percentage text-green"><i
                                         class="fa fa-caret-up"></i> 17%</span-->
-                                    <h5 class="description-header">{{stats_tournaments}}</h5>
-                                    <span class="description-text">Tournaments</span>
+                                    <h5 class="description-header" style="color: #ffffff;">{{stats_tournaments}}</h5>
+                                    <span class="description-text" style="color: #ffffff;">Tournaments</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
@@ -179,8 +178,8 @@
                                 <div class="description-block border-right">
                                 <!--span class="description-percentage text-yellow"><i
                                         class="fa fa-caret-left"></i> 0%</span-->
-                                    <h5 class="description-header">{{stats_handicap}}</h5>
-                                    <span class="description-text">Handicap</span>
+                                    <h5 class="description-header" style="color: #ffffff;">{{stats_handicap}}</h5>
+                                    <span class="description-text" style="color: #ffffff;">Handicap</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
@@ -189,8 +188,8 @@
                                 <div class="description-block border-right">
                                 <!--span class="description-percentage text-green"><i
                                         class="fa fa-caret-up"></i> 20%</span-->
-                                    <h5 class="description-header">{{stats_strokes}}</h5>
-                                    <span class="description-text">Strokes</span>
+                                    <h5 class="description-header" style="color: #ffffff;">{{stats_strokes}}</h5>
+                                    <span class="description-text" style="color: #ffffff;">Strokes</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
@@ -199,8 +198,8 @@
                                 <div class="description-block">
                                 <!--span class="description-percentage text-red"><i
                                         class="fa fa-caret-down"></i> 18%</span-->
-                                    <h5 class="description-header">{{stats_rounds}}</h5>
-                                    <span class="description-text">Rounds</span>
+                                    <h5 class="description-header" style="color: #ffffff;">{{stats_rounds}}</h5>
+                                    <span class="description-text" style="color: #ffffff;">Rounds</span>
                                 </div>
                                 <!-- /.description-block -->
                             </div>
@@ -212,7 +211,7 @@
                 </div>
             {{/myTeam.members}}
         </div>
-
+    </div>
 
 </section>
 

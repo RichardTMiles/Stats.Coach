@@ -32,7 +32,7 @@ class StatsCoach extends Application
     {
         global $json, $user;
 
-        if (!\is_array($json)) {
+        if (!is_array($json)) {
             $json = array();
         }
 
@@ -45,7 +45,9 @@ class StatsCoach extends Application
         $json['AJAX'] = AJAX;
         $json['PJAX'] = PJAX;
         $json['SITE_TITLE'] = SITE_TITLE;
+        $json['SITE_VERSION'] = SITE_VERSION;
         $json['APP_VIEW'] = APP_VIEW;
+        $json['APP_LOCAL'] = (bool)APP_LOCAL;     // mainly for ws vs wss
         $json['TEMPLATE'] = TEMPLATE;
         $json['COMPOSER'] = COMPOSER;
         $json['X_PJAX_Version'] = &$_SESSION['X_PJAX_Version'];
@@ -63,10 +65,12 @@ class StatsCoach extends Application
         // Sockets will not execute this function
         View::$forceWrapper = true; // this will hard refresh the wrapper
 
+        // Even if the user is not logged in we need to update template info
+        $this->userSettings(); // template settings
+
         if (!$_SESSION['id']):
             return $this->MVC()('User', 'login');
         else:
-            $this->userSettings();          // Update the current user
             return $this->MVC()('Golf', 'golf');
         endif;
     }
@@ -126,15 +130,18 @@ class StatsCoach extends Application
                 $json['body-layout'] = 'Json Method Removed';
                 $json['header'] = 'Json Method Removed';
 
-                if (
-                    $this->match('whoami/', function() {
+                // Example code for testing socket connections
+                if (SOCKET && $this->match('whoami/', function () {
                         print $_SESSION['id'] . PHP_EOL;
                     })() ||
-                    $this->match('Send/{user_id}/{message}/', function($user_id, $message) {
+                    $this->match('Send/{user_id}/{message}/', function ($user_id, $message) {
                         print 'About to send' . PHP_EOL;
-                        print 'Did we send? ' . Pipe::send( $message, '/tmp/' . $user_id . '.fifo' ). PHP_EOL .PHP_EOL;
-                    })() ||
-                    $this->match('Search/{search}/', 'Search', 'all')() ||
+                        print 'Did we send? ' . Pipe::send($message, '/tmp/' . $user_id . '.fifo') . PHP_EOL . PHP_EOL;
+                    })()){
+                    return true;
+                }
+
+                if ($this->match('Search/{search}/', 'Search', 'all')() ||
                     $this->match('NavigationMessages/', 'Messages', 'navigation')() ||
                     $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||
                     $this->match('Follow/{user_id}/', 'User', 'follow')() ||
@@ -165,12 +172,16 @@ class StatsCoach extends Application
             }
 
 
-
             ################################### MVC
             $this->structure($this->MVC());
 
 
             ################################### Golf Stuff + User
+
+            if ($this->match('CoursesByState/{state}/', 'Golf', 'CoursesByState')()) {
+                return true;
+            }
+
 
             if ($this->match('PostScore/Basic/{state?}/*', 'Golf', 'PostScoreBasic')() ||
                 $this->match('PostScore/Color/{id}/*', 'Golf', 'PostScoreColor')() ||
@@ -184,7 +195,9 @@ class StatsCoach extends Application
                 return true;
             }
 
-            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')()) {
+            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')() ||
+                $this->match('TournamentSettings/{id}/*', 'Golf', 'TournamentSettings')() ||
+                $this->match('Tournament/{id}/*', 'Golf', 'Tournament')()) {
                 return true;
             }
 
@@ -212,7 +225,6 @@ class StatsCoach extends Application
             $this->match('500/*', 'error/500error.hbs')();
 
 
-
     }
 
 
@@ -224,7 +236,7 @@ class StatsCoach extends Application
      * @throws PublicAlert
      */
 
-    public function userSettings() : void
+    public function userSettings(): void
     {
         global $user, $json;
 
@@ -233,6 +245,9 @@ class StatsCoach extends Application
         // If the user is signed in we need to get the
 
         if ($id ?? false) {
+
+            #sortDump(['damn ok', $id]);
+
 
             if (!\is_array($user[$id] ?? false)) {
                 Session::update();

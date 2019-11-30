@@ -8,31 +8,47 @@
 
 namespace App\tests\browser;
 
+use App\Tests\Config;
+use PHPUnit_Extensions_Selenium2TestCase;
 
 /** Selenium2TestCase
+ * @Depends App\Tests\Feature\UserTest::class
  * @link https://github.com/giorgiosironi/phpunit-selenium/blob/master/Tests/Selenium2TestCaseTest.php
  * @link http://apigen.juzna.cz/doc/sebastianbergmann/phpunit-selenium/class-PHPUnit_Extensions_Selenium2TestCase.html
  */
-class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
+class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
 {
+    public const URL = Config::URL;
+
     public function setUp()
     {
         static $count;
-        $count or $count=1 and print PHP_EOL.'java -jar '. dirname(__DIR__) .'/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
-        self::shareSession(TRUE);
+        $count or $count = 1 and print PHP_EOL . 'java -jar ' . dirname(__DIR__) . '/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
+        // self::shareSession(true);
+        $this->setDesiredCapabilities([
+            "chromeOptions" => [
+                'w3c' => false
+            ]
+        ]);
         $this->setHost('localhost');
         $this->setPort(4444);
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost:80/');
+        $this->setBrowserUrl(self::URL);
         $this->prepareSession()->currentWindow()->maximize();
     }
 
+    public function testVersionCanBeReadFromTheTestCaseClass()
+    {
+        $this->assertEquals(1, version_compare(PHPUnit_Extensions_Selenium2TestCase::VERSION, "1.2.0"));
+    }
 
     public function testBasicNavigation()
     {
         $this->url('/');
 
         $this->assertEquals(SITE_TITLE, $this->title());
+
+        $this->timeouts()->implicitWait(10000);//10 seconds
 
         $register = $this->byId('register');
 
@@ -48,24 +64,27 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
     public function testLoginFormExists()
     {
-        $this->url( '/' );
+        $this->url('/');
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-        $user = $this->byName( 'username' )->value('Test Username');
-        $pass = $this->byName( 'password' )->value('Test Password');
-        //$submit = $this->byName( 'signin' )->value('Sign In');
+        $user = $this->byName('username');
+        $user->value('Test Username');
 
-        sleep(10);
+        $pass = $this->byName('password');
+        $pass->value('Test Password');
+
+        //$submit = $this->byName( 'signin' )->value('Sign In');
         // test that input above was a
-        $this->assertEquals( 'Test Username', $user->value() );
-        $this->assertEquals( 'Test Password', $pass->value() );
-       // $this->assertEquals( 'Sign In', $submit->value() );
+        $this->assertEquals('Test Username', $user->value());
+        $this->assertEquals('Test Password', $pass->value());
+        // $this->assertEquals( 'Sign In', $submit->value() );
 
     }
 
 
-    public function testRegister() {
+    public function testRegister()
+    {
         $this->url('/');
 
         $this->assertEquals(SITE_TITLE, $this->title());
@@ -83,50 +102,165 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(5000);//10 seconds
 
-        $this->byName( 'firstname' )->value( 'Richard' );
-        $this->byName( 'lastname' )->value( 'Miles' );
-        $this->byName( 'email' )->value( 'Richard@Miles.Systems' );
-        $this->byName( 'username' )->value( 'admin' );
-        $this->byName( 'password' )->value( 'adminadmin' );
-        $this->byName( 'password2' )->value( 'adminadmin' );
+        $this->byName('firstname')->value('Richard');
+        $this->byName('lastname')->value('Miles');
+        $this->byName('email')->value('Richard@Miles.Systems');
+        $this->byName('username')->value('adminss');
+        $this->byName('password')->value('adminadmin');
+        $this->byName('password2')->value('adminadmin');
 
         $this->select($this->byName('gender'))->selectOptionByValue('male');
 
         $this->timeouts()->implicitWait(3000);//10 seconds
 
-        $register->click();
+        $this->byClassName('icheckbox_square-blue')->click();
 
-        sleep(10);
+        $this->timeouts()->implicitWait(3000);//10 seconds
+
+        $register->click();
 
     }
 
     public function testLogin()
     {
         // set the url
-        $this->url( '/' );
+        $this->url('/');
 
         // create a form object for reuse
-        $form = $this->byId( 'loginForm' );
+        $form = $this->byId('loginForm');
 
         // get the form action
-        $action = $form->attribute( 'action' );
+        $action = $form->attribute('action');
 
         // check the action value
-        $this->assertEquals( 'http://localhost/login/', $action );
+        $this->assertEquals(  self::URL . 'login/', $action);
 
         // fill in the form field values
-        $this->byName( 'username' )->value( 'admin' );
+        $this->byName('username')->value('admin');
 
-        $this->byName( 'password' )->value( 'adminadmin' );
+        $this->byName('password')->value('adminadmin');
 
-        sleep(10);
+        sleep(1);
 
         // submit the form
         $form->submit();
 
+        sleep(2);
+
+    }
+
+    public function testPostScores()
+    {
+
+        $this->testLogin();
+
+        $this->byId('postScoreHeader')->click();
+
+        // $this->byId('select2-uzdm-container')->click(  );
+
+        sleep(1);
+
+        $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Texas');
+
+        sleep(1);
+
+        $this->select($this->byId('course'))->selectOptionByValue('Add');
+
+
+        sleep(1);
+        $this->byId('clear')->click();
+        sleep(1);
+
+        $this->byName('c_name')->value('Lake Park');
+        $this->select($this->byId('course_type'))->selectOptionByValue('Semi-private');
+        $this->select($this->byId('course_play'))->selectOptionByValue('9');
+        $this->byId('phone')->value('2145551234');
+        $this->byName('c_street')->value('6 Lake Park Rd, TX 75057');
+        $this->byName('c_city')->value('Lewisville');
+        $this->select($this->byId('state'))->selectOptionByValue('California');
+        $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
+        $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
+        $this->byId('next')->click();
         sleep(10);
 
 
+
+
+
+
+
+        $this->byId('tee_color')->click();
+        $this->byId('Black')->click();
+        sleep(1);
+        $this->byName('general_difficulty')->value('13');
+        $this->byName('general_slope')->value('34');
+        $this->byName('women_difficulty')->value('52');
+        $this->byName('women_slope')->value('19');
+        sleep(5);
+        $this->byId('next')->click();
+        sleep(1);
+        $this->byId('tee_color')->click();
+        $this->byId('Blue')->click();
+        $this->byName('general_difficulty')->value('23');
+        $this->byName('general_slope')->value('12');
+        $this->byName('women_difficulty')->value('24');
+        $this->byName('women_slope')->value('43');
+        sleep(3);
+        $this->byId('next')->click();
+        sleep(1);
+        $this->byId('tee_color')->click();
+        $this->byId('White')->click();
+        $this->byName('general_difficulty')->value('43');
+        $this->byName('general_slope')->value('3');
+        $this->byName('women_difficulty')->value('54');
+        $this->byName('women_slope')->value('14');
+        sleep(3);
+        $this->byId('next')->click();
+        sleep(1);
+
+        for ($i = 1; $i < 18; $i++) {
+            sleep(2);
+            $this->byId('current_hole_' . $i)->value('2');
+            $this->byName('Black')->value('5');
+            $this->byName('Blue')->value('7');
+            $this->byName('White')->value('9');
+            $this->byName('hc_Men')->value('2');
+            $this->byName('hc_Women')->value('3');
+            $this->byId('submit')->click();
+        }
+        sleep(10);
+
+
+        //$this->select($this->byClassName('knob'))->selectOptionByValue('13.2');
+
+        sleep(10);
+
+
+    }
+
+
+    public function testCreateTeam()
+    {
+        $this->testLogin();
+        $this->byId('navMenu')->click();
+        $this->byId('createTeamLink')->click();
+        $this->byName('teamName')->value('Ateam');
+        $this->byName('schoolName')->value('southlake');
+        sleep(3);
+        $this->byId('teamSubmit')->click();
+        sleep(10);
+    }
+
+    public function testDeleteAccount()
+    {
+        $this->testLogin();
+        $this->byId('navUserTopRightUserImage')->click();
+        $this->byId('navTopRightUserDropdownProfile')->click();
+        sleep(1);
+        $this->byId('profileDeleteButton')->click();
+        sleep(1);
+        $this->byId('confirmDeleteButton')->click();
+        sleep(10);
     }
 
 }
