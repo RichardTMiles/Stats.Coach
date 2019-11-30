@@ -311,16 +311,16 @@ class User extends Request
      */
     public function profile($user_id = false)
     {
-        global $json, $user;
+        global $json;
 
 
         $user_id = $this->set($user_id)->alnum();
 
-        if (!empty($user_id)) {
+        if (!empty($user_id) && $user_id !== $_SESSION['id']) { // we can assume no post data then
             return $user_id;
         }
 
-        $json['myAccountBool'] = true; // TODO - WHAT THE FUCK???
+        $json['myAccountBool'] = true; // no id set so its our profile
 
 
         if (empty($_POST)) {
@@ -331,7 +331,7 @@ class User extends Request
             throw new PublicAlert('Sorry, you must accept the terms and conditions.', 'warning');
         }
 
-        // Our forum variables get put in the public scope
+        // Our forum variables get put in the public scope TODO - make this better
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me;
 
         [$first, $last, $gender] = $this->post('first_name', 'last_name', 'gender')->word();
@@ -349,7 +349,7 @@ class User extends Request
         if ($_POST['FileToUpload'])
             $profile_pic = $this->files('FileToUpload')->storeFiles('Data/Uploads/Pictures/Profile/');
 
-        return true;
+        return true; // to the model
     }
 
     public function settings()

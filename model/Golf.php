@@ -22,9 +22,53 @@ class Golf extends GlobalMap implements iSport
     use Singleton;
 
 
+    /**
+     * @param $id
+     * @return bool
+     * @throws PublicAlert
+     */
+    public function tournamentSettings($id):bool {
+        $this->json['tournament'] = [];
+        if (!carbon_golf_tournaments::Get($this->json['tournament'], $id, [])){
+            throw new PublicAlert('Failed to load tournament data');
+        }
+
+        $host = $this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID];
+
+        if ($host !== $_SESSION['id']) {
+            throw new PublicAlert('You do not have access to edit this tournament.');
+        }
+        return true;
+    }
+
+
+    /**
+     * @param $id
+     * @return bool
+     * @throws PublicAlert
+     */
+    public function tournament($id)
+    {
+        $this->json['tournament'] = [];
+        if (!carbon_golf_tournaments::Get($this->json['tournament'], $id, [])){
+            throw new PublicAlert('Failed to load tournament data');
+        }
+
+        $host = $this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID];
+
+        $this->json['im_the_host'] = $host === $_SESSION['id'];
+
+        $this->json['tournament_host_info'] = $this->json['im_the_host'] ?
+            $this->user[$_SESSION['id']] :
+            getUser($this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID], 'Basic');
+
+        return true;
+    }
+
     public function coursesByState($state)
     {
-        return self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ?', $state);
+        // this is actually a resolving route with an hbs. do not modify
+        return $this->json['courses'] = self::fetch('SELECT course_name, HEX(course_id) AS course_id FROM StatsCoach.carbon_golf_courses LEFT JOIN StatsCoach.carbon_locations ON entity_id = course_id WHERE state = ? AND course_input_completed = 1', $state);
     }
 
     public function NewTournament($tournamentName, $hostName, $hostID, $courseID, $playStyle)
@@ -43,12 +87,12 @@ class Golf extends GlobalMap implements iSport
 
         if (false === self::commit(function () {
             PublicAlert::success('Tournament created!');
-            return true;
+            return true; // this is a lambda return
         })) {
             PublicAlert::danger('An unexpected error occurred!');
-            return null;
+            return null; // real return
         }
-        return startApplication('home');
+        return startApplication('home');    // real return
     }
 
     public static function sessionStuff(&$my)
@@ -185,9 +229,11 @@ class Golf extends GlobalMap implements iSport
 
     /**
      * @return bool
+     * @throws PublicAlert
      */
     public function golf(): bool  // This is the home page for the user
     {
+        $this->rounds($_SESSION['id']);
         return true;
     }
 
@@ -199,6 +245,7 @@ class Golf extends GlobalMap implements iSport
     public function rounds($user_uri_id, $limit = 20)
     {
         global $json;
+
 
         $json['roundUser'] = [];
 
@@ -495,7 +542,7 @@ class Golf extends GlobalMap implements iSport
 
 
     public
-    function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): bool
+    function AddCourseBasic($phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes): ?bool
     {
         global $json;
 

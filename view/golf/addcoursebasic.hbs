@@ -8,6 +8,12 @@
 -->
 
 <script>
+
+    function resetInput() {
+        alert('reset')
+        $('#c_name').val('value');
+    }
+
     Carbon(() => {
         $('#datepicker').load_datepicker();
         $('.knob').load_knob();                // were pre loading
@@ -47,7 +53,6 @@
             total_holes = Form[fields[2]].value;
             tee_boxes = Form[fields[6]].value;
             Handicap_number = Form[fields[7]].value;
-            carbon.new_tee_box_color_input();                                  // Generate new tee boxes
             return null;   // TODO - on success submit
         };
     })
@@ -58,7 +63,7 @@
 <section class="content-header" style="color: #d9edf7">
     <h1>Add Course</h1>
     <ol class="breadcrumb">
-        <li><a href="#" style="color: ghostwhite; "><i class="fa fa-paper"></i>Add Course</a></li>
+        <li><a href="#" style="color: ghostwhite"><i class="fa fa-paper"></i>Add Course</a></li>
     </ol>
 </section>
 
@@ -69,7 +74,7 @@
 
         <!-- Add Course Main Info -->
 
-        <div class="box box-custom" id='CourseInfo'>
+        <div class="box box-custom dark-box" id='CourseInfo'>
 
             <div class="box-header with-border" style="width: 100%; text-align: center">
                 <h3 class="box-title" style="font-size: 200%">New Course</h3>
@@ -225,9 +230,9 @@
             </div>
 
             <div class="box-footer">
-                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="reset" class="btn btn-default" id="clear" onclick="resetInput()">Reset</button>
                 <!-- button -->
-                <button class="btn btn-info pull-right" type="submit">Next >></button>
+                <button id="next" class="btn btn-info pull-right" type="submit">Next >></button>
             </div>
 
         </div>

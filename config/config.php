@@ -159,13 +159,13 @@ function getUser($id = false, $level = 'All') : array
 return [
     'DATABASE' => [
 
-        'DB_HOST' => APP_LOCAL ? '127.0.0.1' : '35.224.229.250',      // Host and Database get put here
+        'DB_HOST' => APP_LOCAL ? '127.0.0.1' : '35.224.229.250',      // Host and Database get put here # APP_LOCAL ? '127.0.0.1' :
 
         'DB_NAME' => 'StatsCoach',
 
-        'DB_USER' => 'root',                 // User
+        'DB_USER' => 'root',                // User
 
-        'DB_PASS' => APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules
+        'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules # APP_LOCAL ? 'password' :
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 
@@ -249,6 +249,7 @@ return [
     'MINIFY' => [
         'CSS' => [
             'OUT' => APP_ROOT . 'view/css/style.css',
+            APP_ROOT . 'view/css/stats.css',
             APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css',
             APP_ROOT . 'node_modules/admin-lte/dist/css/AdminLTE.min.css',
             APP_ROOT . 'node_modules/admin-lte/dist/css/skins/_all-skins.min.css',
@@ -279,6 +280,8 @@ return [
             CARBON_ROOT . 'helpers/asynchronous.js',
             APP_ROOT . 'node_modules/jquery-form/src/jquery.form.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap/dist/js/bootstrap.min.js',
+            APP_ROOT . 'node_modules/admin-lte/bower_components/moment/moment.js',
+            APP_ROOT . 'node_modules/admin-lte/bower_components/bootstrap-daterangepicker/daterangepicker.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/fastclick/lib/fastclick.js',
             APP_ROOT . 'node_modules/admin-lte/dist/js/adminlte.js',

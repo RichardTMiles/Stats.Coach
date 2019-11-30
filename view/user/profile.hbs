@@ -1,5 +1,5 @@
 {{#my}}
-    <!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) style="font-size: 200%; color: #ffffff;" style="background-color: #2c3b41; border-top-color: #2c3b41;"-->
     <section class="content-header" style="color: ghostwhite">
         <h1>
             {{user_first_name}} {{user_last_name}}
@@ -16,20 +16,20 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- Profile Image -->
-                <div class="box box-primary" data-widget="">
-                    <div class="box-body box-profile">
+                <div class="box box-primary" data-widget="" >
+                    <div class="box-body box-profile" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                         <img class="profile-user-img img-responsive img-circle"
                              src="{{user_profile_pic}}{{^user_profile_pic}}/view/img/Carbon-red.png{{/user_profile_pic}}" alt="User profile picture">
                         <h3 class="profile-username text-center">
                             {{user_first_name}} {{user_last_name}}
                         </h3>
-                        <p class="text-muted text-center">Golfer</p>
-                        <ul class="list-group list-group-unbordered">
-                            <li class="list-group-item">
+                        <p class="text-muted text-center" style="font-size: 200%; color: #ffffff;">Golfer</p>
+                        <ul class="list-group list-group-unbordered" >
+                            <li class="list-group-item" style="color: #ffffff; background-color: #2c3b41;">
                                 <b>Followers</b>
                                 <a class="pull-right" {{#myAccountBool}}href="/Followers/" {{/myAccountBool}}>{{followersCount}}</a>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" style="color: #ffffff; background-color: #2c3b41;">
                                 <b>Following</b>
                                 <a class="pull-right" {{#myAccountBool}}href="/Following/" {{/myAccountBool}}>{{followingCount}}</a>
                             </li>
@@ -72,10 +72,10 @@
 
                 <!-- Display User Info -->
                 <div class="col-md-auto">
-                    <div class="box box-solid">
+                    <div class="box box-solid" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                         <div class="box-header with-border">
-                            <i class="fa fa-user"></i>
-                            <h3 class="box-title">Profile</h3>
+                            <i class="fa fa-user" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;"></i>
+                            <h3 class="box-title" style="font-size: 100%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">Profile</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -102,9 +102,9 @@
                 {{#myAccountBool}}
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
-                        <div class="box box-info" id="ProfileSettings">
+                        <div class="box box-info" id="ProfileSettings" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Profile Settings</h3>
+                                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Profile Settings</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                             class="fa fa-minus"></i></button>
@@ -203,7 +203,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <div class="col-sm-offset-3 col-sm-10">
                                             <div class="checkbox">
@@ -218,7 +217,7 @@
                                 </div>
 
                                 <!-- /.box-body -->
-                                <div class="box-footer">
+                                <div class="box-footer" style="font-size: 100%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                                     <button type="button" class="btn btn-danger" data-toggle="modal"
                                             data-target="#myModal">
                                         Delete Account
@@ -270,6 +269,8 @@
 
     <script>Carbon(() => {
         $('#datepicker').load_datepicker();
+        $('input').load_iCheck();
+
         {{^myAccountBool}}
             carbon.startApplication('/Messages/{{user_id}}/', '#direct-chat');
         {{/myAccountBool}}

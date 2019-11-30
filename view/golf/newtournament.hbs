@@ -15,14 +15,14 @@
 <!-- USERS LIST -->
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form data-pjax class="form-horizontal" method="post" action="/NewTournament/" name="NewTournament">
+    <form data-pjax class="form-horizontal dark-box" method="post" action="/NewTournament/" name="NewTournament">
         <div id="alert"></div>
         <!-- Add Course Main Info -->
-        <div class="box box-custom" id='CourseInfo' style="background-color: #2c3b41; border-top-color: #2c3b41;">
-            <div class="box-header with-border" style="width: 100%; text-align: center">
-                <h3 class="box-title" style="font-size: 200%; color: #ffffff;">New Tournament</h3>
+        <div class="box box-custom dark-box" id="CourseInfo">
+            <div class="box-header with-border dark-box" style="width: 100%; text-align: center">
+                <h3 class="box-title box-title-center-light" style="">New Tournament</h3>
             </div>
-            <div class="box-body" style="color: ghostwhite">
+            <div class="box-body dark-box" style="color: ghostwhite">
                 <!-- text input -->
                 <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 ">
                     <!--Course Name -->
@@ -30,6 +30,19 @@
                         <label for="teamName">Tournament Name</label>
                         <input type="text" class="form-control " placeholder="Tournament Name" name="tournamentName">
                     </div>
+                    <!-- Date and time range -->
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label>Date and time range: (doesnt work)</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="reservationtime" name="datetimes">
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
                     <div class="form-group col-xs-12 col-md-12">
                         <label for="schoolName">Host</label>
                         <select id="selectHost" class="form-control" name="hostID" required>
@@ -174,6 +187,13 @@
         $("select#selectPlay").change(function () {
             info($(this).val());
         })
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            format: 'MM/DD/YYYY h:mm A'
+        })
+
     })
 
     const playInfo = {
@@ -259,13 +279,14 @@
         }
     }
 
-    function redirectIfAdd(select){
+    function redirectIfAdd(select) {
         let courseId = select.value;
         // Jump to a new page using Pjax C6
         if (courseId === "Add") {
             carbon.app('/AddCourse/Basic/');
         }
     }
+
 
     function course_given_states(select) {
 

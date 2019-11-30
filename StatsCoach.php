@@ -32,7 +32,7 @@ class StatsCoach extends Application
     {
         global $json, $user;
 
-        if (!\is_array($json)) {
+        if (!is_array($json)) {
             $json = array();
         }
 
@@ -45,6 +45,7 @@ class StatsCoach extends Application
         $json['AJAX'] = AJAX;
         $json['PJAX'] = PJAX;
         $json['SITE_TITLE'] = SITE_TITLE;
+        $json['SITE_VERSION'] = SITE_VERSION;
         $json['APP_VIEW'] = APP_VIEW;
         $json['APP_LOCAL'] = (bool)APP_LOCAL;     // mainly for ws vs wss
         $json['TEMPLATE'] = TEMPLATE;
@@ -194,7 +195,9 @@ class StatsCoach extends Application
                 return true;
             }
 
-            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')()) {
+            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')() ||
+                $this->match('TournamentSettings/{id}/*', 'Golf', 'TournamentSettings')() ||
+                $this->match('Tournament/{id}/*', 'Golf', 'Tournament')()) {
                 return true;
             }
 

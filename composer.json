@@ -31,8 +31,8 @@
   "require-dev": {
     "richardtmiles/carbonphp" : "dev-master#29741703c1122e34872d306a42f837a8d3c5a0f0-dev",
     "google/cloud-tools": "^0.6",
-    "phpunit/phpunit-selenium": "^4.1",
-    "phpunit/phpunit": "^6"
+    "phpunit/phpunit-selenium": ">=7",
+    "phpunit/phpunit": ">=6"
   },
   "scripts": {
     "post-status-cmd": [

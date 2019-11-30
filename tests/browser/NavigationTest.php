@@ -8,25 +8,39 @@
 
 namespace App\tests\browser;
 
+use App\Tests\Config;
+use PHPUnit_Extensions_Selenium2TestCase;
 
 /** Selenium2TestCase
+ * @Depends App\Tests\Feature\UserTest::class
  * @link https://github.com/giorgiosironi/phpunit-selenium/blob/master/Tests/Selenium2TestCaseTest.php
  * @link http://apigen.juzna.cz/doc/sebastianbergmann/phpunit-selenium/class-PHPUnit_Extensions_Selenium2TestCase.html
  */
-class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
+class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
 {
+    public const URL = Config::URL;
+
     public function setUp()
     {
         static $count;
         $count or $count = 1 and print PHP_EOL . 'java -jar ' . dirname(__DIR__) . '/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
-        self::shareSession(TRUE);
+        // self::shareSession(true);
+        $this->setDesiredCapabilities([
+            "chromeOptions" => [
+                'w3c' => false
+            ]
+        ]);
         $this->setHost('localhost');
         $this->setPort(4444);
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost:80/');
+        $this->setBrowserUrl(self::URL);
         $this->prepareSession()->currentWindow()->maximize();
     }
 
+    public function testVersionCanBeReadFromTheTestCaseClass()
+    {
+        $this->assertEquals(1, version_compare(PHPUnit_Extensions_Selenium2TestCase::VERSION, "1.2.0"));
+    }
 
     public function testBasicNavigation()
     {
@@ -34,11 +48,9 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->assertEquals(SITE_TITLE, $this->title());
 
+        $this->timeouts()->implicitWait(10000);//10 seconds
 
         $register = $this->byId('register');
-
-        return true;
-
 
         $this->assertEquals('Register a new membership', $register->text());
 
@@ -56,11 +68,13 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->timeouts()->implicitWait(10000);//10 seconds
 
-        $user = $this->byName('username')->value('Test Username');
-        $pass = $this->byName('password')->value('Test Password');
-        //$submit = $this->byName( 'signin' )->value('Sign In');
+        $user = $this->byName('username');
+        $user->value('Test Username');
 
-        sleep(10);
+        $pass = $this->byName('password');
+        $pass->value('Test Password');
+
+        //$submit = $this->byName( 'signin' )->value('Sign In');
         // test that input above was a
         $this->assertEquals('Test Username', $user->value());
         $this->assertEquals('Test Password', $pass->value());
@@ -77,10 +91,6 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $link = $this->byLinkText('Register a new membership');
 
-
-        return true;
-
-
         $link->click(); // we must grab all new elements now
 
         $this->timeouts()->implicitWait(2000);//10 seconds
@@ -95,7 +105,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->byName('firstname')->value('Richard');
         $this->byName('lastname')->value('Miles');
         $this->byName('email')->value('Richard@Miles.Systems');
-        $this->byName('username')->value('admin');
+        $this->byName('username')->value('adminss');
         $this->byName('password')->value('adminadmin');
         $this->byName('password2')->value('adminadmin');
 
@@ -108,8 +118,6 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->timeouts()->implicitWait(3000);//10 seconds
 
         $register->click();
-
-        sleep(10);
 
     }
 
@@ -125,7 +133,7 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $action = $form->attribute('action');
 
         // check the action value
-        $this->assertEquals('http://localhost/login/', $action);
+        $this->assertEquals(  self::URL . 'login/', $action);
 
         // fill in the form field values
         $this->byName('username')->value('admin');
@@ -148,12 +156,11 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
         $this->byId('postScoreHeader')->click();
 
-        // $this->byId('select2-uzdm-container')->click();
+        // $this->byId('select2-uzdm-container')->click(  );
 
         sleep(1);
 
-
-        $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Alaska');
+        $this->select($this->byClassName('select2-hidden-accessible'))->selectOptionByValue('Texas');
 
         sleep(1);
 
@@ -161,8 +168,6 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
 
 
         sleep(1);
-
-
         $this->byId('clear')->click();
         sleep(1);
 
@@ -176,7 +181,14 @@ class NavigationTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
         $this->byId('next')->click();
-        sleep(1);
+        sleep(10);
+
+
+
+
+
+
+
         $this->byId('tee_color')->click();
         $this->byId('Black')->click();
         sleep(1);

@@ -77,7 +77,6 @@
 <!-- Full Width Column -->
 
 <body class="{{{body-layout}}}" style="height: auto; min-height: 100%; background-color: transparent; ">
-height: auto; min-height: 100%;
 <div {{{user-layout}}} >
     {{#signedIn}}
         <!-- Begin Layout-Header -->
@@ -122,8 +121,8 @@ height: auto; min-height: 100%;
         </div>
         <div class="clearfix"></div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer fixed">
-            <div class="container">
+        <footer class="main-footer fixed" style="background-color: #2c3b41; border-top-color: #2c3b41;">
+            <div class="container" style="color: #ffffff;">
                 <div class="pull-right hidden-xs">
                     <a href="/Privacy/">Privacy Policy</a> <b>Version</b>  {{SITE_VERSION}}
                 </div>
