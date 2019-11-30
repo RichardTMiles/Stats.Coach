@@ -38,7 +38,9 @@ function getUser($id = false, $level = 'All') : array
         $user = [];
     }
 
-    if (!is_array($my = &$user[$id])) {          // || $reset  /  but this shouldn't matter
+    $my = &$user[$id]; // psr
+
+    if (!is_array($my)) {          // || $reset  /  but this shouldn't matter
         $my = [];
     }
 
@@ -128,8 +130,8 @@ function getUser($id = false, $level = 'All') : array
 
             $my['messages'] = [];
 
-
-        /** @noinspection PhpMissingBreakStatementInspection */ case 'Profile':
+        /** @noinspection PhpMissingBreakStatementInspection */
+        case 'Profile':
             $my['followers'] = User::followers($_SESSION['id']);
 
             $my['followersCount'] = count($my['followers']);
@@ -140,7 +142,7 @@ function getUser($id = false, $level = 'All') : array
 
             // Im thinking its a faster op to foreach than database select again
             $my['friends'] = empty($my['following']) || empty($my['followers'])
-                ? [] : array_intersect( $my['following'], $my['followers']);
+                ? [] : array_intersect($my['following'], $my['followers']);
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case 'Basic':
@@ -148,6 +150,11 @@ function getUser($id = false, $level = 'All') : array
     }
     return $my;
 }
+
+
+/**
+ * Begin C6 configurations
+ */
 
 return [
     'DATABASE' => [
@@ -162,7 +169,7 @@ return [
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 
-        'REBUILD' => false                       // Initial Setup todo - remove this check
+        'REBUILD' => false                      // Initial Setup todo - remove this check
     ],
 
     'SITE' => [
@@ -171,9 +178,9 @@ return [
         'ROOT' => SERVER_ROOT,     // This was defined in our ../index.php
 
         'CACHE_CONTROL' => [
-            'ico|pdf|flv|css|js' => 'Cache-Control: max-age=29030400, public',
+            'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
             'jpg|jpeg|png|gif|swf|xml|txt|woff2|tff' => 'Cache-Control: max-age=604800, public',
-            'html|htm|php|hbs' => 'Cache-Control: max-age=0, private, public',
+            'html|htm|php|hbs|css|js' => 'Cache-Control: max-age=0, private, public',
         ],
 
         'CONFIG' => __FILE__,      // Send to sockets
@@ -214,7 +221,7 @@ return [
         'WEBSOCKETD' => true,  // if you'd like to use web
         'PORT' => 8888,
         'DEV' => true,
-        'SSL' => [
+        APP_LOCAL ? 0 : 'SSL' => [                          // setting to 0 to null the field
             'KEY' => '/var/www/stats.coach/privkey.pem',
             'CERT' => '/var/www/stats.coach/cert.pem'
         ]
@@ -226,7 +233,7 @@ return [
 
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 
-        'STORE' => true,      // Database if specified and / or File 'LOCATION' in your system
+        'STORE' => false,      // Database if specified and / or File 'LOCATION' in your system
 
         'SHOW' => true,       // Show errors on browser
 

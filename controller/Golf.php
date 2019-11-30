@@ -10,34 +10,59 @@ use Tables\carbon_golf_courses as Course;
 class Golf extends Request  // Validation
 {
 
-    public function NewTournament()
+    public function coursesByState($state) {
+        // TODO - validate state
+        if (!$this->set($state)->word()) {
+            return null;
+        }
+        return $state;
+    }
+
+
+    public function NewTournament($state = null)
     {
+        global $json;
+
+        if ($state && $this->PostScoreBasic($state)) {
+            $json['course'] = (new \Model\Golf())->coursesByState($state);
+            return null;
+        }
+
         if (empty($_POST)) {
             return null;
         }
 
+        [$tournamentName, $hostName] = $this->post('tournamentName', 'hostName')->words();
 
-        var_dump($_POST);
+        [$hostID, $courseID] = $this->post('hostID', 'courseID')->hex();
 
-        [$tournamentName, $hostName] = $this->post('tournamentName', 'hostName')->text();
+        if (!$hostID) {
+            PublicAlert::danger('The host input appears incorrect.');
+            return null;
+        }
+
+        if (!$courseID) {
+            PublicAlert::danger('The course selected appears incorrect.');
+            return null;
+        }
 
         $playStyles = [
-            "Match_Play",
-            "Stroke_Play",
-            "Best_Ball",
-            "Scramble",
-            "Alternate_Shot",
-            "Four_Ball",
-            "Skins_Game",
-            "Ryder_Cup",
-            "Shamble",
-            "Stableford",
-            "Chapman_or_Pinehurst",
-            "Bingo_Bango_Bongo",
-            "Flags",
-            "Money_Ball_or_Lone_Ranger",
-            "Quota_Tournament",
-            "Peoria_System"
+            'Match_Play',
+            'Stroke_Play',
+            'Best_Ball',
+            'Scramble',
+            'Alternate_Shot',
+            'Four_Ball',
+            'Skins_Game',
+            'Ryder_Cup',
+            'Shamble',
+            'Stableford',
+            'Chapman_or_Pinehurst',
+            'Bingo_Bango_Bongo',
+            'Flags',
+            'Money_Ball_or_Lone_Ranger',
+            'Quota_Tournament',
+            'Peoria_System'
         ];
 
         if (!in_array($_POST['style'], $playStyles)) {
@@ -45,15 +70,20 @@ class Golf extends Request  // Validation
             return null;
         }
 
-
         if (!$tournamentName || !$hostName) {
             PublicAlert::danger('You must provide input for both input fields.');
             return null;
         }
 
-       return [$tournamentName, $hostName, $_POST['style']];
+        return [$tournamentName, $hostName, $hostID, $courseID, $_POST['style']];
     }
 
+    /**
+     * @param $id
+     * @param $color
+     * @return array|bool
+     * @throws PublicAlert
+     */
     public function PostScoreDistance($id, $color)
     {
         global $json;
@@ -108,13 +138,14 @@ class Golf extends Request  // Validation
         }
 
 
-        return [$id, $color, [
-            'date' => $roundDate,
-            'shots' => $newScore,
-            'ffs' => $ffs,
-            'gnr' => $gnr,
-            'putts' => $putts
-        ]
+        return [
+            $id, $color, [
+                'date' => $roundDate,
+                'shots' => $newScore,
+                'ffs' => $ffs,
+                'gnr' => $gnr,
+                'putts' => $putts
+            ]
         ];
     }
 
@@ -130,10 +161,7 @@ class Golf extends Request  // Validation
 
     public function PostScoreBasic($state)
     {
-        if (!$this->set($state)->word()) {
-            return null;
-        }
-        return $state;
+        return $this->coursesByState($state);
     }
 
     public function PostScoreColor($id)

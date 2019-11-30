@@ -29,6 +29,7 @@ class User extends GlobalMap
      * User constructor.
      * @param string|null $id
      * @throws Exception
+     * @deprecated TODO - ??
      */
     public function __construct(string $id = null)
     {
@@ -485,9 +486,12 @@ class User extends GlobalMap
             return startApplication(true);
         }
 
-        if (true !== $user_uri) {   // !! an actual user id
+        if (true !== $user_uri) {   // !! an actual user id -- NOT US
             global $json, $user;
+
             getUser($user_uri);
+
+            sortDump($json['myAccountBool']);
 
             $user[$user_uri]['following'] = [];
 

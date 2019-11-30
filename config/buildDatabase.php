@@ -203,16 +203,23 @@ END;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `carbon_golf_tournaments` (
   `tournament_id` binary(16) NOT NULL,
-  `tournament_name` binary(16) NOT NULL,
-  `course_id` binary(16) DEFAULT NULL COMMENT 'course_id, in case double',
-  `host_name` varchar(225) NOT NULL COMMENT 'This could be a school or org',
-  `tournament_style` int(11) NOT NULL,
+  `tournament_name` varchar(225) NOT NULL,
+  `tournament_created_by_user_id` binary(16) DEFAULT NULL,
+  `tournament_course_id` binary(16) DEFAULT NULL COMMENT 'course_id, in case double',
+  `tournament_host_id` binary(16) DEFAULT NULL,
+  `tournament_host_name` varchar(225) NOT NULL COMMENT 'This could be a school or org',
+  `tournament_style` varchar(20) NOT NULL,
   `tournament_team_price` int(11) DEFAULT NULL,
   `tournament_paid` int(1) DEFAULT '1' COMMENT 'True False',
   `tournament_date` date DEFAULT NULL,
-  KEY `golf_tournaments_entity_course_pk_fk` (`course_id`),
+  PRIMARY KEY (`tournament_id`),
+  KEY `golf_tournaments_entity_course_pk_fk` (`tournament_course_id`),
   KEY `golf_tournaments_entity_entity_pk_fk` (`tournament_id`),
-  CONSTRAINT `golf_tournaments_entity_course_pk_fk` FOREIGN KEY (`course_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `carbon_golf_tournaments_carbons_entity_pk_fk` (`tournament_created_by_user_id`),
+  KEY `carbon_golf_tournaments_carbons_entity_pk_fk_2` (`tournament_host_id`),
+  CONSTRAINT `carbon_golf_tournaments_carbons_entity_pk_fk` FOREIGN KEY (`tournament_created_by_user_id`) REFERENCES `carbons` (`entity_pk`) ON UPDATE CASCADE,
+  CONSTRAINT `carbon_golf_tournaments_carbons_entity_pk_fk_2` FOREIGN KEY (`tournament_host_id`) REFERENCES `carbons` (`entity_pk`) ON UPDATE CASCADE,
+  CONSTRAINT `golf_tournaments_entity_course_pk_fk` FOREIGN KEY (`tournament_course_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `golf_tournaments_entity_entity_pk_fk` FOREIGN KEY (`tournament_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -578,19 +585,15 @@ END;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `carbon_user_tasks` (
   `task_id` binary(16) NOT NULL,
-  `user_id` binary(16) NOT NULL COMMENT 'This is the user the task is being assigned to',
-  `from_id` binary(16) DEFAULT NULL COMMENT 'Keeping this colum so forgen key will remove task if user deleted',
-  `task_name` varchar(40) NOT NULL,
-  `task_description` varchar(225) DEFAULT NULL,
-  `percent_complete` int(11) DEFAULT '0',
-  `start_date` datetime DEFAULT NULL,
-  `end_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  KEY `user_tasks_entity_entity_pk_fk` (`from_id`),
+  `to_user_id` binary(16) NOT NULL COMMENT 'This is the user the task is being assigned to',
+  `from_user_id` binary(16) DEFAULT NULL COMMENT 'Keeping this colum so forgen key will remove task if user deleted',
+  `task_data` json NOT NULL,
+  PRIMARY KEY (`to_user_id`),
+  KEY `user_tasks_entity_entity_pk_fk` (`from_user_id`),
   KEY `user_tasks_entity_task_pk_fk` (`task_id`),
   CONSTRAINT `tasks_entity_entity_pk_fk` FOREIGN KEY (`task_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_tasks_entity_entity_pk_fk` FOREIGN KEY (`from_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_tasks_entity_user_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `user_tasks_entity_entity_pk_fk` FOREIGN KEY (`from_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_tasks_entity_user_pk_fk` FOREIGN KEY (`to_user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -644,6 +647,7 @@ CREATE TABLE `carbon_users` (
   UNIQUE KEY `carbon_users_user_username_uindex` (`user_username`),
   UNIQUE KEY `user_user_profile_uri_uindex` (`user_profile_uri`),
   UNIQUE KEY `carbon_users_user_facebook_id_uindex` (`user_facebook_id`),
+  UNIQUE KEY `carbon_users_user_google_id_uindex` (`user_google_id`),
   CONSTRAINT `user_entity_entity_pk_fk` FOREIGN KEY (`user_id`) REFERENCES `carbons` (`entity_pk`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -750,9 +754,16 @@ REPLACE INTO tags (tag_id, tag_description, tag_name) VALUES (?,?,?);
 END;
      $tag = [['carbon_comments','','carbon_comments'],['carbon_golf_course_rounds','','carbon_golf_course_rounds'],['carbon_golf_courses','','carbon_golf_courses'],['carbon_golf_tournament_teams','','carbon_golf_tournament_teams'],['carbon_golf_tournaments','','carbon_golf_tournaments'],['carbon_locations','','carbon_locations'],['carbon_photos','','carbon_photos'],['carbon_reports','','carbon_reports'],['carbon_tag','','carbon_tag'],['carbon_team_members','','carbon_team_members'],['carbon_teams','','carbon_teams'],['carbon_user_followers','','carbon_user_followers'],['carbon_user_golf_stats','','carbon_user_golf_stats'],['carbon_user_messages','','carbon_user_messages'],['carbon_user_notifications','','carbon_user_notifications'],['carbon_user_sessions','','carbon_user_sessions'],['carbon_user_tasks','','carbon_user_tasks'],['carbon_users','','carbon_users'],['carbons','','carbons'],['sessions','','sessions'],['tags','','tags'],];
     foreach ($tag as $key => $value) {
-        $db->prepare($sql)->execute($value);
+            $sql = "SELECT count(*) FROM tags WHERE tag_id = ? AND tag_description = ? AND tag_name = ?;";
+            $query = $db->prepare($sql);
+            $query->execute($value);
+        if (!$query->fetchColumn()) {
+            $sql = "INSERT INTO tags (tag_id, tag_description, tag_name) VALUES (?,?,?);";
+            $db->prepare($sql)->execute($value);
+            print "<br>{$value[0]} :: tags inserted";
+        }
     }
-    print '<br>Tags inserted';
+    
 
 } catch (PDOException $e) {
     print '<br>' . $e->getMessage();

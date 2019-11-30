@@ -30,9 +30,22 @@
                         <label for="teamName">Tournament Name</label>
                         <input type="text" class="form-control " placeholder="Tournament Name" name="tournamentName">
                     </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label for="schoolName">Host</label>
+                        <select id="selectHost" class="form-control" name="hostID" required>
+                            <option value="{{my.user_id}}"
+                                    selected>{{my.user_first_name}} {{my.user_last_name}}</option>
+                            {{#my.teams}}
+                                <option value="{{team_id}}">{{team_name}}</option>
+                            {{/my.teams}}
+                        </select>
+                    </div>
                     <div class="form-group col-xs-12 col-md-12" id="teamCode">
-                        <label for="schoolName">Host Name</label>
-                        <input type="text" class="form-control " placeholder="Host Name/Team" name="hostName">
+                        <label for="schoolName">Alternate Host Name</label>
+                        <input id="altHostName" type="text" class="form-control"
+                               value="{{my.user_first_name}} {{my.user_last_name}}"
+                               placeholder="Operating Under Host Name"
+                               name="hostName">
                     </div>
                     <div class="form-group col-xs-12 col-md-12">
                         <label for="schoolName">Tournament Style</label>
@@ -55,8 +68,85 @@
                             <option value="Peoria_System">Peoria System</option>
                         </select>
                     </div>
-                </div>
-            </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label>State</label>
+                        <select class="form-control select2" style="width: 100%;"
+                                onchange="course_given_states(this)" required>
+                            <option selected="selected" disabled="" value="">{{state}}{{^state}}State{{/state}}</option>
+                            <option value="Alabama">Alabama</option>
+                            <option value="Alaska">Alaska</option>
+                            <option value="Arizona">Arizona</option>
+                            <option value="Arkansas">Arkansas</option>
+                            <option value="California">California</option>
+                            <option value="Colorado">Colorado</option>
+                            <option value="Connecticut">Connecticut</option>
+                            <option value="Delaware">Delaware</option>
+                            <option value="Florida">Florida</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Hawaii">Hawaii</option>
+                            <option value="Idaho">Idaho</option>
+                            <option value="Illinois">Illinois</option>
+                            <option value="Indiana">Indiana</option>
+                            <option value="Iowa">Iowa</option>
+                            <option value="Kansas">Kansas</option>
+                            <option value="Kentucky">Kentucky</option>
+                            <option value="Louisiana">Louisiana</option>
+                            <option value="Maine">Maine</option>
+                            <option value="Maryland">Maryland</option>
+                            <option value="Massachusetts">Massachusetts</option>
+                            <option value="Michigan">Michigan</option>
+                            <option value="Minnesota">Minnesota</option>
+                            <option value="Mississippi">Mississippi</option>
+                            <option value="Missouri">Missouri</option>
+                            <option value="Montana">Montana</option>
+                            <option value="Nebraska">Nebraska</option>
+                            <option value="Nevada">Nevada</option>
+                            <option value="New Hampshire">New Hampshire</option>
+                            <option value="New Jersey">New Jersey</option>
+                            <option value="New Mexico">New Mexico</option>
+                            <option value="New York">New York</option>
+                            <option value="North Carolina">North Carolina</option>
+                            <option value="North Dakota">North Dakota</option>
+                            <option value="Ohio">Ohio</option>
+                            <option value="Oklahoma">Oklahoma</option>
+                            <option value="Oregon">Oregon</option>
+                            <option value="Pennsylvania">Pennsylvania</option>
+                            <option value="Rhode Island">Rhode Island</option>
+                            <option value="South Carolina">South Carolina</option>
+                            <option value="South Dakota">South Dakota</option>
+                            <option value="Tennessee">Tennessee</option>
+                            <option value="Texas">Texas</option>
+                            <option value="Utah">Utah</option>
+                            <option value="Vermont">Vermont</option>
+                            <option value="Virginia">Virginia</option>
+                            <option value="Washington">Washington</option>
+                            <option value="West Virginia">West Virginia</option>
+                            <option value="Wisconsin">Wisconsin</option>
+                            <option value="Wyoming">Wyoming</option>
+                            <option value="District of Columbia">District of Columbia</option>
+                            <option value="Puerto Rico">Puerto Rico</option>
+                            <option value="Guam">Guam</option>
+                            <option value="American Samoa">American Samoa</option>
+                            <option value="U.S. Virgin Islands">U.S. Virgin Islands</option>
+                            <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                        </select>
+                    </div><!-- /.form-group -->
+
+                    <div data-pjax class="form-group col-xs-12 col-md-12">
+                        <label>Course</label>
+                        <select name="courseID" id="course" class="form-control select2"
+                                onchange="redirectIfAdd(this)" style="width: 100%;">
+                            <option value="" selected disabled>Course Select</option>
+                            <option value="Add">Add Course</option>
+                            {{#courses}}
+                                <option value='{{course_id}}'>{{course_name}}</option>
+                            {{/courses}}
+                        </select>
+                    </div><!-- /.form-group -->
+                </div><!-- /.col -->
+            </div><!-- body -->
+
+
             <div class="box-footer" style="background-color: #2c3b41; color: ghostwhite !important;">
                 <!-- button -->
                 <button class="btn btn-info pull-right" type="submit">Next >></button>
@@ -70,12 +160,22 @@
             the individual hole wins that hole. The player who wins the most holes throughout the match is the winner.
             In match play you are going up against your opponent in head to head competition.</p>
         <br>
-        <a href="https://golfcollege.edu/popular-golf-tournament-formats/">Tournament Play Information From Golf College</a>
+        <a href="https://golfcollege.edu/popular-golf-tournament-formats/">Tournament Play Information From Golf
+            College</a>
     </div>
 </section>
 
 
 <script>
+    Carbon(() => {
+        $("select#selectHost").change(function () {
+            host($("select#selectHost option:selected").text());
+        })
+        $("select#selectPlay").change(function () {
+            info($(this).val());
+        })
+    })
+
     const playInfo = {
         'Match_Play': 'Match play is a hole-by-hole competition where the golfer who makes the best score on the individual hole wins that hole. The player who wins the most holes throughout the match is the winner. In match play you are going up against your opponent in head to head competition.',
         'Stroke_Play': 'Stroke play is an 18 hole cumulative score competition where the golfer with the best overall score after 18 holes wins. In stroke play you are going up against the course and trying to out play your fellow competitors.',
@@ -139,7 +239,6 @@
                 'Once rounds are completed, players present their normal stroke play score, except that double par is the maximum score one can get on a hole. Once all players have finished the six holes selected for the Peoria system are unveiled. Each golfer totals up their scores for the six holes, that number is then tripled, then course par is subtracted from the total; the number is then multiplied by 80%. This is the golfer’s handicap allowance. The allowance gets deducted from the golfers 18 hole score becoming their net Peoria System score.\n' +
                 '\n' +
                 'Here’s an example: A golfer closes his 18 holes with a score of 90. Their total for the six Peoria holes is 30. 30 tripled, or multiplied by three, is 90. 90 minus par 72 is 18. 80% of 18 is 14, rounding off the number. So 14 is the handicap allowance for this golfer. His 18 hole score of 90 is then subtracted by 14 and his resulting Peoria System score is 76.'
-
     };
 
     function info(id) {
@@ -151,9 +250,35 @@
         }
     }
 
-    Carbon(() =>
-            $("select#selectPlay").change(function () {
-                info($(this).val());
-            }))
+    function host(name) {
+        let $altHost = $('#altHostName');
+        console.log($altHost.val());
+        console.log(name);
+        if ($altHost.val() === '{{my.user_first_name}} {{my.user_last_name}}') {
+            $altHost.val(name);
+        }
+    }
 
+    function redirectIfAdd(select){
+        let courseId = select.value;
+        // Jump to a new page using Pjax C6
+        if (courseId === "Add") {
+            carbon.app('/AddCourse/Basic/');
+        }
+    }
+
+    function course_given_states(select) {
+
+        console.log(select.value);
+
+        let courses = $("#course"); // container to be placed in
+
+        console.log(courses);
+
+        courses.removeAttr('disabled', 'disabled');     // To ensure they at least search for it
+
+        carbon.app('/CoursesByState/' + select.value + '/', '#course');
+    }
+
+    Carbon(() => $('.select2').load_select2());
 </script>

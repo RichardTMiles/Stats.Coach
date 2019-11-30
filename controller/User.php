@@ -311,7 +311,7 @@ class User extends Request
      */
     public function profile($user_id = false)
     {
-        global $json;
+        global $json, $user;
 
 
         $user_id = $this->set($user_id)->alnum();
@@ -320,7 +320,8 @@ class User extends Request
             return $user_id;
         }
 
-        $json['myAccountBool'] = true;
+        $json['myAccountBool'] = true; // TODO - WHAT THE FUCK???
+
 
         if (empty($_POST)) {
             return null;        // don't go onto the model, but run the view
