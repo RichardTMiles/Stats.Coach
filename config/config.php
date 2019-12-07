@@ -163,13 +163,13 @@ return [
 
         'DB_NAME' => 'StatsCoach',
 
-        'DB_USER' => 'root',                // User
+        'DB_USER' => 'root',                                          // User
 
-        'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',      // Password goldteamrules # APP_LOCAL ? 'password' :
+        'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',       // Password goldteamrules # APP_LOCAL ? 'password' :
 
         'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
 
-        'REBUILD' => false                      // Initial Setup todo - remove this check
+        'REBUILD' => false                                            // Initial Setup
     ],
 
     'SITE' => [
@@ -185,7 +185,7 @@ return [
 
         'CONFIG' => __FILE__,      // Send to sockets
 
-        'TIMEZONE' => 'America/Phoenix',    //  Current timezone TODO - look up php
+        'TIMEZONE' => 'America/Phoenix',    //  Current timezone TODO - look up php for default
 
         'TITLE' => 'Stats • Coach',     // Website title
 
