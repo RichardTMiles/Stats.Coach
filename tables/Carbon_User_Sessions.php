@@ -6,19 +6,22 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class tags extends Database implements iRest
+class Carbon_User_Sessions extends Database implements iRest
 {
 
-    public const TAG_ID = 'tag_id';
-    public const TAG_DESCRIPTION = 'tag_description';
-    public const TAG_NAME = 'tag_name';
+    public const USER_ID = 'user_id';
+    public const USER_IP = 'user_ip';
+    public const SESSION_ID = 'session_id';
+    public const SESSION_EXPIRES = 'session_expires';
+    public const SESSION_DATA = 'session_data';
+    public const USER_ONLINE_STATUS = 'user_online_status';
 
     public const PRIMARY = [
-    
+    'session_id',
     ];
 
     public const COLUMNS = [
-        'tag_id' => [ 'varchar', '2', '80' ],'tag_description' => [ 'text', '2', '' ],'tag_name' => [ 'text,', '2', '' ],
+        'user_id' => [ 'binary', '2', '16' ],'user_ip' => [ 'binary', '2', '16' ],'session_id' => [ 'varchar', '2', '255' ],'session_expires' => [ 'datetime', '2', '' ],'session_data' => [ 'text,', '2', '' ],'user_online_status' => [ 'tinyint', '0', '1' ],
     ];
 
     public const VALIDATION = [];
@@ -85,15 +88,27 @@ class tags extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('tag_id', $argv)) {
-            $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-                   if (array_key_exists('tag_description', $argv)) {
-            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+                   if (array_key_exists('user_ip', $argv)) {
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
         }
-                   if (array_key_exists('tag_name', $argv)) {
-            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
+                   if (array_key_exists('session_id', $argv)) {
+            $session_id = $argv['session_id'];
+            $stmt->bindParam(':session_id',$session_id, 2, 255);
+        }
+                   if (array_key_exists('session_expires', $argv)) {
+            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+        }
+                   if (array_key_exists('session_data', $argv)) {
+            $stmt->bindValue(':session_data',$argv['session_data'], 2);
+        }
+                   if (array_key_exists('user_online_status', $argv)) {
+            $user_online_status = $argv['user_online_status'];
+            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         }
            
           }
@@ -179,12 +194,12 @@ class tags extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= ' ASC';
+                    $order .= 'session_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY  ASC LIMIT 100';
+            $limit = ' ORDER BY session_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -202,7 +217,7 @@ class tags extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |tag_id|tag_description|tag_name))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_id|user_ip|session_id|session_expires|session_data|user_online_status))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -210,14 +225,16 @@ class tags extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.tags';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_sessions';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } 
+        } else {
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
+        }
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -243,6 +260,11 @@ class tags extends Database implements iRest
         */
 
         
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -255,17 +277,26 @@ class tags extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.tags (tag_id, tag_description, tag_name) VALUES ( :tag_id, :tag_description, :tag_name)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
                 
-                    $tag_id = $argv['tag_id'];
-                    $stmt->bindParam(':tag_id',$tag_id, 2, 80);
-                        $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
-                        $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
+                    $user_id = $argv['user_id'];
+                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+                        
+                    $user_ip =  $argv['user_ip'] ?? null;
+                    $stmt->bindParam(':user_ip',$user_ip, 2, 16);
+                        
+                    $session_id = $argv['session_id'];
+                    $stmt->bindParam(':session_id',$session_id, 2, 255);
+                        $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+                        $stmt->bindValue(':session_data',$argv['session_data'], 2);
+                        
+                    $user_online_status =  $argv['user_online_status'] ?? '1';
+                    $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         
 
 
@@ -292,20 +323,29 @@ class tags extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.tags ';
+        $sql = 'UPDATE StatsCoach.carbon_user_sessions ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('tag_id', $argv)) {
-                $set .= 'tag_id=:tag_id,';
+            if (array_key_exists('user_id', $argv)) {
+                $set .= 'user_id=UNHEX(:user_id),';
             }
-            if (array_key_exists('tag_description', $argv)) {
-                $set .= 'tag_description=:tag_description,';
+            if (array_key_exists('user_ip', $argv)) {
+                $set .= 'user_ip=UNHEX(:user_ip),';
             }
-            if (array_key_exists('tag_name', $argv)) {
-                $set .= 'tag_name=:tag_name,';
+            if (array_key_exists('session_id', $argv)) {
+                $set .= 'session_id=:session_id,';
+            }
+            if (array_key_exists('session_expires', $argv)) {
+                $set .= 'session_expires=:session_expires,';
+            }
+            if (array_key_exists('session_data', $argv)) {
+                $set .= 'session_data=:session_data,';
+            }
+            if (array_key_exists('user_online_status', $argv)) {
+                $set .= 'user_online_status=:user_online_status,';
             }
 
         if (empty($set)){
@@ -316,21 +356,33 @@ class tags extends Database implements iRest
 
         $pdo = self::database();
 
-        
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('tag_id', $argv)) {
-            $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
-                   if (array_key_exists('tag_description', $argv)) {
-            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+                   if (array_key_exists('user_ip', $argv)) {
+            $user_ip = $argv['user_ip'];
+            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
         }
-                   if (array_key_exists('tag_name', $argv)) {
-            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
+                   if (array_key_exists('session_id', $argv)) {
+            $session_id = $argv['session_id'];
+            $stmt->bindParam(':session_id',$session_id, 2, 255);
+        }
+                   if (array_key_exists('session_expires', $argv)) {
+            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
+        }
+                   if (array_key_exists('session_data', $argv)) {
+            $stmt->bindValue(':session_data',$argv['session_data'], 2);
+        }
+                   if (array_key_exists('user_online_status', $argv)) {
+            $user_online_status = $argv['user_online_status'];
+            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -353,7 +405,7 @@ class tags extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.tags ';
+        $sql = 'DELETE FROM StatsCoach.carbon_user_sessions ';
 
         $pdo = self::database();
 
@@ -369,7 +421,9 @@ class tags extends Database implements iRest
 
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } 
+        } else {
+        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
+        }
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

@@ -6,22 +6,19 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_user_messages extends Database implements iRest
+class Carbon_User_Followers extends Database implements iRest
 {
 
-    public const MESSAGE_ID = 'message_id';
-    public const FROM_USER_ID = 'from_user_id';
-    public const TO_USER_ID = 'to_user_id';
-    public const MESSAGE = 'message';
-    public const MESSAGE_READ = 'message_read';
-    public const CREATION_DATE = 'creation_date';
+    public const FOLLOWER_TABLE_ID = 'follower_table_id';
+    public const FOLLOWS_USER_ID = 'follows_user_id';
+    public const USER_ID = 'user_id';
 
     public const PRIMARY = [
-    'message_id',
+    'follower_table_id',
     ];
 
     public const COLUMNS = [
-        'message_id' => [ 'binary', '2', '16' ],'from_user_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'message' => [ 'text', '2', '' ],'message_read' => [ 'tinyint', '0', '1' ],'creation_date' => [ 'datetime', '2', '' ],
+        'follower_table_id' => [ 'binary', '2', '16' ],'follows_user_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],
     ];
 
     public const VALIDATION = [];
@@ -88,27 +85,17 @@ class carbon_user_messages extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('message_id', $argv)) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
+                   if (array_key_exists('follower_table_id', $argv)) {
+            $follower_table_id = $argv['follower_table_id'];
+            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
         }
-                   if (array_key_exists('from_user_id', $argv)) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+                   if (array_key_exists('follows_user_id', $argv)) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
         }
-                   if (array_key_exists('to_user_id', $argv)) {
-            $to_user_id = $argv['to_user_id'];
-            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-        }
-                   if (array_key_exists('message', $argv)) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-                   if (array_key_exists('message_read', $argv)) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
            
           }
@@ -194,12 +181,12 @@ class carbon_user_messages extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'message_id ASC';
+                    $order .= 'follower_table_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY message_id ASC LIMIT 100';
+            $limit = ' ORDER BY follower_table_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -217,7 +204,7 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |message_id|from_user_id|to_user_id|message|message_read|creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |follower_table_id|follows_user_id|user_id))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -225,7 +212,7 @@ class carbon_user_messages extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_messages';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_followers';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -233,7 +220,7 @@ class carbon_user_messages extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -277,25 +264,21 @@ class carbon_user_messages extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_messages (message_id, from_user_id, to_user_id, message, message_read) VALUES ( UNHEX(:message_id), UNHEX(:from_user_id), UNHEX(:to_user_id), :message, :message_read)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_followers (follower_table_id, follows_user_id, user_id) VALUES ( UNHEX(:follower_table_id), UNHEX(:follows_user_id), UNHEX(:user_id))';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $message_id = $id = $argv['message_id'] ?? self::beginTransaction('carbon_user_messages');
-                $stmt->bindParam(':message_id',$message_id, 2, 16);
+                $follower_table_id = $id = $argv['follower_table_id'] ?? self::beginTransaction('carbon_user_followers');
+                $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
                 
-                    $from_user_id = $argv['from_user_id'];
-                    $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+                    $follows_user_id = $argv['follows_user_id'];
+                    $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
                         
-                    $to_user_id = $argv['to_user_id'];
-                    $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-                        $stmt->bindValue(':message',$argv['message'], 2);
-                        
-                    $message_read =  $argv['message_read'] ?? '0';
-                    $stmt->bindParam(':message_read',$message_read, 0, 1);
-                
+                    $user_id = $argv['user_id'];
+                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+        
 
 
         return $stmt->execute() ? $id : false;
@@ -321,29 +304,20 @@ class carbon_user_messages extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_user_messages ';
+        $sql = 'UPDATE StatsCoach.carbon_user_followers ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('message_id', $argv)) {
-                $set .= 'message_id=UNHEX(:message_id),';
+            if (array_key_exists('follower_table_id', $argv)) {
+                $set .= 'follower_table_id=UNHEX(:follower_table_id),';
             }
-            if (array_key_exists('from_user_id', $argv)) {
-                $set .= 'from_user_id=UNHEX(:from_user_id),';
+            if (array_key_exists('follows_user_id', $argv)) {
+                $set .= 'follows_user_id=UNHEX(:follows_user_id),';
             }
-            if (array_key_exists('to_user_id', $argv)) {
-                $set .= 'to_user_id=UNHEX(:to_user_id),';
-            }
-            if (array_key_exists('message', $argv)) {
-                $set .= 'message=:message,';
-            }
-            if (array_key_exists('message_read', $argv)) {
-                $set .= 'message_read=:message_read,';
-            }
-            if (array_key_exists('creation_date', $argv)) {
-                $set .= 'creation_date=:creation_date,';
+            if (array_key_exists('user_id', $argv)) {
+                $set .= 'user_id=UNHEX(:user_id),';
             }
 
         if (empty($set)){
@@ -354,33 +328,23 @@ class carbon_user_messages extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  message_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('message_id', $argv)) {
-            $message_id = $argv['message_id'];
-            $stmt->bindParam(':message_id',$message_id, 2, 16);
+                   if (array_key_exists('follower_table_id', $argv)) {
+            $follower_table_id = $argv['follower_table_id'];
+            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
         }
-                   if (array_key_exists('from_user_id', $argv)) {
-            $from_user_id = $argv['from_user_id'];
-            $stmt->bindParam(':from_user_id',$from_user_id, 2, 16);
+                   if (array_key_exists('follows_user_id', $argv)) {
+            $follows_user_id = $argv['follows_user_id'];
+            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
         }
-                   if (array_key_exists('to_user_id', $argv)) {
-            $to_user_id = $argv['to_user_id'];
-            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
-        }
-                   if (array_key_exists('message', $argv)) {
-            $stmt->bindValue(':message',$argv['message'], 2);
-        }
-                   if (array_key_exists('message_read', $argv)) {
-            $message_read = $argv['message_read'];
-            $stmt->bindParam(':message_read',$message_read, 0, 1);
-        }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -417,7 +381,7 @@ class carbon_user_messages extends Database implements iRest
         self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE c FROM StatsCoach.carbons c 
-                JOIN StatsCoach.carbon_user_messages on c.entity_pk = follower_table_id';
+                JOIN StatsCoach.carbon_user_followers on c.entity_pk = follower_table_id';
 
         $pdo = self::database();
 

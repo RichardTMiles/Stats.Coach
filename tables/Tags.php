@@ -6,24 +6,19 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_user_golf_stats extends Database implements iRest
+class Tags extends Database implements iRest
 {
 
-    public const STATS_ID = 'stats_id';
-    public const STATS_TOURNAMENTS = 'stats_tournaments';
-    public const STATS_ROUNDS = 'stats_rounds';
-    public const STATS_HANDICAP = 'stats_handicap';
-    public const STATS_STROKES = 'stats_strokes';
-    public const STATS_FFS = 'stats_ffs';
-    public const STATS_GNR = 'stats_gnr';
-    public const STATS_PUTTS = 'stats_putts';
+    public const TAG_ID = 'tag_id';
+    public const TAG_DESCRIPTION = 'tag_description';
+    public const TAG_NAME = 'tag_name';
 
     public const PRIMARY = [
-    'stats_id',
+    
     ];
 
     public const COLUMNS = [
-        'stats_id' => [ 'binary', '2', '16' ],'stats_tournaments' => [ 'int', '2', '11' ],'stats_rounds' => [ 'int', '2', '11' ],'stats_handicap' => [ 'int', '2', '11' ],'stats_strokes' => [ 'int', '2', '11' ],'stats_ffs' => [ 'int', '2', '11' ],'stats_gnr' => [ 'int', '2', '11' ],'stats_putts' => [ 'int', '2', '11' ],
+        'tag_id' => [ 'varchar', '2', '80' ],'tag_description' => [ 'text', '2', '' ],'tag_name' => [ 'text,', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -90,37 +85,15 @@ class carbon_user_golf_stats extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('stats_id', $argv)) {
-            $stats_id = $argv['stats_id'];
-            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
+                   if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
-                   if (array_key_exists('stats_tournaments', $argv)) {
-            $stats_tournaments = $argv['stats_tournaments'];
-            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
+                   if (array_key_exists('tag_description', $argv)) {
+            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
         }
-                   if (array_key_exists('stats_rounds', $argv)) {
-            $stats_rounds = $argv['stats_rounds'];
-            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
-        }
-                   if (array_key_exists('stats_handicap', $argv)) {
-            $stats_handicap = $argv['stats_handicap'];
-            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
-        }
-                   if (array_key_exists('stats_strokes', $argv)) {
-            $stats_strokes = $argv['stats_strokes'];
-            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
-        }
-                   if (array_key_exists('stats_ffs', $argv)) {
-            $stats_ffs = $argv['stats_ffs'];
-            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
-        }
-                   if (array_key_exists('stats_gnr', $argv)) {
-            $stats_gnr = $argv['stats_gnr'];
-            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
-        }
-                   if (array_key_exists('stats_putts', $argv)) {
-            $stats_putts = $argv['stats_putts'];
-            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+                   if (array_key_exists('tag_name', $argv)) {
+            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         }
            
           }
@@ -206,12 +179,12 @@ class carbon_user_golf_stats extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'stats_id ASC';
+                    $order .= ' ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY stats_id ASC LIMIT 100';
+            $limit = ' ORDER BY  ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -229,7 +202,7 @@ class carbon_user_golf_stats extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |stats_id|stats_tournaments|stats_rounds|stats_handicap|stats_strokes|stats_ffs|stats_gnr|stats_putts))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |tag_id|tag_description|tag_name))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -237,16 +210,14 @@ class carbon_user_golf_stats extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_golf_stats';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.tags';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } else {
-        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
-        }
+        } 
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -272,11 +243,6 @@ class carbon_user_golf_stats extends Database implements iRest
         */
 
         
-        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
-            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
-            // promise this is needed and will still return the desired array except for a single record will not be an array
-        
-        }
 
         return true;
     }
@@ -289,40 +255,22 @@ class carbon_user_golf_stats extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ( UNHEX(:stats_id), :stats_tournaments, :stats_rounds, :stats_handicap, :stats_strokes, :stats_ffs, :stats_gnr, :stats_putts)';
+        $sql = 'INSERT INTO StatsCoach.tags (tag_id, tag_description, tag_name) VALUES ( :tag_id, :tag_description, :tag_name)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $stats_id = $id = $argv['stats_id'] ?? self::beginTransaction('carbon_user_golf_stats');
-                $stmt->bindParam(':stats_id',$stats_id, 2, 16);
                 
-                    $stats_tournaments =  $argv['stats_tournaments'] ?? '0';
-                    $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
-                        
-                    $stats_rounds =  $argv['stats_rounds'] ?? '0';
-                    $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
-                        
-                    $stats_handicap =  $argv['stats_handicap'] ?? '0';
-                    $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
-                        
-                    $stats_strokes =  $argv['stats_strokes'] ?? '0';
-                    $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
-                        
-                    $stats_ffs =  $argv['stats_ffs'] ?? '0';
-                    $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
-                        
-                    $stats_gnr =  $argv['stats_gnr'] ?? '0';
-                    $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
-                        
-                    $stats_putts =  $argv['stats_putts'] ?? '0';
-                    $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+                    $tag_id = $argv['tag_id'];
+                    $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                        $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
+                        $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         
 
 
-        return $stmt->execute() ? $id : false;
 
+            return $stmt->execute();
     }
 
     /**
@@ -344,35 +292,20 @@ class carbon_user_golf_stats extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_user_golf_stats ';
+        $sql = 'UPDATE StatsCoach.tags ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('stats_id', $argv)) {
-                $set .= 'stats_id=UNHEX(:stats_id),';
+            if (array_key_exists('tag_id', $argv)) {
+                $set .= 'tag_id=:tag_id,';
             }
-            if (array_key_exists('stats_tournaments', $argv)) {
-                $set .= 'stats_tournaments=:stats_tournaments,';
+            if (array_key_exists('tag_description', $argv)) {
+                $set .= 'tag_description=:tag_description,';
             }
-            if (array_key_exists('stats_rounds', $argv)) {
-                $set .= 'stats_rounds=:stats_rounds,';
-            }
-            if (array_key_exists('stats_handicap', $argv)) {
-                $set .= 'stats_handicap=:stats_handicap,';
-            }
-            if (array_key_exists('stats_strokes', $argv)) {
-                $set .= 'stats_strokes=:stats_strokes,';
-            }
-            if (array_key_exists('stats_ffs', $argv)) {
-                $set .= 'stats_ffs=:stats_ffs,';
-            }
-            if (array_key_exists('stats_gnr', $argv)) {
-                $set .= 'stats_gnr=:stats_gnr,';
-            }
-            if (array_key_exists('stats_putts', $argv)) {
-                $set .= 'stats_putts=:stats_putts,';
+            if (array_key_exists('tag_name', $argv)) {
+                $set .= 'tag_name=:tag_name,';
             }
 
         if (empty($set)){
@@ -383,43 +316,21 @@ class carbon_user_golf_stats extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('stats_id', $argv)) {
-            $stats_id = $argv['stats_id'];
-            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
+                   if (array_key_exists('tag_id', $argv)) {
+            $tag_id = $argv['tag_id'];
+            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
         }
-                   if (array_key_exists('stats_tournaments', $argv)) {
-            $stats_tournaments = $argv['stats_tournaments'];
-            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
+                   if (array_key_exists('tag_description', $argv)) {
+            $stmt->bindValue(':tag_description',$argv['tag_description'], 2);
         }
-                   if (array_key_exists('stats_rounds', $argv)) {
-            $stats_rounds = $argv['stats_rounds'];
-            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
-        }
-                   if (array_key_exists('stats_handicap', $argv)) {
-            $stats_handicap = $argv['stats_handicap'];
-            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
-        }
-                   if (array_key_exists('stats_strokes', $argv)) {
-            $stats_strokes = $argv['stats_strokes'];
-            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
-        }
-                   if (array_key_exists('stats_ffs', $argv)) {
-            $stats_ffs = $argv['stats_ffs'];
-            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
-        }
-                   if (array_key_exists('stats_gnr', $argv)) {
-            $stats_gnr = $argv['stats_gnr'];
-            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
-        }
-                   if (array_key_exists('stats_putts', $argv)) {
-            $stats_putts = $argv['stats_putts'];
-            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
+                   if (array_key_exists('tag_name', $argv)) {
+            $stmt->bindValue(':tag_name',$argv['tag_name'], 2);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -440,27 +351,25 @@ class carbon_user_golf_stats extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        if (null !== $primary) {
-            return carbons::Delete($remove, $primary, $argv);
-        }
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE FROM StatsCoach.tags ';
 
+        $pdo = self::database();
+
+        if (null === $primary) {
         /**
-         *   While useful, we've decided to disallow full
-         *   table deletions through the rest api. For the
-         *   n00bs and future self, "I got chu."
-         */
+        *   While useful, we've decided to disallow full
+        *   table deletions through the rest api. For the
+        *   n00bs and future self, "I got chu."
+        */
         if (empty($argv)) {
             return false;
         }
 
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE c FROM StatsCoach.carbons c 
-                JOIN StatsCoach.carbon_user_golf_stats on c.entity_pk = follower_table_id';
-
-        $pdo = self::database();
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
+        } 
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

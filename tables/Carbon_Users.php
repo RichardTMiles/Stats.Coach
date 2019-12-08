@@ -6,7 +6,7 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_users extends Database implements iRest
+class Carbon_Users extends Database implements iRest
 {
 
     public const USER_USERNAME = 'user_username';

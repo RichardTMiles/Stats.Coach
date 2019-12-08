@@ -6,19 +6,20 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_tag extends Database implements iRest
+class Carbon_Reports extends Database implements iRest
 {
 
-    public const ENTITY_ID = 'entity_id';
-    public const TAG_ID = 'tag_id';
-    public const CREATION_DATE = 'creation_date';
+    public const LOG_LEVEL = 'log_level';
+    public const REPORT = 'report';
+    public const DATE = 'date';
+    public const CALL_TRACE = 'call_trace';
 
     public const PRIMARY = [
     
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'tag_id' => [ 'varchar', '2', '80' ],'creation_date' => [ 'timestamp', '2', '' ],
+        'log_level' => [ 'varchar', '2', '20' ],'report' => [ 'text,', '2', '' ],'date' => [ 'datetime', '2', '' ],'call_trace' => [ 'text', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -85,16 +86,18 @@ class carbon_tag extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('entity_id', $argv)) {
-            $entity_id = $argv['entity_id'];
-            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                   if (array_key_exists('log_level', $argv)) {
+            $log_level = $argv['log_level'];
+            $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-                   if (array_key_exists('tag_id', $argv)) {
-            $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                   if (array_key_exists('report', $argv)) {
+            $stmt->bindValue(':report',$argv['report'], 2);
         }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('date', $argv)) {
+            $stmt->bindValue(':date',$argv['date'], 2);
+        }
+                   if (array_key_exists('call_trace', $argv)) {
+            $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
            
           }
@@ -203,7 +206,7 @@ class carbon_tag extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_id|tag_id|creation_date))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |log_level|report|date|call_trace))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -211,7 +214,7 @@ class carbon_tag extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_tag';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_reports';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -256,19 +259,18 @@ class carbon_tag extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_tag (entity_id, tag_id) VALUES ( UNHEX(:entity_id), :tag_id)';
+        $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, call_trace) VALUES ( :log_level, :report, :call_trace)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
                 
-                    $entity_id = $argv['entity_id'];
-                    $stmt->bindParam(':entity_id',$entity_id, 2, 16);
-                        
-                    $tag_id = $argv['tag_id'];
-                    $stmt->bindParam(':tag_id',$tag_id, 2, 80);
-                
+                    $log_level =  $argv['log_level'] ?? null;
+                    $stmt->bindParam(':log_level',$log_level, 2, 20);
+                        $stmt->bindValue(':report',$argv['report'], 2);
+                                $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+        
 
 
 
@@ -294,20 +296,23 @@ class carbon_tag extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_tag ';
+        $sql = 'UPDATE StatsCoach.carbon_reports ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('entity_id', $argv)) {
-                $set .= 'entity_id=UNHEX(:entity_id),';
+            if (array_key_exists('log_level', $argv)) {
+                $set .= 'log_level=:log_level,';
             }
-            if (array_key_exists('tag_id', $argv)) {
-                $set .= 'tag_id=:tag_id,';
+            if (array_key_exists('report', $argv)) {
+                $set .= 'report=:report,';
             }
-            if (array_key_exists('creation_date', $argv)) {
-                $set .= 'creation_date=:creation_date,';
+            if (array_key_exists('date', $argv)) {
+                $set .= 'date=:date,';
+            }
+            if (array_key_exists('call_trace', $argv)) {
+                $set .= 'call_trace=:call_trace,';
             }
 
         if (empty($set)){
@@ -324,16 +329,18 @@ class carbon_tag extends Database implements iRest
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('entity_id', $argv)) {
-            $entity_id = $argv['entity_id'];
-            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                   if (array_key_exists('log_level', $argv)) {
+            $log_level = $argv['log_level'];
+            $stmt->bindParam(':log_level',$log_level, 2, 20);
         }
-                   if (array_key_exists('tag_id', $argv)) {
-            $tag_id = $argv['tag_id'];
-            $stmt->bindParam(':tag_id',$tag_id, 2, 80);
+                   if (array_key_exists('report', $argv)) {
+            $stmt->bindValue(':report',$argv['report'], 2);
         }
-                   if (array_key_exists('creation_date', $argv)) {
-            $stmt->bindValue(':creation_date',$argv['creation_date'], 2);
+                   if (array_key_exists('date', $argv)) {
+            $stmt->bindValue(':date',$argv['date'], 2);
+        }
+                   if (array_key_exists('call_trace', $argv)) {
+            $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -356,7 +363,7 @@ class carbon_tag extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_tag ';
+        $sql = 'DELETE FROM StatsCoach.carbon_reports ';
 
         $pdo = self::database();
 

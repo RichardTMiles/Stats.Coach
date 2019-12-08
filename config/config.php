@@ -163,6 +163,8 @@ return [
 
         'DB_NAME' => 'StatsCoach',
 
+        'DB_PORT' => 3306,
+
         'DB_USER' => 'root',                                          // User
 
         'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',       // Password goldteamrules # APP_LOCAL ? 'password' :

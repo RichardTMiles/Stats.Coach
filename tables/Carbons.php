@@ -6,20 +6,18 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_reports extends Database implements iRest
+class Carbons extends Database implements iRest
 {
 
-    public const LOG_LEVEL = 'log_level';
-    public const REPORT = 'report';
-    public const DATE = 'date';
-    public const CALL_TRACE = 'call_trace';
+    public const ENTITY_PK = 'entity_pk';
+    public const ENTITY_FK = 'entity_fk';
 
     public const PRIMARY = [
-    
+    'entity_pk',
     ];
 
     public const COLUMNS = [
-        'log_level' => [ 'varchar', '2', '20' ],'report' => [ 'text,', '2', '' ],'date' => [ 'datetime', '2', '' ],'call_trace' => [ 'text', '2', '' ],
+        'entity_pk' => [ 'binary', '2', '16' ],'entity_fk' => [ 'binary', '2', '16' ],
     ];
 
     public const VALIDATION = [];
@@ -86,18 +84,13 @@ class carbon_reports extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('log_level', $argv)) {
-            $log_level = $argv['log_level'];
-            $stmt->bindParam(':log_level',$log_level, 2, 20);
+                   if (array_key_exists('entity_pk', $argv)) {
+            $entity_pk = $argv['entity_pk'];
+            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-                   if (array_key_exists('report', $argv)) {
-            $stmt->bindValue(':report',$argv['report'], 2);
-        }
-                   if (array_key_exists('date', $argv)) {
-            $stmt->bindValue(':date',$argv['date'], 2);
-        }
-                   if (array_key_exists('call_trace', $argv)) {
-            $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+                   if (array_key_exists('entity_fk', $argv)) {
+            $entity_fk = $argv['entity_fk'];
+            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
            
           }
@@ -183,12 +176,12 @@ class carbon_reports extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= ' ASC';
+                    $order .= 'entity_pk ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY  ASC LIMIT 100';
+            $limit = ' ORDER BY entity_pk ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -206,7 +199,7 @@ class carbon_reports extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |log_level|report|date|call_trace))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_pk|entity_fk))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -214,14 +207,16 @@ class carbon_reports extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_reports';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbons';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
             if (!empty($where)) {
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
-        } 
+        } else {
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
 
         if ($aggregate  && !empty($group)) {
             $sql .= ' GROUP BY ' . $group . ' ';
@@ -247,6 +242,11 @@ class carbon_reports extends Database implements iRest
         */
 
         
+        if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
+            $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
+            // promise this is needed and will still return the desired array except for a single record will not be an array
+        
+        }
 
         return true;
     }
@@ -259,22 +259,22 @@ class carbon_reports extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_reports (log_level, report, call_trace) VALUES ( :log_level, :report, :call_trace)';
+        $sql = 'INSERT INTO StatsCoach.carbons (entity_pk, entity_fk) VALUES ( UNHEX(:entity_pk), UNHEX(:entity_fk))';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
+                $entity_pk = $id = $argv['entity_pk'] ?? self::fetchColumn('SELECT (REPLACE(UUID() COLLATE utf8_unicode_ci,"-",""))')[0];
+                $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
                 
-                    $log_level =  $argv['log_level'] ?? null;
-                    $stmt->bindParam(':log_level',$log_level, 2, 20);
-                        $stmt->bindValue(':report',$argv['report'], 2);
-                                $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+                    $entity_fk =  $argv['entity_fk'] ?? null;
+                    $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         
 
 
+        return $stmt->execute() ? $id : false;
 
-            return $stmt->execute();
     }
 
     /**
@@ -296,23 +296,17 @@ class carbon_reports extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_reports ';
+        $sql = 'UPDATE StatsCoach.carbons ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('log_level', $argv)) {
-                $set .= 'log_level=:log_level,';
+            if (array_key_exists('entity_pk', $argv)) {
+                $set .= 'entity_pk=UNHEX(:entity_pk),';
             }
-            if (array_key_exists('report', $argv)) {
-                $set .= 'report=:report,';
-            }
-            if (array_key_exists('date', $argv)) {
-                $set .= 'date=:date,';
-            }
-            if (array_key_exists('call_trace', $argv)) {
-                $set .= 'call_trace=:call_trace,';
+            if (array_key_exists('entity_fk', $argv)) {
+                $set .= 'entity_fk=UNHEX(:entity_fk),';
             }
 
         if (empty($set)){
@@ -323,24 +317,19 @@ class carbon_reports extends Database implements iRest
 
         $pdo = self::database();
 
-        
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('log_level', $argv)) {
-            $log_level = $argv['log_level'];
-            $stmt->bindParam(':log_level',$log_level, 2, 20);
+                   if (array_key_exists('entity_pk', $argv)) {
+            $entity_pk = $argv['entity_pk'];
+            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
         }
-                   if (array_key_exists('report', $argv)) {
-            $stmt->bindValue(':report',$argv['report'], 2);
-        }
-                   if (array_key_exists('date', $argv)) {
-            $stmt->bindValue(':date',$argv['date'], 2);
-        }
-                   if (array_key_exists('call_trace', $argv)) {
-            $stmt->bindValue(':call_trace',$argv['call_trace'], 2);
+                   if (array_key_exists('entity_fk', $argv)) {
+            $entity_fk = $argv['entity_fk'];
+            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -363,7 +352,7 @@ class carbon_reports extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_reports ';
+        $sql = 'DELETE FROM StatsCoach.carbons ';
 
         $pdo = self::database();
 
@@ -379,7 +368,9 @@ class carbon_reports extends Database implements iRest
 
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } 
+        } else {
+        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
+        }
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

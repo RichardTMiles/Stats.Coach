@@ -6,22 +6,19 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_user_sessions extends Database implements iRest
+class Carbon_User_Notifications extends Database implements iRest
 {
 
-    public const USER_ID = 'user_id';
-    public const USER_IP = 'user_ip';
-    public const SESSION_ID = 'session_id';
-    public const SESSION_EXPIRES = 'session_expires';
-    public const SESSION_DATA = 'session_data';
-    public const USER_ONLINE_STATUS = 'user_online_status';
+    public const NOTIFICATION_ID = 'notification_id';
+    public const TO_USER_ID = 'to_user_id';
+    public const NOTIFICATION_DATA = 'notification_data';
 
     public const PRIMARY = [
-    'session_id',
+    'notification_id',
     ];
 
     public const COLUMNS = [
-        'user_id' => [ 'binary', '2', '16' ],'user_ip' => [ 'binary', '2', '16' ],'session_id' => [ 'varchar', '2', '255' ],'session_expires' => [ 'datetime', '2', '' ],'session_data' => [ 'text,', '2', '' ],'user_online_status' => [ 'tinyint', '0', '1' ],
+        'notification_id' => [ 'binary', '2', '16' ],'to_user_id' => [ 'binary', '2', '16' ],'notification_data' => [ 'json', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -88,27 +85,16 @@ class carbon_user_sessions extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
+                   if (array_key_exists('notification_id', $argv)) {
+            $notification_id = $argv['notification_id'];
+            $stmt->bindParam(':notification_id',$notification_id, 2, 16);
         }
-                   if (array_key_exists('user_ip', $argv)) {
-            $user_ip = $argv['user_ip'];
-            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
+                   if (array_key_exists('to_user_id', $argv)) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-                   if (array_key_exists('session_id', $argv)) {
-            $session_id = $argv['session_id'];
-            $stmt->bindParam(':session_id',$session_id, 2, 255);
-        }
-                   if (array_key_exists('session_expires', $argv)) {
-            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
-        }
-                   if (array_key_exists('session_data', $argv)) {
-            $stmt->bindValue(':session_data',$argv['session_data'], 2);
-        }
-                   if (array_key_exists('user_online_status', $argv)) {
-            $user_online_status = $argv['user_online_status'];
-            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
+                   if (array_key_exists('notification_data', $argv)) {
+            $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
         }
            
           }
@@ -194,12 +180,12 @@ class carbon_user_sessions extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'session_id ASC';
+                    $order .= 'notification_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY session_id ASC LIMIT 100';
+            $limit = ' ORDER BY notification_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -217,7 +203,7 @@ class carbon_user_sessions extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |user_id|user_ip|session_id|session_expires|session_data|user_online_status))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |notification_id|to_user_id|notification_data))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -225,7 +211,7 @@ class carbon_user_sessions extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_sessions';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_notifications';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -233,7 +219,7 @@ class carbon_user_sessions extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
+        $sql .= ' WHERE  notification_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -263,6 +249,9 @@ class carbon_user_sessions extends Database implements iRest
         if ($primary !== null || (isset($argv['pagination']['limit']) && $argv['pagination']['limit'] === 1 && \count($return) === 1)) {
             $return = isset($return[0]) && \is_array($return[0]) ? $return[0] : $return;
             // promise this is needed and will still return the desired array except for a single record will not be an array
+        if (array_key_exists('notification_data', $return)) {
+                $return['notification_data'] = json_decode($return['notification_data'], true);
+            }
         
         }
 
@@ -277,31 +266,23 @@ class carbon_user_sessions extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_sessions (user_id, user_ip, session_id, session_expires, session_data, user_online_status) VALUES ( UNHEX(:user_id), UNHEX(:user_ip), :session_id, :session_expires, :session_data, :user_online_status)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_notifications (notification_id, to_user_id, notification_data) VALUES ( UNHEX(:notification_id), UNHEX(:to_user_id), :notification_data)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
+                $notification_id = $id = $argv['notification_id'] ?? self::beginTransaction('carbon_user_notifications');
+                $stmt->bindParam(':notification_id',$notification_id, 2, 16);
                 
-                    $user_id = $argv['user_id'];
-                    $stmt->bindParam(':user_id',$user_id, 2, 16);
-                        
-                    $user_ip =  $argv['user_ip'] ?? null;
-                    $stmt->bindParam(':user_ip',$user_ip, 2, 16);
-                        
-                    $session_id = $argv['session_id'];
-                    $stmt->bindParam(':session_id',$session_id, 2, 255);
-                        $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
-                        $stmt->bindValue(':session_data',$argv['session_data'], 2);
-                        
-                    $user_online_status =  $argv['user_online_status'] ?? '1';
-                    $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
+                    $to_user_id =  $argv['to_user_id'] ?? null;
+                    $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
+                        $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
         
 
 
+        return $stmt->execute() ? $id : false;
 
-            return $stmt->execute();
     }
 
     /**
@@ -323,29 +304,20 @@ class carbon_user_sessions extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_user_sessions ';
+        $sql = 'UPDATE StatsCoach.carbon_user_notifications ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('user_id', $argv)) {
-                $set .= 'user_id=UNHEX(:user_id),';
+            if (array_key_exists('notification_id', $argv)) {
+                $set .= 'notification_id=UNHEX(:notification_id),';
             }
-            if (array_key_exists('user_ip', $argv)) {
-                $set .= 'user_ip=UNHEX(:user_ip),';
+            if (array_key_exists('to_user_id', $argv)) {
+                $set .= 'to_user_id=UNHEX(:to_user_id),';
             }
-            if (array_key_exists('session_id', $argv)) {
-                $set .= 'session_id=:session_id,';
-            }
-            if (array_key_exists('session_expires', $argv)) {
-                $set .= 'session_expires=:session_expires,';
-            }
-            if (array_key_exists('session_data', $argv)) {
-                $set .= 'session_data=:session_data,';
-            }
-            if (array_key_exists('user_online_status', $argv)) {
-                $set .= 'user_online_status=:user_online_status,';
+            if (array_key_exists('notification_data', $argv)) {
+                $set .= 'notification_data=:notification_data,';
             }
 
         if (empty($set)){
@@ -356,33 +328,22 @@ class carbon_user_sessions extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
+        $sql .= ' WHERE  notification_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
+                   if (array_key_exists('notification_id', $argv)) {
+            $notification_id = $argv['notification_id'];
+            $stmt->bindParam(':notification_id',$notification_id, 2, 16);
         }
-                   if (array_key_exists('user_ip', $argv)) {
-            $user_ip = $argv['user_ip'];
-            $stmt->bindParam(':user_ip',$user_ip, 2, 16);
+                   if (array_key_exists('to_user_id', $argv)) {
+            $to_user_id = $argv['to_user_id'];
+            $stmt->bindParam(':to_user_id',$to_user_id, 2, 16);
         }
-                   if (array_key_exists('session_id', $argv)) {
-            $session_id = $argv['session_id'];
-            $stmt->bindParam(':session_id',$session_id, 2, 255);
-        }
-                   if (array_key_exists('session_expires', $argv)) {
-            $stmt->bindValue(':session_expires',$argv['session_expires'], 2);
-        }
-                   if (array_key_exists('session_data', $argv)) {
-            $stmt->bindValue(':session_data',$argv['session_data'], 2);
-        }
-                   if (array_key_exists('user_online_status', $argv)) {
-            $user_online_status = $argv['user_online_status'];
-            $stmt->bindParam(':user_online_status',$user_online_status, 0, 1);
+                   if (array_key_exists('notification_data', $argv)) {
+            $stmt->bindValue(':notification_data',json_encode($argv['notification_data']), 2);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -403,27 +364,27 @@ class carbon_user_sessions extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbon_user_sessions ';
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
 
-        $pdo = self::database();
-
-        if (null === $primary) {
         /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
         if (empty($argv)) {
             return false;
         }
 
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_user_notifications on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } else {
-        $sql .= ' WHERE  session_id='.self::addInjection($primary, $pdo).'';
-        }
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

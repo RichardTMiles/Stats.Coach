@@ -6,23 +6,24 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_locations extends Database implements iRest
+class Carbon_User_Golf_Stats extends Database implements iRest
 {
 
-    public const ENTITY_ID = 'entity_id';
-    public const LATITUDE = 'latitude';
-    public const LONGITUDE = 'longitude';
-    public const STREET = 'street';
-    public const CITY = 'city';
-    public const STATE = 'state';
-    public const ELEVATION = 'elevation';
+    public const STATS_ID = 'stats_id';
+    public const STATS_TOURNAMENTS = 'stats_tournaments';
+    public const STATS_ROUNDS = 'stats_rounds';
+    public const STATS_HANDICAP = 'stats_handicap';
+    public const STATS_STROKES = 'stats_strokes';
+    public const STATS_FFS = 'stats_ffs';
+    public const STATS_GNR = 'stats_gnr';
+    public const STATS_PUTTS = 'stats_putts';
 
     public const PRIMARY = [
-    'entity_id',
+    'stats_id',
     ];
 
     public const COLUMNS = [
-        'entity_id' => [ 'binary', '2', '16' ],'latitude' => [ 'varchar', '2', '225' ],'longitude' => [ 'varchar', '2', '225' ],'street' => [ 'text,', '2', '' ],'city' => [ 'varchar', '2', '40' ],'state' => [ 'varchar', '2', '10' ],'elevation' => [ 'varchar', '2', '40' ],
+        'stats_id' => [ 'binary', '2', '16' ],'stats_tournaments' => [ 'int', '2', '11' ],'stats_rounds' => [ 'int', '2', '11' ],'stats_handicap' => [ 'int', '2', '11' ],'stats_strokes' => [ 'int', '2', '11' ],'stats_ffs' => [ 'int', '2', '11' ],'stats_gnr' => [ 'int', '2', '11' ],'stats_putts' => [ 'int', '2', '11' ],
     ];
 
     public const VALIDATION = [];
@@ -89,32 +90,37 @@ class carbon_locations extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('entity_id', $argv)) {
-            $entity_id = $argv['entity_id'];
-            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                   if (array_key_exists('stats_id', $argv)) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
         }
-                   if (array_key_exists('latitude', $argv)) {
-            $latitude = $argv['latitude'];
-            $stmt->bindParam(':latitude',$latitude, 2, 225);
+                   if (array_key_exists('stats_tournaments', $argv)) {
+            $stats_tournaments = $argv['stats_tournaments'];
+            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
         }
-                   if (array_key_exists('longitude', $argv)) {
-            $longitude = $argv['longitude'];
-            $stmt->bindParam(':longitude',$longitude, 2, 225);
+                   if (array_key_exists('stats_rounds', $argv)) {
+            $stats_rounds = $argv['stats_rounds'];
+            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
         }
-                   if (array_key_exists('street', $argv)) {
-            $stmt->bindValue(':street',$argv['street'], 2);
+                   if (array_key_exists('stats_handicap', $argv)) {
+            $stats_handicap = $argv['stats_handicap'];
+            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
         }
-                   if (array_key_exists('city', $argv)) {
-            $city = $argv['city'];
-            $stmt->bindParam(':city',$city, 2, 40);
+                   if (array_key_exists('stats_strokes', $argv)) {
+            $stats_strokes = $argv['stats_strokes'];
+            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
         }
-                   if (array_key_exists('state', $argv)) {
-            $state = $argv['state'];
-            $stmt->bindParam(':state',$state, 2, 10);
+                   if (array_key_exists('stats_ffs', $argv)) {
+            $stats_ffs = $argv['stats_ffs'];
+            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
         }
-                   if (array_key_exists('elevation', $argv)) {
-            $elevation = $argv['elevation'];
-            $stmt->bindParam(':elevation',$elevation, 2, 40);
+                   if (array_key_exists('stats_gnr', $argv)) {
+            $stats_gnr = $argv['stats_gnr'];
+            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+        }
+                   if (array_key_exists('stats_putts', $argv)) {
+            $stats_putts = $argv['stats_putts'];
+            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         }
            
           }
@@ -200,12 +206,12 @@ class carbon_locations extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'entity_id ASC';
+                    $order .= 'stats_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY entity_id ASC LIMIT 100';
+            $limit = ' ORDER BY stats_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -223,7 +229,7 @@ class carbon_locations extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_id|latitude|longitude|street|city|state|elevation))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |stats_id|stats_tournaments|stats_rounds|stats_handicap|stats_strokes|stats_ffs|stats_gnr|stats_putts))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -231,7 +237,7 @@ class carbon_locations extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_locations';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_golf_stats';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -239,7 +245,7 @@ class carbon_locations extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -283,30 +289,35 @@ class carbon_locations extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
+        $sql = 'INSERT INTO StatsCoach.carbon_user_golf_stats (stats_id, stats_tournaments, stats_rounds, stats_handicap, stats_strokes, stats_ffs, stats_gnr, stats_putts) VALUES ( UNHEX(:stats_id), :stats_tournaments, :stats_rounds, :stats_handicap, :stats_strokes, :stats_ffs, :stats_gnr, :stats_putts)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $entity_id = $id = $argv['entity_id'] ?? self::beginTransaction('carbon_locations');
-                $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                $stats_id = $id = $argv['stats_id'] ?? self::beginTransaction('carbon_user_golf_stats');
+                $stmt->bindParam(':stats_id',$stats_id, 2, 16);
                 
-                    $latitude =  $argv['latitude'] ?? null;
-                    $stmt->bindParam(':latitude',$latitude, 2, 225);
+                    $stats_tournaments =  $argv['stats_tournaments'] ?? '0';
+                    $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
                         
-                    $longitude =  $argv['longitude'] ?? null;
-                    $stmt->bindParam(':longitude',$longitude, 2, 225);
-                        $stmt->bindValue(':street',$argv['street'], 2);
+                    $stats_rounds =  $argv['stats_rounds'] ?? '0';
+                    $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
                         
-                    $city =  $argv['city'] ?? null;
-                    $stmt->bindParam(':city',$city, 2, 40);
+                    $stats_handicap =  $argv['stats_handicap'] ?? '0';
+                    $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
                         
-                    $state =  $argv['state'] ?? null;
-                    $stmt->bindParam(':state',$state, 2, 10);
+                    $stats_strokes =  $argv['stats_strokes'] ?? '0';
+                    $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
                         
-                    $elevation =  $argv['elevation'] ?? null;
-                    $stmt->bindParam(':elevation',$elevation, 2, 40);
+                    $stats_ffs =  $argv['stats_ffs'] ?? '0';
+                    $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
+                        
+                    $stats_gnr =  $argv['stats_gnr'] ?? '0';
+                    $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+                        
+                    $stats_putts =  $argv['stats_putts'] ?? '0';
+                    $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         
 
 
@@ -333,32 +344,35 @@ class carbon_locations extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_locations ';
+        $sql = 'UPDATE StatsCoach.carbon_user_golf_stats ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('entity_id', $argv)) {
-                $set .= 'entity_id=UNHEX(:entity_id),';
+            if (array_key_exists('stats_id', $argv)) {
+                $set .= 'stats_id=UNHEX(:stats_id),';
             }
-            if (array_key_exists('latitude', $argv)) {
-                $set .= 'latitude=:latitude,';
+            if (array_key_exists('stats_tournaments', $argv)) {
+                $set .= 'stats_tournaments=:stats_tournaments,';
             }
-            if (array_key_exists('longitude', $argv)) {
-                $set .= 'longitude=:longitude,';
+            if (array_key_exists('stats_rounds', $argv)) {
+                $set .= 'stats_rounds=:stats_rounds,';
             }
-            if (array_key_exists('street', $argv)) {
-                $set .= 'street=:street,';
+            if (array_key_exists('stats_handicap', $argv)) {
+                $set .= 'stats_handicap=:stats_handicap,';
             }
-            if (array_key_exists('city', $argv)) {
-                $set .= 'city=:city,';
+            if (array_key_exists('stats_strokes', $argv)) {
+                $set .= 'stats_strokes=:stats_strokes,';
             }
-            if (array_key_exists('state', $argv)) {
-                $set .= 'state=:state,';
+            if (array_key_exists('stats_ffs', $argv)) {
+                $set .= 'stats_ffs=:stats_ffs,';
             }
-            if (array_key_exists('elevation', $argv)) {
-                $set .= 'elevation=:elevation,';
+            if (array_key_exists('stats_gnr', $argv)) {
+                $set .= 'stats_gnr=:stats_gnr,';
+            }
+            if (array_key_exists('stats_putts', $argv)) {
+                $set .= 'stats_putts=:stats_putts,';
             }
 
         if (empty($set)){
@@ -369,38 +383,43 @@ class carbon_locations extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  stats_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('entity_id', $argv)) {
-            $entity_id = $argv['entity_id'];
-            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
+                   if (array_key_exists('stats_id', $argv)) {
+            $stats_id = $argv['stats_id'];
+            $stmt->bindParam(':stats_id',$stats_id, 2, 16);
         }
-                   if (array_key_exists('latitude', $argv)) {
-            $latitude = $argv['latitude'];
-            $stmt->bindParam(':latitude',$latitude, 2, 225);
+                   if (array_key_exists('stats_tournaments', $argv)) {
+            $stats_tournaments = $argv['stats_tournaments'];
+            $stmt->bindParam(':stats_tournaments',$stats_tournaments, 2, 11);
         }
-                   if (array_key_exists('longitude', $argv)) {
-            $longitude = $argv['longitude'];
-            $stmt->bindParam(':longitude',$longitude, 2, 225);
+                   if (array_key_exists('stats_rounds', $argv)) {
+            $stats_rounds = $argv['stats_rounds'];
+            $stmt->bindParam(':stats_rounds',$stats_rounds, 2, 11);
         }
-                   if (array_key_exists('street', $argv)) {
-            $stmt->bindValue(':street',$argv['street'], 2);
+                   if (array_key_exists('stats_handicap', $argv)) {
+            $stats_handicap = $argv['stats_handicap'];
+            $stmt->bindParam(':stats_handicap',$stats_handicap, 2, 11);
         }
-                   if (array_key_exists('city', $argv)) {
-            $city = $argv['city'];
-            $stmt->bindParam(':city',$city, 2, 40);
+                   if (array_key_exists('stats_strokes', $argv)) {
+            $stats_strokes = $argv['stats_strokes'];
+            $stmt->bindParam(':stats_strokes',$stats_strokes, 2, 11);
         }
-                   if (array_key_exists('state', $argv)) {
-            $state = $argv['state'];
-            $stmt->bindParam(':state',$state, 2, 10);
+                   if (array_key_exists('stats_ffs', $argv)) {
+            $stats_ffs = $argv['stats_ffs'];
+            $stmt->bindParam(':stats_ffs',$stats_ffs, 2, 11);
         }
-                   if (array_key_exists('elevation', $argv)) {
-            $elevation = $argv['elevation'];
-            $stmt->bindParam(':elevation',$elevation, 2, 40);
+                   if (array_key_exists('stats_gnr', $argv)) {
+            $stats_gnr = $argv['stats_gnr'];
+            $stmt->bindParam(':stats_gnr',$stats_gnr, 2, 11);
+        }
+                   if (array_key_exists('stats_putts', $argv)) {
+            $stats_putts = $argv['stats_putts'];
+            $stmt->bindParam(':stats_putts',$stats_putts, 2, 11);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -437,7 +456,7 @@ class carbon_locations extends Database implements iRest
         self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE c FROM StatsCoach.carbons c 
-                JOIN StatsCoach.carbon_locations on c.entity_pk = follower_table_id';
+                JOIN StatsCoach.carbon_user_golf_stats on c.entity_pk = follower_table_id';
 
         $pdo = self::database();
 

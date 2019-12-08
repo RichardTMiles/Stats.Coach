@@ -6,18 +6,20 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbons extends Database implements iRest
+class Carbon_Comments extends Database implements iRest
 {
 
-    public const ENTITY_PK = 'entity_pk';
-    public const ENTITY_FK = 'entity_fk';
+    public const PARENT_ID = 'parent_id';
+    public const COMMENT_ID = 'comment_id';
+    public const USER_ID = 'user_id';
+    public const COMMENT = 'comment';
 
     public const PRIMARY = [
-    'entity_pk',
+    'comment_id',
     ];
 
     public const COLUMNS = [
-        'entity_pk' => [ 'binary', '2', '16' ],'entity_fk' => [ 'binary', '2', '16' ],
+        'parent_id' => [ 'binary', '2', '16' ],'comment_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],'comment' => [ 'blob', '2', '' ],
     ];
 
     public const VALIDATION = [];
@@ -84,13 +86,20 @@ class carbons extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('entity_pk', $argv)) {
-            $entity_pk = $argv['entity_pk'];
-            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
+                   if (array_key_exists('parent_id', $argv)) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
         }
-                   if (array_key_exists('entity_fk', $argv)) {
-            $entity_fk = $argv['entity_fk'];
-            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
+                   if (array_key_exists('comment_id', $argv)) {
+            $comment_id = $argv['comment_id'];
+            $stmt->bindParam(':comment_id',$comment_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+                   if (array_key_exists('comment', $argv)) {
+            $stmt->bindValue(':comment',$argv['comment'], 2);
         }
            
           }
@@ -176,12 +185,12 @@ class carbons extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'entity_pk ASC';
+                    $order .= 'comment_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY entity_pk ASC LIMIT 100';
+            $limit = ' ORDER BY comment_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -199,7 +208,7 @@ class carbons extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_pk|entity_fk))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |parent_id|comment_id|user_id|comment))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -207,7 +216,7 @@ class carbons extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbons';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_comments';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -215,7 +224,7 @@ class carbons extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  comment_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -259,17 +268,21 @@ class carbons extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbons (entity_pk, entity_fk) VALUES ( UNHEX(:entity_pk), UNHEX(:entity_fk))';
+        $sql = 'INSERT INTO StatsCoach.carbon_comments (parent_id, comment_id, user_id, comment) VALUES ( UNHEX(:parent_id), UNHEX(:comment_id), UNHEX(:user_id), :comment)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $entity_pk = $id = $argv['entity_pk'] ?? self::fetchColumn('SELECT (REPLACE(UUID() COLLATE utf8_unicode_ci,"-",""))')[0];
-                $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
                 
-                    $entity_fk =  $argv['entity_fk'] ?? null;
-                    $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
+                    $parent_id = $argv['parent_id'];
+                    $stmt->bindParam(':parent_id',$parent_id, 2, 16);
+                        $comment_id = $id = $argv['comment_id'] ?? self::beginTransaction('carbon_comments');
+                $stmt->bindParam(':comment_id',$comment_id, 2, 16);
+                
+                    $user_id = $argv['user_id'];
+                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+                        $stmt->bindValue(':comment',$argv['comment'], 2);
         
 
 
@@ -296,17 +309,23 @@ class carbons extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbons ';
+        $sql = 'UPDATE StatsCoach.carbon_comments ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('entity_pk', $argv)) {
-                $set .= 'entity_pk=UNHEX(:entity_pk),';
+            if (array_key_exists('parent_id', $argv)) {
+                $set .= 'parent_id=UNHEX(:parent_id),';
             }
-            if (array_key_exists('entity_fk', $argv)) {
-                $set .= 'entity_fk=UNHEX(:entity_fk),';
+            if (array_key_exists('comment_id', $argv)) {
+                $set .= 'comment_id=UNHEX(:comment_id),';
+            }
+            if (array_key_exists('user_id', $argv)) {
+                $set .= 'user_id=UNHEX(:user_id),';
+            }
+            if (array_key_exists('comment', $argv)) {
+                $set .= 'comment=:comment,';
             }
 
         if (empty($set)){
@@ -317,19 +336,26 @@ class carbons extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  comment_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('entity_pk', $argv)) {
-            $entity_pk = $argv['entity_pk'];
-            $stmt->bindParam(':entity_pk',$entity_pk, 2, 16);
+                   if (array_key_exists('parent_id', $argv)) {
+            $parent_id = $argv['parent_id'];
+            $stmt->bindParam(':parent_id',$parent_id, 2, 16);
         }
-                   if (array_key_exists('entity_fk', $argv)) {
-            $entity_fk = $argv['entity_fk'];
-            $stmt->bindParam(':entity_fk',$entity_fk, 2, 16);
+                   if (array_key_exists('comment_id', $argv)) {
+            $comment_id = $argv['comment_id'];
+            $stmt->bindParam(':comment_id',$comment_id, 2, 16);
+        }
+                   if (array_key_exists('user_id', $argv)) {
+            $user_id = $argv['user_id'];
+            $stmt->bindParam(':user_id',$user_id, 2, 16);
+        }
+                   if (array_key_exists('comment', $argv)) {
+            $stmt->bindValue(':comment',$argv['comment'], 2);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -350,27 +376,27 @@ class carbons extends Database implements iRest
     */
     public static function Delete(array &$remove, string $primary = null, array $argv) : bool
     {
-        self::$injection = [];
-        /** @noinspection SqlResolve */
-        $sql = 'DELETE FROM StatsCoach.carbons ';
+        if (null !== $primary) {
+            return carbons::Delete($remove, $primary, $argv);
+        }
 
-        $pdo = self::database();
-
-        if (null === $primary) {
         /**
-        *   While useful, we've decided to disallow full
-        *   table deletions through the rest api. For the
-        *   n00bs and future self, "I got chu."
-        */
+         *   While useful, we've decided to disallow full
+         *   table deletions through the rest api. For the
+         *   n00bs and future self, "I got chu."
+         */
         if (empty($argv)) {
             return false;
         }
 
+        self::$injection = [];
+        /** @noinspection SqlResolve */
+        $sql = 'DELETE c FROM StatsCoach.carbons c 
+                JOIN StatsCoach.carbon_comments on c.entity_pk = follower_table_id';
+
+        $pdo = self::database();
 
         $sql .= ' WHERE ' . self::buildWhere($argv, $pdo);
-        } else {
-        $sql .= ' WHERE  entity_pk=UNHEX('.self::addInjection($primary, $pdo).')';
-        }
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 

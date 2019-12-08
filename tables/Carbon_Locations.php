@@ -6,19 +6,23 @@ use CarbonPHP\Database;
 use CarbonPHP\Interfaces\iRest;
 
 
-class carbon_user_followers extends Database implements iRest
+class Carbon_Locations extends Database implements iRest
 {
 
-    public const FOLLOWER_TABLE_ID = 'follower_table_id';
-    public const FOLLOWS_USER_ID = 'follows_user_id';
-    public const USER_ID = 'user_id';
+    public const ENTITY_ID = 'entity_id';
+    public const LATITUDE = 'latitude';
+    public const LONGITUDE = 'longitude';
+    public const STREET = 'street';
+    public const CITY = 'city';
+    public const STATE = 'state';
+    public const ELEVATION = 'elevation';
 
     public const PRIMARY = [
-    'follower_table_id',
+    'entity_id',
     ];
 
     public const COLUMNS = [
-        'follower_table_id' => [ 'binary', '2', '16' ],'follows_user_id' => [ 'binary', '2', '16' ],'user_id' => [ 'binary', '2', '16' ],
+        'entity_id' => [ 'binary', '2', '16' ],'latitude' => [ 'varchar', '2', '225' ],'longitude' => [ 'varchar', '2', '225' ],'street' => [ 'text,', '2', '' ],'city' => [ 'varchar', '2', '40' ],'state' => [ 'varchar', '2', '10' ],'elevation' => [ 'varchar', '2', '40' ],
     ];
 
     public const VALIDATION = [];
@@ -85,17 +89,32 @@ class carbon_user_followers extends Database implements iRest
                     continue;
                 }
                 
-                   if (array_key_exists('follower_table_id', $argv)) {
-            $follower_table_id = $argv['follower_table_id'];
-            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+                   if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-                   if (array_key_exists('follows_user_id', $argv)) {
-            $follows_user_id = $argv['follows_user_id'];
-            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                   if (array_key_exists('latitude', $argv)) {
+            $latitude = $argv['latitude'];
+            $stmt->bindParam(':latitude',$latitude, 2, 225);
         }
-                   if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
+                   if (array_key_exists('longitude', $argv)) {
+            $longitude = $argv['longitude'];
+            $stmt->bindParam(':longitude',$longitude, 2, 225);
+        }
+                   if (array_key_exists('street', $argv)) {
+            $stmt->bindValue(':street',$argv['street'], 2);
+        }
+                   if (array_key_exists('city', $argv)) {
+            $city = $argv['city'];
+            $stmt->bindParam(':city',$city, 2, 40);
+        }
+                   if (array_key_exists('state', $argv)) {
+            $state = $argv['state'];
+            $stmt->bindParam(':state',$state, 2, 10);
+        }
+                   if (array_key_exists('elevation', $argv)) {
+            $elevation = $argv['elevation'];
+            $stmt->bindParam(':elevation',$elevation, 2, 40);
         }
            
           }
@@ -181,12 +200,12 @@ class carbon_user_followers extends Database implements iRest
                         $order .= $argv['pagination']['order'];
                     }
                 } else {
-                    $order .= 'follower_table_id ASC';
+                    $order .= 'entity_id ASC';
                 }
             }
             $limit = "$order $limit";
         } else {
-            $limit = ' ORDER BY follower_table_id ASC LIMIT 100';
+            $limit = ' ORDER BY entity_id ASC LIMIT 100';
         }
 
         foreach($get as $key => $column){
@@ -204,7 +223,7 @@ class carbon_user_followers extends Database implements iRest
                 $sql .= $column;
                 $group .= $column;
             } else {
-                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |follower_table_id|follows_user_id|user_id))+\)*)+ *(as [a-z]+)?#i', $column)) {
+                if (!preg_match('#(((((hex|argv|count|sum|min|max) *\(+ *)+)|(distinct|\*|\+|\-|\/| |entity_id|latitude|longitude|street|city|state|elevation))+\)*)+ *(as [a-z]+)?#i', $column)) {
                     return false;
                 }
                 $sql .= $column;
@@ -212,7 +231,7 @@ class carbon_user_followers extends Database implements iRest
             }
         }
 
-        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_user_followers';
+        $sql = 'SELECT ' .  $sql . ' FROM StatsCoach.carbon_locations';
 
         if (null === $primary) {
             /** @noinspection NestedPositiveIfStatementsInspection */
@@ -220,7 +239,7 @@ class carbon_user_followers extends Database implements iRest
                 $sql .= ' WHERE ' . self::buildWhere($where, $pdo);
             }
         } else {
-        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
         }
 
         if ($aggregate  && !empty($group)) {
@@ -264,20 +283,30 @@ class carbon_user_followers extends Database implements iRest
     {
         self::$injection = [];
         /** @noinspection SqlResolve */
-        $sql = 'INSERT INTO StatsCoach.carbon_user_followers (follower_table_id, follows_user_id, user_id) VALUES ( UNHEX(:follower_table_id), UNHEX(:follows_user_id), UNHEX(:user_id))';
+        $sql = 'INSERT INTO StatsCoach.carbon_locations (entity_id, latitude, longitude, street, city, state, elevation) VALUES ( UNHEX(:entity_id), :latitude, :longitude, :street, :city, :state, :elevation)';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = self::database()->prepare($sql);
 
-                $follower_table_id = $id = $argv['follower_table_id'] ?? self::beginTransaction('carbon_user_followers');
-                $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+                $entity_id = $id = $argv['entity_id'] ?? self::beginTransaction('carbon_locations');
+                $stmt->bindParam(':entity_id',$entity_id, 2, 16);
                 
-                    $follows_user_id = $argv['follows_user_id'];
-                    $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                    $latitude =  $argv['latitude'] ?? null;
+                    $stmt->bindParam(':latitude',$latitude, 2, 225);
                         
-                    $user_id = $argv['user_id'];
-                    $stmt->bindParam(':user_id',$user_id, 2, 16);
+                    $longitude =  $argv['longitude'] ?? null;
+                    $stmt->bindParam(':longitude',$longitude, 2, 225);
+                        $stmt->bindValue(':street',$argv['street'], 2);
+                        
+                    $city =  $argv['city'] ?? null;
+                    $stmt->bindParam(':city',$city, 2, 40);
+                        
+                    $state =  $argv['state'] ?? null;
+                    $stmt->bindParam(':state',$state, 2, 10);
+                        
+                    $elevation =  $argv['elevation'] ?? null;
+                    $stmt->bindParam(':elevation',$elevation, 2, 40);
         
 
 
@@ -304,20 +333,32 @@ class carbon_user_followers extends Database implements iRest
             }
         }
 
-        $sql = 'UPDATE StatsCoach.carbon_user_followers ';
+        $sql = 'UPDATE StatsCoach.carbon_locations ';
 
         $sql .= ' SET ';        // my editor yells at me if I don't separate this from the above stmt
 
         $set = '';
 
-            if (array_key_exists('follower_table_id', $argv)) {
-                $set .= 'follower_table_id=UNHEX(:follower_table_id),';
+            if (array_key_exists('entity_id', $argv)) {
+                $set .= 'entity_id=UNHEX(:entity_id),';
             }
-            if (array_key_exists('follows_user_id', $argv)) {
-                $set .= 'follows_user_id=UNHEX(:follows_user_id),';
+            if (array_key_exists('latitude', $argv)) {
+                $set .= 'latitude=:latitude,';
             }
-            if (array_key_exists('user_id', $argv)) {
-                $set .= 'user_id=UNHEX(:user_id),';
+            if (array_key_exists('longitude', $argv)) {
+                $set .= 'longitude=:longitude,';
+            }
+            if (array_key_exists('street', $argv)) {
+                $set .= 'street=:street,';
+            }
+            if (array_key_exists('city', $argv)) {
+                $set .= 'city=:city,';
+            }
+            if (array_key_exists('state', $argv)) {
+                $set .= 'state=:state,';
+            }
+            if (array_key_exists('elevation', $argv)) {
+                $set .= 'elevation=:elevation,';
             }
 
         if (empty($set)){
@@ -328,23 +369,38 @@ class carbon_user_followers extends Database implements iRest
 
         $pdo = self::database();
 
-        $sql .= ' WHERE  follower_table_id=UNHEX('.self::addInjection($primary, $pdo).')';
+        $sql .= ' WHERE  entity_id=UNHEX('.self::addInjection($primary, $pdo).')';
 
         self::jsonSQLReporting(\func_get_args(), $sql);
 
         $stmt = $pdo->prepare($sql);
 
-                   if (array_key_exists('follower_table_id', $argv)) {
-            $follower_table_id = $argv['follower_table_id'];
-            $stmt->bindParam(':follower_table_id',$follower_table_id, 2, 16);
+                   if (array_key_exists('entity_id', $argv)) {
+            $entity_id = $argv['entity_id'];
+            $stmt->bindParam(':entity_id',$entity_id, 2, 16);
         }
-                   if (array_key_exists('follows_user_id', $argv)) {
-            $follows_user_id = $argv['follows_user_id'];
-            $stmt->bindParam(':follows_user_id',$follows_user_id, 2, 16);
+                   if (array_key_exists('latitude', $argv)) {
+            $latitude = $argv['latitude'];
+            $stmt->bindParam(':latitude',$latitude, 2, 225);
         }
-                   if (array_key_exists('user_id', $argv)) {
-            $user_id = $argv['user_id'];
-            $stmt->bindParam(':user_id',$user_id, 2, 16);
+                   if (array_key_exists('longitude', $argv)) {
+            $longitude = $argv['longitude'];
+            $stmt->bindParam(':longitude',$longitude, 2, 225);
+        }
+                   if (array_key_exists('street', $argv)) {
+            $stmt->bindValue(':street',$argv['street'], 2);
+        }
+                   if (array_key_exists('city', $argv)) {
+            $city = $argv['city'];
+            $stmt->bindParam(':city',$city, 2, 40);
+        }
+                   if (array_key_exists('state', $argv)) {
+            $state = $argv['state'];
+            $stmt->bindParam(':state',$state, 2, 10);
+        }
+                   if (array_key_exists('elevation', $argv)) {
+            $elevation = $argv['elevation'];
+            $stmt->bindParam(':elevation',$elevation, 2, 40);
         }
 
         if (!self::bind($stmt, $argv)){
@@ -381,7 +437,7 @@ class carbon_user_followers extends Database implements iRest
         self::$injection = [];
         /** @noinspection SqlResolve */
         $sql = 'DELETE c FROM StatsCoach.carbons c 
-                JOIN StatsCoach.carbon_user_followers on c.entity_pk = follower_table_id';
+                JOIN StatsCoach.carbon_locations on c.entity_pk = follower_table_id';
 
         $pdo = self::database();
 
