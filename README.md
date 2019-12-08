@@ -88,27 +88,4 @@ http://chromedriver.chromium.org/downloads
 
 downloaded the driver for chrome. that downloaded it to the desktop, and then we had to move it into the path 
 
-
-
-copy of terminal
-
-Kristins-MBP:~ KristinCarden$ pwd
-/Users/KristinCarden
-Kristins-MBP:~ KristinCarden$ cd Desktop
-Kristins-MBP:Desktop KristinCarden$ echo $PATH 
-/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands
-Kristins-MBP:Desktop KristinCarden$ ls
-4430HW5.py					README.txt					hw7.py						ubuntuDesktop
-ASSEMBLY FOLDER					READMEHW7.txt					random screen shots				untitled folder
-HW5.py						chromedriver					screenshots					untitled folder 2
-Kali						fucking screenshots				security screen grabs
-KristinCarden					homework 2 submission trouble screenshots	shit from my thumb drive
-MovieTheater Solution				hw7-2.py					spring 2018
-Kristins-MBP:Desktop KristinCarden$ sudo cp chromedriver /usr/local/bin/chromedriver
-Kristins-MBP:Desktop KristinCarden$ 
-
-
-
-lol...
-
-brew cask install chromedriver
+    brew cask install chromedriver

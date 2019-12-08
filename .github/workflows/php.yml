@@ -25,7 +25,7 @@ jobs:
         # MYSQL_ROOT_PASSWORD - root superuser password
         mysql root password: 'password'
         # MYSQL_DATABASE - name for the default database that is created
-        mysql database: 'CarbonPHP'
+        mysql database: 'StatsCoach'
         # MYSQL_USER - create the specified user with superuser power for created database
         mysql user: 'admin'
         # MYSQL_PASSWORD - specified superuser password which user is power for created database

@@ -195,6 +195,7 @@ class StatsCoach extends Application
                 return true;
             }
 
+            // TODO - flesh out tournament
             if ($this->match('NewTournament/*', 'Golf', 'NewTournament')() ||
                 $this->match('TournamentSettings/{id}/*', 'Golf', 'TournamentSettings')() ||
                 $this->match('Tournament/{id}/*', 'Golf', 'Tournament')()) {
