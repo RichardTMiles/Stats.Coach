@@ -1,0 +1,1848 @@
+{
+  "robot": false,
+  "date": "20200225",
+  "path": "\/bluegolf\/course\/course\/lakeparkgolfcourse\/",
+  "stat": {
+    "putt": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "gross0": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "green": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "fairway": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "allowgps": true,
+  "statSettings": {
+    "stat.green.advanced": true,
+    "stat.fairway.advanced": true,
+    "stat.putt": true
+  },
+  "allowedit": true,
+  "course": {
+    "cover": "https:\/\/logos.bluegolf.com\/lakeparkgolfcourse\/cover.jpg",
+    "path": "\/api\/course\/course\/lakeparkgolfcourse\/",
+    "unit": "Yards",
+    "profilePhoto": "https:\/\/logos.bluegolf.com\/lakeparkgolfcourse\/profile.png",
+    "tee": {
+      "par": 70,
+      "color": "blue",
+      "extra": "6135 yds (M-68.3\/108)",
+      "name": "Blue",
+      "rating": "68.3",
+      "slope": 108,
+      "uuid": "d85e778e-bb66-44bf-aa71-3767001fb0f8",
+      "sport": "golf"
+    },
+    "selectedteeid": "d85e778e-bb66-44bf-aa71-3767001fb0f8",
+    "name": "Lake Park GC",
+    "tees": [
+      {
+        "par": 70,
+        "side": 0,
+        "distancethishole": 405,
+        "color": "blue",
+        "iscustom": false,
+        "rating": "68.3",
+        "tourneyuuid": null,
+        "slope": 108,
+        "type": "MEN",
+        "uuid": "d85e778e-bb66-44bf-aa71-3767001fb0f8",
+        "extra": "6135 yds (M-68.3\/108)",
+        "name": "Blue",
+        "isdefault": true,
+        "isarchived": false,
+        "sport": "golf",
+        "holes": 18
+      },
+      {
+        "par": 70,
+        "side": 0,
+        "distancethishole": 380,
+        "color": "white",
+        "iscustom": false,
+        "rating": "66.5",
+        "tourneyuuid": null,
+        "slope": 102,
+        "type": "MEN",
+        "uuid": "949876e9-5dc3-4fbe-85a2-fd50e34918fd",
+        "extra": "5740 yds (M-66.5\/102)",
+        "name": "White",
+        "isdefault": false,
+        "isarchived": false,
+        "sport": "golf",
+        "holes": 18
+      },
+      {
+        "par": 70,
+        "side": 0,
+        "distancethishole": 380,
+        "color": "white",
+        "iscustom": false,
+        "rating": "73.4",
+        "tourneyuuid": null,
+        "slope": 121,
+        "type": "LADY",
+        "uuid": "d6f84d0a-3cb3-46af-9f4a-c5911904b307",
+        "extra": "5740 yds (L-73.4\/121)",
+        "name": "White",
+        "isdefault": false,
+        "isarchived": false,
+        "sport": "golf",
+        "holes": 18
+      },
+      {
+        "par": 70,
+        "side": 0,
+        "distancethishole": 345,
+        "color": "red",
+        "iscustom": false,
+        "rating": "68.6",
+        "tourneyuuid": null,
+        "slope": 111,
+        "type": "LADY",
+        "uuid": "caa9f314-d6dd-496d-ae15-885896fb97e4",
+        "extra": "4960 yds (L-68.6\/111)",
+        "name": "Red",
+        "isdefault": false,
+        "isarchived": false,
+        "sport": "golf",
+        "holes": 18
+      }
+    ],
+    "hasAerial": true,
+    "abbr": "Lake Park",
+    "selectedtee": "Blue"
+  },
+  "holes": [
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069714%2C-97.000078&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068338%2C-97.001339&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 10.165571029316355,
+        "rotation": -3.523405869918082,
+        "lon": -97.00133907610193,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 1.8747282392092428,
+            "name": "green_front",
+            "y": 17.341615042065637
+          },
+          {
+            "x": -5.59575879444889,
+            "name": "green_center",
+            "y": -1.4014438427335172
+          },
+          {
+            "x": -10.638337540675227,
+            "name": "green_back",
+            "y": -13.82287931686977
+          }
+        ],
+        "depth": 37,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068338%2C-97.001339&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93381.08790767404,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.67387478637,
+        "lat": 33.06833763635839,
+        "imageScale": 2.044221305402228
+      },
+      "test": "test",
+      "distance": 405,
+      "maskScale": 0.892456826580537,
+      "handicap": 4,
+      "rotation": -3.568189185388018,
+      "lon": -97.0000775560906,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 34.88278947156897,
+          "name": "tee",
+          "y": 194.23710967974557
+        },
+        {
+          "x": -49.53302511417087,
+          "name": "dogleg",
+          "y": 21.002427013707972
+        },
+        {
+          "x": -115.92643680632636,
+          "name": "green_front",
+          "y": -135.26368558203626
+        },
+        {
+          "x": -123.39686287685902,
+          "name": "green_center",
+          "y": -154.00674663860988
+        },
+        {
+          "x": -128.43940047297576,
+          "name": "green_back",
+          "y": -166.42818355202866
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.068213,
+          "centerlon": -97.001399,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.068494,
+          "backlon": -97.001453,
+          "centerlat": 33.068325,
+          "type": "green",
+          "frontlon": -97.001319
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069714%2C-97.000078&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06971362804231,
+      "imageScale": 0.8973166851994364
+    },
+    {
+      "par": 5,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067222%2C-97.003819&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068235%2C-97.006116&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 17.63593317976653,
+        "rotation": 1.3922397826650017,
+        "lon": -97.00611631068956,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 9.927418851654718,
+            "name": "green_front",
+            "y": 0.5113493906206172
+          },
+          {
+            "x": 1.4297304333051457,
+            "name": "green_center",
+            "y": 2.50765148863614
+          },
+          {
+            "x": -9.122344196248989,
+            "name": "green_back",
+            "y": 3.94942522661715
+          }
+        ],
+        "depth": 21,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068235%2C-97.006116&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93381.19141287636,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.672129306,
+        "lat": 33.06823538933059,
+        "imageScale": 3.546459947234821
+      },
+      "test": "test",
+      "distance": 500,
+      "maskScale": 0.7202509752633177,
+      "handicap": 16,
+      "rotation": 1.281551402522862,
+      "lon": -97.00381931012411,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 241.23034120877054,
+          "name": "tee",
+          "y": -20.274634674517586
+        },
+        {
+          "x": 29.35038181306186,
+          "name": "dogleg",
+          "y": 60.797422322040944
+        },
+        {
+          "x": -204.5673344877324,
+          "name": "green_front",
+          "y": 112.92309508303353
+        },
+        {
+          "x": -213.06494414155338,
+          "name": "green_center",
+          "y": 114.91939744378095
+        },
+        {
+          "x": -223.61692096460501,
+          "name": "green_back",
+          "y": 116.3611713715128
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.068271,
+          "centerlon": -97.006101,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.06824,
+          "backlon": -97.006214,
+          "centerlat": 33.068258,
+          "type": "green",
+          "frontlon": -97.00601
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067222%2C-97.003819&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.067221809694196,
+      "imageScale": 0.7241915778090156
+    },
+    {
+      "par": 3,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068586%2C-97.007070&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=320x320&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069253%2C-97.007288&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 10.354887315104698,
+        "rotation": 0.4991417461628167,
+        "lon": -97.00728808457882,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 11.96055285491175,
+            "name": "green_front",
+            "y": -12.254311423834734
+          },
+          {
+            "x": 4.116623092931574,
+            "name": "green_center",
+            "y": 1.7198055492389965
+          },
+          {
+            "x": -3.8206867850256856,
+            "name": "green_back",
+            "y": 16.692073734506273
+          }
+        ],
+        "depth": 36,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069253%2C-97.007288&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93380.11621284555,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.69026105976,
+        "lat": 33.06925349308106,
+        "imageScale": 2.0822696429613066
+      },
+      "test": "test",
+      "distance": 160,
+      "maskScale": 2.2853839950978077,
+      "handicap": 12,
+      "rotation": 0.47950674067052423,
+      "lon": -97.0070696842419,
+      "blurb": {
+        "allowedit": true,
+        "text": "The two-tiered green has a lower false front that slopes towards the tee box. Front pin locations are difficult to access as the green is difficult to hold for higher handicap players. Back pin locations are easier to reach, however take an extra club as the distance can be deceiving; you do not want to miss back pins short."
+      },
+      "points": [
+        {
+          "x": 52.63701819586379,
+          "name": "tee",
+          "y": -56.81300516073691
+        },
+        {
+          "x": 17.05911403951336,
+          "name": "dogleg",
+          "y": 11.172180801365698
+        },
+        {
+          "x": -8.433714921949559,
+          "name": "green_front",
+          "y": 61.745173948180934
+        },
+        {
+          "x": -16.27766229501367,
+          "name": "green_center",
+          "y": 75.71929047577703
+        },
+        {
+          "x": -24.21498999371056,
+          "name": "green_back",
+          "y": 90.69155818374685
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.069404,
+          "centerlon": -97.007244,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.069143,
+          "backlon": -97.007329,
+          "centerlat": 33.069269,
+          "type": "green",
+          "frontlon": -97.00716
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068586%2C-97.007070&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=18",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.068586264130346,
+      "imageScale": 1.1489304824911375
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069046%2C-97.004958&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068417%2C-97.003387&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 16.871057112568785,
+        "rotation": -1.820006033608187,
+        "lon": -97.00338748549339,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -10.50672239799863,
+            "name": "green_front",
+            "y": -0.2618393979765363
+          },
+          {
+            "x": -0.981855633051449,
+            "name": "green_center",
+            "y": -2.4799528892809053
+          },
+          {
+            "x": 9.103297412108681,
+            "name": "green_back",
+            "y": -5.252594753608374
+          }
+        ],
+        "depth": 22,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068417%2C-97.003387&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93381.04671675211,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.67456941707,
+        "lat": 33.06841736091975,
+        "imageScale": 3.3926435622535083
+      },
+      "test": "test",
+      "distance": 340,
+      "maskScale": 1.0688111451226794,
+      "handicap": 14,
+      "rotation": -1.8414490701924413,
+      "lon": -97.00495835672538,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -162.07493457496128,
+          "name": "tee",
+          "y": 13.202084650330335
+        },
+        {
+          "x": 3.4883831900797304,
+          "name": "dogleg",
+          "y": -47.574231674689145
+        },
+        {
+          "x": 136.18182624875794,
+          "name": "green_front",
+          "y": -69.97718039342112
+        },
+        {
+          "x": 145.7066194871942,
+          "name": "green_center",
+          "y": -72.1952941278476
+        },
+        {
+          "x": 155.79169468075452,
+          "name": "green_back",
+          "y": -74.96793629607774
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.06837,
+          "centerlon": -97.003398,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.068415,
+          "backlon": -97.00329,
+          "centerlat": 33.068395,
+          "type": "green",
+          "frontlon": -97.0035
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069046%2C-97.004958&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06904596115682,
+      "imageScale": 1.0746449552259445
+    },
+    {
+      "par": 3,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068157%2C-97.002132&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=320x320&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067670%2C-97.001394&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 14.370988341347177,
+        "rotation": -2.0303213924634975,
+        "lon": -97.00139411973872,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -12.035075517671748,
+            "name": "green_front",
+            "y": 2.460046041670358
+          },
+          {
+            "x": -1.296164292971893,
+            "name": "green_center",
+            "y": -3.0852370208552635
+          },
+          {
+            "x": 9.255983257412543,
+            "name": "green_back",
+            "y": -8.075991776970717
+          }
+        ],
+        "depth": 26,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067670%2C-97.001394&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93381.8367299587,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.66124683076,
+        "lat": 33.06766981857108,
+        "imageScale": 2.8899229718782307
+      },
+      "test": "test",
+      "distance": 180,
+      "maskScale": 2.0024007816720797,
+      "handicap": 2,
+      "rotation": -2.0002001555707385,
+      "lon": -97.00213177075015,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -87.42539243775832,
+          "name": "tee",
+          "y": 13.8262918087878
+        },
+        {
+          "x": -4.970564695616304,
+          "name": "dogleg",
+          "y": -23.327113245022986
+        },
+        {
+          "x": 56.8472110285868,
+          "name": "green_front",
+          "y": -51.60806335955178
+        },
+        {
+          "x": 67.58594850423106,
+          "name": "green_center",
+          "y": -57.15334769601202
+        },
+        {
+          "x": 78.13792532728263,
+          "name": "green_back",
+          "y": -62.14410359866861
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.067597,
+          "centerlon": -97.001408,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.067692,
+          "backlon": -97.001295,
+          "centerlat": 33.067642,
+          "type": "green",
+          "frontlon": -97.001523
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068157%2C-97.002132&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=18",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06815733288674,
+      "imageScale": 1.006674524030702
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067316%2C-96.999167&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066639%2C-96.997302&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 15.082426336994875,
+        "rotation": -1.7381691945814088,
+        "lon": -96.99730182248881,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -11.68944254731202,
+            "name": "green_front",
+            "y": -1.2526429233949008
+          },
+          {
+            "x": -1.1371716548538604,
+            "name": "green_center",
+            "y": -2.6944162806081393
+          },
+          {
+            "x": 10.629077305806007,
+            "name": "green_back",
+            "y": -5.023434779873183
+          }
+        ],
+        "depth": 25,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066639%2C-96.997302&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93382.92825273502,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.64283947743,
+        "lat": 33.066639294672584,
+        "imageScale": 3.033024674430129
+      },
+      "test": "test",
+      "distance": 395,
+      "maskScale": 0.9335093603498784,
+      "handicap": 6,
+      "rotation": -1.7230166566312155,
+      "lon": -96.99916723792236,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -188.41928033508077,
+          "name": "tee",
+          "y": -22.347291333294535
+        },
+        {
+          "x": -1.8453892495693935,
+          "name": "dogleg",
+          "y": -51.73729831543055
+        },
+        {
+          "x": 162.50398427959064,
+          "name": "green_front",
+          "y": -76.35836076858904
+        },
+        {
+          "x": 173.05596110264224,
+          "name": "green_center",
+          "y": -77.80013469632087
+        },
+        {
+          "x": 184.82188216290183,
+          "name": "green_back",
+          "y": -80.12915411719287
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.066594,
+          "centerlon": -96.997314,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.066628,
+          "backlon": -96.997188,
+          "centerlat": 33.066615,
+          "type": "green",
+          "frontlon": -96.997427
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067316%2C-96.999167&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06731649815571,
+      "imageScale": 0.938625088719726
+    },
+    {
+      "par": 3,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066382%2C-96.996769&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=320x320&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066159%2C-96.996058&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 10.044821217996118,
+        "rotation": -1.7181745561814201,
+        "lon": -96.99605767976134,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -17.492610038088845,
+            "name": "green_front",
+            "y": -2.109324317127916
+          },
+          {
+            "x": 0.34362880658411754,
+            "name": "green_center",
+            "y": -4.881965167682048
+          },
+          {
+            "x": 16.12543176327782,
+            "name": "green_back",
+            "y": -7.100077849386205
+          }
+        ],
+        "depth": 37,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066159%2C-96.996058&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93383.44944808974,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.63405000487,
+        "lat": 33.06615901909073,
+        "imageScale": 2.0199907341547596
+      },
+      "test": "test",
+      "distance": 150,
+      "maskScale": 2.425772840210626,
+      "handicap": 10,
+      "rotation": -1.717107657597498,
+      "lon": -96.99676892216011,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -72.47040158748815,
+          "name": "tee",
+          "y": -9.117471432465418
+        },
+        {
+          "x": 12.69245560464141,
+          "name": "dogleg",
+          "y": -21.87162540600876
+        },
+        {
+          "x": 48.92402204174868,
+          "name": "green_front",
+          "y": -26.86238130866537
+        },
+        {
+          "x": 66.75966428274027,
+          "name": "green_center",
+          "y": -29.635023476107456
+        },
+        {
+          "x": 82.54093935450125,
+          "name": "green_back",
+          "y": -31.85313721132198
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.066095,
+          "centerlon": -96.996054,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.06614,
+          "backlon": -96.995885,
+          "centerlat": 33.066115,
+          "type": "green",
+          "frontlon": -96.996245
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.066382%2C-96.996769&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=18",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06638220923292,
+      "imageScale": 1.2195422753023935
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067233%2C-96.998546&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067456%2C-97.000264&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 13.826091260140293,
+        "rotation": -4.608896644338279,
+        "lon": -97.00026370291005,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 11.925153606339087,
+            "name": "green_front",
+            "y": 4.689320368056672
+          },
+          {
+            "x": 1.9332792208990917,
+            "name": "green_center",
+            "y": 3.691169442318171
+          },
+          {
+            "x": -12.63431334144768,
+            "name": "green_back",
+            "y": 2.1384902242400465
+          }
+        ],
+        "depth": 27,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067456%2C-97.000264&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93382.00360236756,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.65843272157,
+        "lat": 33.06745571793402,
+        "imageScale": 2.7803522996767387
+      },
+      "test": "test",
+      "distance": 350,
+      "maskScale": 1.101328719674348,
+      "handicap": 8,
+      "rotation": -4.615636072575565,
+      "lon": -96.99854594184745,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 150.0567533671778,
+          "name": "tee",
+          "y": 58.324015407379875
+        },
+        {
+          "x": -4.207544968421843,
+          "name": "dogleg",
+          "y": 43.351747699410055
+        },
+        {
+          "x": -148.48014843476696,
+          "name": "green_front",
+          "y": 29.37763117181393
+        },
+        {
+          "x": -158.4718433026945,
+          "name": "green_center",
+          "y": 28.379479991440235
+        },
+        {
+          "x": -173.03917413857445,
+          "name": "green_back",
+          "y": 26.826800377262884
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.067475,
+          "centerlon": -97.000243,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.067498,
+          "backlon": -97.000399,
+          "centerlat": 33.067489,
+          "type": "green",
+          "frontlon": -97.000136
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.067233%2C-96.998546&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.0672331115886,
+      "imageScale": 1.107354564770915
+    },
+    {
+      "par": 5,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069455%2C-97.000690&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071226%2C-96.999195&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 13.675467535636718,
+        "rotation": -0.4036316343735862,
+        "lon": -96.99919506784906,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -1.6744695936483982,
+            "name": "green_front",
+            "y": -12.8573070679024
+          },
+          {
+            "x": 3.3679460303229733,
+            "name": "green_center",
+            "y": 0.11866273584721476
+          },
+          {
+            "x": 8.130227453626093,
+            "name": "green_back",
+            "y": 10.100177969258294
+          }
+        ],
+        "depth": 27,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071226%2C-96.999195&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93378.06712517422,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.72481549933,
+        "lat": 33.071225930057615,
+        "imageScale": 2.749946205616765
+      },
+      "test": "test",
+      "distance": 505,
+      "maskScale": 0.7289323939038335,
+      "handicap": 18,
+      "rotation": -0.358765365978003,
+      "lon": -97.00069020911349,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -21.45794786367196,
+          "name": "tee",
+          "y": -242.04646092432347
+        },
+        {
+          "x": 44.468562198992345,
+          "name": "dogleg",
+          "y": -18.571502172383305
+        },
+        {
+          "x": 137.94226839367718,
+          "name": "green_front",
+          "y": 183.49865904119866
+        },
+        {
+          "x": 142.98480598979387,
+          "name": "green_center",
+          "y": 196.47462438842098
+        },
+        {
+          "x": 147.74720260901205,
+          "name": "green_back",
+          "y": 206.45613619373427
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.071317,
+          "centerlon": -96.999159,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.07111,
+          "backlon": -96.999108,
+          "centerlat": 33.071227,
+          "type": "green",
+          "frontlon": -96.999213
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069455%2C-97.000690&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06945545311012,
+      "imageScale": 0.7329071552222817
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070332%2C-97.001547&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069346%2C-97.003014&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 12.741358167672113,
+        "rotation": -3.7800538981620897,
+        "lon": -97.00301410376528,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 4.958830584586908,
+            "name": "green_front",
+            "y": 13.002989870037306
+          },
+          {
+            "x": -2.4181908779668246,
+            "name": "green_center",
+            "y": 2.910571906618049
+          },
+          {
+            "x": -11.009152580790813,
+            "name": "green_back",
+            "y": -8.512714360284518
+          }
+        ],
+        "depth": 29,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069346%2C-97.003014&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93380.01851393396,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.69190860579,
+        "lat": 33.069345756334265,
+        "imageScale": 2.5621636069930878
+      },
+      "test": "test",
+      "distance": 360,
+      "maskScale": 1.010499155183676,
+      "handicap": 13,
+      "rotation": -3.78725766380159,
+      "lon": -97.00154675944775,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 63.849680046838955,
+          "name": "tee",
+          "y": 163.39086718643614
+        },
+        {
+          "x": -35.600367004272016,
+          "name": "dogleg",
+          "y": 22.20792798510729
+        },
+        {
+          "x": -132.06224362584305,
+          "name": "green_front",
+          "y": -96.35025112459857
+        },
+        {
+          "x": -139.43928936941586,
+          "name": "green_center",
+          "y": -106.44266861635731
+        },
+        {
+          "x": -148.03027934886973,
+          "name": "green_back",
+          "y": -117.86595434940239
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.069269,
+          "centerlon": -97.00304,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.069463,
+          "backlon": -97.003132,
+          "centerlat": 33.069372,
+          "type": "green",
+          "frontlon": -97.002961
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070332%2C-97.001547&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.07033175843763,
+      "imageScale": 1.0159938037780378
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069244%2C-97.005782&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069778%2C-97.007562&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 11.480892741051358,
+        "rotation": 1.16839922732464,
+        "lon": -97.00756205234983,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 14.945617261827879,
+            "name": "green_front",
+            "y": -2.8492223214280914
+          },
+          {
+            "x": -0.08849115245744876,
+            "name": "green_center",
+            "y": 4.5814595598901215
+          },
+          {
+            "x": -12.414592460033768,
+            "name": "green_back",
+            "y": 8.795876148812251
+          }
+        ],
+        "depth": 31,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069778%2C-97.007562&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93379.55536496712,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.69971889707,
+        "lat": 33.06977769049498,
+        "imageScale": 2.3086847242909814
+      },
+      "test": "test",
+      "distance": 360,
+      "maskScale": 0.9911871551146505,
+      "handicap": 11,
+      "rotation": 1.4630385934094305,
+      "lon": -97.00578197586616,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 176.11304096177616,
+          "name": "tee",
+          "y": 26.7769574974501
+        },
+        {
+          "x": -7.846200999380585,
+          "name": "dogleg",
+          "y": 39.53111147099344
+        },
+        {
+          "x": -151.27838153370305,
+          "name": "green_front",
+          "y": 56.3887758532652
+        },
+        {
+          "x": -166.3126139990742,
+          "name": "green_center",
+          "y": 63.81945686402736
+        },
+        {
+          "x": -178.63881701313096,
+          "name": "green_back",
+          "y": 68.03387295920129
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.069857,
+          "centerlon": -97.007563,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.069752,
+          "backlon": -97.007695,
+          "centerlat": 33.069819,
+          "type": "green",
+          "frontlon": -97.007402
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069244%2C-97.005782&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06924356100541,
+      "imageScale": 0.996587400230644
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070679%2C-97.006096&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070116%2C-97.004084&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 11.00453658387434,
+        "rotation": -1.7796622610290955,
+        "lon": -97.00408381444865,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -16.078560484717993,
+            "name": "green_front",
+            "y": -1.050774882812731
+          },
+          {
+            "x": -0.29746444824412954,
+            "name": "green_center",
+            "y": -4.267040315692553
+          },
+          {
+            "x": 14.2697011242939,
+            "name": "green_back",
+            "y": -7.483305749360405
+          }
+        ],
+        "depth": 34,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070116%2C-97.004084&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93379.26648820903,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.70459033745,
+        "lat": 33.07011647448904,
+        "imageScale": 2.212887718292249
+      },
+      "test": "test",
+      "distance": 410,
+      "maskScale": 0.8881438170824361,
+      "handicap": 7,
+      "rotation": -1.6481992461181896,
+      "lon": -97.00609596914938,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -195.6346635352262,
+          "name": "tee",
+          "y": -36.94814312592763
+        },
+        {
+          "x": -1.030064425385035,
+          "name": "dogleg",
+          "y": -53.69490182175389
+        },
+        {
+          "x": 171.816918757596,
+          "name": "green_front",
+          "y": -63.45460225338803
+        },
+        {
+          "x": 187.5981938293569,
+          "name": "green_center",
+          "y": -66.67086716818824
+        },
+        {
+          "x": 202.16552466523694,
+          "name": "green_back",
+          "y": -69.88713208377646
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.070049,
+          "centerlon": -97.004087,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.070107,
+          "backlon": -97.003931,
+          "centerlat": 33.070078,
+          "type": "green",
+          "frontlon": -97.004256
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070679%2C-97.006096&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.0706791492209,
+      "imageScale": 0.892976972237509
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070323%2C-97.005986&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070783%2C-97.008122&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 14.982732993882067,
+        "rotation": 1.5610613813556533,
+        "lon": -97.00812233398733,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 11.423363484328792,
+            "name": "green_front",
+            "y": 3.092630351263774
+          },
+          {
+            "x": 1.6186216294906934,
+            "name": "green_center",
+            "y": 2.538101762990061
+          },
+          {
+            "x": -11.360989016235632,
+            "name": "green_back",
+            "y": 3.3144417867308653
+          }
+        ],
+        "depth": 25,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070783%2C-97.008122&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93378.4938512373,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.71761953954,
+        "lat": 33.07078311477985,
+        "imageScale": 3.012832844364391
+      },
+      "test": "test",
+      "distance": 430,
+      "maskScale": 0.8487923651681288,
+      "handicap": 1,
+      "rotation": 1.5020818669764835,
+      "lon": -97.00598583325728,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 203.3667792523471,
+          "name": "tee",
+          "y": 25.99225858887047
+        },
+        {
+          "x": 1.1983737476674605,
+          "name": "dogleg",
+          "y": 56.60222812505924
+        },
+        {
+          "x": -188.08354678783155,
+          "name": "green_front",
+          "y": 54.16230301695373
+        },
+        {
+          "x": -197.88848100449343,
+          "name": "green_center",
+          "y": 53.6077745831501
+        },
+        {
+          "x": -210.86834630063402,
+          "name": "green_back",
+          "y": 54.38411439063282
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.070813,
+          "centerlon": -97.008105,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.070811,
+          "backlon": -97.008244,
+          "centerlat": 33.070806,
+          "type": "green",
+          "frontlon": -97.008
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070323%2C-97.005986&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.07032263637667,
+      "imageScale": 0.8534068215822194
+    },
+    {
+      "par": 5,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072025%2C-97.006201&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071618%2C-97.003623&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 11.69360147639643,
+        "rotation": -1.468046242835413,
+        "lon": -97.00362314229362,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -14.180118949932451,
+            "name": "green_front",
+            "y": -4.795629963849382
+          },
+          {
+            "x": 1.0404414274048897,
+            "name": "green_center",
+            "y": -4.019289843768679
+          },
+          {
+            "x": 14.860336740230453,
+            "name": "green_back",
+            "y": -1.8011752139534853
+          }
+        ],
+        "depth": 32,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071618%2C-97.003623&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93377.67102627756,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.7314949583,
+        "lat": 33.07161824059631,
+        "imageScale": 2.3514105002520735
+      },
+      "test": "test",
+      "distance": 510,
+      "maskScale": 0.718483817345669,
+      "handicap": 17,
+      "rotation": -1.49837543201738,
+      "lon": -97.0062010444924,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -232.13933539382083,
+          "name": "tee",
+          "y": -83.53620278532821
+        },
+        {
+          "x": 8.78190534668795,
+          "name": "dogleg",
+          "y": -66.3458213429318
+        },
+        {
+          "x": 226.54482527186292,
+          "name": "green_front",
+          "y": -49.931779707230135
+        },
+        {
+          "x": 241.76581838849972,
+          "name": "green_center",
+          "y": -49.1554399005355
+        },
+        {
+          "x": 255.58610661799003,
+          "name": "green_back",
+          "y": -46.937326166109074
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.071602,
+          "centerlon": -97.003612,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.071575,
+          "backlon": -97.003464,
+          "centerlat": 33.071582,
+          "type": "green",
+          "frontlon": -97.003775
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072025%2C-97.006201&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.072025218389896,
+      "imageScale": 0.7223837312904462
+    },
+    {
+      "par": 3,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072206%2C-97.002971&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=320x320&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072067%2C-97.002049&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 20.349080034403215,
+        "rotation": -1.484750484938813,
+        "lon": -97.00204940563388,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -8.179315343155514,
+            "name": "green_front",
+            "y": -2.7837801828900064
+          },
+          {
+            "x": 0.3180085043163352,
+            "name": "green_center",
+            "y": -2.3401572244680873
+          },
+          {
+            "x": 8.535200797076966,
+            "name": "green_back",
+            "y": -1.3420055674277447
+          }
+        ],
+        "depth": 18,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072067%2C-97.002049&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93377.18513949469,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.7396884817,
+        "lat": 33.07206710041582,
+        "imageScale": 4.091877972851293
+      },
+      "test": "test",
+      "distance": 185,
+      "maskScale": 2.011364490491611,
+      "handicap": 3,
+      "rotation": -1.4995125591125074,
+      "lon": -97.00297070194742,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -82.94956161947198,
+          "name": "tee",
+          "y": -29.848150261767614
+        },
+        {
+          "x": 7.722734799592558,
+          "name": "dogleg",
+          "y": -22.63928062468449
+        },
+        {
+          "x": 77.85135952635085,
+          "name": "green_front",
+          "y": -18.20305315504345
+        },
+        {
+          "x": 86.34896918017182,
+          "name": "green_center",
+          "y": -17.75943040847335
+        },
+        {
+          "x": 94.56643785709434,
+          "name": "green_back",
+          "y": -16.761279228099625
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.072055,
+          "centerlon": -97.002046,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.072042,
+          "backlon": -97.001958,
+          "centerlat": 33.072046,
+          "type": "green",
+          "frontlon": -97.002137
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.072206%2C-97.002971&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=18",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.07220613092685,
+      "imageScale": 1.0111345785595591
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070666%2C-97.002086&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069781%2C-97.003430&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 12.38568066365807,
+        "rotation": -3.8103040612196892,
+        "lon": -97.00342976142397,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": 6.047393385675397,
+            "name": "green_front",
+            "y": 12.786203336392722
+          },
+          {
+            "x": -4.0375992779213306,
+            "name": "green_center",
+            "y": 1.1411048773735875
+          },
+          {
+            "x": -11.04106640516103,
+            "name": "green_back",
+            "y": -8.840408087725107
+          }
+        ],
+        "depth": 30,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.069781%2C-97.003430&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93379.56170227613,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.6996120284,
+        "lat": 33.06978071103486,
+        "imageScale": 2.490628067247896
+      },
+      "test": "test",
+      "distance": 330,
+      "maskScale": 1.0956515727844631,
+      "handicap": 15,
+      "rotation": -3.7948565611440994,
+      "lon": -97.00208644454436,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": 59.89830057841016,
+          "name": "tee",
+          "y": 150.34192718767974
+        },
+        {
+          "x": -26.758641827825954,
+          "name": "dogleg",
+          "y": 19.473216851788607
+        },
+        {
+          "x": -119.39192508916119,
+          "name": "green_front",
+          "y": -85.4435627904457
+        },
+        {
+          "x": -129.47700028272152,
+          "name": "green_center",
+          "y": -97.08865989638178
+        },
+        {
+          "x": -136.48052472243603,
+          "name": "green_back",
+          "y": -107.07017170169502
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.069701,
+          "centerlon": -97.003473,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.069896,
+          "backlon": -97.003548,
+          "centerlat": 33.069791,
+          "type": "green",
+          "frontlon": -97.003365
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070666%2C-97.002086&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.070666416426,
+      "imageScale": 1.1016052613848146
+    },
+    {
+      "par": 3,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068998%2C-97.003212&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=320x320&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068674%2C-97.002540&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 12.091987773787645,
+        "rotation": -1.8330594182916597,
+        "lon": -97.00253997869247,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -14.66277317348542,
+            "name": "green_front",
+            "y": -0.17394660161249487
+          },
+          {
+            "x": -0.9357975775441858,
+            "name": "green_center",
+            "y": -3.279305612528315
+          },
+          {
+            "x": 12.604416446132575,
+            "name": "green_back",
+            "y": -7.493721412606623
+          }
+        ],
+        "depth": 31,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068674%2C-97.002540&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93380.78636799983,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.67895984912,
+        "lat": 33.06867356841925,
+        "imageScale": 2.431601605347649
+      },
+      "test": "test",
+      "distance": 155,
+      "maskScale": 2.4115676719319548,
+      "handicap": 9,
+      "rotation": -1.8780135161502312,
+      "lon": -97.00321189921898,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -73.12620612003627,
+          "name": "tee",
+          "y": 3.568047804187586
+        },
+        {
+          "x": 9.422001947738636,
+          "name": "dogleg",
+          "y": -22.938411323272817
+        },
+        {
+          "x": 48.08145685793488,
+          "name": "green_front",
+          "y": -36.1361880433862
+        },
+        {
+          "x": 61.808364760465224,
+          "name": "green_center",
+          "y": -39.2415472717409
+        },
+        {
+          "x": 75.3485120117299,
+          "name": "green_back",
+          "y": -43.45596336691483
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.068606,
+          "centerlon": -97.00255,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.068672,
+          "backlon": -97.002405,
+          "centerlat": 33.068644,
+          "type": "green",
+          "frontlon": -97.002697
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.068998%2C-97.003212&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=18",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.06899782808971,
+      "imageScale": 1.2123644883129965
+    },
+    {
+      "par": 4,
+      "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070028%2C-97.001755&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=1&size=640x640&zoom=17",
+      "green": {
+        "image": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071372%2C-97.000380&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&zoom=19",
+        "maskScale": 11.114465554844665,
+        "rotation": -0.5973025399095457,
+        "lon": -97.00037974178684,
+        "blurb": {
+          "allowedit": true
+        },
+        "points": [
+          {
+            "x": -5.0665192187091765,
+            "name": "green_front",
+            "y": -15.127601451255039
+          },
+          {
+            "x": 3.1507379545166554,
+            "name": "green_center",
+            "y": -2.706159998453794
+          },
+          {
+            "x": 12.20839642870523,
+            "name": "green_back",
+            "y": 10.269810090802086
+          }
+        ],
+        "depth": 34,
+        "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.071372%2C-97.000380&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=800x800&zoom=19",
+        "lon2x": 93377.92241750828,
+        "lunit": 1.0936132983377078,
+        "lat2y": 110905.7272557238,
+        "lat": 33.07137240054328,
+        "imageScale": 2.2349608677718025
+      },
+      "test": "test",
+      "distance": 410,
+      "maskScale": 0.8982739206777822,
+      "handicap": 5,
+      "rotation": -0.46884188394963555,
+      "lon": -97.00175480747747,
+      "blurb": {
+        "allowedit": true
+      },
+      "points": [
+        {
+          "x": -40.171517939494606,
+          "name": "tee",
+          "y": -192.6626321987647
+        },
+        {
+          "x": 37.42753285646944,
+          "name": "dogleg",
+          "y": 8.520283520888995
+        },
+        {
+          "x": 123.3374326563158,
+          "name": "green_front",
+          "y": 133.9546152075534
+        },
+        {
+          "x": 131.55490133323826,
+          "name": "green_center",
+          "y": 146.3760521209722
+        },
+        {
+          "x": 140.61279294218332,
+          "name": "green_back",
+          "y": 159.35201746819462
+        }
+      ],
+      "features": [
+        {
+          "descrip": null,
+          "backlat": 33.071465,
+          "centerlon": -97.000346,
+          "icon": "https:\/\/cdn.bluegolf.com\/images\/course\/app-green.svg",
+          "frontlat": 33.071236,
+          "backlon": -97.000249,
+          "centerlat": 33.071348,
+          "type": "green",
+          "frontlon": -97.000434
+        }
+      ],
+      "image2x": "https:\/\/d3ij8bs8xp5yfq.cloudfront.net\/maps\/api\/staticmap?maptype=satellite&center=33.070028%2C-97.001755&key=AIzaSyDewpzThUP2UE7kQpHLkOiL7gpXFxkwtxs&scale=2&size=640x640&format=jpg&zoom=17",
+      "lon2x": 93380.32586860616,
+      "lunit": 1.0936132983377078,
+      "lat2y": 110905.68672552312,
+      "lat": 33.07002817541352,
+      "imageScale": 0.9031662311241192
+    }
+  ]
+}

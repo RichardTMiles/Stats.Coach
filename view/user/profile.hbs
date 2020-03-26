@@ -11,7 +11,7 @@
         <p></p>
     </section>
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="opacity: .8">
         <div id="alert"></div>
         <div class="row">
             <div class="col-md-12">
@@ -72,16 +72,17 @@
 
                 <!-- Display User Info -->
                 <div class="col-md-auto">
-                    <div class="box box-solid" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
+                    <div class="box box-solid" style="font-size: 110%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                         <div class="box-header with-border">
                             <i class="fa fa-user" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;"></i>
                             <h3 class="box-title" style="font-size: 100%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">Profile</h3>
                         </div>
                         <!-- /.box-header -->
+                        <!-- /.box-header -->
                         <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>About {{#myAccountBool}}Me{{/myAccountBool}}{{^myAccountBool}}{{user_first_name}} {{user_last_name}}{{/myAccountBool}}</dt>
-                                <dd>{{user_about_me}} {{#myAccountBool}}{{^user_about_me}}Come on, nothing{{/user_about_me}}{{/myAccountBool}}</dd>
+                                <dd>{{user_about_me}} {{#myAccountBool}}{{^user_about_me}}Come on, nothing?{{/user_about_me}}{{/myAccountBool}}</dd>
                                 <br>
                                 <dt>Birthday</dt>
                                 <dd>{{user_birthday}}</dd>
@@ -102,7 +103,7 @@
                 {{#myAccountBool}}
                     <div class="col-md-auto">
                         <!-- Horizontal Form -->
-                        <div class="box box-info" id="ProfileSettings" style="font-size: 200%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
+                        <div class="box box-info" id="ProfileSettings" style="opacity: .85; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
                             <div class="box-header with-border">
                                 <h3 class="box-title" style="font-size: 200%; color: #ffffff;">Profile Settings</h3>
                                 <div class="box-tools pull-right">
@@ -218,42 +219,12 @@
 
                                 <!-- /.box-body -->
                                 <div class="box-footer" style="font-size: 100%; color: #ffffff; background-color: #2c3b41; border-top-color: #2c3b41;">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    <button id="profileDeleteButton" type="button" class="btn btn-danger" data-toggle="modal"
                                             data-target="#myModal">
                                         Delete Account
                                     </button>
                                     <button type="reset" class="btn btn-default">Reset Form</button>
                                     <button type="submit" name="terms" class="btn btn-info pull-right">Submit</button>
-                                </div>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                <h4 class="modal-title" id="myModalLabel">Please confirm your account
-                                                    deletion</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                Your account will no longer be visible or accessible. Please ensure you
-                                                export
-                                                and download all of your information and golf data.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Take
-                                                    me
-                                                    back
-                                                </button>
-                                                <a href="/Profile/DeleteAccount/" type="button"
-                                                   class="btn btn-danger">Delete Account</a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <!-- /.box-footer -->
@@ -279,3 +250,33 @@
     <!-- /.content -->
 
 {{/my}}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="color: #0c0c0c">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Please confirm your account
+                    deletion</h4>
+            </div>
+            <div class="modal-body">
+                Your account will no longer be visible or accessible. Please ensure you
+                export
+                and download all of your information and golf data.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Take
+                    me
+                    back
+                </button>
+                <a id="confirmDeleteButton" href="/Profile/DeleteAccount/" type="button"
+                   class="btn btn-danger">Delete Account</a>
+            </div>
+        </div>
+    </div>
+</div>

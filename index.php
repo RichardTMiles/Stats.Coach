@@ -5,7 +5,7 @@ const DS = DIRECTORY_SEPARATOR; // All folder constants end in a trailing slash 
 
 define('APP_ROOT', __DIR__ . DS);  // Set our root folder for the application
 
-const SERVER_ROOT = APP_ROOT;        // I would like to change to only using app_root soon
+const SERVER_ROOT = APP_ROOT;        // I would like to change to only using APP_ROOT soon
 
 // Template
 const COMPOSER = 'vendor/';
@@ -30,7 +30,7 @@ try {
 } catch (\Throwable $e) {
     /** @noinspection ForgottenDebugOutputInspection */
     APP_LOCAL and print_r($e->getMessage());
-    print '<h1>Fuck, Carbon Failed.</h1>';
+    print '<h1>Fuck, CarbonPHP [C6] Failed. It\'s likely you just need to run "composer install".</h1>';
     exit(1);
 }
 

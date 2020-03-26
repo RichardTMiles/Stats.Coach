@@ -11,7 +11,7 @@
  *
  */
 
-print '<h1>Setting up CarbonPHP</h1>';
+print '<h1>Setting up Stats Coach</h1>';
 
 $db = \CarbonPHP\Database::database();
 

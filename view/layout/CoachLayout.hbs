@@ -125,7 +125,7 @@
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="user-image" alt="User Image"/>
+                        <img id="navUserTopRightUserImage" src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"> {{my.user_first_name}} {{my.user_last_name}}</span>
                     </a>
                     <ul class="dropdown-menu">
@@ -152,10 +152,10 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="/Profile/" class="btn btn-default btn-flat">Profile</a>
+                                <a id="navTopRightUserDropdownProfile" href="/Profile/" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
+                                <a id="navTopRightUserDropdownLogout" href="/Logout/" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
@@ -174,7 +174,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
+        <div class="user-panel" style="height: 60px;">
             <div class="pull-left image">
                 <img src="{{my.user_profile_pic}}{{^my.user_profile_pic}}/view/img/Carbon-red.png{{/my.user_profile_pic}}" class="img-circle" alt="User Image">
             </div>

@@ -77,15 +77,16 @@ from carbon_users join carbon_team_members join carbon_teams join carbon_user_go
     /**
      * @param $teamName
      * @param null $schoolName
+     * @return bool|null
      * @throws PublicAlert
      */
     public function createTeam($teamName, $schoolName = null)
     {
         if (!Teams::Post([
-            'team_name' => $teamName,
-            'team_school' => $schoolName,
-            'team_coach' => $_SESSION['id'],
-            'team_code' => Bcrypt::genRandomHex(20)
+            Teams::TEAM_NAME => $teamName,
+            Teams::TEAM_SCHOOL => $schoolName,
+            Teams::TEAM_COACH => $_SESSION['id'],
+            Teams::TEAM_CODE => Bcrypt::genRandomHex(20)
         ])) {
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         }
@@ -93,29 +94,32 @@ from carbon_users join carbon_team_members join carbon_teams join carbon_user_go
         $return = [];
 
         if (!Users::Put($return, $_SESSION['id'], [
-            'user_type' => 'Coach'
+            Users::USER_TYPE => 'Coach'
         ])) {
+            // to break the transaction
             throw new PublicAlert('Sorry, we we\'re unable to create your team at this time.');
         }
 
-        self::commit();
-
-        PublicAlert::success("We successfully created `$teamName`!");
-
-        return startApplication(true);
+        if (self::commit()) {
+            PublicAlert::success("We successfully created `$teamName`!");
+            return startApplication(true);
+        }
+        PublicAlert::danger('Failed to create your team. Try again later.');
+        return null;
     }
 
     /**
      * @param $teamCode
+     * @return bool|null
      * @throws PublicAlert
      */
-    public function joinTeam($teamCode)
+    public function joinTeam($teamCode): ?bool
     {
         $team = [];
 
         if (!Teams::get($team, null, [
             'where' => [
-                'team_code' => $teamCode
+                Teams::TEAM_CODE => $teamCode
             ],
             'pagination' => [
                 'limit' => 1
@@ -132,9 +136,9 @@ from carbon_users join carbon_team_members join carbon_teams join carbon_user_go
 
         if (!TeamMembers::get($member, null, [
             'where' => [
-                'team_id' => $team['team_id'],
-                'user_id' => $_SESSION['id'],
-                'accepted' => 0
+                TeamMembers::TEAM_ID => $team['team_id'],
+                TeamMembers::USER_ID => $_SESSION['id'],
+                TeamMembers::ACCEPTED => 0
             ]
         ])) {
             throw new PublicAlert('We failed to lookup the membership history. Please try again later.', 'danger');
@@ -145,16 +149,18 @@ from carbon_users join carbon_team_members join carbon_teams join carbon_user_go
         }
 
         if (!TeamMembers::Post([
-            'user_id' => $_SESSION['id'],
-            'team_id' => $team['team_id']
+            TeamMembers::USER_ID => $_SESSION['id'],
+            TeamMembers::TEAM_ID => $team['team_id']
         ])) {
             throw new PublicAlert('Failed to update team status. Please try again later.', 'danger');
         }
 
-        self::commit();
+        if (self::commit()) {
+            PublicAlert::success('We successfully added you!');
+            return startApplication('/');
+        }
 
-        PublicAlert::success('We successfully add you!');
-
-        return startApplication(true);
+        PublicAlert::danger('Sorry, we failed to add you to the team! Please try again.');
+        return false;
     }
 }

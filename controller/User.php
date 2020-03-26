@@ -22,7 +22,6 @@ class User extends Request
         return false;
     }
 
-
     public function listFollowers($id = null) {
         if ($id === null) {
             return $_SESSION['id'];
@@ -45,9 +44,6 @@ class User extends Request
         return $id;
     }
 
-
-
-
     /**
      * @return array|bool
      * @throws PublicAlert
@@ -61,7 +57,7 @@ class User extends Request
 
         $UserImage = $this->cookie('UserImage')->value();
 
-        $UserImage = file_exists(SERVER_ROOT . $UserImage) ? SITE . $UserImage : false;
+        $UserImage = file_exists(APP_ROOT . $UserImage) ? SITE . $UserImage : false;
 
         $rememberMe = $this->post('RememberMe')->int();
 

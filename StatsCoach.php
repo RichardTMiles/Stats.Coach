@@ -84,6 +84,11 @@ class StatsCoach extends Application
     {
         static $count;
 
+
+
+
+
+
         if (empty($count)) {
             $count = 0;
         } else {
@@ -131,13 +136,13 @@ class StatsCoach extends Application
                 $json['header'] = 'Json Method Removed';
 
                 // Example code for testing socket connections
-                if (SOCKET && $this->match('whoami/', function () {
-                        print $_SESSION['id'] . PHP_EOL;
-                    })() ||
-                    $this->match('Send/{user_id}/{message}/', function ($user_id, $message) {
-                        print 'About to send' . PHP_EOL;
-                        print 'Did we send? ' . Pipe::send($message, '/tmp/' . $user_id . '.fifo') . PHP_EOL . PHP_EOL;
-                    })()){
+                if (SOCKET && ($this->match('whoami/', function () {
+                            print $_SESSION['id'] . PHP_EOL;
+                        })() ||
+                        $this->match('Send/{user_id}/{message}/', function ($user_id, $message) {
+                            print 'About to send' . PHP_EOL;
+                            print 'Did we send? ' . Pipe::send($message, '/tmp/' . $user_id . '.fifo') . PHP_EOL . PHP_EOL;
+                        })())) {
                     return true;
                 }
 

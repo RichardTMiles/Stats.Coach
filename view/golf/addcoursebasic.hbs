@@ -10,8 +10,7 @@
 <script>
 
     function resetInput() {
-        alert('reset')
-        $('#c_name').val('value');
+        document.getElementById("addCourseBasic").reset()
     }
 
     Carbon(() => {
@@ -69,7 +68,7 @@
 
 <!-- Main content -->
 <section class="content" id="content-pane">
-    <form class="form-horizontal" method="post" action="/AddCourse/Basic" name="addCourse">
+    <form id="addCourseBasic" class="form-horizontal" method="post" action="/AddCourse/Basic" name="addCourse">
         <div id="alert"></div>
 
         <!-- Add Course Main Info -->
@@ -128,10 +127,10 @@
                                     {{course_holes}} Hole Standard
                                 </option>{{/course}}
 
-                                <option value="18">
+                                <option value="18-hole">
                                     18 Hole Standard
                                 </option>
-                                <option value="9">
+                                <option value="9-hole">
                                     9 Hole Standard
                                 </option>
                             </select>

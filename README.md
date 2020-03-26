@@ -5,9 +5,10 @@ Use these links, previous links were for view only
 Design Doc:
 https://docs.google.com/document/d/1ofW1cjBhymq0cPrWwI54o_-AeUkVXqFdmBtghaqxjKQ/edit?usp=sharing
 
-Test Plan:
-https://docs.google.com/document/d/1fbRzf-RfuxIV9L27tlHf_WHXWtsMZb4euxNJOb9LXqo/edit?usp=sharing
+## Tests 
+https://github.com/php-webdriver/php-webdriver
 
+Ensure you are using the latest version of chromedriver outlined above 
 
 At the end of Sprint 1, a user must be able to:
     

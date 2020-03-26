@@ -21,6 +21,8 @@ use Tables\carbon_users;
 
 
 /**
+ * This is a global level function. If it should fail we have no context to recover.
+ * This is the use case for throwing an Alert verses statically invoking.
  * @param bool $id
  * @param string $level
  * @return array
@@ -45,14 +47,13 @@ function getUser($id = false, $level = 'All') : array
     }
 
     /**
-     * @noinspection NotOptimalIfConditionsInspection
      * @param array $options
      * @return void
      */
-    $getUser = function ($options = []) use (&$my, $id, $level) {
-        if (false === carbon_users::Get($my, empty($options) ? $id : null, $options) || empty($my)) {
+    $getUser = static function ($options = []) use (&$my, $id) {
+        if (false === carbon_users::Get($my, (empty($options) ? $id : null), $options) || empty($my)) {
             $_SESSION['id'] = false;
-            throw new PublicAlert('Failed get to user restful api failed.');
+            throw new PublicAlert('Failed get to user! Restful api failed.');
         }
     };
 
@@ -60,26 +61,8 @@ function getUser($id = false, $level = 'All') : array
         case 'All':
             $getUser();
             break;
-        case 'Profile':
-            $getUser([
-                'select' => [
-                    carbon_users::USER_FIRST_NAME,
-                    carbon_users::USER_LAST_NAME,
-                    carbon_users::USER_ID,
-                    carbon_users::USER_SPORT,
-                    carbon_users::USER_PROFILE_PIC,
-                    carbon_users::USER_COVER_PHOTO,
-                    carbon_users::USER_ABOUT_ME,
-                ],
-                'where' => [
-                    carbon_users::USER_ID => $id
-                ],
-                'pagination' => [
-                    'limit' => 1
-                ]
-            ]);
-            break;
         case 'Basic':
+        case 'Profile':
             $getUser([
                 'select' => [
                     carbon_users::USER_FIRST_NAME,
@@ -144,7 +127,6 @@ function getUser($id = false, $level = 'All') : array
             $my['friends'] = empty($my['following']) || empty($my['followers'])
                 ? [] : array_intersect($my['following'], $my['followers']);
 
-        /** @noinspection PhpMissingBreakStatementInspection */
         case 'Basic':
             Golf::sessionStuff($my);
     }
@@ -169,7 +151,7 @@ return [
 
         'DB_PASS' =>  APP_LOCAL ? 'password' : 'goldteamrules',       // Password goldteamrules # APP_LOCAL ? 'password' :
 
-        'DB_BUILD' => SERVER_ROOT . '/config/buildDatabase.php',
+        'DB_BUILD' => APP_ROOT . '/config/buildDatabase.php',
 
         'REBUILD' => false                                            // Initial Setup
     ],
@@ -177,7 +159,7 @@ return [
     'SITE' => [
         'URL' => 'stats.coach',    // Evaluated and if not the accurate redirect. Local php server okay. Remove for any domain
 
-        'ROOT' => SERVER_ROOT,     // This was defined in our ../index.php
+        'ROOT' => APP_ROOT,     // This was defined in our ../index.php
 
         'CACHE_CONTROL' => [
             'ico|pdf|flv' => 'Cache-Control: max-age=29030400, public',
@@ -235,7 +217,7 @@ return [
 
         'LEVEL' => E_ALL | E_STRICT,  // php ini level
 
-        'STORE' => false,      // Database if specified and / or File 'LOCATION' in your system
+        'STORE' => false,     // Database if specified and / or File 'LOCATION' in your system
 
         'SHOW' => true,       // Show errors on browser
 

@@ -282,7 +282,7 @@ class Golf extends Request  // Validation
         }
 
         if ($state) {
-            $state = ucfirst(parent::set($state)->alnum());
+            $state = ucfirst($this->set($state)->alnum()); // TODO - add state validations
         }  // uri
 
         if (empty($_POST)) {
@@ -318,11 +318,20 @@ class Golf extends Request  // Validation
                 $holes = 18;
         }
 
-        return [$phone, $pga_pro, $course_website, $name, $access, $style, $street, $city, $state, $tee_boxes, $handicap_number, $holes];
-
+        return [
+            $phone, $pga_pro, $course_website, $name,
+            $access, $style, $street, $city,
+            $state, $tee_boxes, $handicap_number, $holes
+        ];
     }
 
 
+    /**
+     * @param $courseId
+     * @param $box_number
+     * @return array|bool|null
+     * @throws PublicAlert
+     */
     public function AddCourseColor($courseId, $box_number)
     {
         global $json;

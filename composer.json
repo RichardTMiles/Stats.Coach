@@ -29,11 +29,11 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-master#29741703c1122e34872d306a42f837a8d3c5a0f0-dev",
+    "richardtmiles/carbonphp" : "dev-master#44f9742e48bd6fb7bab8d6bb3eb4bb117c8ef920-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": ">=7",
     "phpunit/phpunit": ">=6",
-    "facebook/webdriver": "^1.7"
+    "php-webdriver/webdriver": "1.8.1"
   },
   "scripts": {
     "post-status-cmd": [

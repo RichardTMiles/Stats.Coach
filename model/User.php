@@ -83,6 +83,7 @@ class User extends GlobalMap
         foreach ($users as &$value) {
             $value = getUser($value, 'Basic');
         }
+        unset($value);
         $json['following'] = $users;
     }
 
@@ -110,7 +111,6 @@ class User extends GlobalMap
             ]
         ]);
 
-
         if (empty($data)) {
             throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
         }
@@ -132,7 +132,7 @@ class User extends GlobalMap
             $_SESSION['id'] = $data['user_id'];    // returning the user's id.
             PublicAlert::warning('Password encryption not detected, be sure to update before live release.');
         } else {
-            throw new PublicAlert('Sorry, the username and password combination you have entered is invalid.', 'warning');
+            throw new PublicAlert('Sorry, this Username and Password combination doesn\'t match out records.', 'warning');
         }
 
         if ($rememberMe) {
@@ -143,9 +143,7 @@ class User extends GlobalMap
             (new Request)->clearCookies();
         }
 
-        startApplication(true);
-
-        return false;
+        return startApplication(true);
     }
 
     /**
@@ -161,14 +159,14 @@ class User extends GlobalMap
 
         $json['UserInfo'] = &$UserInfo;
 
-        $service = $service === 'google' ? Users::USER_GOOGLE_ID :
-            Users::USER_FACEBOOK_ID;
-
-        $sql = []; // quick refactor
+        $sql = [];
 
         if (false === Users::Get($sql, null, [
             'select' => [
-                'user_id', $service
+                Users::USER_ID,
+                $service === 'google'
+                    ? $service = Users::USER_GOOGLE_ID
+                    : $service = Users::USER_FACEBOOK_ID
             ],
             'where' => [
                 [
@@ -514,7 +512,7 @@ class User extends GlobalMap
             return null;
         }
 
-        // we can assume post is active then
+        // we can assume post is active then TODO - lets remove this global ref
         global $first, $last, $email, $gender, $dob, $password, $profile_pic, $about_me, $user_education_history;
 
         // $this->user === global $user
@@ -539,7 +537,7 @@ class User extends GlobalMap
 
         // Remove old picture
         if (!empty($profile_pic) && !empty($my['user_profile_pic']) && $profile_pic !== $my['user_profile_pic']) {
-            unlink(SERVER_ROOT . $my['user_profile_pic']);
+            unlink(APP_ROOT . $my['user_profile_pic']);
         }
 
         // Send new activation code

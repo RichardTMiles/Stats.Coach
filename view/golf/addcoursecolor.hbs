@@ -39,21 +39,21 @@
                             data-widget="collapse"><i class="fa fa-minus"></i></button>
                 </div>
             </div>
-            <div class='box-body' style='background-color: #2c3b41; color: ghostwhite !important;'><h3>Tee
-                Box {{current_hole}} Color</h3>
+            <div class='box-body' style='background-color: #2c3b41; color: ghostwhite !important;'><h3>
+                Tee Box {{current_hole}} Color</h3>
                 <div class='row col-lg-12 col-md-12'>
                     <div id='color-tee-box-selection' class='input-group input-group-lgsd'>
-                        <div class='input-group-btn '>
-                            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'
-                                    aria-expanded='false'>
+                        <div class='input-group-btn'>
+                            <button id="color-tee-box-selection-dropdown" type='button' class='btn dropdown-toggle' data-toggle='dropdown'
+                                    aria-expanded='false' style="background-color: #1a2226; color: whitesmoke">
                                 Color Select <span class='fa fa-caret-down'></span></button>
                             <ul class='dropdown-menu'>
-                                <li><a onclick='carbon.addColor(this)'>Blue</a></li>
-                                <li><a onclick='carbon.addColor(this)'>Black</a></li>
-                                <li><a onclick='carbon.addColor(this)'>Green</a></li>
-                                <li><a onclick='carbon.addColor(this)'>Gold</a></li>
-                                <li><a onclick='carbon.addColor(this)'>Red</a></li>
-                                <li><a onclick='carbon.addColor(this)'>White</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="Blue">Blue</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="Black">Black</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="Green">Green</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="Gold">Gold</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="Red">Red</a></li>
+                                <li><a onclick='carbon.addColor(this)' id="White">White</a></li>
                             </ul>
                         </div>
                         <input id='color' name='color' type='text'
@@ -106,7 +106,7 @@
                 </div><!-- ./col -->
 
                 <button type='button' class='btn btn-default' onclick=""><< Back</button>
-                <button type='submit' class='btn btn-info pull-right'>Next >></button>
+                <button id="next" type='submit' class='btn btn-info pull-right'>Next >></button>
             </div>
         </div>
     </div>
