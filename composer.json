@@ -29,13 +29,17 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-master#44f9742e48bd6fb7bab8d6bb3eb4bb117c8ef920-dev",
+    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#febecd301c7431d16025fca3e212ebea0d70296f-dev",
     "google/cloud-tools": "^0.6",
-    "phpunit/phpunit-selenium": ">=7",
-    "phpunit/phpunit": ">=6",
+    "phpunit/phpunit-selenium": "8.0.0",
+    "phpunit/phpunit": "8.5.*",
     "php-webdriver/webdriver": "1.8.1"
   },
   "scripts": {
+    "rei": "rm -rf vendor && rm composer.lock && composer i",
+    "post-install-cdm": [
+      "php index.php rest -json"
+    ],
     "post-status-cmd": [
       "php index.php buildDatabase",
       "php index.php minify",
@@ -51,7 +55,7 @@
     ]
   },
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.4",
     "mustache/mustache": "^2.12",
     "google/cloud": "^0.21",
     "facebook/graph-sdk": "^5.6.1",

@@ -12,6 +12,7 @@ composer.phar
 node_modules/
 /vendor/
 /security/*
+/tables/*
 
 /vendor/richardtmiles/
 

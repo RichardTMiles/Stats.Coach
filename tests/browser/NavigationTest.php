@@ -222,8 +222,8 @@ class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->select($this->byId('course_play'))->selectOptionByValue('18-hole');
         $this->byId('phone')->value('2145551234');
         $this->byName('c_street')->value('6 Lake Park Rd, TX 75057');
-        $this->byName('c_city')->value('Lewisville');
-        $this->select($this->byId('state'))->selectOptionByValue('California');
+        $this->byName('c_city')->value('Flower Mound');
+        $this->select($this->byId('state'))->selectOptionByValue('Texas');
         $this->select($this->byName('tee_boxes'))->selectOptionByValue('3');
         $this->select($this->byName('Handicap_number'))->selectOptionByValue('2');
         $this->byId('next')->click();

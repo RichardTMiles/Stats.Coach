@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use Psr\Log\InvalidArgumentException;
 use Tables\carbon_golf_tournaments;
 use Tables\carbon_locations as Location;
 use Tables\carbon_golf_courses as Course;

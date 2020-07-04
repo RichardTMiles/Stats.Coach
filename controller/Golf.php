@@ -29,7 +29,7 @@ class Golf extends Request  // Validation
         return $id;
     }
 
-    public function coursesByState($state) {
+    public function coursesByState($state) : ? string {
         // TODO - validate state
         if (!$this->set($state)->word()) {
             return null;
@@ -90,7 +90,7 @@ class Golf extends Request  // Validation
         }
 
         if (!$tournamentName || !$hostName) {
-            PublicAlert::danger('You must provide input for both input fields.');
+            PublicAlert::danger('You must provide input for tournament name and the  input fields.');
             return null;
         }
 
@@ -178,7 +178,7 @@ class Golf extends Request  // Validation
         return $this->set($user_uri)->alnum() ?: $_SESSION['id'];  // session id must be set (route)
     }
 
-    public function PostScoreBasic($state)
+    public function PostScoreBasic(string $state = '')
     {
         return $this->coursesByState($state);
     }
@@ -191,68 +191,6 @@ class Golf extends Request  // Validation
         return $id;
     }
 
-    /**
-     * @param $state
-     * @param $course_id
-     * @param $boxColor
-     * @return array|bool
-     * @throws PublicAlert
-     */
-    public function PostScore($state, $course_id, $boxColor)
-    {
-        global $json;
-
-        if (!$state) {
-            $json['step1'] = true;
-            return null;                                // goto view
-        }
-
-        $state = ucfirst(strtolower($this->set($state)->alnum()));
-
-        $course_id = $this->set($course_id)->hex();         // hex id
-
-        $boxColor = $this->set($boxColor)->word();
-
-        if (empty($_POST)) {
-            return [$state, $course_id, $boxColor];     // goto the model
-        }
-
-        global $roundDate, $newScore, $ffs, $gnr, $putts;
-
-        $datePicker = $this->post('datepicker')->regex('#^\d{1,2}\/\d{1,2}\/\d{4}$#');
-        $timePicker = $this->post('timepicker')->regex('#^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s(A|P)M$#');
-
-        if (!$datePicker || !$timePicker) {
-            throw new PublicAlert('Sorry, invalid tee time provided');
-        }
-
-        [$timePicker, $midday] = explode(' ', $timePicker); // trim the last to chars
-        [$hour, $minute] = explode(':', $timePicker);
-        [$day, $month, $year] = explode('/', $datePicker);
-
-        if ($midday === 'PM') {
-            $hour += 12;
-        }
-
-        $roundDate = mktime($hour, $minute, 0, $month, $day, $year) ?: time();
-
-        $newScore = $this->post('hole-1', 'hole-2', 'hole-3', 'hole-4', 'hole-5', 'hole-6', 'hole-7', 'hole-8', 'hole-9', 'hole-10', 'hole-11', 'hole-12', 'hole-13', 'hole-14', 'hole-15', 'hole-16', 'hole-17', 'hole-18')->int();
-
-        foreach ($newScore as $key => $value) {
-            if (!$value) {
-                $newScore = false;
-                break;
-            }
-        }
-
-        if ($newScore) {
-            $ffs = $this->post('ffs-1', 'ffs-2', 'ffs-3', 'ffs-4', 'ffs-5', 'ffs-6', 'ffs-7', 'ffs-8', 'ffs-9', 'ffs-10', 'ffs-11', 'ffs-12', 'ffs-13', 'ffs-14', 'ffs-15', 'ffs-16', 'ffs-17', 'ffs-18')->int();
-            $gnr = $this->post('gnr-1', 'gnr-2', 'gnr-3', 'gnr-4', 'gnr-5', 'gnr-6', 'gnr-7', 'gnr-8', 'gnr-9', 'gnr-10', 'gnr-11', 'gnr-12', 'gnr-13', 'gnr-14', 'gnr-15', 'gnr-16', 'gnr-17', 'gnr-18')->int();
-            $putts = $this->post('putts-1', 'putts-2', 'putts-3', 'putts-4', 'putts-5', 'putts-6', 'putts-7', 'putts-8', 'putts-9', 'putts-10', 'putts-11', 'putts-12', 'putts-13', 'putts-14', 'putts-15', 'putts-16', 'putts-17', 'putts-18')->int();
-        }
-
-        return [$state, $course_id, $boxColor];
-    }
 
     /**
      * @param $state
@@ -478,6 +416,4 @@ class Golf extends Request  // Validation
 
         return [$courseId, $holeNumber, $par, $handicap, $color];
     }
-
-
 }

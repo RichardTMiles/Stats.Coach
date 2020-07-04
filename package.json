@@ -4,7 +4,8 @@
   "description": "A stats website for coaches",
   "main": "index.php",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "sudo php -S localhost:80 index.php"
   },
   "dependencies": {
     "admin-lte": "2.4",

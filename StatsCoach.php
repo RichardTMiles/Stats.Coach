@@ -14,11 +14,6 @@ use CarbonPHP\Helpers\Pipe;
 use CarbonPHP\Session;
 use CarbonPHP\View;
 use Controller\User;
-use Model\Helpers\GlobalMap;
-use /** @noinspection PhpUndefinedClassInspection */
-    Mustache_Engine;
-use Tables\carbon_users;
-use Tables\carbon_user_golf_stats as Stats;
 
 class StatsCoach extends Application
 {
@@ -26,7 +21,7 @@ class StatsCoach extends Application
      * Bootstrap constructor. Places basic variables
      * in our json response that will be needed by many pages.
      * @param null $structure
-     * @throws \CarbonPHP\Error\PublicAlert
+     * @throws PublicAlert
      */
     public function __construct($structure = null)
     {
@@ -84,16 +79,15 @@ class StatsCoach extends Application
     {
         static $count;
 
-
-
-
-
-
         if (empty($count)) {
             $count = 0;
         } else {
             $count++;
         }
+
+        $hole = '([0-9]{1,2})';
+        $id = self::MATCH_C6_ENTITY_ID_REGEX;
+        $state = '([a-z\s]{4,20})';
 
         if ('' !== $uri) {
             $this->changeURI($uri);
@@ -105,20 +99,20 @@ class StatsCoach extends Application
             return $this->defaultRoute();
         }
 
-        $this->userSettings();          // Update the current user
+        $this->userSettings();          // Update the current user, must always be done here.
 
         $this->structure($this->MVC());
 
-        if ($this->match('Contact', 'Messages', 'Mail')()) {
+        if ($this->regexMatch('#Contact#i', 'Messages', 'Mail')()) {
             return true;
         }
 
         ################################### MVC
         if (!$_SESSION['id']) {  // Signed out
-            if ($this->match('Login/*', 'User', 'login')() ||
-                $this->match('oAuth/{service}/{request?}/*', 'User', 'oAuth')() ||
-                $this->match('Register/*', 'User', 'Register')() ||           // Register
-                $this->match('Recover/{user_email?}/{user_generated_string?}/', 'User', 'recover')()) {     // Recover $userId
+            if ($this->regexMatch('#Login.*#', 'User', 'login')() ||
+                $this->regexMatch('#oAuth/([a-zA-z]{0,10})/([a-zA-z]{0,10})#i', 'User', 'oAuth')() ||
+                $this->regexMatch('#Register#i', 'User', 'Register')() ||           // Register
+                $this->regexMatch('#Recover/([a-zA-Z@\.]){8,40}/([A-Za-z0-9]){4,40})/', 'User', 'recover')()) {     // Recover $userId
                 return true;
             }
         } else {
@@ -146,14 +140,14 @@ class StatsCoach extends Application
                     return true;
                 }
 
-                if ($this->match('Search/{search}/', 'Search', 'all')() ||
-                    $this->match('NavigationMessages/', 'Messages', 'navigation')() ||
-                    $this->match('Messages/{user_uri}/', 'Messages', 'chat')() ||
-                    $this->match('Follow/{user_id}/', 'User', 'follow')() ||
-                    $this->match('Unfollow/{user_id}/', 'User', 'unfollow')() ||
-                    $this->structure($this->JSON('#NavNotifications'))->match('Notifications/*', 'notifications', 'notifications')() ||
-                    $this->structure($this->JSON('#NavTasks'))->match('tasks/*', 'tasks', 'tasks')() ||
-                    $this->structure($this->JSON('.direct-chat'))->match('Messages/{user_uri}/', 'Messages', 'chat')()
+                if ($this->regexMatch('#Search/([a-z\s\.]{1,40})#i', 'Search', 'all')() ||
+                    $this->regexMatch('#NavigationMessages#i', 'Messages', 'navigation')() ||
+                    $this->regexMatch("#Messages/$id#i", 'Messages', 'chat')() ||
+                    $this->regexMatch("#Follow/$id#i", 'User', 'follow')() ||
+                    $this->regexMatch("#Unfollow/$id#i", 'User', 'unfollow')() ||
+                    $this->structure($this->JSON('#NavNotifications'))->regexMatch('#Notifications#i', 'notifications', 'notifications')() ||
+                    $this->structure($this->JSON('#NavTasks'))->regexMatch('#tasks#i', 'tasks', 'tasks')() ||
+                    $this->structure($this->JSON('.direct-chat'))->regexMatch("#Messages/$id#i", 'Messages', 'chat')()
                 ) {
                     return true;         // Event
                 }
@@ -168,10 +162,10 @@ class StatsCoach extends Application
             $this->structure($this->wrap());
 
 
-            if ($this->match('Drills/Putting', 'golf/putting.hbs')() ||
-                $this->match('Drills/Approach', 'golf/approach.hbs')() ||
-                $this->match('Drills/Accuracy', 'golf/accuracy.hbs')() ||
-                $this->match('Drills/Distance', 'golf/distance.hbs')()
+            if ($this->regexMatch('#drills/putting#i', 'golf/putting.hbs')() ||
+                $this->regexMatch('#drills/approach#i', 'golf/approach.hbs')() ||
+                $this->regexMatch('#drills/accuracy#i', 'golf/accuracy.hbs')() ||
+                $this->regexMatch('#drills/distance#i', 'golf/distance.hbs')()
             ) {
                 return true;
             }
@@ -183,41 +177,42 @@ class StatsCoach extends Application
 
             ################################### Golf Stuff + User
 
-            if ($this->match('CoursesByState/{state}/', 'Golf', 'CoursesByState')()) {
+            if ($this->regexMatch("#CoursesByState/$state#i", 'Golf', 'CoursesByState')()) {
                 return true;
             }
 
 
-            if ($this->match('PostScore/Basic/{state?}/*', 'Golf', 'PostScoreBasic')() ||
-                $this->match('PostScore/Color/{id}/*', 'Golf', 'PostScoreColor')() ||
-                $this->match('PostScore/Distance/{id}/{color}/*', 'Golf', 'PostScoreDistance')()) {
+            if ($this->regexMatch("#PostScore/Basic/?$state?#i", 'Golf', 'PostScoreBasic')() ||
+                $this->regexMatch("#PostScore/Color/$id#i", 'Golf', 'PostScoreColor')() ||
+                $this->regexMatch("#PostScore/Distance/$id/([a-z]{3,10})#i", 'Golf', 'PostScoreDistance')()) { // id color
                 return true;
             }
 
-            if ($this->match('AddCourse/Basic/{state?}/*', 'Golf', 'AddCourseBasic')() ||
-                $this->match('AddCourse/Color/{id}/{box_number}/*', 'Golf', 'AddCourseColor')() ||
-                $this->match('AddCourse/Distance/{id}/{box_number}/*', 'Golf', 'AddCourseDistance')()) {
+
+            if ($this->regexMatch("#AddCourse/Basic/$state#i", 'Golf', 'AddCourseBasic')() ||
+                $this->regexMatch("#AddCourse/Color/$id/$hole#i", 'Golf', 'AddCourseColor')() ||
+                $this->regexMatch("#AddCourse/Distance/$id/$hole#i", 'Golf', 'AddCourseDistance')()) {
                 return true;
             }
 
             // TODO - flesh out tournament
-            if ($this->match('NewTournament/*', 'Golf', 'NewTournament')() ||
-                $this->match('TournamentSettings/{id}/*', 'Golf', 'TournamentSettings')() ||
-                $this->match('Tournament/{id}/*', 'Golf', 'Tournament')()) {
+            if ($this->regexMatch('#NewTournament#i', 'Golf', 'NewTournament')() ||
+                $this->regexMatch("#TournamentSettings/$id#i", 'Golf', 'TournamentSettings')() ||
+                $this->regexMatch("#Tournament/$id#i", 'Golf', 'Tournament')()) {
                 return true;
             }
 
-            if ($this->match('Profile/{user_uri?}/', 'User', 'profile')() ||   // Profile $user
-                $this->match('Messages/', 'Messages', 'messages')() ||
-                $this->match('Followers/', 'User', 'listFollowers')() ||
-                $this->match('Following/', 'User', 'listFollowing')() ||
-                $this->match('Home/*', 'Golf', 'golf')() ||
-                $this->match('Golf/*', 'Golf', 'golf')() ||
-                $this->match('Team/{team_id}/*', 'Team', 'team')() ||
-                $this->match('Rounds/{user_uri?}/', 'Golf', 'rounds')() ||
-                $this->match('JoinTeam/', 'Team', 'joinTeam')() ||
-                $this->match('CreateTeam/', 'Team', 'createTeam')() ||
-                $this->match('Logout/*', function () {
+            if ($this->regexMatch("#profile/$id#i", 'User', 'profile')() ||   // Profile $user
+                $this->regexMatch('#messages#i', 'Messages', 'messages')() ||
+                $this->regexMatch('#followers#i', 'User', 'listFollowers')() ||
+                $this->regexMatch('#following#i', 'User', 'listFollowing')() ||
+                $this->regexMatch('#home#i', 'Golf', 'golf')() ||
+                $this->regexMatch('#golf#i', 'Golf', 'golf')() ||
+                $this->regexMatch("#Team/$id#i", 'Team', 'team')() ||
+                $this->regexMatch("#Rounds/$id/#i", 'Golf', 'rounds')() ||
+                $this->regexMatch('#JoinTeam#i', 'Team', 'joinTeam')() ||
+                $this->regexMatch('#CreateTeam#i', 'Team', 'createTeam')() ||
+                $this->regexMatch('#Logout#i', static function () {
                     User::logout();
                 })()) {
                 return true;          // Logout
@@ -226,7 +221,7 @@ class StatsCoach extends Application
 
         return
             $this->structure($this->MVC())->match('Activate/{email?}/{email_code?}/', 'User', 'activate')() ||  // Activate $email $email_code
-            $this->structure($this->wrap())->match('Privacy/', 'policy/privacy.hbs')() ||
+            $this->structure($this->wrap())->regexMatch('#Privacy#i', 'policy/privacy.hbs')() ||
             $this->match('404/*', 'error/404error.hbs')() ||
             $this->match('500/*', 'error/500error.hbs')();
 
