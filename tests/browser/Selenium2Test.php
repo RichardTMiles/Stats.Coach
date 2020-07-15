@@ -9,21 +9,21 @@
 namespace App\tests\browser;
 
 use App\Tests\Config;
-use PHPUnit_Extensions_Selenium2TestCase;
+use PHPUnit\Extensions\Selenium2TestCase;
 
 /** Selenium2TestCase
  * @Depends App\Tests\Feature\UserTest::class
  * @link https://github.com/giorgiosironi/phpunit-selenium/blob/master/Tests/Selenium2TestCaseTest.php
  * @link http://apigen.juzna.cz/doc/sebastianbergmann/phpunit-selenium/class-PHPUnit_Extensions_Selenium2TestCase.html
  */
-class Selenium2Test extends PHPUnit_Extensions_Selenium2TestCase
+class Selenium2Test extends Selenium2TestCase
 {
 
-    public function setUp() {
-        print PHP_EOL . 'java -jar ' . dirname(__DIR__) . '/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
+    public function setUp(): void {
+        print PHP_EOL . 'java -jar ' . COMPOSER . 'bin/selenium-server-standalone' . PHP_EOL;
         // self::shareSession(true);
         $this->setDesiredCapabilities([
-            "chromeOptions" => [
+            'chromeOptions' => [
                 'w3c' => false
             ]
         ]);
@@ -32,11 +32,13 @@ class Selenium2Test extends PHPUnit_Extensions_Selenium2TestCase
         $this->setBrowser('chrome');
         $this->setBrowserUrl(Config::URL);
         $this->prepareSession()->currentWindow()->maximize();
+        $this->setSeleniumServerRequestsTimeout(10);
+
     }
 
-    public function testSetupNavigationAndTitle()
+    public function testSetupNavigationAndTitle(): void
     {
-        $this->assertEquals(1, version_compare(PHPUnit_Extensions_Selenium2TestCase::VERSION, "1.2.0"));
+        $this->assertEquals(1, version_compare(Selenium2TestCase::VERSION, '8.0.0'));
 
         $this->url('/');
 

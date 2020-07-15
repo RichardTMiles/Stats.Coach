@@ -13,20 +13,23 @@ namespace App\Tests\Feature;
 use App\Tests\Config;
 use PHPUnit\Framework\TestCase;
 use Tables\carbon_users as Users;
-use \CarbonPHP\Database;
+use CarbonPHP\Database;
+
 
 final class UserTest extends TestCase
 {
 
-    public $user;
+    public array $user = [];
 
     /**
      * Ideally this is run with a fresh build. If not, the relation between create new users
      * must depend on can be deleted. This is cyclic and can not be annotated.
      */
-    public function setUp()/* The :void return type declaration that should be here would cause a BC issue */
+    public function setUp(): void /* The :void return type declaration that should be here would cause a BC issue */
     {
         parent::setUp();
+
+        $_SERVER['REQUEST_TIME'] = time();
 
         $_POST = [
             'username' => 'Admin',
@@ -104,7 +107,9 @@ final class UserTest extends TestCase
 
         $this->assertIsArray($this->user);
 
-        $this->assertArrayHasKey(Users::USER_EMAIL, $this->user);
+        $this->assertArrayHasKey(
+            Users::COLUMNS[Users::USER_EMAIL],
+            $this->user);
 
     }
 
@@ -124,9 +129,11 @@ final class UserTest extends TestCase
         $this->user = $this->user[0];
 
         $this->assertTrue(
-            Users::Put($this->user, $this->user[Users::USER_ID], [
-                Users::USER_FIRST_NAME => 'lil\'Rich'
-            ]));
+            Users::Put($this->user,
+                $this->user[Users::COLUMNS[Users::USER_ID]],
+                [
+                    Users::USER_FIRST_NAME => 'lil\'Rich'
+                ]));
 
         $this->commit();
 
@@ -143,7 +150,8 @@ final class UserTest extends TestCase
                 ]
             ));
 
-        $this->assertEquals('lil\'Rich', $this->user[Users::USER_FIRST_NAME]);
+        $this->assertEquals('lil\'Rich',
+            $this->user[Users::COLUMNS[Users::USER_FIRST_NAME]]);
     }
 
 
@@ -165,10 +173,11 @@ final class UserTest extends TestCase
         $user = $user[0];
 
         $this->assertTrue(
-            Users::Delete($this->user, $user[Users::USER_ID], [])
+            Users::Delete($this->user,
+                $user[Users::COLUMNS[Users::USER_ID]], [])
         );
 
-        $this->assertNull($this->user);
+        $this->assertEmpty($this->user);
 
         $this->user = [];
 
@@ -179,8 +188,5 @@ final class UserTest extends TestCase
         ]);
 
         $this->assertEmpty($this->user);
-
     }
-
-
 }

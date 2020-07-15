@@ -1,6 +1,6 @@
 {
   "name": "richardtmiles/statscoach",
-  "description": "The best MVC framework",
+  "description": "Creating a better golf tournament",
   "license": "MIT",
   "config": {
     "vendor-dir": "vendor"
@@ -29,7 +29,7 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#febecd301c7431d16025fca3e212ebea0d70296f-dev",
+    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#de5447346ab913995f4650cf6a49b123d93aeacb-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": "8.0.0",
     "phpunit/phpunit": "8.5.*",
@@ -37,20 +37,19 @@
   },
   "scripts": {
     "rei": "rm -rf vendor && rm composer.lock && composer i",
-    "post-install-cdm": [
-      "php index.php rest -json"
-    ],
     "post-status-cmd": [
-      "php index.php buildDatabase",
-      "php index.php minify",
-      "php index.php rest -json",
       "./vendor/bin/phpunit --testdox"
     ],
-    "test": [
+    "setup": [
       "php index.php setup --mysql_native_password",
       "php index.php setup --rebuild",
       "php index.php minify",
-      "php index.php rest -json -logClasses",
+      "php index.php rest -json -logClasses"
+    ],
+    "rest": [
+      "php index.php rest -json"
+    ],
+    "test": [
       "./vendor/bin/phpunit --testdox --filter feature"
     ]
   },
@@ -64,6 +63,7 @@
     "matthiasmullie/minify": "^1.3",
     "patchwork/jsqueeze": "^2.0",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "se/selenium-server-standalone": "^3.141"
   }
 }

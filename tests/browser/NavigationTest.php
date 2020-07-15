@@ -10,7 +10,6 @@ namespace App\tests\browser;
 
 use App\Tests\Config;
 use App\Tests\Feature\UserTest;
-use PHPUnit_Extensions_Selenium2TestCase;
 use Tables\Carbon_Users as Users;
 
 /** Selenium2TestCase
@@ -18,13 +17,13 @@ use Tables\Carbon_Users as Users;
  * @link https://github.com/giorgiosironi/phpunit-selenium/blob/master/Tests/Selenium2TestCaseTest.php
  * @link http://apigen.juzna.cz/doc/sebastianbergmann/phpunit-selenium/class-PHPUnit_Extensions_Selenium2TestCase.html
  */
-class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
+class NavigationTest extends Selenium2Test
 {
     public const URL = Config::URL;
     public const ADMIN_USERNAME = Config::ADMIN_USERNAME;
     public const ADMIN_PASSWORD = Config::ADMIN_PASSWORD;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -32,7 +31,6 @@ class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
 
         if (!$count) {
             $count++;
-            print PHP_EOL . 'java -jar ' . dirname(__DIR__) . '/selenium-server-standalone-3.141.59.jar' . PHP_EOL;
             try {
                 $user = [];
 
@@ -53,22 +51,6 @@ class NavigationTest extends PHPUnit_Extensions_Selenium2TestCase
         }
 
         self::shareSession(true);
-
-        $this->setDesiredCapabilities([
-            'chromeOptions' => [
-                'w3c' => false
-            ]
-        ]);
-        $this->setHost('localhost');
-        $this->setPort(4444);
-        $this->setBrowser('chrome');
-        $this->setBrowserUrl(self::URL);
-        $this->prepareSession()->currentWindow()->maximize();
-        $this->setSeleniumServerRequestsTimeout(10);
-        // testVersionCanBeReadFromTheTestCaseClass
-        $this->assertGreaterThanOrEqual(0,
-            version_compare(PHPUnit_Extensions_Selenium2TestCase::VERSION, '4.1.0'));
-
     }
 
     public function testBasicNavigation(): void

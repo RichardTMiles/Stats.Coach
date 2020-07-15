@@ -4,9 +4,8 @@
 namespace App\tests\browser;
 
 use App\Tests\Config;
-use PHPUnit_Extensions_Selenium2TestCase;
 
-class NewMockUserTest  extends PHPUnit_Extensions_Selenium2TestCase
+class NewMockUserTest  extends Selenium2Test
 {
     public const URL = Config::URL;
 

@@ -9,6 +9,7 @@
 namespace App;
 
 use CarbonPHP\Application;
+use CarbonPHP\Error\ErrorCatcher;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Pipe;
 use CarbonPHP\Session;

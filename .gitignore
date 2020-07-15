@@ -1,6 +1,6 @@
 
 .idea/workspace.xml
-
+/data/bin/*
 /.idea/
 /data/vendors/
 /mysql.cnf
@@ -10,13 +10,10 @@
 /Stats.Coach.iml
 composer.phar
 node_modules/
-/vendor/
+/vendor/*
 /security/*
 /tables/*
-
-/vendor/richardtmiles/
-
-
+/vendor/richardtmiles/*
 table/.DS_Store
 .DS_Store
 .DS_Store

@@ -113,15 +113,15 @@ class Messages extends GlobalMap
         }
 
         if ($message && !$json['message_id'] = Message::Post([
-                'from_user_id' => $_SESSION['id'],
-                'to_user_id' => $user_id,
-                'message' => $message,
+                Message::FROM_USER_ID => $_SESSION['id'],
+                Message::TO_USER_ID => $user_id,
+                Message::MESSAGE => $message,
             ])) {
             PublicAlert::warning('Failed to send message :( Please try again later');
         }     // else were grabbing content (json, html, etc)
 
 
-        if (!self::commit(function() use ($user_id) {
+        if (!self::commit(static function() use ($user_id) {
             self::sendUpdate($user_id, 'NavigationMessages/');
             return true;
         })) {
@@ -136,12 +136,12 @@ class Messages extends GlobalMap
             'where' => [
                 [
                     [
-                        'to_user_id' => $_SESSION['id'],
-                        'from_user_id' => $user_id,
+                        Message::TO_USER_ID => $_SESSION['id'],
+                        Message::FROM_USER_ID => $user_id,
                     ],
                     [
-                        'to_user_id' => $user_id,
-                        'from_user_id' => $_SESSION['id'],
+                        Message::TO_USER_ID => $user_id,
+                        Message::FROM_USER_ID => $_SESSION['id'],
                     ]
                 ],
             ],
@@ -153,6 +153,7 @@ class Messages extends GlobalMap
         ]);
 
         // this is rough, but it needs to get formatted for mustache templates
+        /** @noinspection SuspiciousLoopInspection */
         foreach ($user[$user_id]['messages'] as $key => $message) {
             $json['Messages'][] = [
                 'myUser' => $message['from_user_id'] === $_SESSION['id'],

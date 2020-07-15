@@ -203,7 +203,7 @@ class User extends GlobalMap
                 ]);
 
                 Stats::Post([
-                    'stats_id' => $id
+                    Stats::STATS_ID => $id
                 ]);
                 $_SESSION['id'] = $id;
 
@@ -288,8 +288,8 @@ class User extends GlobalMap
         }
 
         if (false === Followers::Delete($this->user[$_SESSION['id']], null, [
-                'follows_user_id' => $user_id,
-                'user_id' => $_SESSION['id']
+                Followers::FOLLOWS_USER_ID => $user_id,
+                Followers::USER_ID => $_SESSION['id']
             ])) {
             PublicAlert::warning('Could not unfollow user.');
         } else {
@@ -335,7 +335,7 @@ class User extends GlobalMap
         }
 
         if (!Stats::Post([
-            'stats_id' => $id
+            Stats::STATS_ID => $id
         ])) {
             throw new PublicAlert('Failed to create your account!');
         }
@@ -347,10 +347,11 @@ class User extends GlobalMap
             PublicAlert::success('Welcome to Stats Coach. Please check your email to finish your registration.');
 
             startApplication('home/'); // TODO - Im not going to return this but I feel like I should... idk
+
             return false;
-        } else {
-            throw new PublicAlert('Failed to create your account!');
         }
+
+        throw new PublicAlert('Failed to create your account!');
     }
 
     /**
