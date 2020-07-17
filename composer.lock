@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d24338b5cc676ff50ee1ce961cfb3e8",
+    "content-hash": "7d155ed4425fcb64cec5d5f6a5d2427b",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -2740,8 +2740,14 @@
             "version": "dev-drunkDaysAtTavern",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RichardTMiles/CarbonPHP",
-                "reference": "de5447346ab913995f4650cf6a49b123d93aeacb"
+                "url": "https://github.com/RichardTMiles/CarbonPHP.git",
+                "reference": "144d6f2ab4cb734061be6f16799d56213c94c1ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/144d6f2ab4cb734061be6f16799d56213c94c1ef",
+                "reference": "144d6f2ab4cb734061be6f16799d56213c94c1ef",
+                "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
@@ -2754,39 +2760,17 @@
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit-selenium": "4.1.0"
+                "phpunit/phpunit-selenium": "^4.1"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "CarbonPHP\\Error\\": "src/error/",
-                    "CarbonPHP\\Interfaces\\": "src/interfaces/",
-                    "CarbonPHP\\Programs\\": "src/programs/",
-                    "CarbonPHP\\Tables\\": "src/tables/",
                     "CarbonPHP\\": "src/",
-                    "Tests\\": "tests/"
+                    "CarbonPHP\\Controller\\": "controller/",
+                    "CarbonPHP\\Model\\": "model/"
                 }
             },
-            "scripts": {
-                "rei": [
-                    "rm -rf vendor && rm composer.lock && composer i"
-                ],
-                "post-update-cmd": [
-                    "php index.php minify",
-                    "cd view/react/material-dashboard-react-c6 && npm install && npm run build"
-                ],
-                "setup": [
-                    "php index.php setup --mysql_native_password",
-                    "php index.php setup --rebuild",
-                    "php index.php minify",
-                    "php index.php rest -json -logClasses",
-                    "php index.php minify",
-                    "cd view/react/material-dashboard-react-c6 && npm install && npm run build"
-                ],
-                "test": [
-                    "./vendor/bin/phpunit  --testdox"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2794,21 +2778,19 @@
                 {
                     "name": "Richard Miles",
                     "email": "Richard@Miles.systems",
-                    "homepage": "https://www.CarbonPHP.com",
+                    "homepage": "http://www.CarbonPHP.com",
                     "role": "Developer"
                 }
             ],
-            "description": "A PHP 7.4+ tool kit featuring RESTFUL ORM, sockets, session management, and routing.",
+            "description": "Edit the DOM in PHP. A PHP 7+ tool kit designed for SEO optimization.",
             "homepage": "https://github.com/richardtmiles/carbonphp",
             "keywords": [
-                "Carbon",
-                "IO",
-                "Pipes",
-                "Routing",
-                "Session",
-                "Sockets"
+                "carbon",
+                "io",
+                "pipes",
+                "sockets"
             ],
-            "time": "2020-07-15T15:33:07+00:00"
+            "time": "2020-07-05T23:35:20+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

@@ -110,10 +110,10 @@ class StatsCoach extends Application
 
         ################################### MVC
         if (!$_SESSION['id']) {  // Signed out
-            if ($this->regexMatch('#Login.*#', 'User', 'login')() ||
+            if ($this->regexMatch('#Login.*#i', 'User', 'login')() ||
                 $this->regexMatch('#oAuth/([a-zA-z]{0,10})/([a-zA-z]{0,10})#i', 'User', 'oAuth')() ||
                 $this->regexMatch('#Register#i', 'User', 'Register')() ||           // Register
-                $this->regexMatch('#Recover/([a-zA-Z@\.]){8,40}/([A-Za-z0-9]){4,40})/', 'User', 'recover')()) {     // Recover $userId
+                $this->regexMatch('#Recover/([a-zA-Z@\.]){8,40}/([A-Za-z0-9]){4,40})/?#i', 'User', 'recover')()) {     // Recover $userId
                 return true;
             }
         } else {

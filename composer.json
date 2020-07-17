@@ -29,7 +29,7 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#de5447346ab913995f4650cf6a49b123d93aeacb-dev",
+    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#1944d6880af01218d282d37a7c8c0b072612f77b-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": "8.0.0",
     "phpunit/phpunit": "8.5.*",
