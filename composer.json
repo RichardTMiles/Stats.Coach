@@ -29,25 +29,26 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-drunkDaysAtTavern#1944d6880af01218d282d37a7c8c0b072612f77b-dev",
+    "richardtmiles/carbonphp" : "dev-updateCli#f237994041409132012c6d0748b1e84aaa38499f-dev",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": "8.0.0",
     "phpunit/phpunit": "8.5.*",
     "php-webdriver/webdriver": "1.8.1"
   },
   "scripts": {
-    "rei": "rm -rf vendor && rm composer.lock && composer i",
+    "rei": "rm -rf vendor && rm composer.lock && composer i --prefer-dist --no-progress --no-suggest",
     "post-status-cmd": [
       "./vendor/bin/phpunit --testdox"
     ],
-    "post-install-cmd": [
+    "setupCI": [
+      "php index.php setup --mysql_native_password",
+      "php index.php setup --rebuild",
+      "composer setup"
+    ],
+    "setup": [
       "php index.php rest -json",
       "npm install",
       "php index.php minify"
-    ],
-    "setupCI": [
-      "php index.php setup --mysql_native_password",
-      "php index.php setup --rebuild"
     ],
     "rest": [
       "php index.php rest -json"

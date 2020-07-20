@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d155ed4425fcb64cec5d5f6a5d2427b",
+    "content-hash": "a1803f03b4de2dbd739b58f006606291",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -2737,17 +2737,11 @@
         },
         {
             "name": "richardtmiles/carbonphp",
-            "version": "dev-drunkDaysAtTavern",
+            "version": "dev-updateCli",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RichardTMiles/CarbonPHP.git",
-                "reference": "144d6f2ab4cb734061be6f16799d56213c94c1ef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RichardTMiles/CarbonPHP/zipball/144d6f2ab4cb734061be6f16799d56213c94c1ef",
-                "reference": "144d6f2ab4cb734061be6f16799d56213c94c1ef",
-                "shasum": ""
+                "url": "https://github.com/RichardTMiles/CarbonPHP",
+                "reference": "f237994041409132012c6d0748b1e84aaa38499f"
             },
             "require": {
                 "ext-curl": "*",
@@ -2756,21 +2750,46 @@
                 "matthiasmullie/minify": "^1.3",
                 "mustache/mustache": "^2.13.0",
                 "patchwork/jsqueeze": "^2.0",
-                "php": "^7.4",
+                "php": ">=7.4",
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit-selenium": "^4.1"
+                "phpunit/phpunit-selenium": "4.1.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
+                    "CarbonPHP\\Error\\": "src/error/",
+                    "CarbonPHP\\Helpers\\": "src/helpers/",
+                    "CarbonPHP\\Interfaces\\": "src/interfaces/",
+                    "CarbonPHP\\Programs\\": "src/programs/",
+                    "CarbonPHP\\Tables\\": "src/tables/",
                     "CarbonPHP\\": "src/",
-                    "CarbonPHP\\Controller\\": "controller/",
-                    "CarbonPHP\\Model\\": "model/"
+                    "Tests\\": "tests/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "rei": [
+                    "rm -rf vendor && rm composer.lock && composer i"
+                ],
+                "setupCI": [
+                    "php index.php setup --mysql_native_password",
+                    "php index.php setup --rebuild",
+                    "composer setup"
+                ],
+                "setup": [
+                    "php index.php rest -json -logClasses",
+                    "npm install",
+                    "php index.php minify",
+                    "cd view/react/material-dashboard-react-c6 && npm install && npm run build"
+                ],
+                "rest": [
+                    "php index.php rest -json -logClasses"
+                ],
+                "test": [
+                    "./vendor/bin/phpunit  --testdox || ./vendor/bin/phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2778,19 +2797,21 @@
                 {
                     "name": "Richard Miles",
                     "email": "Richard@Miles.systems",
-                    "homepage": "http://www.CarbonPHP.com",
+                    "homepage": "https://www.CarbonPHP.com",
                     "role": "Developer"
                 }
             ],
-            "description": "Edit the DOM in PHP. A PHP 7+ tool kit designed for SEO optimization.",
+            "description": "A PHP 7.4+ tool kit featuring RESTFUL ORM, sockets, session management, and routing.",
             "homepage": "https://github.com/richardtmiles/carbonphp",
             "keywords": [
-                "carbon",
-                "io",
-                "pipes",
-                "sockets"
+                "Carbon",
+                "IO",
+                "Pipes",
+                "Routing",
+                "Session",
+                "Sockets"
             ],
-            "time": "2020-07-05T23:35:20+00:00"
+            "time": "2020-07-20T05:12:30+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
