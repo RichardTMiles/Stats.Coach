@@ -13,7 +13,8 @@
       "View\\": "view/",
       "Controller\\": "controller/",
       "Model\\": "model/",
-      "Tables\\": "tables/"
+      "Tables\\": "tables/",
+      "Programs\\": "programs/"
     }
   },
   "authors": [
@@ -49,6 +50,12 @@
       "php index.php rest -json",
       "npm install",
       "php index.php minify"
+    ],
+    "liveUpdate": [
+      "git pull",
+      "composer update",
+      "npm update",
+      "composer setup"
     ],
     "rest": [
       "php index.php rest -json"
