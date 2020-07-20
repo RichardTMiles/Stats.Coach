@@ -9,12 +9,12 @@
 namespace App;
 
 use CarbonPHP\Application;
-use CarbonPHP\Error\ErrorCatcher;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Pipe;
 use CarbonPHP\Session;
 use CarbonPHP\View;
 use Controller\User;
+
 
 class StatsCoach extends Application
 {
@@ -131,10 +131,10 @@ class StatsCoach extends Application
                 $json['header'] = 'Json Method Removed';
 
                 // Example code for testing socket connections
-                if (SOCKET && ($this->match('whoami/', function () {
+                if (SOCKET && ($this->regexMatch('#whoami/?#', static function () {
                             print $_SESSION['id'] . PHP_EOL;
                         })() ||
-                        $this->match('Send/{user_id}/{message}/', function ($user_id, $message) {
+                        $this->match('Send/{user_id}/{message}/', static function ($user_id, $message) {
                             print 'About to send' . PHP_EOL;
                             print 'Did we send? ' . Pipe::send($message, '/tmp/' . $user_id . '.fifo') . PHP_EOL . PHP_EOL;
                         })())) {

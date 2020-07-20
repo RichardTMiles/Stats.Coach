@@ -40,11 +40,14 @@
     "post-status-cmd": [
       "./vendor/bin/phpunit --testdox"
     ],
-    "setup": [
+    "post-install-cmd": [
+      "php index.php rest -json",
+      "npm install",
+      "php index.php minify"
+    ],
+    "setupCI": [
       "php index.php setup --mysql_native_password",
-      "php index.php setup --rebuild",
-      "php index.php minify",
-      "php index.php rest -json -logClasses"
+      "php index.php setup --rebuild"
     ],
     "rest": [
       "php index.php rest -json"
