@@ -31,37 +31,37 @@ jobs:
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
 
-    - name: Setup MySQL
-      uses: mirromutth/mysql-action@v1.1
-      with:
-        # --character-set-server - The character set of MySQL server
-        character set server: 'utf8mb4'
-        # --collation-server - The character collation of MySQL server
-        collation server: 'utf8mb4_general_ci'
-        # Version of MySQL to use
-        mysql version: 'latest'
-        # MYSQL_ROOT_PASSWORD - root superuser password
-        mysql root password: 'password'
-        # MYSQL_DATABASE - name for the default database that is created
-        mysql database: 'StatsCoach'
-        # MYSQL_USER - create the specified user with superuser power for created database
-        mysql user: 'admin'
-        # MYSQL_PASSWORD - specified superuser password which user is power for created database
-        mysql password: 'password'
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          # --character-set-server - The character set of MySQL server
+          character set server: 'utf8mb4'
+          # --collation-server - The character collation of MySQL server
+          collation server: 'utf8mb4_general_ci'
+          # Version of MySQL to use
+          mysql version: 'latest'
+          # MYSQL_ROOT_PASSWORD - root superuser password
+          mysql root password: 'password'
+          # MYSQL_DATABASE - name for the default database that is created
+          mysql database: 'StatsCoach'
+          # MYSQL_USER - create the specified user with superuser power for created database
+          mysql user: 'admin'
+          # MYSQL_PASSWORD - specified superuser password which user is power for created database
+          mysql password: 'password'
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
+      - name: Validate composer.json and composer.lock
+        run: composer validate
 
-    - name: Install Dependencies & Generate Sources
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install Dependencies & Generate Sources
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: C6 Composer Database Setup
-      run: composer setupCI
+      - name: C6 Composer Database Setup
+        run: composer setupCI
 
-    - name: PHP version
-      run: php --version
+      - name: PHP version
+        run: php --version
 
-      # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-      # Docs: https://getcomposer.org/doc/articles/scripts.md
-    - name: Run test suite
-      run: composer test
+        # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+        # Docs: https://getcomposer.org/doc/articles/scripts.md
+      - name: Run test suite
+        run: composer test
