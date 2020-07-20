@@ -259,7 +259,7 @@ return [
             'OUT' => APP_ROOT . 'view/js/javascript.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/jquery/dist/jquery.min.js',
             APP_ROOT . 'node_modules/jquery-pjax/jquery.pjax.js',
-            CARBON_ROOT . 'view/mustache/Layout/mustache.js',
+            APP_ROOT . 'vendor/richardtmiles/carbonphp/view/mustache/Layout/mustache.js',
             CARBON_ROOT . 'helpers/Carbon.js',
             CARBON_ROOT . 'helpers/asynchronous.js',
             APP_ROOT . 'node_modules/jquery-form/src/jquery.form.js',
