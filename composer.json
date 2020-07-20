@@ -29,7 +29,7 @@
     }
   ],
   "require-dev": {
-    "richardtmiles/carbonphp" : "dev-updateCli#f237994041409132012c6d0748b1e84aaa38499f-dev",
+    "richardtmiles/carbonphp" : "6.0.0",
     "google/cloud-tools": "^0.6",
     "phpunit/phpunit-selenium": "8.0.0",
     "phpunit/phpunit": "8.5.*",

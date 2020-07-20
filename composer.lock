@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1803f03b4de2dbd739b58f006606291",
+    "content-hash": "4330aea25fb6d26f870430f46eddcddc",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -2737,11 +2737,11 @@
         },
         {
             "name": "richardtmiles/carbonphp",
-            "version": "dev-updateCli",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RichardTMiles/CarbonPHP",
-                "reference": "f237994041409132012c6d0748b1e84aaa38499f"
+                "reference": "ee74ccd4c8f75cb872523b61ad3fbfad7ce4e4e8"
             },
             "require": {
                 "ext-curl": "*",
@@ -2811,7 +2811,7 @@
                 "Session",
                 "Sockets"
             ],
-            "time": "2020-07-20T05:12:30+00:00"
+            "time": "2020-07-20T05:26:47+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -4122,9 +4122,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "richardtmiles/carbonphp": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
