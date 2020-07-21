@@ -6,13 +6,10 @@ use CarbonPHP\Session;
 use Exception;
 use Model\Helpers\GlobalMap;
 
-
-use Tables\carbon_user_followers;
-use Tables\carbon_user_golf_stats as Stats;
-use Tables\carbon_users as Users;
-use Tables\carbon_user_followers as Followers;
-use Tables\carbon_user_messages as Messages;
-
+use Tables\Carbon_User_Followers as Followers;
+use Tables\Carbon_User_Golf_Stats as Stats;
+use Tables\Carbon_Users as Users;
+use Tables\Carbon_User_Messages as Messages;
 
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Helpers\Bcrypt;
@@ -51,7 +48,8 @@ class User extends GlobalMap
     }
 
 
-    public static function followers($id) {
+    public static function followers($id): array
+    {
         return self::fetchColumn('SELECT HEX(user_id) FROM carbon_user_followers WHERE follows_user_id = UNHEX(?)', $id);
     }
 
@@ -70,7 +68,7 @@ class User extends GlobalMap
 
 
     public static function following($id) {
-        return self::fetchColumn('SELECT HEX('.carbon_user_followers::FOLLOWS_USER_ID.') FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
+        return self::fetchColumn('SELECT HEX('. Followers::FOLLOWS_USER_ID.') FROM carbon_user_followers WHERE user_id = UNHEX(?)', $id);
     }
 
     /**
@@ -492,10 +490,10 @@ class User extends GlobalMap
 
             $user[$user_uri]['following'] = [];
 
-            if (!carbon_user_followers::Get($user[$user_uri]['following'], null, [
+            if (!Followers::Get($user[$user_uri]['following'], null, [
                     'where' => [
-                        carbon_user_followers::USER_ID => $_SESSION['id'],
-                        carbon_user_followers::FOLLOWS_USER_ID => $user_uri
+                        Followers::USER_ID => $_SESSION['id'],
+                        Followers::FOLLOWS_USER_ID => $user_uri
                     ],
                     'pagination' => [
                         'limit' => 1

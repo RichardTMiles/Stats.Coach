@@ -9,20 +9,17 @@
 namespace Model;
 
 use CarbonPHP\Error\PublicAlert;
-use Exception;
 use Model\Helpers\GlobalMap;
-use Tables\carbon_user_messages as Message;
-use Tables\carbon_user_notifications;
-use Tables\carbon_users as Users;
+use Tables\Carbon_User_Messages as Message;
 
 class Messages extends GlobalMap
 {
 
     /** A little misleading because I want all users who have sent a message to appear in the chat
      * @return array
-     * @throws PublicAlert
      */
-    public static function unreadMessages() {
+    public static function unreadMessages(): array
+    {
          $users = self::fetchColumn('SELECT distinct(HEX(from_user_id)) FROM StatsCoach.carbon_user_messages WHERE to_user_id = UNHEX(?) AND message_read = 0', $_SESSION['id']);
          foreach ($users as &$value) {
              $value = self::fetch('SELECT HEX(user_id) as user_id, user_first_name, user_last_name, user_profile_pic, message, creation_date FROM carbon_users JOIN carbon_user_messages ON from_user_id = user_id WHERE message_read = 0 AND from_user_id = UNHEX(?) ORDER BY creation_date DESC LIMIT 1', $value);
@@ -34,13 +31,14 @@ class Messages extends GlobalMap
     /**
      * @throws PublicAlert
      */
-    public function messages()
+    public function messages(): void
     {
         global $json, $user;
 
         foreach ($user[$_SESSION['id']]['friends'] as $pos => $id) {
-            if ($id === $_SESSION['id'])
+            if ($id === $_SESSION['id']) {
                 continue;
+            }
             getUser($id, 'Basic');
 
             $json['friends'] = $user[$id];
@@ -59,8 +57,9 @@ class Messages extends GlobalMap
         $json['Widget'] = '#NavMessages';
 
         foreach ($user as $id => $their) {
-            if ($id == $_SESSION['id'])
+            if ($id === $_SESSION['id']) {
                 continue;
+            }
 
             if ($their['messages'] ?? false) {
                 $message = $their['messages'][count($their['messages']) - 1];
@@ -87,7 +86,7 @@ class Messages extends GlobalMap
      * @return array
      * @throws PublicAlert
      */
-    public function chat($user_id, $message = false)
+    public function chat($user_id, $message = false): array
     {
         global $json, $user;
 
@@ -155,13 +154,13 @@ class Messages extends GlobalMap
         // this is rough, but it needs to get formatted for mustache templates
         /** @noinspection SuspiciousLoopInspection */
         foreach ($user[$user_id]['messages'] as $key => $message) {
-            $json['Messages'][] = [
-                'myUser' => $message['from_user_id'] === $_SESSION['id'],
-                'first_name' => $user[$message['from_user_id']]['user_first_name'],
+            $json['Messages'][] = array(
+                'myUser' => $message[Message::COLUMNS[Message::FROM_USER_ID]] === $_SESSION['id'],
+                'first_name' => $user[$message[Message::COLUMNS[Message::FROM_USER_ID]]]['user_first_name'],
                 'user_profile_picture' => $user[$message['from_user_id']]['user_profile_pic'],
                 'creation_date' => $message['creation_date'], //date("F j, Y, g:i a", $message['creation_date']),
                 'message' => $message['message']
-            ];
+            );
         }
 
         return $json;

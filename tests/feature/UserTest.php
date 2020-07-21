@@ -12,7 +12,7 @@ namespace App\Tests\Feature;
 
 use App\Tests\Config;
 use PHPUnit\Framework\TestCase;
-use Tables\carbon_users as Users;
+use Tables\Carbon_Users as Users;
 use CarbonPHP\Database;
 
 

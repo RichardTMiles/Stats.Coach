@@ -10,7 +10,6 @@ namespace Controller;
 
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
-use Tables\carbon_user_messages as message;
 
 
 class Messages extends Request

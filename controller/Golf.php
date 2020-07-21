@@ -4,8 +4,8 @@ namespace Controller;
 
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Request;
-use Tables\carbon_locations;
-use Tables\carbon_golf_courses as Course;
+use Tables\Carbon_Locations;
+use Tables\Carbon_Golf_Courses as Course;
 
 class Golf extends Request  // Validation
 {
@@ -216,7 +216,7 @@ class Golf extends Request  // Validation
         if (!empty($json['course'])) {
             PublicAlert::success('It seems like you have unfinished changes! Please finish entering the data for this course.');
             $json['course']['location'] = [];
-            carbon_locations::Get($json['course']['location'], $json['course']['course_id'], []);
+            Carbon_Locations::Get($json['course']['location'], $json['course']['course_id'], []);
         }
 
         if ($state) {

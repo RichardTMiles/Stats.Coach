@@ -4,9 +4,9 @@ use CarbonPHP\Error\PublicAlert;
 use Model\Golf;
 use Model\Messages;
 use Model\User;
-use Tables\carbon_user_notifications;
-use Tables\carbon_user_tasks;
-use Tables\carbon_users;
+use Tables\Carbon_User_Notifications;
+use Tables\Carbon_User_Tasks;
+use Tables\Carbon_Users;
 
 /**
  * Created by IntelliJ IDEA.
@@ -93,17 +93,17 @@ function getUser($id = false, $level = 'All') : array
 
             $my['notifications'] = [];
 
-            carbon_user_notifications::Get($my['notifications'], null, [
+            Carbon_User_Notifications::Get($my['notifications'], null, [
                 'where' => [
-                    carbon_user_notifications::TO_USER_ID => $id,
+                    Carbon_User_Notifications::TO_USER_ID => $id,
                 ]
             ]);
 
             $my['tasks'] = [];
 
-            carbon_user_tasks::Get($my['tasks'], null, [
+            Carbon_User_Tasks::Get($my['tasks'], null, [
                 'where' => [
-                    carbon_user_tasks::TO_USER_ID => $id
+                    Carbon_User_Tasks::TO_USER_ID => $id
                 ]
             ]);
 

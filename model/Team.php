@@ -11,10 +11,9 @@ namespace Model;
 
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Helpers\Bcrypt;
-use Tables\carbon_photos as Photos;
-use Tables\carbon_teams as Teams;
-use Tables\carbon_users as Users;
-use Tables\carbon_team_members as TeamMembers;
+use Tables\Carbon_Teams as Teams;
+use Tables\Carbon_Users as Users;
+use Tables\Carbon_Team_Members as TeamMembers;
 use CarbonPHP\Error\PublicAlert;
 use CarbonPHP\Singleton;
 

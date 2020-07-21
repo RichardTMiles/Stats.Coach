@@ -2,19 +2,20 @@
 
 namespace Model;
 
-use Tables\carbon_golf_tournaments;
-use Tables\carbon_locations as Location;
-use Tables\carbon_golf_courses as Course;
-use Tables\carbon_golf_course_rounds as Rounds;
+
 use CarbonPHP\Singleton;
 use Model\Helpers\iSport;
 use Model\Helpers\GlobalMap;
 use CarbonPHP\Error\PublicAlert;
-use Tables\carbon_team_members as members;
-use Tables\carbon_teams as teams;
-use Tables\carbon_user_golf_stats as stats;
-use Tables\carbon_users as Users;
-use Tables\golf_rounds;
+use Tables\Carbon_Golf_Tournaments;
+use Tables\Carbon_Locations as Location;
+use Tables\Carbon_Golf_Courses as Course;
+use Tables\Carbon_Golf_Course_Rounds as Rounds;
+use Tables\Carbon_Team_Members as members;
+use Tables\Carbon_Teams as teams;
+use Tables\Carbon_User_Golf_Stats as stats;
+use Tables\Carbon_Users as Users;
+
 
 class Golf extends GlobalMap implements iSport
 {
@@ -28,11 +29,10 @@ class Golf extends GlobalMap implements iSport
     public function tournamentSettings($id): bool
     {
         $this->json['tournament'] = [];
-        if (!carbon_golf_tournaments::Get($this->json['tournament'], $id, [])) {
+        if (!Carbon_Golf_Tournaments::Get($this->json['tournament'], $id, [])) {
             throw new PublicAlert('Failed to load tournament data');
         }
-
-        $host = $this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID];
+        $host = $this->json['tournament'][Carbon_Golf_Tournaments::COLUMNS[Carbon_Golf_Tournaments::TOURNAMENT_CREATED_BY_USER_ID]];
 
         if ($host !== $_SESSION['id']) {
             throw new PublicAlert('You do not have access to edit this tournament.');
@@ -48,17 +48,17 @@ class Golf extends GlobalMap implements iSport
     public function tournament($id): bool
     {
         $this->json['tournament'] = [];
-        if (!carbon_golf_tournaments::Get($this->json['tournament'], $id, [])) {
+        if (!Carbon_Golf_Tournaments::Get($this->json['tournament'], $id, [])) {
             throw new PublicAlert('Failed to load tournament data');
         }
 
-        $host = $this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID];
+        $host = $this->json['tournament'][Carbon_Golf_Tournaments::TOURNAMENT_CREATED_BY_USER_ID];
 
         $this->json['im_the_host'] = $host === $_SESSION['id'];
 
         $this->json['tournament_host_info'] = $this->json['im_the_host'] ?
             $this->user[$_SESSION['id']] :
-            getUser($this->json['tournament'][carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID], 'Basic');
+            getUser($this->json['tournament'][Carbon_Golf_Tournaments::TOURNAMENT_CREATED_BY_USER_ID], 'Basic');
 
         return true;
     }
@@ -71,13 +71,13 @@ class Golf extends GlobalMap implements iSport
 
     public function NewTournament($tournamentName, $hostName, $hostID, $courseID, $playStyle): ?bool
     {
-        if (!carbon_golf_tournaments::Post([
-            carbon_golf_tournaments::TOURNAMENT_NAME => $tournamentName,
-            carbon_golf_tournaments::TOURNAMENT_HOST_NAME => $hostName,
-            carbon_golf_tournaments::TOURNAMENT_HOST_ID => $hostID,
-            carbon_golf_tournaments::TOURNAMENT_COURSE_ID => $courseID,
-            carbon_golf_tournaments::TOURNAMENT_STYLE => $playStyle,
-            carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
+        if (!Carbon_Golf_Tournaments::Post([
+            Carbon_Golf_Tournaments::TOURNAMENT_NAME => $tournamentName,
+            Carbon_Golf_Tournaments::TOURNAMENT_HOST_NAME => $hostName,
+            Carbon_Golf_Tournaments::TOURNAMENT_HOST_ID => $hostID,
+            Carbon_Golf_Tournaments::TOURNAMENT_COURSE_ID => $courseID,
+            Carbon_Golf_Tournaments::TOURNAMENT_STYLE => $playStyle,
+            Carbon_Golf_Tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
         ])) {
             PublicAlert::danger('Failed to post new tournament!');
             return true;
@@ -104,13 +104,13 @@ class Golf extends GlobalMap implements iSport
             'tournaments' => []
         ]);
 
-        if (!carbon_golf_tournaments::Get($my['tournaments'], null, [
+        if (!Carbon_Golf_Tournaments::Get($my['tournaments'], null, [
             'select' => [
-                carbon_golf_tournaments::TOURNAMENT_ID,
-                carbon_golf_tournaments::TOURNAMENT_NAME
+                Carbon_Golf_Tournaments::TOURNAMENT_ID,
+                Carbon_Golf_Tournaments::TOURNAMENT_NAME
             ],
             'where' => [
-                carbon_golf_tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
+                Carbon_Golf_Tournaments::TOURNAMENT_CREATED_BY_USER_ID => $_SESSION['id']
             ]
         ])) {
             PublicAlert::danger('Failed to lookup golf tournaments');
