@@ -1,13 +1,9 @@
 
-.idea/workspace.xml
 /data/bin/*
-/.idea/
 /data/vendors/
 /mysql.cnf
 /mysqldump.sql
-/Stats.Coach.iml
 /Cloud_SQL_Export.sql
-/Stats.Coach.iml
 composer.phar
 node_modules/
 /vendor/*
@@ -15,4 +11,8 @@ node_modules/
 /vendor/richardtmiles/*
 table/.DS_Store
 .DS_Store
-.DS_Store
+.phpunit.result.cache
+chromedriver
+websocketd_log.txt
+
+

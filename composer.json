@@ -49,7 +49,7 @@
       "php index.php setup --mysql_native_password",
       "php index.php setup --rebuild",
       "php index.php rest -json",
-      "composer setup"
+      "@composer setup"
     ],
     "setup": [
       "npm install",
@@ -57,8 +57,8 @@
     ],
     "liveUpdate": [
       "git pull",
-      "composer update",
-      "composer setup"
+      "@composer update",
+      "@composer setup"
     ],
     "rest": [
       "php index.php rest -json"
