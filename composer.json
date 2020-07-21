@@ -14,7 +14,10 @@
       "Controller\\": "controller/",
       "Model\\": "model/",
       "Tables\\": "tables/",
-      "Programs\\": "programs/"
+      "Programs\\": "programs/",
+      "App\\Tests\\": "tests/",
+      "App\\Tests\\Feature\\": "tests/feature/",
+      "App\\Tests\\Browser\\": "tests/browser/"
     }
   },
   "authors": [
