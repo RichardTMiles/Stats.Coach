@@ -190,11 +190,11 @@ return [
 
         ],           // These global variables will be stored between session
 
-        'CALLBACK' => function () {
+        'CALLBACK' => static function () {
             // optional variable $reset which would be true if a url is passed to startApplication()
-
-            if ($_SESSION['id'] ?? ($_SESSION['id'] = false))
+            if ($_SESSION['id'] ??= false) {
                 getUser($_SESSION['id']);
+            }
         },
     ],
 
