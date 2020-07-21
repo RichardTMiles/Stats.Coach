@@ -179,7 +179,7 @@ return [
 
         'REPLY_EMAIL' => 'support@carbonphp.com',
 
-        'HTTP' => APP_LOCAL   // I assume that HTTP is okay by default
+        'HTTP' => 1 // todo - APP_LOCAL   // I assume that HTTP is okay by default
     ],
 
     'SESSION' => [
