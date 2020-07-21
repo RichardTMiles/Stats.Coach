@@ -40,24 +40,24 @@
     "php-webdriver/webdriver": "1.8.1"
   },
   "scripts": {
-    "rei": "rm -rf vendor && rm composer.lock && composer i --prefer-dist --no-progress --no-suggest",
+    "rei": "echo \"\n\tPlease use Update when possible! :)\n\t\" && rm -rf vendor && rm composer.lock && composer i --prefer-dist --no-progress --no-suggest",
     "post-status-cmd": [
       "./vendor/bin/phpunit --testdox"
     ],
+    "post-update-cmd": "php index.php rest -json",
     "setupCI": [
       "php index.php setup --mysql_native_password",
       "php index.php setup --rebuild",
+      "php index.php rest -json",
       "composer setup"
     ],
     "setup": [
-      "php index.php rest -json",
       "npm install",
       "php index.php minify"
     ],
     "liveUpdate": [
       "git pull",
       "composer update",
-      "npm update",
       "composer setup"
     ],
     "rest": [

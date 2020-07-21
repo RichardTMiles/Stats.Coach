@@ -12,7 +12,6 @@ composer.phar
 node_modules/
 /vendor/*
 /security/*
-/tables/*
 /vendor/richardtmiles/*
 table/.DS_Store
 .DS_Store
