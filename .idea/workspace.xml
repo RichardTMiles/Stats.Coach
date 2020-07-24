@@ -2,8 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fed75265-43c0-4fac-9e50-e54acbea3c02" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stats.Coach.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Stats.Coach.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StatsCoach.php" beforeDir="false" afterPath="$PROJECT_DIR$/StatsCoach.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,25 +39,16 @@
     <expand>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@google" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="@localhost" type="feb32156:DbDataSourceImpl" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="StatsCoach: schema" type="76f4a085:MysqlImplModel$Schema" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="StatsCoach: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="carbon_golf_tournaments: table" type="285a2a93:MysqlImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -151,6 +151,7 @@
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
@@ -244,7 +245,10 @@
       <workItem from="1594771862001" duration="18434000" />
       <workItem from="1595087719682" duration="4975000" />
       <workItem from="1595141284733" duration="1832000" />
-      <workItem from="1595220212592" duration="22600000" />
+      <workItem from="1595220212592" duration="22854000" />
+      <workItem from="1595400664170" duration="1374000" />
+      <workItem from="1595483328227" duration="7950000" />
+      <workItem from="1595539687724" duration="3777000" />
     </task>
     <task id="LOCAL-00001" summary="New startApplication.bash and .bat &#10;improved test cases">
       <created>1585259588896</created>
@@ -358,7 +362,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595328483677</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="i want editor configs, I feed safe with creds in code atm">
+      <created>1595357692956</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1595357692956</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,21 +413,22 @@
     <MESSAGE value="trying to let the deployment be as little as possible" />
     <MESSAGE value="no more deferred styles" />
     <MESSAGE value="loggin on servers change" />
-    <option name="LAST_COMMIT_MESSAGE" value="loggin on servers change" />
+    <MESSAGE value="i want editor configs, I feed safe with creds in code atm" />
+    <option name="LAST_COMMIT_MESSAGE" value="i want editor configs, I feed safe with creds in code atm" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="320" y="115" key="#Deployment" timestamp="1595357417652">
+    <state x="320" y="115" key="#Deployment" timestamp="1595489113422">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1595357417652" />
+    <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1595489113422" />
     <state x="320" y="115" key="#Inspections" timestamp="1594707679550">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#Inspections/0.0.1440.900@0.0.1440.900" timestamp="1594707679550" />
-    <state x="260" y="116" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593735442894">
+    <state x="260" y="116" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595402228418">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="260" y="116" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1593735442894" />
+    <state x="260" y="116" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1595402228418" />
     <state x="87" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1595285285407">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -429,10 +441,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="213" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1595296811104" />
-    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1595328483549">
+    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1595357692814">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1595328483549" />
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1595357692814" />
     <state x="562" y="381" key="Github.Dialog.Accounts.Choose" timestamp="1595284612828">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -470,10 +482,10 @@
     </state>
     <state x="221" y="63" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1594743424287" />
     <state x="295" y="76" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1593723140826" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1595328484858">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1595357698048">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1595328484858" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1595357698048" />
     <state x="560" y="356" key="WebDeployment.AddServerDialog.v.1" timestamp="1595357162111">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -507,14 +519,14 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="375" y="72" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900@0.0.1440.900" timestamp="1595295901166" />
-    <state x="238" y="200" width="837" height="550" key="find.popup" timestamp="1595317673122">
+    <state x="238" y="200" width="837" height="550" key="find.popup" timestamp="1595492126994">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="238" y="200" width="837" height="550" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1595317673122" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1595326790846">
+    <state x="238" y="200" width="837" height="550" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1595492126994" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1595564633296">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1595326790846" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1595564633296" />
     <state x="513" y="235" width="894" height="812" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1593722553238" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1594771798587" />
   </component>

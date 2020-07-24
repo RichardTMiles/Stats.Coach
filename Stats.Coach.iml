@@ -7,8 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/controller" isTestSource="false" packagePrefix="Controller\" />
       <sourceFolder url="file://$MODULE_DIR$/tables" isTestSource="false" packagePrefix="Tables\" />
       <sourceFolder url="file://$MODULE_DIR$/view" isTestSource="false" packagePrefix="View\" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
-      <sourceFolder url="file://$MODULE_DIR$/tests/feature" isTestSource="true" packagePrefix="App\Tests\Feature\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" packagePrefix="App\Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests/feature" isTestSource="false" packagePrefix="App\Tests\Feature\" />
       <sourceFolder url="file://$MODULE_DIR$/programs" isTestSource="false" packagePrefix="Programs\" />
       <sourceFolder url="file://$MODULE_DIR$/model" isTestSource="false" packagePrefix="Model\" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" packagePrefix="App\" />

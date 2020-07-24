@@ -1,3 +1,7 @@
+
+sudo find /etc/apache2/sites-enabled -name "*.conf" -exec sed -i 's/<VirtualHost *:443>/<VirtualHost *:443>\n\rProtocols h2 http\/1.1/g' {} \;
+
+
 # An analytic website for golf at the moment
 
 Use these links, previous links were for view only

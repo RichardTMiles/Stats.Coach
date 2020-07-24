@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="f80f8be6-ec01-4664-aa7f-5d068462ad11" name="google_Root" url="http://34.70.55.199">
+        <fileTransfer host="34.70.55.199" port="22" privateKey="$USER_HOME$/.ssh/google_compute_engine" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

@@ -263,14 +263,14 @@ class StatsCoach extends Application
 
             $json['user-layout'] = 'class="wrapper" style="background: rgba(0, 0, 0, 0.7)"';
 
-            $mustache = function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
+            $mustache = static function ($path) {      // This is our mustache template engine implemented in php, used for rendering user content
                 global $json;
                 static $mustache;
                 if (empty($mustache)) {
                     $mustache = new \Mustache_Engine();
                 }
                 if (!file_exists($path)) {
-                    print "<script>Carbon(() => carbon.alert('Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
+                    print "<script>Carbon(() => carbon.alert('Mustache Content Buffer Failed ($path), Does Not Exist!', 'danger'))</script>";
                 }
                 return $mustache->render(file_get_contents($path), $json);
             };
@@ -278,11 +278,11 @@ class StatsCoach extends Application
             switch ($user[$id]['user_type'] ?? false) {
                 case 'Athlete':
                     $json['body-layout'] = 'hold-transition skin-blue layout-top-nav';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'layout/AthleteLayout.hbs');
+                    $json['header'] = $mustache(APP_VIEW . 'layout/AthleteLayout.hbs');
                     break;
                 case 'Coach':
                     $json['body-layout'] = 'skin-green fixed sidebar-mini sidebar-collapse';
-                    $json['header'] = $mustache(APP_ROOT . APP_VIEW . 'layout/CoachLayout.hbs');
+                    $json['header'] = $mustache( APP_VIEW . 'layout/CoachLayout.hbs');
                     break;
                 default:
                     throw new PublicAlert('No user type found!!!!');

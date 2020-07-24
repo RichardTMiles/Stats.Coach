@@ -225,8 +225,7 @@ return [
     ],
 
     'VIEW' => [
-        'VIEW' => 'view/',  // This is where the MVC() function will map the HTML.PHP and HTML.HBS . See Carbonphp.com/mvc
-
+        'VIEW' => 'view/',                     // This is where the MVC() function will map the HTML.PHP and HTML.HBS . See Carbonphp.com/mvc
         'WRAPPER' => 'layout/Wrapper.hbs',     // View::content() will produce this
     ],
 
@@ -269,6 +268,7 @@ return [
             APP_ROOT . 'node_modules/admin-lte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
             APP_ROOT . 'node_modules/admin-lte/bower_components/fastclick/lib/fastclick.js',
             APP_ROOT . 'node_modules/admin-lte/dist/js/adminlte.js',
+
         ],
     ]
 
